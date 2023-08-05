@@ -1,0 +1,46 @@
+language: python
+sudo: false
+cache: pip
+env:
+  global:
+    - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
+    - SEGFAULT_SIGNALS=all
+  matrix:
+    - TOXENV=check
+matrix:
+  include:
+    - python: '3.4'
+      env:
+        - TOXENV=py34,report,coveralls
+    - python: '3.5'
+      env:
+        - TOXENV=py35,report,coveralls
+    - python: '3.6'
+      env:
+        - TOXENV=py36,report,coveralls
+    - python: '3.6'
+      env:
+        - TOXENV=docs
+services:
+  - redis-server
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq graphviz
+  - python --version
+  - uname -a
+  - lsb_release -a
+install:
+  - pip install tox
+  - virtualenv --version
+  - easy_install --version
+  - pip --version
+  - tox --version
+script:
+  - tox -v
+after_failure:
+  - more .tox/log/* | cat
+  - more .tox/*/log/* | cat
+notifications:
+  email:
+    on_success: never
+    on_failure: always
