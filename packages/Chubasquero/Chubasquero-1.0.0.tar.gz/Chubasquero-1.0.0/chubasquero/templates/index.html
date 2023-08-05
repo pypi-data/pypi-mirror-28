@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="material.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="chubasquero.css">
+    <script src="material.js"></script>
+    <script src="vue.js"></script>
+    <title>Pelican chubasquero</title>
+  </head>
+  <body>
+  
+  <script>
+    const CHUBASQUERO_SERVER = "{{server}}";
+    const DEFAULT_LANG = "{{defaultLang}}";
+  </script>
+  <!--main layout-->
+  <div id="chubasquero" class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
+    <div class="mdl-layout__drawer">
+    <span class="mdl-layout__title">Chubasquero</span>
+    <nav class="mdl-navigation">
+      <a class="mdl-navigation__link" href="#" v-on:click="newPost()">New post</a>
+      <a class="mdl-navigation__link" href="#" v-on:click="managePosts()">Posts</a>
+      <a class="mdl-navigation__link" href="#" v-on:click="generateSite()">Generate site</a>
+      <a class="mdl-navigation__link" href="#" v-on:click="previewSite()">Preview</a>
+      <!--<a class="mdl-navigation__link" href="#" v-on:click="close">Close</a>-->
+    </nav>
+    </div>
+    <!--contenido-->
+    <main class="mdl-layout__content">
+    <div id="contenido">
+      <!--Show posts-->
+      <section id="posts" v-show="showPosts">
+        <div id="progressPosts" class="mdl-progress mdl-js-progress" v-bind:class='{"mdl-progress--indeterminate": loadingPosts}'></div>
+        <!--post table-->
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+          <thead>
+            <tr>
+              <th class="mdl-data-table__cell--non-numeric">Name</th>
+              <th class="mdl-data-table__cell--non-numeric">Date</th>
+              <th class="mdl-data-table__cell--non-numeric">Modified</th>
+              <th class="mdl-data-table__cell--non-numeric">Is page</th>
+              <th class="mdl-data-table__cell--non-numeric">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="post in posts" :key="post.slug">
+              <td class="mdl-data-table__cell--non-numeric">${post.slug}</td>
+              <td class="mdl-data-table__cell--non-numeric">${post.date}</td>
+              <td class="mdl-data-table__cell--non-numeric">${post.modified}</td>
+              <td class="mdl-data-table__cell--non-numeric">${post.isPage}</td>
+              <td class="mdl-data-table__cell--non-numeric">
+                <!-- What to do with this post -->
+                <button class="mdl-button mdl-js-button mdl-button--colored" v-on:click="editPost(post)">
+                  Edit
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+      <!--Shot editor-->
+      <section id="editor" v-show="showEditor">
+        <!--editor layout-->
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+          <header class="mdl-layout__header">
+            <div class="mdl-layout__header-row">
+              <span class="mdl-layout-title">Edit post</span>
+            </div>
+            <div class="mdl-layout__tab-bar">
+              <a href="#edit" class="mdl-layout__tab is-active">Edit</a>
+              <a href="#meta" class="mdl-layout__tab">Meta</a>
+            </div>
+          </header>
+          <!--editor content-->
+          <main class="mdl-layout__content">
+            <!--post edition-->
+            <section id="edit" class="mdl-layout__tab-panel is-active">
+              <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--6-col mdl-textfield mdl-js-textfield">
+                  <input class="mdl-textfield__input" type="text" id="slug" ref="slug" v-on:change="onChangeSlug"></input>
+                  <label class="mdl-textfield__label" for="slug">Insert slug</label>
+                </div>
+                <div class="mdl-cell mdl-cell--2-col">
+                  <button class="mdl-button mdl-js-button mdl-button--raised" v-on:click="savePost">Save</button>
+                </div>
+              </div>
+              <!--Change language-->
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect"
+                v-on:click="changeTranslation('{{defaultLang}}')">
+                {{defaultLang}}
+              </button>
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect"
+                v-for="(value, key) in post.translations"
+                v-on:click="changeTranslation(key)"
+                >${key}</button>
+              <!--TODO: Insert here buttons with the post translations
+              <!--insert new translation-->
+              <div class="mdl-textfield mdl-js-textfield" id="translation-field">
+                <input class="mdl-textfield__input" type="text" id="translation"
+                  ref="translation" v-on:change="" maxlength="2"
+                  pattern="\w\w">
+                </input>
+                <label class="mdl-textfield__label" for="translation">en, es, fr...</label>
+              </div>
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect"
+                v-on:click="addTranslation">
+                <i class="material-icons">add</i>
+              </button>
+              <!--end insert new translation-->
+              <!--(big) text area-->
+              <div class="mdl-textfield mdl-js-textfield post-content">
+                <textarea class="mdl-textfield__input" type="text" rows="25" id="post-textarea" ref="postTextarea" v-on:change="onChangePostContent">
+                </textarea>
+                <label class="mdl-textfield__label" for="post-textarea">Write your content here</label>
+              </div>
+            </section>
+            <!--post meta-->
+            <section id="meta" class="mdl-layout__tab-panel">
+              <h4>Tags</h4>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="tags" ref="tags" v-on:change="onChangeTags"></input>
+                <label class="mdl-textfield__label" for="tags">Insert tags</label>
+              </div>
+              <h4>Category</h4>
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="category" ref="category" v-on:change="onChangeCategory"></input>
+                <label class="mdl-textfield__label" for="category">Category</label>
+              </div>
+              <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="is-a-page">
+                <input type="checkbox" id="is-a-page" class="mdl-checkbox__input" ref="isPage" v-on:change="postIsPage"></input>
+                <span class="mdl-checbox__label">This is a page</span>
+              </label>
+            </section>
+          </main>
+        </div>
+      </section>
+      <!--Generate site page-->
+      <section id="generate-site" v-show="showGenerateSite">
+        <h4>Generating site</h4>
+        <div id="progressSite" class="mdl-progress mdl-js-progress" v-bind:class='{"mdl-progress--indeterminate": generatingSite}'></div>
+        <p>${serverResponse.stdout}</p>
+        <p style="color: red;">${serverResponse.stderr}</p>
+        <button class="mdl-button mdl-js-button mdl-button--raised" v-on:click="previewSite" v-show="serverResponse.returncode === 0">
+          View generated site
+        </button> 
+      </section>
+      
+    </div>
+    <div id="notification" class="mdl-snackbar mdl-js-snackbar">
+      <div class="mdl-snackbar__text"></div>
+      <button type="button" class="mdl-snackbar__action"></button>
+    </div>
+    </main>
+  </div>
+
+  <script src="post.js"></script>
+  <script src="chubasquero.js"></script>
+
+  </body>
+</html>
