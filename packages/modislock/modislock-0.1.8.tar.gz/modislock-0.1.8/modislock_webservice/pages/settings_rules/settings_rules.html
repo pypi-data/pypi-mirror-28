@@ -1,0 +1,103 @@
+{% extends "_template_page.html" %}
+{% from "rules_field/_rules_field.html" import render_rules_field, render_time_field %}
+
+{% set active_page = "settings" %}
+
+{% block page_title %}System Rules{% endblock %}
+
+{% block page_heading %}
+    <h2><i class="fa fa-fw fa-compass"></i>Rules Settings</h2>
+{% endblock %}
+
+{% block page_name %}
+    Rules Settings
+{% endblock %}
+
+{% block page_css %}
+    {% assets 'settings_rules_css' %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <p class="small text-uppercase text-center"><span class="fa fa-calendar-times-o"></span>&nbsp Global Time Settings</p>
+                </div>
+                <div class="ibox-content">
+                    <div class="row">
+                        <div class="col text-center">
+                            <p class="h5 text-success">Default Access Hours</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <form method="POST" action="{{ url_for('settings_rules.rules_settings') }}">
+                            {{ form.csrf_token }}
+                            <div class="form-row form-group form-inline">
+                                <div class="col text-center">
+                                    <label for="glob_start" class="label bg-muted">{{ form.glob_start.description }}</label>
+                                    <div class="input-group clockpicker">
+                                        {{ form.glob_start(class_='form-control text-center') }}
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row form-group form-inline">
+                                <div class="col text-center">
+                                    <label for="glob_end" class="label bg-muted">{{ form.glob_end.description }}</label>
+                                    <div class="input-group clockpicker">
+                                        {{ form.glob_end(class_='form-control text-center') }}
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-time"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row form-group">
+                                <div class="col text-center">
+                                    <div class="weekDays-selector">
+                                        {{ render_rules_field(form.glob_mon) }}
+                                        {{ render_rules_field(form.glob_tue) }}
+                                        {{ render_rules_field(form.glob_wed) }}
+                                        {{ render_rules_field(form.glob_thr) }}
+                                        {{ render_rules_field(form.glob_fri) }}
+                                        {{ render_rules_field(form.glob_sat) }}
+                                        {{ render_rules_field(form.glob_sun) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row form-group">
+                                <div class="col text-center">
+                                    {{ form.submit_btn(class_=('btn btn-outline btn-primary btn-rounded')) }}
+                                    {%  for error in form.submit_btn.errors %}
+                                        <div class="text-warning">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_js %}
+    {{ super() }}
+    {% assets 'settings_rules_js' %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if( '{{ save_result }}' === 'True' ) {
+                toastr.success('saved settings', 'RULES');
+            }
+        });
+    </script>
+{% endblock page_js %}

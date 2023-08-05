@@ -1,0 +1,160 @@
+{% extends "_template_page.html" %}
+{% from "security_field/_security_field.html" import render_security_field %}
+{% from "security_notification/_security_notification.html" import render_security_notification %}
+{% set active_page = "settings" %}
+
+{% macro error_fields(field) %}
+    {% if field.errors %}
+        <ul class=error>
+            {% for error in field.errors %}
+                <li class="text-warning">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endmacro %}
+
+{% block page_title %}System Security Settings{% endblock %}
+
+{% block page_heading %}
+    <h2><i class="fa fa-fw fa-lock"></i>Security Settings</h2>
+{% endblock %}
+
+{% block page_name %}
+    Security Settings
+{% endblock %}
+
+{% block page_css %}
+    {% assets 'settings_security_css' %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <p class="small text-uppercase text-center"><span class="fa fa-lock"></span>&nbsp Security Settings</p>
+                </div>
+                <div class="ibox-content">
+                    <form method="POST" action="{{ url_for('settings_security.security_settings') }}">
+                        {{ security_form.csrf_token }}
+                        {{ render_security_field(security_form.pin_places) }}
+                        {{ render_security_field(security_form.months_preserved) }}
+                        <hr class="hr-line-dashed">
+                        <p class="text-center text-success">Email Notifications</p>
+                        <div class="form-row form-group">
+                            <div class="col">
+                                <ul class="todo-list m-t">
+                                    {{ render_security_notification(security_form.notify_on_denied) }}
+                                    {{ render_security_notification(security_form.notify_on_after_hours) }}
+                                    {{ render_security_notification(security_form.notify_on_system_error) }}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="form-row form-group text-center">
+                            <div class="col">
+                                {{ security_form.submit_btn(class_='btn btn-outline btn-primary btn-rounded') }}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <p class="small text-uppercase text-center"><span class="fa fa-envelope"></span>&nbsp Email Server Settings</p>
+                </div>
+                <div class="ibox-content">
+                    <form method="POST" action="{{ url_for('settings_security.security_settings') }}">
+                        {{ email_form.csrf_token }}
+                        <div class="form-row form-group">
+                            <div class="col">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-muted">{{ email_form.mail_server.description }}</span>
+                                    {{ email_form.mail_server(class_='form-control text-center') }}
+                                </div>
+                                {{ error_fields(email_form.mail_server) }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-7">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-muted">{{ email_form.mail_port.description }}</span>
+                                    {{ email_form.mail_port(class_='form-control text-center', size=6) }}
+                                </div>
+                                {{ error_fields(email_form.mail_port) }}
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="checkbox checkbox-modis">
+                                    {{ email_form.mail_use_tls }}
+                                    <label for="mail_use_tls">{{ email_form.mail_use_tls.description }}</label>
+                                </div>
+                                <div class="checkbox checkbox-modis">
+                                    {{ email_form.mail_use_ssl }}
+                                    <label for="mail_use_ssl">{{ email_form.mail_use_ssl.description }}</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-muted">{{ email_form.mail_username.description }}</span>
+                                    {{ email_form.mail_username(class_='form-control text-center') }}
+                                </div>
+                                {{ error_fields(email_form.mail_username) }}
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-muted">{{ email_form.mail_password.description }}</span>
+                                    {{ email_form.mail_password(class_='form-control text-center') }}
+                                </div>
+                                {{ error_fields(email_form.mail_password) }}
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <span class="input-group-addon bg-muted">{{ email_form.mail_sender.description }}</span>
+                                    {{ email_form.mail_sender(class_='form-control text-center') }}
+                                </div>
+                                {{ error_fields(email_form.mail_sender) }}
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-sm-5 col-md-5 col-lg-5 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                {{ email_form.submit_btn(class_='btn btn-outline btn-primary btn-rounded') }}
+                            </div>
+                            <div class="col-sm-5 col-md-5 col-lg-5 col-sm-offset-1 col-md-offset-1 col-lg-offset-1">
+                                <button class="btn btn-outline btn-success btn-rounded" id="btn_test_mail">TEST Settings</button>
+                            </div>
+                            <span class="clearfix"></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_js %}
+    {{ super() }}
+    {% assets 'settings_security_js' %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                if( '{{ save_result }}' === 'True' ){
+                    toastr.success('saved settings', 'SECURITY');
+                }
+
+                $('.i-checks').iCheck({
+                    checkboxClass: 'icheckbox_square-green',
+                    radioClass: 'iradio_square-green'
+                });
+            });
+        </script>
+    {% endassets %}
+{% endblock page_js %}

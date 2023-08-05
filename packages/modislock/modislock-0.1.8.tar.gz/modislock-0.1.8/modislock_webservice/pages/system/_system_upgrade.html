@@ -1,0 +1,74 @@
+{# Modal Upgrade Windows #}
+<div class="modal inmodal" id="upgrade_modal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:visible;">
+    <div class="modal-dialog">
+        <div class="modal-content animated">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col text-center">
+                        <h3>Update Software</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4 col-sm-3 col-xs-3 text-right">
+                        <p>Software</p>
+                    </div>
+                    <div class="col-md-4 col-sm-3 col-xs-3 text-center">
+                        <b>WebAdmin</b>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 text-center">
+                        <b>Monitor</b>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-3 col-xs-3 text-right">
+                        <p>Current Version</p>
+                    </div>
+                    <div class="col-md-4 col-sm-3 col-xs-3 text-center">
+                        <p>{{ app_version }}</p>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 text-center">
+                        <p>{{ mon_version }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-sm-3 col-xs-3 text-right">
+                        <p>Available Version</p>
+                    </div>
+                    <div class="col-md-4 col-sm-3 col-xs-3 text-center">
+                        <p>{{ app_avail_version }}</p>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 text-center">
+                        <p>{{ mon_avail_version }}</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-sm-3 col-xs-3 text-right text-middle">
+                        <p>Upgrade?</p>
+                    </div>
+                    <div class="col-md-4 col-sm-3 col-xs-3 text-center">
+                        <form action="{{ url_for('system.system_upgrade', target='modislock') }}" method="GET">
+                            <button type="submit" class="btn btn-success" id="btn_admin" disabled><i class="fa fa-download">
+                            </i> Yes</button>
+                        </form>
+                    </div>
+                    <div class="col-md-3 col-sm-3 col-xs-3 text-center">
+                        <form action="{{ url_for('system.system_upgrade', target='modislock-monitor') }}" method="GET">
+                            <button type="submit" class="btn btn-success" id="btn_monitor" disabled><i class="fa fa-download">
+                            </i> Yes</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                    <span class="pull-right">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                    </span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                            <span>
+                                <img alt="image" class="img-circle" width="50%" height="50%"
+                                     src={{ url_for('static', filename='img/logo_m_round.png') }}>
+                            </span>
+                    <span class="clear">
+                                <span class="block m-t-xs">
+                                    <strong class="font-bold">| Modis Lock |</strong>
+                                </span>
+                            </span>
+                </div>
+                <div class="logo-element">
+                    ML+
+                </div>
+            </li>
+            {% set navigation_bar = [
+                        (url_for('site.index'), 'index', 'fa fa-th-large', 'Dashboard', None),
+                        (url_for('users.users'), 'users', 'fa fa-users', 'User/Key Management', None ),
+                        (url_for('logs.logs'), 'logs', 'fa fa-list-ul', 'Reports', None),
+                        (url_for('system.system'), 'system', 'fa fa-heart-o', 'System Status', None),
+                        ('#', 'settings', 'fa fa-gear', 'System Settings', [
+                            (url_for('settings_network.network_settings'), 'fa fa-server', 'Network'),
+                            (url_for('settings_security.security_settings'), 'fa fa-lock', 'Security'),
+                            (url_for('settings_reader.reader_settings'), 'fa fa-fax', 'Readers'),
+                            (url_for('settings_rules.rules_settings'), 'fa fa-book', 'Rules'),
+                            (url_for('settings_backup.backup_settings'), 'fa fa-file', 'Backup/Restore'),
+                            (url_for('settings_api.api_settings'), 'fa fa-compass', 'API Access')
+                        ]),
+                        (url_for('documentation.get_docs'), 'documentation', 'fa fa-medkit', 'Documentation', None)
+                    ] -%}
+
+            {% set active_page = active_page|default('index') -%}
+            {# Dynamic creation of navigation menu #}
+            {% for href, id, icon, caption, children in navigation_bar %}
+                <li {% if id == active_page %} class="active" {% endif %}>
+                    <a href="{{ href|e }}">
+                        <i class="{{ icon }}"></i>
+                        <span class="nav-label">{{ caption }}</span>
+                        {% if children %}
+                            <span class="fa arrow"></span>
+                        {% endif %}
+                    </a>
+                    {% if children %}
+                        <ul class="nav nav-second-level collapse">
+                            {% for href, icon, caption in children %}
+                                <li>
+                                    <a href="{{ href|e }}">
+                                        <i class="{{ icon }}"></i>
+                                        <span class="nav-label">{{ caption }}</span>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</nav>
