@@ -1,0 +1,43 @@
+---
+api:
+  url: https://api.trello.com/1
+  key: API_KEY
+  token: API_TOKEN
+  organization: API_ORGANISATION
+
+elasticsearch:
+  username: ELASTIC_USERNAME
+  password: ELASTIC_PASSWORD
+  endpoint: ELASTIC_IP_ADDRESS
+  port: ELASTIC_PORT
+  index: ELASTIC_INDEX
+
+log_config:
+  version: 1
+  handlers:
+    default:
+      class: logging.StreamHandler
+      formatter: default
+      level: INFO
+      stream: ext://sys.stdout
+    file:
+      class: logging.FileHandler
+      formatter: default
+      filename: '/opt/trelloreporter/data/log/trelloreporter.log'
+      level: DEBUG
+  formatters:
+    default:
+      format: '%(asctime)s %(name)s %(levelname)s %(message)s'
+  loggers:
+    trelloreporter:
+      handlers:
+        - default
+        - file
+      level:  DEBUG
+
+mail:
+  from: philanim@is.co.za
+  recipients:
+    - philanim@is.co.za
+  subject: Trelloreporter
+  relay: grumpy.is.co.za
