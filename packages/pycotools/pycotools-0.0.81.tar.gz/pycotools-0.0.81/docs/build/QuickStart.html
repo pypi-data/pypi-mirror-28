@@ -1,0 +1,1872 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quick Start &mdash; Pycotools version 12</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Pycotools version 12" href="index.html"/>
+        <link rel="next" title="Installation, dependencies, versions, environment variables" href="Tutorials/Tutorial0InstallationAndConfiguration.html"/>
+        <link rel="prev" title="Pycotools’s Documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Pycotools
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Create-Michaelis-Menten-Model">Create Michaelis-Menten Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Simulate-Michaelis-Menten-model">Simulate Michaelis-Menten model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Plot-results">Plot results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Inspect-the-model">Inspect the model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Prepare-Time-Course-Results-for-Parameter-Estimation">Prepare Time Course Results for Parameter Estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Do-parameter-estimations">Do parameter estimations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Visualize-data">Visualize data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Profile-Likelihoods">Profile Likelihoods</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Best-Parameters">Best Parameters</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial0InstallationAndConfiguration.html">Installation, dependencies, versions, environment variables</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial0InstallationAndConfiguration.html#COPASI">COPASI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial0InstallationAndConfiguration.html#COPASI-Environment-Variables">COPASI Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial0InstallationAndConfiguration.html#On-Linux">On Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial0InstallationAndConfiguration.html#On-Windows">On Windows</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial0InstallationAndConfiguration.html#Python">Python</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial0InstallationAndConfiguration.html#Python3-Users">Python3 Users</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial0InstallationAndConfiguration.html#IDE">IDE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial0InstallationAndConfiguration.html#Pip">Pip</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial0InstallationAndConfiguration.html#Pycotools">Pycotools</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html">Get Zi Model for this Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Parse-a-Model-into-Pycotools">Parse a Model into Pycotools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Open-and-Save">Open and Save</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Get-Model-Information">Get Model Information</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Model-attributes">Model attributes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Access-Model-Attributes">Access Model Attributes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Get,-Set,-Add-and-Remove">Get, Set, Add and Remove</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#How-to-get-model-objects">How to get model objects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Get-the-Smad3c-metabolite">Get the Smad3c metabolite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Get-any-global-quantity-with-a-fixed-simulation_type-attribute">Get any global quantity with a fixed simulation_type attribute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Get-a-function-by-its-expression">Get a function by its expression</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Get-all-local-parameters-in-the-R17_LRC_formation-reaction">Get all local parameters in the R17_LRC_formation reaction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#How-to-change-existing-model-attributes">How to change existing model attributes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Change-the-name-of-a-metabolite">Change the name of a metabolite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Change-initial_value-of-a-global_quantity">Change initial_value of a global_quantity</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#How-to-add-a-model-component">How to add a model component</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Add-a-metabolite">Add a metabolite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Add-a-global-quantity-to-the-model">Add a global quantity to the model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Add-a-reaction">Add a reaction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial1TheModel.html#Remove-model-components">Remove model components</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html">TimeCourse</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Imports-and-Getting-the-Test-Model">Imports and Getting the Test Model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Get-Model-Object">Get Model Object</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Deterministic-Time-Course">Deterministic Time Course</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Run-a-deterministic-time-course">Run a deterministic time course</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Save-time-course-configured-model">Save time course configured model</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Being-selective-about-which-output-variables-to-select">Being selective about which output variables to select</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Visualization">Visualization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Plot-the-results">Plot the results</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Plot-on-the-same-axis">Plot on the same axis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Choose-Y-variables">Choose Y variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Plot-in-Phase-Space">Plot in Phase Space</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Save-to-file">Save to file</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial2Timecourse.html#Alternative-Solvers">Alternative Solvers</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial3Scan.html">Parameter Scan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial3Scan.html#Get-Model-String">Get Model String</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial3Scan.html#Parse-Model">Parse Model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial3Scan.html#Parameter-Scan">Parameter Scan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial3Scan.html#2-Way-Parameter-Scan">2 Way Parameter Scan</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial3Scan.html#Repeat-Scan-Items">Repeat Scan Items</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html">Parameter Estimation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Imports-and-Getting-Test-Model">Imports and Getting Test Model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Simulate-Synthetic-Data-for-Demonstration">Simulate Synthetic Data for Demonstration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Parameter-Estimation-Data-Files">Parameter Estimation Data Files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Setup-and-run-single-parameter-estimation">Setup and run single parameter estimation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Use-HookeJeeves-algorithm">Use HookeJeeves algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Use-particle-swarm-algorithm">Use particle swarm algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Use-genetic-algorithm">Use genetic algorithm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Write-and-configure-item-template">Write and configure item template</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Configure-manually">Configure manually</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Configure-with-API">Configure with API</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Setup-and-run-parameter-estimation">Setup and run parameter estimation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Run-with-CopasiSE">Run with CopasiSE</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Visualization">Visualization</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Plot-all-estimated-parameters">Plot all estimated parameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Save-to-file-(default-options)">Save to file (default options)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Save-to-file-(user-specified-options)">Save to file (user specified options)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Select-specific-variables-to-plot">Select specific variables to plot</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Multiple-Data-Files">Multiple Data Files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Pre-requisites">Pre-requisites</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Change-a-parameter-value">Change a parameter value</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Simulate-second-time-course">Simulate second time course</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Format-the-second-synthetic-time-course-data">Format the second synthetic time course data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Add-independent-variable">Add independent variable</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Setup-parameter-estimation-with-two-data-files">Setup parameter estimation with two data files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Run-parameter-estimation-with-two-data-files">Run parameter estimation with two data files</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Visualization">Visualization</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Steady-State-data">Steady State data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Tutorials/Tutorial4SingleParameterEstimations.html#Setup-parameter-estimation-with-steady-state">Setup parameter estimation with steady state</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Examples/ExamplesIndex.html">Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Examples/LorenzAttractor.html">The Lorenz attractor system</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/LorenzAttractor.html#Visualization">Visualization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Examples/LorenzAttractor.html#Time-on-x-axis">Time on x axis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Examples/LorenzAttractor.html#Phase-Space-Plots">Phase Space Plots</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/LotkaVolterra.html">The Lotka Volterra System</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Examples/LotkaVolterra.html#Visualization">Visualization</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="APIDoc/APIIndex.html">API Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="APIDoc/model/model_index.html">model</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="APIDoc/tasks/tasks_index.html">tasks</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="APIDoc/viz/viz_index.html">Viz</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="APIDoc/viz/viz_index.html#kwargs">kwargs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="APIDoc/viz/viz_index.html#kwargs-for-plotting">Kwargs for plotting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="APIDoc/viz/viz_index.html#savefig-kwargs">savefig kwargs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="APIDoc/viz/viz_index.html#truncate-kwargs">truncate-kwargs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Caveats.html">Caveats</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Caveats.html#non-ascii-characters">Non-Ascii Characters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Caveats.html#parameter-estimation">Parameter Estimation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Caveats.html#units">Units</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Caveats.html#assignments">Assignments</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Caveats.html#duplicate-names">Duplicate Names</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Pycotools</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Quick Start</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/QuickStart.ipynb.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput,
+div.nbinput div.prompt,
+div.nbinput div.input_area,
+div.nbinput div[class*=highlight],
+div.nbinput div[class*=highlight] pre,
+div.nboutput,
+div.nbinput div.prompt,
+div.nbinput div.output_area,
+div.nboutput div[class*=highlight],
+div.nboutput div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput,
+div.nboutput {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput,
+    div.nboutput {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput div.prompt pre {
+    color: #303F9F;
+}
+
+/* output prompt */
+div.nboutput div.prompt pre {
+    color: #D84315;
+}
+
+/* all prompts */
+div.nbinput div.prompt,
+div.nboutput div.prompt {
+    min-width: 8ex;
+    padding-top: 0.4em;
+    padding-right: 0.4em;
+    text-align: right;
+    flex: 0;
+}
+@media (max-width: 540px) {
+    div.nbinput div.prompt,
+    div.nboutput div.prompt {
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput div.prompt.empty {
+        padding: 0;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput div.prompt pre,
+div.nboutput div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput div.input_area,
+div.nboutput div.output_area {
+    padding: 0.4em;
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput div.input_area,
+    div.nboutput div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput div.input_area {
+    border: 1px solid #cfcfcf;
+    border-radius: 2px;
+    background: #f7f7f7;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.pngmath center alignment in output cells */
+div.nboutput div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-bold { font-weight: bold; }
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast,
+.nboutput.nblast {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast + .nbinput {
+    margin-top: -19px;
+}
+
+/* nice headers on first paragraph of info/warning boxes */
+.admonition .first {
+    margin: -12px;
+    padding: 6px 12px;
+    margin-bottom: 12px;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+.admonition.warning .first {
+    background: #f0b37e;
+}
+.admonition.note .first {
+    background: #6ab0de;
+}
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+</style>
+<div class="section" id="Quick-Start">
+<h1>Quick Start<a class="headerlink" href="#Quick-Start" title="Permalink to this headline">¶</a></h1>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="kn">import</span> <span class="nn">site</span>
+<span class="n">site</span><span class="o">.</span><span class="n">addsitedir</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;C:\Users\Ciaran\Documents\pycotools&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pycotools</span> <span class="kn">import</span> <span class="n">model</span><span class="p">,</span> <span class="n">models</span><span class="p">,</span> <span class="n">viz</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">misc</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="stderr output_area docutils container">
+<div class="highlight"><pre>
+C:\Users\Ciaran\Documents\pycotools\pycotools\viz.py:117: FutureWarning: The pandas.parser module is deprecated and will be removed in a future version. Please import from the pandas.io.parser instead
+  from pandas.parser import CParserError
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+root:INFO:25:    Initializing pycotools
+root:INFO:26:    Initializing logging System
+root:INFO:27:    logging config file at: C:\Users\Ciaran\Documents\pycotools\pycotools\logging_config.conf
+</pre></div></div>
+</div>
+<div class="section" id="Create-Michaelis-Menten-Model">
+<h2>Create Michaelis-Menten Model<a class="headerlink" href="#Create-Michaelis-Menten-Model" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">working_directory</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;C:\Users\Ciaran\Documents\PycotoolsQuickStart&#39;</span>
+<span class="n">copasi_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">working_directory</span><span class="p">,</span> <span class="s1">&#39;quick_start_model.cps&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">copasi_file</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">copasi_file</span><span class="p">)</span>
+
+
+<span class="n">kf</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">kb</span> <span class="o">=</span> <span class="mf">0.1</span>
+<span class="n">kcat</span> <span class="o">=</span> <span class="mf">0.03</span>
+<span class="k">with</span> <span class="n">model</span><span class="o">.</span><span class="n">Build</span><span class="p">(</span><span class="n">copasi_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">m</span><span class="p">:</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Michaelis-Menten&#39;</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;compartment&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Cell&#39;</span><span class="p">)</span>
+
+    <span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;P&#39;</span><span class="p">,</span> <span class="n">concentration</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="n">concentration</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">,</span> <span class="n">concentration</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;metabolite&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ES&#39;</span><span class="p">,</span> <span class="n">concentration</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;reaction&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;S bind E&#39;</span><span class="p">,</span> <span class="n">expression</span><span class="o">=</span><span class="s1">&#39;S + E -&gt; ES&#39;</span><span class="p">,</span> <span class="n">rate_law</span><span class="o">=</span><span class="s1">&#39;kf*S*E&#39;</span><span class="p">,</span>
+          <span class="n">parameter_values</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;kf&#39;</span><span class="p">:</span> <span class="n">kf</span><span class="p">})</span>
+
+    <span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;reaction&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;S unbind E&#39;</span><span class="p">,</span> <span class="n">expression</span><span class="o">=</span><span class="s1">&#39;ES -&gt; S + E&#39;</span><span class="p">,</span> <span class="n">rate_law</span><span class="o">=</span><span class="s1">&#39;kb*ES&#39;</span><span class="p">,</span>
+         <span class="n">parameter_values</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;kb&#39;</span><span class="p">:</span> <span class="n">kb</span><span class="p">})</span>
+
+    <span class="n">m</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;reaction&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;ES produce P&#39;</span><span class="p">,</span> <span class="n">expression</span><span class="o">=</span><span class="s1">&#39;ES -&gt; P&#39;</span><span class="p">,</span> <span class="n">rate_law</span><span class="o">=</span><span class="s1">&#39;kcat*ES&#39;</span><span class="p">,</span>
+          <span class="n">parameter_values</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;kcat&#39;</span><span class="p">:</span> <span class="n">kcat</span><span class="p">})</span>
+
+<span class="n">michaelis_menten</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">copasi_file</span><span class="p">)</span>
+
+<span class="n">michaelis_menten</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[4]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>Model(name=Michaelis-Menten, time_unit=s, volume_unit=ml, quantity_unit=mmol)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Simulate-Michaelis-Menten-model">
+<h2>Simulate Michaelis-Menten model<a class="headerlink" href="#Simulate-Michaelis-Menten-model" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [70]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">TC</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">TimeCourse</span><span class="p">(</span><span class="n">michaelis_menten</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">intervals</span><span class="o">=</span><span class="mf">0.01</span><span class="o">*</span><span class="mi">100</span><span class="p">,</span>
+                     <span class="n">report_name</span><span class="o">=</span><span class="s1">&#39;MM-time-course.csv&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Plot-results">
+<h2>Plot results<a class="headerlink" href="#Plot-results" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">viz</span><span class="o">.</span><span class="n">PlotTimeCourse</span><span class="p">(</span><span class="n">TC</span><span class="p">,</span> <span class="n">separate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[36]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>&lt;pycotools.viz.PlotTimeCourse at 0xdb36128&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_7_1.png" src="_images/QuickStart_7_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">metabolite_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">michaelis_menten</span><span class="o">.</span><span class="n">metabolites</span><span class="p">]</span>
+<span class="p">[</span><span class="n">viz</span><span class="o">.</span><span class="n">PlotTimeCourse</span><span class="p">(</span><span class="n">TC</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">separate</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">metabolite_names</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[37]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>[&lt;pycotools.viz.PlotTimeCourse at 0xdc52be0&gt;,
+ &lt;pycotools.viz.PlotTimeCourse at 0xd9fde48&gt;,
+ &lt;pycotools.viz.PlotTimeCourse at 0xe3de5c0&gt;,
+ &lt;pycotools.viz.PlotTimeCourse at 0xdf4e3c8&gt;]
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_8_1.png" src="_images/QuickStart_8_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_8_2.png" src="_images/QuickStart_8_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_8_3.png" src="_images/QuickStart_8_3.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_8_4.png" src="_images/QuickStart_8_4.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Inspect-the-model">
+<h2>Inspect the model<a class="headerlink" href="#Inspect-the-model" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="k">print</span> <span class="s1">&#39;model has {} metabolites, {} reactions and {} local parameters&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+    <span class="nb">len</span><span class="p">(</span><span class="n">michaelis_menten</span><span class="o">.</span><span class="n">metabolites</span><span class="p">),</span>
+    <span class="nb">len</span><span class="p">(</span><span class="n">michaelis_menten</span><span class="o">.</span><span class="n">reactions</span><span class="p">),</span>
+    <span class="nb">len</span><span class="p">(</span><span class="n">michaelis_menten</span><span class="o">.</span><span class="n">local_parameters</span><span class="p">)</span>
+<span class="p">)</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+model has 4 metabolites, 3 reactions and 3 local parameters
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Prepare-Time-Course-Results-for-Parameter-Estimation">
+<h2>Prepare Time Course Results for Parameter Estimation<a class="headerlink" href="#Prepare-Time-Course-Results-for-Parameter-Estimation" title="Permalink to this headline">¶</a></h2>
+<p>Since copasi headers from copasi output looks like this:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">pandas</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">TC</span><span class="o">.</span><span class="n">report_name</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[39]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Time</th>
+      <th>[E]</th>
+      <th>[ES]</th>
+      <th>[P]</th>
+      <th>[S]</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.00</td>
+      <td>15.0000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>50.0000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.01</td>
+      <td>14.9253</td>
+      <td>0.074708</td>
+      <td>0.000011</td>
+      <td>49.9253</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.02</td>
+      <td>14.8511</td>
+      <td>0.148837</td>
+      <td>0.000045</td>
+      <td>49.8511</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.03</td>
+      <td>14.7775</td>
+      <td>0.222392</td>
+      <td>0.000100</td>
+      <td>49.7775</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.04</td>
+      <td>14.7044</td>
+      <td>0.295378</td>
+      <td>0.000178</td>
+      <td>49.7044</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<p>And we need exact match between variable names and data file headers, we
+can use the <code class="docutils literal"><span class="pre">misc.correct_copasi_timecourse_headers</span></code> function to
+automatically format the simulated time course data for us</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [71]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">misc</span><span class="o">.</span><span class="n">correct_copasi_timecourse_headers</span><span class="p">(</span><span class="n">TC</span><span class="o">.</span><span class="n">report_name</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[71]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Time</th>
+      <th>E</th>
+      <th>ES</th>
+      <th>P</th>
+      <th>S</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.00</td>
+      <td>15.000000</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>50.0000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.01</td>
+      <td>14.925200</td>
+      <td>0.074755</td>
+      <td>0.000011</td>
+      <td>49.9252</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.02</td>
+      <td>14.851000</td>
+      <td>0.148929</td>
+      <td>0.000045</td>
+      <td>49.8510</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.03</td>
+      <td>14.777400</td>
+      <td>0.222528</td>
+      <td>0.000100</td>
+      <td>49.7774</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.04</td>
+      <td>14.704300</td>
+      <td>0.295557</td>
+      <td>0.000178</td>
+      <td>49.7043</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.05</td>
+      <td>14.631700</td>
+      <td>0.368023</td>
+      <td>0.000278</td>
+      <td>49.6317</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>0.06</td>
+      <td>14.559700</td>
+      <td>0.439929</td>
+      <td>0.000399</td>
+      <td>49.5597</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>0.07</td>
+      <td>14.488200</td>
+      <td>0.511282</td>
+      <td>0.000541</td>
+      <td>49.4882</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.08</td>
+      <td>14.417200</td>
+      <td>0.582086</td>
+      <td>0.000705</td>
+      <td>49.4172</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.09</td>
+      <td>14.346800</td>
+      <td>0.652346</td>
+      <td>0.000890</td>
+      <td>49.3468</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>0.10</td>
+      <td>14.276800</td>
+      <td>0.722068</td>
+      <td>0.001096</td>
+      <td>49.2768</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>0.11</td>
+      <td>14.207400</td>
+      <td>0.791256</td>
+      <td>0.001323</td>
+      <td>49.2074</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>0.12</td>
+      <td>14.138500</td>
+      <td>0.859916</td>
+      <td>0.001571</td>
+      <td>49.1385</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>0.13</td>
+      <td>14.070100</td>
+      <td>0.928052</td>
+      <td>0.001839</td>
+      <td>49.0701</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>0.14</td>
+      <td>14.002200</td>
+      <td>0.995669</td>
+      <td>0.002127</td>
+      <td>49.0022</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>0.15</td>
+      <td>13.934800</td>
+      <td>1.062770</td>
+      <td>0.002436</td>
+      <td>48.9348</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>0.16</td>
+      <td>13.867900</td>
+      <td>1.129360</td>
+      <td>0.002764</td>
+      <td>48.8679</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>0.17</td>
+      <td>13.801400</td>
+      <td>1.195450</td>
+      <td>0.003113</td>
+      <td>48.8014</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>0.18</td>
+      <td>13.735500</td>
+      <td>1.261040</td>
+      <td>0.003481</td>
+      <td>48.7355</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>0.19</td>
+      <td>13.670000</td>
+      <td>1.326130</td>
+      <td>0.003869</td>
+      <td>48.6700</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>0.20</td>
+      <td>13.605000</td>
+      <td>1.390730</td>
+      <td>0.004276</td>
+      <td>48.6050</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>0.21</td>
+      <td>13.540500</td>
+      <td>1.454840</td>
+      <td>0.004703</td>
+      <td>48.5405</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>0.22</td>
+      <td>13.476400</td>
+      <td>1.518470</td>
+      <td>0.005148</td>
+      <td>48.4764</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>0.23</td>
+      <td>13.412800</td>
+      <td>1.581630</td>
+      <td>0.005613</td>
+      <td>48.4128</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>0.24</td>
+      <td>13.349600</td>
+      <td>1.644300</td>
+      <td>0.006097</td>
+      <td>48.3496</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>0.25</td>
+      <td>13.286900</td>
+      <td>1.706510</td>
+      <td>0.006599</td>
+      <td>48.2869</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>0.26</td>
+      <td>13.224600</td>
+      <td>1.768250</td>
+      <td>0.007120</td>
+      <td>48.2246</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>0.27</td>
+      <td>13.162800</td>
+      <td>1.829530</td>
+      <td>0.007659</td>
+      <td>48.1628</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>0.28</td>
+      <td>13.101400</td>
+      <td>1.890360</td>
+      <td>0.008217</td>
+      <td>48.1014</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>0.29</td>
+      <td>13.040500</td>
+      <td>1.950720</td>
+      <td>0.008793</td>
+      <td>48.0405</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>9971</th>
+      <td>99.71</td>
+      <td>0.361069</td>
+      <td>1.191130</td>
+      <td>13.447800</td>
+      <td>35.3611</td>
+    </tr>
+    <tr>
+      <th>9972</th>
+      <td>99.72</td>
+      <td>0.360986</td>
+      <td>1.190860</td>
+      <td>13.448200</td>
+      <td>35.3610</td>
+    </tr>
+    <tr>
+      <th>9973</th>
+      <td>99.73</td>
+      <td>0.360904</td>
+      <td>1.190580</td>
+      <td>13.448500</td>
+      <td>35.3609</td>
+    </tr>
+    <tr>
+      <th>9974</th>
+      <td>99.74</td>
+      <td>0.360822</td>
+      <td>1.190310</td>
+      <td>13.448900</td>
+      <td>35.3608</td>
+    </tr>
+    <tr>
+      <th>9975</th>
+      <td>99.75</td>
+      <td>0.360740</td>
+      <td>1.190030</td>
+      <td>13.449200</td>
+      <td>35.3607</td>
+    </tr>
+    <tr>
+      <th>9976</th>
+      <td>99.76</td>
+      <td>0.360657</td>
+      <td>1.189760</td>
+      <td>13.449600</td>
+      <td>35.3607</td>
+    </tr>
+    <tr>
+      <th>9977</th>
+      <td>99.77</td>
+      <td>0.360575</td>
+      <td>1.189480</td>
+      <td>13.449900</td>
+      <td>35.3606</td>
+    </tr>
+    <tr>
+      <th>9978</th>
+      <td>99.78</td>
+      <td>0.360493</td>
+      <td>1.189210</td>
+      <td>13.450300</td>
+      <td>35.3605</td>
+    </tr>
+    <tr>
+      <th>9979</th>
+      <td>99.79</td>
+      <td>0.360411</td>
+      <td>1.188940</td>
+      <td>13.450700</td>
+      <td>35.3604</td>
+    </tr>
+    <tr>
+      <th>9980</th>
+      <td>99.80</td>
+      <td>0.360328</td>
+      <td>1.188660</td>
+      <td>13.451000</td>
+      <td>35.3603</td>
+    </tr>
+    <tr>
+      <th>9981</th>
+      <td>99.81</td>
+      <td>0.360246</td>
+      <td>1.188390</td>
+      <td>13.451400</td>
+      <td>35.3602</td>
+    </tr>
+    <tr>
+      <th>9982</th>
+      <td>99.82</td>
+      <td>0.360164</td>
+      <td>1.188110</td>
+      <td>13.451700</td>
+      <td>35.3602</td>
+    </tr>
+    <tr>
+      <th>9983</th>
+      <td>99.83</td>
+      <td>0.360082</td>
+      <td>1.187840</td>
+      <td>13.452100</td>
+      <td>35.3601</td>
+    </tr>
+    <tr>
+      <th>9984</th>
+      <td>99.84</td>
+      <td>0.360000</td>
+      <td>1.187560</td>
+      <td>13.452400</td>
+      <td>35.3600</td>
+    </tr>
+    <tr>
+      <th>9985</th>
+      <td>99.85</td>
+      <td>0.359918</td>
+      <td>1.187290</td>
+      <td>13.452800</td>
+      <td>35.3599</td>
+    </tr>
+    <tr>
+      <th>9986</th>
+      <td>99.86</td>
+      <td>0.359836</td>
+      <td>1.187020</td>
+      <td>13.453100</td>
+      <td>35.3598</td>
+    </tr>
+    <tr>
+      <th>9987</th>
+      <td>99.87</td>
+      <td>0.359754</td>
+      <td>1.186740</td>
+      <td>13.453500</td>
+      <td>35.3598</td>
+    </tr>
+    <tr>
+      <th>9988</th>
+      <td>99.88</td>
+      <td>0.359672</td>
+      <td>1.186470</td>
+      <td>13.453900</td>
+      <td>35.3597</td>
+    </tr>
+    <tr>
+      <th>9989</th>
+      <td>99.89</td>
+      <td>0.359589</td>
+      <td>1.186200</td>
+      <td>13.454200</td>
+      <td>35.3596</td>
+    </tr>
+    <tr>
+      <th>9990</th>
+      <td>99.90</td>
+      <td>0.359507</td>
+      <td>1.185920</td>
+      <td>13.454600</td>
+      <td>35.3595</td>
+    </tr>
+    <tr>
+      <th>9991</th>
+      <td>99.91</td>
+      <td>0.359425</td>
+      <td>1.185650</td>
+      <td>13.454900</td>
+      <td>35.3594</td>
+    </tr>
+    <tr>
+      <th>9992</th>
+      <td>99.92</td>
+      <td>0.359344</td>
+      <td>1.185380</td>
+      <td>13.455300</td>
+      <td>35.3593</td>
+    </tr>
+    <tr>
+      <th>9993</th>
+      <td>99.93</td>
+      <td>0.359262</td>
+      <td>1.185100</td>
+      <td>13.455600</td>
+      <td>35.3593</td>
+    </tr>
+    <tr>
+      <th>9994</th>
+      <td>99.94</td>
+      <td>0.359180</td>
+      <td>1.184830</td>
+      <td>13.456000</td>
+      <td>35.3592</td>
+    </tr>
+    <tr>
+      <th>9995</th>
+      <td>99.95</td>
+      <td>0.359098</td>
+      <td>1.184560</td>
+      <td>13.456300</td>
+      <td>35.3591</td>
+    </tr>
+    <tr>
+      <th>9996</th>
+      <td>99.96</td>
+      <td>0.359016</td>
+      <td>1.184280</td>
+      <td>13.456700</td>
+      <td>35.3590</td>
+    </tr>
+    <tr>
+      <th>9997</th>
+      <td>99.97</td>
+      <td>0.358934</td>
+      <td>1.184010</td>
+      <td>13.457100</td>
+      <td>35.3589</td>
+    </tr>
+    <tr>
+      <th>9998</th>
+      <td>99.98</td>
+      <td>0.358852</td>
+      <td>1.183740</td>
+      <td>13.457400</td>
+      <td>35.3589</td>
+    </tr>
+    <tr>
+      <th>9999</th>
+      <td>99.99</td>
+      <td>0.358770</td>
+      <td>1.183460</td>
+      <td>13.457800</td>
+      <td>35.3588</td>
+    </tr>
+    <tr>
+      <th>10000</th>
+      <td>100.00</td>
+      <td>0.358688</td>
+      <td>1.183190</td>
+      <td>13.458100</td>
+      <td>35.3587</td>
+    </tr>
+  </tbody>
+</table>
+<p>10001 rows × 5 columns</p>
+</div></div>
+</div>
+</div>
+<div class="section" id="Do-parameter-estimations">
+<h2>Do parameter estimations<a class="headerlink" href="#Do-parameter-estimations" title="Permalink to this headline">¶</a></h2>
+<p>Spread computation over multiple model copies</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [74]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">PE</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">MultiParameterEstimation</span><span class="p">(</span><span class="n">michaelis_menten</span><span class="p">,</span> <span class="n">TC</span><span class="o">.</span><span class="n">report_name</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;genetic_algorithm_sr&#39;</span><span class="p">,</span>
+                                   <span class="n">copy_number</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">pe_number</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">population_size</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+                                   <span class="n">number_of_generations</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">metabolites</span><span class="o">=</span><span class="p">[],</span> <span class="n">overwrite_config_file</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="n">PE</span><span class="o">.</span><span class="n">write_config_file</span><span class="p">()</span>
+<span class="n">PE</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+<span class="n">PE</span><span class="o">.</span><span class="n">results_directory</span>
+<span class="n">PE</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[74]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>&#39;C:\\Users\\Ciaran\\Documents\\PycotoolsQuickStart\\MultipleParameterEstimationResults&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Visualize-data">
+<h2>Visualize data<a class="headerlink" href="#Visualize-data" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [64]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">viz</span><span class="o">.</span><span class="n">Boxplots</span><span class="p">(</span><span class="n">PE</span><span class="p">,</span> <span class="n">log10</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">num_per_plot</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[64]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>&lt;pycotools.viz.Boxplots at 0xdd35518&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_18_1.png" src="_images/QuickStart_18_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [65]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">viz</span><span class="o">.</span><span class="n">Boxplots</span><span class="p">(</span><span class="n">PE</span><span class="p">,</span> <span class="n">log10</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">num_per_plot</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">truncate_mode</span><span class="o">=</span><span class="s1">&#39;ranks&#39;</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[65]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>&lt;pycotools.viz.Boxplots at 0xdd35198&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_19_1.png" src="_images/QuickStart_19_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [66]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">viz</span><span class="o">.</span><span class="n">LikelihoodRanks</span><span class="p">(</span><span class="n">PE</span><span class="p">,</span> <span class="n">log10</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[66]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>&lt;pycotools.viz.LikelihoodRanks at 0x11a3fa90&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_20_1.png" src="_images/QuickStart_20_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [67]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">viz</span><span class="o">.</span><span class="n">PlotTimeCourseEnsemble</span><span class="p">(</span><span class="n">PE</span><span class="p">,</span> <span class="n">truncate_mode</span><span class="o">=</span><span class="s1">&#39;ranks&#39;</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+pycotools.viz:INFO:1353:    Plotting &#34;E&#34;
+pycotools.viz:INFO:1353:    Plotting &#34;ES&#34;
+pycotools.viz:INFO:1353:    Plotting &#34;P&#34;
+pycotools.viz:INFO:1353:    Plotting &#34;S&#34;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[67]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>&lt;pycotools.viz.PlotTimeCourseEnsemble at 0x17b1ad68&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_21_2.png" src="_images/QuickStart_21_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_21_3.png" src="_images/QuickStart_21_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_21_4.png" src="_images/QuickStart_21_4.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_21_5.png" src="_images/QuickStart_21_5.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [51]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">viz</span><span class="o">.</span><span class="n">Scatters</span><span class="p">(</span><span class="n">PE</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="n">log10</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">truncate_mode</span><span class="o">=</span><span class="s1">&#39;ranks&#39;</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+pycotools.viz:INFO:2404:    Plotting &#34;(ES produce P).kcat&#34; Vs &#34;(ES produce P).kcat&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;(ES produce P).kcat&#34; Vs &#34;(S bind E).kf&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;(ES produce P).kcat&#34; Vs &#34;(S unbind E).kb&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;(ES produce P).kcat&#34; Vs &#34;RSS&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;(S bind E).kf&#34; Vs &#34;(ES produce P).kcat&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;(S bind E).kf&#34; Vs &#34;(S bind E).kf&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;(S bind E).kf&#34; Vs &#34;(S unbind E).kb&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;(S bind E).kf&#34; Vs &#34;RSS&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;(S unbind E).kb&#34; Vs &#34;(ES produce P).kcat&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;(S unbind E).kb&#34; Vs &#34;(S bind E).kf&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;(S unbind E).kb&#34; Vs &#34;(S unbind E).kb&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;(S unbind E).kb&#34; Vs &#34;RSS&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;RSS&#34; Vs &#34;(ES produce P).kcat&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;RSS&#34; Vs &#34;(S bind E).kf&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;RSS&#34; Vs &#34;(S unbind E).kb&#34;
+pycotools.viz:INFO:2404:    Plotting &#34;RSS&#34; Vs &#34;RSS&#34;
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[51]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>&lt;pycotools.viz.Scatters at 0xd8147f0&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_2.png" src="_images/QuickStart_22_2.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_3.png" src="_images/QuickStart_22_3.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_4.png" src="_images/QuickStart_22_4.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_5.png" src="_images/QuickStart_22_5.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_6.png" src="_images/QuickStart_22_6.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_7.png" src="_images/QuickStart_22_7.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_8.png" src="_images/QuickStart_22_8.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_9.png" src="_images/QuickStart_22_9.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_10.png" src="_images/QuickStart_22_10.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_11.png" src="_images/QuickStart_22_11.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_12.png" src="_images/QuickStart_22_12.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_13.png" src="_images/QuickStart_22_13.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_14.png" src="_images/QuickStart_22_14.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_15.png" src="_images/QuickStart_22_15.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_16.png" src="_images/QuickStart_22_16.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_22_17.png" src="_images/QuickStart_22_17.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Profile-Likelihoods">
+<h2>Profile Likelihoods<a class="headerlink" href="#Profile-Likelihoods" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [75]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">PL</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">ProfileLikelihood</span><span class="p">(</span><span class="n">michaelis_menten</span><span class="p">,</span> <span class="n">parameter_path</span><span class="o">=</span><span class="n">PE</span><span class="o">.</span><span class="n">results_directory</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+                            <span class="n">max_active</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">number_of_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">log10</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">PL</span><span class="o">.</span><span class="n">results_directory</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+pycotools.tasks:INFO:4541:    running C:\Users\Ciaran\Documents\PycotoolsQuickStart\ProfileLikelihoods\0\(S_bind_E).kf.cps
+pycotools.tasks:INFO:4541:    running C:\Users\Ciaran\Documents\PycotoolsQuickStart\ProfileLikelihoods\0\(ES_produce_P).kcat.cps
+pycotools.tasks:INFO:4541:    running C:\Users\Ciaran\Documents\PycotoolsQuickStart\ProfileLikelihoods\0\(S_unbind_E).kb.cps
+C:\Users\Ciaran\Documents\PycotoolsQuickStart\ProfileLikelihoods
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [78]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">viz</span><span class="o">.</span><span class="n">PlotProfileLikelihood</span><span class="p">(</span><span class="n">PL</span><span class="p">,</span> <span class="n">interpolation</span><span class="o">=</span><span class="s1">&#39;cubic&#39;</span><span class="p">,</span> <span class="n">log10</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">show_original_rss</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[78]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>&lt;pycotools.viz.PlotProfileLikelihood at 0x140a2978&gt;
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_25_1.png" src="_images/QuickStart_25_1.png" />
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_25_2.png" src="_images/QuickStart_25_2.png" />
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/QuickStart_25_3.png" src="_images/QuickStart_25_3.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Best-Parameters">
+<h2>Best Parameters<a class="headerlink" href="#Best-Parameters" title="Permalink to this headline">¶</a></h2>
+<p>original parameters: * kf: 0.01 * kb: 0.1 * kcat: 0.03</p>
+<p>Best estimated parameters:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>In [80]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython2"><div class="highlight"><pre>
+<span></span><span class="n">viz</span><span class="o">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">PE</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none"><div class="highlight"><pre>
+<span></span>Out[80]:
+</pre></div>
+</div>
+<div class="output_area highlight-none"><div class="highlight"><pre>
+<span></span>(ES produce P).kcat    0.029980
+(S bind E).kf          0.010006
+(S unbind E).kb        0.100343
+RSS                    0.348595
+Name: 0, dtype: float64
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Tutorials/Tutorial0InstallationAndConfiguration.html" class="btn btn-neutral float-right" title="Installation, dependencies, versions, environment variables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Pycotools’s Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, Ciaran Welsh.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'12',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
