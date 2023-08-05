@@ -1,0 +1,68 @@
+Metadata-Version: 1.0
+Name: rdsmaker
+Version: 0.1.0
+Summary: thin wrapper boto3 for RDS.
+Home-page: https://github.com/denzow/rds_maker
+Author: denzow
+Author-email: denzow@gmail.com
+License: MIT License
+
+Copyright (c) 2018 denzow
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+Description: rds maker
+        ==========================
+        
+        thin wrapper boto3 for RDS
+        
+        
+        ```python
+        from rds_maker import RdsMaker
+        
+        
+        rds_maker = RdsMaker(
+            region_name=REGION_NAME,
+            az_name=AZ_NAME,
+            aws_access_key=AWS_ACCESS_KEY,
+            aws_rds_secret_key=AWS_RDS_SECRET_KEY,
+            logger=default_logger
+        )
+        
+        # 最新のスナップショット識別子取得
+        snapshot_identifier = rds_maker.get_latest_snapshot(source_instance_name)
+        # DB作成
+        rds_maker.create_db_instance_sync(
+            db_identifier=target_instance_name,
+            snapshot_identifier=snapshot_identifier,
+            instance_class=instance_class,
+        )
+        
+        # 作成時には設定できない部分を変更
+        rds_maker.change_db_instance_attributes_sync(db_identifier=target_instance_name, attributes={
+            'DBParameterGroupName': DB_PARAMETER_GROUP,
+            'BackupRetentionPeriod': 7,
+            'VpcSecurityGroupIds': [VPC_SECURITY_GROUP_ID],
+        })
+        
+        # インスタンスをリネーム
+        rds_maker.rename_db_instance_sync(from_identifier=target_instance_name, to_identifier=renamed_instance_name)
+        
+        
+        ```
+Platform: UNKNOWN
