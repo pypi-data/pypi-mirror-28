@@ -1,0 +1,20 @@
+import os
+from setuptools import setup
+
+here = os.path.abspath(os.path.dirname(__file__))
+README = open(os.path.join(here, 'README.rst')).read()
+
+setup(
+    name='django-wscounter',
+    version='0.1.4.7.9.7',
+    packages=['wscounter'],
+    description='A dynamic web-socket',
+    long_description=README,
+    author='Firas Al Kafri',
+    author_email='firas.alkafri@gmail.com',
+    url='https://github.com/salalem/django-wscounter/',
+    license='GPLv2',
+    install_requires=[
+        'cerberus>=1.1'
+    ]
+)
