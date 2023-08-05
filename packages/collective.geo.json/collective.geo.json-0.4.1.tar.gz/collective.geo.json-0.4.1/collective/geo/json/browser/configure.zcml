@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:cache="http://namespaces.zope.org/cache"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    i18n_domain="collective.geo.json">
+
+
+  <include package="Products.CMFCore" file="permissions.zcml" />
+  <include package="z3c.caching" file="meta.zcml" />
+
+  <browser:page
+      for="collective.geo.geographer.interfaces.IGeoreferenceable"
+      name="geo-json.json"
+      class=".jsonview.JsonDocument"
+      layer="..interfaces.IGeoJsonLayer"
+      permission="zope2.View"
+      />
+
+  <cache:ruleset
+      for=".jsonview.JsonDocument"
+      ruleset="plone.content.itemView"
+      />
+
+  <browser:page
+      for="Products.CMFCore.interfaces.IFolderish"
+      name="geo-json.json"
+      class=".jsonview.JsonFolderDocument"
+      layer="..interfaces.IGeoJsonLayer"
+      permission="zope2.View"
+      />
+
+   <cache:ruleset
+      for=".jsonview.JsonFolderDocument"
+      ruleset="plone.content.folderView"
+      />
+
+  <browser:page
+      for="Products.ATContentTypes.interface.IATFolder"
+      name="geo-json.json"
+      layer="..interfaces.IGeoJsonLayer"
+      class=".jsonview.JsonFolderDocument"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      for="Products.ATContentTypes.interface.IATTopic"
+      name="geo-json.json"
+      layer="..interfaces.IGeoJsonLayer"
+      class=".jsonview.JsonTopicDocument"
+      permission="zope2.View"
+      />
+
+  <configure zcml:condition="installed plone.app.contenttypes">
+    <browser:page
+        for="plone.app.contenttypes.interfaces.IFolder"
+        name="geo-json.json"
+        layer="..interfaces.IGeoJsonLayer"
+        class=".jsonview.JsonFolderDocument"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="plone.app.contenttypes.interfaces.ICollection"
+        name="geo-json.json"
+        layer="..interfaces.IGeoJsonLayer"
+        class=".jsonview.JsonCollectionDocument"
+        permission="zope2.View"
+        />
+  </configure>
+
+  <cache:ruleset
+      for=".jsonview.JsonTopicDocument"
+      ruleset="plone.content.folderView"
+      />
+
+  <browser:page
+      for="plone.app.collection.interfaces.ICollection"
+      name="geo-json.json"
+      layer="..interfaces.IGeoJsonLayer"
+      class=".jsonview.JsonCollectionDocument"
+      permission="zope2.View"
+      />
+
+  <cache:ruleset
+      for=".jsonview.JsonCollectionDocument"
+      ruleset="plone.content.folderView"
+      />
+
+
+</configure>
