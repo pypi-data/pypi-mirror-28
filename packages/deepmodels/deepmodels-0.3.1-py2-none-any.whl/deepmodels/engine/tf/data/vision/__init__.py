@@ -1,0 +1,1 @@
+from deepmodels.engine.tf.data.vision import img_clf_data
