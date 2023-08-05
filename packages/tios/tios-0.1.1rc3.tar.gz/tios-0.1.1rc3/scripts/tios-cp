@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+
+import sys
+import os
+import argparse
+from tios import utilities, communication
+from tios._version import __version__
+
+parser = argparse.ArgumentParser(description='Create a copy of a *tios* simulation')
+parser.add_argument('-t', '--title', 
+                    help='new title for the cloned simulation')
+parser.add_argument('id', 
+                    help='tios ID of simulation to clone')
+parser.add_argument('-V', '--version', action='version', version=__version__)
+args = parser.parse_args()
+
+te = communication.TiosAgent(args.id)
+new_id = utilities.id_generator()
+duplicate = True
+while duplicate:
+    try:
+        te_new = communication.TiosAgent(new_id, new=True)
+        duplicate = False
+    except:
+        new_id = utilities.id_generator()
+
+for a in ['box', 'checkpoint', 'filepack', 'frame_rate', 'host', 'md_code',
+          'md_version', 'message', 'monitors', 'selection', 'status',
+          'timepoint', 'title', 'topology', 'trate', 'username', 'xyzsel',
+          'xyzunsel']:
+    setattr(te_new, a, getattr(te, a))
+if args.title is not None:
+    te_new.title = args.title
+te_new.sync()
+print('New tios ID = {}'.format(te_new.id))

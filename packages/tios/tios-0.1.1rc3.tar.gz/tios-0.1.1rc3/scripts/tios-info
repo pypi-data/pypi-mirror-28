@@ -1,0 +1,35 @@
+#!/usr/bin/env python
+'''
+Detailed information about a simulation.
+'''
+import sys
+from tios import communication
+import argparse
+import datetime
+
+parser = argparse.ArgumentParser(description='print information regarding a tios simulation')
+parser.add_argument('id', type=str, help='ID of tios simulation')
+args = parser.parse_args()
+
+te = communication.TiosAgent(args.id)
+
+offset = datetime.datetime.now() - datetime.datetime.utcnow()
+status = te.status
+if status == 'Running':
+    delta_t = datetime.datetime.utcnow() - te.last_update
+    if delta_t.total_seconds() > 10 * te.frame_rate:
+        status = '*Stalled*'
+
+print('{:20s}{}'.format('ID:', te.id))
+print('{:20s}{}'.format('Title:', te.title))
+print('{:20s}{}'.format('Status:', status))
+print('{:20s}{} ps'.format('Time Point:', te.timepoint))
+print('{:20s}{}'.format('Last Update:',(te.last_update + offset).strftime('%c')))
+print('{:20s}{}'.format('MD Code:',te.md_code))
+print('{:20s}{}'.format('MD Code Version:', te.md_version))
+if status!= 'Running':
+    exit(0)
+print('{:20s}{}'.format('Current Host:', te.host))
+print('{:20s}{}'.format('Current Username:', te.username))
+print('{:20s}{} ps'.format('Sampling Interval:', te.trate))
+print('{:20s}{:.1f}/minute'.format('Current Frame Rate:', te.frame_rate))

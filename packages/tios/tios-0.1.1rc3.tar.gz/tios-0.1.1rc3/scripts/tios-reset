@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+'''
+Reset the status of a tios simulation.
+'''
+from tios import communication
+from tios._version import __version__
+import argparse
+
+parser  = argparse.ArgumentParser(description='Change the status of a *tios* simulation')
+parser.add_argument("id", help='tios id of the job')
+parser.add_argument('status', help='job status to set')
+parser.add_argument('-V', '--version', action='version', version=__version__)
+args = parser.parse_args()
+
+te = communication.TiosAgent(args.id)
+te.status = args.status
+te.sync()

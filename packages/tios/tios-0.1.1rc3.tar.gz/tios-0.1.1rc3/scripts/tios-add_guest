@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+'''
+Create the guest account.
+'''
+try:
+    from tios import admin
+except RuntimeError as e:
+    print 'Error: ', e.args[0]
+    exit(1)
+
+import argparse
+import sys
+
+if sys.version_info[0] == 2:
+    input = raw_input
+
+parser = argparse.ArgumentParser(description='Create the *tios* guest account')
+args = parser.parse_args()
+
+response = input("Guest account password:")
+admin.add_guest(response)

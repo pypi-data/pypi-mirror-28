@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+'''
+Create or modify the tios configuration file administrator entries interactively.
+'''
+from tios import environments
+import getpass
+import argparse
+import sys
+
+if sys.version_info[0] == 2:
+    input = raw_input
+
+parser = argparse.ArgumentParser(description='Create or modify administrator data in the *tios* configuration file')
+args = parser.parse_args()
+
+tios_env = environments.load_mongo_env(authenticate=False)
+
+for key in ['DB_URL', 'DB_NAME', 'DB_COLLECTION', 'DB_ADMINISTRATOR', 'DB_ADMIN_PWD']:
+    if not key in tios_env:
+        tios_env[key] = ''
+
+if not 'DB_PORT' is tios_env:
+    tios_env['DB_PORT'] = 27017
+
+response = input("Database URL ({}):".format(tios_env['DB_URL']))
+if response != "":
+    tios_env['DB_URL'] = response
+
+response = input("Database Port ({}):".format(tios_env['DB_PORT']))
+if response != "":
+    tios_env['DB_PORT'] = response
+
+response = input("Database name ({}):".format(tios_env['DB_NAME']))
+if response != "":
+    tios_env['DB_NAME'] = response
+
+response = input("Admin username ({}):".format(tios_env['DB_ADMINISTRATOR']))
+if response != "":
+    tios_env['DB_ADMINISTRATOR'] = response
+
+response = getpass.getpass("Admin password (hit return to leave unchanged):")
+if response != "":
+    tios_env['DB_ADMIN_PWD'] = response
+
+tios_env = environments.load_mongo_env(source=tios_env, authenticate=True, administrator=True)
+environments.save_mongo_env(tios_env)

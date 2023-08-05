@@ -1,0 +1,27 @@
+#!/usr/bin/env python
+'''
+Add a user to a tios database
+'''
+import argparse
+import sys
+try:
+   from tios import admin
+except RuntimeError as e:
+    print'Error: ', e[0]
+    exit(1)
+
+import pymongo
+
+parser = argparse.ArgumentParser(description='Add a user to the *tios* database')
+parser.add_argument("username", help='username for new user')
+parser.add_argument("password", help='password for new user')
+
+parser.parse_args()
+new_user_name = parser.usernames
+new_password = parser.password
+
+try:
+    admin.add_user(new_user_name, new_password, new_email)
+except pymongo.errors.DuplicateKeyError:
+    print('Error: duplicate user name')
+    exit(1)

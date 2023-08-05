@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+'''
+Remove a simulation from the tios database
+'''
+import sys
+from tios import environments
+import argparse
+
+parser = argparse.ArgumentParser(description='delete entries from the tios database')
+
+parser.add_argument('id', nargs='*', type=str, help='List of one or more tios IDs to be deleted')
+
+args = parser.parse_args()
+
+tios_env = environments.load_mongo_env()
+collection = tios_env['COLLECTION']
+
+if args.id is not None:
+    for id in args.id:
+        result = collection.delete_one({"id":id})
+        ndel = result.deleted_count
+        if ndel == 0:
+            print('Error {} - no such job'.format(id))

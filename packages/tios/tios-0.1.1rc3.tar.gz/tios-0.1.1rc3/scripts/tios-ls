@@ -1,0 +1,50 @@
+#!/usr/bin/env python
+'''
+List the contents of the tios database
+'''
+from tios import environments
+from tios._version import __version__
+import datetime
+import pymongo
+import sys
+import argparse
+
+parser = argparse.ArgumentParser(description='List simulations in the *tios* database')
+parser.add_argument('-a', '--all', 
+                    help='list jobs for all users, not just self',
+                    action='store_true')
+parser.add_argument('-V', '--version', action='version', version=__version__)
+args = parser.parse_args()
+
+tios_env = environments.load_mongo_env()
+collection = tios_env['COLLECTION']
+now = datetime.datetime.utcnow()
+offset = datetime.datetime.now() - datetime.datetime.utcnow()
+if args.all:
+    coll_names = [c for c in collection.database.collection_names()]
+else:
+    coll_names = [collection.name]
+for c in coll_names:
+    coll = collection.database[c]
+    cursor = coll.find(projection=["id","timepoint","title","status","last_update", "frame_rate"])
+    results = [r for r in cursor]
+    for r in results:
+        id = r.get('id', '-none-')
+        timepoint = r.get('timepoint', 0.0)
+        status = r.get('status', 'unknown')
+        frame_rate = r.get('frame_rate', 0.0)
+        title = r.get('title', '(no title)')
+        if len(title) > 26:
+            title = title[:23] + '...'
+        last_update = r.get('last_update', now)
+        delta = now-last_update
+        if delta.days > 365:
+            time = (last_update + offset).strftime('%b %d %Y')
+        else:
+            time = (last_update + offset).strftime('%b %d %H:%M')
+        if status == 'Running':
+            if delta.total_seconds() > 10 * frame_rate:
+                status = '*Stalled*'
+        if id != '-none-':
+            print('{:6s} {:26s} {:10.2f} {:8s} {:9s} {:10}'.format(id,title,timepoint,c,status,time))
+

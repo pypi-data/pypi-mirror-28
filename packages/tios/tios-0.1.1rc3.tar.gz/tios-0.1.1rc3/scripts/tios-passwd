@@ -1,0 +1,25 @@
+#!/usr/bin/env python
+'''
+Change the user's tios password
+'''
+from tios import environments
+import getpass
+import argparse
+
+parser = argparse.ArgumentParser(description='Change you *tios* password')
+args = parser.parse_args()
+
+tios_env = environments.load_mongo_env()
+
+response = getpass.getpass("Current password:")
+if response != tios_env['DB_PWD']:
+    print('Sorry')
+    exit(1)
+response = getpass.getpass("New password (hit return to leave unchanged):")
+if response != "":
+    tios_env['DB_PWD'] = response
+db = tios_env['COLLECTION'].database
+
+db.command('updateUser', tios_env['DB_USER'], pwd=response)
+tios_environments.save_mongo_env(tios_env)
+

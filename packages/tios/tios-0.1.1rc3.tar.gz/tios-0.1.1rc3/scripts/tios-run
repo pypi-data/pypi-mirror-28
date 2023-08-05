@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+
+from tios import transmitter, communication, utilities
+from tios._version import __version__
+import sys
+import signal
+import argparse
+
+parser = argparse.ArgumentParser(description='Submit an MD simulation to *tios* and run it', usage='tios-run [-h] [--title TITLE] [--selection SELECTION] [--trate TRATE] job_string')
+parser.add_argument('-t', '--title', 
+                    help='descriptive title for the simulation')
+parser.add_argument('-s', '--selection', default='all',
+                    help='subset of atoms to be displayed on the web page')
+parser.add_argument('-r', '--trate', default=1.0,
+                    help='interval (in ps) between frames')
+parser.add_argument('-V', '--version', action='version', version=__version__)
+indx = 0
+for i in range(1, len(sys.argv)):
+    if i%2 == 1 and sys.argv[i][0] != '-':
+        indx = i
+        break
+
+if len(sys.argv) == 2:
+    args = parser.parse_args()
+else:
+    args = parser.parse_args(sys.argv[1:indx])
+
+command = ' '.join(sys.argv[indx:])
+tj = transmitter.from_command(command, title=args.title,
+                           trate=args.trate, selection=args.selection,
+                           protocol='Mongo')
+print('Tios job {} registered.'.format(tj.id))
+
+tj.start()
+killer = utilities.GracefulKiller()
+while tj.is_running():
+    try:
+        tj.step()
+    except:
+        print('get_update failed')
+        tj.stop()
+        
+    if killer.kill_now:
+        tj.stop()
+
+tj.stop()
+print("simulation stopped")
+print(tj.stdout)
+print(tj.stderr)

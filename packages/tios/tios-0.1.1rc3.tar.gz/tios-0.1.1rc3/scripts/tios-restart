@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+
+import sys
+import signal
+from tios import transmitter, communication, utilities
+from tios._version import __version__
+import argparse
+import zlib
+import tempfile
+import mdtraj as mdt
+import numpy as np
+import pickle
+
+parser = argparse.ArgumentParser(description='Connect to a stopped *tios* simulation and restart from where it left off')
+parser.add_argument('id', 
+                    help='tios ID of simulation to restart')
+parser.add_argument('-p', '--preamble', 
+                    help='preamble for command line, e.g. mpirun mdrun_mpi')
+parser.add_argument('-e', '--extra_args', 
+                    help='extra arguments at end of command line, e.g. -maxh 24')
+parser.add_argument('-r', '--trate', type=float,
+                    help='IMD sampling interval in picoseconds')
+parser.add_argument('-V', '--version', action='version', version=__version__)
+args = parser.parse_args()
+
+tj = transmitter.from_entry(args.id, preamble=args.preamble,
+                         extra_args=args.extra_args, trate=args.trate)
+if tj.status == 'Running':
+    print('Error - job {} is already running'.format(args.id))
+    exit(1)
+
+md_code = tj._te.md_code
+md_version = tj._te.md_version
+available_version = utilities.installed_version(md_code)
+if available_version is None:
+    print('Error - this is a {} simulation and you do not seem to have this code available'.format(md_code))
+    exit(1)
+elif available_version == 'unknown' or md_version == 'unknown':
+    print('Warning: cannot confirm that MD code versions are compatible')
+elif available_version < md_version:
+    print('Warning: this simulation was created with a newer version of {} than is installed here ({} vs. {})'.format(md_code, md_version, available_version))
+tj.start()
+killer = utilities.GracefulKiller()
+failed = False
+while tj.is_running():
+    try:
+        tj.step()
+    except Exception as e:
+        print('Exception raised')
+        failed = True
+        tj.stop()
+        raise
+        
+    if killer.kill_now:
+        tj.stop()
+
+tj.stop()
+print("simulation stopped")
+print(tj.stdout)
+print(tj.stderr)
