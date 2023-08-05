@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+{% block content %}
+<section id="main-content">
+    <section class="wrapper">
+        <!-- //market-->
+        <div class="panel panel-default">
+            <div class="panel-heading" >
+                <span style="font-size:28px;">
+                    服务编辑
+                </span>
+            </div>
+            <div class="panel-body">
+            <div class="market-updates">
+
+            <div class="clearfix"> </div>
+            </div>
+        <div class="market-updates">
+
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">模块名称</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="service_name" value="{% if module_name %}{{ module_name }}{% else %}{% endif %}" placeholder="模块名称">
+                    </div>
+                </div>
+                <h1 class="page-header"></h1>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">模块路径</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" id="service_file_path" value="{% if _module_option %}{{ _module_option["service_file_path"] }}{% else %}{% endif %}" placeholder="模块路径">
+                </div>
+              </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">GitURL</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="git_url" value="{% if _module_option %}{{ _module_option["git_url"] }}{% else %}{% endif %}" placeholder="GitURL">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Git用户名</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="git_username" value="{% if _module_option %}{{ _module_option["git_username"] }}{% else %}{% endif %}" placeholder="Git用户名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Git密码</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="git_passwd" value="{% if _module_option %}{{ _module_option["git_passwd"] }}{% else %}{% endif %}" placeholder="Git密码">
+                    </div>
+                </div>
+                <h1 class="page-header"></h1>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库IP</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="database_ip" value="{% if _module_option %}{{ _module_option["database_ip"] }}{% else %}127.0.0.1{% endif %}" placeholder="数据库IP">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库端口</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="databse_port" value="{% if _module_option %}{{ _module_option["databse_port"] }}{% else %}5432{% endif %}" placeholder="数据库端口">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库名</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="database_db_name" value="{% if _module_option %}{{ _module_option["database_db_name"] }}{% else %}my_data{% endif %}" placeholder="数据库名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库用户名</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="database_user_name" value="{% if _module_option %}{{ _module_option["database_user_name"] }}{% else %}postgres{% endif %}" placeholder="数据库用户名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库密码</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="database_passwd" value="{% if _module_option %}{{ _module_option["database_passwd"] }}{% else %}postgres{% endif %}" placeholder="数据库密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库连接池大小</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="database_pool_size" value="{% if _module_option %}{{ _module_option["database_pool_size"] }}{% else %}20{% endif %}" placeholder="数据库连接池大小">
+                    </div>
+                </div>
+                <h1 class="page-header"></h1>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">循环间隔时间(秒)</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="loop_time" value="{% if _module_option %}{{ _module_option["loop_time"] }}{% else %}5{% endif %}" placeholder="循环间隔时间(秒)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">自定义参数(JSON数据)</label>
+                    <div class="col-sm-6">
+                      <textarea rows="8" cols="90" id="other_params" >{% if _module_option %}{{ _module_option["other_params"] }}{% else %}{}{% endif %}</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-2">
+                      <div class="checkbox">
+                        <label>
+                          <input id="service_enable" type="checkbox" {% if _module_option %}{% if _module_option["service_enable"]==True %}checked="checked"{% endif %}{% else %}checked="checked"{% endif %}>是否启用
+                        </label>
+                      </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-2">
+                      <div class="checkbox">
+                        <label>
+                          <input id="is_register_zookeeper" type="checkbox" disabled>注册到应用云平台
+                        </label>
+                      </div>
+                    </div>
+                </div>
+
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button id="enter" type="submit" class="btn btn-default">保 存</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"> </div>
+        </div></div>
+        </div>
+        <div class="market-updates">
+
+            <div class="clearfix"> </div>
+        </div>
+    </section>
+
+    <div class="footer">
+        <div class="wthree-copyright">
+            <p>Copyright &copy; 2017.TTFramework All rights reserved.<a target="_blank" href="#"></a></p>
+        </div>
+    </div>
+
+</section>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#enter").click(function () {
+
+              service_name = $("#service_name").val();
+              service_file_path = $("#service_file_path").val();
+              git_url = $("#git_url").val();
+              git_username = $("#git_username").val();
+              git_passwd = $("#git_passwd").val();
+
+              database_ip = $("#database_ip").val();
+              databse_port = $("#databse_port").val();
+              database_db_name = $("#database_db_name").val();
+              database_user_name = $("#database_user_name").val();
+              database_passwd = $("#database_passwd").val();
+              database_pool_size = $("#database_pool_size").val();
+
+              loop_time = $("#loop_time").val();
+              other_params = $("#other_params").val();
+
+              service_enable = $("#service_enable").get(0).checked;
+              is_register_zookeeper = $("#is_register_zookeeper").get(0).checked;
+
+              $.ajax({
+                    url:"rest_save_service_set_data",
+                    data:{
+                          "service_name":service_name,
+                          "service_file_path":service_file_path,
+                          "git_url":git_url,
+                          "git_username":git_username,
+                          "git_passwd":git_passwd,
+                          "database_ip":database_ip,
+                          "databse_port":databse_port,
+                          "database_db_name":database_db_name,
+                          "database_user_name":database_user_name,
+                          "database_passwd":database_passwd,
+                          "database_pool_size":database_pool_size,
+                          "loop_time":loop_time,
+                          "other_params":other_params,
+                          "service_enable":service_enable,
+                          "is_register_zookeeper":is_register_zookeeper},
+                    async:true,
+                    type:"POST",
+                    success:function (data) {
+                        if (data.state == 'success'){
+                            alert('保存成功!');
+                        }else {
+                            alert('添加失败!' + data.message);
+                        }
+                    },
+                    error:function (err) {
+                        console.log(err);
+                    }
+              })
+        });
+
+    });
+</script>
+{% endblock %}

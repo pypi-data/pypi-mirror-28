@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+{% block content %}
+<section id="main-content">
+    <section class="wrapper">
+        <!-- //market-->
+        <div class="panel panel-default">
+            <div class="panel-heading" >
+                <span style="font-size:28px;">
+                    系统参数编辑
+                </span>
+            </div>
+            <div class="panel-body">
+            <div class="market-updates">
+
+            <div class="clearfix"> </div>
+            </div>
+        <div class="market-updates">
+
+
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据存放目录</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="data_path" value="{% if _module_option %}{{ _module_option["data_path"] }}{% else %}{% endif %}" placeholder="模块名称">
+                    </div>
+                </div>
+                <h1 class="page-header"></h1>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-2">
+                      <div class="checkbox">
+                        <label>
+                          <input id="debug" type="checkbox" {% if _module_option %}{% if _module_option["debug"]==True %}checked="checked"{% endif %}{% else %}checked="checked"{% endif %}>是否DEBUG
+                        </label>
+                      </div>
+                    </div>
+                </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">上传文件大小(kb)</label>
+                <div class="col-sm-6">
+                  <input type="text" class="form-control" id="file_size" value="{% if _module_option %}{{ _module_option["file_size"] }}{% else %}{% endif %}" placeholder="2048">
+                </div>
+              </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">接口使用IP</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="host" value="{% if _module_option %}{{ _module_option["host"] }}{% else %}{% endif %}" placeholder="0.0.0.0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">使用端口</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="port" value="{% if _module_option %}{{ _module_option["port"] }}{% else %}{% endif %}" placeholder="使用端口">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">WEB工作线程</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="thread_count" value="{% if _module_option %}{{ _module_option["thread_count"] }}{% else %}{% endif %}" placeholder="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">FastDFS配置文件路径</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="fastdfs_config_file_path" value="{% if _module_option %}{{ _module_option["fastdfs_config_file_path"] }}{% else %}{% endif %}" placeholder="">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">模块前缀(防止命名空间冲突)</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="module_prefix" value="{% if _module_option %}{{ _module_option["module_prefix"] }}{% else %}{% endif %}" placeholder="SDLC">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">白名单</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="white_list_ip" value="{% if _module_option %}{{ _module_option["white_list_ip"] }}{% else %}{% endif %}" placeholder="['*']">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">管理用户名</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="supper_user_name" value="{% if _module_option %}{{ _module_option["supper_user_name"] }}{% else %}{% endif %}" placeholder="admin">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">管理密码</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="supper_passwd" value="{% if _module_option %}{{ _module_option["supper_passwd"] }}{% else %}{% endif %}" placeholder="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">检测服务是否在线周期(秒)</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="check_service_alive_time" value="{% if _module_option %}{{ _module_option["check_service_alive_time"] }}{% else %}{% endif %}" placeholder="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">AES KEY</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="encryptor_key" value="{% if _module_option %}{{ _module_option["encryptor_key"] }}{% else %}{% endif %}" placeholder="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">首页模块</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="home_page_module_name" value="{% if _module_option %}{{ _module_option["home_page_module_name"] }}{% else %}{% endif %}" placeholder="">
+                    </div>
+                </div>
+                <h1 class="page-header"></h1>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">域服务设置DN</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="ldap_base_dn" value="{% if _module_option %}{{ _module_option["ldap_base_dn"] }}{% else %}{% endif %}" placeholder="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">域用户名前缀</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="ldap_prefix" value="{% if _module_option %}{{ _module_option["ldap_prefix"] }}{% else %}{% endif %}" placeholder="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">域认证服务器IP</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="ldap_url" value="{% if _module_option %}{{ _module_option["ldap_url"] }}{% else %}{% endif %}" placeholder="">
+                    </div>
+                </div>
+
+                <h1 class="page-header"></h1>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库IP</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="database_ip" value="{% if _module_option %}{{ _module_option["database_ip"] }}{% else %}127.0.0.1{% endif %}" placeholder="数据库IP">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库端口</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="databse_port" value="{% if _module_option %}{{ _module_option["databse_port"] }}{% else %}5432{% endif %}" placeholder="数据库端口">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库名</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="database_db_name" value="{% if _module_option %}{{ _module_option["database_db_name"] }}{% else %}my_data{% endif %}" placeholder="数据库名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库用户名</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="database_user_name" value="{% if _module_option %}{{ _module_option["database_user_name"] }}{% else %}postgres{% endif %}" placeholder="数据库用户名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库密码</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="database_passwd" value="{% if _module_option %}{{ _module_option["database_passwd"] }}{% else %}postgres{% endif %}" placeholder="数据库密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">数据库连接池大小</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="database_pool_size" value="{% if _module_option %}{{ _module_option["database_pool_size"] }}{% else %}20{% endif %}" placeholder="数据库连接池大小">
+                    </div>
+                </div>
+                <h1 class="page-header"></h1>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">日志记录级别</label>
+                    <div class="col-sm-6">
+                      <input type="text" class="form-control" id="logger_level" value="{% if _module_option %}{{ _module_option["logger_level"] }}{% else %}20{% endif %}" placeholder="数据库连接池大小">
+                    </div>
+                </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button id="enter" type="submit" class="btn btn-default">保 存</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="clearfix"> </div>
+        </div></div>
+        </div>
+        <div class="market-updates">
+
+            <div class="clearfix"> </div>
+        </div>
+    </section>
+
+    <div class="footer">
+        <div class="wthree-copyright">
+            <p>Copyright &copy; 2017.TTFramework All rights reserved.<a target="_blank" href="#"></a></p>
+        </div>
+    </div>
+
+</section>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#enter").click(function () {
+
+              data_path = $("#data_path").val();
+              file_size = $("#file_size").val();
+              host = $("#host").val();
+              port = $("#port").val();
+              thread_count = $("#thread_count").val();
+              white_list_ip = $("#white_list_ip").val();
+
+              supper_user_name = $("#supper_user_name").val();
+              supper_passwd = $("#supper_passwd").val();
+              ldap_base_dn = $("#ldap_base_dn").val();
+              ldap_prefix = $("#ldap_prefix").val();
+              ldap_url = $("#ldap_url").val();
+              fastdfs_config_file_path = $("#fastdfs_config_file_path").val();
+              module_prefix = $("#module_prefix").val();
+              check_service_alive_time = $("#check_service_alive_time").val();
+              encryptor_key = $("#encryptor_key").val();
+
+              home_page_module_name = $("#home_page_module_name").val();
+              logger_level = $("#logger_level").val();
+
+              database_ip = $("#database_ip").val();
+              databse_port = $("#databse_port").val();
+              database_db_name = $("#database_db_name").val();
+              database_user_name = $("#database_user_name").val();
+              database_passwd = $("#database_passwd").val();
+              database_pool_size = $("#database_pool_size").val();
+
+              debug = $("#debug").get(0).checked;
+              $.ajax({
+                    url:"rest_save_system_option",
+                    data:{
+                          "debug":debug,
+                          "data_path":data_path,
+                          "file_size":file_size,
+                          "host":host,
+                          "port":port,
+                          "thread_count":thread_count,
+
+                          "white_list_ip":white_list_ip,
+                          "supper_user_name":supper_user_name,
+                          "supper_passwd":supper_passwd,
+                          "ldap_base_dn":ldap_base_dn,
+                          "ldap_prefix":ldap_prefix,
+                          "ldap_url":ldap_url,
+
+                          "fastdfs_config_file_path":fastdfs_config_file_path,
+                          "module_prefix":module_prefix,
+                          "check_service_alive_time":check_service_alive_time,
+                          "encryptor_key":encryptor_key,
+                          "home_page_module_name":home_page_module_name,
+                          "logger_level":logger_level,
+
+                          "database_ip":database_ip,
+                          "databse_port":databse_port,
+                          "database_db_name":database_db_name,
+                          "database_user_name":database_user_name,
+                          "database_passwd":database_passwd,
+                          "database_pool_size":database_pool_size},
+                    async:true,
+                    type:"POST",
+                    success:function (data) {
+                        if (data.state == 'success'){
+                            alert('保存成功!');
+                        }else {
+                            alert('添加失败!' + data.message);
+                        }
+                    },
+                    error:function (err) {
+                        console.log(err);
+                    }
+              })
+        });
+
+    });
+</script>
+{% endblock %}

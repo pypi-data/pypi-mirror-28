@@ -1,0 +1,411 @@
+{% extends "base.html" %}
+{% block content %}
+<section id="main-content">
+    <section class="wrapper">
+        <!-- //market-->
+        <div class="market-updates">
+            <div class="col-md-3 market-update-gd">
+                <div class="market-update-block clr-block-2">
+                    <div class="col-md-4 market-update-right">
+                        <i class="fa fa-eye"> </i>
+                    </div>
+                    <div class="col-md-8 market-update-left">
+                        <h4>请求数</h4>
+                        <h3 id="module_all_visitor_count">0</h3>
+                        <p>所有模块总和</p>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+            </div>
+            <div class="col-md-3 market-update-gd">
+                <div class="market-update-block clr-block-1">
+                    <div class="col-md-4 market-update-right">
+                        <i class="fa fa-users" ></i>
+                    </div>
+                    <div class="col-md-8 market-update-left">
+                        <h4>发送数据</h4>
+                        <h3 id="send_bytes_count">0</h3>
+                        <p>通过接口输出数据</p>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+            </div>
+            <div class="col-md-3 market-update-gd">
+                <div class="market-update-block clr-block-3">
+                    <div class="col-md-4 market-update-right">
+                        <i class="fa fa-usd"></i>
+                    </div>
+                    <div class="col-md-8 market-update-left">
+                        <h4>接口数</h4>
+                        <h3 id="module_interface_count">0</h3>
+                        <p>接口模块数量</p>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+            </div>
+            <div class="col-md-3 market-update-gd">
+                <div class="market-update-block clr-block-4">
+                    <div class="col-md-4 market-update-right">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-md-8 market-update-left">
+                        <h4>服务数</h4>
+                        <h3 id="module_service_count">0</h3>
+                        <p>后台服务数</p>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+        <div class="agile-last-grids">
+            <div class="col-md-6 agile-last-left">
+                <div class="agile-last-grid">
+                    <div class="area-grids-heading">
+                        <h3>Cpu 占用</h3>
+                    </div>
+                    <div id="cpu" style="height:300px;border:1px solid #ccc;padding:10px;"></div>
+                </div>
+            </div>
+            <div class="col-md-6 agile-last-left agile-last-middle">
+                <div class="agile-last-grid">
+                    <div class="area-grids-heading">
+                        <h3>Mem 占用</h3>
+                    </div>
+                    <div id="mem"  style="height:300px;border:1px solid #ccc;padding:10px;"></div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+        <div class="market-updates">
+            <div class="col-md-6 agile-last-left agile-last-right">
+                <div class="agile-last-grid">
+                    <div class="area-grids-heading">
+                        <h3>磁盘IO</h3>
+                    </div>
+                    <div id="io" style="height:300px;border:1px solid #ccc;padding:10px;"></div>
+                </div>
+            </div>
+            <div class="col-md-6 agile-last-left agile-last-right">
+                <div class="agile-last-grid">
+                    <div class="area-grids-heading">
+                        <h3>网路流量</h3>
+                    </div>
+                    <div id="netio" style="height:300px;border:1px solid #ccc;padding:10px;"></div>
+                </div>
+            </div>
+            <div class="clearfix"> </div>
+        </div>
+    </section>
+
+    <div class="footer">
+        <div class="wthree-copyright">
+            <p>Copyright &copy; 2017.TTFramework All rights reserved.<a target="_blank" href="#"></a></p>
+        </div>
+    </div>
+
+</section>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+    var myChartCpu,myChartMem,myChartIo,myChartNetIo
+    $(document).ready(function(){
+        require.config({
+            paths: {
+                echarts: 'static/echart'
+            }
+        });
+        require(
+                [
+                    'echarts',
+                    'echarts/chart/bar',
+                    'echarts/chart/line',
+                ],
+                function (ec) {
+                    myChartMem = ec.init(document.getElementById('mem'));
+                    myChartMem.setOption({
+                        title : {
+                        },
+                        tooltip : {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data:['已使用','内存']
+                        },
+
+                        calculable : true,
+                        xAxis : [
+                            {
+                                type : 'category',
+                                boundaryGap : false,
+                                data : ['周一','周二','周三','周四','周五','周六','周日']
+                            }
+                        ],
+                        yAxis : [
+                            {
+                                type : 'value'
+                            }
+                        ],
+                        series : [
+                            {
+                                name:'已使用',
+                                type:'line',
+                                smooth:true,
+                                itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                                data:[10, 12, 21, 54, 260, 830, 710]
+                            },
+                            {
+                                name:'内存',
+                                type:'line',
+                                smooth:true,
+                                itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                                data:[30, 182, 434, 791, 390, 30, 10]
+                            }
+                        ]
+                    });
+                    myChartCpu = ec.init(document.getElementById('cpu'));
+                    myChartCpu.setOption({
+                        title : {
+                        },
+                        tooltip : {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data:['占用']
+                        },
+
+                        calculable : true,
+                        xAxis : [
+                            {
+                                type : 'category',
+                                boundaryGap : false,
+                                data : ['周一','周二','周三','周四','周五','周六','周日']
+                            }
+                        ],
+                        yAxis : [
+                            {
+                                type : 'value'
+                            }
+                        ],
+                        series : [
+                            {
+                                name:'占用',
+                                type:'line',
+                                smooth:true,
+                                itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                                data:[10, 12, 21, 54, 260, 830, 710]
+                            }
+                        ]
+                    });
+                    myChartIo = ec.init(document.getElementById('io'));
+                    myChartIo.setOption({
+                        title : {
+                        },
+                        tooltip : {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data:['读取','写入']
+                        },
+
+                        calculable : true,
+                        xAxis : [
+                            {
+                                type : 'category',
+                                boundaryGap : false,
+                                data : ['周一','周二','周三','周四','周五','周六','周日']
+                            }
+                        ],
+                        yAxis : [
+                            {
+                                type : 'value'
+                            }
+                        ],
+                        series : [
+                            {
+                                name:'读取',
+                                type:'line',
+                                smooth:true,
+                                itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                                data:[10, 12, 21, 54, 260, 830, 710]
+                            },
+                            {
+                                name:'写入',
+                                type:'line',
+                                smooth:true,
+                                itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                                data:[30, 182, 434, 791, 390, 30, 10]
+                            }
+                        ]
+                    });
+                    //
+                    myChartNetIo = ec.init(document.getElementById('netio'));
+                    myChartNetIo.setOption({
+                        title : {
+                        },
+                        tooltip : {
+                            trigger: 'axis'
+                        },
+                        legend: {
+                            data:['发送','接收']
+                        },
+
+                        calculable : true,
+                        xAxis : [
+                            {
+                                type : 'category',
+                                boundaryGap : false,
+                                data : ['周一','周二','周三','周四','周五','周六','周日']
+                            }
+                        ],
+                        yAxis : [
+                            {
+                                type : 'value'
+                            }
+                        ],
+                        series : [
+                            {
+                                name:'发送',
+                                type:'line',
+                                smooth:true,
+                                itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                                data:[10, 12, 21, 54, 260, 830, 710]
+                            },
+                            {
+                                name:'接收',
+                                type:'line',
+                                smooth:true,
+                                itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                                data:[30, 182, 434, 791, 390, 30, 10]
+                            }
+                        ]
+                    });
+                }
+        );
+        function getdata(){
+            $.ajax({
+                url:"rest_module_statics_data",
+                data:{},
+                async:true,
+                type:"GET",
+                success:function (data) {
+                    console.log(data)
+                    if (data.state == 'success'){
+                        $("#module_all_visitor_count").empty();
+                        $("#module_all_visitor_count").append(data.data.module_all_visitor_count);
+                        $("#send_bytes_count").empty();
+                        $("#send_bytes_count").append(data.data.send_bytes_count);
+                        $("#module_service_count").empty();
+                        $("#module_service_count").append(data.data.module_service_count);
+                        $("#module_interface_count").empty();
+                        $("#module_interface_count").append(data.data.module_interface_count);
+                    }else {
+                        console.log('添加失败!' + data.info);
+                    }
+                },
+                error:function (err) {
+                    console.log(err);
+                }
+            });
+
+            $.ajax({
+                url:"rest_cpu_data",
+                data:{},
+                async:true,
+                type:"GET",
+                success:function (data) {
+                    console.log(data)
+                    if (data.state == 'success'){
+                        times = data.data.time;
+                        useds = data.data.cpu
+                        myChartCpu.setOption({
+                            xAxis:[{data:times}],
+                            series:[{data:useds}]
+                        });
+                    }else {
+                        console.log('添加失败!' + data.info);
+                    }
+                },
+                error:function (err) {
+                    console.log(err);
+                }
+            });
+            //
+            $.ajax({
+                url:"rest_mem_data",
+                data:{},
+                async:true,
+                type:"GET",
+                success:function (data) {
+                    console.log(data)
+                    if (data.state == 'success'){
+                        times = data.data.time;
+                        useds = data.data.used;
+                        percents = data.data.percent;
+                        totals = data.data.total;
+                        myChartMem.setOption({
+                            xAxis:[{data:times}],
+                            series:[{data:useds},{data:totals}]
+                        });
+                    }else {
+                        console.log('添加失败!' + data.info);
+                    }
+                },
+                error:function (err) {
+                    console.log(err);
+                }
+            });
+            //
+            $.ajax({
+                url:"rest_io_data",
+                data:{},
+                async:true,
+                type:"GET",
+                success:function (data) {
+                    console.log(data)
+                    if (data.state == 'success'){
+                        times = data.data.time;
+                        reads = data.data.read;
+                        writes = data.data.write;
+                        myChartIo.setOption({
+                            xAxis:[{data:times}],
+                            series:[{data:reads},{data:writes}]
+                        });
+                    }else {
+                        console.log('添加失败!' + data.info);
+                    }
+                },
+                error:function (err) {
+                    console.log(err);
+                }
+            });
+            //
+            $.ajax({
+                url:"rest_net_io_data",
+                data:{},
+                async:true,
+                type:"GET",
+                success:function (data) {
+                    console.log(data)
+                    if (data.state == 'success'){
+                        times = data.data.time;
+                        sends = data.data.send;
+                        recvs = data.data.recv;
+                        myChartNetIo.setOption({
+                            xAxis:[{data:times}],
+                            series:[{data:sends},{data:recvs}]
+                        });
+                    }else {
+                        console.log('添加失败!' + data.info);
+                    }
+                },
+                error:function (err) {
+                    console.log(err);
+                }
+            });
+        }
+        getdata();
+        setInterval(getdata,5000)
+    });
+</script>
+{% endblock %}
