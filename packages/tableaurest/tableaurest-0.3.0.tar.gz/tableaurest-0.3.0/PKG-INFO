@@ -1,0 +1,136 @@
+Metadata-Version: 1.2
+Name: tableaurest
+Version: 0.3.0
+Summary: A Python based Tableau REST API interface.
+Home-page: UNKNOWN
+Author: Levi Kanwischer
+Author-email: hello@levibrooks.co
+License: MIT license
+Description-Content-Type: UNKNOWN
+Description: A Python based Tableau REST API interface.
+        ==========================================
+        
+        *Warning: This package is still in a pre-v1 development phase. Breaking changes are likely to occur without warning.*
+        
+        
+        tableaurest
+        ===========
+        A Python based Tableau REST API interface.
+        
+        Installation
+        ------------
+        ``tableaurest`` is a Python 3.6+ based package, and can be installed through ``pip`` using the following command.
+        
+            .. code-block:: bash
+        
+                $ python -m pip install tableaurest
+        
+        
+        Examples
+        ========
+        
+        Print count of Workbooks Owned by Login User.
+        
+            .. code-block:: python
+        
+                >>> from tableaurest import TableauREST
+                >>>
+                >>> SERVER = 'YOUR_TABLEAU_URL'
+                >>> USERNAME = 'YOUR_TABLEAU_USERNAME'
+                >>> PASSWORD = 'YOUR_TABLEAU_PASSWORD'
+                >>>
+                >>> with TableauREST(SERVER, USERNAME, PASSWORD) as restapi:
+                >>>     workbooks = restapi.queryWorkbooksforUser(owner=True)
+                >>>
+                >>> print(f'{USERNAME} owns {len(workbooks)} workbooks on {SERVER}.')
+                'YOUR_TABLEAU_USERNAME owns 4 workbooks on YOUR_TABLEAU_URL.'
+        
+        
+        Extras
+        ======
+        
+        Contribute
+        ----------
+        #. Check/Open Issue for related topics of change
+        #. Fork/Clone/Branch repo and make discussed/desired changes
+        #. Add tests (``¯\_(ツ)_/¯``) and document code w/ numpy formatting
+        #. Open Pull Request and notify maintainer
+        
+        
+        Changelog
+        =========
+        
+        All notable changes to this project will be documented in this file.
+        
+        
+        Develop_
+        --------
+        
+        
+        Unreleased_
+        -----------
+        
+        
+        v0.3.0_
+        -------
+        
+        Added
+        ~~~~~
+        - All methods added for: Authentication, Sites, Projects, Subscriptions, Server
+        
+        Changed
+        ~~~~~~~
+        - Remove excessive (useless) dict.keys() usage from codebase
+        - Allow user to specify ssl verify on TableauREST init (default=True)
+        - Remove auth token from session header on signOut
+        - Update self.site (contenturl) on signIn
+        - Add user impersonation to signIn
+        
+        Removed
+        ~~~~~~~
+        - Remove custom logger(s) from submodules
+        
+        
+        v0.2.3_
+        -------
+        
+        Changed
+        ~~~~~~~
+        - Correct queryWorkbookConnections to use GET method
+        - Correct queryDatasourceConnections to use GET method
+        - Add 'connection' dict wrapper updateWorkbookConnection details
+        
+        
+        v0.2.2_
+        -------
+        
+        Changed
+        ~~~~~~~
+        - Correct userid/siteid updating on switchSite method
+        
+        
+        v0.2.1_
+        -------
+        
+        Changed
+        ~~~~~~~
+        - Some light cleanup around formatting, logging, & bug fixes
+        
+        
+        .. _Develop: https://github.com/levikanwischer/tableaurest/compare/master...develop
+        .. _Unreleased: https://github.com/levikanwischer/tableaurest/compare/v0.3.0...master
+        .. _v0.3.0: https://github.com/levikanwischer/tableaurest/compare/v0.2.3...v0.3.0
+        .. _v0.2.3: https://github.com/levikanwischer/tableaurest/compare/v0.2.2...v0.2.3
+        .. _v0.2.2: https://github.com/levikanwischer/tableaurest/compare/v0.2.1...v0.2.2
+        .. _v0.2.1: https://github.com/levikanwischer/tableaurest/compare/v0.2.0...v.0.2.1
+        
+        
+Keywords: Tableau,Tableau REST API,TabCMD
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3.6
