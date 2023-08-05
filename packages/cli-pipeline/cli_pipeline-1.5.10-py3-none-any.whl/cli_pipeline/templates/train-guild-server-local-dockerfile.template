@@ -1,0 +1,71 @@
+FROM {{ PIPELINE_IMAGE_REGISTRY_URL }}/{{ PIPELINE_IMAGE_REGISTRY_REPO }}/{{ PIPELINE_IMAGE_REGISTRY_NAMESPACE }}:{{ PIPELINE_IMAGE_REGISTRY_BASE_TAG }}
+
+ENV \
+  PIPELINE_MODEL_RUNTIME={{ PIPELINE_MODEL_RUNTIME }}
+
+ENV \
+  PIPELINE_MODEL_TYPE={{ PIPELINE_MODEL_TYPE }}
+
+ENV \
+  PIPELINE_MODEL_NAME={{ PIPELINE_MODEL_NAME }}
+
+ENV \
+  PIPELINE_MODEL_TAG={{ PIPELINE_MODEL_TAG }}
+
+ENV \
+  PIPELINE_MODEL_PATH=/root/model/{{ PIPELINE_MODEL_RUNTIME }}/{{ PIPELINE_MODEL_TYPE }}/{{ PIPELINE_MODEL_NAME }}/{{ PIPELINE_MODEL_TAG }}
+
+COPY {{ PIPELINE_MODEL_PATH }} $PIPELINE_MODEL_PATH
+
+RUN \
+   echo "PIPELINE_MODEL_PATH=$PIPELINE_MODEL_PATH"
+
+ENV \
+  PIPELINE_MODEL_TRAIN_CONDA_ENV_NAME=pipeline-{{ PIPELINE_IMAGE_REGISTRY_NAMESPACE }}-{{ PIPELINE_MODEL_RUNTIME }}-{{ PIPELINE_MODEL_TYPE }}-{{ PIPELINE_MODEL_NAME }}-{{ PIPELINE_MODEL_TAG }}
+
+RUN \
+   sudo chmod a+rwx -R $PIPELINE_MODEL_PATH
+
+RUN \
+  if [ -f "$PIPELINE_MODEL_PATH/pipeline_conda_environment.yml" ]; then \
+    echo "" \
+    && echo "Creating Conda Environment '$PIPELINE_MODEL_TRAIN_CONDA_ENV_NAME' with '$PIPELINE_MODEL_PATH/pipeline_conda_environment.yml'..." \
+    && echo "" \
+    && conda env update --name $PIPELINE_MODEL_TRAIN_CONDA_ENV_NAME --file $PIPELINE_MODEL_PATH/pipeline_conda_environment.yml \ 
+    && echo "" \
+    && echo "...Conda Environment Updated!" \
+    && echo ""; \
+  fi
+
+RUN \
+  echo "source activate $PIPELINE_MODEL_TRAIN_CONDA_ENV_NAME" >> ~/.bashrc
+
+RUN \
+  source activate $PIPELINE_MODEL_TRAIN_CONDA_ENV_NAME && conda list
+
+RUN \
+   if [ -f "$PIPELINE_MODEL_PATH/pipeline_setup.sh" ]; then \
+     sudo chmod a+x $PIPELINE_MODEL_PATH/pipeline_setup.sh \
+     && echo "Running '$PIPELINE_MODEL_PATH/pipeline_setup.sh'..." \
+     && echo "" \
+     && $PIPELINE_MODEL_PATH/pipeline_setup.sh \
+     && echo "" \
+     && echo "...Successfully Trained!" \
+     && echo ""; \
+   fi
+
+RUN \
+    if [ -f "$PIPELINE_MODEL_PATH/Guild" ]; then \
+         echo "" \
+         && echo "Starting Guild-based TensorFlow Training with learning_rate=[0.05, 0.025]..." \
+         && echo "" \
+         && cd $PIPELINE_MODEL_PATH \
+         && guild prepare \
+         && guild train --flag=learning_rate=0.05 \
+         && guild evaluate --latest-run \
+         && guild train --flag=learning_rate=0.025 \
+         && guild evaluate --latest-run \
+         && echo "" \
+         && echo "...Training Complete!" \
+         && echo ""; \
+   fi
