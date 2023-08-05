@@ -1,0 +1,73 @@
+{% extends "_template_page.html" %}
+{% from "network_field/_network_field.html" import render_network_field %}
+{% set active_page = "settings" %}
+
+{% block page_title %}System Network Settings{% endblock %}
+
+{% block page_heading %}
+    <h2><i class="fa fa-fw fa-server"></i>Network Settings</h2>
+{% endblock %}
+
+{% block page_name %}
+    Network Settings
+{% endblock %}
+
+{% block page_css %}
+    {% assets 'settings_network_css' %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <p class="small text-uppercase">
+                        <span class="fa fa-exchange"></span>&nbsp Network Settings
+                        <span class="pull-right"><strong>mac:</strong>{{ mac_address }}</span>
+                    </p>
+                </div>
+                <div class="ibox-content">
+                    <form id="network_form" method="POST" action="{{ url_for('settings_network.network_settings') }}">
+                        {{ form.csrf_token }}
+                        <div class="form-row form-group">
+                            <div class="col">
+                                    {{ form.dhcp_mode(data_on="<i class='fa fa-sign-in'></i> DHCP",
+                                                      data_off="<i class='fa fa-sign-out'></i> STATIC",
+                                                      data_onstyle="success",
+                                                      data_offstyle="warning",
+                                                      data_width="90",
+                                                      data_toggle="toggle") }}
+                            </div>
+                        </div>
+                        {{ render_network_field(form.host_name) }}
+                        {{ render_network_field(form.ip_address) }}
+                        {{ render_network_field(form.sub_address) }}
+                        {{ render_network_field(form.gw_address) }}
+                        {{ render_network_field(form.dns1_address) }}
+                        {{ render_network_field(form.dns2_address) }}
+                        <hr>
+                        <div class="form-row text-center">
+                            <div class="col">{{ form.submit_btn(class_=('btn btn-outline btn-primary btn-rounded')) }}</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_js %}
+    {{ super() }}
+    {% assets 'settings_network_js'  %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            if( '{{ save_result }}' === 'True' ){
+                toastr.success('saved settings', 'NETWORK');
+            }
+        });
+    </script>
+{% endblock page_js %}

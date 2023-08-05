@@ -1,0 +1,78 @@
+{% extends "_template_page.html" %}
+{% from "reader_field/_reader_field.html" import render_reader_field %}
+{% from "output_field/_output_field.html" import render_output_field %}
+{% from "option_output_field/_option_output_field.html" import render_option_output_field %}
+{% set active_page = "settings" %}
+
+{% block page_title %}System Reader Settings{% endblock %}
+
+{% block page_heading %}
+    <h2><i class="fa fa-fw fa-fax"></i>Reader Settings</h2>
+{% endblock %}
+
+{% block page_name %}
+    Reader Settings
+{% endblock %}
+
+{% block page_css %}
+    {% assets 'settings_reader_css' %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <p class="small text-uppercase text-center"><span class="fa fa-hand-pointer-o"></span>&nbsp Reader Settings</p>
+                </div>
+                <div class="ibox-content">
+                    <form method="POST" action="{{ url_for('settings_reader.reader_settings') }}">
+                        {{ readers.csrf_token }}
+                        {{ render_reader_field(readers.reader1, readers.reader1_dir, readers.reader1_relay) }}
+                        {{ render_reader_field(readers.reader2, readers.reader2_dir, readers.reader2_relay) }}
+                        {{ render_reader_field(readers.reader3, readers.reader3_dir, readers.reader3_relay) }}
+                        {{ render_reader_field(readers.reader4, readers.reader4_dir, readers.reader4_relay) }}
+                        <div class="text-center">
+                            {{ readers.submit_btn(class_=('btn btn-outline btn-primary btn-rounded')) }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <p class="small text-uppercase text-center"><span class="fa fa-power-off"></span>&nbsp Output Settings</p>
+                </div>
+                <div class="ibox-content">
+                    <form class="form-horizontal" method="POST" action="{{ url_for('settings_reader.reader_settings') }}">
+                        {{ outputs.csrf_token }}
+                        {{ render_output_field(outputs.relay_1_enabled, outputs.relay_1_delay) }}
+                        {{ render_output_field(outputs.relay_2_enabled, outputs.relay_2_delay) }}
+                        {{ render_option_output_field(outputs.output_1) }}
+                        {{ render_option_output_field(outputs.output_2) }}
+                        <div class="text-center">
+                            {{ outputs.submit_btn(class_=('btn btn-outline btn-primary btn-rounded')) }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_js %}
+    {{ super() }}
+    {% assets 'settings_reader_js' %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                if( '{{ save_result }}' === 'True' ){
+                    toastr.success('saved settings', 'READERS');
+                }
+            });
+        </script>
+    {% endassets %}
+{% endblock page_js %}
