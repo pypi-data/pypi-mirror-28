@@ -1,0 +1,29 @@
+{% extends "blockadmin/change_form.html" %}
+{% load static from staticfiles %}
+{% load glitter_admin_js %}
+
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'glitter/libs/redactorjs/redactor.css' %}" />
+{% endblock extrastyle %}
+
+
+{% block content %}
+{{ block.super }}
+
+<script src="{% jquery_min %}"></script>
+<script src="{% static 'glitter/libs/redactorjs/redactor.min.js' %}"></script>
+<script type="text/javascript">
+/* global $ */
+$().ready(function() {
+    "use strict";
+
+    $("#id_left_column,#id_right_column").redactor({
+        iframe: true,
+        minHeight: 300,
+        css: "{% static 'glitter/libs/redactorjs/redactor-iframe.css' %}"
+    });
+});
+</script>
+{% endblock content %}
