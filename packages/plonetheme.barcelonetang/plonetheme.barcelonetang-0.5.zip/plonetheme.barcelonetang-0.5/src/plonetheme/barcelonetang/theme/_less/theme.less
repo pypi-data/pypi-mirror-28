@@ -1,0 +1,268 @@
+/* theme.less file that will be compiled */
+
+/* Remove unnecessary whitespace from debug output. */
+pre {
+  #spirit_plone_theming_diazo_snippets {
+    white-space: nowrap;
+  }
+}
+
+
+/* Fix oversized images. */
+img {
+  max-width: 100%;
+}
+
+
+/* Fix dropdown menu hover bug. */
+.dropdown-menu {
+  border: none;
+  border-radius: 0;
+  margin-top: 0;
+  padding: 0;
+}
+
+
+/* Fix search box mobile view. */
+#portal-searchbox {
+  position: relative;
+  z-index: 100;
+
+  /* Fix Safari bug since Plone 5.1rc1 */
+  .pat-livesearch {
+    min-width: 269px;
+  }
+}
+
+
+/* Fix search portlet in footer. */
+#portal-footer-wrapper .pat-livesearch {
+  min-width: 0;
+}
+
+/* Boxed layout. */
+body.boxed {
+  background-attachment: fixed;
+  background-position: center;
+
+  #main-wrapper  {
+    border: 1px solid #eee;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+
+    max-width: 100%;
+
+    @media (min-width: 768px) {
+      width: 750px;
+    }
+    @media (min-width: 992px) {
+      width: 970px;
+    }
+    @media (min-width: 1200px) {
+      width: 1170px;
+    }
+  }
+  &.plone-toolbar-left-expanded #main-wrapper {
+    @media (min-width: 888px) {
+      width: 750px;
+    }
+    @media (min-width: 1112px) {
+      width: 970px;
+    }
+    @media (min-width: 1320px) {
+      width: 1170px;
+    }
+  }
+  &.plone-toolbar-left-default #main-wrapper {
+    @media (min-width: 828px) {
+      width: 750px;
+    }
+    @media (min-width: 1052px) {
+      width: 970px;
+    }
+    @media (min-width: 1260px) {
+      width: 1170px;
+    }
+  }
+}
+
+
+/* Fix footer text. */
+#portal-footer-wrapper {
+  padding: 0;
+  text-align: inherit;
+}
+
+
+/* Footer area re-styling. */
+#portal-footer {
+  font-weight: 400;
+
+  p {
+    border: none;
+    margin-bottom: 14px;
+    padding-bottom: 0;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  > .row {
+    margin-top: 14px;
+    padding-top: 14px;
+
+    &:first-child {
+      padding-top: 0;
+      margin-top: 0;
+    }
+  }
+
+  .colophon,
+  .copyright,
+  .site-actions {
+    text-align: center;
+  }
+
+  .row + .site-actions {
+    border-top: 1px solid #4d4d4d;
+  }
+
+  .site-actions {
+    ul {
+      list-style: none;
+      margin: 0;
+
+      li {
+        display: inline-block;
+        padding: 10px 30px;
+      }
+    }
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+  }
+}
+
+
+.mosaic-grid-row-margin {
+  margin-bottom: 2em;
+  margin-top: 2em;
+}
+
+.mosaic-grid-row-dark,
+.mosaic-grid-row-primary,
+.mosaic-grid-row-gray-light {
+  padding: 15px 0;
+}
+
+.mosaic-grid-row-pattern {
+  background-image: url('../img/pattern.png');
+}
+
+.container-full {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+
+/* Full width row, but only when there are no portlets. */
+body:not(.boxed) {
+  #content-container {
+    &.col-md-12 {
+      .mosaic-grid-row-full {
+        width: 100vw;
+        left: 50%;
+        right: 50%;
+        margin-left: -50vw;
+        margin-right: -50vw;
+
+        .container-full {
+          margin-left: auto;
+          margin-right: auto;
+          width: 100%;
+
+          @media (min-width: 768px) {
+            width: 750px;
+          }
+          @media (min-width: 992px) {
+            width: 970px;
+          }
+          @media (min-width: 1200px) {
+            width: 1170px;
+          }
+        }
+      }
+    }
+  }
+  &.plone-toolbar-left-expanded #content-container.col-md-12 .mosaic-grid-row-full .container-full {
+    @media (min-width: 888px) {
+      width: 750px;
+    }
+    @media (min-width: 1112px) {
+      width: 970px;
+    }
+    @media (min-width: 1320px) {
+      width: 1170px;
+    }
+  }
+  &.plone-toolbar-left-default #content-container.col-md-12 .mosaic-grid-row-full .container-full {
+    @media (min-width: 828px) {
+      width: 750px;
+    }
+    @media (min-width: 1052px) {
+      width: 970px;
+    }
+    @media (min-width: 1260px) {
+      width: 1170px;
+    }
+  }
+}
+
+
+#banner {
+  margin-top: -20px;
+  margin-bottom: 20px;
+
+  img {
+    width: 100%;
+  }
+}
+
+
+.site-info {
+  background-color: #fdfdfd;
+  border-top: solid 1px #f0f0f0;
+  border-bottom: solid 1px #f0f0f0;
+
+  ul {
+    font-weight: normal;
+    list-style: none;
+    margin: 0;
+    padding-left: 0;
+
+    li {
+      display: inline-block;
+      margin-right: 1em;
+      padding: 0.5ex 0;
+    }
+  }
+
+  .slogan {
+    padding: 0.5ex 0;
+
+    * {
+      margin: 0;
+    }
+  }
+}
+
+#content-header {
+  .slogan {
+    margin-bottom: 15px;
+
+    * {
+      margin: 0;
+    }
+  }
+}

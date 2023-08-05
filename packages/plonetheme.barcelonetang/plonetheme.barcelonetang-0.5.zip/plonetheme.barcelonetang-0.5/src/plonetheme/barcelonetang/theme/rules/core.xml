@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://namespaces.plone.org/diazo"
+    xmlns:css="http://namespaces.plone.org/diazo/css"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <!-- Adjust HTML Meta Data and Resources. -->
+  <rules css:if-content="#portal-top">
+
+    <!-- Add Barceloneta CSS. -->
+    <after css:theme-children="html head">
+      <link href="{$portal_url}/++theme++barcelonetang/assets/css/barceloneta.css?v={$theme_version}" type="text/css" rel="stylesheet" />
+      <link href="{$portal_url}/++theme++barcelonetang/assets/css/theme.css?v={$theme_version}" type="text/css" rel="stylesheet" />
+    </after>
+
+    <!-- Add selected theme color option from spirit.plone.theming. -->
+    <after css:theme-children="html head" css:if-content="#PLONE_THEMING_COLOR_OPTION">
+      <link href="{$portal_url}/++theme++barcelonetang/assets/css/{$color}.css?v={$theme_version}" type="text/css" rel="stylesheet" />
+    </after>
+
+    <!-- Add default theme color in case we have no option. -->
+    <after css:theme-children="html head" css:if-not-content="#PLONE_THEMING_COLOR_OPTION">
+      <link href="{$portal_url}/++theme++barcelonetang/assets/css/blue.css?v={$theme_version}" type="text/css" rel="stylesheet" />
+    </after>
+
+  </rules>
+
+  <!-- Add required CSS classes to body tag based on spirit.plone.theming settings. -->
+  <before theme-children="html/body">
+    <xsl:attribute name="class"><xsl:value-of select="/html/body/@class" />
+      <!-- Add selected layout classes from spirit.plone.theming to body tag. -->
+      <xsl:choose>
+        <xsl:when test="$layout='boxed'">
+          <xsl:value-of select="' boxed'" />
+        </xsl:when>
+      </xsl:choose>
+    </xsl:attribute>
+  </before>
+
+</rules>

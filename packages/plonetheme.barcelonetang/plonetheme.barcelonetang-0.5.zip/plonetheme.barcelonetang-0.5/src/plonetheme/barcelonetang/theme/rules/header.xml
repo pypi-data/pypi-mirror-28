@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rules xmlns="http://namespaces.plone.org/diazo"
+    xmlns:css="http://namespaces.plone.org/diazo/css"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xi="http://www.w3.org/2001/XInclude">
+
+  <!-- Show spirit.plone.theming debug output, if enabled. -->
+  <before css:theme="#main-wrapper" css:if-content="#PLONE_THEMING_DEBUG">
+    <div class="container">
+      <div class="row">
+        <pre class="col-xs-12">
+          <xsl:copy-of css:select="#spirit_plone_theming_diazo_snippets" />
+        </pre>
+      </div>
+    </div>
+  </before>
+  <drop css:content="#spirit_plone_theming_diazo_snippets" />
+
+
+  <!-- Show spirit.plone.theming slogan. -->
+  <rules css:if-content="#PLONE_THEMING_SLOGAN">
+    <after css:theme-children="#content-header .container">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="slogan">
+            <xsl:copy-of css:select="#PLONE_THEMING_SLOGAN > *" />
+          </div>
+        </div>
+      </div>
+    </after>
+  </rules>
+  <drop css:theme=".site-info .slogan" />
+  <!--
+  <replace
+      css:if-content="#PLONE_THEMING_SLOGAN"
+      css:theme-children=".site-info .slogan"
+      css:content-children="#PLONE_THEMING_SLOGAN"
+      />
+  <drop css:theme=".site-info .slogan" css:if-not-content="#PLONE_THEMING_SLOGAN" />
+  -->
+
+
+  <!-- Show spirit.plone.theming email. -->
+  <replace css:if-content="#PLONE_THEMING_EMAIL" css:theme=".site-info .email a">
+    <xsl:variable name="email" css:select="#PLONE_THEMING_EMAIL"></xsl:variable>
+    <a href="mailto:{$email}"><xsl:value-of select="$email" /></a>
+  </replace>
+  <drop css:theme=".site-info .email" css:if-not-content="#PLONE_THEMING_EMAIL" />
+
+
+  <!-- Show spirit.plone.theming phone number. -->
+  <replace css:if-content="#PLONE_THEMING_PHONE_NUMBER" css:theme=".site-info .phone a">
+    <xsl:variable name="phone" css:select="#PLONE_THEMING_PHONE_NUMBER"></xsl:variable>
+    <xsl:variable name="phone_raw" css:select="#PLONE_THEMING_PHONE_NUMBER_RAW"></xsl:variable>
+    <a><xsl:attribute name="href">tel:<xsl:value-of select="$phone_raw" /></xsl:attribute>
+      <xsl:value-of select="$phone" />
+    </a>
+  </replace>
+  <drop css:theme=".site-info .phone" css:if-not-content="#PLONE_THEMING_PHONE_NUMBER" />
+
+
+  <!-- Hide search box, if requested. -->
+  <drop css:content="#portal-searchbox" css:if-content="#PLONE_THEMING_HIDE_SEARCHBOX" />
+
+
+  <!-- Show slidehsow in fullscreen mode. -->
+  <replace css:theme-children="#banner" css:content=".mosaic-grid-row-banner" method="raw" />
+  <drop css:content=".mosaic-grid-row-banner" />
+
+</rules>
