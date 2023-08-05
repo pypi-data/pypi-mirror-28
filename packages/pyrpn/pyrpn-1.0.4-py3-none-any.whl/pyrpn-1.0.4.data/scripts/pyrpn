@@ -1,0 +1,44 @@
+#!python
+# -*- coding: utf-8 -*-
+
+#
+# 2016-02-03 
+#
+
+import pyrpn
+from pyrpn.rpn import Rpn
+import sys
+
+
+def showhelp():
+    print("Input RPN expression seperated by space, press enter to get the result.\n")
+    print("For example: 1 2 +\n")
+    print("3.0000000000000000\n")
+    print("Type 'exit' or 'quit' or CTRL+D to exit.")
+
+print("Welcome to RPN calculator, powered by Python.\n\n"
+      "pyrpn {} -- Python package for reverse polish notation expression.\n"
+      "help       --> Show usage message.\n"
+      "exit, quit --> Exit.\n"
+      .format(pyrpn.__version__))
+
+prompt = 'pyrpn shell > '
+while True:
+    try:
+        istr = raw_input(prompt)
+        if istr == 'exit' or istr == 'quit':
+            print("%s%s" % (prompt, 'Bye.'))
+            sys.exit(0)
+        if istr == 'help':
+            showhelp()
+            continue
+    except KeyboardInterrupt:
+        print("%s%s" % (prompt, 'Bye.'))
+        sys.exit(0)
+    except EOFError:
+        sys.exit(0)
+    res = Rpn.solve_rpn(istr)
+    if res is not None:
+        print("%s%.16f" % (prompt, res))
+    else:
+        print("Invalid RPN, fix it and try again.:)")
