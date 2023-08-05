@@ -1,0 +1,345 @@
+#!/usr/bin/env python
+from os.path import expanduser
+from subprocess import call
+import curses
+import locale
+import logging
+import itertools
+import math
+import ntpath
+import os
+import re
+import subprocess
+import sys
+import time
+
+EDITOR = os.environ.get('EDITOR','vim') #that easy!
+documentSet = []
+notationalDir = os.getcwd()
+results = []
+screenH = None
+screenW = None
+searchTerm = ""
+selectedItem = -1
+showPreview = True
+storedException = None
+updateText = ""
+
+# Set up curses to interpret non-ASCII characters
+locale.setlocale(locale.LC_ALL, '')
+code = locale.getpreferredencoding()
+logging.basicConfig(filename='qn.log',level=logging.DEBUG)
+
+""" Setup cursors screen
+Set up screen with no echo settings etc.
+"""
+def setupScreen():
+    global screen
+    screen = curses.initscr()
+    curses.start_color()
+    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+    curses.init_pair(2, curses.COLOR_RED, curses.COLOR_WHITE)
+    curses.init_pair(3, curses.COLOR_RED, curses.COLOR_BLACK)
+    curses.noecho()
+    # curses.curs_set(0)
+    screen.keypad(1)
+
+def getSortedListOfFilenames(path):
+    mtime = lambda f: os.stat(os.path.join(path, f)).st_mtime
+    return reversed(list(sorted(os.listdir(path), key=mtime)))
+
+""" Update keyword search
+Read all the files in the notational folder and update the interal document list
+to reflect their contents. Note: for lots of files this could cause a hang.
+"""
+def updateDocumentSet():
+    global documentSet
+    documentSet =  []
+    for noteName in getSortedListOfFilenames(notationalDir):
+        filePath = notationalDir + '/' + noteName
+        if isFile(filePath) and not isFileHidden(noteName):
+            with open(filePath, 'r') as f:
+                words = getWordsFromFile(f)
+                documentSet.append((filePath, set(words)))
+
+def isFile(filePath):
+    return os.path.isfile(filePath);
+
+def isFileHidden(fileName):
+    return fileName[0] == '.';
+
+def getWordsFromFile(f):
+    words = []
+    for line in f:
+        line = cleanLine(line)
+        words.extend(line.split())
+    return words
+
+def cleanLine(line):
+    line = re.sub(r'[^a-zA-Z0-9]',' ', line) # remove non-alphanumeric
+    line = line.lower()
+    return line
+
+""" Search for a term in files
+Using the internally generated document set, search for any files that contain
+the term, or have the term in the header. Returns the files as a list of paths.
+"""
+def findFiles(term):
+    files = []
+    for document in documentSet:
+        # print(document[1])
+        basename = os.path.splitext(ntpath.basename(document[0]))[0].lower()
+        if any(term.lower() in s for s in document[1]) or term.lower() in basename:
+            files.append(document[0])
+    return files
+
+""" Create full width string,
+Will add spaces between texta and textb in order to make it fill entire screen width
+then will return
+"""
+def fullWidthString(texta, textb):
+    h,w = screen.getmaxyx()
+    space = w - len(texta) - len(textb) -1
+    return texta + ' ' * space + textb
+
+""" Safely print in curses passing errors
+"""
+def safePrint(text, *formattingArgs):
+    cursorY, cursorX = screen.getyx()
+    maxTextWidth = screenW - cursorX - 1
+    text = text[0:maxTextWidth]
+    screen.addstr(text, *formattingArgs)
+
+""" Print file preview
+Print the first @number of files from @filename, note that this
+doesn't take into account line wrapping """
+def printFile(filename, number = None):
+    with open(filename, 'r') as f:
+        catchErrorsPrintingLinesFromFile(f)
+
+def catchErrorsPrintingLinesFromFile(f):
+    for line in f:
+        try:
+            addstr_wordwrap(line)
+        except WindowFullException:
+            logging.warning('Window full exception')
+            break
+        except Exception as e:
+            logging.warning('Exception thrown: %s' % str(e))
+            break
+
+class WindowFullException(Exception):
+    pass
+
+def addstr_wordwrap(string, *formattingArgs):
+    """ (cursesWindow, str, int, int) -> None
+
+    Add a string to a curses window with given dimensions. If mode is given
+    (e.g. curses.A_BOLD), then format text accordingly. We do very
+    rudimentary wrapping on word boundaries.
+
+    Raise WindowFullException if we run out of room.
+    """
+    (height, width) = screen.getmaxyx()
+    height = height - 2
+    width = width - 1
+    (y, x) = screen.getyx() # Coords of cursor
+    # If the whole string fits on the current line, just add it all at once
+    if len(string) + x <= width:
+        screen.addstr(string, *formattingArgs)
+    # Otherwise, split on word boundaries and write each token individually
+    else:
+        for word in words_and_spaces(string):
+            if len(word) + x <= width:
+                screen.addstr(word, *formattingArgs)
+            else:
+                if y == height-1:
+                    # Can't go down another line
+                    raise WindowFullException()
+                screen.addstr(y+1, 0, word, *formattingArgs)
+            (y, x) = screen.getyx()
+
+def words_and_spaces(s):
+    """
+    >>> words_and_spaces('spam eggs ham')
+    ['spam', ' ', 'eggs', ' ', 'ham']
+    """
+    # Inspired by http://stackoverflow.com/a/8769863/262271
+    return list(itertools.chain.from_iterable(zip(s.split(), itertools.repeat(' '))))[:-1] # Drop the last space
+
+""" Main page drawing function
+Clears the screen and updates it with the current search term at the top
+as well as a list of notes that contain the searched term. It also highlights
+the currently selected file for editing.
+"""
+def drawPage():
+    global selectedItem
+    global results
+    global screenH
+    global screenW
+
+    results = findFiles(searchTerm)
+    screenH, screenW = screen.getmaxyx()
+
+    printedFileListHeight = getHeightForPrintedFileList()
+
+    if selectedItem < 0:
+        selectedItem = -1
+    if selectedItem >= printedFileListHeight:
+        selectedItem = printedFileListHeight - 1
+
+    screen.clear()
+    printSearchBar()
+    printFileList(printedFileListHeight)
+    printSelectedFilePreview(screenH - printedFileListHeight - 1)
+
+def getHeightForPrintedFileList():
+    height = -1
+    if showPreview and selectedItem >= 0:
+        height = int(screenH - (screenH/1.8))
+    else:
+        height = screenH - 1
+
+    if len(results) < height:
+        height = len(results)
+
+    return height - 1
+
+def printSearchBar():
+    safePrint("Search Term: ", curses.color_pair(2))
+    safePrint(searchTerm, curses.A_REVERSE)
+    printOnRightHandSide(updateText + '\n', curses.A_REVERSE)
+
+def printOnRightHandSide(string, *formattingArgs):
+    cursorY, cursorX = screen.getyx()
+    numberOfSpacesToPrint = screenW - cursorX - len(string) - 1
+    safePrint(' ' * numberOfSpacesToPrint + string, *formattingArgs)
+
+def printFileList(numberOflinesToPrint):
+    # TODO: Needs refactoring!
+    for x in range(numberOflinesToPrint):
+        cursesFormatting = curses.A_REVERSE if x == selectedItem else curses.A_NORMAL
+        filename = os.path.splitext(ntpath.basename(results[x]))[0]
+        lowercaseFilename = filename.lower()
+        lowercaseSearchTerm = searchTerm.lower()
+
+        if searchTerm != '' and x != selectedItem:
+            cursor = 0
+            while cursor < len(filename):
+                location = lowercaseFilename.find(lowercaseSearchTerm, cursor)
+                if location < 0:
+                    safePrint(filename[cursor:])
+                    cursor = len(filename)
+                else:
+                    safePrint(filename[cursor:location])
+                    safePrint(filename[location:location + len(searchTerm)], curses.color_pair(3))
+                    cursor = location + len(searchTerm)
+        else:
+            safePrint(filename, cursesFormatting)
+        printOnRightHandSide(time.ctime(os.path.getmtime(results[x])) + '\n', cursesFormatting) # get date of creation
+
+def printSelectedFilePreview(numberOflinesToPrint):
+    if showPreview and selectedItem >= 0:
+        safePrint(screenW * '-')
+        printFile(results[selectedItem], numberOflinesToPrint)
+
+""" Note editing function
+If a file is selected it will open it in your favourite editor, otherwise it'll
+create a new file with the searchterm as its name and open that.
+"""
+def editPage():
+    global results
+    global selectedFile
+    curses.endwin() # close curses app
+    if selectedItem < 0: # if new file
+        selectedFile = notationalDir + '/' + searchTerm + '.txt'
+        if not os.path.isfile(selectedFile):
+            open (selectedFile, 'a').close()
+    else: #otherwise use selected file
+        selectedFile = results[selectedItem]
+
+    with open(selectedFile, 'r+') as tempfile:
+      tempfile.flush()
+      call([EDITOR, tempfile.name])
+      # do the parsing with `tempfile`
+    screen.refresh()
+    updateDocumentSet()
+    drawPage()
+
+def deleteSelectedFile():
+    global updateText
+    if selectedItem >= 0:
+        os.remove(results[selectedItem])
+        updateText = 'deleted \'%s\'' % os.path.splitext(ntpath.basename(results[selectedItem]))[0]
+    else:
+        updateText = 'No note selected, can\'t delete'
+
+if __name__ == "__main__":
+    # If argument given use that as notational directory, otherwise just use
+    # current directory
+    if len(sys.argv) > 1:
+        print(sys.argv[1])
+        if not os.path.isdir(expanduser(sys.argv[1])):
+            print("That doesn't seem to be a directory...")
+            print("python notational.py [notaional directory]")
+            sys.exit(1)
+        notationalDir = expanduser(sys.argv[1])
+
+
+    # Initial page draw
+    setupScreen()
+    updateDocumentSet()
+    drawPage()
+
+    while True:
+        try:
+            if storedException:
+                break
+            event = screen.getch()
+            if event == 27:
+                screen.nodelay(True)
+                n = screen.getch()
+                if n == -1:
+                    break
+                elif n == 112: # alt + p: toggle preview
+                    if showPreview:
+                        showPreview = False
+                        updateText = 'Hide preview'
+                    else:
+                        updateText = 'Show preview'
+                        showPreview = True
+                    drawPage()
+                elif n == 113: # alt + q: quit
+                    break
+                elif n == 114: # alt + r: reload files
+                    searchTerm = ''
+                    updateText = 'Documents updated!'
+                    updateDocumentSet()
+                    drawPage()
+                elif n == 100: # alt + d: delete file
+                    deleteSelectedFile()
+                    updateDocumentSet()
+                    drawPage()
+                screen.nodelay(False)
+            elif event == curses.KEY_BACKSPACE or event == 127: # backspace
+                searchTerm = searchTerm[:-1]
+                drawPage()
+            elif event == curses.KEY_UP: # up
+                selectedItem = selectedItem - 1
+                drawPage()
+            elif event == curses.KEY_DOWN: # down
+                selectedItem = selectedItem + 1
+                drawPage()
+            elif event == 10:
+                editPage()
+                drawPage()
+            elif event < 257 and event > 0:
+                updateText = ''
+                searchTerm = searchTerm + str(chr(event))
+                drawPage()
+        except KeyboardInterrupt:
+            storedException = sys.exc_info()
+    curses.endwin()
+    print 'Thanks for using QuickNote!'
+    print '-- Linus'
+    sys.exit();
