@@ -1,0 +1,52 @@
+Metadata-Version: 2.0
+Name: mgun
+Version: 0.1.5
+Summary: HTTP REST Client based on requests with dynamic url building
+Home-page: https://github.com/maximdanilchenko/mgun
+Author: Danilchenko Maksim
+Author-email: dmax.dev@gmail.com
+License: MIT
+Description-Content-Type: UNKNOWN
+Keywords: http client rest requests mgun
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Dist: requests
+
+====
+mgun
+====
+
+.. image:: https://badge.fury.io/py/mgun.svg
+    :target: https://pypi.python.org/pypi/mgun
+.. image:: https://travis-ci.org/maximdanilchenko/mgun.svg
+    :target: https://travis-ci.org/maximdanilchenko/mgun
+.. image:: https://codecov.io/gh/maximdanilchenko/mgun/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/maximdanilchenko/mgun
+
+HTTP REST Client based on requests with dynamic url building
+
+Quickstart
+----------
+
+.. code-block:: python
+
+
+    from mgun import HttpClient
+
+    client = HttpClient('https://httpbin.org')
+
+    resp = client.anything.api.users[23].address.get({'q': '12'})
+
+    print(resp.status)  # 200
+    print(resp.data['url'])  # https://httpbin.org/anything/api/users/23/address?q=12
+
+
+
+
