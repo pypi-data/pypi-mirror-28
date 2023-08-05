@@ -1,0 +1,28 @@
+{% load i18n %}
+<div id="instant" style="display:none" v-show="instantForm">
+	<div class="event-labels">
+		<span class="pull-left" v-for="cl in eventLabels" v-bind:div="cl">
+			<span v-bind:id="cl.name"
+				href="" 
+				class="event-label inline"
+				v-html="cl.label" 
+				@click="activateEventClass(cl.name)">
+			</span>
+		</span>
+		
+		<span id="msg_status" v-html="msgStatus"></span>
+	</div>
+	<div class="full" style="padding:0 1em 0.5em 1em">
+		<form id="instant_form" onsubmit="return false">
+			<div class="inline" style="min-width:80%">
+				<input id="msg" type="text" name="msg" style="min-width:80%" 
+					v-bind:placeholder="instantFormPlaceholder" v-model="msgToSend">
+				</input>
+			</div>
+			<div class="inline">
+				<button id="submitMsg" @click="postInstantForm()" class="disabled">{% trans "Publish" %}</button>
+			</div>
+			{% csrf_token %}
+		</form>
+	</div>
+</div>
