@@ -1,0 +1,53 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %} {% trans "Mabel Settings" %} {% endblock %}
+{% block inside %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {{ ticket_limit_forms.management_form }}
+        <fieldset>
+            <legend>{% trans "Mabel Settings" %}</legend>
+            {% bootstrap_form form layout="horizontal" %}
+            <p>
+                You can find a sample spreedsheet
+                <a href="https://docs.google.com/spreadsheets/d/16G5tneAqCdo03O1MFayUZWGvsV8XdBIQO7VEYFvi-YY/edit#gid=0">here</a>,
+                 and create an API key 
+                <a href="https://console.developers.google.com/apis/credentials?pli=1&project=mabel3-1234">here</a>.
+            </p>
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Ticket Limits" %}</legend>
+            {% for f in ticket_limit_forms %}
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="collapsed" data-toggle="collapse" href="#{{f.item.value}}">
+                            <strong>
+                                {{f.instance.item}}
+                                {% if f.item.value is None %}
+                                    <em>New Limit Rule</em>
+                                {% endif %}
+                            </strong>
+                            <i class="fa fa-angle-down collapse-indicator"></i>
+                        </a>
+                    </h4>
+                </div>
+                <div id="{{ f.item.value }}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        {% bootstrap_form_errors f %}
+                        {% bootstrap_form f layout="horizontal" %}
+                     </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </fieldset>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
