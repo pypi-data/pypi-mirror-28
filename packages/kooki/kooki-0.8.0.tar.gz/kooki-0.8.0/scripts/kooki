@@ -1,0 +1,53 @@
+#!/usr/bin/python3
+import sys, platform, argparse, pretty_output, traceback
+
+from karamel.exception import KaramelException
+from karamel.command import *
+
+from kooki.logger import logger
+from kooki.version import __version__
+from kooki.exception import KookiException
+
+from kooki_cli import *
+
+__command__ = 'kooki'
+__description__ = 'Generate any kind of documents.'
+
+
+class KookiCommand(Command):
+
+    def __init__(self):
+        super(KookiCommand, self).__init__(__command__, __description__)
+        self.add_argument('-v', '--version', help='Show program\'s version number and exit.', action='store_true')
+        self.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help='Show this help message and exit.')
+
+        self.add_command(BakeCommand())
+        self.add_command(NewCommand())
+
+    def callback(self, args):
+
+        if args.version:
+            python_info = sys.version_info
+            python_build = platform.python_build()
+            python_compiler = platform.python_compiler().split(' ')
+
+            version = \
+'''Kooki {}
+Python {}.{}.{} ({}, {})
+{} {} ({})
+'''
+
+            version_filled = version.format(__version__, python_info.major, python_info.minor, python_info.micro, python_build[0], python_build[1], python_compiler[0], python_compiler[1], python_compiler[2])
+            pretty_output.color(version_filled)
+            print(version_filled)
+        else:
+            print(self.parser.print_help())
+
+
+if __name__ == '__main__':
+    try:
+        command = KookiCommand()
+        command.run()
+
+    except (KeyboardInterrupt, SystemExit):
+        pass
