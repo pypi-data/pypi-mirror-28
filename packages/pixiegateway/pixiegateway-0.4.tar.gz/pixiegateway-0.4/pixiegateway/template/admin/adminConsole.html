@@ -1,0 +1,50 @@
+{%from six import iteritems%}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>PixieGateway Admin Console</title>
+    <meta name="description" content="PixieGateway Admin Console">
+    <meta name="author" content="PixieDust">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {%include "adminCSS.html"%}
+    {%include "../headLinks.html"%}
+</head>
+<body>
+    <nav class="navbar navbar-pd-gateway navbar-fixed-top">
+        <div class="container-fluid row">
+            <div class="navbar-header col-xs-12 col-sm-2">
+                <a class="navbar-brand" href="/admin">PixieDust Gateway</a>
+            </div>
+        </div>
+    </nav> 
+    <div class="row main-content">
+        <div class="col-xs-12 col-sm-2 adminOptions">
+            <ul class="nav nav-pills nav-stacked">
+                {%for key, tab in iteritems(tab_definitions)%}
+                {% set name = tab.get('name', None) or tab.get('default')['name'] %}
+                <li {%if key==selected_tab_id%} class="active" {%end%}>
+                    <a data-toggle="collapse" data-target="#contents" href="/admin/{{key}}">{{name}}</a>
+                </li>
+                {%end%}
+            </ul>
+        </div>
+        <div class="col-xs-12 col-sm-10 adminContents">
+            <div class="admin-content-title">
+                <span>{{content_definition.get('description', "")}}</span>
+            </div>
+
+            <div class="admin-content-main">
+                {%include "../logo.html"%}
+
+                <div id="contents">
+                    {% set path = content_definition['path'] %}
+                    {% set args = content_definition['args']() if 'args' in content_definition else {} %}
+                    {% module Template("template/" + path, **args) %}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

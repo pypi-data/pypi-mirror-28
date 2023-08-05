@@ -1,0 +1,63 @@
+<script>
+    var displayStats = {}
+    $( document ).ready(function() {
+        function updateStats(){
+            $.get({
+                url: "/stats",
+                contentType: "text/plain",
+                success: function(data){
+                    function createAppsList(kernel_id, appStats){
+                        var html = "";
+                        appStats.forEach(function(app){
+                            var name = app['appName'];
+                            var status = app["status"]
+                            html += '<div><a href="/admin/stats/app/' + name + '/kernel/' + kernel_id+ '">' + name + ' (' + status + ")</a></div>";
+                        })
+                        return html;
+                    }
+                    for (var key in data){
+                        var runStats = data[key]["run_stats"];
+                        var appStats = data[key]["app_stats"];
+                        var userStats = data[key]["users"];
+                        var stats = {
+                            "kernel_name": '<a href="/admin/stats/kernel/' + key+ '">' + runStats["kernel_name"] + "</a>",
+                            "status": runStats["status"],
+                            "busy_ratio": Math.round(runStats["busy_ratio"] * 10)/10 + "%",
+                            "apps": createAppsList(key, appStats) || "None",
+                            "users": userStats.count
+                        }
+                        if (!displayStats[key]){
+                            displayStats[key] = stats;
+                            $("#tbody").append(
+                                "<tr id=\""+key+"\"> "+
+                                    "<td id=\"kernel_name_" + key + "\">" + stats["kernel_name"] + "</td>" +
+                                    "<td id=\"status_" + key + "\">" + stats["status"] + "</td>" +
+                                    "<td id=\"busy_ratio_" + key + "\">" + stats["busy_ratio"] + "</td>" +
+                                    "<td id=\"apps_" + key + "\">" + stats["apps"] + "</td>" +
+                                    "<td id=\"users_" + key + "\">" + stats["users"] + "</td>" +
+                                "</tr>"
+                            )
+                        }else{
+                            for (var k in displayStats[key]){
+                                if (displayStats[key][k] !== stats[k]){
+                                    displayStats[key][k] = stats[k];
+                                    $("#" + k + "_" + key).html( stats[k] );
+                                }
+                            }
+                        }
+                    }
+
+                    //Check for keys that needs to be removed
+                    Object.keys(displayStats).forEach(function(key){
+                        if (!data[key]){
+                            delete(displayStats[key]);
+                            $("#" + key).remove();
+                        }
+                    });
+                }
+            });
+        }
+
+        setInterval(updateStats, 1000);
+    });
+</script>
