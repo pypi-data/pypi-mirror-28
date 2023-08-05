@@ -1,0 +1,171 @@
+CHANGES
+=======
+
+1.6.17
+------
+
+* Bump versions for release
+* Run Influx TooSlow single process so flow stats don't time out under load
+* Influx timeout test is impatient, when stats request to switch times out
+* Add test for multiple DBs in gauge
+* Allow the same stat to be collected into a single db
+* Re-merge
+* Revert "Pi builder script should only tag latest if the image is the latest."
+* Pi builder script should only tag latest if the image is the latest
+* Use common function for version parsing, and allow manual building/pushing of tags
+* Allow configuration of OFPP\_LOCAL
+* Rework order of docker tag operations
+* Prevsion 1.6.17
+
+1.6.16
+------
+
+* Need to allow packets from VLAN 101 on SwapVID mirror test, and set right tcpdump host
+* Test deferred apply actions
+* Defer ACL actions to instruction
+* Bump version numbers for release
+* pylint
+* Test unknown port key
+* Use config key consistently
+* Verify port key must be same as number or name
+* Don't need to verify meter name
+* Check unknown DP key
+* VLAN key must match VID or name
+* Don't use set() yet for VLAN attributes
+* Drop packets that are not stacked and are not in the right VLAN
+* Test trying to share BGP VLAN across DPs
+* Use common reset\_refs() function
+* Incremental fix to re-resolve ports after warm start
+* Verify packet in has reason OFPR\_ACTION (resulted from a flow specifying packet in)
+* Move tag/untagged config check to Port
+* Log consistently
+* Log port state changes verbosely
+* reparse\_ip() already has eth\_type
+* reparse\_ip() already has eth\_type
+* Simplify IP header size checking (don't use Ryu to calculate header size - hard code)
+* Revert "Really should just check if untagged, directly."
+* Really should just check if untagged, directly
+* Don't need build\_port\_out\_inst() any more
+* Test cannot have same VLAN tagged and native on same port
+* Move implementation to build output actions on a VLAN to a common function
+* metermod add are sent before barrier
+* meter\_mod delete sent before barrier in valve\_flowreorder
+* Fix ConfigReload tests
+* More explicitly cause all ports change detection to trigger
+* Test addition of router causes cold start restart
+* Explicitly test native and tagged\_vlans on same port
+* Disable warm start optimization on router change
+* pylint
+* pylint
+* Add check for unreferenced routers
+* Add output\_only type check
+* Test bad cookie value
+* Add description field for ACL rules
+* Stricter type checking of ACLs and watchers
+* increase max\_len for ICMPv6 echo from 96 to 128 (MAX\_LEN)
+* Add faucet and gauge console scripts
+* Work-around 2to3 issue
+* Clarify port up/down versus configuration
+* Test output\_only drop flow is present
+* Test output\_only: True
+* Implement output\_only attribute for ports (if True, drop all input packets on a port)
+* Proof of concept for faucet launcher script
+* Make source mypy compatible and run mypy in presubmit
+* Ignore .mypy\_cache
+* Fix ACL cookies (not actually tested as get\_port\_match\_flow() was never called)
+* fix FaucetTaggedTargetedResolutionIPv4RouteTest
+* Correct resolve\_gw\_on\_port()
+* Move packet out tag or untagged implementation to VLAN, out of valve\_route
+* pylint
+* Re-enable pytype
+* Limit range of ACL rule cookie
+* Fix test\_gauge with cookie value
+* Test additional of cookie to ACL rule
+* Allow cookie to be set on ACL rules
+* Flow table loggers now log cookie value
+* Safe to reduce MIN\_PORT\_AGE max to 10s from 30
+* Don't validate ACLs on a DP that doesn't use them
+* Revert "Revert "Workaround stale pytype.""
+* Revert "Workaround stale pytype."
+* Workaround stale pytype
+* Verify set\_fields (and entire ACLs) can be serialized at config parsing time
+* Implement set\_fields in ACL output (so any OF field can be set)
+* Update documentation to reflect how docker tags work for us now
+* Update rasp pi build script to use our new docker tag system
+* Preversion 1.6.16
+
+1.6.15
+------
+
+* Explicitly require both msgpack and msgpack-python, to workaround msgpack package renaming
+* Fix #1462
+* Fix #1460
+* Fix #1463 and Fix #1461
+* Bump to 1.6.15
+* Fix #1464
+* Improve test cases and packet fuzzing now runs in persistent mode
+* Introduce debug setting on VLANs, to disable the minimum IP packet size check
+* Update the generic pipeline so that the faucet test suite will pass if 'GenericTFM' is used as hardware type  - Add missing match capabilities in table 0 (Port ACL)  - Add missing action capabilities in table 4 and 5 (IPv4/IPv6 FIB)
+* Revert "Use VLAN pkt\_out helper consistently."
+* Use VLAN pkt\_out helper consistently
+* Disable targeted resolution by default, and test it
+* Add comment for targeted gateway resolution
+* Convenient pkt out helper method for VLAN
+* Incremental targeted gateway resolution implementation
+* comments addressed
+* Add port\_state watcher for Prometheus, and recommend Prometheus-only monitoring
+* Suggest Prometheus instead of InfluxDB monitoring as an example
+* Use common FROOT
+* Use common install script for building FAUCET
+* Retry pip/pip3
+* Retry pip/pip3
+* Revert "Retry pip install (Travis fails occasionally due to connectivity reasons)."
+* Fix issue 1421: Decode port change reasons
+* Event server should reject multiple clients, and also keep only most recent N events when the queue is full
+* All hosts must have nonzero eth\_dst counters
+* Add retries for flow tables in Prometheus
+* Add test for Prometheus flow logging
+* Add unit tests for gauge config
+* dps shouldn't be a required key for gauge.yaml #1441
+* Reduce dimensions for Prometheus flow table logging
+* Prometheus/Influx now logs DP ID
+* Initial implementation of Prometheus flow table counters
+* Run more unit tests in pre-commit hook
+* Pre-version 1.6.15
+
+1.6.14
+------
+
+* pylint
+* Better check for bad include format and fix errors
+* Fix typo
+* Fix #1414
+* Fix #1412
+* Fix #1415
+* Fix #1410 and #1411
+* Fix #1409 and #1408
+* Fix #1407 and #1406
+* Fix #1405 and #1401
+* Fix #1404
+* Update docker documentation
+* Add note that only one client is supported
+* Allocate new port if iperf client or server fail to start
+* typo
+* Explicitly set iperf client IP
+* Revert "Revert "Add routing IPv6 routing test address by loopback interface.""
+* Revert "Add routing IPv6 routing test address by loopback interface."
+* Add routing IPv6 routing test address by loopback interface
+* TODO to fix IPv6 test host addresses for consistent ND
+* Revert "IPv6 routing tests can fail occasionally because we don't find the FAUCET VIP in the IPv6 neighbor table."
+* FaucetConfigReloadAclTest should verify port 4 can't be learned as well
+* FaucetConfigReloadAclTest less redundant
+* FaucetConfigReloadAclTest can fail due to hosts learned check before Prometheus updated
+* FaucetConfigReloadAclTest might expire a host under load
+* Remove logs every controller start attempt, log prom output from both FAUCET and Gauge automatically
+* More thorough check that FAUCET is listening on Prometheus port
+* Check controller health again after test start/switch connection
+* Revert "Temporarily add .fuzz to enable deletion of orphan repo on Dockerhub."
+* Temporarily add .fuzz to enable deletion of orphan repo on Dockerhub
+* Remove exception logs before restarting test
+* Put default for FAUCET\_EVENT\_SOCK in get\_setting()
+* Fix console command
