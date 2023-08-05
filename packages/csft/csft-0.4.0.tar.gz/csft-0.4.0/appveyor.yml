@@ -1,0 +1,26 @@
+environment:
+  matrix:
+    - PYTHON: "C:\\Python27"
+    - PYTHON: "C:\\Python27-x64"
+    - PYTHON: "C:\\Python35-x64"
+    - PYTHON: "C:\\Python36-x64"
+
+skip_commits:
+  files:
+    - "*.yml"
+    - "*.rst"
+    - "LICENSE"
+
+install:
+  - "%PYTHON%\\python.exe -m pip install . -r requirements.txt"
+
+build: off
+
+test_script:
+  - "%PYTHON%\\python.exe -m pytest"
+
+notifications:
+  - provider: Email
+    to:
+      - yanqd0@outlook.com
+    on_build_status_changed: true
