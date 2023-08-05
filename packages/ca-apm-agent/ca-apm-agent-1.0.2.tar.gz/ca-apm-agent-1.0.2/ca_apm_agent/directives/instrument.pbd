@@ -1,0 +1,16 @@
+# This file is to contain information of Probes and Functions to be instrumented
+# Probe declaration section
+# Declare in the following format
+# Variable = (Probe Module Name, Probe Class Name)
+http_probe=(ca_apm_agent.probes.django.http,HTTPProbe)
+timing_probe=(ca_apm_agent.probes.timing_probe,TProbe)
+sql_probe=(ca_apm_agent.probes.django.dbapi,DBAPIProbe)
+error_probe=(ca_apm_agent.probes.error,ErrorProbe)
+http_error_probe=(ca_apm_agent.probes.django.http_error,HTTPErrorProbe)
+
+
+# Function Instrumentation Section
+# A tuple consists of 4 or more items in the following format (At least 1 probe variable)
+# (Module Name, Class Name (can be None), Method Name, Probe Variable, Probe variable, ..)
+(django.core.handlers.base,BaseHandler,get_response,http_probe,http_error_probe,error_probe)
+(django.db.backends.utils,CursorWrapper,execute,sql_probe,error_probe)
