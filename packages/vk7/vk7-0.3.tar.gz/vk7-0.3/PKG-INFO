@@ -1,0 +1,60 @@
+Metadata-Version: 1.1
+Name: vk7
+Version: 0.3
+Summary: Framework for extract data from vk.com (russian social network).
+Home-page: https://github.com/pash4paul/vk7
+Author: Pavel Fomin
+Author-email: pash4paul@gmail.com
+License: UNKNOWN
+Description-Content-Type: UNKNOWN
+Description: ================================================================
+        Framework for extract data from vk.com (russian social network).
+        ================================================================
+        
+        This is a framework for extract data from vk.com (russian social network).
+        The goal is to give helpful interface for work with api and extracting data.
+        
+        Quickstart
+        ==========
+        
+        Install
+        -------
+        
+        .. code:: bash
+        
+            pip install vk7
+        
+        Usage
+        -----
+        
+        .. code:: python
+        
+            >>> from vk7 import VK
+            >>> from vk7.data_iterators import group_members_iterator
+            >>>
+            >>> vk = VK()
+            >>> vk.users.get(user_ids='1,2')
+            {'response': [{'first_name': 'Павел', 'id': 1, 'last_name': 'Дуров'},
+              {'first_name': 'Александра',
+               'hidden': 1,
+               'id': 2,
+               'last_name': 'Владимирова'}]}
+            >>>
+            >>> vk = VK('username', 'password', 'client_id')
+            >>> fields = ('bdate', 'connections', 'domain', 'followers_count', 'sex')
+            >>> group_members = group_members_iterator(vk, 'group_id', ','.join(fields), verbose=True)
+        
+        See https://vk.com/dev/methods for detailed API guide.
+        
+Keywords: api data osint social vk.com
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
