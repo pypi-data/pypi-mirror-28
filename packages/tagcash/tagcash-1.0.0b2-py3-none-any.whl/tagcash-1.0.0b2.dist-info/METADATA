@@ -1,0 +1,107 @@
+Metadata-Version: 2.0
+Name: tagcash
+Version: 1.0.0b2
+Summary: Finances with tags in CLI
+Home-page: https://github.com/cemsbr/tagcash
+Author: Carlos Eduardo Moreira dos Santos
+Author-email: cems@cemshost.com.br
+License: MIT
+Description-Content-Type: UNKNOWN
+Keywords: accounting finance finances cli terminal
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Financial and Insurance Industry
+Classifier: Topic :: Office/Business :: Financial :: Accounting
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Dist: docopt
+Requires-Dist: terminaltables
+Provides-Extra: dev
+Requires-Dist: coverage (<4.4); extra == 'dev'
+Requires-Dist: eradicate; extra == 'dev'
+Requires-Dist: pip-tools; extra == 'dev'
+Requires-Dist: rstcheck; extra == 'dev'
+Requires-Dist: tox; extra == 'dev'
+Requires-Dist: yala (>=1.4.0); extra == 'dev'
+
+TagCash - Finances with tags in CLI
+===================================
+
+|semaphore| |coveralls|
+
+Missing a practical and easy-to-learn solution to keep track of your finances? Use tagcash to do it with simple text files!
+
+TagCash is a little hack that I'm currently using after trying several solutions like GnuCash and Financisto. These are some of the features that I was missing and that are found in TagCash:
+
+- As simple as editing text files;
+- Text files are easy to sync between devices and people;
+- Simple CLI;
+- Quickly copy and paste statements from CLI to e-mail;
+- Simple and short Python source code.
+
+
+Quick Start
+-----------
+
+Let's choose 2 tags: ``wallet``, and ``bank`` for your checking account. Now, write the following in a file (e.g.: ``finances.txt``)::
+
+ 2018-01-13  100  Starting balance  bank
+ 2018-01-14   40  Withdrawal        wallet,-bank
+
+As there's no starting balance for ``wallet``, it will be $0.00. In the second line, there is a ``-`` (minus) sign next to the ``bank`` tag to make it ``-40`` in the ``bank`` ledger. Now, let's see what *tagcash* does without any option::
+
+ ~$ tagcash finances.txt
+ ┌bank────────┬────────┬─────────┬───────────────────┐
+ │ Date       │ Amount │ Balance │ Description       │
+ ├────────────┼────────┼─────────┼───────────────────┤
+ │ 2018-01-13 │ 100.00 │  100.00 │ Starting balance  │
+ │ 2018-01-14 │ -40.00 │   60.00 │ Withdrawal        │
+ └────────────┴────────┴─────────┴───────────────────┘
+ ┌wallet──────┬────────┬─────────┬───────────────────┐
+ │ Date       │ Amount │ Balance │ Description       │
+ ├────────────┼────────┼─────────┼───────────────────┤
+ │ 2018-01-14 │  40.00 │   40.00 │ Withdrawal        │
+ └────────────┴────────┴─────────┴───────────────────┘
+
+
+Tips
+----
+
+- The parser is flexible. Just don't use space in tags and separate them by comma;
+- Align as you wish. Use 1 or more spaces between fields (date, amount, ...);
+- You can use as many files as you want;
+- There's no need to keep the lines sorted by date. Thus, you can keep together all the monthly installments of a payment;
+- To choose tags, use for example ``--tags wallet`` (``-t`` for short).
+
+
+How to Install
+--------------
+Tested with Python >= 3.5: ``pip3 install tagcash``.
+
+
+Advanced Usage
+--------------
+
+To know how much money you have in total, including all specified tags, add the ``--all`` option::
+
+ $ tagcash --all finances.txt
+ (...)
+ ┌All Tags────┬────────┬─────────┬───────────────────┐
+ │ Date       │ Amount │ Balance │ Description       │
+ ├────────────┼────────┼─────────┼───────────────────┤
+ │ 2018-01-13 │ 100.00 │  100.00 │ Starting balance  │
+ │ 2018-01-14 │ -40.00 │   60.00 │ Withdrawal        │
+ │ 2018-01-14 │  40.00 │  100.00 │ Withdrawal        │
+ └────────────┴────────┴─────────┴───────────────────┘
+
+As expected, because you withdrew money to your own wallet, the last table shows that you have $100 in total. To keep this overall balance consistent, adopt the simple rule: use negative numbers (or tags) whenever you spend money, and positive when you earn it.
+
+
+.. |semaphore| image:: https://semaphoreci.com/api/v1/cemsbr/tagcash/branches/master/shields_badge.svg
+              :target: https://semaphoreci.com/cemsbr/tagcash
+.. |coveralls| image:: https://coveralls.io/repos/github/cemsbr/tagcash/badge.svg?branch=master
+              :target: https://coveralls.io/github/cemsbr/tagcash?branch=master
+
+
