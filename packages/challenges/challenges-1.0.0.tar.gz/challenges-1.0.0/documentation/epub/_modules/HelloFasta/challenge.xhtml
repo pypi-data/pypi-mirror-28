@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops">
+  <head>
+    <meta charset="utf-8" />
+    <title>HelloFasta.challenge</title>
+    <link rel="stylesheet" href="../../_static/epub.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" /> 
+  </head>
+  <body>
+
+    <div class="document">
+      <div class="documentwrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for HelloFasta.challenge</h1><div class="highlight"><pre>
+<span></span><span class="c1"># https://github.com/elmar-hinz/Python.Challenges</span>
+<span class="kn">from</span> <span class="nn">challenges</span> <span class="k">import</span> <span class="n">Challenge</span>
+
+<div class="viewcode-block" id="HelloFastaChallenge"><a class="viewcode-back" href="../../HelloFasta.xhtml#HelloFasta.challenge.HelloFastaChallenge">[docs]</a><span class="k">class</span> <span class="nc">HelloFastaChallenge</span><span class="p">(</span><span class="n">Challenge</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given: A DNA strand followed by fasta reads.</span>
+<span class="sd">    Return: The id of the read which the shortest distance to the given strand.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        ACCGGTCC</span>
+<span class="s1">        &gt;Fasta1</span>
+<span class="s1">        AGCG</span>
+<span class="s1">        GGCC </span>
+<span class="s1">        &gt;Fasta2</span>
+<span class="s1">        ACCC</span>
+<span class="s1">        GTCC </span>
+<span class="s1">        &gt;Fasta3</span>
+<span class="s1">        ACCG</span>
+<span class="s1">        TTTT </span>
+<span class="s1">    &#39;&#39;&#39;</span>
+
+    <span class="n">expect</span> <span class="o">=</span> <span class="s1">&#39;Fasta2&#39;</span>
+
+<div class="viewcode-block" id="HelloFastaChallenge.build"><a class="viewcode-back" href="../../HelloFasta.xhtml#HelloFasta.challenge.HelloFastaChallenge.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">strand</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fasta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fasta</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HelloFastaChallenge.calc"><a class="viewcode-back" href="../../HelloFasta.xhtml#HelloFasta.challenge.HelloFastaChallenge.calc">[docs]</a>    <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">winner</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">maximum</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="nb">id</span><span class="p">,</span> <span class="n">strand</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">fasta</span><span class="p">:</span>
+            <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">position</span><span class="p">,</span> <span class="n">base</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">strand</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">strand</span><span class="p">[</span><span class="n">position</span><span class="p">]</span> <span class="o">==</span> <span class="n">base</span><span class="p">:</span>
+                    <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">counter</span> <span class="o">&gt;</span> <span class="n">maximum</span><span class="p">:</span>
+                <span class="n">maximum</span> <span class="o">=</span> <span class="n">counter</span>
+                <span class="n">winner</span> <span class="o">=</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">winner</span></div></div>
+</pre></div>
+
+          </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+  </body>
+</html>
