@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+# PYTHON_ARGCOMPLETE_OK
+
+import os
+import json
+import sys 
+import argcomplete, argparse
+
+homedir = os.environ["HOME"]
+cfgFile = open(homedir+"/.goto.cfg").read()
+cfg = json.loads(cfgFile)
+
+def check_sshpass_installed():
+    return True if os.system("which sshpass > /dev/null")==0 else False
+
+def get_servers(prefix, parsed_args, **kwargs):
+    return cfg
+
+parser = argparse.ArgumentParser()
+parser.add_argument("cmd").completer = get_servers
+argcomplete.autocomplete(parser)
+
+args = parser.parse_args()
+cmd = args.cmd
+
+def main():
+    if cmd in cfg:
+        if check_sshpass_installed():
+            print "connect to %s" % (cfg[cmd]['server'])
+            os.system("sshpass -p %s ssh %s@%s"%(cfg[cmd]['password'], cfg[cmd]['user'], cfg[cmd]['server']))
+        else:
+            print "install sshpass to login more quickly!"
+            print "connect to %s" % (cfg[cmd]['server'])
+            os.system("ssh %s@%s"%(cfg[cmd]['user'], cfg[cmd]['server']))
+    else:
+        print "not found"
+
+if __name__ == "__main__":
+    main()
