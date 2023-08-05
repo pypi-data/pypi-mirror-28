@@ -1,0 +1,9 @@
+"""nester__UeRS.py: processa listas aninhadas"""
+def print_lol(the_list):
+  """Imprime os itens de uma lista na tela, inclusive os itens aninhados.
+  the_list: lista a ser impressa de forma recursiva."""
+  for each_item in the_list:
+    if isinstance(each_item, list):
+      print_lol(each_item)
+    else:
+      print(each_item)
