@@ -1,0 +1,158 @@
+% This file was converted to LaTeX by Writer2LaTeX ver. 1.0.2
+% see http://writer2latex.sourceforge.net for more info
+\documentclass[a4paper]{article}
+\include{data_parameters}
+\usepackage[latin1]{inputenc}
+\usepackage[french]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb,amsfonts,textcomp}
+\usepackage{color}
+\usepackage[top=1.8cm,bottom=2.7cm,left=2cm,right=2cm,includehead,head=2.0cm,headsep=1.2cm,includefoot,foot=4.2cm,footskip=1.2cm]{geometry}
+\usepackage{array}
+\usepackage{supertabular}
+\usepackage{hhline}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, filecolor=blue, urlcolor=blue, pdftitle=, pdfauthor=, pdfsubject=, pdfkeywords=}
+\makeatletter
+\newcommand\arraybslash{\let\\\@arraycr}
+\makeatother
+% Footnote rule
+\setlength{\skip\footins}{0.119cm}
+\renewcommand\footnoterule{\vspace*{-0.01cm}\setlength\leftskip{0pt}\setlength\rightskip{0pt plus 1fil}\noindent\textcolor{black}{\rule{0.25\columnwidth}{0.018cm}}\vspace*{0.101cm}}
+% Pages styles
+\makeatletter
+\makeatother
+%\pagestyle{empty}
+\setlength\tabcolsep{1mm}
+\renewcommand\arraystretch{1.3}
+\title{}
+\author{}
+\gdef\present #1{\textcolor{black}{{#1}}}
+\gdef\cell #1#2{\centering {#1}{\present #2} &}{}
+\gdef\dim #1{\centering\arraybslash  {#1}\\\hline}
+\gdef\semaine #1#2#3#4#5#6#7{\cell  #1\cell #2\cell #3\cell #4\cell #5\cell #6\centering\arraybslash  #7\\\hline}
+
+\chead{ {\bfseries\color{black} \companyName} \\ \companyShortAddress\companySuffixAddress \\
+Tél : \companyTel\ // mail : \companyMail\ 
+}
+\cfoot{ {\bfseries\color{black} \companyName} \\ Société à Responsabilité Limitée au capital de \companyCapital\ euros \\
+	Siège social : \companyShortAddress\companySuffixAddress \\
+	\companySiren\ R.C.S. \companyRCS \\
+	SIRET : \companySiren\ \companyNIC\ Code APE : \companyCodeAPE \\
+    N° TVA intracommunautaire : \companyVATCodePrefix{}\companyCompactSiren\ 
+}
+
+
+\begin{document}
+
+{\raggedleft\selectlanguage{french}\bfseries\color{black}
+A \clientAddressName{}\ \ \ \ 
+\par}
+
+{\raggedleft\selectlanguage{french}
+\clientStreet{}\ \ \ \ 
+\par}
+
+{\raggedleft\selectlanguage{french}
+\clientTown{}\ \ \ \ 
+\par}
+
+
+\bigskip
+
+\begin{flushleft}
+\tablehead{}
+\begin{supertabular}{|m{5.4cm}|m{5.4cm}|m{5.4cm}|}
+\hline
+\selectlanguage{french} \foreignlanguage{french}{\textcolor{black}{Facture }}\foreignlanguage{french}{\textcolor{black}{: }} &
+\selectlanguage{french}\color{black} No. \billNbBill &
+\selectlanguage{french}\color{black} \billLastDay/\billMonthId/\billYear{}\\\hline
+\end{supertabular}
+\end{flushleft}
+
+\bigskip
+
+
+\bigskip
+
+{\selectlanguage{french}
+\foreignlanguage{french}{\textcolor{black}{Objet : }}\foreignlanguage{french}{\textcolor{black}{Facture détaillée selon contrat de prestation de service N° \clientContractRef{}\billAmendment }}}
+
+
+\bigskip
+
+
+\bigskip
+
+{\selectlanguage{french}\color{black}
+Année : \billYear }
+
+{\selectlanguage{french}\color{black} Mois : \billMonthName}
+
+{\centering\selectlanguage{french}\color{black}
+Calendrier des dates de prestations :
+\par}
+
+\begin{flushleft}
+\centering {\tablehead{}
+\begin{supertabular}{|m{1.60cm}|m{1.60cm}|m{1.60cm}|m{1.60cm}|m{1.60cm}|m{1.60cm}|m{1.60cm}|}
+\hline
+\tableau
+\end{supertabular}}
+\end{flushleft}
+
+{\selectlanguage{french}\color{black}
+Nombre total de jours de prestations : \billNbDays.}
+
+\bigskip
+
+\begin{flushleft}
+\tablehead{}
+\begin{supertabular}{|m{5,5cm}|m{5,4cm}|m{5,4cm}|}
+\hline
+\centering \selectlanguage{french}\color{black} MONTANT HT &
+\centering \selectlanguage{french} \foreignlanguage{french}{\textcolor{black}{T.V.A. }}\foreignlanguage{french}{\textcolor{black}{\billVATRate\%}} &
+\centering\arraybslash \selectlanguage{french} \foreignlanguage{french}{\textcolor{black}{MONTANT }}\foreignlanguage{french}{\textcolor{black}{T.T.C.}}\\\hline
+\centering \selectlanguage{french}\color{black} \billCalculus{} = \billTotalWoVAT{} Euros &
+\centering \selectlanguage{french}\color{black} \billVAT{} Euros &
+\centering\arraybslash \selectlanguage{french}\bfseries\color{black} \billTotal{}  Euros\\\hline
+\end{supertabular}
+\end{flushleft}
+\bigskip
+
+\begin{supertabular}{|m{8.2cm}|m{8.3cm}|}
+\hline
+\selectlanguage{french}\color{black} MONTANT NET A PAYER : &
+\raggedleft\arraybslash \selectlanguage{french}\bfseries\color{black} \billTotal{} Euros\\\hline
+\end{supertabular}
+
+\bigskip
+{\small{\foreignlanguage{french}{\textcolor{black}{Paiement :\ \ }}\foreignlanguage{french}{\textcolor{black}{30 jours à réception par virement au compte ci-dessous.\\}
+Taux d{\textquoteright}intérêt applicable en cas de retard : 15\% (C. com., art. L.441-6)}}}
+\bigskip
+\bigskip
+\begin{flushleft}
+{\small
+\begin{supertabular}{|m{1,1cm}m{2,0cm}m{1,9cm}m{2,9cm}m{1,8cm}|}
+\hline
+\multicolumn{5}{|m{10.8cm}|}{\centering \selectlanguage{french}\bfseries\color{black} RELEVE D{\textquoteright}IDENTITE BANCAIRE}\\\hline
+\multicolumn{5}{|m{10.8cm}|}{\selectlanguage{french} \foreignlanguage{french}{\textbf{\textcolor{black}{Titulaire}}}\foreignlanguage{french}{\textcolor{black}{ \ \ \ \ \ \ \companyName\ \companyForm, \companyShortAddress}}}\\\hline
+\multicolumn{5}{|m{10.8cm}|}{\selectlanguage{french} \foreignlanguage{french}{\textbf{\textcolor{black}{Domiciliation}}}\foreignlanguage{french}{\textcolor{black}{ \ \ \ \ \bankName}}}\\\hline
+\selectlanguage{french}{\textbf{\textcolor{black}RIB}} &
+\centering \selectlanguage{french}\color{black} Banque &
+\centering \selectlanguage{french}\color{black} Agence &
+\centering \selectlanguage{french}\color{black} N° de compte &
+\centering\arraybslash \selectlanguage{french}\color{black} Clé\\ &
+\centering \selectlanguage{french}\color{black} \bankCode &
+\centering \selectlanguage{french}\color{black} \bankAgency &
+\centering \selectlanguage{french}\color{black} \bankShortAccountNumber &
+\centering\arraybslash \selectlanguage{french}\color{black} \bankKey\\
+\multicolumn{5}{|m{10.8cm}|}{\selectlanguage{french} \foreignlanguage{french}{\textbf{\textcolor{black}{IBAN}}}\foreignlanguage{french}{\textcolor{black}{ 
+\ \ \ \ \ \ \bankCountryCode\bankKeyControl\ \bankIBAN\ \ \ BIC : \bankBICCode }}}\\\hline
+\end{supertabular}
+}
+\end{flushleft}
+
+\end{document}
