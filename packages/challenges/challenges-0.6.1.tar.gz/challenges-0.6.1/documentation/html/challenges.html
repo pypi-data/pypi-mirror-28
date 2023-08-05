@@ -1,0 +1,711 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>challenges package &#8212; Challenges 0.6.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="tests package" href="tests.html" />
+    <link rel="prev" title="HelloWorld package" href="HelloWorld.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="challenges-package">
+<h1>challenges package<a class="headerlink" href="#challenges-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-challenges.challenge">
+<span id="challenges-challenge-module"></span><h2>challenges.challenge module<a class="headerlink" href="#module-challenges.challenge" title="Permalink to this headline">¶</a></h2>
+<p>Core module of challenges</p>
+<p>This module holds the base class of all challenges.</p>
+<dl class="class">
+<dt id="challenges.challenge.Challenge">
+<em class="property">class </em><code class="descclassname">challenges.challenge.</code><code class="descname">Challenge</code><a class="reference internal" href="_modules/challenges/challenge.html#Challenge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base class of all challenges</p>
+<p>Design concept is the Template Method Design Pattern (GOF).</p>
+<p>Attributes:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Sample:</th><td class="field-body">The input of the challenge.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Output:</th><td class="field-body">The output of the challenge</td>
+</tr>
+</tbody>
+</table>
+<p>Workflow:</p>
+<p>The <cite>main</cite> method controls the overall workflow by calling the worker
+methods. This is the common character of all challenges.
+The base class controls the workflow of the derived workers.</p>
+<p>Workers:</p>
+<p>The worker methods need to be implemented by the inheriting class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Read:</th><td class="field-body">Read the input into a list of lines.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Build:</th><td class="field-body">Build the data model from the lines.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Calc:</th><td class="field-body">Run the main algorithm of the challenge.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Format:</th><td class="field-body">Create the output string required by the grader.</td>
+</tr>
+</tbody>
+</table>
+<p>Library:</p>
+<p>The other methods support the implementation of the workers. They address
+the extraction of data from the input lines or the formatting of the
+output.</p>
+<p>Sample:</p>
+<p>The attribute <cite>sample</cite> is both used as class and as instance attribute.
+When the instance attribute is injected it shadows the class attribute. By
+this the class attribute sets a tiny but useful default.</p>
+<p>When the challenge runner is executed with the option <cite>–klass</cite> no
+instance variable is injected and the sample from the class is used:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">prompt</span><span class="o">&gt;</span> <span class="n">challenge</span> <span class="n">MyChallenge</span> <span class="o">--</span><span class="n">klass</span>
+</pre></div>
+</div>
+<p>When the runner is executed with the option <cite>–file</cite> the files content is
+injected:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">prompt</span><span class="o">&gt;</span> <span class="n">challenge</span> <span class="n">MyChallenge</span> <span class="o">--</span><span class="n">file</span> <span class="o">~/</span><span class="n">Downloads</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="challenges.challenge.Challenge.br">
+<code class="descname">br</code><em class="property"> = '\n'</em><a class="headerlink" href="#challenges.challenge.Challenge.br" title="Permalink to this definition">¶</a></dt>
+<dd><p>Line breaks as expected by the most graders.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.build">
+<code class="descname">build</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up the model from the input lines.</p>
+<p>This method must be implemented.
+Reads from self.lines.
+Fills self.model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.calc">
+<code class="descname">calc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main algorithm of the challenge.</p>
+<p>This method must be implemented. Here the interesting stuff happens.
+Best practice is to delegate to functions, that are named by the
+algorithms used or even to other classes that implement the algorithm.</p>
+<p>Reads from self.model.
+Fills self.result.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.challenge.Challenge.edge_pattern">
+<code class="descname">edge_pattern</code><em class="property"> = '^(\\d+)-&gt;(\\d+)(:(\\d+))?$'</em><a class="headerlink" href="#challenges.challenge.Challenge.edge_pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reg expression to extract edges of a graph.</p>
+<p>A default setting used by methods that extract edges from input lines.
+May need adjustment for different kind of edge input formats.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.edges">
+<code class="descname">edges</code><span class="sig-paren">(</span><em>start=0</em>, <em>stop=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.edges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.edges" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator to read edges from lines.</p>
+<p>Reads a range of lines, one edge per line, and yields the edges.</p>
+<p>By the start and stop parameters a range can be given.
+The stop parameter is the index behind the last line to use.</p>
+<p>The line to start is set by the parameter start. It defaults to zero.
+The line to stop is set by the parameter stop. When it is not provided
+lines are used as long as they match the edge_pattern reg expression.
+The match behaviour can be adjusted by the self.edge_pattern.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.example">
+<code class="descname">example</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.example"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.example" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the sample, with heading whitespace trimmed</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.challenge.Challenge.expect">
+<code class="descname">expect</code><em class="property"> = '\n        expected result\n        expected result\n    '</em><a class="headerlink" href="#challenges.challenge.Challenge.expect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds the expected result with additional leading whitespace.</p>
+<p>Whitespace surrounding lines is for readability. It typically needs to be
+stripped to get the actual expactation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.expectation">
+<code class="descname">expectation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.expectation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.expectation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the expecation, with heading whitespace trimmed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.fasta">
+<code class="descname">fasta</code><span class="sig-paren">(</span><em>start=0</em>, <em>stop=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.fasta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.fasta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator to read FASTA formatted samples.</p>
+<p>Reads multiple fasta sequences and yields them.</p>
+<p>By the start and stop parameters a range can be given.
+The stop parameter is the index behind the last line to use.</p>
+<p>The line to start is set by the parameter start. It defaults to zero.
+The line to stop is set by the parameter stop. When it is not provided
+lines are used as long as they match the FASTA format.
+The match behaviour can be adjusted by the self.fasta_pattern.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.challenge.Challenge.fasta_pattern">
+<code class="descname">fasta_pattern</code><em class="property"> = '^[\\-\\*A-Z]+$'</em><a class="headerlink" href="#challenges.challenge.Challenge.fasta_pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reg expression for FASTA sequences.</p>
+<p>Matches lines holding FASTA sequences.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.fasta_strands">
+<code class="descname">fasta_strands</code><span class="sig-paren">(</span><em>start=0</em>, <em>stop=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.fasta_strands"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.fasta_strands" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the strands of a fasta read as list.</p>
+<p>Takes the same arguments as self.fasta() and delegates to it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.format">
+<code class="descname">format</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.format"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format the output string.</p>
+<p>In simple cases this method can be used as is. In other cases it
+needs to be reimplemented.</p>
+<p>Reads from self.result.
+Fills self.output.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.format_list_of_integers">
+<code class="descname">format_list_of_integers</code><span class="sig-paren">(</span><em>integers</em>, <em>joint='</em>, <em>'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.format_list_of_integers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.format_list_of_integers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join a list of integers to a string</p>
+<p>Use the given joint.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.format_path">
+<code class="descname">format_path</code><span class="sig-paren">(</span><em>integers</em>, <em>backwards=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.format_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.format_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Join a list of integers to path of nodes.</p>
+<p>The joint is -&gt; by default. If the parameter
+backwards is True the joint is &lt;-.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.line">
+<code class="descname">line</code><span class="sig-paren">(</span><em>number</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.line"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return one line by the given number.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.line_to_edge">
+<code class="descname">line_to_edge</code><span class="sig-paren">(</span><em>nr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.line_to_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.line_to_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert one line to an edge.</p>
+<p>The number of the line is selected by line_nr.
+The split behaviour can be adjusted by changing self.edge_pattern.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.line_to_floats">
+<code class="descname">line_to_floats</code><span class="sig-paren">(</span><em>line_nr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.line_to_floats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.line_to_floats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split one line into  a list of floats.</p>
+<p>The number of the line is selected by line_nr.
+The split behaviour can be adjusted by changing self.split_pattern.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.line_to_integer">
+<code class="descname">line_to_integer</code><span class="sig-paren">(</span><em>line_nr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.line_to_integer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.line_to_integer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return line as integer.</p>
+<p>The number of the line is selected by line_nr.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.line_to_integers">
+<code class="descname">line_to_integers</code><span class="sig-paren">(</span><em>line_nr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.line_to_integers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.line_to_integers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split one line into  a list of integers.</p>
+<p>The number of the line is selected by line_nr.
+The split behaviour can be adjusted by changing self.split_pattern.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.line_to_words">
+<code class="descname">line_to_words</code><span class="sig-paren">(</span><em>line_nr</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.line_to_words"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.line_to_words" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split one line into  a list of words.</p>
+<p>The number of the line is selected by line_nr.
+The split behaviour can be adjusted by changing self.split_pattern.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.challenge.Challenge.lines">
+<code class="descname">lines</code><em class="property"> = None</em><a class="headerlink" href="#challenges.challenge.Challenge.lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of lines that will be filled by the method read().</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.main">
+<code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Control the workflow of the challenge.</p>
+<p>Usually this method doesn’t need to be overwritten.</p>
+<p>The workers share data via instance variables.
+The overall input is injected into self.sample.
+The overall output is read from self.result.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.challenge.Challenge.model">
+<code class="descname">model</code><em class="property"> = None</em><a class="headerlink" href="#challenges.challenge.Challenge.model" title="Permalink to this definition">¶</a></dt>
+<dd><p>The imported data model.</p>
+<p>A flexible namespace object to take up any kind of data. In simple
+cases this may be completely overwritten, i.e by a list or dict.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.challenge.Challenge.output">
+<code class="descname">output</code><em class="property"> = None</em><a class="headerlink" href="#challenges.challenge.Challenge.output" title="Permalink to this definition">¶</a></dt>
+<dd><p>The output string.</p>
+<p>The string representation of the resulting model as expected by the
+grader.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.challenge.Challenge.read">
+<code class="descname">read</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/challenge.html#Challenge.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.challenge.Challenge.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the input string self.sample into self.lines.</p>
+<p>Typically this method can be used as is.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.challenge.Challenge.result">
+<code class="descname">result</code><em class="property"> = None</em><a class="headerlink" href="#challenges.challenge.Challenge.result" title="Permalink to this definition">¶</a></dt>
+<dd><p>The resulting data model.</p>
+<p>A flexible namespace object to take up any kind of data. In simple
+cases this may be completely overwritten, i.e by a list or dict.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.challenge.Challenge.sample">
+<code class="descname">sample</code><em class="property"> = '\n        sample\n        sample\n    '</em><a class="headerlink" href="#challenges.challenge.Challenge.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Holds a minimal example of the input with additional whitespace.</p>
+<p>This class variable should always be preset with a tiny sample of input.
+Whitespace surrounding lines is for readability. It typically needs to be
+stripped to get the actual sample.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.challenge.Challenge.split_pattern">
+<code class="descname">split_pattern</code><em class="property"> = '\\s+|\\s?,\\s?'</em><a class="headerlink" href="#challenges.challenge.Challenge.split_pattern" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reg expression to split input lines.</p>
+<p>Used by some of the input parsing functions. The default splits by
+whitespace and/or comma. If the input is separated differently like colons
+or semicolons it needs adjustment in the inheriting class.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-challenges.conf">
+<span id="challenges-conf-module"></span><h2>challenges.conf module<a class="headerlink" href="#module-challenges.conf" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="challenges.conf.Conf">
+<em class="property">class </em><code class="descclassname">challenges.conf.</code><code class="descname">Conf</code><a class="reference internal" href="_modules/challenges/conf.html#Conf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="challenges.conf.Conf.get_challenge">
+<code class="descname">get_challenge</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_challenge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_challenge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_challenge_dir">
+<code class="descname">get_challenge_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_challenge_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_challenge_dir" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_challenge_file">
+<code class="descname">get_challenge_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_challenge_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_challenge_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_challenge_init_file">
+<code class="descname">get_challenge_init_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_challenge_init_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_challenge_init_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_challenge_name">
+<code class="descname">get_challenge_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_challenge_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_challenge_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_challenges">
+<code class="descname">get_challenges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_challenges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_challenges" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="challenges.conf.Conf.get_class">
+<em class="property">static </em><code class="descname">get_class</code><span class="sig-paren">(</span><em>class_</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_class" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_full_qualified_challenge_name">
+<code class="descname">get_full_qualified_challenge_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_full_qualified_challenge_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_full_qualified_challenge_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_full_qualified_unittest_name">
+<code class="descname">get_full_qualified_unittest_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_full_qualified_unittest_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_full_qualified_unittest_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_input_file">
+<code class="descname">get_input_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_input_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_input_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_latest_at_root">
+<code class="descname">get_latest_at_root</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_latest_at_root"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_latest_at_root" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_latest_file">
+<code class="descname">get_latest_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_latest_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_latest_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_result_file">
+<code class="descname">get_result_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_result_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_result_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_sample_file">
+<code class="descname">get_sample_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_sample_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_sample_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_unittest">
+<code class="descname">get_unittest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_unittest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_unittest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.get_unittest_file">
+<code class="descname">get_unittest_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.get_unittest_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.get_unittest_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.parse_arguments">
+<code class="descname">parse_arguments</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.parse_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.parse_arguments" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.conf.Conf.print_help">
+<code class="descname">print_help</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/conf.html#Conf.print_help"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.conf.Conf.print_help" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-challenges.graph">
+<span id="challenges-graph-module"></span><h2>challenges.graph module<a class="headerlink" href="#module-challenges.graph" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="challenges.graph.Edge">
+<em class="property">class </em><code class="descclassname">challenges.graph.</code><code class="descname">Edge</code><span class="sig-paren">(</span><em>tail</em>, <em>head</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/graph.html#Edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="attribute">
+<dt id="challenges.graph.Edge.head">
+<code class="descname">head</code><a class="headerlink" href="#challenges.graph.Edge.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the head node.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.graph.Edge.tail">
+<code class="descname">tail</code><a class="headerlink" href="#challenges.graph.Edge.tail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the tail node.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="challenges.graph.Graph">
+<em class="property">class </em><code class="descclassname">challenges.graph.</code><code class="descname">Graph</code><a class="reference internal" href="_modules/challenges/graph.html#Graph"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="challenges.graph.Graph.count">
+<code class="descname">count</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/graph.html#Graph.count"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Graph.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return count of nodes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.graph.Graph.create_edge">
+<code class="descname">create_edge</code><span class="sig-paren">(</span><em>tail</em>, <em>head</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/graph.html#Graph.create_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Graph.create_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an edge and return it.</p>
+<p>Create nodes as necessary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Tail:</th><td class="field-body">Node or id of node</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Head:</th><td class="field-body">Node or id of node</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.graph.Graph.create_node">
+<code class="descname">create_node</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/graph.html#Graph.create_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Graph.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a standalone node to the graph and return it.</p>
+<p>If a node of this id already exists, it is just returned.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.graph.Graph.keys">
+<code class="descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/graph.html#Graph.keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Graph.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return keys of nodes in sorted order.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.graph.Graph.node">
+<code class="descname">node</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/graph.html#Graph.node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Graph.node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a node by id.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.graph.Graph.nodes">
+<code class="descname">nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/graph.html#Graph.nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Graph.nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return all nodes sorted by node id.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="challenges.graph.Node">
+<em class="property">class </em><code class="descclassname">challenges.graph.</code><code class="descname">Node</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/graph.html#Node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="challenges.graph.Node.add_edge">
+<code class="descname">add_edge</code><span class="sig-paren">(</span><em>edge</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/graph.html#Node.add_edge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Node.add_edge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an edge to the node.</p>
+<p>Not for direct usage. To create node and edges use:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Graph.create_node()</li>
+<li>Graph.create_edge()</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.graph.Node.antecessors">
+<code class="descname">antecessors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/graph.html#Node.antecessors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Node.antecessors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the incoming NODES of the node.</p>
+<p>The tail nodes of all incoming edges.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.graph.Node.id">
+<code class="descname">id</code><a class="headerlink" href="#challenges.graph.Node.id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the nodes id.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.graph.Node.incoming">
+<code class="descname">incoming</code><a class="headerlink" href="#challenges.graph.Node.incoming" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the incoming EDGES of the node.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="challenges.graph.Node.outgoing">
+<code class="descname">outgoing</code><a class="headerlink" href="#challenges.graph.Node.outgoing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the outgoing EDGES of the node.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="challenges.graph.Node.successors">
+<code class="descname">successors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/graph.html#Node.successors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.graph.Node.successors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the outgoing NODES of the node.</p>
+<p>The head nodes of all outgoing edges.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-challenges.main">
+<span id="challenges-main-module"></span><h2>challenges.main module<a class="headerlink" href="#module-challenges.main" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="challenges.main.main">
+<code class="descclassname">challenges.main.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/main.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.main.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-challenges.runner">
+<span id="challenges-runner-module"></span><h2>challenges.runner module<a class="headerlink" href="#module-challenges.runner" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="challenges.runner.Runner">
+<em class="property">class </em><code class="descclassname">challenges.runner.</code><code class="descname">Runner</code><span class="sig-paren">(</span><em>conf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/runner.html#Runner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.runner.Runner" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="challenges.runner.Runner.list_challenges">
+<code class="descname">list_challenges</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/runner.html#Runner.list_challenges"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.runner.Runner.list_challenges" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.runner.Runner.main">
+<code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/runner.html#Runner.main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.runner.Runner.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.runner.Runner.read_file">
+<code class="descname">read_file</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/runner.html#Runner.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.runner.Runner.read_file" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.runner.Runner.run_challenge">
+<code class="descname">run_challenge</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/runner.html#Runner.run_challenge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.runner.Runner.run_challenge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.runner.Runner.run_unittest">
+<code class="descname">run_unittest</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/runner.html#Runner.run_unittest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.runner.Runner.run_unittest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.runner.Runner.set_sample">
+<code class="descname">set_sample</code><span class="sig-paren">(</span><em>challenge</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/runner.html#Runner.set_sample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.runner.Runner.set_sample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.runner.Runner.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>challenge</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/runner.html#Runner.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.runner.Runner.write" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-challenges.scaffold">
+<span id="challenges-scaffold-module"></span><h2>challenges.scaffold module<a class="headerlink" href="#module-challenges.scaffold" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="challenges.scaffold.Scaffold">
+<em class="property">class </em><code class="descclassname">challenges.scaffold.</code><code class="descname">Scaffold</code><span class="sig-paren">(</span><em>conf</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/scaffold.html#Scaffold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.scaffold.Scaffold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<dl class="method">
+<dt id="challenges.scaffold.Scaffold.get_class_content">
+<code class="descname">get_class_content</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/scaffold.html#Scaffold.get_class_content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.scaffold.Scaffold.get_class_content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.scaffold.Scaffold.get_unittest_content">
+<code class="descname">get_unittest_content</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/scaffold.html#Scaffold.get_unittest_content"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.scaffold.Scaffold.get_unittest_content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="challenges.scaffold.Scaffold.scaffold">
+<code class="descname">scaffold</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/challenges/scaffold.html#Scaffold.scaffold"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#challenges.scaffold.Scaffold.scaffold" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-challenges">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-challenges" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">challenges package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-challenges.challenge">challenges.challenge module</a></li>
+<li><a class="reference internal" href="#module-challenges.conf">challenges.conf module</a></li>
+<li><a class="reference internal" href="#module-challenges.graph">challenges.graph module</a></li>
+<li><a class="reference internal" href="#module-challenges.main">challenges.main module</a></li>
+<li><a class="reference internal" href="#module-challenges.runner">challenges.runner module</a></li>
+<li><a class="reference internal" href="#module-challenges.scaffold">challenges.scaffold module</a></li>
+<li><a class="reference internal" href="#module-challenges">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="HelloWorld.html" title="previous chapter">HelloWorld package</a></li>
+      <li>Next: <a href="tests.html" title="next chapter">tests package</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/challenges.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Elmar Hinz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/challenges.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
