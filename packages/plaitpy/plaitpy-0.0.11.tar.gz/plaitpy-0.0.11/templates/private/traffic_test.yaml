@@ -1,0 +1,29 @@
+mixin:
+  - web/browser.yaml
+
+fields:
+  _timestamp:
+    onlyif: this._new_visitor
+    template: timestamp/human_daily_pattern.yaml
+
+  new_visitor:
+    lambda: this._new_visitor 
+
+  pages_left:
+    lambda: this._pages_left
+
+  _new_visitor:
+    switch:
+      - onlyif: prev._pages_left <= 0
+        lambda: 1
+
+  _revisit: 0
+
+  _pages_left:
+    initial: 0
+    switch:
+      - onlyif: this._new_visitor
+        random: min(weibullvariate(1, 0.9) * 10, 134) + randint(1, 10)
+        cast: int
+      - default:
+        lambda: prev._pages_left - 1 + this._revisit

@@ -1,0 +1,140 @@
+mixin:
+  - web/browser.yaml
+
+fields:
+  _timestamp:
+    onlyif: this._new_visitor
+    template: timestamp/human_monthly_pattern.yaml
+
+  new_visitor:
+    lambda: this._new_visitor 
+
+  pages_left:
+    lambda: this._pages_left
+
+  _new_visitor:
+    switch:
+      - onlyif: prev._pages_left <= 0
+        lambda: 1
+
+  _pages_left:
+    initial: 0
+    switch:
+      - onlyif: this._new_visitor
+        random: min(weibullvariate(1, 0.9) * 10, 134) + randint(1, 10)
+        cast: int
+      - onlyif: this._is_bot
+        random: prev._pages_left - randint(0, 5)
+      - default:
+        lambda: prev._pages_left - 1 + this._revisit
+
+  host: "logv.org"
+
+  referer:
+    initial: '-'
+    switch:
+      - onlyif: random.random() < 0.92
+        lambda: prev.referer
+      - default:
+        lambda: prev.referer
+
+  nextpath:
+    initial: '-'
+    csv: private/snorkel_url_transitions.csv
+    column: 0
+    index: 1
+    weight: 2
+    lookup: this.parsedpath
+
+  parsedpath:
+    initial: '-'
+    switch:
+    - onlyif: prev.nextpath
+      lambda: prev.nextpath
+    - default:
+      csv: private/snorkel_agents_and_urls.csv
+      column: 1
+      index: 0
+      lookup: this.useragent
+      depends: useragent
+
+
+  _revisit:
+    switch:
+      - onlyif: random.random() > 0.99
+        lambda: 20
+      - default:
+        lambda: 0
+
+  _is_bot:
+    switch:
+      - onlyif: re.search("bot", this.useragent, re.I)
+        lambda: True
+      - onlyif: re.search("zmeu", this.useragent, re.I)
+        lambda: True
+      - default:
+        lambda: False
+
+  _bot_interval:
+    initial: 0
+    switch:
+      - onlyif: prev._bot_interval
+        lambda: prev._bot_interval
+      - onlyif: this._is_bot
+        random: randint(2, 5) * 1000 + randint(300, 500)
+
+
+  visit_duration:
+    switch:
+      - onlyif: this._is_bot
+        lambda: this._bot_interval
+      - onlyif: this._revisit
+        lambda: random.randint(20, 30) * 3000
+      - default:
+        random: random() * 5
+
+  remote:
+    switch:
+      # from https://stackoverflow.com/questions/21014618/python-randomly-generated-ip-address-of-the-string
+      - lambda: '".".join(map(str, (random.randint(0, 255) for _ in range(4))))'
+        onlyif: this._new_visitor
+      - default:
+        lambda: prev.remote
+
+  useragent:
+    switch:
+      - onlyif: this._new_visitor
+        csv: private/snorkel_agents_and_urls.csv
+        column: 0
+        weight: 2
+      - default:
+        lambda: prev.useragent
+
+  timestamp:
+    initial:
+      lambda: time.time()
+    switch:
+      - onlyif: this._timestamp
+        lambda: this._timestamp.time
+      - default:
+        lambda: prev.timestamp + this.visit_duration
+
+  time:
+    lambda: this.timestamp
+
+  geoip:
+    switch:
+      - onlyif: this._new_visitor
+        template:
+          address/usa.yaml:
+            override:
+              country: "United Stated"
+            hide:
+              - street
+      - default:
+        lambda: prev.geoip
+
+hide:
+  - nextpath
+  - visit_duration
+  - timestamp
