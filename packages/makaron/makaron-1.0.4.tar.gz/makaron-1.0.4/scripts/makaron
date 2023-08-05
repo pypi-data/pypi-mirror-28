@@ -1,0 +1,133 @@
+#!/usr/bin/env python
+from __future__ import print_function
+from builtins import input
+
+import argparse, re, os, yaml, sys
+import copy
+import logging
+
+from makaron import MakaronException, Version, read_config_file, generate_config_file, parse_version_rules
+from makaron import extract_version_from_rules, apply_version_to_rules
+
+__version__ = '1.0.4'
+__program__ = 'makaron'
+
+logger = logging.getLogger(__program__)
+logger.setLevel(logging.INFO)
+stream_handler = logging.StreamHandler()
+formatter = logging.Formatter('%(message)s')
+stream_handler.setFormatter(formatter)
+stream_handler.setLevel(logging.INFO)
+logger.addHandler(stream_handler)
+
+
+def main(args):
+    show_makaron_version(args)
+    handling_args_errors(args)
+    should_generate_config_file(args)
+
+    config = read_config_file()
+    rules = parse_version_rules(config)
+
+    version = extract_version_from_rules(rules)
+
+    show_version(args, version)
+
+    new_version = Version()
+    new_version.copy(version)
+
+    if args.verb:
+        if 'major' in args.verb:
+            new_version.increase_major()
+
+        elif 'minor' in args.verb:
+            new_version.increase_minor()
+
+        elif 'patch' in args.verb:
+            new_version.increase_patch()
+
+    if args.apply:
+        new_version.set_from_string(args.apply)
+
+    show_next_version(args, new_version)
+
+    if args.yes:
+        apply_version_to_rules(rules, new_version)
+    else:
+        prompt_version(rules, version, new_version)
+
+
+def prompt_version(rules, old_version, new_version):
+
+    logger.info('{} -> {}'.format(old_version, new_version))
+    confirm = input('confirm [y/n] (y): ')
+
+    if confirm == 'y' or confirm == '':
+        apply_version_to_rules(rules, new_version)
+    elif confirm == 'n':
+        pass
+    else:
+        logger.error('bad response')
+
+
+def show_makaron_version(args):
+    if args.version:
+        print('{0} {1}\nPython {2}'.format(__program__, __version__, sys.version))
+        raise SystemExit(0)
+
+
+def handling_args_errors(args):
+    if args.next and not args.verb:
+        logger.error('Cannot show you next release if you do not indicate the type of the release.\nAdd \'major\', \'minor\' or \'patch\' to the command.')
+        raise SystemExit(0)
+
+    if args.apply and args.verb:
+        logger.error('Cannot give a specific version and also update with major, minor or patch.')
+        raise SystemExit(0)
+
+
+def should_generate_config_file(args):
+    if args.generate_config:
+        generate_config_file()
+        raise SystemExit(0)
+
+
+def show_version(args, version):
+    if not args.verb and not args.apply:
+        print(version)
+        raise SystemExit(0)
+
+
+def show_next_version(args, new_version):
+    if args.next:
+        print(new_version)
+        raise SystemExit(0)
+
+
+def full_version_regex(s, pat=re.compile(r'[0-9]+\.[0-9]+\.[0-9]+')):
+    if not pat.match(s):
+        raise argparse.ArgumentTypeError
+    return s
+
+
+if __name__ == '__main__':
+
+    try:
+        parser = argparse.ArgumentParser(prog=__program__, add_help=False)
+        parser.add_argument('verb', help='What your next release will be.', nargs='?', choices=['major', 'minor', 'patch'])
+        parser.add_argument('-v', '--version', help='Show program\'s version number and exit.', action='store_true')
+        parser.add_argument('-h', '--help', action='help', default=argparse.SUPPRESS, help='Show this help message and exit.')
+        parser.add_argument('-n', '--next', help='Show the next release version number.', action='store_true')
+        parser.add_argument('-y', '--yes', help='Auto confirm the passage to next version.', action='store_true')
+        parser.add_argument('--apply', help='Apply a specific version.', type=full_version_regex)
+
+        parser.add_argument('--generate-config', help='Create a \'.makaronrc\' file if not present.', action='store_true')
+        args = parser.parse_args()
+
+        main(args)
+
+    except MakaronException as e:
+        logger.error(e)
+
+    except (KeyboardInterrupt, SystemExit):
+        pass
