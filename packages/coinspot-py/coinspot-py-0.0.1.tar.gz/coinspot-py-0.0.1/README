@@ -1,0 +1,118 @@
+# Python-CoinSpot-V2
+An updated wrapper for the CoinSpot exchange API, this runs on Py3 but should also run on Py2 with no issues, as far as I know.
+
+If there are any issues you'd like me to implement or improve upon, please feel free to let me know and i'll do my best to make it work.
+
+## Dependencies
+* [requests](https://github.com/requests/requests)
+
+## Installing Dependencies
+
+All four dependencies can be installed with Python's package manager, [pip](https://pip.pypa.io/en/stable/installing/).
+
+### Option 1 - Installing dependances globally
+Once you have pip installed, you can install the four dependencies with:
+
+```
+pip install requests
+```
+
+### Option 2 - Installing VirtualENV for contained environment
+Instead of installing the dependancies globally and potentially breaking other apps, you can install the dependancies in a contained environment.
+First install virtualenv with:
+
+```
+pip install virtualenv
+```
+
+then set up the virtual environment inside the *root* repo folder:
+
+```
+virtualenv venv
+```
+
+*venv* is the name of the folder where all the dependancies will be stored.
+Now activate *venv* using the method for your operating system.
+
+Linux/Mac: ```source venv/bin/activate```
+
+Windows: ```./venv/Scripts/activate```
+
+A requirements file has been created to make installation easier, just type the following to finish installing the dependancies.
+
+```
+pip install -r requirements.txt
+```
+
+You will need to have virtualenv activated whenever you are working, running, or developing on the project. Follow the above instructions again to activate.
+When finished, you can deactivate by typing ```deactivate```.
+
+## Usage
+
+To be able to use the module you'll need to copy the coinspot.py file over to your working directory.
+
+To import the Python-CoinSpot-V2 wrapper, write the following;
+
+```
+from coinspot import CoinSpot
+```
+
+To initialize a CoinSpot instance, write the following;
+
+```
+api = CoinSpot(yourKey, yourSecret)
+```
+
+All of the functions available in the module are available here below;
+```
+- List all latest coin prices
+api.latestPrices()
+
+- Fetch the most recent buy/sell orders for a single coin
+api.listOpenOrders(shortened_coin_name)
+api.listOpenOrders('BTC')
+
+- Fetch the last 1000 completed orders for a single coin
+api.listOrderHistory(shortened_coin_name)
+api.listOrderHistory('BTC')
+
+- Get a single coins wallet address
+api.depositCoins(shortened_coin_name)
+api.depositCoins('BTC')
+
+- Send coins to another wallet for a single coin
+- NOTE: Doesn't work with coins that take more than an address, e.g. Stellar Lumens.
+api.sendCoins(shortened_coin_name, address, amount)
+api.sendCoins('BTC', 'abc123xyz456', 100)
+
+- Buy quote for a coin
+api.quickBuyQuote(shortened_coin_name, amount)
+api.quickBuyQuote('BTC', 100)
+
+- Sell quote for a coin
+api.quickSellQuote(shortened_coin_name, amount)
+api.quickSellQuote('BTC', 100)
+
+- List your balances
+api.listMyBalances()
+
+- List your orders
+api.listMyOrders()
+
+- Place buy order for a coin
+api.placeBuyOrder(shortened_coin_name, amount, rate)
+api.placeBuyOrder('BTC', 10, 20135.76)
+
+- Place sell order for a coin
+api.placeSellOrder(shortened_coin_name, amount, rate)
+api.placeSellOrder('BTC', 10, 20135.76)
+
+- Cancel buy order
+api.cancelBuyOrder(id)
+api.cancelBuyOrder(54321)
+
+- Cancel sell order
+api.cancelSellOrder(id)
+api.cancelSellOrder(12345)
+```
+
