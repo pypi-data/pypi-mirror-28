@@ -1,0 +1,54 @@
+{%
+  TODO: I don't think this quite works yet
+%}
+
+
+#include <pybind11/pybind11.h>
+namespace py = pybind11;
+
+{% for header in headers %}
+#include <{{ header.fname }}>
+{% endfor %}
+
+PYBIND11_PLUGIN({{ module_name }}) {
+
+  py::module m("{{ module_name }}");
+
+  {% for header in headers %}
+
+  {% for enum in header.enums %}
+  py::enum_<{{ enum.name }}>(m, "{{ enum.name }}")
+  {% for val in enum %}
+    .value("{{ val.name }}", {{ enum.name }}::{{ val.name }})
+  {% endfor %};
+  {% endfor %}
+
+  {% for cls in header.classes %}
+  py::class_<{{ cls.name }}> {{ cls.name | lower }}(m, "{{ cls.name }}");
+  {% if cls.methods.public %}
+  {{ cls.name | lower }}
+  {% for method in cls.methods.public %}
+    {% if method.get('destructor') %}
+    {% elif method.name == cls.name %}
+    .def(py::init<{{ method.parameters | join(', ', attribute='raw_type') }}>())
+    {% else %}
+    .def("{{ method.name }}", &{{ cls.name }}::{{method.name}})
+    {% endif %}
+  {% endfor %}
+  ;
+  {% endif %}
+
+
+  {% for enum in cls.enums.public %}
+  py::enum_<{{ cls.name }}::{{ enum.name }}>({{ cls.name | lower }}, "{{ enum.name }}")
+  {% for val in enum['values'] %}
+    .value("{{ val.name }}", {{ enum.name }}::{{ val.name }})
+  {% endfor %};
+  {% endfor %}
+
+  {% endfor %}
+
+  {% endfor %}
+
+  return m.ptr();
+}
