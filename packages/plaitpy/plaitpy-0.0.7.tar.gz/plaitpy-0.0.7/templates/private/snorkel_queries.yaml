@@ -1,0 +1,124 @@
+fields:
+  _timestamp:
+    onlyif: this._new_visitor
+    template: timestamp/human_daily_pattern.yaml
+
+  _new_visitor:
+    switch:
+      - onlyif: prev._pages_left <= 0
+        lambda: 1
+
+  _pages_left:
+    initial: 0
+    switch:
+      - onlyif: this._new_visitor
+        random: min(weibullvariate(1, 0.9) * 10, 134) + randint(1, 10)
+        cast: int
+      - default:
+        lambda: prev._pages_left - 1 + this._revisit
+
+  _revisit:
+    switch:
+      - onlyif: random.random() > 0.99
+        lambda: 20
+      - default:
+        lambda: 0
+
+  visit_duration:
+    switch:
+      - onlyif: this._revisit
+        lambda: random.randint(20, 30) * 3000
+      - default:
+        random: random() * 5
+
+
+  _table:
+    initial: "queries"
+    switch:
+      - onlyif: not this._new_visitor
+        lambda: prev._table
+      - default:
+        mixture: [ queries, nginx, taxi_trips ]
+
+  table:
+    lambda: ("demo@%s" % this._table)
+
+  user:
+    initial: "anon"
+    switch:
+      - onlyif: not this._new_visitor
+        lambda: prev.user
+      - default:
+        mixture: 
+          - value: anon
+            weight: 5
+          - value: demo
+            weight: 3
+          - value: john
+          - value: jenn
+
+  view:
+    mixture: 
+      - value: table
+        weight: 4
+      - value: time
+        weight: 3
+      - value: session
+        weight: 2
+      - value: samples
+        weight: 1
+      - value: overview
+        weight: 1
+
+  start:
+    mixture: 
+      - value: -1 week
+        weight: 4
+      - value: -1 day
+        weight: 3
+      - value: -6 hours
+        weight: 2
+      - value: -1 month
+        weight: 1
+      - value: -6 months
+        weight: 1
+
+  query_duration:
+    lambda: this._view_duration + this._table_duration
+
+  _view_duration:
+    switch:
+      - onlyif: re.search("time", this.view, re.I)
+        random: gauss(300, 20)
+      - default:
+        random: gauss(100, 20)
+
+
+  _table_duration:
+    switch:
+      - onlyif: re.search("nginx", this.table, re.I)
+        random: gauss(300, 20)
+      - default:
+        random: gauss(100, 50)
+
+  end:
+    mixture: [ "Now", "-1 day", "-3 hours", "-6 hours" ]
+      
+      
+  timestamp:
+    initial:
+      lambda: time.time()
+    switch:
+      - onlyif: this._timestamp
+        lambda: this._timestamp.time
+      - default:
+        lambda: prev.timestamp + this.visit_duration
+
+  time:
+    lambda: this.timestamp
+
+hide:
+  - nextpath
+  - visit_duration
+  - pages_left
+  - timestamp
