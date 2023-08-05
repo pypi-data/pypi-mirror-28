@@ -1,0 +1,22 @@
+# i want to create a test file that has 
+# T test cases, each with random N and K
+# the N will be the size of the array for
+# that test case
+
+define:
+  N: int(100)
+  K: int(100)
+
+fields:
+  n:
+    random: randint(0, ${N})
+  k: 
+    random: randint(0, ${K})
+  arr: 
+    random: > 
+      [ randint(0, this.k) for _ in xrange(this.n) ]
+
+
+printer: |
+  print(this.n, this.k)
+  print(str(this.arr)[1:-1])
