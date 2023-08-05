@@ -1,0 +1,77 @@
+[tox]
+envlist =
+    py27,
+    py34,
+    py35,
+    pypy,
+    pycodestyle
+    pep257,
+    docs,
+    pychecker
+
+[testenv]
+commands =
+    py.test --pylint --pylint-rcfile={toxinidir}/.pylintrc {{ module_name }}
+
+[py]
+deps=
+    pytest-cov
+    pytest-flakes
+    pytest-pylint
+    pytest-random
+    pytest-remove-stale-bytecode
+
+[pep8]
+show-source=True
+statistics=True
+exclude=.svn,CVS,.bzr,.hg,.git,__pycache__,.tox,setup.py,docs
+
+[testenv:py27]
+deps=
+    {[py]deps}
+basepython = python2.7
+
+[testenv:py33]
+deps=
+    {[py]deps}
+basepython = python3.3
+
+[testenv:py34]
+deps=
+    {[py]deps}
+basepython = python3.4
+
+[testenv:py35]
+deps=
+    {[py]deps}
+basepython = python3.5
+
+[testenv:pypy]
+deps=
+    {[py]deps}
+basepython = pypy
+
+[testenv:pycodestyle]
+deps=
+    {[py]deps}
+    pycodestyle
+basepython = python3.5
+commands = pycodestyle --first
+
+[testenv:pep257]
+deps=
+    pep257
+commands = pep257 {{ module_name }}
+basepython = python3.5
+
+[testenv:docs]
+deps=
+    Sphinx
+    sphinx_rtd_theme
+commands = python setup.py build_sphinx
+
+[testenv:pychecker]
+deps=
+    http://sourceforge.net/projects/pychecker/files/latest/download#egg=PyChecker
+basepython = python2.7
+commands = pychecker -F {{ module_name }}/*.py
