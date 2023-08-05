@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+if which apk >/dev/null;then
+    apk info -v | sed -E 's/^(.+)-(\w+(\.\w+)*)?-r[0-9]+$/\1: "\2"/g' | grep ': "' | sort
+elif which apt >/dev/null;then
+    apt list --installed | sed -E 's/^(.+)\/\S+\s(.*:)?(\w+(\.\w+)*)?.*$/\1: "\3"/g' | grep ': "' | sort
+else
+    echo "Your OS is not supported. Please create an issue in https://gitlab.com/mediamoose/versions-client/issues"
+    exit 1
+fi
