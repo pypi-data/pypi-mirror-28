@@ -1,0 +1,50 @@
+# TextClassify
+
+## Model
+
+* fastText char
+* fastText word
+* CNN char embedding
+* CNN word embedding
+* CNN char & word embedding
+* CNN + BiGRU + char & word embedding
+
+## Segment Model
+
+* pyltp
+* jieba
+
+## Embedding
+
+* fastText (CBOW / skip-gram)
+* gensim
+
+char or word embedding
+
+## Usage
+
+```python
+from text_classify import TextClassify
+
+# default params
+t = TextClassify(
+    model='fasttext',
+    cut=False,
+    cut_model='pyltp',
+    ...
+)
+
+text = ''
+logtis = t.predict(text)
+
+# get index2label
+t.index2label
+
+# get top label
+t.get_top_label(text, k=5)
+```
+
+* model: 'fasttext' (default), 'cnn', 'mcnn', 'mgcnn'
+* cut: True, False (default)
+* cut_model: 'pyltp' (default), 'jieba'
+* everything in config
