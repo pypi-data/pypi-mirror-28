@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+find_mirror_conf() {
+	local CR7=/usr/local/Reductor/userinfo/mirror_info.conf
+	local CR8_INNER=/cfg/userinfo/mirror_info.conf
+	local CR8_OUTER=/app/reductor/$CR8_INNER
+	local conf
+	for conf in $CR7 $CR8_INNER $CR8_OUTER; do
+		[ -f $conf ] || continue
+		echo $conf
+		break
+	done
+}
+
+mirror_devices_bridge() {
+	brctl show | tail -n +2 | awk '{print $4}'
+}
+
+mirror_devices() {
+	local mirror_conf
+	mirror_conf="$(find_mirror_conf)"
+	if [ -n "${mirror_conf:-}" ]; then
+		awk '{print $1}' "$mirror_conf" | sort -u
+	else
+		mirror_devices_bridge
+	fi
+}
+
+main() {
+	maximize-cpu-freq
+	for device in $(mirror_devices); do
+		autorps "$device" || true
+		rx-buffers-increase "$device" || true
+	done
+}
+
+main "$@"

@@ -1,0 +1,71 @@
+#!/bin/bash
+
+set -euo pipefail
+
+SYSCONFIG=/etc/sysconfig/network-scripts/
+TMPDIR="$1"
+
+prepare() {
+	mkdir -p $TMPDIR/ethtool/{g,i,c} $TMPDIR/network-scripts/
+}
+
+server_info() {
+	cat /proc/interrupts > $TMPDIR/interrupts
+	cat /proc/meminfo > $TMPDIR/meminfo
+	cat /proc/cpuinfo > $TMPDIR/cpuinfo
+	cat /proc/scsi/scsi > $TMPDIR/scsi 2>/dev/null || true
+	LANG= lsblk -d --output=NAME,MODEL > $TMPDIR/lsblk_models
+	LANG= lsblk -nlb --output SIZE,MOUNTPOINT,NAME > $TMPDIR/lsblk_sizes
+	if ! LANG= lspci 2>/dev/null > $TMPDIR/lspci; then
+		echo "Consider install lspci" >&2
+		echo "	yum -y install pciutils" >&2
+	fi
+	LANG= lscpu > $TMPDIR/lscpu_info
+	LANG= lscpu -p | grep -v '^#' | awk -F ',' '{print $1" "$3}' > $TMPDIR/lscpu_layout
+	if ! LANG= dmidecode --type memory 2>/dev/null > $TMPDIR/dmidecode; then
+		echo "Consider installing dmidecode:" >&2
+		echo "	yum -y install dmidecode" >&2
+	fi
+	fgrep -H '' /sys/block/*/queue/rotational | egrep -v '[0-9]+/' >  $TMPDIR/disks_types || true
+}
+
+network_info() {
+	local netdev action
+	MIRRORCONF_CR7=/usr/local/Reductor/userinfo/mirror_info.conf
+	MIRRORCONF_CR8_INCHROOT="/cfg/userinfo/mirror_info.conf"
+	MIRRORCONF_CR8_OUTCHROOT="/app/reductor/$MIRRORCONF_CR8_INCHROOT"
+
+	if [ -f "$MIRRORCONF_CR7" ]; then
+		cp "$MIRRORCONF_CR7" "$TMPDIR/mirror_info.conf"
+	elif [ -f "$MIRRORCONF_CR8_INCHROOT" ]; then
+		cp "$MIRRORCONF_CR8_INCHROOT" "$TMPDIR/mirror_info.conf"
+	elif [ -f "$MIRRORCONF_CR8_OUTCHROOT" ]; then
+		cp "$MIRRORCONF_CR8_OUTCHROOT" "$TMPDIR/mirror_info.conf"
+	else
+		# We need bridges data only in case of Carbon Reductor without mirror_info.conf
+		# Other systems don't depend on bridges/configs.
+		if [ -d /usr/local/Reductor ] || [ -d /app/reductor ]; then
+			bridge link > $TMPDIR/bridge_links
+		fi
+	fi
+
+	for netdev in $(grep : /proc/net/dev | awk '{print $1}' | tr -d :); do
+		ethtool -i "$netdev" &>/dev/null || continue
+		for action in i g c; do
+			if ! ethtool -"$action" "$netdev" &>"$TMPDIR/ethtool/$action/$netdev"; then
+				rm -f "$TMPDIR/ethtool/$action/$netdev"
+			fi
+		done
+		[ -f "$SYSCONFIG/ifcfg-$netdev" ] || continue
+		# avoiding collection of identification/privacy info
+		grep ETHTOOL "$SYSCONFIG/ifcfg-$netdev" > "$TMPDIR/network-scripts/ifcfg-$netdev" || true
+	done
+}
+
+main() {
+	prepare
+	server_info
+	network_info
+}
+
+main

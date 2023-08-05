@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+parse_params() {
+	DRYRUN=0
+	if [ "${1:-}" == '--dry-run' ]; then
+		DRYRUN=1
+		shift
+	fi
+
+	if [ "${1:-}" == '--help' ]; then
+		echo "Usage: $0 [--dry-run]"
+		exit 0
+	fi
+	
+	if [ "$UID" != '0' ]; then
+		echo "You should run this util as root. Use sudo/su."
+		exit 1
+	fi
+}
+
+set_governor_performance() {
+	local gov_state
+	local cpu="$1"
+	local gov=$cpu/cpufreq/scaling_governor
+	[ -f $gov ] || continue
+	read gov_state < $gov
+	if [ "$DRYRUN" = '0' ]; then
+		if [ "$gov_state" != 'performance' ]; then
+			echo "Set performance mode for $cpu governor"
+			echo 'performance' > $gov
+		fi
+	fi
+}
+
+maximize_freq() {
+	local cpu="$1"
+	local max=$cpu/cpufreq/scaling_max_freq
+	local min=$cpu/cpufreq/scaling_min_freq
+	local cur=$cpu/cpufreq/scaling_cur_freq
+	if [ ! -f $min ] || [ ! -f $max ]; then
+		echo "$cpu doesn't support cpu scaling (and it's good)."
+		continue
+	fi
+	echo "- set $cpu minimal freq ($(<$min)) to maximum ($(<$max))"
+	if [ "$DRYRUN" = '0' ]; then
+		cat $max > $min
+	fi
+}
+
+main() {
+	local cpu
+	parse_params "$@"
+	for cpu in $(find /sys/devices/system/cpu/ -maxdepth 1 -type d | egrep 'cpu[0-9]+'); do
+		set_governor_performance "$cpu"
+		maximize_freq "$cpu"
+	done
+}
+
+main "$@"
