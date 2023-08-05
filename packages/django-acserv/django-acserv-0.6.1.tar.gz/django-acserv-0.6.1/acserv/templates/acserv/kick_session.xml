@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config-auth client="vpn" type="auth-request">
+  <version who="sg">0.1(1)</version>
+  <auth id="main">
+    <message>{{ message }}</message>
+    <form method="post" action="/auth/sessions">
+      <select name="group_list" label="Group:">
+        {% for option in options %}
+          <option value="{{ option.value }}">{{ forloop.counter }}: {{ option.label }}</option>
+        {% endfor %}
+      </select>
+
+      {% if not can_hide_username %}
+        <input type="text" name="username" label="Username:"/>
+      {% endif %}
+    </form>
+  </auth>
+</config-auth>
