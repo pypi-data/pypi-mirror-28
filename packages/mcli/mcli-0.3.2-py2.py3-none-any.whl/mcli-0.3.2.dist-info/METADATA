@@ -1,0 +1,195 @@
+Metadata-Version: 2.0
+Name: mcli
+Version: 0.3.2
+Summary: MarketMaker CLI
+Home-page: https://github.com/Monaize/mcli
+Author: Maxime Saddok
+Author-email: maxime@monaize.com
+License: MIT license
+Description-Content-Type: UNKNOWN
+Keywords: mcli
+Platform: UNKNOWN
+Classifier: Development Status :: 2 - Pre-Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Requires-Dist: Click (>=6.0)
+Requires-Dist: requests (==2.18.4)
+
+=====
+mcli
+=====
+
+
+.. image:: https://img.shields.io/pypi/v/mcli.svg
+        :target: https://pypi.python.org/pypi/mcli
+
+.. image:: https://img.shields.io/travis/Monaize/mcli.svg
+        :target: https://travis-ci.org/Monaize/mcli
+
+.. image:: https://readthedocs.org/projects/mcli/badge/?version=latest
+        :target: https://mcli.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
+.. image:: https://pyup.io/repos/github/Monaize/mcli/shield.svg
+     :target: https://pyup.io/repos/github/Monaize/mcli/
+     :alt: Updates
+
+
+MarketMaker CLI
+
+
+* Free software: MIT license
+* Documentation: https://mcli.readthedocs.io.
+
+
+Features
+--------
+* Send commands to MarketMaker RPC API (http://127.0.0.1:7783) with a simplified cli fashion.
+
+Usage
+-----
+
+**Check that the marketmaker is running (on localhost, or via ssh tunnel) before testing this**
+
+This tool require python 2.7 and pip at least to make things easier.
+
+1. Install it with
+
+.. code:: bash
+
+        $ pip install mcli
+
+..
+
+2. Test if the cli can connect to marketmaker, if you can see lot of commands, it works !
+
+.. code:: bash
+
+        $ mcli --help
+        Usage: mcli [OPTIONS] COMMAND [ARGS]...
+
+        Options:
+        --help  Show this message and exit.
+
+        Commands:
+        autoprice
+        balance
+        bestfit
+        blacklistbalance
+        buy
+        deletemessages
+        disable
+        dividends
+        electrum
+        enable
+        getcoin
+        getcoins
+        getmessages
+        getpeers
+        getprices
+        getrawtransaction
+        goal
+        inventory
+        lastnonce
+        list
+        listunspent
+        myprice
+        notarizations
+        orderbook
+        parselog
+        passphrase
+        pause
+        portfolio
+        pricearray
+        recentswaps
+        resume
+        secretaddresses
+        sell
+        sendmessage
+        sendrawtransaction
+        setconfirms
+        setprice
+        settings
+        snapshot
+        statsdisp
+        status
+        statuslist
+        stop
+        swapstatus
+        trust
+        withdraw
+
+..
+
+3. You can check the usage of every command like this :
+
+.. code:: bash
+
+        $ mcli orderbook --help
+        Usage: mcli orderbook [OPTIONS]
+
+        Options:
+        --base TEXT
+        --rel TEXT
+        --duration TEXT
+        --help           Show this message and exit.
+
+..
+
+4. And then call the method :
+
+.. code:: bash
+
+        $ mcli orderbook --base KMD --rel MNZ
+        {
+                "base": "KMD",
+                "numbids": 1,
+                "rel": "MNZ",
+                "bids": [
+                        {
+                        "address": "RVz1cJSqAfgLQcC9KX96Ba6tqmVb6uNmim",
+                        "maxvolume": 3.59287268,
+                        "minvolume": 0.00147469,
+                        "coin": "MNZ",
+                        "price": 9.98495744,
+                        "numutxos": 416,
+                        "depth": 230.24036763,
+                        "pubkey": "d80a74847cd60899afdd673570f8b698e4089e5ad4d6e9e205b5e5891ec0c84f",
+                        "age": 29
+                        }
+                ],
+        "asks": [],
+        "timestamp": 1515770670,
+        "numasks": 0
+        }
+
+..
+
+Credits
+---------
+
+This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+
+
+
+=======
+History
+=======
+
+0.1.0 (2018-01-10)
+------------------
+
+* First release on PyPI.
+
+
