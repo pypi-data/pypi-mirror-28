@@ -1,0 +1,18 @@
+{% load i18n pcart_core %}
+{% if collection.properties_filters %}
+    {# Rearrange tags groups if properties_filters field has been set #}
+    {% group_sequence_by_attr all_tags "group_label" as regrouped_tags %}
+    {% for label in collection.properties_filters %}
+        {% save regrouped_tags|get_element:label as tag_group %}
+        {% if tag_group.group_label not in collection.exclude_properties_filters %}
+            {% include "catalog/includes/collection/filter/property.html" %}
+        {% endif %}
+    {% endfor %}
+{% else %}
+    {# Default behaviour is using if properties_filters field is blank #}
+    {% for tag_group in all_tags %}
+        {% if tag_group.group_label not in collection.exclude_properties_filters %}
+            {% include "catalog/includes/collection/filter/property.html" %}
+        {% endif %}
+    {% endfor %}
+{% endif %}

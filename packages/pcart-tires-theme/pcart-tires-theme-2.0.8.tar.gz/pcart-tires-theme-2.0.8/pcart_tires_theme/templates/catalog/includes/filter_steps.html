@@ -1,0 +1,30 @@
+{% load i18n pcart_core %}
+<form method="post"
+      action="{% url 'pcart_collection:filter-form-dispatcher' collection.slug %}"
+      class="__action--ajax-submit __action--onchange-ajax-submit"
+      data-target="#{{ collection.slug }}-size-finder-form-wrapper">
+<input type="hidden" name="view" value="{{ view }}">
+<input type="hidden" name="context-data" value="{{ context_data }}">
+{% if collection.show_properties_filters %}
+    {% split_str context_data as selected_filters %}
+    {% group_sequence_by_attr all_tags "prefix" as regrouped_tags %}
+    {% for prefix in selected_filters %}
+        {% save regrouped_tags|get_element:prefix as tag_group %}
+        <div class="form-group">
+            <label class="control-label">{{tag_group.group_label}}</label>
+            <select class="form-control" name="tag">
+                <option value="">-----</option>
+                {% for tag in tag_group.tags %}
+                    {% if tag.filtered > 0 %}
+                    <option value="{{tag.tag}}" {% if tag.selected %}selected{% endif %}>{{ tag.label|capfirst }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="form-group">
+    <a class="btn btn-info" href="{{ request.path }}">{% trans "Search" %}</a>
+    <span style="margin-left:10px;">{{ products.paginator.count }}</span>
+</div>
+</form>

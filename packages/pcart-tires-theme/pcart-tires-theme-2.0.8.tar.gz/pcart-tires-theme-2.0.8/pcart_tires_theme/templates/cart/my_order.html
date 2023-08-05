@@ -1,0 +1,73 @@
+{% extends CMS_TEMPLATE %}
+{% load i18n pcart_core cms_tags thumbnail %}
+
+{% block sidebar %}{% include "customers/includes/profile_menu.html" %}{% endblock %}
+
+{% block content %}
+<h1 class="page_heading">{% trans "My order" %}: {{ order.number }}</h1>
+<p>
+    {% trans "Status" %}: {{ order.status }}<br>
+    {% trans "Added" %}: {{ order.added }}</p>
+
+<div class="row">
+    <div class="col-md-6">
+        {{ order.get_payment_info }}
+    </div>
+    <div class="col-md-6">
+        {{ order.get_shipping_info }}
+    </div>
+</div>
+
+{% if order.note %}
+<pre>
+{{ order.note }}
+</pre>
+{% endif %}
+<br>
+<table class="table">
+<tr>
+    <th>{% trans "Image" %}</th>
+    <th>{% trans "Title" %}</th>
+    <th>{% trans "Count" %}</th>
+    <th>{% trans "Price" %}</th>
+</tr>
+{% for item in order.items %}
+<tr>
+    <td>
+    {% with image=item.product.images.first %}
+        <a href="{{item.object.get_absolute_url}}" target="_blank">
+    {% if image %}<img src="{% thumbnail image.image 100x100 %}" title="{{image}}">{% endif %}
+        </a>
+    {% endwith %}
+    </td>
+    <td>
+        <span><a href="{{item.object.get_absolute_url}}" target="_blank">{{item.object.title}}</a></span>
+    </td>
+    <td width="10">
+        {{item.quantity}}
+    </td>
+    <td>
+        &times; {{item.price|money}} = {{item.line_price|money}}</td>
+</tr>
+{% endfor %}
+<tr>
+    <td colspan="2"></td>
+    <td class="subtotal" colspan="2">
+        <h4>{% trans "Subtotal" %}: {{order.total_price|money}}</h4>
+        {% with total_weight=order.total_weight %}
+        {% if total_weight %}<h4>{% trans "Weight" %}: {{total_weight|weight}}</h4>{% endif %}
+        {% endwith %}
+    </td>
+</tr>
+{% if cart.total_weight > 0 %}
+<tr>
+    <td colspan="2"></td>
+    <td colspan="2" class="subtotal">
+        {% trans "Weight" %}: {{cart.total_weight|weight}}
+    </td>
+</tr>
+{% endif %}
+
+</table>
+
+{% endblock %}

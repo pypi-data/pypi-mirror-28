@@ -1,0 +1,19 @@
+{% load i18n %}
+{% if is_valid %}
+<script>
+window.location = '{{ redirect_url }}';
+</script>
+<div class="alert alert-success">
+{% trans "Wait a second. Redirecting to the search results..." %}
+</div>
+{% else %}
+<form method="post" class="__action--ajax-submit __action--onchange-ajax-submit"
+        action="{% url 'pcart_product_finder:product-finder-form' collection.slug %}?target={{ target|default:'tires-finder-form-wrapper' }}"
+        data-target="#{{ target|default:'tires-finder-form-wrapper' }}">
+    {% csrf_token %}
+    {% include "forms/form_fields.html" with form=form %}
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">{% trans "Search" %}</button>
+    </div>
+</form>
+{% endif %}
