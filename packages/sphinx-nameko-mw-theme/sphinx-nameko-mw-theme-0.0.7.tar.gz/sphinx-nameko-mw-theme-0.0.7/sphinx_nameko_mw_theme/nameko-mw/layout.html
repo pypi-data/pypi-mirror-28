@@ -1,0 +1,80 @@
+{%- extends "basic/layout.html" %}
+
+{%- from "relbar.html" import relbar_top with context %}
+{%- from "relbar.html" import relbar_bottom with context %}
+
+{%- block extrahead %}
+  {{ super() }}
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic|Lora:400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+{% endblock %}
+
+{%- block header %}
+
+  {{ super() }}
+  {% if pagename == 'index' %}
+  <div class="indexwrapper">
+  {% endif %}
+
+ {% endblock %}
+
+ {%- block relbar1 %}{{ relbar_top() }}{% endblock %}
+
+ {%- block document %}
+    {%- if theme_doc_logo %}
+        <div class="logo">
+            <img class="logo" src="{{ pathto( theme_doc_logo, 1) }}" alt="Logo"/>
+        </div>
+    {%- endif %}
+    {%- if docstitle %}
+        <div class="docstitle">
+            <a class="docstitle" href="{{ pathto(master_doc) }}">{{ docstitle }}</a>
+        </div>
+    {% endif %}
+    {{ super() }}
+ {% endblock %}
+
+ {%- block relbar2 -%}{{ relbar_bottom() }}{%- endblock -%}
+
+
+ {%- block footer %}
+  {% if pagename == 'index' %}
+  </div>
+  {% endif %}
+  <div class="footer">
+	{%- if show_copyright %}
+      {%- if hasdoc('copyright') %}
+        {% trans path=pathto('copyright'), copyright=copyright|e %}
+          <a href="{{ path }}">&copy; {{ copyright }} </a>.
+        {% endtrans %}
+      {%- else %}
+        {%- trans copyright=copyright|e -%}
+          &copy; {{ copyright }}.
+        {%- endtrans %}
+      {%- endif %}
+    {%- endif %}
+
+    {%- if last_updated %}
+      {%- trans last_updated=last_updated|e -%}
+        Last updated on {{ last_updated }}.
+      {%- endtrans %}
+    {%- endif %}
+
+	{%- if show_sphinx %}
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a>
+      {{ sphinx_version }}
+      {%- if theme_linktotheme|tobool %}
+        with the <a href="https://github.com/penseleit/sphinx-nameko-mw-theme">
+          Nameko MW</a> theme
+      {%- endif %}.
+    {%- else %}
+      {%- if theme_linktotheme %}
+        This site uses the
+        <a href="https://github.com/penseleit/sphinx-nameko-mw-theme">
+        &ldquo;Nameko MW&rdquo;</a>
+        theme for Sphinx.
+      {%- endif %}
+    {%- endif %}
+</div>
+{%- endblock %}
