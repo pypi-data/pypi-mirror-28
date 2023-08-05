@@ -1,0 +1,46 @@
+Metadata-Version: 1.1
+Name: django-magic-db-router
+Version: 0.1
+Summary: Dynamic database router
+Home-page: https://www.cloudjetkpi.com/
+Author: Thoi Ngoc Quoc Duan
+Author-email: duan@cjs.vn/quocduan@gmail.com
+License: CLOUDJET SOLUTIONS License
+Description-Content-Type: UNKNOWN
+Description: 
+        =====
+        Django-magic-db-router
+        =====
+        
+        Django-magic-db-router is an app to allow Django system can auto pick random database for read/write, generally!
+        
+        The key feature is we can use dedicated database for code block, this will usefull for transaction handler!
+        
+        
+        Quick start
+        -----------
+        1. Install the app:
+        	pip install django-magic-db-router
+        
+        2. Config your settings file, for example:
+        	DJANGO_MAGIC_DB_ROUTER_READ_DB_LIST=['REPLICA1', 'REPLICA2', 'REPLICA3',]
+        	DJANGO_MAGIC_DB_ROUTER_WRITE_DB_LIST=['default',]
+        	DATABASE_ROUTERS = ['django_magic_db_router.DynamicDbRouter']	
+        
+        3. For using dedicated database for code block, use: `in_database`
+        	with in_database(db_name, write=True):
+        		some_code()
+        
+        ========================================================================================
+        
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 1.9
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
