@@ -1,0 +1,1 @@
+from .pystrct import StructFile
