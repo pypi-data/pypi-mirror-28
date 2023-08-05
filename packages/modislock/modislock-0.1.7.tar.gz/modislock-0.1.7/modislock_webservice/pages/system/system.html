@@ -1,0 +1,199 @@
+{% extends "_template_page.html" %}
+{% set active_page = "system" %}
+
+{% block page_title %}System Information{% endblock %}
+
+{% block page_css %}
+    {% assets 'select_css' %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+    {% assets 'system_css' %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+{% endblock %}
+
+{% block page_heading %}
+    <h2><i class="fa fa-fw fa-heart-o"></i> System</h2>
+{% endblock %}
+
+{% block page_name %}
+    System Health
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <p class="small"><span class="fa fa-bar-chart"></span>&nbsp System Resources</p>
+                </div>
+                <div class="ibox-content">
+                    {# Memory Space #}
+                    <div>
+                        <span>Memory</span>
+                        <small class="pull-right" id="memory_info_header"></small>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" id="memory1" ></div>
+                        <div class="progress-bar progress-bar-warning" role="progressbar" id="memory2"></div>
+                        <div class="progress-bar progress-bar-danger" role="progressbar" id="memory3"></div>
+                    </div>
+                    {# CPU Information #}
+                    <div>
+                        <span>CPU</span>
+                        <small class="pull-right" id="cpu_info_header"></small>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" id="cpu1"></div>
+                        <div class="progress-bar progress-bar-warning" role="progressbar" id="cpu2"></div>
+                        <div class="progress-bar progress-bar-danger" role="progressbar" id="cpu3"></div>
+                    </div>
+                    {# Storage Space #}
+                    <div>
+                        <span>Storage Space</span>
+                        <small class="pull-right" id="storage_info_header">4 GB</small>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" id="storage1" ></div>
+                        <div class="progress-bar progress-bar-warning" role="progressbar" id="storage2"></div>
+                        <div class="progress-bar progress-bar-danger" role="progressbar" id="storage3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <p class="small"><span class="fa fa-info"></span>&nbsp System Info</p>
+                </div>
+                <div class="ibox-content">
+                    <table class="table text-center">
+                        <tbody>
+                            <tr>
+                                <td>Uptime</td>
+                                <td><p class="text-navy"><strong id="uptime_info"></strong></p></td>
+                                <td><i class="text-navy fa fa-play fa-rotate-270"></i></td>
+                            </tr>
+                            <tr>
+                                <td>System Time</td>
+                                <td id="system_time_info"></td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-xs" data-toggle="modal"
+                                            data-target="#time_modal" id="btn_time_set">Set System Time</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Software Version</td>
+                                <td>{{ app_version }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-xs"
+                                            onclick="get_versions('{{ app_version }}', '{{ app_avail_version }}',
+                                                    '{{ mon_version }}', '{{ mon_avail_version }}')" id="btn_upgrade"
+                                            data-toggle="modal" data-target="#upgrade_modal">Check for Update</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Serial Number</td>
+                                <td><strong>{{ serial_number }}</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <p class="small"><span class="fa fa-sign-in">&nbsp Reader Status</span></p>
+                </div>
+                <div class="ibox-content">
+                    <table class="table text-center">
+                        <col width="15">
+                        <col width="75">
+                        <tbody>
+                            <tr>
+                                <td id="reader1_header"></td>
+                                <td>Reader 1</td>
+                                <td id="reader1_info"></td>
+                            </tr>
+                            <tr>
+                                <td id="reader2_header"></td>
+                                <td>Reader 2</td>
+                                <td id="reader2_info"></td>
+                            </tr>
+                            <tr>
+                                <td id="reader3_header"></td>
+                                <td>Reader 3</td>
+                                <td id="reader3_info"></td>
+                            </tr>
+                            <tr>
+                                <td id="reader4_header"></td>
+                                <td>Reader 4</td>
+                                <td id="reader4_info"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <p class="small"><span class="fa fa-home">&nbsp Door Sensors</span></p>
+                </div>
+                <div class="ibox-content">
+                    <table class="table text-center">
+                        <col width="25">
+                        <col width="75">
+                        <tbody>
+                        <tr>
+                            <td id="door1_header"></td>
+                            <td>Door 1</td>
+                            <td id="door1_info"></td>
+                        </tr>
+                        <tr>
+                            <td id="door2_header"></td>
+                            <td>Door 2</td>
+                            <td id="door2_info"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 15px;">
+        <div class="col-md-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <p class="small"><span class="fa fa-book">&nbsp Log Information</span></p>
+                </div>
+                <div class="ibox-context">
+                    <div class="form-group">
+                        <label for="log_output"></label>
+                        <textarea id="log_output" readonly>{{ logs }}</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include 'system/_time_zone.html' %}
+    {% include 'system/_system_upgrade.html' %}
+{% endblock %}
+
+{% block page_js %}
+    {{ super() }}
+    {% assets 'select_js' %}
+        <script src="{{ ASSET_URL }}" type="text/javascript"></script>
+    {% endassets %}
+    {% assets 'system_js' %}
+        <script src="{{ ASSET_URL }}" type="text/javascript"></script>
+    {% endassets %}
+    <script>
+        $(document).ready(function(){
+
+        });
+    </script>
+{% endblock page_js %}

@@ -1,0 +1,159 @@
+{% extends "_template_page.html" %}
+{% set active_page = "settings" %}
+
+{% block page_title %}System Rules{% endblock %}
+
+{% block page_heading %}
+    <h2><i class="fa fa-fw fa-compass"></i>Rules Settings</h2>
+{% endblock %}
+
+{% block page_name %}
+    Rules Settings
+{% endblock %}
+
+{% block page_css %}
+    {% assets 'settings_rules_css' %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <p class="small text-uppercase text-center"><span class="fa fa-calendar-times-o"></span>&nbsp Global Time Settings</p>
+                </div>
+
+                <div class="ibox-content">
+                    <form class="form-horizontal" method="POST" action="{{ url_for('settings_rules.rules_settings') }}">
+                        {{ form.csrf_token }}
+
+                        <div class="col-md-12 text-center text-success">Default Access Hours</div>
+
+                        <div class="form-group">
+                            <div class="form-inline">
+                                <div class="col-md-8 col-sm-8 col-xs-8 text-right">
+                                    <b>{{ form.glob_start_hour.description }}</b>
+                                    {{ form.glob_start_hour(class_='form-control text-center', size=3, maxlength=2, placeholder="00") }} :
+                                    {{ form.glob_start_min(class_='form-control text-center', size=3, maxlength=2, placeholder="00") }}
+                                </div>
+                                <div class="col-md-4 col-sm-4 col-xs-4 text left">
+                                    {% for error in form.glob_start_hour.errors %}
+                                        <div class="text-warning">{{ error }}</div>
+                                    {% endfor %}
+                                    {% for error in form.glob_start_min.errors %}
+                                        <div class="text-warning">{{ error }}</div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <div class="form-inline">
+                                <p class="col-md-8 col-sm-8 col-xs-8 text-right">
+                                    <b>{{ form.glob_stop_hour.description }}</b>
+                                    {{ form.glob_stop_hour(class_='form-control text-center', size=3, maxlength=2, placeholder="00") }} :
+                                    {{ form.glob_stop_min(class_='form-control text-center', size=3, maxlength=2, placeholder="00") }}
+                                </p>
+                            </div>
+                            <div class="col-md-4 col-sm-4 col-xs-4 text-left">
+                                {% for error in form.glob_stop_hour.errors %}
+                                    <div class="text-warning">{{ error }}</div>
+                                {% endfor %}
+                                {% for error in form.glob_stop_min.errors %}
+                                    <div class="text-warning">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <!-- <div class="form-group col-md-12 text-right">
+                        {% for field, errors in form.errors.items() %}
+                        <div class="alert alert-error">
+                            {{ form[field].label }}: {{ ', '.join(errors) }}
+                        </div>
+                        {% endfor %}
+                        </div> -->
+                        <div class="form-group">
+                            <div class="col-md-9 col-sm-8 col-xs-8 text-right">
+                                <label for="glob_mon" class="col-form-label p-xs">
+                                    {{form.glob_mon.description}}
+                                </label> {{ form.glob_mon(
+                                data_on="<i class='fa fa-check'></i> Enabled",
+                                data_off="<i class='fa fa-close'></i> Disabled",
+                                data_offstyle="danger", data_width="85", data_size="mini", data_toggle="toggle", value=1) }}
+                            </div>
+                            <div class="col-md-9 col-sm-8 col-xs-8 text-right">
+                                <label for="glob_tue" class="col-form-label p-xs">
+                                    {{form.glob_tue.description}}
+                                </label> {{ form.glob_tue(
+                                data_on="<i class='fa fa-check'></i> Enabled",
+                                data_off="<i class='fa fa-close'></i> Disabled",
+                                data_offstyle="danger", data_width="85", data_size="mini", data_toggle="toggle", value=1) }}
+                            </div>
+                            <div class="col-md-9 col-sm-8 col-xs-8 text-right">
+                                <label for="glob_wed" class="col-form-label p-xs">
+                                    {{form.glob_wed.description}}
+                                </label> {{ form.glob_wed(
+                                data_on="<i class='fa fa-check'></i> Enabled",
+                                data_off="<i class='fa fa-close'></i> Disabled",
+                                data_offstyle="danger", data_width="85", data_size="mini", data_toggle="toggle", value=1) }}
+                            </div>
+                            <div class="col-md-9 col-sm-8 col-xs-8 text-right">
+                                <label for="glob_thr" class="col-form-label p-xs">
+                                    {{form.glob_thr.description}}
+                                </label> {{ form.glob_thr(
+                                data_on="<i class='fa fa-check'></i> Enabled",
+                                data_off="<i class='fa fa-close'></i> Disabled",
+                                data_offstyle="danger", data_width="85", data_size="mini", data_toggle="toggle", value=1) }}
+                            </div>
+                            <div class="col-md-9 col-sm-8 col-xs-8 text-right">
+                                <label for="glob_fri" class="col-form-label p-xs">
+                                    {{form.glob_fri.description}}
+                                </label> {{ form.glob_fri(
+                                data_on="<i class='fa fa-check'></i> Enabled",
+                                data_off="<i class='fa fa-close'></i> Disabled",
+                                data_offstyle="danger", data_width="85", data_size="mini",  data_toggle="toggle", value=1) }}
+                            </div>
+                            <div class="col-md-9 col-sm-8 col-xs-8 text-right">
+                                <label for="glob_sat" class="col-form-label p-xs">
+                                    {{form.glob_sat.description}}
+                                </label> {{ form.glob_sat(
+                                data_on="<i class='fa fa-check'></i> Enabled",
+                                data_off="<i class='fa fa-close'></i> Disabled",
+                                data_offstyle="danger", data_width="85", data_size="mini", data_toggle="toggle", value=1) }}
+                            </div>
+                            <div class="col-md-9 col-sm-8 col-xs-8 text-right">
+                                <label for="glob_sun" class="col-form-label p-xs">
+                                    {{form.glob_sun.description}}
+                                </label> {{ form.glob_sun(
+                                data_on="<i class='fa fa-check'></i> Enabled",
+                                data_off="<i class='fa fa-close'></i> Disabled",
+                                data_offstyle="danger", data_width="85", data_size="mini", data_toggle="toggle", value=1) }}
+                            </div>
+                            <div class="row col-md-12 text-center">
+                                {% for error in form.glob_sun.errors %}
+                                    <div class="text-warning">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row form-group text-center">
+                            {{ form.submit_btn(class_=('btn btn-outline btn-primary btn-rounded')) }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_js %}
+    {{ super() }}
+    {% assets 'settings_rules_js' %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                if( '{{ save_result }}' === 'True' ){
+                    toastr.success('saved settings', 'RULES');
+                }
+            });
+        </script>
+    {% endassets %}
+{% endblock page_js %}

@@ -1,0 +1,36 @@
+{% macro render_reader_field(field, field2, field3) %}
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-addon bg-muted">{{ field.description }}</span>
+                            {{ field(class_='text-center form-control') }}
+                        </div>
+                        <ul>
+                            {% for error in field.errors %}
+                                <li class="text-warning">{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="reader1_dir" class="label bg-muted">{{ field2.description }}</label>
+                            {{ field2(data_on="<i class='fa fa-sign-in'></i> ENTRY",
+                                      data_off="<i class='fa fa-sign-out'></i> EXIT",
+                                      data_onstyle="success",
+                                      data_offstyle="warning",
+                                      data_width="75",
+                                      data_size='mini',
+                                      data_toggle="toggle") }}
+                            <label for="reader1_relay" class="label bg-muted">{{ field3.description }}</label>
+                            {{ field3(data_on="RELAY 1",
+                                      data_off="RELAY 2",
+                                      data_offstyle="info",
+                                      data_width="75",
+                                      data_size='mini',
+                                      data_toggle="toggle") }}
+                        </div>
+                    </div>
+                </div>
+{% endmacro %}

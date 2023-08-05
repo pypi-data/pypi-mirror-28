@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Modis Lock Registration</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="description" content="Administration for Modis Cloud Lock">
+    <meta name="author" content="Modis GmbH">
+    <meta name="theme-color" content="#ffffff">
+    <link sizes="180x180" rel="apple-touch-icon" href={{ url_for( 'static', filename='img/apple-touch-icon.png' ) }}/>
+    <link sizes="32x32" type="image/png" rel="icon" href={{ url_for( 'static', filename='img/favicon-32x32.png' ) }}/>
+    <link sizes="16x16" type="image/png" rel="icon" href={{ url_for( 'static', filename='img/favicon-16x16.png' ) }}/>
+    <link rel="manifest" href={{ url_for( 'static', filename='img/manifest.json' ) }}/>
+    <link rel="mask-icon" href={{ url_for( 'static', filename='img/safari-pinned-tab.svg' ) }}/>
+    {% assets 'layout_css' %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+    {% assets 'select_css' %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+    <style>
+        .middle-box {
+            max-width: 600px;
+        }
+
+        input {
+            font-size: 20px;
+            padding: 4px;
+            margin: 1px;
+        }
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="container">
+        <div class="row">
+            <div class="middle-box text-center loginscreen animated faceInDown">
+                <h1 class="logo-name">ML</h1>
+                <h2>Welcome to Modis Lock Registration!</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-8 col-xs-offset-2">
+                <form id="welcomeForm" method="POST" action novalidate="novalidate" class="form-horizontal">
+                    {{ form.csrf_token }}
+                    <fieldset>
+                        <div id="rootwizard" class="tabbable">
+                            <div class="navbar">
+                                <div class="navbar-inner">
+                                    <ul class="nav nav-tabs" data-tabs="tabs">
+                                        <li class="hidden"><a href="#tab1" data-toggle="tab">Start</a></li>
+                                        <li class="hidden"><a href="#tab1_1" data-toggle="tab">Confirm</a></li>
+                                        <li class="hidden"><a href="#tab2" data-toggle="tab">Administrator</a></li>
+                                        <li class="hidden"><a href="#tab2_1" data-toggle="tab">Confirm</a></li>
+                                        <li class="hidden"><a href="#tab2_2" data-toggle="tab">Password</a></li>
+                                        <li class="hidden"><a href="#tab3" data-toggle="tab">Local Time</a></li>
+                                        <li class="hidden"><a href="#tab3_1" data-toggle="tab">Confirm</a></li>
+                                        <li class="hidden"><a href="#tab4" data-toggle="tab">Finish</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="tab-content text-center" style="margin: 2px">
+
+                                <div class="tab-pane" id="tab1">
+                                    <p>Please enter the serial number of the main controller unit found in the rear</p>
+                                    {{ form.serial_number(class_='text-center') }}
+                                    <b><p id="serial_message"></p></b>
+                                </div>
+
+                                <div class="tab-pane" id="tab1_1">
+                                    <h2>You entered:
+                                        <b>
+                                            <div id="serial_entered"></div>
+                                        </b>
+                                    </h2>
+                                    <p>If correct, select <b>Next</b> to continue</p>
+                                </div>
+
+                                <div class="tab-pane" id="tab2">
+                                    <p>Enter the first name of the administrator</p>
+                                    {{ form.first_name(class_='text-center') }}
+                                    <b><p id="first_name_message"></p></b>
+
+                                    <p>And the last name</p>
+                                    {{ form.last_name(class_='text-center') }}
+                                    <b><p id="last_name_message"></p></b>
+
+                                    <p>Enter an email address for the administrator</p>
+                                    {{ form.email(class_='text-center') }}
+                                    <b><p id="email_message"></p></b>
+                                </div>
+
+                                <div class="tab-pane" id="tab2_1">
+                                    <h2>You entered:
+                                        <b>
+                                            <div id="username_entered"></div>
+                                            <div id="email_entered"></div>
+                                        </b>
+                                    </h2>
+                                    <p>If correct, select <b>Next</b> to continue</p>
+                                </div>
+
+                                <div class="tab-pane" id="tab2_2">
+                                    <p>Enter a password for the administrator</p>
+                                    {{ form.password(class_='text-center') }}
+                                    <b><p id="password_message"></p></b>
+
+                                    <p>Again for verification</p>
+                                    {{ form.pwd_confirm(class_='text-center') }}
+                                    <b><p id="confirm_message"></p></b>
+                                </div>
+
+                                <div class="tab-pane" id="tab3">
+                                    <p>Enter the current time</p>
+                                        {{ form.hours(class_='text-center', size=3, maxlength=2) }} :
+                                        {{ form.minutes(class_='text-center', size=3, maxlength=2) }}
+                                        <b><p id="cur_time_message"></p></b>
+                                    <div></div>
+                                    <p>Select the local timezone</p>
+                                        {{ form.tz_zone(class_='select2-selection--single') }}
+                                        <b><p id="cur_tzone_message"></p></b>
+                                </div>
+
+                                <div class="tab-pane" id="tab3_1">
+                                    <div id="cur_time_entered"></div>
+                                </div>
+
+                                <div class="tab-pane" id="tab4">
+                                    <h2>That's it!</h2>
+                                    <h3>Select <b>Finish</b> to enable the system after a restart</h3>
+                                </div>
+
+                                <ul class="pager wizard">
+                                    <li class="previous first" style="display:none;"><a href="#">First</a></li>
+                                    <li class="previous"><a href="#">Previous</a></li>
+                                    <li class="next last" style="display:none;"><a href="#">Last</a></li>
+                                    <li class="next"><a href="#">Next</a></li>
+                                    <li class="finish"><a href="javascript:;">Finish</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+        <div class="row text-center ">
+            <p class="text-muted ">&copy; <script type="text/javascript">document.write(new Date().getFullYear());</script> Modis GmbH</p>
+            <p class="text-muted small ">Made with <i class="fa fa-fw fa-heart-o " style="color:#F00 "></i> in Vienna, Austria</p>
+        </div>
+    </div>
+    {% assets 'layout_js' %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    {% assets 'select_js' %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+    {% assets 'welcome_js' %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+</body>
+
+</html>

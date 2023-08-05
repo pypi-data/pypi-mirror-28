@@ -1,0 +1,87 @@
+{% extends "_template_page.html" %}
+{% set active_page = "settings" %}
+
+{% block page_title %}System Backup / Restore{% endblock %}
+
+{% block page_heading %}
+    <h2><i class="fa fa-fw fa-compass"></i>Backup / Restore</h2>
+{% endblock %}
+
+{% block page_name %}
+    Backup - Restore
+{% endblock %}
+
+{% block page_css %}
+    {% assets 'settings_backup_css' %}
+        <link href="{{ ASSET_URL }}" rel="stylesheet">
+    {% endassets %}
+{% endblock %}
+
+{% block page_content %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="ibox">
+                <div class="ibox-title">
+                    <p class="small text-uppercase text-center"><span class="fa fa-database"></span>&nbsp Database Settings</p>
+                </div>
+                <div class="ibox-content">
+                    <div class="row form-group">
+                        {# Database Backup #}
+                        <form action="{{ url_for('settings_backup.backup_db') }}" method='POST'>
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <div class="col-md-6">
+                                <button class="btn btn-info" type="submit" id="btn_backup_db">
+                                    <i class="fa fa-file-zip-o"></i> Backup Database
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="text-center h6" id="btn_backup_db_date" >
+                                    Last Backup <strong>{{ backup_age }}</strong> days ago
+                                </p>
+                            </div>
+                        </form>
+                    </div>
+                    {# Database Restore #}
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <form id="restore_db_form" method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <div class="form-group">
+                                    <label for="file">Restore Database from Backup</label>
+                                    <input class="filestyle" name="file" type="file">
+                                </div>
+                                <div class="form-group text-center">
+                                    <button class="btn btn-info" id="submit_restore" type="button">
+                                        Upload and Restore
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <hr class="hr-line-dashed">
+                    <div class="row form-group">
+                        {# Restart System #}
+                        <div class="col-xs-6 col-md-6">
+                            <button class="btn btn-danger btn-rounded" id="reboot_btn" data-toggle="confirmation">
+                                <i class="fa fa-power-off"></i> Reboot System
+                            </button>
+                        </div>
+                        {# Purge Database Events #}
+                        <div class="col-xs-6 col-md-6">
+                            <button class="btn btn-warning btn-rounded" id="purge_btn" data-toggle="confirmation">
+                                <i class="fa fa-trash"></i> Purge Database
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block page_js %}
+    {{ super() }}
+    {% assets 'settings_backup_js' %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock page_js %}
