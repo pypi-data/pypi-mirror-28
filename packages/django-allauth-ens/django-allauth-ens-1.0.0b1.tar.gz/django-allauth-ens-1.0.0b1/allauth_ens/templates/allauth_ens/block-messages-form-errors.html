@@ -1,0 +1,15 @@
+{% extends "allauth_ens/block-messages-base.html" %}
+
+{% block messages-container %}
+  {% if form_errors %}{{ block.super }}{% endif %}
+{% endblock %}
+
+{% block message-list %}
+
+{% for field, errors in form_errors.items %}
+  {% for error in errors %}
+  <li class="message error">{{ error }}</li>
+  {% endfor %}
+{% endfor %}
+
+{% endblock %}

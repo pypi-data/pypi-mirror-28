@@ -1,0 +1,288 @@
+Metadata-Version: 1.1
+Name: django-allauth-ens
+Version: 1.0.0b1
+Summary: Providers for django-allauth allowing using the ENS' auth-systems.
+Home-page: https://git.eleves.ens.fr/cof-geek/django-allauth-ens
+Author: cof-geek
+Author-email: cof-geek@ens.fr
+License: MIT
+Description: ##################
+        django-allauth-ens
+        ##################
+        
+        This package is meant to ease the management of authentication of django-apps
+        at the ENS.
+        
+        On top of django-allauth_, which provides easy ways to configure the
+        authentication of django-apps, this package provides:
+        
+        * social authentication using Clipper (*cas.eleves*);
+        
+        * ready-to-use templates in replacement of allauth' ones;
+        
+        * helpers to use *allauth*'s login and logout views instead of those
+          provided by third-parties (Django admin, wagtail, *etc*).
+        
+        
+        **Contents**
+        
+        .. contents:: :local:
+        
+        
+        ************
+        Installation
+        ************
+        
+        First, `install django-allauth`_.
+        
+        Then, install *django-allauth-ens*:
+        
+        .. code-block:: bash
+        
+          $ pip install django-allauth-ens
+        
+        And edit your settings file:
+        
+        .. code-block:: python
+        
+          INSTALLED_APPS = [
+              # …
+        
+              # Above allauth to replace its templates.
+              'allauth_ens',
+        
+              # Added when you installed allauth.
+              'allauth',
+              'allauth.account',
+              'allauth.socialaccount',
+        
+              # Required to use CAS-based providers (e.g. Clipper).
+              'allauth_cas',
+        
+              # …
+          ]
+        
+        
+        *************
+        Configuration
+        *************
+        
+        See also the `allauth configuration`_ and `advanced usage`_ docs pages.
+        
+        ``ACCOUNT_HOME_URL``
+          *Optional* — A view name or an url path.
+        
+          Used as a link from the templates of ``allauth_ens`` to return to your
+          application.
+        
+          **Examples:** ``'home'``, ``'/home/'``
+        
+        ``ACCOUNT_DETAILS_URL``
+          *Optional* — A view name or an url path.
+        
+          Used as a link from the templates of ``allauth_ens`` for a logged in user to
+          access their profile in your app.
+        
+          **Examples:** ``'my-account'``, ``'/my-account/'``
+        
+        *****
+        Views
+        *****
+        
+        Capture other login and logout views
+        ====================================
+        
+        You can use the ``capture_login`` and ``capture_logout`` views to replace the
+        login and logout views of other applications. They redirect to their similar
+        *allauth*'s view and forward the query string, so that if a GET parameter
+        ``next`` is given along the initial request, user is redirected to this url on
+        successful login and logout.
+        
+        This requires to add urls before the include of the app' urls.
+        
+        For example, to replace the Django admin login and logout views with allauth's
+        ones:
+        
+        .. code-block:: python
+        
+          from allauth_ens.views import capture_login, capture_logout
+        
+          urlpatterns = [
+              # …
+        
+              # Add it before include of admin urls.
+              url(r'^admin/login/$', capture_login),
+              url(r'^admin/logout/$', capture_logout),
+        
+              url(r'^admin/$', include(admin.site.urls)),
+        
+              # …
+          ]
+        
+        
+        *********
+        Templates
+        *********
+        
+        The templates provided by *allauth* only contains the bare minimum. Hopefully,
+        this package includes ready-to-use templates. They are automatically used if
+        you put ``'allauth_ens'`` before ``'allauth'`` in your ``INSTALLED_APPS``,
+        
+        
+        *********
+        Providers
+        *********
+        
+        *Google, Facebook¸ but also Clipper…*
+        
+        To interact with an external authentication service, you must add the
+        corresponding provider application to your ``INSTALLED_APPS``.
+        
+        *allauth* already includes `several providers`_ (see also `their python path`_).
+        In addition to that, this package adds the following providers:
+        
+        Clipper
+        =======
+        
+        It uses the CAS server `<https://cas.eleves.ens.fr/>`_.
+        
+        Installation
+          Add ``'allauth_ens.providers.clipper'`` to the ``INSTALLED_APPS``.
+        
+        Configuration
+          Available settings and their default value:
+        
+          .. code-block:: python
+        
+            SOCIALACCOUNT_PROVIDERS = {
+                # …
+        
+                'clipper': {
+        
+                    # These settings control whether a message containing a link to
+                    # disconnect from the CAS server is added when users log out.
+                    'MESSAGE_SUGGEST_LOGOUT_ON_LOGOUT': True,
+                    'MESSAGE_SUGGEST_LOGOUT_ON_LOGOUT_LEVEL': messages.INFO,
+        
+                },
+            }
+        
+        Auto-signup
+          Poulated data
+            - username: ``<clipper>``
+            - email (primary and verified): ``<clipper>@clipper.ens.fr``
+        
+        
+        *********
+        Demo Site
+        *********
+        
+        See ``example/README``.
+        
+        
+        ***********
+        Development
+        ***********
+        
+        First, you need to clone the repository.
+        
+        Stylesheets
+        ===========
+        
+        This project uses `compass`_ to compile SCSS files to CSS.
+        
+        Using bundler
+        -------------
+        
+        Requirements
+          * Ensure Ruby is installed (``$ ruby -v``) or `install Ruby`_
+          * Ensure bundler is installed (``$ bundle -v``) or install bundler
+            (``$ gem install bundler``)
+          * Install dependencies: ``$ bundle install``
+        
+        Compile
+          * Watch changes and recompile: ``$ bundle exec compass watch``
+        
+        Tests
+        =====
+        
+        Local environment
+        -----------------
+        
+        ``$ ./runtests.py``
+        
+        All
+        ---
+        
+        Requirements
+          * tox, install with ``$ pip install tox``
+          * ``python{2.7,3.4,3.5,3.6}`` must be available on your system path
+        
+        Run
+          * all (django/python with combined coverage + flake8 + isort): ``$ tox``
+        
+        
+        ******
+        Howtos
+        ******
+        
+        Assuming you use the following settings (when needed):
+        
+        .. code-block:: python
+        
+          ACCOUNT_ADAPTER = 'shared.allauth_adapter.AccountAdapter'
+          SOCIALACCOUNT_ADAPTER = 'shared.allauth_adapter.SocialAccountAdapter'
+        
+        Signup disabled, except for clipper provider (auto-signup)
+        ==========================================================
+        
+        In ``shared/allauth_adapter.py``:
+        
+        .. code-block:: python
+        
+          class AccountAdapter(DefaultAccountAdapter):
+              def is_open_for_signup(self, request):
+                  return False
+        
+          class SocialAccountAdapter(DefaultSocialAccountAdapter):
+              def is_open_for_signup(self, request, sociallogin):
+                  # sociallogin.account is a SocialAccount instance.
+                  # See https://github.com/pennersr/django-allauth/blob/master/allauth/socialaccount/models.py
+        
+                  if sociallogin.account.provider == 'clipper':
+                      return True
+        
+                  # It returns AccountAdapter.is_open_for_signup().
+                  # See https://github.com/pennersr/django-allauth/blob/master/allauth/socialaccount/adapter.py
+                  return super().is_open_for_signup(request, sociallogin)
+        
+        
+        .. _django-allauth: https://django-allauth.readthedocs.io/en/latest/overview.html
+        .. _install django-allauth: https://django-allauth.readthedocs.io/en/latest/installation.html
+        .. _several providers: https://django-allauth.readthedocs.io/en/latest/providers.html
+        .. _allauth configuration: https://django-allauth.readthedocs.io/en/latest/configuration.html
+        .. _advanced usage: https://django-allauth.readthedocs.io/en/latest/advanced.html
+        .. _their python path: https://django-allauth.readthedocs.io/en/latest/installation.html
+        .. _compass: https://compass-style.org/
+        .. _install Ruby: https://www.ruby-lang.org/en/documentation/installation/
+        
+Keywords: django allauth cas authentication
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 1.8
+Classifier: Framework :: Django :: 1.9
+Classifier: Framework :: Django :: 1.10
+Classifier: Framework :: Django :: 1.11
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Internet :: WWW/HTTP

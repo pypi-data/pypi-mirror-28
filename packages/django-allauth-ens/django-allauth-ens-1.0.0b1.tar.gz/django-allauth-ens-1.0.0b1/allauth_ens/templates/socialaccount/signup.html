@@ -1,0 +1,26 @@
+{% extends "allauth_ens/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Signup" %}{% endblock %}
+{% block header-title %}{% trans "Signup" %}{% endblock %}
+
+{% block content %}
+
+<section>
+  <p>
+    {% blocktrans with provider_name=account.get_provider.name %}
+    You are about to use your {{ provider_name }} account to login.
+    As a final step, please complete the following form:
+    {% endblocktrans %}
+  </p>
+
+  <form action="{% url "socialaccount_signup" %}" method="post">
+    {% include "allauth_ens/block-form.html" with form=form %}
+    <input type="submit" value="{% trans "Sign Up" %}">
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+    {% endif %}
+  </form>
+</section>
+
+{% endblock %}

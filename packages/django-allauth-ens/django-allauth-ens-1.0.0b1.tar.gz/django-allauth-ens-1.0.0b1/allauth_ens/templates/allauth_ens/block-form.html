@@ -1,0 +1,33 @@
+{% load widget_tweaks %}
+
+{% csrf_token %}
+
+{% for field in form %}
+  {% with widget=field|widget_type %}
+  {% if widget == "checkboxinput" %}
+    <div li class="input-wrapper input-skip {% if field.errors %}input-error{% endif %}">
+      <label for="{{ field.id_for_label }}">
+        {{ field.label }}
+        <div class="widget-checkbox">
+          {% render_field field class+="field" %}
+          <button type="button" class="choice-yes">Oui</button>
+          <button type="button" class="choice-no focus">Non</button>
+        </div>
+      </label>
+  {% else %}
+    <div class="input-wrapper{% if field.errors %} input-error{% endif %}">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {% render_field field class+="field" size="" autocomplete="off" autocapitalize="none" placeholder="" %}
+  {% endif %}
+      <div class="infos-spacer"></div>
+      <ul class="messages">
+        {% if field.help_text %}
+        <li>{{ field.help_text|safe }}</li>
+        {% endif %}
+        {% for error in field.errors %}
+        <li class="error-desc">{{ error }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endwith %}
+{% endfor %}

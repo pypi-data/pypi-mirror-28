@@ -1,0 +1,72 @@
+{% extends "allauth_ens/base.html" %}
+{% load i18n %}
+{% load socialaccount allauth_ens_social %}
+
+{% block title %}{% trans "Account Connections" %}{% endblock %}
+{% block header-title %}{% trans "Account Connections" %}{% endblock %}
+
+{% block content %}
+
+<section>
+  <p>
+    {% if form.accounts %}
+      {% blocktrans %}
+      You can sign in to your account using any of the following third party accounts:
+      {% endblocktrans %}
+    {% else %}
+      {% blocktrans %}
+      You currently have no third party accounts connected to this account.
+      {% endblocktrans %}
+    {% endif %}
+  </p>
+  <ul class="connections-providers-list">
+    {% get_accounts_by_providers user as accounts_by_providers %}
+
+    {% for provider, accounts in accounts_by_providers.items %}
+
+    <li>
+      <div class="heading">
+        <a class="connect" href="{% provider_login_url provider.id process="connect" scope=scope auth_params=auth_params %}">
+          <i class="fa fa-plus"></i>
+        </a>
+        {{ provider.name }}
+      </div>
+
+      {% if accounts %}
+
+      <ul class="connections-list">
+        {% for account in accounts %}
+
+        <li>
+          <div class="delete">
+            <form action="{% url "socialaccount_connections" %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="account" value="{{ account.id }}">
+              <button type="submit" class="link">
+                <i class="fa fa-remove"></i>
+              </button>
+            </form>
+          </div>
+          <i class="fa fa-user"></i>
+          {% with profile_urlaccount.get_profile_url as profile_url %}
+          {% firstof account.extra_data.name account.extra_data.username account.uid as account_label %}
+          {% if profile_url %}
+            <a href="{{ get_profile_url }}" target="blank">
+              {{ account_label }}
+            </a>
+          {% else %}
+            {{ account_label }}
+          {% endif %}
+          {% endwith %}
+        </li>
+
+        {% endfor %}
+      </ul>
+
+      {% endif %}
+
+    {% endfor %}
+  </ul>
+</section>
+
+{% endblock %}
