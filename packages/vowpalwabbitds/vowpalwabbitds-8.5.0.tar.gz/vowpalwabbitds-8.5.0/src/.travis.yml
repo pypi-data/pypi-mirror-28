@@ -1,0 +1,53 @@
+language: cpp
+compiler:
+  - gcc
+  - clang
+os:
+  - linux
+# - osx
+
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker pull ubuntu:16.04
+  - docker run --name travis-ci -v $TRAVIS_BUILD_DIR:/vw -td ubuntu:16.04 /bin/bash
+install:
+  - docker exec -ti travis-ci bash -c "apt-get update"
+  - docker exec -ti travis-ci bash -c "apt-get install -y build-essential cmake libboost-all-dev libboost-program-options-dev libboost-python-dev libboost-regex-dev maven libcpprest-dev libcpprest2.8 rapidjson-dev default-jre default-jdk python3-dev swig3.0"
+script:
+  - docker exec -ti travis-ci bash -c "cd /vw && bash cmake --build . -- -j"
+after_script:
+  - docker stop travis-ci
+
+sbefore_install:
+  # - sudo apt-get update -qq
+  # - sudo apt-get install -qq libboost-all-dev
+  # - sudo apt-get install maven
+  # - sudo pip install cpp-coveralls wheel
+  # # use miniconda for python package testing
+  # - wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
+  # - bash miniconda.sh -b -p $HOME/miniconda
+  # - export PATH="$HOME/miniconda/bin:$PATH"
+  # - hash -r
+  # - conda config --set always_yes yes --set changeps1 no
+  # - conda update -q conda
+  # - conda create -q -n test-python27 python=2.7 nomkl numpy scipy scikit-learn
+#script:
+  #- cmake --build . -- -j
+  # - make python
+  # - mvn clean test -f java/pom.xml
+  # - make test
+  # - make test_gcov --always-make
+  # - cd python
+  # - source activate test-python27
+  # - pip install pytest readme_renderer
+  # - python setup.py check -mrs
+  # - python setup.py install
+  # - py.test tests
+  # - source deactivate
+  # - cd ..
+after_success:
+  - coveralls --exclude lib --exclude tests --gcov-options '\-lp'
