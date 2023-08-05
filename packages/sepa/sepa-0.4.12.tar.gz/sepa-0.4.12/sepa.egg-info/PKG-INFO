@@ -1,0 +1,109 @@
+Metadata-Version: 1.0
+Name: sepa
+Version: 0.4.12
+Summary: Python library for parsing and building SEPA Direct Debit and SEPA eMandate schemas.
+Home-page: https://github.com/VerenigingCampusKabel/python-sepa
+Author: Vereniging Campus Kabel
+Author-email: info@vck.utwente.nl
+License: The MIT License (MIT)
+
+Copyright (c) 2016 Vereniging Campus Kabel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Description: # Python SEPA library
+        
+        Python library for parsing and building SEPA Direct Debit and SEPA eMandate schemas.
+        
+        The ultimate goal of this library is to support all [ISO 20022 Payments messages](https://www.iso20022.org/payments_messages.page), however in practice SEPA only uses a subset of these messages.
+        
+        ## Supported messages
+        - Cash Management (CAMT)
+          - [ ] Bank To Customer Account Report v6 (camt.052.001.06)
+          - [x] Bank To Customer Statement v6 (camt.053.001.06)
+          - [ ] Bank To Customer Debit Credit Notification v6 (camt.054.001.06)
+          - [ ] Account Reporting Request v3 (camt.060.001.03)
+        - Payments Initiation (PAIN)
+          - [ ] Customer Credit Transfer Initiation v8 (pain.001.001.08)
+          - [ ] Customer Payment Status Report v8 (pain.002.001.08)
+          - [ ] Customer Payment Reversal v7 (pain.007.001.07)
+          - [x] Customer Direct Debit Initiation v7 (pain.008.001.07)
+          - [x] Mandate Initiation Request v5 (pain.009.001.05)
+          - [x] Mandate Amendment Request v5 (pain.010.001.05)
+          - [x] Mandate Cancellation Request v5 (pain.011.001.05)
+          - [ ] Mandate Acceptance Report v5 (pain.012.001.05)
+          - [ ] Creditor Payment Activation Request v6 (pain.013.001.06)
+          - [ ] Creditor Payment Activation Request Status Report v6 (pain.014.001.06)
+          - [ ] Mandate Copy Request v1 (pain.017.001.01)
+          - [ ] Mandate Suspension Request v1 (pain.018.001.01)
+        
+        ## Usage
+        ### Building messages
+        ```python
+        from sepa import builder
+        
+        data_in = {
+            'group_header': {},
+            'mandate': [{
+                'id': '78904536',
+                'request_id': '9823701',
+                'authentication': {
+                    'date': '2017-03-05',
+                    'channel': {
+                        'code': 'ABC'
+                    }
+                }
+            }]
+        }
+        
+        # Returns an lxml etree object
+        data_out = builder.build(builder.mandate_initiation_request, data_in)
+        
+        # Returns a byte string
+        str_data_out = builder.build_string(builder.mandate_initiation_request, data_in)
+        print(str_data_out)
+        ```
+        
+        ### Parsing messages
+        ```python
+        from sepa import parser
+        
+        data_in = ('<MndtInitnReq>'
+            '<GrpHdr></GrpHdr>'
+            '<Mndt>'
+                '<MndtId>78904536</MndtdId>'
+                '<MndtReqId>9823701</MndtReqId>'
+                '<Authntcn>'
+                    '<Dt>2017-03-05</Dt>'
+                    '<Chanl><Cd>ABC</Cd></Chanl>'
+                '</Authntcn>'
+            '</Mndt>'
+        '</MndtInitnReq>')
+        
+        data_out = parser.parse_string(parser.mandate_initiation_request, data_in)
+        print(data_out)
+        ```
+        
+        ### Verifying messages
+        *This feature is still work in progress.*
+        
+        ### Signing messages
+        *This feature is still work in progress.*
+        
+Platform: UNKNOWN
