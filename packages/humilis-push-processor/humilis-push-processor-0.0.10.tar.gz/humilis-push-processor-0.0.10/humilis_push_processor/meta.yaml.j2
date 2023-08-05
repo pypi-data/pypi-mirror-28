@@ -1,0 +1,153 @@
+---
+# Hyperparameters to this layer:
+#
+# input, output, error
+# input_delivery, output_delivery, error_delivery
+# lambda_dependencies
+meta:
+    description:
+        Processes events in a Kinesis stream
+    parameters:
+        dynamodb_capacity:
+            description:
+                The read and write capacity for the Lambda state table(s)
+            value:
+                read: 1
+                write: 1
+
+        batch_size:
+            description:
+                The number of events to batch in one lambda execution
+            value: 1
+
+        lambda_dependencies:
+            description:
+                A list of Python dependencies for the Lambda function
+            value: []
+
+        sources:
+            description:
+                The AWS services that may push events to the Lambda
+            value:
+                - sns
+                - s3
+
+        sns_topic_name:
+            description: A SNS topic the lambda can use to send notifications
+            value:
+
+        {% if network %}
+            {% if network.vpc_id and network.subnet_id %}
+        meta_network:
+            description: Parameters to put the Lambda in a VPC
+            value:
+                vpc_id: "{{network.vpc_id}}"
+                subnet_id: "{{network.subnet_id}}"
+                security_group_id: "{{network.security_group_id}}"
+            {% endif %}
+        {% endif %}
+
+        {% if input %}
+        meta_input:
+            description: Mapping and filtering for the input events
+            value:
+                mapper: "{{input.mapper}}"
+                filter: "{{input.filter}}"
+        {% endif %}
+
+        # Settings for the error Kinesis stream
+        {% if error %}
+        meta_error:
+            description:
+                Settings for the error event stream
+            value:
+                {% if error.kinesis_stream %}
+                kinesis_stream:
+                    {% if error.kinesis_stream is mapping %}
+                    {# if user is passing a reference to a layer output #}
+                    ref:
+                        parser: output
+                        parameters:
+                            layer_name: {{error.kinesis_stream.layer}}
+                            output_name: {{error.kinesis_stream.name}}
+                    {% else %}
+                    {# else assume user is passing the name of the stream #}
+                    {{error.kinesis_stream}}
+                    {% endif %}
+                {% endif %}
+
+                {% if error.firehose_delivery_stream %}
+                firehose_delivery_stream:
+                    {% if error.firehose_delivery_stream is mapping %}
+                    ref:
+                        parser: output
+                        parameters:
+                            layer_name: {{error.firehose_delivery_stream.layer}}
+                            output_name: {{error.firehose_delivery_stream.name}}
+                    {% else %}
+                    {# user is passing directly the name of the delivery stream #}
+                    {{error.firehose_delivery_stream}}
+                    {% endif %}
+                {% endif %}
+                mapper: "{{error.mapper}}"
+                filter: "{{error.filter}}"
+        {% endif %}
+
+        # There can be 0 or more output streams
+        {% if output %}
+        meta_output:
+            description:
+                Settings for the output event stream(s)
+            value:
+                {% for s in output %}
+                - mapper: "{{s.mapper}}"
+                  filter: "{{s.filter}}"
+                  partition_key: {{s.partition_key}}
+                  {% if s.kinesis_stream %}
+                  kinesis_stream:
+                      {% if s.kinesis_stream is mapping %}
+                      {# user is passing a reference to another layer output #}
+                      ref:
+                          parser: output
+                          parameters:
+                              layer_name: {{s.kinesis_stream.layer}}
+                              output_name: {{s.kinesis_stream.name}}
+                      {% else %}
+                      {# user is passing directly the name of the stream #}
+                      {{s.kinesis_stream}}
+                      {% endif %}
+                  {% endif %}
+
+                  {% if s.firehose_delivery_stream %}
+                  firehose_delivery_stream:
+                      ref:
+                      {% if s.firehose_delivery_stream is mapping %}
+                      {# user is passing a reference to another layer output #}
+                          parser: output
+                          parameters:
+                              layer_name: {{s.firehose_delivery_stream.layer}}
+                              output_name: {{s.firehose_delivery_stream.name}}
+                      {% else %}
+                      {{s.firehose_delivery_stream}}
+                      {% endif %}
+                  {% endif %}
+                {% endfor %}
+        {% endif %}
+
+        lambda_function:
+            # We use a low priority so that the references above that retrieve
+            # the names of the relevant streams are resolved before this
+            # reference.
+            priority: 100
+            value:
+                ref:
+                    parser: lambda
+                    parameters:
+                        path: lambda_function
+                        dependencies: {{lambda_dependencies or []}}
+
+        variables:
+            description:
+                The environment variables that will be injected in all the AWS
+                Lambdas that back the API resources.
+            value: {}

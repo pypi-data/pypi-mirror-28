@@ -1,0 +1,194 @@
+Metadata-Version: 1.1
+Name: humilis-push-processor
+Version: 0.0.10
+Summary: Humilis push event processor plugin
+Home-page: http://github.com/humilis/humilis-push-processor
+Author: German Gomez-Herrero, FindHotel and others
+Author-email: data@findhotel.net
+License: MIT
+Description-Content-Type: UNKNOWN
+Description: Lambda processor for push event sources
+        =======================================
+        
+        .. |Build Status| image:: https://travis-ci.org/humilis/humilis-push-processor.svg?branch=master
+           :target: https://travis-ci.org/humilis/humilis-push-processor
+        .. |PyPI| image:: https://img.shields.io/pypi/v/humilis-push-processor.svg?style=flat
+           :target: https://pypi.python.org/pypi/humilis-push-processor
+        
+        |Build Status| |PyPI|
+        
+        A `humilis <https://github.com/humilis/humilis>`__ plugin to deploy a
+        `Lambda <https://aws.amazon.com/documentation/lambda/>`__ function that
+        processes event notification from an `event sources`_ that pushes events to
+        Lambda (e.g. S3 or SNS, as opposed to Kinesis).
+        
+        .. _event sources: http://docs.aws.amazon.com/lambda/latest/dg/eventsources.html
+        
+        
+        Installation
+        ------------
+        
+        ::
+        
+            pip install humilis-push-processor
+        
+        Development
+        -----------
+        
+        Assuming you have
+        `virtualenv <https://virtualenv.readthedocs.org/en/latest/>`__ installed:
+        
+        ::
+        
+            make develop
+        
+        Configure humilis:
+        
+        ::
+        
+            .env/bin/humilis configure --local
+        
+        
+        You can crate a development deployment (on a deployment stage called `DEV`) of
+        the Lambda function using:
+        
+        .. code:: bash
+        
+            make create STAGE=DEV
+        
+        The command above will also create additional resources (such as a S3 bucket)
+        needed to produce a self-contained deployment that you can play with. You
+        can destroy the `DEV` deployment using:
+        
+        .. code:: bash
+        
+            make delete STAGE=DEV
+        
+        
+        Testing
+        -------
+        
+        To run the local test suite::
+        
+            make test
+        
+        To run the integration test suite:
+        
+        ::
+        
+            make testi STAGE=[STAGE] DESTROY=[yes|no]
+        
+        
+        Note that the command above will deploy the processor to the specified
+        deployment stage. If a deployment stage is not specified then `TEST` will be
+        used. If ``DESTROY`` is set to ``yes`` all deployed resources will be deleted
+        after tests have completed (this is also the default behaviour if the
+        ``DESTROY`` parameter is not provided). You can manually destroy the test
+        infrastructure with:
+        
+        .. code:: bash
+        
+            make delete STAGE=[STAGE]
+        
+        
+        Deployment secrets
+        ------------------
+        
+        The S3 event processor supports `Sentry <https://getsentry.com/welcome/>`_
+        monitoring out of the box. To activate it you just need to store your Sentry
+        DSN in your local keychain. Using Python's `keyring <https://pypi.python.org/pypi/keyring>`_
+        module::
+        
+            keyring set humilis-push-processor:[STAGE] sentry.dsn [SENTRY_DSN]
+        
+        
+        Alternatively you can set environment variable ``SENTRY_DSN``
+        
+        
+        
+        More information
+        ----------------
+        
+        See `humilis <https://github.com/humilis/humilis>`__ documentation.
+        
+        
+        Contact
+        -------
+        
+        If you have questions, bug reports, suggestions, etc. please create an issue on
+        the `GitHub project page <http://github.com/humilis/humilis-lambda-processor>`_.
+        
+        License
+        -------
+        
+        This software is licensed under the `MIT license <http://en.wikipedia.org/wiki/MIT_License>`_
+        
+        See `License file <https://github.com/humilis/humilis-lambda-processor/blob/master/LICENSE.txt>`_
+        
+        
+        © 2016 German Gomez-Herrero, FindHotel and others.
+        
+        Authors
+        =======
+        
+        `German Gomez-Herrero <german.gomezherrero@gmail.com>`_
+            original idea and implementation
+        
+        These people have contributed to `humilis-push-processor`, in alphabetical order:
+        
+        * `Arnaud Charpentier <arnaudcharpentier91@gmail.com>`_
+        * `Anatoly Bubenkov <bubenkoff@gmail.com>`_
+        
+        Changelog
+        =========
+        
+        0.0.10
+        ------
+        
+        - Add support for injection of env vars and KMS key decrypt
+        
+        0.0.8
+        -----
+        
+        - Support deploying Lambda in a VPC and notifying SNS topic
+        
+        0.0.7
+        -----
+        
+        - Grant full access to S3
+        
+        0.0.6
+        -----
+        
+        - Support for one-to-many mappers
+        
+        0.0.5
+        -----
+        
+        - Mappers do not modify input events directly
+        
+        0.0.4
+        -----
+        
+        - Users can also specify input/output/error streams by name instead of as
+          references to another layer outputs.
+        
+        0.0.3
+        -----
+        
+        - Permission to read from S3
+        
+        0.0.2
+        -----
+        
+        - Fix test suite
+        
+        0.0.1
+        -----
+        
+        - Initial release (germangh)
+        - Practically a clone of the humilis-kinesis-processor
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 2

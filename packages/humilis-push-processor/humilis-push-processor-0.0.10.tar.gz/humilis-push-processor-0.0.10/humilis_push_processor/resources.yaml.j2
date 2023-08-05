@@ -1,0 +1,250 @@
+---
+# Find out if there are output (delivery) streams
+{% set globs={'has_output_stream': False, 'has_output_delivery': False} %}
+{% for s in meta_output %}
+{% if s.kinesis_stream %}
+{% set _ = globs.update({'has_output_stream': True}) %}
+{% endif %}
+{% if s.firehose_delivery_stream %}
+{% set _ = globs.update({'has_output_delivery': True}) %}
+{% endif %}
+{% endfor %}
+# set meta parameters to empty dicts if the user has not provided them
+{% set meta_error = meta_error or {} %}
+{% set meta_input = meta_input or {} %}
+{% set meta_network = meta_network or {} %}
+# Do we need a DynamoDB table to store state info?
+{% if dynamodb_capacity.read|int or dynamodb_capacity.write|int %}
+{% set _ = globs.update({'stateful': True}) %}
+{% else %}
+{% set _ = globs.update({'stateful': False}) %}
+{% endif %}
+resources:
+    # Grant access to S3 and SNS to push events to the Lambda
+    {% if "s3" in sources %}
+    LambdaPermissionS3:
+      Type: "AWS::Lambda::Permission"
+      Properties:
+        Action: "lambda:InvokeFunction"
+        FunctionName: {Ref: LambdaFunction}
+        Principal: s3.amazonaws.com
+    {% endif %}
+    {% if "sns" in sources %}
+    LambdaPermissionSNS:
+      Type: "AWS::Lambda::Permission"
+      Properties:
+        Action: "lambda:InvokeFunction"
+        FunctionName: {Ref: LambdaFunction}
+        Principal: s3.amazonaws.com
+    {% endif %}
+    # The lambda function
+    LambdaFunction:
+      Type: "AWS::Lambda::Function"
+      Properties:
+        Code:
+          S3Bucket: "{{lambda_function.s3bucket}}"
+          S3Key: "{{lambda_function.s3key}}"
+        Runtime: "python3.6"
+        Description: "{{_layer.description}}"
+        {# in seconds #}
+        Timeout: 100
+        Handler: "handler.lambda_handler"
+        Role:
+          "Fn::GetAtt":
+              - LambdaExecutionRole
+              - Arn
+        {% if variables %}
+        Environment:
+          Variables:
+            {% for k, v in variables.items() %}
+            "{{k}}": "{{v}}"
+            {% endfor %}
+        {% endif %}
+
+{% if meta_network %}
+        VpcConfig:
+          SubnetIds:
+              - "{{meta_network.subnet_id}}"
+          SecurityGroupIds:
+              {% if meta_network.security_group_id %}
+              - "{{meta_network.security_group_id}}"
+              {% else %}
+              - "Fn::GetAtt":
+                - LambdaSecurityGroup
+                - GroupId
+              {% endif %}
+    {% if not meta_network.security_group_id %}
+    # If the security group id is missing while deploying Lambda in a VPC
+    LambdaSecurityGroup:
+      Type: "AWS::EC2::SecurityGroup"
+      Properties:
+        GroupDescription: "Lambda push-processor security group"
+        SecurityGroupEgress:
+          CidrIp: "0.0.0.0/0"
+          IpProtocol: "-1"
+        Tags:
+          - Key: "Name"
+            Value: "lambda-push-processor"
+        VpcId: "{{meta_network.vpc_id}}"
+    {% endif %}
+{% endif %}
+    # The role associated to the Lambda function that processes raw events
+    LambdaExecutionRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                  Service: 'lambda.amazonaws.com'
+              Action: 'sts:AssumeRole'
+        # Keep all environment role under the same path
+        Path: {{ "/{}/".format(_env.name) }}
+        Policies:
+          - PolicyName: root
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  # Write access to Cloudwatch logs
+                  Action:
+                    - "logs:*"
+                  Resource: "arn:aws:logs:*:*:*"
+                {% if meta_input.firehose_delivery_stream or meta_error.firehose_delivery_stream or globs.has_output_delivery %}
+                - Effect: Allow
+                  # Write access to the Firehose delivery stream(s)
+                  Action:
+                    - "firehose:PutRecord"
+                    - "firehose:PutRecordBatch"
+                    - "firehose:ListDeliveryStreams"
+                    - "firehose:DescribeDeliveryStream"
+                  Resource:
+                    {% if meta_input.firehose_delivery_stream %}
+                    - "Fn::Join":
+                      - ""
+                      - ["arn:aws:firehose:", {"Ref": "AWS::Region"},":", {"Ref": "AWS::AccountId"}, ":", "deliverystream/", "{{meta_input.firehose_delivery_stream}}"]
+                    {% endif %}
+                    {% if meta_error.firehose_delivery_stream %}
+                    - "Fn::Join":
+                      - ""
+                      - ["arn:aws:firehose:", {"Ref": "AWS::Region"},":", {"Ref": "AWS::AccountId"}, ":", "deliverystream/", "{{meta_error.firehose_delivery_stream}}"]
+                    {% endif %}
+                    {% for os in meta_output %}
+                    {% if os.firehose_delivery_stream %}
+                    - "Fn::Join":
+                      - ""
+                      - ["arn:aws:firehose:", {"Ref": "AWS::Region"},":", {"Ref": "AWS::AccountId"}, ":", "deliverystream/", "{{os.firehose_delivery_stream}}"]
+                    {% endif %}
+                    {% endfor %}
+                {% endif %}
+                - Effect: Allow
+                  # Permission to list and describe all streams
+                  Action:
+                    - "kinesis:DescribeStream"
+                    - "kinesis:ListStreams"
+                  Resource: "*"
+                  {% if globs.has_output_stream or meta_error.kinesis_stream %}
+                - Effect: Allow
+                  # Permissions to write to error and output streams
+                  Action:
+                    - "kinesis:PutRecords"
+                  Resource:
+                    {% for os in meta_output %}
+                    {% if os.kinesis_stream %}
+                    - "Fn::Join":
+                      - ""
+                      - ["arn:aws:kinesis:", {"Ref": "AWS::Region"},":", {"Ref": "AWS::AccountId"}, ":", "stream/", "{{os.kinesis_stream}}"]
+                    {% endif %}
+                    {% endfor %}
+                    {% if meta_error.kinesis_stream %}
+                    - "Fn::Join":
+                      - ""
+                      - ["arn:aws:kinesis:", {"Ref": "AWS::Region"},":", {"Ref": "AWS::AccountId"}, ":", "stream/", "{{meta_error.kinesis_stream}}"]
+                    {% endif %}
+                  {% endif %}
+                - Effect: Allow
+                  # Permissions to access the DynamoDB secrets table
+                  Action:
+                    - "dynamodb:GetItem"
+                  Resource: "*"
+                - Effect: Allow
+                  # Full access S3 buckets
+                  Action:
+                    - "s3:*"
+                  Resource: "*"
+                  {% if globs.stateful %}
+                - Effect: Allow
+                  # Read/write permission on the associated state tables
+                  Action:
+                    - "dynamodb:*"
+                  Resource:
+                    - "Fn::Join":
+                      - ""
+                      - ["arn:aws:dynamodb:", {"Ref": "AWS::Region"},":", {"Ref": "AWS::AccountId"}, ":", "table/", {"Ref": "StateTable"}]
+                  {% endif %}
+                - Effect: Allow
+                  # Allow the Lambda to access VPC and create ENI
+                  Action:
+                    - "ec2:CreateNetworkInterface"
+                    - "ec2:DescribeNetworkInterfaces"
+                    - "ec2:DeleteNetworkInterface"
+                  Resource: "*"
+                  {% if sns_topic_name %}
+                - Effect: Allow
+                  # Permission to access a given SNS topic
+                  Action:
+                    - "sns:*"
+                  Resource:
+                    - "Fn::Join":
+                      - ""
+                      - ["arn:aws:sns:", {"Ref": "AWS::Region"},":", {"Ref": "AWS::AccountId"}, ":", "{{sns_topic_name}}"]
+                  {% endif %}
+                - Effect: Allow
+                  # Permission to decrypt using KMS
+                  Action:
+                    - "kms:Decrypt"
+                    - "kms:DescribeKey"
+                  Resource:
+                    - "*"
+
+    {% if meta_input.kinesis_stream %}
+    InputEventSourceMapping:
+      Type: "AWS::Lambda::EventSourceMapping"
+      Properties:
+        BatchSize: {{ batch_size }}
+        # The ARN of the input Kinesis stream
+        EventSourceArn:
+            "Fn::Join":
+              - ""
+              - ["arn:aws:kinesis:", {"Ref": "AWS::Region"},":", {"Ref": "AWS::AccountId"}, ":", "stream/", "{{meta_input.kinesis_stream}}"]
+        FunctionName:
+          Ref: LambdaFunction
+        StartingPosition:
+          TRIM_HORIZON
+    {% endif %}
+    # The DynamoDB tables that keep shard-specific state information
+    #
+    # We use the same state table across shards. The lambdautils functions
+    # set_state and get_state take care of concurrent access to the state table
+    # across shards by storing each shard state in a different namespace.
+    {% if globs.stateful %}
+    StateTable:
+      Type: "AWS::DynamoDB::Table"
+      Properties:
+        AttributeDefinitions:
+        {# The state item id #}
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: {{dynamodb_capacity.read}}
+          WriteCapacityUnits: {{dynamodb_capacity.write}}
+        {% if _env.stage %}
+        TableName: {{_env.name}}-{{_layer.name}}-{{_env.stage}}-state
+        {% else %}
+        TableName: {{_env.name}}-{{_layer.name}}-state
+        {% endif %}
+    {% endif %}
