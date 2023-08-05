@@ -1,0 +1,11 @@
+{% extends "polls/base.html" %}
+
+{% block title %}Index of Question{% endblock %}
+
+{% block content %}
+<ul>
+  {% for q in latest_questions %}
+  <li><a href="{% url 'polls:detail' q.pk %}">{{ q.question_text }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}
