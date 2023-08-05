@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Messages</title>
+    <style type="text/css">
+        html {
+            overflow: hidden;
+        }
+
+        body {
+            overflow: auto;
+            height: 98vh;
+            transform: scaleY(-1)
+        }
+
+        .message {
+            display: flex;
+            transform: scaleY(-1);
+            margin: 12px;
+        }
+
+        .message__body {
+            margin-left: 18px;
+        }
+
+        .message__item {
+            display: flex;
+        }
+
+        .message__avatar {
+            width: 50px;
+            height: 50px;
+        }
+
+        .message__user {
+            font-weight: 700;
+            color: orange;
+            font-size: 130%;
+        }
+
+        .message__time {
+            font-style: italic;
+            color: lightgrey;
+            font-size: 85%;
+            min-width: 100px;
+            max-width: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    {% for message in messages %}
+    <div class="message">
+        <img src="data:image/png; base64,{{ message.avatar }}" alt="avatar" class="message__avatar">
+        <div class="message__body">
+            <div class="message__user">{{ message.name }}</div>
+            {% for item in message["items"] %}
+            <div class="message__item">
+                <div class="message__time">{{ item.time }}</div>
+                <div class="message__text">{{ item.text }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+
+</body>
+
+</html>
