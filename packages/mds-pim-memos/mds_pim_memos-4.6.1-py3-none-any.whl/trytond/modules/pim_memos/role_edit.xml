@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<tryton>
+    <data>
+
+        <!-- usergroup for editors -->
+        <record model="res.group" id="group_pim_memos_note_edit">
+            <field name="name">PIM-Memos Editor</field>
+        </record>
+        <!-- administrator is member -->
+        <record model="res.user-res.group" id="user_admin_group_pim_memos_note_edit">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_pim_memos_note_edit"/>
+        </record>
+
+        <!-- table access - memo -->
+        <record model="ir.model.access" id="access_mds_wiedervorlage_wvlitem_edit">
+            <field name="model" search="[('model', '=', 'pim_memos.note')]"/>
+            <field name="group" ref="group_pim_memos_note_edit"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- rule access -->
+        <record model="ir.rule.group" id="rule_group_memos_note_edit">
+            <field name="model" search="[('model', '=', 'pim_memos.note')]"/>
+            <field name="global_p" eval="False"/>
+            <field name="default_p" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- owner-only access -->
+        <record model="ir.rule" id="rule_group_memos_note_edit_line1">
+            <field name="domain"
+                eval="[('create_uid', '=', Eval('user', {}).get('id', -1))]"
+                pyson="1"/>
+            <field name="rule_group" ref="rule_group_memos_note_edit"/>
+        </record>
+        <record model="ir.rule.group-res.group" 
+                id="rule_group_memos_note_edit-group_pim_memos_note_edit">
+            <field name="rule_group" ref="rule_group_memos_note_edit"/>
+            <field name="group" ref="group_pim_memos_note_edit"/>
+        </record>
+        <!-- report -->
+        <record model="ir.action-res.group" id="report_noteodt-group_pim_memos_note_edit">
+            <field name="action" ref="report_noteodt"/>
+            <field name="group" ref="group_pim_memos_note_edit"/>
+        </record>
+        
+        <!-- table access - category -->
+        <record model="ir.model.access" id="access_pim_memocategory_edit">
+            <field name="model" search="[('model', '=', 'pim_memos.category')]"/>
+            <field name="group" ref="group_pim_memos_note_edit"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- rule access -->
+        <record model="ir.rule.group" id="rule_group_memos_category_edit">
+            <field name="model" search="[('model', '=', 'pim_memos.category')]"/>
+            <field name="global_p" eval="False"/>
+            <field name="default_p" eval="True"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+        <!-- owner-only access -->
+        <record model="ir.rule" id="rule_group_memos_category_edit_line1">
+            <field name="domain"
+                eval="[('create_uid', '=', Eval('user', {}).get('id', -1))]"
+                pyson="1"/>
+            <field name="rule_group" ref="rule_group_memos_category_edit"/>
+        </record>
+        <record model="ir.rule.group-res.group" 
+                id="rule_group_memos_category_edit-group_pim_memos_note_edit">
+            <field name="rule_group" ref="rule_group_memos_category_edit"/>
+            <field name="group" ref="group_pim_memos_note_edit"/>
+        </record>
+        
+        <!-- menu -->
+        <record model="ir.ui.menu-res.group" 
+                id="menu_pimmemos_note_tree-group_pim_memos_note_edit">
+            <field name="menu" ref="menu_pimmemos_note_tree"/>
+            <field name="group" ref="group_pim_memos_note_edit"/>
+        </record>
+        <record model="ir.ui.menu-res.group" 
+                id="menu_pimmemos_note_list-group_pim_memos_note_edit">
+            <field name="menu" ref="menu_pimmemos_note_list"/>
+            <field name="group" ref="group_pim_memos_note_edit"/>
+        </record>
+        <record model="ir.ui.menu-res.group" 
+                id="menu_memocategory_tree2-group_pim_memos_note_edit">
+            <field name="menu" ref="menu_memocategory_tree2"/>
+            <field name="group" ref="group_pim_memos_note_edit"/>
+        </record>
+        <record model="ir.ui.menu-res.group" 
+                id="menu_memocategory_list-group_pim_memos_note_edit">
+            <field name="menu" ref="menu_memocategory_list"/>
+            <field name="group" ref="group_pim_memos_note_edit"/>
+        </record>
+
+    </data>
+</tryton>
