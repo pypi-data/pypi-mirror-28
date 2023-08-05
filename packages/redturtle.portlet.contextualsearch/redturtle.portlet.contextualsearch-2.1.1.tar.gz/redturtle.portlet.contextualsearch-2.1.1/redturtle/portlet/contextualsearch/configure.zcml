@@ -1,0 +1,58 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:plone="http://namespaces.plone.org/plone"
+	xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="redturtle.portlet.contextualsearch">
+
+    <five:registerPackage package="." initialize=".initialize" />
+
+	<i18n:registerTranslations directory="locales" />
+
+	<include package=".browser" />
+  <include package=".tiles" />
+  <include file="skins.zcml"/>
+
+	<genericsetup:registerProfile
+       name="default"
+       title="Contextual search portlet"
+       directory="profiles/default"
+       description=""
+       provides="Products.GenericSetup.interfaces.EXTENSION"
+       post_handler=".setuphandlers.post_install"
+       />
+
+  <genericsetup:registerProfile
+       name="mosaic_support"
+       title="Contextual search portlet (moasic support)"
+       directory="profiles/mosaic_support"
+       description="Add this tile to mosaic list."
+       provides="Products.GenericSetup.interfaces.EXTENSION"
+       />
+
+  <genericsetup:registerProfile
+     name="uninstall"
+     title="Contextual search portlet (uninstall)"
+     directory="profiles/uninstall"
+     description="Uninstalls the redturtle.portlet.contextualsearch add-on."
+     provides="Products.GenericSetup.interfaces.EXTENSION"
+     post_handler=".setuphandlers.uninstall"
+     />
+
+  <utility
+     factory=".setuphandlers.HiddenProfiles"
+     name="redturtle.portlet.contextualsearch-hiddenprofiles" />
+
+  <plone:portlet
+     name="redturtle.portlet.contextualsearch.ContextualSearchPortlet"
+     interface=".contextualsearchportlet.IContextualSearchPortlet"
+     assignment=".contextualsearchportlet.Assignment"
+     view_permission="zope2.View"
+     edit_permission="cmf.ManagePortal"
+     renderer=".contextualsearchportlet.Renderer"
+     addview=".contextualsearchportlet.AddForm"
+     editview=".contextualsearchportlet.EditForm"
+     />
+
+</configure>
