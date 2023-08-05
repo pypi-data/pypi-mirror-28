@@ -1,0 +1,177 @@
+Metadata-Version: 1.1
+Name: zope.fanstatic
+Version: 3.0.0
+Summary: Fanstatic integration for Zope.
+Home-page: http://pypi.python.org/pypi/zope.fanstatic
+Author: Zope Foundation and Contributors
+Author-email: zope-dev@zope.org
+License: ZPL 2.1
+Description: Zope integration for fanstatic
+        ******************************
+        
+        This package provides Zope integration for fanstatic. This means it's
+        taking care of three things:
+        
+        * provide access to the needed resources throughout the request/response cycle.
+        
+        * provide the base URL for the resources to be rendered.
+        
+        * clear the needed resources when an exception view is rendered.
+        
+        This library fulfills these conditions for a Zope Toolkit/Grok setup.
+        
+        We'll run through a few tests to demonstrate it. Note that the real
+        code being tested is not in this document itself, but in the views
+        described in ``ftesting.zcml``.
+        
+        We need to be in a request to make this work, so let's up a request to
+        a page we have set up in ``ftesting.zcml`` that should cause the
+        inclusion of a single resource in its header::
+        
+          >>> from zope.testbrowser.wsgi import Browser
+          >>> browser = Browser()
+          >>> browser.open('http://localhost/zope.fanstatic.test_single')
+          >>> print(browser.contents)
+          <html>
+          <head>
+          <script type="text/javascript" src="http://localhost/fanstatic/foo/a.js"></script></head>
+          <body>
+          <p>the widget HTML itself</p>
+          </body>
+          </html>
+        
+        If a resource happens to need another resource, this resource is also
+        automatically included::
+        
+          >>> browser.open('http://localhost/zope.fanstatic.test_multiple')
+          >>> print(browser.contents)
+          <html>
+          <head>
+            <script type="text/javascript" src="http://localhost/fanstatic/foo/a.js"></script>
+            <script type="text/javascript" src="http://localhost/fanstatic/foo/b.js"></script></head>
+          <body>
+          <p>the widget HTML itself</p>
+          </body>
+          </html>
+        
+        Bottom rendering of resources, just before the ``</body>`` tag::
+        
+          >>> browser.open('http://localhost/zope.fanstatic.test_bottom')
+          >>> print(browser.contents)
+          <html>
+          <head>
+          </head>
+          <body>
+          <p>the widget HTML itself</p>
+          <script type="text/javascript" src="http://localhost/fanstatic/foo/c.js"></script>
+          <script type="text/javascript" src="http://localhost/fanstatic/foo/d.js"></script></body>
+          </html>
+        
+        In-template resources
+        ---------------------
+        
+        zope.fanstatic provides support for rendering resource publisher
+        aware URLs to in-template resources::
+        
+          >>> browser.open('http://localhost/zope.fanstatic.test_inline_resource')
+          >>> print(browser.contents)
+          <html>
+          <head>
+          </head>
+          <body>
+            <img src="http://localhost/fanstatic/foo/evencaveman.jpg" />
+            <img src="http://localhost/fanstatic/foo/sub/evencaveman.jpg" />
+          </body>
+          </html>
+        
+        Exception views
+        ---------------
+        
+        When an exception occurs in the rendering of a view, we don't want to have any
+        needed resources intended for a view being also injected in the error view.
+        The needed resources are cleared and if the exception view chooses to do so,
+        it can need resources itself.
+        
+          >>> browser.raiseHttpErrors = False
+          >>> browser.open('http://localhost/zope.fanstatic.test_error')
+          >>> import fanstatic
+          >>> fanstatic.get_needed().has_resources()
+          False
+        
+        CHANGES
+        *******
+        
+        3.0.0 (2018-01-16)
+        ------------------
+        
+        - Python 3 and Fanstatic 1.0.0 compatibility.
+        
+        0.12 (2011-08-31)
+        -----------------
+        
+        - Similar to the fix in 0.11, make sure calling for the URL of a resource
+          will not failed for a `DummyNeededResources` object which would badly hurt
+          testability of function or "browser" tests of applications that depend
+          on fanstatic/zope.fanstatic.
+        
+        0.11 (2011-08-17)
+        -----------------
+        
+        - Fix bug where calling `ensure_base_url()` failed for `DummyNeededResources`
+          objects. This was problematic when writing functional or "browser" tests
+          of applications that depend on fanstatic/zope.fanstatic.
+        
+        0.10 (2011-04-11)
+        -----------------
+        
+        - Update to fanstatic 0.11 API.
+        
+        0.9.1 (2011-01-20)
+        ------------------
+        
+        - Do not clear resources on DummyNeededResources objects.
+        
+        0.9 (2011-01-20)
+        ----------------
+        
+        - Integrate zope.errorview, subscribing to the HandleExceptionEvent. This will
+          clear the needed resources thusfar required, to have a clean slate for the
+          error view to be rendered.
+        
+        0.9b (2011-01-06)
+        -----------------
+        
+        Zope.fanstatic version 0.9 is a fundamental rewrite of `hurry.zoperesource`_,
+        as a result of the rewrite of `hurry.resource`_ into `fanstatic`_.
+        
+        Here's a list of essential changes since version 0.7 of hurry.zoperesource:
+        
+        - Compliance with the Fanstatic API.
+        
+        - ``++resource++foo/bar/baz.jpg`` expressions in Page Templates are
+          still supported by way registering a traversable component for all
+          available resource libraries. There are no zope.browserresource
+          components involved anymore in zope.fanstatic.
+        
+        .. _`hurry.zoperesource`: http://pypi.python.org/pypi/hurry.zoperesource
+        .. _`hurry.resource`: http://pypi.python.org/pypi/hurry.resource
+        .. _`fanstatic`: http://fanstatic.org
+        
+        Download
+        ********
+        
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Zope Public License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: Implementation
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Framework :: Zope3
