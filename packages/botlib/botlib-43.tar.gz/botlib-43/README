@@ -1,0 +1,85 @@
+README
+######
+
+.. raw: <html>
+
+    <br><br>
+
+BOTLIB is a python3 framework you can use to program bots. It makes it 
+possible to program your own module enabling your own commands and contains serveral modules that can be used to program bots.
+
+BOTLIB has a MIT no-clause license.
+
+install
+=======
+
+you might need to do the following if the bot doesn't work:
+
+::
+
+  export PYTHONPATH="."
+  export PYTHONIOENCODING="utf-8"
+
+clone the source:
+
+:: 
+
+  bart@okdan:~$ hg clone https://bitbucket.org/bthate/botlib
+  bart@okdan:~$ cd botlib
+  bart@okdan:~/botlib$ sudo python3 setup.py install
+
+another option is to download with pip3 and install globally:
+
+::
+
+  bart@okdan:~$ pip3 install botlib --upgrade
+
+irc
+===
+
+use the bot-irc program to connect to an IRC server.
+
+::
+
+  bart@okdan:~$ bot-irc -n jsonbot -s irc.freenode.net -c \#dunkbots --shell
+
+xmpp
+====
+
+use the bot-xmpp to connect to an XMPP server
+
+::
+
+  bart@okdan:~$ bot-xmpp -u monitor@localhost --room test@conference.localhost --shell
+
+users
+=====
+
+you need to add a users origin to be able to give the bot commands, add a user with the meet command:
+
+::
+
+  bart@okdan:~$ bot meet user@server
+  user user@server created
+
+to give the user a permission you can use the perm command:
+
+::
+
+  bart@okdan:~$ bot perm user@server ps
+  ok user@server
+
+the default shell user is root@shell and gives access to all the commands that are available.
+
+programming
+===========
+
+user programmed modules are read from the ~/.mods directory, you can put your .py files over there.
+
+example:
+
+::
+
+  def hi(event):
+      event.reply("hi %s" % event.origin)
+
