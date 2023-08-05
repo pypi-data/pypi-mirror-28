@@ -1,0 +1,778 @@
+<h1 id="application-developer-guide-for-python-hwloc">Application Developer Guide For <code>python-hwloc</code></h1>
+<p>Copyright 2016-2017 Guy Streeter</p>
+<p><em>This copyrighted material is made available to anyone wishing to use, modify, copy, or redistribute it subject to the terms and conditions of the <code>GNU General Public License v.2</code>.</em></p>
+<p><em>This material is distributed in the hope that it will be useful, but </em>WITHOUT ANY WARRANTY<em>; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</em></p>
+<h1 id="version-information">Version information</h1>
+<ul>
+<li>August 22 2017: This is the initial release of the document, corresponding to the package version 2.3-1.11.5</li>
+</ul>
+<h2 id="introduction">Introduction</h2>
+<p><code>python-hwloc</code> is a set of Python bindings for <code>hwloc</code>, the Portable Hardware Locality software package. The <code>python-hwloc</code> package allows access to the <code>hwloc</code> library from Python applications. Information on <code>hwloc</code> is available at <nobr><a href="https://www.open-mpi.org/projects/hwloc" class="uri">https://www.open-mpi.org/projects/hwloc</a></nobr>. The source code for <code>python-hwloc</code> is maintained at <nobr><a href="https://gitlab.com/guystreeter/python-hwloc" class="uri">https://gitlab.com/guystreeter/python-hwloc</a></nober>.</p>
+<p>This document describes the implemented interface between Python and the <code>hwloc</code> library. The first section discusses obtaining and installing the <code>python-hwloc</code> package. The next sections describe the Python classes representing the C structures used in <code>hwloc</code>, with documentation of the methods and properties of each class. Some examples are inter-mixed with the documentation. The source code contains a <code>tests</code> folder providing further usage examples.</p>
+<p><strong>Please Note</strong> that this package is written for Linux, and has only been tested on recent Fedora® and Red Hat® systems. It should work on any recent Linux platform for which <code>hwloc</code> has been built.</p>
+<h2 id="installation">Installation</h2>
+<p>RPM package repositories for Fedora and for EPEL for Centos® 7 are available at <nobr><a href="https://copr.fedorainfracloud.org/coprs/streeter/python-hwloc" class="uri">https://copr.fedorainfracloud.org/coprs/streeter/python-hwloc</a></nobr>. For other linux platforms, the source code can be down-loaded from <nobr><a href="https://gitlab.com/guystreeter/python-hwloc" class="uri">https://gitlab.com/guystreeter/python-hwloc</a></nobr> and the <code>setup.py</code> file can be used to build and install it. Building <code>python-hwloc</code> requires Cython, and the development files for the <code>hwloc</code>, <code>numactl</code> (or <code>libnuma</code>), and <code>libibverbs</code> packages.</p>
+<p><code>python-hwloc</code> also requires <code>python-libnuma</code>, available from the same RPM repository. The source for <code>python-libnuma</code> is available at <nobr><a href="https://gitlab.com/guystreeter/python-libnuma" class="uri">https://gitlab.com/guystreeter/python-libnuma</a></nobr>.</p>
+<p>This document can be recreated in the source tree using the command <code>make doc</code>. This requires the <code>pandoc</code> and <code>latex</code> applications.</p>
+<h2 id="differences-from-the-c-library">Differences from the C library</h2>
+<p>Wherever the C library uses structures, this package implements classes that allow access to the structure members as properties. If a structure member is a structure or structure pointer, the associated object property is an object. The object instances hold pointers to the <code>hwloc</code> library structures. Except where they are explicitly created, (bitmap allocation for instance), these library structures remain in place until the topology is destroyed. <em>A reference to the topology object should be held as long as any constituent object instance is needed.</em></p>
+<p>Generally, library functions that reference a structure are implemented as methods in the class that represents that structure. Some of the classes support the use of various Python operators, such as conversion to string or comparison.</p>
+<p>The Python code handles reference counting, and the freeing of allocated structures when required. <em>Assignment to a new variable name does not copy the library structures, it just make a new reference to the same object instance.</em></p>
+<p>All of the library functions with names ending in <code>snprintf</code> have been changed to an <code>asprintf</code> implementation, and the caller is not responsible for providing a string buffer for the result. The returned value is a native Python string.</p>
+<h2 id="classes">Classes</h2>
+<p>The major classes used are <code>Topology</code>, <code>Obj</code>, and <code>Bitmap</code>. These correspond to the <code>hwloc_topology</code>, <code>hwloc_obj</code>, and <code>hwloc_bitmap</code> structures in the <code>hwloc</code> C code. They may for example be used as follows:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#!/usr/bin/python3</span>
+
+<span class="im">import</span> hwloc
+
+topo <span class="op">=</span> hwloc.Topology()
+topo.load()
+
+robj <span class="op">=</span> topo.root_obj
+
+bmap <span class="op">=</span> robj.cpuset
+
+<span class="bu">print</span>(<span class="st">&#39;root object cpuset is&#39;</span>, <span class="bu">str</span>(bmap))</code></pre></div>
+<p><em>Note</em> that unless otherwise specified, properties are read-only</p>
+<h3 id="argerror"><code>ArgError</code></h3>
+<p><code>ArgError</code> is derived from the base Exception class. It is raised by class methods when one of the calling arguments is invalid. The exception object can be coerced to a string for error messages. For example</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#!/usr/bin/python3</span>
+
+<span class="im">from</span> hwloc <span class="im">import</span> Bitmap, ArgError
+
+bmap <span class="op">=</span> Bitmap()
+<span class="cf">try</span>:
+    bmap.sscanf(<span class="st">&#39;qwerty&#39;</span>)
+<span class="cf">except</span> ArgError <span class="im">as</span> err:
+    <span class="bu">print</span>(<span class="bu">str</span>(err))</code></pre></div>
+<h3 id="bitmap"><code>Bitmap</code></h3>
+<p>The <code>Bitmap</code> class represents the <code>hwloc_bitmap</code> structure, which is opaque to the application. The class has methods which can operate on the object instance, as well as object properties. It also has some class methods.</p>
+<p><em>Important Note About <code>Bitmap</code> Object Lifetimes</em> <code>Bitmap</code> instances remember automatically if they were created by explicit allocation (or returned as a result of a function call), or if they are references to bitmaps in other objects. An allocated bitmap will be freed when the reference count of the instance goes to zero.<br />
+Bitmaps that are references to other object properties are freed when that object instance goes away. A variable that is a reference to a bitmap property of another object will behave unpredictably when the underlying <code>hwloc</code> library structure is freed</p>
+<p>Creating an instance of a <code>Bitmap</code> using the constructor (which must not have any parameters) is equivalent to calling the <code>alloc</code> class method without a parameter. These two statements are equivalent:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">bmap <span class="op">=</span> Bitmap()
+
+bmap <span class="op">=</span> Bitmap.alloc()</code></pre></div>
+<h4 id="class-methods">Class methods</h4>
+<p>The class methods are: * <code>alloc(values=None)</code></p>
+<blockquote>
+<p><code>alloc</code> can be called with a parameter. If the parameter is an <code>int</code>, that bit is set in the resulting <code>Bitmap</code>. If the parameter is a <code>str</code>, the resulting <code>Bitmap</code> is set from the <code>sscanf()</code> result of the supplied string.</p>
+</blockquote>
+<ul>
+<li><code>alloc_full()</code></li>
+<li><code>linux_parse_cpumap(path)</code></li>
+</ul>
+<blockquote>
+<p>returns a newly-allocated bitmap from a Linux kernel cpumap file</p>
+</blockquote>
+<ul>
+<li><code>cpuset_from_glibc_sched_affinity(bitmask)</code></li>
+</ul>
+<blockquote>
+<p>returns a new bitmap from a list of set bit indexes</p>
+</blockquote>
+<h4 id="operators">Operators</h4>
+<p>These Python operators can be used on bitmap objects: * <code>|</code> (arithmetic 'or')</p>
+<blockquote>
+<p>creates a new bitmap object using <code>hwloc_bitmap_or</code></p>
+</blockquote>
+<ul>
+<li><code>&amp;</code> (arithmetic 'and')</li>
+</ul>
+<blockquote>
+<p>results in a new bitmap object created with <code>hwloc_bitmap_and</code></p>
+</blockquote>
+<ul>
+<li><code>^</code> (arithmetic 'exclusive or')</li>
+</ul>
+<blockquote>
+<p>creates a new bimap object from <code>hwloc_bitmap_xor</code></p>
+</blockquote>
+<ul>
+<li><code>!</code> (arithmetic 'not')</li>
+</ul>
+<blockquote>
+<p>results in a new bitmap object created with <code>hwloc_bitmap_not</code></p>
+</blockquote>
+<ul>
+<li><code>in</code></li>
+</ul>
+<blockquote>
+<p><code>&lt;integer&gt; in bitmap</code> is True if <code>hwloc_bitmap_isset</code> is true for the bitmap and the bit index indicated by the integer.<br />
+<code>bitmap1 in bitmap2</code> is True if <code>hwloc_bitmap_isincluded(bitmap1, bitmap2)</code> returns true. That is, if all the bits set in <code>bitmap1</code> are set in <code>bitmap2</code></p>
+</blockquote>
+<p>Additionally, a <code>Bitmap</code> object can be converted to a string or list. <code>str(bitmap)</code> returns the result of <code>hwloc_bitmap_asprintf</code> for the bitmap. <code>tuple(bitmap)</code> will create tuple consisting of the index numbers of the bits set in <code>bitmap</code>.</p>
+<p>A <code>Bitmap</code> object may be used as a boolean. It is true is <code>hwloc_bitmap_iszero</code> returns zero fir the bitmap.</p>
+<p>A <code>Bitmap</code> object may also be used where an iterator is expected. <code>for bit in bitmap</code> will iterate through the indices of the set bits. The length of a <code>Bitmap</code> object is the number of set bits (<code>hwloc_bitmap_weight</code>).</p>
+<p><code>Bitmap</code> objects may be tested for bitwise equality using the <code>==</code> operator. <em>Note</em> however that <code>bitmap1 is bitmap2</code> is <em>not</em> a test of equality. It is only True when both variable names refer to the same bitmap object.</p>
+<p>Assignment of a bitmap to another variable only creates another reference to the same object. In order to create a new copy of a bitmap object, you must use the <code>dup</code> method. The Python <code>copy</code> module's <code>copy()</code> function will also make a duplicate.</p>
+<p><em>Note</em> that unlike the <code>copy</code> method supported by many Python classes, the <code>Bitmap</code> class has a <code>copy</code> function that follows the <code>hwloc_bitmap_copy</code> function. It copies the other bitmap to this bitmap.</p>
+<h4 id="properties">Properties</h4>
+<p>Most of the bitmap functions that require no arguments other than the bitmap itself are implemented as properties. A property <code>&lt;name&gt;</code> is equivalent to the <code>hwloc_bitmap_&lt;name&gt;</code> function. * <code>iszero</code> * <code>isfull</code> * <code>first</code> * <code>all_set_bits</code> -&gt; tuple of <code>int</code> * <code>last</code></p>
+<p><em>Note</em> that some functions like <code>zero</code>, <code>fill</code>, and <code>weight</code> are presented as methods rather than properties, to indicate that they may be expensive operations.</p>
+<h4 id="methods">Methods</h4>
+<p>A few of the <code>Bitmap</code> methods have a slightly different signature that the C library equivalents. They are:</p>
+<ul>
+<li><code>alloc(value=None)</code></li>
+</ul>
+<blockquote>
+<p>Without an argument, this behaves like <code>hwloc_bitmap_alloc</code>. If a value is supplied as an integer, <code>hwloc_bitmap_set</code> is called on the newly-allocated bitmap for the integer supplied. If the value is a string, it is passed to <code>hwloc_bitmap_sscanf</code> for the new bitmap.</p>
+</blockquote>
+<ul>
+<li><code>from_ulong(mask, idx=0)</code></li>
+</ul>
+<blockquote>
+<p>There is no separate <code>hwloc_bitmap_from_ulong</code> and <code>hwloc_bitmap_from_ith_ulong</code>. <em>Note</em> that the order of arguments is different from the library routine, so that the idx parameter can be defaulted to <code>0</code>.</p>
+</blockquote>
+<ul>
+<li><code>ulong(idx=0)</code></li>
+</ul>
+<blockquote>
+<p>Like <code>from_ulong</code>, <code>ulong</code> takes an optional index, and there is no separate <code>hwloc_bitmap_to_ulong</code> equivalent.</p>
+</blockquote>
+<ul>
+<li><code>set_ulong(idx=0)</code></li>
+</ul>
+<blockquote>
+<p>Same as above but for <code>hwloc_bitmap_set_ith_ulong</code>.</p>
+</blockquote>
+<p>The rest of the methods have the same argument in order as the <code>hwloc_bitmap_*</code> library routines (except of course the bitmap argument is not supplied). If the method returns a value, the type is specified.</p>
+<ul>
+<li><code>dup()</code> -&gt; <code>Bitmap</code></li>
+<li><code>copy(other)</code></li>
+<li><code>asprintf()</code> -&gt; <code>str</code></li>
+<li><code>sscanf(string)</code></li>
+<li><code>list_asprintf()</code> -&gt; <code>str</code></li>
+<li><code>list_sscanf(string)</code></li>
+<li><code>taskset_asprintf()</code> -&gt; <code>str</code></li>
+<li><code>taskset_sscanf(string)</code></li>
+<li><code>zero()</code></li>
+<li><code>fill()</code></li>
+<li><code>only(idx)</code></li>
+<li><code>allbut(idx)</code></li>
+<li><code>set(index)</code></li>
+<li><code>set_range(begin, end)</code></li>
+<li><code>clr(index)</code></li>
+<li><code>clr_range(begin, end)</code></li>
+<li><code>singlify()</code></li>
+<li><code>isset(index)</code> -&gt; <code>bool</code></li>
+<li><code>next(prev)</code> -&gt; <code>int</code></li>
+<li><code>weight()</code> -&gt; <code>int</code></li>
+<li><code>andnot(other)</code> -&gt; <code>Bitmap</code></li>
+<li><code>intersects(other)</code> -&gt; <code>bool</code></li>
+<li><code>isincluded(super_bitmap)</code> -&gt; <code>bool</code></li>
+<li><code>compare_first(other)</code> -&gt; <code>int</code></li>
+<li><code>compare(other)</code> -&gt; <code>int</code></li>
+</ul>
+<h3 id="obj"><code>Obj</code></h3>
+<p>The <code>Obj</code> class represents the <code>hwloc_obj</code> structure, and has properties corresponding to the structure members. It also has methods matching the library functions that are called with a <code>hwloc_obj</code> structure as an argument.</p>
+<p><em>Important Note About <code>Obj</code> Structure References</em>. Only the top-level <code>Topology</code> instance holds a reference to the <code>hwloc_topology</code> structure and all of the associated <code>hwloc_obj</code> structures, and all of their member structures and their member structures. <em>You must keep a reference to the <code>Topology</code> instance</em> as long as you are accessing anything the C structure points to. When the reference count for a <code>Topology</code> instance goes to zero, <code>hwloc_topology_destroy</code> is called for it, and any member objects still around will have invalid references.</p>
+<p>An <code>Obj</code> object can be converted to a string. The resulting string is essentially all the <code>infos</code>, then <code>hwloc_obj_type_snprintf</code>, followed by <code>hwloc_obj_attr_snprintf</code>. This is mostly useful for debugging.</p>
+<p>The test for equality between <code>Obj</code> instances is a test to see if they are both physically the same C structure (the structure pointer value is the same).</p>
+<h4 id="properties-1">Properties</h4>
+<p>If the value of the property is not an integer, it's type is listed.</p>
+<ul>
+<li><code>type</code> -&gt; <code>HWLOC_OBJ_SYSTEM</code> etc.</li>
+<li><code>os_index</code></li>
+<li><code>name</code> -&gt; <code>str</code></li>
+<li><code>memory</code> -&gt; <code>ObjMemory</code></li>
+<li><code>attr</code> -&gt; <code>ObjAttr</code> or <code>None</code></li>
+<li><code>depth</code></li>
+<li><code>logical_index</code></li>
+<li><code>os_level</code></li>
+<li><code>next_cousin</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>prev_cousin</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>parent</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>sibling_rank</code></li>
+<li><code>next_sibling</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>prev_sibling</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>arity</code></li>
+<li><code>children</code> -&gt; list of <code>Obj</code></li>
+<li><code>first_child</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>last_child</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>userdata</code></li>
+</ul>
+<blockquote>
+<p><code>userdata</code> is read-write. <strong>Note: only integer values are supported</strong></p>
+</blockquote>
+<ul>
+<li><code>cpuset</code> -&gt; <code>Bitmap</code> or <code>None</code></li>
+<li><code>complete_cpuset</code> -&gt; <code>Bitmap</code> or <code>None</code></li>
+<li><code>online_cpuset</code> -&gt; <code>Bitmap</code> or <code>None</code></li>
+<li><code>allowed_cpuset</code> -&gt; <code>Bitmap</code> or <code>None</code></li>
+<li><code>nodeset</code> -&gt; <code>Bitmap</code> or <code>None</code></li>
+<li><code>complete_nodeset</code> -&gt; <code>Bitmap</code> or <code>None</code></li>
+<li><code>allowed_nodeset</code> -&gt; <code>Bitmap</code> or <code>None</code></li>
+<li><code>distances</code> -&gt; tuple of <code>Distances</code></li>
+<li><code>distances_count</code></li>
+<li><code>infos</code> -&gt; tuple of <code>ObjInfo</code></li>
+<li><code>infos_count</code></li>
+<li><code>symmetric_subtree</code></li>
+<li><code>type_string</code> -&gt; <code>str</code></li>
+</ul>
+<blockquote>
+<p>The result of calling <code>hwloc_obj_type_string</code> for this object's <code>type</code></p>
+</blockquote>
+<ul>
+<li><code>non_io_ancestor</code> -&gt; <code>Obj</code> or <code>None</code></li>
+</ul>
+<h4 id="class-methods-1">Class Methods</h4>
+<ul>
+<li><code>type_of_string(string)</code> -&gt; the 'type' value returned by <code>type_sscanf()</code></li>
+<li><code>type_sscanf(string)</code> -&gt; (<code>HWLOC_OBJ_SYSTEM</code> etc. or <code>None</code>, depth or <code>None</code>, cache_type or <code>None</code>)</li>
+<li><code>string_of_type(type enum)</code> -&gt; <code>str</code></li>
+<li><code>cpuset_asprintf(list of Obj)</code> -&gt; <code>str</code> returned by <code>hwloc_obj_cpuset_snprintf</code></li>
+<li><code>get_common_ancestor(obj1, obj2)</code> -&gt; <code>Obj</code></li>
+</ul>
+<h4 id="methods-1">Methods</h4>
+<ul>
+<li><code>type_asprintf(verbose=0)</code> -&gt; <code>str</code></li>
+<li><code>attr_asprintf(separator=</code>'#'<code>, verbose=0)</code> -&gt; <code>str</code></li>
+<li><code>get_info_by_name(str)</code> -&gt; <code>ObjInfo</code></li>
+<li><code>add_info(&lt;name&gt; str, &lt;value&gt; str)</code></li>
+<li><code>get_ancestor_obj_by_depth(int)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_ancestor_obj_by_type(int)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_next_child(&lt;prev&gt; Obj)</code> -&gt; <code>Obj</code></li>
+<li><code>get_common_ancestor_obj(Obj)</code> -&gt; <code>Obj</code></li>
+<li><code>is_in_subtree(&lt;subtree_root&gt; Obj)</code> -&gt; <code>bool</code></li>
+<li><code>get_shared_cache_covering()</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>gl_get_display()</code> -&gt; <code>Obj</code> or <code>None</code></li>
+</ul>
+<h3 id="objmemory"><code>ObjMemory</code></h3>
+<p>The <code>memory</code> property of an Obj class object is an object of the <code>ObjMemory</code> class, corresponding the the <code>hwloc_obj_memory</code> structure. It has these properties:</p>
+<ul>
+<li><code>total_memory</code></li>
+<li><code>local_memory</code> (read-write)</li>
+<li><code>page_types</code> -&gt; tuple of <code>ObjMemoryPageType</code></li>
+</ul>
+<h4 id="objmemorypagetype"><code>ObjMemoryPageType</code></h4>
+<p>Corresponding to the <code>hwloc_obj_memory_page_type</code> structure, this has two integer properties:</p>
+<ul>
+<li><code>size</code></li>
+<li><code>count</code></li>
+</ul>
+<h3 id="objattr"><code>ObjAttr</code></h3>
+<p>The <code>attr</code> property of an <code>Obj</code> object is an object of <code>ObjAttr</code> class. Corresponding o the <code>hwloc_obj_attr</code> union, it will return an object instance for one of the following properties:</p>
+<ul>
+<li><code>cache</code> -&gt; <code>CacheAttr</code></li>
+<li><code>group</code> -&gt; <code>GroupAttr</code></li>
+<li><code>pcidev</code> -&gt; <code>PCIAttr</code></li>
+<li><code>bridge</code> -&gt; <code>BridgeAttr</code></li>
+<li><code>osdev</code> -&gt; <code>OSDevAttr</code></li>
+</ul>
+<blockquote>
+<p><em>Note</em> that like the C union, the result of accessing these through the wrong attribute class is undefined.</p>
+</blockquote>
+<h4 id="cacheattr"><code>CacheAttr</code></h4>
+<p>Like the <code>hwloc_cache_attr</code> structure, this class has these integer properties:</p>
+<ul>
+<li><code>size</code></li>
+<li><code>depth</code></li>
+<li><code>linesize</code></li>
+<li><code>associativity</code></li>
+<li><code>type</code> -&gt; <code>HWLOC_OBJ_CACHE_UNIFIED</code> etc.</li>
+</ul>
+<h4 id="groupattr"><code>GroupAttr</code></h4>
+<p>This matches the <code>hwloc_group_attr</code> structure, and has this integer property:</p>
+<ul>
+<li><code>depth</code></li>
+</ul>
+<h4 id="pcidevattr"><code>PCIDevAttr</code></h4>
+<p>Corresponding to the <code>hwloc_pcidev_attr</code> structure, this class has these integer properties:</p>
+<ul>
+<li><code>domain</code></li>
+<li><code>bus</code></li>
+<li><code>dev</code></li>
+<li><code>func</code></li>
+<li><code>class_id</code></li>
+<li><code>vendor_id</code></li>
+<li><code>device_id</code></li>
+<li><code>subvendor_id</code></li>
+<li><code>subdevice_id</code></li>
+<li><code>revision</code></li>
+<li><code>linkspeed</code></li>
+</ul>
+<h3 id="bridgeattr"><code>BridgeAttr</code></h3>
+<p>This class represents the <code>hwloc_bridge_attr</code> structure.</p>
+<ul>
+<li><code>upstream</code> -&gt; <code>BridgeAttrUpstream</code></li>
+<li><code>upstream_type</code> -&gt; <code>HWLOC_OBJ_BRIDGE_HOST</code> etc.</li>
+<li><code>downstream</code> -&gt; <code>BridgeAttrDownstream</code></li>
+<li><code>downstream_type</code> -&gt; <code>HWLOC_OBJ_BRIDGE_HOST</code> etc.</li>
+<li><code>depth</code> -&gt; <code>int</code></li>
+</ul>
+<h4 id="bridgeattrupstream"><code>BridgeAttrUpstream</code></h4>
+<ul>
+<li><code>pci</code> -&gt; <code>PCIDevAttr</code></li>
+</ul>
+<h4 id="bridgeattrdownstream"><code>BridgeAttrDownstream</code></h4>
+<ul>
+<li><code>pci</code> -&gt; <code>BridgeAttrDownstreamPCI</code></li>
+</ul>
+<h4 id="bridgeattrdownstreampci"><code>BridgeAttrDownstreamPCI</code></h4>
+<ul>
+<li><code>domain</code></li>
+<li><code>seconday_bus</code></li>
+<li><code>subordinate_bus</code></li>
+</ul>
+<h4 id="bridgeattr-example"><code>BridgeAttr</code> example</h4>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="cf">for</span> obj <span class="kw">in</span> topology.bridges:
+    <span class="cf">assert</span> obj.<span class="bu">type</span> <span class="op">==</span> hwloc.OBJ_BRIDGE
+    <span class="cf">if</span> obj.attr.bridge.upstream_type <span class="op">==</span> hwloc.OBJ_BRIDGE_HOST:
+        <span class="cf">assert</span> obj.attr.bridge.downstream_type <span class="op">==</span> hwloc.OBJ_BRIDGE_PCI
+        <span class="bu">print</span>(<span class="st">&#39; Found host-&gt;PCI bridge for domain </span><span class="sc">%04x</span><span class="st"> bus </span><span class="sc">%02x</span><span class="st">-</span><span class="sc">%02x</span><span class="st">&#39;</span> <span class="op">%</span> (
+            obj.attr.bridge.downstream.pci.domain,
+            obj.attr.bridge.downstream.pci.secondary_bus,
+            obj.attr.bridge.downstream.pci.subordinate_bus))</code></pre></div>
+<h4 id="distances">Distances</h4>
+<ul>
+<li><code>relative_depth</code> -&gt; <code>int</code></li>
+<li><code>nbobjs</code> -&gt; <code>int</code></li>
+<li><code>latency</code> -&gt; tuple of <code>float</code></li>
+<li><code>latency_max</code> -&gt; <code>float</code></li>
+<li><code>latency_base</code> -&gt; <code>float</code></li>
+</ul>
+<h4 id="objinfo">ObjInfo</h4>
+<p><code>ObjInfo</code> represents the <code>hwloc_obj_info</code> structure. It can be converted to a <code>str</code> type, resulting in <code>&quot;&lt;name&gt;:&lt;value&gt;&quot;</code>. It has these properties:</p>
+<ul>
+<li><code>name</code> -&gt; <code>str</code></li>
+<li><code>value</code> -&gt; <code>str</code></li>
+</ul>
+<h3 id="topologysupport"><code>TopologySupport</code></h3>
+<p>The <code>support</code> property of a <code>Topology</code> object is an object of the <code>TopologySupport</code> class, similar to the <code>hwloc_topology_support</code> structure. This class has 3 properties:</p>
+<ul>
+<li><code>discovery</code> -&gt; <code>TopologyDiscoverySupport</code></li>
+<li><code>cpubind</code> -&gt; <code>TopologyCpubindSupport</code></li>
+<li><code>membind</code> -&gt;<code>TopologyMembindSupport</code></li>
+</ul>
+<p>All of these objects have properties that are booleans describing what support is available. See the documentation for <code>hwloc_topology_support</code> in the <code>hwloc</code> package for the meanings of these booleans.</p>
+<h4 id="topologydiscoverysupport"><code>TopologyDiscoverySupport</code></h4>
+<p>This corresponds to the <code>hwloc_topology_discovery_support</code> structure. It has this boolean property:</p>
+<ul>
+<li><code>pu</code></li>
+</ul>
+<h4 id="topologycpubindsupport">TopologyCpubindSupport</h4>
+<p>This corresponds to the <code>hwloc_topology_cpubind_support</code> structure, and has these boolean properties:</p>
+<ul>
+<li><code>get_proc_cpubind</code></li>
+<li><code>get_proc_last_cpu_location</code></li>
+<li><code>get_thisproc_cpubind</code></li>
+<li><code>get_thisproc_last_cpu_location</code></li>
+<li><code>get_thisthread_cpubind</code></li>
+<li><code>get_thisthread_last_cpu_location</code></li>
+<li><code>get_thread_cpubind</code></li>
+<li><code>set_proc_cpubind</code></li>
+<li><code>set_thisproc_cpubind</code></li>
+<li><code>set_thisthread_cpubind</code></li>
+<li><code>set_thread_cpubind</code></li>
+</ul>
+<h4 id="topologymembindsupport"><code>TopologyMembindSupport</code></h4>
+<p>This corresponds to the <code>hwloc_topology_membind_support</code> structure, It has the following boolean properties:</p>
+<ul>
+<li><code>set_thisproc_membind</code></li>
+<li><code>get_thisproc_membind</code></li>
+<li><code>set_proc_membind</code></li>
+<li><code>get_proc_membind</code></li>
+<li><code>set_thisthread_membind</code></li>
+<li><code>get_thisthread_membind</code></li>
+<li><code>set_area_membind</code></li>
+<li><code>get_area_membind</code></li>
+<li><code>alloc_membind</code></li>
+<li><code>firsttouch_membind</code></li>
+<li><code>bind_membind</code></li>
+<li><code>interleave_membind</code></li>
+<li><code>replicate_membind</code></li>
+<li><code>nexttouch_membind</code></li>
+<li><code>migrate_membind</code></li>
+</ul>
+<h4 id="topologydiff"><code>TopologyDiff</code></h4>
+<p>Corresponding to the <code>hwloc_topology_diff</code> union, it has these properties. Referencing the member structure through the wrong class type has unknown results, except that <code>type</code> can always be referenced as though the class was <code>TopologyDiffGeneric</code>.</p>
+<ul>
+<li><code>type</code> -&gt; <code>HWLOC_TOPOLOGY_DIFF_OBJ_ATTR</code> etc.</li>
+<li><code>generic</code> -&gt; <code>TopologyDiffGeneric</code></li>
+<li><code>obj_attr</code> -&gt; <code>TopologyDiffObjAttrU</code></li>
+<li><code>too-complex</code> -&gt; <code>TopologyDiffTooComplex</code></li>
+<li><code>obj_depth</code> -&gt; <code>int</code></li>
+<li><code>obj_index</code> -&gt; <code>int</code></li>
+</ul>
+<h4 id="topologydiffgeneric"><code>TopologyDiffGeneric</code></h4>
+<ul>
+<li><code>type</code> -&gt; <code>HWLOC_TOPOLOGY_DIFF_OBJ_ATTR_SIZE</code> etc.</li>
+<li><code>next</code> -&gt; <code>TopologyDiff</code> or <code>None</code></li>
+</ul>
+<h4 id="topologydiffobjattruint64"><code>TopologyDiffObjAttrUint64</code></h4>
+<ul>
+<li><code>type</code> -&gt; <code>HWLOC_TOPOLOGY_DIFF_OBJ_ATTR_SIZE</code> etc.</li>
+<li><code>index</code> -&gt; <code>int</code></li>
+<li><code>oldvalue</code> -&gt; <code>int</code></li>
+<li><code>newvalue</code> -&gt; <code>int</code></li>
+</ul>
+<h4 id="topologydiffobjattrstring"><code>TopologyDiffObjAttrString</code></h4>
+<ul>
+<li><code>type</code> -&gt; <code>HWLOC_TOPOLOGY_DIFF_OBJ_ATTR_NAME</code> etc.</li>
+<li><code>name</code> -&gt; <code>str</code></li>
+<li><code>oldvalue</code> -&gt; <code>str</code></li>
+<li><code>newvalue</code> -&gt; <code>str</code></li>
+</ul>
+<h4 id="topologydifftoocomplex"><code>TopologyDiffTooComplex</code></h4>
+<ul>
+<li><code>type</code> -&gt;<code>HWLOC_TOPOLOGY_DIFF_TOO_COMPLEX</code></li>
+<li><code>next</code> -&gt; <code>TopologyDiff</code> or <code>None</code></li>
+<li><code>obj_depth</code> -&gt; <code>int</code></li>
+<li><code>obj_index</code> -&gt; <code>int</code></li>
+</ul>
+<h4 id="topologydiffobjattru"><code>TopologyDiffObjAttrU</code></h4>
+<ul>
+<li><code>generic</code> -&gt; <code>TopologyDiffObjAttrGeneric</code></li>
+<li><code>uint64</code> -&gt; <code>TopologyDiffObjAttrUint64</code></li>
+<li><code>string</code> -&gt; <code>TopologyDiffObjAttrString</code></li>
+</ul>
+<h4 id="topologydiffobjattr"><code>TopologyDiffObjAttr</code></h4>
+<ul>
+<li><code>type</code> -&gt; <code>HWLOC_TOPOLOGY_DIFF_OBJ_ATTR_SIZE</code> etc.</li>
+<li><code>next</code> -&gt; <code>TopologyDiff</code> or <code>None</code></li>
+<li><code>obj_depth</code> -&gt; <code>int</code></li>
+<li><code>obj_index</code> -&gt; <code>int</code></li>
+<li><code>diff</code> -&gt; <code>TopologyDiffObjAttrU</code></li>
+</ul>
+<h3 id="topology"><code>Topology</code></h3>
+<p><strong><em>Note</em></strong> You must hold a reference to your <code>Topology</code> object as long as you want to reference any constituent part of it</p>
+<h4 id="general-methods">General Methods</h4>
+<ul>
+<li><code>load()</code></li>
+<li><code>check()</code></li>
+</ul>
+<p><em>Note</em> there is no <code>destroy()</code> method. The topology is destroyed when the Topology instance is no longer referenced.</p>
+<h4 id="properties-2">Properties</h4>
+<ul>
+<li><code>support</code> -&gt; <code>TopologySupport</code></li>
+<li><code>depth</code> -&gt;<code>int</code></li>
+<li><code>is_thissystem</code> -&gt; <code>bool</code></li>
+<li><code>root_obj</code> -&gt; <code>Obj</code></li>
+</ul>
+<h4 id="methods-for-configuring-topology-detection">Methods for Configuring Topology Detection</h4>
+<ul>
+<li><code>ignore_type(int or str)</code></li>
+<li><code>ignore_type_keep_structure(&lt;int or str&gt;)</code></li>
+</ul>
+<blockquote>
+<p>The two functions above can take a type value or a string recognized by <code>hwloc_obj_type_sscanf()</code></p>
+</blockquote>
+<ul>
+<li><code>ignore_all_keep_structure()</code></li>
+<li><code>set_flags(flags)</code></li>
+<li><code>set_pid(pid)</code></li>
+<li><code>set_fsroot(path)</code></li>
+<li><code>set_synthetic(string)</code></li>
+<li><code>set_xml(xmlpath)</code></li>
+<li><code>set_xmlbuffer(xmlbuffer)</code></li>
+<li><code>set_custom()</code></li>
+<li><code>set_distance_matrix(&lt;obj_type&gt; int, &lt;os_index&gt; list of int, &lt;distances&gt; list of int)</code></li>
+</ul>
+<h4 id="methods-for-exporting-topologies-to-xml">Methods for exporting Topologies to XML</h4>
+<ul>
+<li><code>export_xml(path)</code></li>
+<li><code>export_xmlbuffer()</code> -&gt; <code>str</code></li>
+<li><code>set_userdata_export_callback(cb)</code></li>
+</ul>
+<blockquote>
+<p>cb is a Python function taking <code>(reserved, Topology, Obj)</code> arguments</p>
+</blockquote>
+<ul>
+<li><code>export_obj_userdata(reserved, Obj, &lt;name&gt; str, &lt;buffer&gt; str)</code></li>
+<li><code>export_obj_userdata_base64(reserved, Obj, &lt;name&gt; str, &lt;buffer&gt; str)</code></li>
+<li><code>set_userdata_import_callback(cb)</code></li>
+</ul>
+<blockquote>
+<p>cb is a Python function taking <code>(Topology, Obj, name, buf)</code> arguments. <code>name</code> and <code>buf</code> are <code>str</code> types</p>
+</blockquote>
+<ul>
+<li><code>export_synthetic(&lt;flags&gt; int)</code></li>
+</ul>
+<p>See <code>tests/hwloc_object_userdata.py</code> in the source-code for an example.</p>
+<h4 id="topology-information">Topology Information</h4>
+<ul>
+<li><code>depth</code> [property] -&gt; <code>int</code></li>
+<li><code>get_type_depth(int)</code> -&gt; <code>int</code></li>
+<li><code>get_depth_type(int)</code> -&gt; <code>HWLOC_OBJ_SYSTEM</code> etc.</li>
+<li><code>get_nbobjs_by_depth(int)</code> -&gt; <code>int</code></li>
+<li><code>get_nbobjs_by_type(int)</code> -&gt; <code>int</code></li>
+<li><code>get_flags()</code> -&gt; <code>int</code></li>
+<li><code>is_thissystem</code> [property] -&gt; <code>bool</code></li>
+</ul>
+<h4 id="cpu-binding">CPU Binding</h4>
+<ul>
+<li><code>set_cpubind(Bitmap, &lt;flags&gt; int)</code></li>
+<li><code>get_cpubind(&lt;flags&gt;)</code> -&gt;<code>Bitmap</code></li>
+<li><code>set_proc_cpubind(&lt;pid&gt; int, Bitmap, &lt;flags&gt; int)</code></li>
+<li><code>get_proc_cpubind(&lt;pid&gt; int, &lt;flags&gt; int)</code> -&gt; <code>Bitmap</code></li>
+<li><code>set_thread_cpubind(&lt;thread&gt; int, Bitmap, &lt;flags&gt; int)</code></li>
+<li><code>get_thread_cpubind(&lt;thread&gt; int, &lt;flags&gt; int)</code> -&gt; <code>Bitmap</code></li>
+<li><code>get_last_cpu_location(&lt;flags&gt; int)</code> -&gt; <code>Bitmap</code></li>
+<li><code>get_proc_last_cpu_location(&lt;pid&gt; int, &lt;flags&gt; int)</code> -&gt; <code>Bitmap</code></li>
+</ul>
+<h4 id="memory-binding">Memory Binding</h4>
+<ul>
+<li><code>set_membind_nodeset(self, Bitmap, policy, flags)</code></li>
+<li><code>set_membind(self, Bitmap, policy, flags)</code></li>
+<li><code>get_membind_nodeset(flags)</code> -&gt; <code>Bitmap</code></li>
+<li><code>get_membind(flags)</code> -&gt; <code>Bitmap</code></li>
+<li><code>set_proc_membind_nodeset(self, pid, Bitmap, policy, flags)</code></li>
+<li><code>set_proc_membind(pid, Bitmap, policy, flags)</code></li>
+<li><code>get_proc_membind_nodeset(pid, flags)</code> -&gt; <code>Bitmap</code></li>
+<li><code>get_proc_membind(pid, flags)</code> -&gt; <code>Bitmap</code></li>
+<li><code>set_area_membind_nodeset(addr, length, Bitmap, policy, flags)</code></li>
+<li><code>set_area_membind(addr, length, Bitmap, policy, flags)</code></li>
+<li><code>get_area_membind_nodeset(addr, length, flags)</code> -&gt; <code>Bitmap</code></li>
+<li><code>get_area_membind(addr, length, flags)</code> -&gt; <code>Bitmap</code></li>
+<li><code>get_area_memlocation(addr, length, flags)</code> -&gt; <code>Bitmap</code></li>
+<li><code>alloc(length)</code> -&gt; address or <code>None</code></li>
+<li><code>alloc_membind_nodeset(length, Bitmap, policy, flags)</code> -&gt; address or <code>None</code></li>
+<li><code>alloc_membind(length, Bitmap, policy, flags)</code> -&gt; address or <code>None</code></li>
+<li><code>alloc_membind_policy_nodeset(len, Bitmap, policy, flags)</code> -&gt; address or <code>None</code></li>
+<li><code>alloc_membind_policy(len, Bitmap, policy, flags)</code> -&gt; address or <code>None</code></li>
+<li><code>free(address, length)</code></li>
+</ul>
+<p>An example of using the memory methods:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#!/usr/bin/python3</span>
+LEN <span class="op">=</span> <span class="dv">1048576</span>
+
+<span class="im">import</span> hwloc, sys, ctypes
+
+topology <span class="op">=</span> hwloc.Topology()
+topology.load()
+
+buffer_ <span class="op">=</span> topology.alloc(LEN)
+<span class="cf">assert</span> buffer_
+<span class="bu">print</span>(<span class="st">&#39;buffer 0x</span><span class="sc">{:X}</span><span class="st"> length </span><span class="sc">{:d}</span><span class="st">&#39;</span>.<span class="bu">format</span>(buffer_, LEN))
+
+<span class="cf">if</span> topology.support.membind.get_area_memlocation:
+    set_ <span class="op">=</span> topology.get_area_memlocation(buffer_, LEN, hwloc.MEMBIND_BYNODESET)
+    <span class="bu">print</span>(<span class="st">&#39;address 0x</span><span class="sc">{:X}</span><span class="st"> length </span><span class="sc">{:d}</span><span class="st"> allocated in nodeset&#39;</span>.<span class="bu">format</span>(buffer_, LEN), <span class="bu">str</span>(set_))
+
+<span class="co"># touch the memory</span>
+buf <span class="op">=</span> ctypes.cast(buffer_, ctypes.POINTER(ctypes.c_ubyte))
+buf[<span class="dv">0</span>] <span class="op">=</span> <span class="dv">0</span>
+buf[LEN<span class="dv">-1</span>] <span class="op">=</span> <span class="dv">0</span> 
+
+topology.free(buffer_, LEN)</code></pre></div>
+<h4 id="modifying-a-loaded-topology">Modifying A Loaded Topology</h4>
+<ul>
+<li><code>insert_misc_object_by_cpuset(&lt;cpuset&gt; Bitmap, name)</code> -&gt; <code>Obj</code></li>
+<li><code>insert_misc_object_by_parent(&lt;parent&gt; Obj, name)</code> -&gt; <code>Obj</code></li>
+<li><code>restrict(Bitmap, flags=0)</code></li>
+<li><code>dup()</code> -&gt; <code>Topology</code></li>
+</ul>
+<h4 id="building-custom-topologies">Building Custom Topologies</h4>
+<ul>
+<li><code>custom_insert_topology(&lt;newparent&gt; Obj, &lt;oldtopology&gt; Topology, &lt;oldroot&gt; Obj=None)</code></li>
+<li><code>custom_insert_group_object_by_parent(&lt;parent&gt; Obj, groupdepth)</code> -&gt; <code>Obj</code></li>
+</ul>
+<h4 id="object-type-helpers">Object Type Helpers</h4>
+<ul>
+<li><code>get_type_or_below_depth(type)</code> -&gt; <code>int</code></li>
+<li><code>get_type_or_above_depth(type)</code> -&gt; <code>int</code></li>
+</ul>
+<h4 id="retrieve-objects">Retrieve Objects</h4>
+<ul>
+<li><code>get_obj_by_depth(depth, index)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_obj_by_type(type, index)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+</ul>
+<h4 id="objectstring-conversion">Object/String Conversion</h4>
+<ul>
+<li><code>obj_asprintf(Obj, prefix, verbose=0)</code> -&gt; <code>str</code></li>
+</ul>
+<h4 id="basic-traversal-helpers">Basic Traversal Helpers</h4>
+<ul>
+<li><code>root_obj</code> [property] -&gt; <code>Obj</code></li>
+<li><code>get_next_obj_by_depth(depth, &lt;prev&gt; Obj=None)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>objs_by_depth(depth, &lt;prev&gt; Obj=None)</code> -&gt; generator object yielding <code>Obj</code></li>
+<li><code>get_next_obj_by_type(type, &lt;prev&gt; Obj=None)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>objs_by_type(type, &lt;prev&gt; Obj=None)</code> -&gt; generator object yielding <code>Obj</code></li>
+<li><code>obj_is_in_subtree(self, Obj, &lt;subtree_root&gt; Obj)</code> -&gt; bool</li>
+</ul>
+<h4 id="finding-objects-inside-a-cpu-set">Finding Objects Inside a CPU set</h4>
+<ul>
+<li><code>get_first_largest_obj_inside_cpuset(Bitmap)</code> -&gt; <code>Obj</code> or `None</li>
+<li><code>get_largest_objs_inside_cpuset(Bitmap, max)</code> -&gt; tuple of Obj, or ArgError exception</li>
+<li><code>get_next_obj_inside_cpuset_by_depth(Bitmap, depth, &lt;prev&gt; Obj=None)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>objs_inside_cpuset_by_depth(Bitmap, depth, &lt;prev&gt; Obj=None)</code> -&gt; generator object yielding <code>Obj</code></li>
+<li><code>get_next_obj_inside_cpuset_by_type(Bitmap, type, &lt;prev&gt; Obj=None)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>objs_inside_cpuset_by_type(Bitmap, type, &lt;prev&gt; Obj=None)</code> -&gt; generator object yielding <code>Obj</code></li>
+<li><code>get_obj_inside_cpuset_by_depth(Bitmap, depth, idx)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_obj_inside_cpuset_by_type(Bitmap, type, idx)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_nbobjs_inside_cpuset_by_depth(Bitmap, depth)</code></li>
+<li><code>get_nbobjs_inside_cpuset_by_type(bitmap, type)</code></li>
+<li><code>get_obj_index_inside_cpuset(Bitmap, Obj)</code></li>
+</ul>
+<h4 id="finding-a-single-object-covering-at-least-a-cpu-set">Finding a single Object covering at least a CPU set</h4>
+<ul>
+<li><code>get_child_covering_cpuset(Bitmap, &lt;parent&gt; Obj) -&gt;</code>Obj<code>or</code>None`</li>
+<li><code>get_obj_covering_cpuset(Bitmap)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_next_obj_covering_cpuset_by_depth(Bitmap, depth, &lt;prev&gt; Obj=None)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>objs_covering_cpuset_by_depth(Bitmap, depth, &lt;prev&gt; Obj=None)</code> -&gt; generator object yielding <code>Obj</code></li>
+<li><code>get_next_obj_covering_cpuset_by_type(Bitmap, type, &lt;prev&gt; Obj=None)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>objs_covering_cpuset_by_type(Bitmap, type, &lt;prev&gt; Obj=None) -&gt; generator object yielding</code>Obj`</li>
+</ul>
+<p>Example usage:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#!/usr/bin/env python3</span>
+<span class="im">import</span> hwloc
+
+topo <span class="op">=</span> hwloc.Topology()
+
+set1 <span class="op">=</span> hwloc.Bitmap.alloc(<span class="st">&#39;00008f18&#39;</span>)
+
+topo.set_synthetic(<span class="st">&#39;nodes:8 cores:2 1&#39;</span>)
+topo.load()
+
+obj <span class="op">=</span> topo.get_next_obj_covering_cpuset_by_type(set1, hwloc.OBJ_NODE, <span class="va">None</span>)
+<span class="cf">assert</span> obj <span class="op">==</span> topo.get_obj_by_depth(<span class="dv">1</span>, <span class="dv">1</span>)
+
+topo <span class="op">=</span> hwloc.Topology()
+topo.set_synthetic(<span class="st">&#39;nodes:2 socket:5 cores:3 4&#39;</span>)
+topo.load()
+
+set1.sscanf(<span class="st">&#39;0ff08000&#39;</span>)
+
+depth <span class="op">=</span> topo.get_type_depth(hwloc.OBJ_SOCKET)
+<span class="cf">assert</span> depth <span class="op">==</span> <span class="dv">2</span>
+
+<span class="cf">for</span> index, obj <span class="kw">in</span> <span class="bu">enumerate</span>(topo.objs_covering_cpuset_by_depth(set1, depth),
+                            start<span class="op">=</span><span class="dv">1</span>):
+    <span class="cf">assert</span> obj <span class="op">==</span> topo.get_obj_by_depth(depth, index)</code></pre></div>
+<h4 id="cache-specific-finding-helpers">Cache-specific Finding Helpers</h4>
+<ul>
+<li><code>get_cache_type_depth(&lt;cachelevel&gt; int, &lt;cachetype&gt; int)</code> -&gt; <code>int</code></li>
+<li><code>get_cache_covering_cpuset(Bitmap)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_shared_cache_covering_obj(Obj)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+</ul>
+<h4 id="inding-objects-miscellaneous-helpers">inding objects, miscellaneous helpers</h4>
+<ul>
+<li><code>get_pu_obj_by_os_index(os_index)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_numanode_obj_by_os_index(os_index)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_closest_objs(Obj, max)</code> -&gt; tuple of <code>Obj</code></li>
+<li><code>get_obj_below_by_type(type1, idx1, type2, idx2)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_obj_below_array_by_type((type, idx), ... )</code> -&gt; <code>Obj</code> or <code>None</code></li>
+</ul>
+<p>An example of <code>get_obj_below_array_by_type</code>:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#!/usr/bin/env python3</span>
+<span class="im">import</span> hwloc
+
+topo <span class="op">=</span> hwloc.Topology()
+
+topo.set_synthetic(<span class="st">&#39;node:3 pack:3 core:3 pu:3&#39;</span>)
+
+topo.load()
+
+<span class="co"># find the first thread</span>
+obj <span class="op">=</span> topo.get_obj_below_array_by_type((hwloc.OBJ_NODE, <span class="dv">0</span>),
+                                       (hwloc.OBJ_SOCKET, <span class="dv">0</span>),
+                                       (hwloc.OBJ_CORE, <span class="dv">0</span>),
+                                       (hwloc.OBJ_PU, <span class="dv">0</span>))
+<span class="cf">assert</span> obj <span class="op">==</span> topo.get_obj_by_depth(<span class="dv">4</span>, <span class="dv">0</span>)
+
+<span class="co"># find the last core</span>
+obj <span class="op">=</span> topo.get_obj_below_array_by_type((hwloc.OBJ_NODE, <span class="dv">2</span>),
+                                       (hwloc.OBJ_SOCKET, <span class="dv">2</span>),
+                                       (hwloc.OBJ_CORE, <span class="dv">2</span>))
+<span class="cf">assert</span> obj <span class="op">==</span> topo.get_obj_by_depth(<span class="dv">3</span>, <span class="dv">26</span>)</code></pre></div>
+<h4 id="distributing-items-over-a-topology">Distributing items over a topology</h4>
+<ul>
+<li><code>distrib(&lt;roots&gt; list of OBJ, n, until, flags=0)</code> -&gt; tuple of n Bitmap objects</li>
+</ul>
+<blockquote>
+<p><code>distribute</code> and <code>distributev</code> are deprecated</p>
+</blockquote>
+<h4 id="cpuset-helpers">Cpuset Helpers</h4>
+<ul>
+<li><code>complete_cpuset</code> [property] -&gt; <code>Bitmap</code></li>
+<li><code>cpuset</code> [property] -&gt; <code>Bitmap</code></li>
+<li><code>online_cpuset</code> [property] -&gt; <code>Bitmap</code></li>
+<li><code>allowed_cpuset</code> [property] -&gt; <code>Bitmap</code></li>
+</ul>
+<h4 id="nodeset-helpers">Nodeset Helpers</h4>
+<ul>
+<li><code>complete_nodeset</code> [property] -&gt; <code>Bitmap</code></li>
+<li><code>nodeset</code> [property] -&gt; <code>Bitmap</code></li>
+<li><code>allowed_nodeset</code> [property] -&gt; <code>Bitmap</code></li>
+</ul>
+<h4 id="converting-between-cpu-sets-and-node-sets">Converting between CPU sets and node sets</h4>
+<ul>
+<li><code>cpuset_to_nodeset(Bitmap)</code> -&gt; <code>Bitmap</code></li>
+<li><code>cpuset_to_nodeset_strict(Bitmap)</code> -&gt; <code>Bitmap</code></li>
+<li><code>cpuset_from_nodeset(Bitmap)</code> -&gt; <code>Bitmap</code></li>
+<li><code>cpuset_from_nodeset_strict(Bitmap)</code> -&gt; <code>Bitmap</code></li>
+</ul>
+<h4 id="manipulating-distances">Manipulating Distances</h4>
+<ul>
+<li><code>get_whole_distance_matrix_by_depth(depth)</code> -&gt; <code>Distances</code> or <code>None</code></li>
+<li><code>get_whole_distance_matrix_by_type(type)</code> -&gt; <code>Distances</code> or <code>None</code></li>
+<li><code>get_distance_matrix_covering_obj_by_depth(Obj, depth)</code> -&gt; <code>Distances</code> or <code>None</code></li>
+<li><code>get_latency(Obj, Obj)</code> -&gt; (<latency> <code>float</code>, <reverse_latency> <code>float</code>)</li>
+</ul>
+<h4 id="finding-io-objects">Finding I/O objects</h4>
+<ul>
+<li><code>get_non_io_ancestor_obj(Obj)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_next_pcidev(Obj)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>pcidevs</code> [property] -&gt; generator object yielding <code>Obj</code></li>
+<li><code>get_pcidev_by_busid(&lt;domain&gt; str, &lt;bus&gt; str, &lt;dev&gt; str, &lt;func&gt; str)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_pcidev_by_busidstring(&lt;busid&gt; str)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>get_next_osdev(&lt;prev&gt; Obj)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>osdevs</code> [property] -&gt; generator object yielding <code>Obj</code></li>
+<li><code>get_next_bridge(&lt;prev&gt; Obj)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+<li><code>bridges</code> [property] -&gt; generator object yielding Obj</li>
+<li><code>bridge_covers_pcibus(&lt;domain&gt; str, &lt;bus&gt; str)</code> -&gt; <code>bool</code></li>
+<li><code>get_hostbridge_by_pcibus(&lt;domain&gt; str, &lt;bus&gt; str)</code> -&gt; <code>Obj</code> or <code>None</code></li>
+</ul>
+<p>See the <code>BridgeAttr</code> section for an example.</p>
+<h4 id="topology-differences">Topology differences</h4>
+<ul>
+<li><code>diff_build(&lt;newtopology&gt; Topology, flags=0)</code> -&gt; (<code>TopologyDiff</code> or <code>None</code>, &lt;toocomplex&gt; bool)</li>
+<li><code>diff_apply(TopologyDiff, flags=0)</code></li>
+<li><code>diff_load_xml(&lt;xmlpath&gt; str)</code> -&gt; (<code>TopologyDiff</code>, <refname> <code>str</code>)</li>
+<li><code>diff_export_xml(TopologyDiff, &lt;refname&gt; str, &lt;xmlpath&gt; str)</code></li>
+<li><code>diff_load_xmlbuffer(str)</code> -&gt; (<code>TopologyDiff</code>, <refname> <code>str</code>)</li>
+<li><code>diff_export_xmlbuffer(Topologydiff, &lt;refname&gt; str=None)</code> -&gt; &lt;xmlbuffer&gt; <code>str</code></li>
+</ul>
+<h4 id="linux-only-helpers">Linux-only helpers</h4>
+<ul>
+<li><code>linux_set_tid_cpubind(tid, Bitmap)</code></li>
+<li><code>linux_get_tid_cpubind(tid)</code> -&gt; <code>Bitmap</code></li>
+<li><code>linux_get_tid_last_cpu_location(tid)</code> -&gt; <code>Bitmap</code></li>
+</ul>
+<h4 id="opengl-display-specific-functions">OpenGL display specific functions</h4>
+<ul>
+<li><code>gl_get_display_osdev_by_port_device(&lt;port&gt; int, &lt;device&gt; int)</code> -&gt; <code>Obj</code></li>
+<li><code>gl_get_display_osdev_by_name(str)</code> -&gt; <code>Obj</code></li>
+<li><code>gl_get_display_by_osdev(Obj)</code> -&gt; <code>int</code></li>
+</ul>
+<h4 id="helpers-for-manipulating-linux-libnuma-unsigned-long-masks">Helpers for manipulating Linux libnuma unsigned long masks</h4>
+<ul>
+<li><code>cpuset_to_linux_libnuma_ulongs(Bitmap)</code> -&gt; (tuple of <code>int</code>, &lt;maxnode&gt; <code>int</code>)</li>
+<li><code>nodeset_to_linux_libnuma_ulongs(Bitmap)</code> -&gt; (tuple of <code>int</code>, &lt;maxnode&gt; <code>int</code>)</li>
+<li><code>cpuset_from_linux_libnuma_ulongs(list of</code>int<code>, &lt;maxnode&gt; int=None)</code> -&gt; <code>Bitmap</code></li>
+<li><code>nodeset_from_linux_libnuma_ulongs(list of</code>int<code>, &lt;maxnode&gt; int=None)</code> -&gt; <code>Bitmap</code></li>
+<li><code>cpuset_to_linux_libnuma_bitmask(Bitmap)</code> -&gt; <code>libnuma.Bitmask()</code></li>
+<li><code>nodeset_to_linux_libnuma_bitmask(Bitmap)</code> -&gt; <code>libnuma.Bitmask()</code></li>
+<li><code>cpuset_from_linux_libnuma_bitmask(libnuma.Bitmask)</code> -&gt; <code>Bitmap</code></li>
+<li><code>nodeset_from_linux_libnuma_bitmask(libnuma.Bitmask)</code> -&gt; <code>Bitmap</code></li>
+</ul>
+<h4 id="intel-xeon-phi-mic-specific-functions">Intel Xeon Phi (MIC) Specific Functions</h4>
+<ul>
+<li><code>intel_mic_get_device_cpuset(int)</code> -&gt; Bitmap</li>
+<li><code>intel_mic_get_device_osdev_by_index(int)</code> -&gt; <code>Obj</code></li>
+<li><code>intel_mic_device_osdevs</code> [property] -&gt; generator object yielding <code>Obj</code></li>
+</ul>
+<h2 id="module-level-functions">Module-Level Functions</h2>
+<ul>
+<li><code>compare_types(&lt;type1&gt; int or str, &lt;type2&gt; int or str)</code> -&gt; int</li>
+</ul>
+<blockquote>
+<p><code>compare_types()</code> can take a type constant or a string recognized by <code>hwloc_obj_type_sscanf()</code> * <code>get_api_version</code>()<code>-&gt;</code>int<code>*</code>version_string()<code>-&gt;</code>str<code>*</code>cpuset_from_glibc_sched_affinity(list of set bit indexes)<code>-&gt;</code>Bitmap`</p>
+</blockquote>
+<h2 id="constants">Constants</h2>
+<ul>
+<li><code>Version</code> -&gt; <code>int</code></li>
+<li><code>INT_MAX</code> -&gt; <code>int</code></li>
+<li><code>UINT_MAX</code> -&gt; <code>int</code></li>
+</ul>
