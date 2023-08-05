@@ -1,0 +1,94 @@
+Metadata-Version: 1.2
+Name: snug
+Version: 0.3.0
+Summary: Wrap REST APIs to fit nicely into your python code
+Home-page: https://github.com/ariebovenberg/snug
+Author: Arie Bovenberg
+Author-email: a.c.bovenberg@gmail.com
+License: MIT
+Description-Content-Type: UNKNOWN
+Description: Snug
+        ====
+        
+        .. image:: https://img.shields.io/pypi/v/snug.svg
+            :target: https://pypi.python.org/pypi/snug
+        
+        .. image:: https://img.shields.io/pypi/l/snug.svg
+            :target: https://pypi.python.org/pypi/snug
+        
+        .. image:: https://img.shields.io/pypi/pyversions/snug.svg
+            :target: https://pypi.python.org/pypi/snug
+        
+        .. image:: https://travis-ci.org/ariebovenberg/snug.svg?branch=master
+            :target: https://travis-ci.org/ariebovenberg/snug
+        
+        .. image:: https://coveralls.io/repos/github/ariebovenberg/snug/badge.svg?branch=master
+            :target: https://coveralls.io/github/ariebovenberg/snug?branch=master
+        
+        .. image:: https://readthedocs.org/projects/snug/badge/?version=latest
+            :target: http://snug.readthedocs.io/en/latest/?badge=latest
+            :alt: Documentation Status
+        
+        .. image:: https://api.codeclimate.com/v1/badges/00312aa548eb87fe11b4/maintainability
+           :target: https://codeclimate.com/github/ariebovenberg/snug/maintainability
+           :alt: Maintainability
+        
+        
+        Wrap web APIs to fit nicely into your python code For python 3.5+.
+        
+        Quickstart
+        ----------
+        
+        .. code-block:: python
+        
+           import json
+           import snug
+        
+           @snug.querytype()
+           def repo(name: str, owner: str):
+              """a repo lookup by owner and name"""
+              request = snug.http.GET(f'https://api.github.com/repos/{owner}/{name}')
+              response = yield request
+              return json.loads(response.data)
+        
+          exec = snug.http.simple_exec()
+        
+        Check the ``examples/`` directory for some samples.
+        
+        
+        Release history
+        ---------------
+        
+        development
+        +++++++++++
+        
+        0.3.0 (2018-01-14)
+        ++++++++++++++++++
+        
+        - generator-based queries
+        
+        0.1.2
+        +++++
+        
+        - fixes to documentation
+        
+        0.1.1
+        +++++
+        
+        - improvements to versioning info
+        
+        0.1.0
+        +++++
+        
+        - implement basic resource and simple example
+        
+Keywords: api,wrapper,rest
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Requires-Python: >=3.5
