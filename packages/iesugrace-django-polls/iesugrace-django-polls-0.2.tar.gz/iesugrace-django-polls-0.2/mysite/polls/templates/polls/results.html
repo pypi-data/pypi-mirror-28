@@ -1,0 +1,15 @@
+{% load myfilters %}
+
+<html>
+<body>
+
+<h1>{{ q.question_text }}</h1>
+
+{% for c in q.choice_set.all %}
+<p>{{ c.votes }} vote{{ c.votes|pluralize }} -- {{ c.choice_text }}</p>
+{% endfor %}
+
+<a href="{% url 'polls:detail' q.pk %}">Vote again</a><br>
+<a href="{% url 'polls:index' %}">Index</a>
+</body>
+</html>
