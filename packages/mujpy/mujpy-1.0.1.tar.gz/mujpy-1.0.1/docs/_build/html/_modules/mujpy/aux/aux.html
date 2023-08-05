@@ -1,0 +1,796 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mujpy.aux.aux &mdash; mujpy 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="mujpy 0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> mujpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Source.html">Source documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mujpy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>mujpy.aux.aux</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mujpy.aux.aux</h1><div class="highlight"><pre>
+<span></span><span class="c1">########################</span>
+<span class="c1"># FFT AUTO PHASE METHODS</span>
+<span class="c1">########################</span>
+<div class="viewcode-block" id="autops"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.autops">[docs]</a><span class="k">def</span> <span class="nf">autops</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Automated phase correction from NMRglue by https://github.com/jjhelmus</span>
+<span class="sd">    These functions provide support for automatic phasing of NMR data. </span>
+<span class="sd">    ----------</span>
+<span class="sd">    Automatic linear phase correction</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : ndarray</span>
+<span class="sd">        Array of NMR data.</span>
+<span class="sd">    fn : str or function</span>
+<span class="sd">        Algorithm to use for phase scoring. Built in functions can be</span>
+<span class="sd">        specified by one of the following strings: &quot;acme&quot;, &quot;peak_minima&quot;</span>
+<span class="sd">    p0 : float</span>
+<span class="sd">        Initial zero order phase in degrees.</span>
+<span class="sd">    p1 : float</span>
+<span class="sd">        Initial first order phase in degrees.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndata : ndarray</span>
+<span class="sd">        Phased NMR data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">import</span> <span class="nn">scipy.optimize</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">callable</span><span class="p">(</span><span class="n">fn</span><span class="p">):</span>
+        <span class="n">fn</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;peak_minima&#39;</span><span class="p">:</span> <span class="n">_ps_peak_minima_score</span><span class="p">,</span>
+            <span class="s1">&#39;acme&#39;</span><span class="p">:</span> <span class="n">_ps_acme_score</span><span class="p">,</span>
+        <span class="p">}[</span><span class="n">fn</span><span class="p">]</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="p">[</span><span class="n">p0</span><span class="p">,</span> <span class="n">p1</span><span class="p">]</span>
+    <span class="n">opt</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">fmin</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">opt</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="p">))</span>
+    <span class="k">return</span> <span class="n">ps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">opt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">p1</span><span class="o">=</span><span class="n">opt</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">opt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">opt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+<span class="k">def</span> <span class="nf">_ps_acme_score</span><span class="p">(</span><span class="n">ph</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Phase correction using ACME algorithm by Chen Li et al.</span>
+<span class="sd">    Journal of Magnetic Resonance 158 (2002) 164-168</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pd : tuple</span>
+<span class="sd">        Current p0 and p1 values</span>
+<span class="sd">    data : ndarray</span>
+<span class="sd">        Array of NMR data.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    score : float</span>
+<span class="sd">        Value of the objective function (phase score)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+    <span class="n">stepsize</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">phc0</span><span class="p">,</span> <span class="n">phc1</span> <span class="o">=</span> <span class="n">ph</span>
+
+    <span class="n">s0</span> <span class="o">=</span> <span class="n">ps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">phc0</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="n">phc1</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">s0</span><span class="p">)</span>
+
+    <span class="c1"># Calculation of first derivatives</span>
+    <span class="n">ds1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">((</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">-</span><span class="n">data</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="p">(</span><span class="n">stepsize</span><span class="o">*</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">ds1</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ds1</span><span class="p">)</span>
+
+    <span class="c1"># Calculation of entropy</span>
+    <span class="n">p1</span><span class="p">[</span><span class="n">p1</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">h1</span> <span class="o">=</span> <span class="o">-</span><span class="n">p1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+    <span class="n">h1s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">h1</span><span class="p">)</span>
+
+    <span class="c1"># Calculation of penalty</span>
+    <span class="n">pfun</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">as_</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">sumas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">as_</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">sumas</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">pfun</span> <span class="o">=</span> <span class="n">pfun</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">as_</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">p</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">pfun</span>
+
+    <span class="k">return</span> <span class="n">h1s</span> <span class="o">+</span> <span class="n">p</span>
+
+
+<span class="k">def</span> <span class="nf">_ps_peak_minima_score</span><span class="p">(</span><span class="n">ph</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Phase correction using simple minima-minimisation around highest peak</span>
+<span class="sd">    This is a naive approach but is quick and often achieves reasonable</span>
+<span class="sd">    results.  The optimisation is performed by finding the highest peak in the</span>
+<span class="sd">    spectra (e.g. TMSP) and then attempting to reduce minima surrounding it.</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pd : tuple</span>
+<span class="sd">        Current p0 and p1 values</span>
+<span class="sd">    data : ndarray</span>
+<span class="sd">        Array of NMR data.</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    score : float</span>
+<span class="sd">        Value of the objective function (phase score)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">phc0</span><span class="p">,</span> <span class="n">phc1</span> <span class="o">=</span> <span class="n">ph</span>
+
+    <span class="n">s0</span> <span class="o">=</span> <span class="n">ps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="n">phc0</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="n">phc1</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">s0</span><span class="p">)</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">mina</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">100</span><span class="p">:</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">minb</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="o">+</span><span class="mi">100</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mina</span> <span class="o">-</span> <span class="n">minb</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ps"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.ps">[docs]</a><span class="k">def</span> <span class="nf">ps</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">p0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">p1</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">inv</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Linear phase correction</span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : ndarray</span>
+<span class="sd">        Array of NMR data.</span>
+<span class="sd">    p0 : float</span>
+<span class="sd">        Zero order phase in degrees.</span>
+<span class="sd">    p1 : float</span>
+<span class="sd">        First order phase in degrees.</span>
+<span class="sd">    inv : bool, optional</span>
+<span class="sd">        True for inverse phase correction</span>
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ndata : ndarray</span>
+<span class="sd">        Phased NMR data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+    <span class="n">p0</span> <span class="o">=</span> <span class="n">p0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span>  <span class="c1"># convert to radians</span>
+    <span class="n">p1</span> <span class="o">=</span> <span class="n">p1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">apod</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="p">(</span><span class="n">p0</span> <span class="o">+</span> <span class="p">(</span><span class="n">p1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">size</span><span class="p">)</span> <span class="o">/</span> <span class="n">size</span><span class="p">)))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">inv</span><span class="p">:</span>
+        <span class="n">apod</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">apod</span>
+    <span class="k">return</span> <span class="n">apod</span> <span class="o">*</span> <span class="n">data</span></div>
+
+<span class="c1">##############</span>
+<span class="c1"># MUGUI AUX</span>
+<span class="c1">##############</span>
+
+<div class="viewcode-block" id="derange"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.derange">[docs]</a><span class="k">def</span> <span class="nf">derange</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    derange(string) </span>
+<span class="sd">    reads string </span>
+<span class="sd">    assuming 2, 3 or 4 csv values, integers or floats,</span>
+<span class="sd">    or 2, 3 or 4 space separated values, integers or floats</span>
+<span class="sd">    returns 2, 3 or 4 floats, or </span>
+<span class="sd">    two negative values, if the string does not </span>
+<span class="sd">    contain commas or spaces</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<span class="c1">#    print(&#39;In derange&#39;)</span>
+    <span class="k">try</span><span class="p">:</span>  
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">==</span><span class="mi">5</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&lt;</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">values</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">&gt;</span><span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">or</span> <span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="nb">sum</span><span class="p">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">values</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span>
+            <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="c1"># start, stop, packe, last, packl</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">==</span><span class="mi">4</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="c1"># start, stop,packe, last, packl</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># start, stop, pack</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># start, stop</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span> </div>
+
+<div class="viewcode-block" id="derange_int"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.derange_int">[docs]</a><span class="k">def</span> <span class="nf">derange_int</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    derange(string) </span>
+<span class="sd">    reads string </span>
+<span class="sd">    assuming 2, 3 or 4 csv values, integers or floats,</span>
+<span class="sd">    or 2, 3 or 4 space separated values, integers or floats</span>
+<span class="sd">    returns 2, 3 or 4 floats, or </span>
+<span class="sd">    two negative values, if the string does not </span>
+<span class="sd">    contain commas or spaces</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<span class="c1">#    print(&#39;In derange_int&#39;)</span>
+    <span class="k">try</span><span class="p">:</span>  
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">==</span><span class="mi">5</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&lt;</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">values</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">&gt;</span><span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="ow">or</span> <span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="nb">sum</span><span class="p">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">values</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span>
+            <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="c1"># start, stop, packe, last, packl</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">==</span><span class="mi">4</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&lt;</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">or</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">&lt;</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="nb">sum</span><span class="p">(</span><span class="n">n</span><span class="o">&lt;</span><span class="mi">0</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">values</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span>
+            <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">,</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="c1"># start, stop, packe, last, packl</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">==</span><span class="mi">3</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="c1"># start, stop, pack</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># start, stop</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span> </div>
+
+<div class="viewcode-block" id="derun"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.derun">[docs]</a><span class="k">def</span> <span class="nf">derun</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    parses string, producing a list of runs; </span>
+<span class="sd">    expects comma separated items</span>
+<span class="sd">    looks for &#39;l&#39;,&#39;l:m&#39;,&#39;l+n+m&#39; </span>
+<span class="sd">    where l, m, n are integers</span>
+<span class="sd">    rejects all other characters</span>
+<span class="sd">    returns a list of lists of integer</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">try</span><span class="p">:</span>
+    <span class="c1"># systematic str(int(b[])) to check that b[] ARE integers</span>
+        <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">):</span> <span class="c1"># csv</span>
+            <span class="n">kcolon</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span> <span class="c1"># &#39;:&#39; and &#39;+&#39; are mutually exclusive</span>
+            <span class="n">kplus</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">kcolon</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span> <span class="c1"># value might be a range</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">[:</span><span class="n">kcolon</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">kcolon</span><span class="o">+</span><span class="mi">1</span><span class="p">:])</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)])</span> <span class="c1"># strings</span>
+            <span class="k">elif</span> <span class="n">kplus</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+                <span class="n">ss</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">k0</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">while</span> <span class="n">kplus</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span> <span class="c1"># str(int(b[]))</span>
+                    <span class="n">ss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">k0</span><span class="p">:</span><span class="n">kplus</span><span class="p">]))</span> 
+                    <span class="n">k0</span> <span class="o">=</span> <span class="n">kplus</span><span class="o">+</span><span class="mi">1</span>
+                    <span class="n">kplus</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;+&#39;</span><span class="p">,</span><span class="n">k0</span><span class="p">)</span>
+                <span class="n">ss</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">k0</span><span class="p">:]))</span>
+                <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">q</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">ss</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span><span class="c1"># value should be an integer</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="c1"># produces an Error if b is not an integer</span>
+                <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">b</span><span class="p">])</span> <span class="c1"># added as a string</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">errmsg</span> <span class="o">=</span> <span class="n">e</span>
+    <span class="k">if</span> <span class="s1">&#39;errmsg&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">():</span>
+        <span class="n">errmsg</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">s</span><span class="p">,</span> <span class="n">errmsg</span></div>
+
+<div class="viewcode-block" id="findall"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.findall">[docs]</a><span class="k">def</span> <span class="nf">findall</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">s</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Yields all the positions of</span>
+<span class="sd">    the pattern p in the string s.&#39;&#39;&#39;</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">yield</span> <span class="n">i</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="find_nth"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.find_nth">[docs]</a><span class="k">def</span> <span class="nf">find_nth</span><span class="p">(</span><span class="n">haystack</span><span class="p">,</span> <span class="n">needle</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+           <span class="n">start</span> <span class="o">=</span> <span class="n">haystack</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="n">needle</span><span class="p">)</span>
+           <span class="k">while</span> <span class="n">start</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+               <span class="n">start</span> <span class="o">=</span> <span class="n">haystack</span><span class="o">.</span><span class="n">rfind</span><span class="p">(</span><span class="n">needle</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">start</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+               <span class="n">n</span> <span class="o">-=</span> <span class="mi">1</span>
+           <span class="k">return</span> <span class="n">start</span></div>
+
+<div class="viewcode-block" id="get_grouping"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.get_grouping">[docs]</a><span class="k">def</span> <span class="nf">get_grouping</span><span class="p">(</span><span class="n">groupcsv</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    name = &#39;forward&#39; or &#39;backward&#39;</span>
+<span class="sd">    grouping(name) is an np.array wth detector indices</span>
+<span class="sd">    group.value[k] for k=0,1 is a shorthand csv like &#39;1:3,5&#39; or &#39;1,3,5&#39; etc.</span>
+<span class="sd">    index is present mugui.mainwindow.selected_index</span>
+<span class="sd">    out is mugui._output_ for error messages</span>
+<span class="sd">    returns</span>
+<span class="sd">      grouping, group, index</span>
+<span class="sd">         group and index are changed only in case of errors</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+    <span class="c1"># two shorthands: either a list, comma separated, such as 1,3,5,6 </span>
+    <span class="c1"># or a pair of integers, separated by a colon, such as 1:3 = 1,2,3 </span>
+    <span class="c1"># only one column is allowed, but 1, 3, 5 , 7:9 = 1, 3, 5, 7, 8, 9 </span>
+    <span class="c1"># or 1:3,5,7 = 1,2,3,5,7  are also valid</span>
+    <span class="c1">#       get the shorthand from the gui Text </span>
+    <span class="n">groupcsv</span> <span class="o">=</span> <span class="n">groupcsv</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> <span class="c1"># can only be a mistake: &#39;.&#39; means &#39;,&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">groupcsv</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span><span class="o">==-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># colon not found, csv only</span>
+            <span class="n">grouping</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">groupcsv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># colon found                 </span>
+            <span class="k">if</span> <span class="n">groupcsv</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span><span class="o">+</span><span class="n">groupcsv</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span><span class="o">==-</span><span class="mi">2</span><span class="p">:</span>
+                <span class="n">grouping</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">groupcsv</span><span class="p">)])</span>
+            <span class="k">elif</span> <span class="n">groupcsv</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># True if found, False if not found (not found yields -1)    </span>
+                <span class="n">firstcomma</span> <span class="o">=</span> <span class="n">groupcsv</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">lastcomma</span> <span class="o">=</span> <span class="n">groupcsv</span><span class="o">.</span><span class="n">rindex</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">firstcomma</span> <span class="o">&lt;</span> <span class="n">groupcsv</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">):</span> <span class="c1"># first read csv then range</span>
+                    <span class="n">partial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">groupcsv</span><span class="p">[:</span><span class="n">lastcomma</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)])</span>
+                    <span class="n">fst</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">groupcsv</span><span class="p">[</span><span class="n">lastcomma</span><span class="p">:</span><span class="n">grouping</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)])</span>
+                    <span class="n">lst</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">groupcsv</span><span class="p">[</span><span class="n">groupcsv</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:])</span>
+                    <span class="n">grouping</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">partial</span><span class="p">,</span><span class="n">arange</span><span class="p">(</span><span class="n">fst</span><span class="p">,</span><span class="n">lst</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)))</span>
+                <span class="k">else</span><span class="p">:</span> <span class="c1"># first read range then csv</span>
+                    <span class="n">partial</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">groupcsv</span><span class="p">[:</span><span class="n">lastcomma</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)])</span>
+                    <span class="n">fst</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">groupcsv</span><span class="p">[:</span><span class="n">groupcsv</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)])</span>
+                    <span class="n">lst</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">groupcsv</span><span class="p">[</span><span class="n">groupcsv</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">firstcomma</span><span class="p">])</span>
+                    <span class="n">grouping</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">fst</span><span class="p">,</span><span class="n">lst</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span><span class="n">partial</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span> <span class="c1"># only range</span>
+                <span class="n">fst</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">groupcsv</span><span class="p">[:</span><span class="n">groupcsv</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)])</span>
+                <span class="n">lst</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">groupcsv</span><span class="p">[</span><span class="n">groupcsv</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:])</span>
+                <span class="n">grouping</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">fst</span><span class="p">,</span><span class="n">lst</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+            <span class="n">grouping</span> <span class="o">-=</span><span class="mi">1</span> <span class="c1"># python starts at 0</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">grouping</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        
+    <span class="k">return</span> <span class="n">grouping</span></div>
+
+<div class="viewcode-block" id="get_title"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.get_title">[docs]</a><span class="k">def</span> <span class="nf">get_title</span><span class="p">(</span><span class="n">run</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    form standard psi title</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">run</span><span class="o">.</span><span class="n">get_sample</span><span class="p">(),</span><span class="n">run</span><span class="o">.</span><span class="n">get_field</span><span class="p">(),</span><span class="n">run</span><span class="o">.</span><span class="n">get_orient</span><span class="p">(),</span><span class="n">run</span><span class="o">.</span><span class="n">get_temp</span><span class="p">())</span>    </div>
+
+<div class="viewcode-block" id="muvalid"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.muvalid">[docs]</a><span class="k">def</span> <span class="nf">muvalid</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">out</span><span class="p">,</span><span class="n">index</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    parse function CHECK WITH MUCOMPONENT, THAT USES A DIFFERENT SCHEME</span>
+<span class="sd">    accepted functions are RHS of agebraic expressions of parameters p[i], i=0...ntot  </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">import</span> <span class="nn">re</span>
+
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\p\[(\d+)\]&quot;</span><span class="p">)</span> <span class="c1"># find all patterns p[*] where * is digits</span>
+    <span class="n">test</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;a&quot;</span><span class="p">,</span><span class="n">string</span><span class="p">)</span> <span class="c1"># substitute &quot;a&quot; to &quot;p[*]&quot; in s</span>
+    <span class="c1">#           strindices = pattern.findall(string)</span>
+    <span class="c1">#           indices = [int(strindices[k]) for k in range(len(strindices))] # in internal parameter list</span>
+    <span class="c1">#           mindices = ... # produce the equivalent minuit indices  </span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">try</span><span class="p">:</span> 
+        <span class="n">safetry</span><span class="p">(</span><span class="n">test</span><span class="p">)</span> <span class="c1"># should select only safe use (although such a thing does not exist!)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">out</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;function: </span><span class="si">{}</span><span class="s1">. Tested: </span><span class="si">{}</span><span class="s1">. Wrong or not allowed syntax: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">string</span><span class="p">,</span><span class="n">test</span><span class="p">,</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">valid</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">valid</span></div>
+
+<div class="viewcode-block" id="muvaluid"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.muvaluid">[docs]</a><span class="k">def</span> <span class="nf">muvaluid</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Run suite fits: muvaluid returns True/False</span>
+<span class="sd">    checks the syntax for string function </span>
+<span class="sd">    corresponding to flag=&#39;l&#39;. Meant for pars</span>
+<span class="sd">    displaying large changes across the run suite,</span>
+<span class="sd">    requiring different migrad start guesses.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># string syntax: e.g. &quot;0.2*3,2.*4,20.&quot;</span>
+    <span class="c1"># means that for the first 3 runs value = 0.2,</span>
+    <span class="c1">#            for the next 4 runs value = 2.0</span>
+    <span class="c1">#            from the 8th run on value = 20.0</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">value_times_list</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="n">value_times_list</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">value_times</span> <span class="ow">in</span> <span class="n">value_times_list</span><span class="p">:</span>
+            <span class="n">value</span><span class="p">,</span><span class="n">times</span> <span class="o">=</span> <span class="n">value_times</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span>
+            <span class="n">dum</span><span class="p">,</span> <span class="n">dum</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">),</span><span class="nb">int</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
+        <span class="n">dum</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">last</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+<div class="viewcode-block" id="muvalue"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.muvalue">[docs]</a><span class="k">def</span> <span class="nf">muvalue</span><span class="p">(</span><span class="n">lrun</span><span class="p">,</span><span class="n">string</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Run suite fits: muvalue returns the value </span>
+<span class="sd">    for the nint-th parameter of the lrun-th run</span>
+<span class="sd">    according to string (corresponding flag=&#39;l&#39;).</span>
+<span class="sd">    Large parameter change across the run suite</span>
+<span class="sd">    requires different migrad start guesses.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># string syntax: e.g. &quot;0.2*3,2.*4,20.&quot;</span>
+    <span class="c1"># means that for the first 3 runs value = 0.2,</span>
+    <span class="c1">#            for the next 4 runs value = 2.0</span>
+    <span class="c1">#            from the 8th run on value = 20.0</span>
+
+    <span class="n">value</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">value_times</span> <span class="ow">in</span> <span class="n">string</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">value</span><span class="p">,</span><span class="n">times</span> <span class="o">=</span> <span class="n">value_time</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span> 
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">times</span><span class="p">)):</span>
+                <span class="n">value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">),</span><span class="n">lrun</span><span class="p">):</span>
+                <span class="n">value</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">value_time</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">value</span><span class="p">[</span><span class="n">lrun</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="muzeropad"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.muzeropad">[docs]</a><span class="k">def</span> <span class="nf">muzeropad</span><span class="p">(</span><span class="n">runs</span><span class="p">,</span><span class="n">out</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    muzeropad(runs,out)</span>
+<span class="sd">        runs is a string containing the run number</span>
+<span class="sd">    utility of the suite tab, not a method</span>
+<span class="sd">    future:</span>
+<span class="sd">    1) determine how many leading zeros for padding</span>
+<span class="sd">       read a file from data dir</span>
+<span class="sd">       check number of digits before &#39;.&#39;</span>
+<span class="sd">       count number of digits in run</span>
+<span class="sd">       zero pad</span>
+<span class="sd">    now:</span>
+<span class="sd">    0) zeroth version pads a fixed number of zeros to 4 digits</span>
+<span class="sd">    out in mugui is _output_, Textarea for printing messages</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">zeros</span><span class="o">=</span><span class="s1">&#39;0000&#39;</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">runs</span><span class="p">)</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">zeros</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">zeros</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">zeros</span><span class="p">)</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">runs</span><span class="p">)]</span><span class="o">+</span><span class="n">runs</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">runs</span><span class="p">)</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">zeros</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">runs</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">out</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Too long run number!&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="norun_msg"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.norun_msg">[docs]</a><span class="k">def</span> <span class="nf">norun_msg</span><span class="p">(</span><span class="n">out</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">out</span><span class="p">:</span>
+         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No run loaded yet! Load one first (select suite tab).&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plotile"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.plotile">[docs]</a><span class="k">def</span> <span class="nf">plotile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">xdim</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    xt = plotile(x,xdim,xoffset=0)</span>
+<span class="sd">        e.g. x.shape = (1,1000) y.shape = (4,1000)</span>
+<span class="sd">        xt = plotile(x,4)</span>
+<span class="sd">        yt = plotile(y,offset=0.1) </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># x is an array(x.shape[0],x.shape[1])</span>
+    <span class="c1"># xoffset is a step offset</span>
+    <span class="c1"># xdim = x.shape[0] if xdim == 0 else xdim</span>
+    <span class="c1"># each row is shifted by xoffset*n, where n is the index of the row  </span>
+    <span class="c1"># </span>
+    <span class="c1"># </span>
+    <span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+    <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">tile</span><span class="p">,</span> <span class="n">arange</span>
+    <span class="n">xt</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">xdim</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># x is a 1D array, must be tiled to xdim</span>
+        <span class="n">xt</span> <span class="o">=</span> <span class="n">tile</span><span class="p">(</span><span class="n">xt</span><span class="p">,(</span><span class="nb">int</span><span class="p">(</span><span class="n">xdim</span><span class="p">),</span><span class="mi">1</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">offset</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">xt</span> <span class="o">+=</span> <span class="n">tile</span><span class="p">(</span><span class="n">offset</span><span class="o">*</span><span class="n">arange</span><span class="p">(</span><span class="n">xt</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">xt</span></div>
+
+<div class="viewcode-block" id="rebin"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.rebin">[docs]</a><span class="k">def</span> <span class="nf">rebin</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">strstp</span><span class="p">,</span><span class="n">pack</span><span class="p">,</span><span class="n">e</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    x,y[,e] are 2D arrays to be rebinned</span>
+<span class="sd">    pack is the rebinning factor, e.g:</span>
+<span class="sd">        xb = array([x[0:pack].sum()/pack])</span>
+<span class="sd">    strstp = [start,stop] is a list of indices</span>
+<span class="sd">        rebinning is done on slices of x,y[,e]</span>
+<span class="sd">        such as x[start:stop]</span>
+
+<span class="sd">    use either </span>
+<span class="sd">    xb,yb = rebin(x,y,strstp,pack)</span>
+<span class="sd">    or</span>
+<span class="sd">    xb,yb,eyb = rebin(x,y,strstp,pack,ey) # the 5th is y error</span>
+<span class="sd">    Works also with pack = 1</span>
+
+<span class="sd">    * Now works for 1d array x and 2d ndarrays y, ey</span>
+<span class="sd">    xb, yb, eb are 2D arrays, e.g. xb.shape = (1,25000), yb.shape = (nruns,25000) </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">floor</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span><span class="n">empty</span><span class="p">,</span> <span class="n">array</span>
+    <span class="n">start</span><span class="p">,</span><span class="n">stop</span> <span class="o">=</span> <span class="n">strstp</span>
+    <span class="k">if</span> <span class="n">pack</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span> <span class="c1"># no rebinning, just a slice of 2D arrays</span>
+        <span class="n">xx</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span> 
+        <span class="n">yy</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span>
+        <span class="c1"># print(&#39;in rebin: shape xx {}, yy {}&#39;.format(xx.shape,yy.shape)) </span>
+        <span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">xx</span><span class="p">,</span><span class="n">yy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ee</span> <span class="o">=</span> <span class="n">e</span><span class="p">[:,</span><span class="n">start</span><span class="p">:</span><span class="n">stop</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">,</span><span class="n">ee</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">floor</span><span class="p">((</span><span class="n">stop</span><span class="o">-</span><span class="n">start</span><span class="p">)</span><span class="o">/</span><span class="n">pack</span><span class="p">))</span> <span class="c1"># length of rebinned xb</span>
+        <span class="n">mn</span> <span class="o">=</span> <span class="n">m</span><span class="o">*</span><span class="n">pack</span> <span class="c1"># length of x slice </span>
+        <span class="n">xx</span> <span class="o">=</span><span class="n">x</span><span class="p">[:,</span><span class="n">start</span><span class="p">:</span><span class="n">start</span><span class="o">+</span><span class="n">mn</span><span class="p">]</span> <span class="c1"># slice of the first 2D array</span>
+        <span class="n">xx</span> <span class="o">=</span> <span class="n">xx</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">pack</span><span class="p">)</span> <span class="c1"># temporaty 2d array</span>
+        <span class="n">xb</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">xx</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">pack</span><span class="p">])</span> <span class="c1"># rebinned first ndarray</span>
+        <span class="n">nruns</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># number of runs</span>
+        <span class="n">yb</span> <span class="o">=</span> <span class="n">empty</span><span class="p">((</span><span class="n">nruns</span><span class="p">,</span><span class="n">m</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">eb</span> <span class="o">=</span> <span class="n">empty</span><span class="p">((</span><span class="n">nruns</span><span class="p">,</span><span class="n">m</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nruns</span><span class="p">):</span> <span class="c1"># each row is a run</span>
+            <span class="n">yy</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">start</span><span class="p">:</span><span class="n">start</span><span class="o">+</span><span class="n">mn</span><span class="p">]</span>  <span class="c1"># slice row</span>
+            <span class="n">yy</span> <span class="o">=</span> <span class="n">yy</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">pack</span><span class="p">)</span>  <span class="c1"># temporaty 2d</span>
+            <span class="n">yb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">yy</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="n">pack</span> <span class="c1"># rebinned row</span>
+            <span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">ey</span> <span class="o">=</span> <span class="n">e</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">start</span><span class="p">:</span><span class="n">start</span><span class="o">+</span><span class="n">mn</span><span class="p">]</span>   <span class="c1"># slSice row</span>
+                <span class="n">ey</span> <span class="o">=</span> <span class="n">ey</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">m</span><span class="p">,</span><span class="n">pack</span><span class="p">)</span>  <span class="c1"># temporaty 2d</span>
+                <span class="n">eb</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">((</span><span class="n">ey</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="o">/</span><span class="n">pack</span>  <span class="c1"># rebinned row</span>
+        <span class="k">if</span> <span class="n">e</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">xb</span><span class="p">,</span><span class="n">yb</span><span class="p">,</span><span class="n">eb</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">xb</span><span class="p">,</span><span class="n">yb</span></div>
+
+<div class="viewcode-block" id="safetry"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.safetry">[docs]</a><span class="k">def</span> <span class="nf">safetry</span><span class="p">(</span><span class="n">string</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">acos</span><span class="p">,</span><span class="n">asin</span><span class="p">,</span><span class="n">atan</span><span class="p">,</span><span class="n">atan2</span><span class="p">,</span><span class="n">ceil</span><span class="p">,</span><span class="n">cos</span><span class="p">,</span><span class="n">cosh</span><span class="p">,</span><span class="n">degrees</span><span class="p">,</span><span class="n">e</span><span class="p">,</span><span class="n">exp</span><span class="p">,</span><span class="n">floor</span><span class="p">,</span><span class="n">log</span><span class="p">,</span><span class="n">log10</span><span class="p">,</span><span class="n">pi</span><span class="p">,</span><span class="nb">pow</span><span class="p">,</span><span class="n">radians</span><span class="p">,</span><span class="n">sin</span><span class="p">,</span><span class="n">sinh</span><span class="p">,</span><span class="n">sqrt</span><span class="p">,</span><span class="n">tan</span><span class="p">,</span><span class="n">tanh</span>
+    <span class="n">safe_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span><span class="s1">&#39;acos&#39;</span><span class="p">,</span> <span class="s1">&#39;asin&#39;</span><span class="p">,</span> <span class="s1">&#39;atan&#39;</span><span class="p">,</span> <span class="s1">&#39;atan2&#39;</span><span class="p">,</span> <span class="s1">&#39;ceil&#39;</span><span class="p">,</span> <span class="s1">&#39;cos&#39;</span><span class="p">,</span> <span class="s1">&#39;cosh&#39;</span><span class="p">,</span> <span class="s1">&#39;degrees&#39;</span><span class="p">,</span> <span class="s1">&#39;e&#39;</span><span class="p">,</span> 
+                 <span class="s1">&#39;exp&#39;</span><span class="p">,</span> <span class="s1">&#39;floor&#39;</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="s1">&#39;log10&#39;</span><span class="p">,</span> <span class="s1">&#39;pi&#39;</span><span class="p">,</span> <span class="s1">&#39;pow&#39;</span><span class="p">,</span> <span class="s1">&#39;radians&#39;</span><span class="p">,</span> <span class="s1">&#39;sin&#39;</span><span class="p">,</span> <span class="s1">&#39;sinh&#39;</span><span class="p">,</span> <span class="s1">&#39;sqrt&#39;</span><span class="p">,</span> <span class="s1">&#39;tan&#39;</span><span class="p">,</span> <span class="s1">&#39;tanh&#39;</span><span class="p">]</span>
+    <span class="c1"># 	use the list to filter the local namespace</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mf">0.3</span>
+    <span class="n">safe_dict</span><span class="o">=</span><span class="p">{}</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">safe_list</span><span class="p">:</span>
+        <span class="n">safe_dict</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">=</span><span class="nb">locals</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+    <span class="c1">#    print(safe_dict[k])</span>
+    <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="n">string</span><span class="p">,{</span><span class="s2">&quot;__builtins__&quot;</span><span class="p">:</span><span class="kc">None</span><span class="p">},</span><span class="n">safe_dict</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="set_bar"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.set_bar">[docs]</a><span class="k">def</span> <span class="nf">set_bar</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">b</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    service to animate histograms</span>
+<span class="sd">    e.g. in the fit tab</span>
+<span class="sd">    extracted from matplotlib animate </span>
+<span class="sd">    histogram example</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span>
+    <span class="kn">import</span> <span class="nn">matplotlib.path</span> <span class="k">as</span> <span class="nn">path</span>
+
+    <span class="c1"># get the corners of the rectangles for the histogram</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">b</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="n">bottom</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">left</span><span class="p">))</span>
+    <span class="n">top</span> <span class="o">=</span> <span class="n">bottom</span> <span class="o">+</span> <span class="n">n</span>
+    <span class="n">nrects</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">left</span><span class="p">)</span>
+
+    <span class="c1"># here comes the tricky part -- we have to set up the vertex and path</span>
+    <span class="c1"># codes arrays using moveto, lineto and closepoly</span>
+
+    <span class="c1"># for each rect: 1 for the MOVETO, 3 for the LINETO, 1 for the</span>
+    <span class="c1"># CLOSEPOLY; the vert for the closepoly is ignored but we still need</span>
+    <span class="c1"># it to keep the codes aligned with the vertices</span>
+    <span class="n">nverts</span> <span class="o">=</span> <span class="n">nrects</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">verts</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">nverts</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">codes</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="n">nverts</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="o">*</span> <span class="n">path</span><span class="o">.</span><span class="n">Path</span><span class="o">.</span><span class="n">LINETO</span>
+    <span class="n">codes</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">Path</span><span class="o">.</span><span class="n">MOVETO</span>
+    <span class="n">codes</span><span class="p">[</span><span class="mi">4</span><span class="p">::</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">Path</span><span class="o">.</span><span class="n">CLOSEPOLY</span>
+    <span class="n">verts</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">left</span>
+    <span class="n">verts</span><span class="p">[</span><span class="mi">0</span><span class="p">::</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">bottom</span>
+    <span class="n">verts</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">left</span>
+    <span class="n">verts</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">top</span>
+    <span class="n">verts</span><span class="p">[</span><span class="mi">2</span><span class="p">::</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span>
+    <span class="n">verts</span><span class="p">[</span><span class="mi">2</span><span class="p">::</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">top</span>
+    <span class="n">verts</span><span class="p">[</span><span class="mi">3</span><span class="p">::</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">right</span>
+    <span class="n">verts</span><span class="p">[</span><span class="mi">3</span><span class="p">::</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">bottom</span>
+    <span class="n">xlim</span> <span class="o">=</span> <span class="p">[</span><span class="n">left</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">right</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">verts</span><span class="p">,</span> <span class="n">codes</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">xlim</span></div>
+
+<div class="viewcode-block" id="translate"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.translate">[docs]</a><span class="k">def</span> <span class="nf">translate</span><span class="p">(</span><span class="n">nint</span><span class="p">,</span><span class="n">lmin</span><span class="p">,</span><span class="n">function</span><span class="p">):</span>
+    <span class="n">string</span> <span class="o">=</span> <span class="n">function</span><span class="p">[</span><span class="n">nint</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+    <span class="c1"># search for integers between &#39;[&#39; and &#39;]&#39;</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>  <span class="n">findall</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">,</span><span class="n">string</span><span class="p">)]</span>
+    <span class="n">stop</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span>  <span class="n">findall</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">,</span><span class="n">string</span><span class="p">)]</span>
+    <span class="n">nints</span> <span class="o">=</span> <span class="p">[</span><span class="n">string</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">stop</span><span class="p">)]</span>
+    <span class="n">nmins</span> <span class="o">=</span> <span class="p">[</span><span class="n">lmin</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">string</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">j</span><span class="p">])]</span> <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">start</span><span class="p">,</span><span class="n">stop</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">lstr</span><span class="p">,</span><span class="n">m</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">nints</span><span class="p">,</span><span class="n">nmins</span><span class="p">):</span>
+        <span class="n">string</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">lstr</span><span class="p">,</span><span class="nb">str</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">string</span></div>
+
+<div class="viewcode-block" id="value_error"><a class="viewcode-back" href="../../../Source.html#mujpy.aux.aux.value_error">[docs]</a><span class="k">def</span> <span class="nf">value_error</span><span class="p">(</span><span class="n">value</span><span class="p">,</span><span class="n">error</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    value_error(v,e)</span>
+<span class="sd">    returns a string of the format v(e) </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">floor</span><span class="p">,</span> <span class="n">log10</span>
+    <span class="n">exponent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">floor</span><span class="p">(</span><span class="n">log10</span><span class="p">(</span><span class="n">error</span><span class="p">)))</span>  
+    <span class="n">most_significant</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">error</span><span class="o">/</span><span class="mi">10</span><span class="o">**</span><span class="n">exponent</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">most_significant</span><span class="o">&gt;</span><span class="mi">9</span><span class="p">:</span>
+        <span class="n">exponent</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">most_significant</span><span class="o">=</span><span class="mi">1</span>
+    <span class="n">exponent</span> <span class="o">=</span> <span class="o">-</span><span class="n">exponent</span> <span class="k">if</span> <span class="n">exponent</span><span class="o">&lt;</span><span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="s1">&#39;&quot;{:.&#39;</span>
+    <span class="n">form</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">exponent</span><span class="p">)</span>
+    <span class="n">form</span> <span class="o">+=</span> <span class="s1">&#39;f}(</span><span class="si">{}</span><span class="s1">)&quot;.format(value,most_significant)&#39;</span>
+    <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="n">form</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, R. De Renzi.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

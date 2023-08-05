@@ -1,0 +1,616 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mujpy.mucomponents.mucomponents &mdash; mujpy 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="mujpy 0.1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> mujpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Tutorial.html">Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Reference.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../FAQ.html">FAQ</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Source.html">Source documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mujpy</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>mujpy.mucomponents.mucomponents</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mujpy.mucomponents.mucomponents</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">nan_to_num</span><span class="p">,</span> <span class="n">inf</span><span class="p">,</span> <span class="n">ceil</span><span class="p">,</span> <span class="n">linspace</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">empty</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">fft</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">zeros_like</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">dawsn</span><span class="p">,</span><span class="n">erf</span><span class="p">,</span> <span class="n">j0</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="k">import</span> <span class="n">physical_constants</span> <span class="k">as</span> <span class="n">C</span>
+
+<div class="viewcode-block" id="mumodel"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel">[docs]</a><span class="k">class</span> <span class="nc">mumodel</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="mumodel.__init__"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">        defines few constants and _help_ dictionary</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_radeg_</span> <span class="o">=</span> <span class="n">pi</span><span class="o">/</span><span class="mf">180.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gamma_Mu_MHzperT</span> <span class="o">=</span> <span class="mf">3.183345142</span><span class="o">*</span><span class="n">C</span><span class="p">[</span><span class="s1">&#39;proton gyromag. ratio over 2 pi&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># numbers are from Particle Data Group 2017</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gamma_mu_</span> <span class="o">=</span> <span class="mf">135.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_help_</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;bl&#39;</span><span class="p">:</span><span class="sa">r</span><span class="s1">&#39;Lorentz decay: $\mbox</span><span class="si">{asymmetry}</span><span class="s1">\exp(-\mbox</span><span class="si">{Lor_rate}</span><span class="s1">\,t)$&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;bg&#39;</span><span class="p">:</span><span class="sa">r</span><span class="s1">&#39;Gauss decay: $\mbox</span><span class="si">{asymmetry}</span><span class="s1">\exp(-0.5(\mbox</span><span class="si">{Gau_rate}</span><span class="s1">\,t)^2)$&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;bs&#39;</span><span class="p">:</span><span class="sa">r</span><span class="s1">&#39;Gauss decay: $\mbox</span><span class="si">{asymmetry}</span><span class="s1">\exp(-0.5(\mbox</span><span class="si">{rate}</span><span class="s1">\,t)^\beta)$&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;da&#39;</span><span class="p">:</span><span class="sa">r</span><span class="s1">&#39;Linearized dalpha correction: $f = \frac{2f_0(1+\alpha/\mbox</span><span class="si">{dalpha}</span><span class="s1">)-1}{1-f_0+2\alpha/dalpha}$&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;mg&#39;</span><span class="p">:</span><span class="sa">r</span><span class="s1">&#39;Gauss decay: $\mbox</span><span class="si">{asymmetry}</span><span class="s1">\cos[2\pi(\gamma_\mu \mbox</span><span class="si">{field}</span><span class="s1">\, t +\mbox</span><span class="si">{phase}</span><span class="s1">/360)]\exp(-0.5(\mbox</span><span class="si">{Gau_rate}</span><span class="s1">\,t)^2)$&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;ml&#39;</span><span class="p">:</span><span class="sa">r</span><span class="s1">&#39;Gauss decay: $\mbox</span><span class="si">{asymmetry}</span><span class="s1">\cos[2\pi(\gamma_\mu \mbox</span><span class="si">{field}</span><span class="s1">\, t +\mbox</span><span class="si">{phase}</span><span class="s1">/360)]\exp(-\mbox</span><span class="si">{Lor_rate}</span><span class="s1">\,t)$&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;ms&#39;</span><span class="p">:</span><span class="sa">r</span><span class="s1">&#39;Gauss decay: $\mbox</span><span class="si">{asymmetry}</span><span class="s1">\cos[2\pi(\gamma_\mu \mbox</span><span class="si">{field}</span><span class="s1">\, t +\mbox</span><span class="si">{phase}</span><span class="s1">/360)]\exp(-(\mbox</span><span class="si">{rate}</span><span class="s1">\,t)^\beta)$&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;jg&#39;</span><span class="p">:</span><span class="sa">r</span><span class="s1">&#39;Gauss Bessel: $\mbox</span><span class="si">{asymmetry}</span><span class="s1"> j_0[2\pi(\gamma_\mu \mbox</span><span class="si">{field}</span><span class="s1">\, t +\mbox</span><span class="si">{phase}</span><span class="s1">/360)]\exp(-0.5(\mbox</span><span class="si">{Lor_rate}</span><span class="s1">\,t)^2)$&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;jl&#39;</span><span class="p">:</span><span class="sa">r</span><span class="s1">&#39;Lorentz Bessel: $\mbox</span><span class="si">{asymmetry}</span><span class="s1">j_0[2\pi(\gamma_\mu \mbox</span><span class="si">{field}</span><span class="s1">\, t +\mbox</span><span class="si">{phase}</span><span class="s1">/360)]\exp(-0.5(\mbox</span><span class="si">{Lor_rate}</span><span class="s1">\,t)^2)$&#39;</span><span class="p">,</span>
+                     <span class="s1">&#39;fm&#39;</span><span class="p">:</span><span class="sa">r</span><span class="s1">&#39;FMuF: $\mbox</span><span class="si">{asymmetry}</span><span class="s1">/6[3+\cos 2*\pi\gamma_\mu\mbox</span><span class="si">{dipfield}</span><span class="s1">\sqrt</span><span class="si">{3}</span><span class="s1">\, t + </span><span class="se">\</span>
+<span class="s1">               (1-1/\sqrt</span><span class="si">{3}</span><span class="s1">)\cos \pi\gamma_\mu\mbox</span><span class="si">{dipfield}</span><span class="s1">(3-\sqrt</span><span class="si">{3}</span><span class="s1">)\,t + </span><span class="se">\</span>
+<span class="s1">               (1+1/\sqrt</span><span class="si">{3}</span><span class="s1">)\cos\pi\gamma_\mu\mbox</span><span class="si">{dipfield}</span><span class="s1">(3+\sqrt</span><span class="si">{3}</span><span class="s1">)\,t ]\exp(-\mbox</span><span class="si">{Lor_rate}</span><span class="s1">\,t)$&#39;</span><span class="p">,</span> 
+                     <span class="s1">&#39;kg&#39;</span><span class="p">:</span><span class="sa">r</span><span class="s1">&#39;Gauss Kubo-Toyabe: static and dynamic, in zero or longitudinal field by G. Allodi [Phys Scr 89, 115201]&#39;</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_</span> <span class="o">=</span>  <span class="p">[]</span></div>
+    <span class="c1"># ---- end generic __init__</span>
+
+<div class="viewcode-block" id="mumodel._add_"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel._add_">[docs]</a>    <span class="k">def</span> <span class="nf">_add_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="o">*</span><span class="n">argv</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        e.g. a blmg global model with </span>
+<span class="sd">        argv will be a list parameter values (val1,val2.val3,val4,val5,val6, ...) at this iteration </span>
+<span class="sd">        _add_ DISTRIBUTES THESE PARAMETER VALUES</span>
+<span class="sd">              SINGLE OR SUITE OF RUNS WITH self._global_==False</span>
+<span class="sd">              order driven by model e.g. blml</span>
+<span class="sd">              see mugui int2_int, _add_ replicates the same loops</span>
+<span class="sd">                loop over model components (bl &amp; ml)</span>
+<span class="sd">                    loop over pars (component parameters, two and four, respectively)</span>
+<span class="sd">                        eval(pars) # pars is a string set by int2_int as keys</span>
+<span class="sd">        use to plot as follows: </span>
+<span class="sd">          j = -1</span>
+<span class="sd">          yoffset = 0.05</span>
+<span class="sd">          for y,e in zip(self.asymm,self.asyme)</span>
+<span class="sd">              j += 1</span>
+<span class="sd">              plt.errorbar(x,y+j*yoffset,yerr=e)</span>
+<span class="sd">              plt.plot(x,mumodel()._add_global(x,val1,val2.val3,val4,val5,val6,run=j)+j*yoffset)</span>
+<span class="sd">        UNIFIED WITH FFT, where, for each component f adds it   </span>
+<span class="sd">            if self._fft_include_components[j] else 0. </span>
+<span class="sd">            if if self._fft_include_da else f</span>
+
+<span class="sd">              WITH self._global_==True     </span>
+<span class="sd">              order driven by model, e.g. blml, </span>
+<span class="sd">              global, global pars, local constants, local pars (see int2_int)</span>
+<span class="sd">                 loop over global</span>
+<span class="sd">                 loop over model components (bl &amp; ml)  </span>
+<span class="sd">                     loop over global pars</span>
+<span class="sd">                         eval(pars) </span>
+<span class="sd">                loop over runs</span>
+<span class="sd">                    loop over local pars</span>
+<span class="sd">                    loop over model components (bl &amp; ml)</span>
+<span class="sd">                        loop over local pars</span>
+<span class="sd">                            eval(pars)  </span>
+<span class="sd">        FINAL COMMMENT: eval implies both a python time overhead and a security break</span>
+<span class="sd">                        is there a way to avoid it, implementing free parameter functions?    </span>
+<span class="sd">        &#39;&#39;&#39;</span>      
+
+        <span class="c1"># _load_data_ loads also: </span>
+        <span class="c1"># self._components_ = [[method,[key,...,key]],...,[method,[key,...,key]]], and eval(key) produces the parmeter value</span>
+        <span class="c1"># self._alpha_, self._da_index_ (index of dalpha or [])</span>
+        <span class="c1"># self._nglobals_ = number of globals</span>
+        <span class="c1"># self._ntruecomponents_ = number of components apart from dalpha </span>
+
+        <span class="c1"># With nglobal global parameters and nlocal local parameters </span>
+        <span class="c1"># there must be nruns*nlocal+nglobal minuit parameters</span>
+        <span class="c1"># Additionally with nfixed local constants </span>
+        <span class="c1"># self.locals contains nruns*nfixed additional constants </span>
+        <span class="n">nfixed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># print(&#39;x[0] = {}, x[-1] = {}, nbins = {}&#39;.format(x[0],x[-1],x.shape[0]))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_global_</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locals_</span><span class="p">:</span>
+                <span class="n">nfixed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locals_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_locals_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># number of local constants</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="c1"># initialize a 2D array</span>
+            <span class="k">for</span> <span class="n">run</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span> <span class="c1"># range(nruns)</span>
+                <span class="c1"># argv is a list</span>
+                <span class="n">p</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="n">nfixed</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">argv</span><span class="p">))</span> <span class="c1"># internally, also locals are parameters</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locals_</span><span class="p">:</span>
+                    <span class="n">p</span><span class="p">[:</span><span class="n">nfixed</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locals_</span><span class="p">[</span><span class="n">run</span><span class="p">][:]</span> <span class="c1"># locals for this run </span>
+                <span class="c1"># nothing, if run &lt;1 nfixed = 0 and self._locals_ = None</span>
+                <span class="n">p</span><span class="p">[</span><span class="n">nfixed</span><span class="p">:</span><span class="n">nfixed</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_nglobals_</span><span class="p">]</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">_nglobals_</span><span class="p">]</span> <span class="c1"># store global minuit parameter</span>
+                <span class="n">kp</span><span class="p">,</span> <span class="n">ka</span> <span class="o">=</span> <span class="n">nfixed</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_nglobals_</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nglobals_</span>  <span class="c1"># new version</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ntruecomponents_</span><span class="p">):</span> <span class="c1"># all components in model excluding da</span>
+                    <span class="n">component</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components_</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">pars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components_</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">ismin</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">_components_</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="n">p_comp</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pars</span><span class="p">)):</span>
+                        <span class="n">p_comp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">pars</span><span class="p">[</span><span class="n">l</span><span class="p">]))</span>
+                        <span class="k">if</span> <span class="n">ismin</span><span class="p">[</span><span class="n">l</span><span class="p">]:</span>     <span class="c1"># new version</span>
+                            <span class="n">p</span><span class="p">[</span><span class="n">kp</span><span class="p">]</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[</span><span class="n">ka</span><span class="p">]</span>
+                            <span class="n">kp</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">ka</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">run</span><span class="p">,:]</span> <span class="o">+=</span> <span class="n">component</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="o">*</span><span class="n">p_comp</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_include_components</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">else</span> <span class="mf">0.</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_da_index_</span><span class="p">:</span>  <span class="c1"># linearized correction </span>
+                    <span class="n">dalpha</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_da_index_</span><span class="p">]</span>
+                    <span class="n">dada</span> <span class="o">=</span> <span class="n">dalpha</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha_</span>
+                    <span class="n">f</span><span class="p">[</span><span class="n">run</span><span class="p">,:]</span> <span class="o">=</span> <span class="p">((</span><span class="mf">2.</span><span class="o">+</span><span class="n">dada</span><span class="p">)</span><span class="o">*</span><span class="n">f</span><span class="o">-</span><span class="n">dada</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="mf">2.</span><span class="o">+</span><span class="n">dada</span><span class="p">)</span><span class="o">-</span><span class="n">dada</span><span class="o">*</span><span class="n">f</span><span class="p">)</span>  <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_include_da</span> <span class="k">else</span> <span class="n">f</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c1"># non global, single run fit, possibly one of a suite</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locals_</span><span class="p">:</span>
+                <span class="n">nfixed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locals_</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># number of local constants per run</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">zeros_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># initialize a 1D array</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">empty</span><span class="p">(</span><span class="n">nfixed</span><span class="o">+</span><span class="nb">len</span><span class="p">(</span><span class="n">argv</span><span class="p">))</span> <span class="c1"># internally, also locals are parameters</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locals_</span><span class="p">:</span>
+                <span class="n">p</span><span class="p">[:</span><span class="n">nfixed</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_locals_</span> <span class="c1"># locals for this run </span>
+            <span class="n">p</span><span class="p">[</span><span class="n">nfixed</span><span class="p">:</span><span class="n">nfixed</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_nglobals_</span><span class="p">]</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">_nglobals_</span><span class="p">]</span> <span class="c1"># store global minuit parameters</span>
+            <span class="n">p</span><span class="p">[(</span><span class="n">nfixed</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_nglobals_</span><span class="p">):]</span> <span class="o">=</span> <span class="n">argv</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nglobals_</span><span class="p">):]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_ntruecomponents_</span><span class="p">):</span> <span class="c1"># all components in model excluding da</span>
+                <span class="n">component</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components_</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">pars</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_components_</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> 
+                <span class="n">p_comp</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pars</span><span class="p">)):</span>
+                    <span class="n">p_comp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">eval</span><span class="p">(</span><span class="n">pars</span><span class="p">[</span><span class="n">l</span><span class="p">]))</span>
+                <span class="c1"># print(&#39;y:{},x:{},f:[]&#39;.format(self._y_.shape,x.shape,f.shape))</span>
+                <span class="c1"># print(&#39;f.shape = {}, zeros.shape = {}&#39;.format(f.shape,zeros_like(x).shape))</span>
+                <span class="n">f</span> <span class="o">+=</span> <span class="n">component</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="o">*</span><span class="n">p_comp</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_include_components</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">else</span> <span class="mf">0.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_da_index_</span><span class="p">:</span>  <span class="c1"># linearized correction </span>
+                <span class="n">dalpha</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_da_index_</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">dada</span> <span class="o">=</span> <span class="n">dalpha</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_alpha_</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="p">((</span><span class="mf">2.</span><span class="o">+</span><span class="n">dada</span><span class="p">)</span><span class="o">*</span><span class="n">f</span><span class="o">-</span><span class="n">dada</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="mf">2.</span><span class="o">+</span><span class="n">dada</span><span class="p">)</span><span class="o">-</span><span class="n">dada</span><span class="o">*</span><span class="n">f</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_include_da</span> <span class="k">else</span> <span class="n">f</span>
+        <span class="k">return</span> <span class="n">f</span>     </div>
+
+<div class="viewcode-block" id="mumodel._fft_init"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel._fft_init">[docs]</a>    <span class="k">def</span> <span class="nf">_fft_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">include_components</span><span class="p">,</span><span class="n">include_da</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        saves the string of component flags used to generate a partial residue for FFT</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_include_components</span> <span class="o">=</span> <span class="n">include_components</span> <span class="c1"># True means include, False, do not include </span>
+                                              <span class="c1"># in function f, for partial residues = asymm - f</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_include_da</span> <span class="o">=</span> <span class="n">include_da</span> <span class="c1"># True means &quot;da is a component&quot; and &quot;include it&quot; in function f,</span></div>
+                                              <span class="c1"># for partial residues = asymm - f, False, all other combinations</span>
+
+<div class="viewcode-block" id="mumodel._include_all_"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel._include_all_">[docs]</a>    <span class="k">def</span> <span class="nf">_include_all_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        reset to normal fit mode (initially of after fft)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_include_components</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_ntruecomponents_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_include_da</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="mumodel._load_data_"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel._load_data_">[docs]</a>    <span class="k">def</span> <span class="nf">_load_data_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">_components_</span><span class="p">,</span><span class="n">_alpha_</span><span class="p">,</span><span class="n">e</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">_nglobals_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">_locals_</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; ,</span>
+<span class="sd">        _load_data_(x,y,_components_,_alpha_,e,_nglobals_,_locals_,_ntruecomponents_)</span>
+<span class="sd">        x, y, e are numpy arrays</span>
+<span class="sd">        e = 1 yields unitary errors </span>
+<span class="sd">        _components_ is a list [[method,[key,...,key]],...,[method,[key,...,key]]], </span>
+<span class="sd">                                where method is an instantiation of a component, e.g. self.ml </span>
+<span class="sd">                                and value = eval(key) produces the parameter value</span>
+<span class="sd">        _alpha_ is ditto</span>
+<span class="sd">        _nglobals_ = index of global parameter in iminuit parameter list (only for global fits)</span>
+<span class="sd">        _locals_ = values of local constants (e.g. B, T extrated form data file by musr2py), a 2D array for global fits</span>
+
+<span class="sd">        Strategy to accommodate single runs, multi run suites and global:</span>
+<span class="sd">        for global y is 2D array self._global_ = True</span>
+<span class="sd">        for single and multi y is 1D </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># self._components_ = [[method,[key,...,key]],...,[method,[key,...,key]]], and eval(key) produces the parmeter value</span>
+        <span class="c1"># self._alpha_, self._da_index_ (index of dalpha or [])</span>
+        <span class="c1"># self._nglobals_ = number of globals</span>
+        <span class="c1"># self._locals_ = np.array nruns x nlocals local values </span>
+        <span class="c1"># self._ntruecomponents_ = number of components apart from dalpha </span>
+        <span class="c1"># local, y is a simple vector</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x_</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y_</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_global_</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="n">_nglobals_</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_alpha_</span> <span class="o">=</span> <span class="n">_alpha_</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_components_</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_da_index_</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ntruecomponents_</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">_components_</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">val</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="c1"># val[0] is directly the method for all components but dalpha</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_ntruecomponents_</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_components_</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="c1"># store again [method, [key,...,key]] # also val[3] = isminuit, in new version</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># when the method is da  (val[0] was set to [], i.e. False)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_da_index_</span> <span class="o">=</span> <span class="mi">1</span><span class="o">+</span><span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">2</span><span class="p">:</span><span class="n">val</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;]&#39;</span><span class="p">)])</span> <span class="c1"># position in minuit parameter list +1 to pass logical test</span>
+                <span class="c1"># print(&#39;_da_index_ = {}&#39;.format(self._da_index_-1))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_include_all_</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">_nglobals_</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nglobals_</span> <span class="o">=</span> <span class="n">_nglobals_</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nglobals_</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># to be used as index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_locals_</span> <span class="o">=</span> <span class="n">_locals_</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_global_</span><span class="p">:</span>
+            <span class="c1"># global</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># (should be y.shape[1]=x.shape[0])</span>
+                <span class="k">if</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">!=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="c1"># not global, error!</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mumodel._load_data: x, y have different lengths&#39;</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="c1"># error</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="nb">int</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_e_</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">!=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;x, e have different lengths, </span><span class="si">{}</span><span class="s1">,</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">e</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>           
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_e_</span> <span class="o">=</span> <span class="n">e</span>
+            <span class="k">except</span><span class="p">:</span> <span class="c1"># y.shape[1] does not exist</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;mumodel._load_data: this is a single run!&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="c1"># error</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># local</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span><span class="nb">int</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_e_</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;x, e have different lengths, </span><span class="si">{}</span><span class="s1">,</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span><span class="n">e</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>          
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_e_</span> <span class="o">=</span> <span class="n">e</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="c1"># no error</span></div>
+
+<div class="viewcode-block" id="mumodel.bl"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.bl">[docs]</a>    <span class="k">def</span> <span class="nf">bl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">asymmetry</span><span class="p">,</span><span class="n">Lor_rate</span><span class="p">):</span> 
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fit component for a Lorentzian decay, </span>
+<span class="sd">        x [mus], asymmetry, Lor_rate [mus-1]</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">asymmetry</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">Lor_rate</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mumodel.bg"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.bg">[docs]</a>    <span class="k">def</span> <span class="nf">bg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">asymmetry</span><span class="p">,</span><span class="n">Gau_rate</span><span class="p">):</span> 
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fit component for a Gaussian decay, </span>
+<span class="sd">        x [mus], asymmetry, Gau_rate [mus-1]</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">asymmetry</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">Gau_rate</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mumodel.bs"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.bs">[docs]</a>    <span class="k">def</span> <span class="nf">bs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">asymmetry</span><span class="p">,</span><span class="n">rate</span><span class="p">,</span><span class="n">beta</span><span class="p">):</span> 
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fit component for a stretched decay, </span>
+<span class="sd">        x [mus], asymmetry, rate [mus-1], beta (&gt;0)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">asymmetry</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">rate</span><span class="p">)</span><span class="o">**</span><span class="n">beta</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mumodel.da"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.da">[docs]</a>    <span class="k">def</span> <span class="nf">da</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">dalpha</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fit component for linearized alpha correction</span>
+<span class="sd">        x [mus], dalpha</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># the returned value will not be used, correction in _add_</span>
+        <span class="c1"># print(&#39;dalpha = {}&#39;.format(dalpha))</span>
+        <span class="k">return</span> <span class="n">zero</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="mumodel.ml"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.ml">[docs]</a>    <span class="k">def</span> <span class="nf">ml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">asymmetry</span><span class="p">,</span><span class="n">field</span><span class="p">,</span><span class="n">phase</span><span class="p">,</span><span class="n">Lor_rate</span><span class="p">):</span> 
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fit component for a precessing muon with Lorentzian decay, </span>
+<span class="sd">        x [mus], asymmetry, field [T], phase [degrees], Lor_rate [mus-1]</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># print(&#39;a={}, B={}, ph={}, lb={}&#39;.format(asymmetry,field,phase,Lor_rate))</span>
+        <span class="k">return</span> <span class="n">asymmetry</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gamma_mu_</span><span class="o">*</span><span class="n">field</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">phase</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_radeg_</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">Lor_rate</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mumodel.mg"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.mg">[docs]</a>    <span class="k">def</span> <span class="nf">mg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">asymmetry</span><span class="p">,</span><span class="n">field</span><span class="p">,</span><span class="n">phase</span><span class="p">,</span><span class="n">Gau_rate</span><span class="p">):</span> 
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fit component for a precessing muon with Gaussian decay, </span>
+<span class="sd">        x [mus], asymmetry, field [T], phase [degrees], Gau_rate [mus-1]</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">asymmetry</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gamma_mu_</span><span class="o">*</span><span class="n">field</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">phase</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_radeg_</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">Gau_rate</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mumodel.ms"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.ms">[docs]</a>    <span class="k">def</span> <span class="nf">ms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">asymmetry</span><span class="p">,</span><span class="n">field</span><span class="p">,</span><span class="n">phase</span><span class="p">,</span><span class="n">rate</span><span class="p">,</span><span class="n">beta</span><span class="p">):</span> 
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fit component for a precessing muon with stretched decay, </span>
+<span class="sd">        x [mus], asymmetry, field [T], phase [degrees], rate [mus-1], beta (&gt;0)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">asymmetry</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gamma_mu_</span><span class="o">*</span><span class="n">field</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">phase</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_radeg_</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">rate</span><span class="p">)</span><span class="o">**</span><span class="n">beta</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mumodel.fm"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.fm">[docs]</a>    <span class="k">def</span> <span class="nf">fm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">asymmetry</span><span class="p">,</span><span class="n">dipfield</span><span class="p">,</span><span class="n">Lor_rate</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fit component for FmuF (powder average)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">asymmetry</span><span class="o">/</span><span class="mf">6.0</span><span class="o">*</span><span class="p">(</span> <span class="mf">3.</span><span class="o">+</span><span class="n">cos</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gamma_mu_</span><span class="o">*</span><span class="n">dipfield</span><span class="o">*</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span>
+               <span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="mf">1.</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.</span><span class="p">))</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gamma_mu_</span><span class="o">*</span><span class="n">dipfield</span><span class="o">*</span><span class="p">(</span><span class="mf">3.</span><span class="o">-</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.</span><span class="p">))</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span>
+               <span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="mf">1.</span><span class="o">/</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.</span><span class="p">))</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gamma_mu_</span><span class="o">*</span><span class="n">dipfield</span><span class="o">*</span><span class="p">(</span><span class="mf">3.</span><span class="o">+</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">3.</span><span class="p">))</span><span class="o">*</span><span class="n">x</span><span class="p">)</span> <span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">Lor_rate</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mumodel.jl"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.jl">[docs]</a>    <span class="k">def</span> <span class="nf">jl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">asymmetry</span><span class="p">,</span><span class="n">field</span><span class="p">,</span><span class="n">phase</span><span class="p">,</span><span class="n">Lor_rate</span><span class="p">):</span> 
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fit component for a Bessel j0 precessing muon with Lorentzian decay, </span>
+<span class="sd">        x [mus], asymmetry, field [T], phase [degrees], Lor_rate [mus-1]</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">asymmetry</span><span class="o">*</span><span class="n">j0</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gamma_mu_</span><span class="o">*</span><span class="n">field</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">phase</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_radeg_</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="o">*</span><span class="n">Lor_rate</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mumodel.jg"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.jg">[docs]</a>    <span class="k">def</span> <span class="nf">jg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">asymmetry</span><span class="p">,</span><span class="n">field</span><span class="p">,</span><span class="n">phase</span><span class="p">,</span><span class="n">Gau_rate</span><span class="p">):</span> 
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        fit component for a Bessel j0 precessing muon with Lorentzian decay, </span>
+<span class="sd">        x [mus], asymmetry, field [T], phase [degrees], Lor_rate [mus-1]</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="n">asymmetry</span><span class="o">*</span><span class="n">j0</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gamma_mu_</span><span class="o">*</span><span class="n">field</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">phase</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_radeg_</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">Gau_rate</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="mumodel._kg"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel._kg">[docs]</a>    <span class="k">def</span> <span class="nf">_kg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">Gau_delta</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        auxiliary component for a static Gaussian Kubo Toyabe in longitudinal field, </span>
+<span class="sd">        x [mus], w [mus-1], Gau_delta [mus-1]</span>
+<span class="sd">        w = 2*pi*gamma_mu*L_field</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">Dt</span> <span class="o">=</span> <span class="n">Gau_delta</span><span class="o">*</span><span class="n">x</span>
+        <span class="n">DDtt</span> <span class="o">=</span> <span class="n">Dt</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">DD</span> <span class="o">=</span> <span class="n">Gau_delta</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">sqr2</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">argf</span> <span class="o">=</span> <span class="n">w</span><span class="o">/</span><span class="p">(</span><span class="n">sqr2</span><span class="o">*</span><span class="n">Gau_delta</span><span class="p">)</span>
+        <span class="n">fdc</span> <span class="o">=</span> <span class="n">dawsn</span><span class="p">(</span><span class="n">argf</span><span class="p">)</span>
+        <span class="n">wx</span> <span class="o">=</span> <span class="n">w</span><span class="o">*</span><span class="n">x</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">w</span><span class="o">!=</span><span class="mi">0</span><span class="p">):</span> <span class="c1"># non-vanishing Longitudinal Field</span>
+            <span class="n">Aa</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="o">*</span><span class="n">DDtt</span> <span class="o">+</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">wx</span><span class="p">)</span><span class="o">*</span><span class="n">dawsn</span><span class="p">(</span><span class="o">-</span><span class="n">argf</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="n">Dt</span><span class="o">/</span><span class="n">sqr2</span><span class="p">)</span> <span class="p">)</span>
+            <span class="n">Aa</span><span class="p">[</span><span class="n">Aa</span> <span class="o">==</span> <span class="n">inf</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="c1"># bi-empirical fix</span>
+            <span class="n">nan_to_num</span><span class="p">(</span><span class="n">Aa</span><span class="p">,</span><span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="c1"># empirical fix </span>
+            <span class="n">A</span><span class="o">=</span><span class="n">sqr2</span><span class="o">*</span><span class="p">(</span><span class="n">Aa</span> <span class="o">+</span> <span class="n">fdc</span><span class="p">)</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="mf">1.</span> <span class="o">-</span> <span class="mf">2.</span><span class="o">*</span><span class="n">DD</span><span class="o">/</span><span class="n">w</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">exp</span><span class="p">(</span><span class="o">-.</span><span class="mi">5</span><span class="o">*</span><span class="n">DDtt</span><span class="p">)</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">wx</span><span class="p">))</span> <span class="o">+</span> <span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">Gau_delta</span><span class="o">/</span><span class="n">w</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="o">*</span><span class="n">A</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">DDtt</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-.</span><span class="mi">5</span><span class="o">*</span><span class="n">DDtt</span><span class="p">))</span><span class="o">/</span><span class="mf">3.</span>
+        <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="mumodel._kgdyn"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel._kgdyn">[docs]</a>    <span class="k">def</span> <span class="nf">_kgdyn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">Gau_delta</span><span class="p">,</span><span class="n">jump_rate</span><span class="p">,</span><span class="o">*</span><span class="n">argv</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39; </span>
+<span class="sd">        auxiliary dynamization of Gaussian Kubo Toyabe </span>
+<span class="sd">        by G. Allodi </span>
+<span class="sd">        N: number of sampling points;</span>
+<span class="sd">        dt: time interval per bin [i.e. time base is t = dt*(0:N-1)]</span>
+<span class="sd">        w [mus-1], Gau_delta [mus-1], jump_rate [MHz] </span>
+<span class="sd">        (longitudinal field freq, dGaussian distribution, scattering frequency </span>
+<span class="sd">        % alphaN: [optional argument] weighting coefficient alpha times N. Default=10 </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">alphaN</span> <span class="o">=</span> <span class="mf">10.</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">argv</span> <span class="k">else</span> <span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># default is 10.</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">ceil</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">dt</span><span class="p">))</span> <span class="c1"># for function to include t=0</span>
+        <span class="n">Npad</span> <span class="o">=</span> <span class="n">N</span> <span class="o">*</span> <span class="mi">2</span> <span class="c1"># number of total time points, includes as many zeros</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">dt</span><span class="o">*</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span><span class="n">Npad</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">Npad</span><span class="p">)</span>
+        <span class="n">expwei</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">alphaN</span><span class="o">/</span><span class="p">(</span><span class="n">N</span><span class="o">*</span><span class="n">dt</span><span class="p">))</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+
+        <span class="n">gg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kg</span><span class="p">(</span><span class="n">t</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">Gau_delta</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">t</span> <span class="o">&lt;</span> <span class="n">dt</span><span class="o">*</span><span class="n">N</span><span class="p">)</span>  <span class="c1">#  padded_KT</span>
+        <span class="c1"># gg = 1/3*(1 + 2*(1 - s^2*tt.^2).*exp(-(.5*s^2)*tt.^2)) % </span>
+
+        <span class="n">ff</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">gg</span><span class="o">*</span><span class="n">expwei</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">jump_rate</span><span class="o">*</span><span class="n">t</span><span class="p">))</span> <span class="c1"># fft(padded_KT*exp(-jump_rate*t))</span>
+        <span class="n">FF</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">jump_rate</span><span class="o">*</span><span class="n">dt</span><span class="p">)</span><span class="o">*</span><span class="n">ff</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">jump_rate</span><span class="o">*</span><span class="n">dt</span><span class="p">))</span><span class="o">*</span><span class="n">ff</span><span class="p">)</span> <span class="c1"># (1-jump_rate*dt*ff)  </span>
+
+        <span class="n">dkt</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">FF</span><span class="p">))</span><span class="o">/</span><span class="n">expwei</span>  <span class="c1"># ifft</span>
+        <span class="n">dkt</span> <span class="o">=</span> <span class="n">dkt</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">]</span> <span class="c1"># /dkt(1) </span>
+
+        <span class="c1">#if (nargout &gt; 1),</span>
+        <span class="c1">#   t = t[0:intN-1]</span>
+        <span class="k">return</span> <span class="n">dkt</span></div>
+         
+<div class="viewcode-block" id="mumodel.kg"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel.kg">[docs]</a>    <span class="k">def</span> <span class="nf">kg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">asymmetry</span><span class="p">,</span><span class="n">L_field</span><span class="p">,</span><span class="n">Gau_delta</span><span class="p">,</span><span class="n">jump_rate</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Gaussian Kubo Toyabe in longitudinal field, static or dynamic</span>
+<span class="sd">        x [mus], asymmetry, L_field [T], Gau_delta [mus-1], jump_rate (MHz)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">L_field</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_gamma_mu_</span>
+        <span class="k">if</span> <span class="n">jump_rate</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="c1"># static </span>
+           <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kg</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">Gau_delta</span><span class="p">)</span> <span class="c1"># normalized to 1.</span>
+        <span class="k">else</span> <span class="p">:</span>            <span class="c1"># dynamic</span>
+           <span class="c1"># P=[w Gau_delta];</span>
+ 
+           <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kgdyn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">w</span><span class="p">,</span><span class="n">Gau_delta</span><span class="p">,</span><span class="n">jump_rate</span><span class="p">)</span>
+<span class="c1"># function generated from t=0, shift result nshift=data(1,1)/dt bins backward</span>
+           <span class="n">dt</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+           <span class="n">nshift</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="n">dt</span>
+           <span class="n">Ns</span> <span class="o">=</span> <span class="n">N</span> <span class="o">+</span> <span class="n">ceil</span><span class="p">(</span><span class="n">nshift</span><span class="p">)</span>
+           <span class="k">if</span> <span class="n">Ns</span><span class="o">%</span><span class="mi">2</span><span class="p">:</span> <span class="c1"># odd</span>
+               <span class="n">Np</span> <span class="o">=</span> <span class="n">Ns</span><span class="o">//</span><span class="mi">2</span>
+               <span class="n">Nm</span> <span class="o">=</span> <span class="o">-</span><span class="n">Np</span>
+           <span class="k">else</span><span class="p">:</span> <span class="c1"># even</span>
+               <span class="n">Np</span> <span class="o">=</span> <span class="n">Ns</span><span class="o">//</span><span class="mi">2</span><span class="o">-</span><span class="mi">1</span>
+               <span class="n">Nm</span> <span class="o">=</span> <span class="o">-</span><span class="n">Ns</span><span class="o">//</span><span class="mi">2</span>
+           <span class="n">n</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">((</span><span class="n">inspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="n">Np</span><span class="p">,</span><span class="n">Np</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span><span class="n">linspace</span><span class="p">(</span><span class="n">Nm</span><span class="p">,</span><span class="o">-</span><span class="mf">1.</span><span class="p">,</span><span class="o">-</span><span class="n">Nm</span><span class="p">)))</span>
+           <span class="n">f</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">ifft</span><span class="p">(</span><span class="n">fft</span><span class="o">.</span><span class="n">fft</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">*</span><span class="n">exp</span><span class="p">(</span><span class="n">nshift</span><span class="o">*</span><span class="mi">1</span><span class="n">j</span><span class="o">*</span><span class="mi">2</span><span class="o">*</span><span class="n">pi</span><span class="o">*</span><span class="n">n</span><span class="o">/</span><span class="n">Ns</span><span class="p">))</span> <span class="c1"># shift back</span>
+        <span class="c1"># multiply by amplitude</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">asymmetry</span><span class="o">*</span><span class="n">real</span><span class="p">(</span><span class="n">f</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">N</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">f</span></div>
+
+<div class="viewcode-block" id="mumodel._chisquare_"><a class="viewcode-back" href="../../../Source.html#mujpy.mucomponents.mucomponents.mumodel._chisquare_">[docs]</a>    <span class="k">def</span> <span class="nf">_chisquare_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">argv</span><span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Signature provided at Minuit invocation by </span>
+<span class="sd">           optional argument forced_parameters=parnames</span>
+<span class="sd">           where parnames is a tuple of parameter names </span>
+<span class="sd">           e.g. parnames = (&#39;asym&#39;,&#39;field&#39;,&#39;phase&#39;,&#39;rate&#39;) </span>
+<span class="sd">        Works also for global fits </span>
+<span class="sd">        where sum (...,axis=None) yields the sum over all indices</span>
+<span class="sd">        Provides partial chisquares over individual runs if invoked as</span>
+<span class="sd">            self._chisquare_(*argv,axis=1):</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>  <span class="p">(</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_add_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_</span><span class="p">,</span><span class="o">*</span><span class="n">argv</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_</span><span class="p">)</span> <span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">_e_</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="p">,</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span> <span class="p">)</span></div></div>
+
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, R. De Renzi.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
