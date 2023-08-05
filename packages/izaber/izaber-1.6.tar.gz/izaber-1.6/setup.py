@@ -1,0 +1,24 @@
+#!/usr/bin/python
+
+from setuptools import setup
+
+setup(name='izaber',
+      version='1.06',
+      description='Base load point for iZaber code',
+      author='Aki Mimoto',
+      url = 'https://github.com/zabertech/python-izaber',
+      download_url = 'https://github.com/zabertech/python-izaber/archive/1.6.tar.gz',
+      author_email='aki+izaber@zaber.com',
+      license='MIT',
+      packages=['izaber'],
+      scripts=[
+        'scripts/izaber-config'
+      ],
+      install_requires=[
+          'PyYAML',
+          'appdirs',
+          'Jinja2',
+          'setuptools',
+      ],
+      zip_safe=False)
+
