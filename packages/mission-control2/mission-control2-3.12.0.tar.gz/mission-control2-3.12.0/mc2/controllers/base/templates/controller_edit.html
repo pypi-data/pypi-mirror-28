@@ -1,0 +1,212 @@
+{% extends "skins/base.html" %}
+{% load i18n admin_urls admin_static %}
+
+{% block script %}
+    <script type="text/javascript">
+      function guid() {
+        function s4() {
+          return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+          s4() + '-' + s4() + s4() + s4();
+      }
+
+      $(function() {
+          $(".inline.env").formset({
+              prefix: "env",
+              addCssClass: "add-row btn btn-primary",
+              deleteCssClass: "delete-row btn btn-danger btn-xs",
+          });
+          $(".inline.applabel").formset({
+              prefix: "label",
+              addCssClass: "add-row btn btn-primary",
+              deleteCssClass: "delete-row btn btn-danger btn-xs",
+          });
+          $(".inline.link").formset({
+              prefix: "link",
+              addCssClass: "add-row btn btn-primary",
+              deleteCssClass: "delete-row btn btn-danger btn-xs",
+          });
+
+          $('#generate_webhook').click(function(){
+            var uuid = guid();
+            $('#id_webhook_token').val(uuid);
+            $('#id_webhook_token_ui').val('{% if request.is_secure %}https://{% else %}http://{% endif %}{{request.get_host}}/base/restarthook/{{object.pk}}/' + uuid + '/');
+          });
+
+      })
+    </script>
+{% endblock %}
+
+{% block navbar %}
+<ul class="nav" id="main-menu-left">
+<li><a href="{% url 'home' %}">Home</a></li>
+<li class="active"><a href="#">New</a></li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+<div class="col-md-12">
+  <!-- general form elements -->
+  <div class="box box-primary">
+    <div class="box-header with-border">
+      <h3 class="box-title">Edit your app</h3>
+    </div>
+
+    <form role="form" method="POST">
+    <div class="box-body">
+    {% with form=form.controller_form %}
+      {% if form.errors %}
+          <div class="alert alert-error">
+              Please correct the errors below
+          </div>
+      {% endif %}
+      {% if form.non_field_errors %}
+          <div class="alert alert-error">
+              {{ form.non_field_errors|join:", " }}
+          </div>
+      {% endif %}
+
+      <div class="row"><div class="col-xs-4">
+      {% include "form_field.html" with field=form.name %}
+      </div></div>
+      <div class="row"><div class="col-xs-4">
+      {% include "form_field.html" with field=form.description %}
+      </div></div>
+
+      <div class="row"><div class="col-xs-8">
+      {% include "form_field.html" with field=form.postgres_db_needed %}
+
+      {% if object.postgres_db_needed %}
+      <input class="form-control" type="text" value="postgres://{{object.postgres_db_username}}:{{object.postgres_db_password}}@{{object.postgres_db_host}}/{{object.postgres_db_name}}" disabled>
+      {% endif %}
+      </div></div>
+
+      <div class="row"><div class="col-xs-8">
+      {% include "form_field.html" with field=form.rabbitmq_vhost_needed %}
+      {% include "form_field.html" with field=form.rabbitmq_vhost_name %}
+
+      {% if object.rabbitmq_vhost_needed %}
+      <input class="form-control" type="text" value="amqp://{{object.rabbitmq_vhost_username}}:{{object.rabbitmq_vhost_password}}@{{object.rabbitmq_vhost_host}}/{{object.rabbitmq_vhost_name|urlencode}}" disabled>
+      {% endif %}
+      </div></div>
+
+    {% endwith %}
+
+      <fieldset class="input-xxlarge" id="env-variables">
+        <legend>Environment Variables</legend>
+          {{ form.env_formset.management_form }}
+          {{ form.non_form_errors }}
+          {% for form in form.env_formset %}
+              {{ form.id }}
+              <div class="row inline env">
+                  <div class="col-xs-4">
+                  {% include "form_field.html" with field=form.key %}
+                  </div>
+                  <div class="col-xs-4">
+                  {% include "form_field.html" with field=form.value %}
+                  </div>
+              </div>
+          {% endfor %}
+      </fieldset>
+
+      <fieldset class="input-xxlarge" id="label-variables">
+        <legend>Application Labels</legend>
+          {{ form.label_formset.management_form }}
+          {{ form.non_form_errors }}
+          {% for form in form.label_formset %}
+              {{ form.id }}
+              <div class="row inline applabel">
+                  <div class="col-xs-4">
+                  {% include "form_field.html" with field=form.name %}
+                  </div>
+                  <div class="col-xs-4">
+                  {% include "form_field.html" with field=form.value %}
+                  </div>
+              </div>
+          {% endfor %}
+      </fieldset>
+
+      <fieldset class="input-xxlarge" id="additional-links">
+        <legend>Additional Links</legend>
+          {{ form.link_formset.management_form }}
+          {{ form.non_form_errors }}
+          {% for form in form.link_formset %}
+              {{ form.id }}
+              <div class="row inline link">
+                  <div class="col-xs-4">
+                  {% include "form_field.html" with field=form.name %}
+                  </div>
+                  <div class="col-xs-4">
+                  {% include "form_field.html" with field=form.link %}
+                  </div>
+              </div>
+          {% endfor %}
+      </fieldset>
+
+
+
+      {% with form=form.controller_form %}
+      <fieldset class="input-xxlarge">
+          <legend>Marathon</legend>
+          <div class="row">
+          <div class="col-xs-6">
+          {% include "form_field.html" with field=form.marathon_cmd %}
+          </div></div>
+          <div class="row">
+          <div class="col-md-2">
+          {% include "form_field.html" with field=form.marathon_cpus %}
+          </div>
+          <div class="col-md-2">
+          {% include "form_field.html" with field=form.marathon_mem %}
+          </div>
+          <div class="col-md-2">
+          {% include "form_field.html" with field=form.marathon_instances %}
+          </div>
+          </div>
+      </fieldset>
+      {% endwith %}
+
+      {% with form=form.controller_form %}
+      <fieldset class="input-xxlarge">
+        <legend>Organization</legend>
+        <label>{{form.organization.label}}</label>
+        <div class="row inline applabel">
+          <div class="col-xs-4">
+            {% include "form_field.html" with field=form.organization %}
+          </div>
+        </div>
+      </fieldset>
+      {% endwith %}
+
+      {% with form=form.controller_form %}
+      <fieldset class="input-xxlarge">
+          <legend>Webhooks</legend>
+            <label>{{form.webhook_token.label}}</label>
+          <div class="row"><div class="col-xs-8">
+          <div class="input-group input-group-sm">
+            {% include "form_errors.html" with errors=field.errors %}
+            <input name="webhook_token" id="id_webhook_token" type="hidden" value="{% if form.webhook_token.value %}{{form.webhook_token.value}}{% endif %}"/>
+
+            <input class="form-control" id="id_webhook_token_ui" type="text" value="{% if object.webhook_token %}{% if request.is_secure %}https://{% else %}http://{% endif %}{{request.get_host}}/base/restarthook/{{object.pk}}/{{object.webhook_token}}/{% endif %}" disabled>
+                <span class="input-group-btn">
+                  <button id="generate_webhook" type="button" class="btn btn-info btn-flat">Generate!</button>
+                </span>
+          </div>
+          </div></div>
+      </fieldset>
+      {% endwith %}
+
+      {% csrf_token %}
+      <br/>
+      <p><input type="submit" value="Submit" class="btn btn-primary"/></p>
+      </div>
+    </form>
+
+  </div>
+</div>
+</div>
+{% endblock %}

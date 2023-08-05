@@ -1,0 +1,170 @@
+{% extends "skins/base.html" %}
+
+<!-- LOADING -->
+{% load i18n controller_base_tags static mc2_tags %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href= "{% static "css/home.css" %}"/>
+{% endblock %}
+
+{% block page_header_title %}
+{% endblock %}
+
+{% block left-sidebar %}
+
+<ul class="sidebar-menu">
+<li class="header">MENU</li>
+<li class="active"><a href="{% url 'home' %}"><i class="fa fa-home"></i> <span>Home</span></a></li>
+<li><a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a></li>
+</ul>
+
+{% endblock %}
+
+<!-- CONTENT -->
+{% block content %}
+
+<div id="mc-overview">
+    <div class="mc-overview-item apps">
+        <span><i class="fa fa-play"></i></span>
+        Running Applications &ndash; <span id="results_count">{{controller_list.count}}</span>/Unlimited
+    </div>
+</div>
+<div id="projects_progress">
+    <div class="row">
+    {% if user.is_superuser or is_admin %}
+    <div class="col-md-4">
+        <div class="nav-tabs-custom main card new-site bg-green">
+            <div class="card-content new-site bg-green">
+                <div id="overlay-content" class="card-content-overlay bg-green">
+                    <a href="#" class="btn btn-xs btn-default btn-flat card-close"><i class="fa fa-close"></i></a>
+                    <div>
+                        <h4>Choose app type</h4>
+                        <hr/>
+                        <a href="{% url 'base:add' %}" class="btn btn-default">Basic</a>
+                        <a href="{% url 'controllers.docker:add' %}" class="btn btn-default">Docker</a>
+                    </div>
+                </div>
+                <div id="overlay-title" class="card-content-overlay bg-green">
+                    <div class="center-text">
+                        <h1>Create an app</h1>
+                        <hr/>
+                        <h3>Setup and create a new app</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div id="result_list">
+      {% for controller in controller_list %}
+      {% render_controller controller %}
+      {% endfor %}
+    </div>
+    </div>
+      <!-- /.info-box-content -->
+    </div>
+    <!-- /.info-box -->
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+
+jQuery(document).ready(function($) {
+    $("#result_list .main")
+    .on("mouseenter", function(){
+      $(this).addClass("info-hint");
+    })
+    .on("mouseleave", function(){
+      $(this).removeClass("info-hint");
+    })
+    .on("click", function(e){
+      if(!$(e.target).is("a")){
+        $(this).find(".additional-info").toggle(400);
+      }
+    });
+
+    $('#filter').keyup(function(){
+        var valThis = $(this).val().toLowerCase().split(" ");
+        $('#result_list .main').each(function(){
+            var text = $(this).attr('name') + ' ' +
+                       $(this).attr('appid') + ' ' +
+                       $(this).attr('state');
+            valThis.every(function(a){return text.toLowerCase().indexOf(a) != -1}) ? $(this).show() : $(this).hide();
+        });
+        $("#results_count").html($('#result_list .main:visible').length);
+    });
+
+    $("#overlay-title").click(function(evt){
+        var parentTag = $(evt.target).closest(".card-content-overlay");
+        if(parentTag.siblings().length > 0) {
+            parentTag.animate({opacity: 0}, 400, "linear", function () {
+                swapZIndex(this);
+            });
+        }
+    });
+
+    $("#overlay-content").click(function(evt){
+        $(evt.target).closest(".card-content-overlay").animate({opacity: 0}, 400, "linear", function(){
+            swapZIndex(this);
+        });
+    });
+
+    var deleteLink = "";
+    $(".app-delete-action").click(function (evt){
+        deleteLink = $(evt.target).closest("a").attr('href');
+        $(evt.target).closest(".card-content-overlay").animate({opacity: 0}, 400, "linear", function(){
+            swapZIndex_with(this, $(this).parent().find(".delete-overlay"));
+        });
+        return false;
+    });
+
+    $(".app-delete-confirm-action").click(function (evt){
+        var chosenOption = $(evt.target).closest(".app-delete-confirm-action").text().trim().toUpperCase();
+        if(chosenOption == "YES") {
+            $.post(deleteLink).always(function(){
+              window.location.reload();
+            });
+        }else if(chosenOption == "NO"){
+            var parentTag = $(evt.target).closest(".card-content-overlay");
+            if(parentTag.siblings().length > 0) {
+                parentTag.animate({opacity: 0}, 400, "linear", function () {
+                    swapZIndex_with(this, $(this).parent().find(".content-overlay"));
+                });
+            }
+        }
+    });
+    $(".app-view-action").click(function (evt){
+        $(evt.target).closest(".card-content-overlay").animate({opacity: 0}, 400, "linear", function(){
+            swapZIndex_with(this, $(this).parent().find(".view-overlay"));
+        });
+        return false;
+    });
+    $(".card-close").click(function (evt){
+        evt.preventDefault();
+        $(evt.target).closest(".card-content-overlay").animate({opacity: 0}, 400, "linear", function(){
+            swapZIndex_with(this, $(this).parent().find(".content-overlay"));
+        });
+        //return false;
+    });
+
+
+
+    function swapZIndex(cardOverlay){
+        $(cardOverlay).css("z-index", "2");
+        $(cardOverlay).siblings().css("z-index", "3");
+        $(cardOverlay).css('opacity', '1');
+    }
+
+    function swapZIndex_with(cardOverlay, targetCardOverlay){
+        $(cardOverlay).css("z-index", "1");
+        $(cardOverlay).siblings().css("z-index", "1");
+        $(cardOverlay).css('opacity', '1');
+
+        $(cardOverlay).siblings('.blank-overlay').css("z-index", "2");
+        $(targetCardOverlay).css("z-index", "3");
+    }
+});
+</script>
+{% endblock %}
