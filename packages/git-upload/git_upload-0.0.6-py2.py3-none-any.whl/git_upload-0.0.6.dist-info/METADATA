@@ -1,0 +1,82 @@
+Metadata-Version: 2.0
+Name: git-upload
+Version: 0.0.6
+Summary: A tool to upload patches to a git or gerrit repository
+Home-page: http://github.com/masayukig/git-upload
+Author: Masayuki Igawa
+Author-email: masayuki@igawa.io
+License: Apache License 2.0
+Description-Content-Type: UNKNOWN
+Platform: UNKNOWN
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Software Development :: Version Control
+Requires-Dist: pbr (!=2.1.0,>=2.0.0)
+Requires-Dist: futures (>=3.0.0); (python_version=='2.7' or python_version=='2.6')
+
+==========
+git-upload
+==========
+
+.. image:: https://circleci.com/gh/masayukig/git-upload.svg?style=shield
+    :target: https://circleci.com/gh/masayukig/git-upload
+
+.. image:: https://img.shields.io/pypi/v/git-upload.svg
+    :target: https://pypi.python.org/pypi/git-upload
+
+
+I don't want to care about the type of repositories when pushing a
+patch.
+
+
+Description
+===========
+
+When you use this ``git upload`` command in a repo managed by Gerrit
+(supported only OpenStack repos, currently), this command runs ``git
+review`` . And when you use this command in a repo managed by the
+others, this command runs ``git push origin $CURRENT_BRANCH`` (you can
+specify the remote repo and branch, of course :).
+
+
+Installation
+============
+
+From source
+-----------
+
+::
+
+   $ git clone https://github.com/masayukig/git-upload
+   $ cd git-upload
+   $ sudo pip install -e .
+   or
+   $ virtualenv ~/venv; source ~/venv/bin/activate; pip install .
+
+From PYPI
+---------
+
+::
+
+   $ pip install git-upload
+   or
+   $ virtualenv ~/venv; source ~/venv/bin/activate; pip install git-upload
+
+Usage
+=====
+
+::
+
+   $ git upload [<remote-repo>] [<branch>]
+   or you can use varioush options for `git push` or `git review`.
+
+
+
