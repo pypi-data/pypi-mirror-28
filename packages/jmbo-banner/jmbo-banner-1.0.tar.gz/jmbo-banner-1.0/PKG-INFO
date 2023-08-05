@@ -1,0 +1,221 @@
+Metadata-Version: 1.1
+Name: jmbo-banner
+Version: 1.0
+Summary: Jmbo banner app.
+Home-page: http://github.com/praekelt/jmbo-banner
+Author: Praekelt Consulting
+Author-email: dev@praekelt.com
+License: BSD
+Description-Content-Type: UNKNOWN
+Description: Jmbo Banner
+        ===========
+        **Jmbo banner application. Banners are typically used to serve ads.**
+        
+        .. figure:: https://travis-ci.org/praekelt/jmbo-banner.svg?branch=develop
+           :align: center
+           :alt: Travis
+        
+        .. contents:: Contents
+            :depth: 5
+        
+        Installation
+        ------------
+        
+        #. Install or add ``jmbo-banner`` to your Python path.
+        
+        #. Add ``banner`` to your ``INSTALLED_APPS`` setting.
+        
+        #. Run ``manage.py migrate banner``.
+        
+        Usage
+        -----
+        
+        ``jmbo-banner`` allows users to create and edit banners in the admin. Each banner can optionally have a byline,
+        a description block, images and CTA buttons. The way in which these components are laid out in each banner is defined
+        in a banner style.
+        
+        Content types
+        -------------
+        
+        ``jmbo-banner`` defines the following content types:
+        
+        **Button:**
+        
+        * A banner can consist of several buttons, although usually only two are used.
+        
+        * A button has a *text* field which can be used to specify its label, and a *link* object which can be used to specify its click-through.
+        
+        **Banner:**
+        
+        * A banner can be thought of as a container for promotional content. It can consist of buttons, images and promotional text. Each banner also has a *style* which controls how its contents are rendered.
+        
+        
+        Banner styles
+        -------------
+        
+        ``jmbo-banner`` allows you to control how each banner will be rendered. The different ways in which a banner can be rendered can be found in a predefined list of styles.
+        A style controls how the different components (buttons, images, description) are rendered through a *template partial*.
+        
+        Adding your own banner styles
+        -----------------------------
+        
+        It is sometimes necessary to have more *styles* in which banners can be rendered. This can easily be achieved by adding a package, ``banner_config`` to one of your own
+        apps and ensuring that you create your custom style in a ``styles.py`` file. An example structure would be as follows::
+        
+            <your app>/
+                ...
+                banner_config/
+                    __init__.py
+                    styles.py
+        
+        
+        All custom styles **should** inherit from ``BaseStyle``. For most situations, overriding the ``template_name`` should suffice.
+        It is important to bear in mind a style's template is meant to be used as a partial containing only the banner content.
+        
+        .. code-block:: python
+        
+            from banner.styles import BaseStyle
+        
+        
+            class CustomStyle(BaseStyle):
+                """
+                Custom banner style
+                """
+                template_name = "banner/custom_banner.html"
+        
+        The ``CustomStyle`` should then be available for selection in the list of styles.
+        
+        
+        Getting banners to render on a page
+        -----------------------------------
+        
+        Banners are typically rendered as part of a page. This can be achieved by using the ``render_banner`` template tag as shown below. The template tag accepts either a
+        banner object or it's slug.
+        
+        .. code-block:: html
+        
+            {% extends "base.html" %}
+            {% load banner_tags %}
+        
+            {% block content %}
+                {% render_banner <object_or_slug> %}
+            {% endblock %}
+        
+        Authors
+        =======
+        
+        Praekelt Consulting
+        -------------------
+        
+        * Shaun Sephton
+        * Jonathan Bydendyk
+        * Hedley Roos
+        * Phala Ramonyai
+        
+        Changelog
+        =========
+        
+        1.0
+        ---
+        #. Django 1.11 compatibility.
+        #. Recreated `Banner` model with headline, body, and button components.
+        #. Removed `django-dfp` dependency.
+        
+        0.6
+        ---
+        #. Django 1.6 compatibility.
+        
+        0.5
+        ---
+        #. Remove dependency on `jmbo-foundry`.
+        #. Add tests.
+        
+        0.4
+        ---
+        #. Rename `get_absolute_url` method to `get_target_url` since it was breaking Jmbo convention. If you have customized `imagebanner_*.html` then you need to update them.
+        
+        0.3
+        ---
+        #. Remove redundant tests.
+        #. Use newer version of `django-dfp`. If you have customized `dfpbanner_detail.html` or `dfpbanner_list_item.html` then you need to update them.
+        
+        0.2.6
+        -----
+        #. If there is no actual banner and the banner proxy has no image set then don't render anything.
+        #. Cache templates.
+        
+        0.2.5
+        -----
+        #. Multiple banners that match a regex are now randomized to effect banner rotation.
+        
+        0.2.4.4
+        -------
+        # Hotfix. Split paths on any whitespace.
+        
+        0.2.4.3
+        -------
+        #. Hotfix. Skip over empty paths to avoid an exception.
+        
+        0.2.4.2
+        -------
+        #. Hotfix. Properly fall back to default banner if it is set.
+        
+        0.2.4.1
+        -------
+        #. Hotfix. Add missing migration.
+        
+        0.2.4
+        -----
+        #. Use search instead of match for regular expressions.
+        #. A Banner Proxy now has an optional default banner.
+        #. Consider query string when doing regex matching for Banner Proxies.
+        
+        0.2.3
+        -----
+        #. Add a BannerProxy model that inspects the URL and renders a banner designated to render for that URL.
+        
+        0.2.2
+        -----
+        #. DFP banners draw themselves when loaded via ajax. The code is in the new banner.js.
+        
+        0.2.1
+        -----
+        #. Hotfix release. Add missing files.
+        #. Display error message in admin interface to notify of missing banner urls.
+        
+        0.2
+        ---
+        #. Google DFP banner functionality for web and mobi. This facilitates advertising and tracking using Google's DFP service.
+        #. `urls.py` created. Be sure to add it to your project urls.
+        #. Dependency on `django-dfp>=0.1.2`.
+        #. We now have South migrations.
+        
+        0.1.3
+        -----
+        #. Create list item templates for code banners.
+        
+        0.1.2
+        -----
+        #. Use correct photosize name.
+        
+        0.1.1
+        -----
+        #. Use older `jmbo-foundry` API for image URLs.
+        
+        0.1
+        ---
+        #. Add dependency on `jmbo-foundry>=0.7`.
+        
+        0.0.6
+        -----
+        #. Fix incorrect photosizes.json
+        
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Operating System :: OS Independent
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
