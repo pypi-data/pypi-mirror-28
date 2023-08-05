@@ -1,0 +1,54 @@
+BusinessOptics Client
+=====================
+
+Easy access to the BusinessOptics API, based on the python requests library.
+
+For example:
+
+```python
+from businessoptics import Client
+
+print Client(auth=('user@example.com', 'apikey')).workspace(123).query('ideaname').tuples()
+```
+
+Installation
+------------
+```bash
+pip install businessoptics
+```
+
+Authentication
+--------------
+
+Construct a new Client. 
+
+Authentication details can either be passed in directly:
+```python
+client = Client(auth=('user@example.com', 'apikey'))
+```
+
+or be extracted from environment variables:
+
+* BUSINESSOPTICS_EMAIL
+* BUSINESSOPTICS_APIKEY
+
+so you can go 
+
+```python
+client = Client()
+```
+
+or from a ~/.businessoptics_client.config JSON file of the form
+
+```json
+{ 
+  "user@example.com": "<apikey>",
+  "other@example.com": "<apikey>" 
+}
+```
+
+so you can easily switch between multiple users and create a client as below
+
+```python
+client = Client(auth="user@example.com")
+```
