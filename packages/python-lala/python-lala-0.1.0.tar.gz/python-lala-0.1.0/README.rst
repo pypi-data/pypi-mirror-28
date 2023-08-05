@@ -1,0 +1,96 @@
+.. raw:: html
+
+    <p align="center">
+    <img alt="lala Logo" title="lala Logo" src="https://raw.githubusercontent.com/Edinburgh-Genome-Foundry/lala/master/docs/_static/images/logo.png" width="300">
+    <br /><br />
+    </p>
+
+.. image:: https://travis-ci.org/Edinburgh-Genome-Foundry/lala.svg?branch=master
+   :target: https://travis-ci.org/Edinburgh-Genome-Foundry/lala
+   :alt: Travis CI build status
+
+Lala is a Python library for access log analysis (right now it only supports NGINX standard logs). It provides a set of methods to retrieve, parse and analyze access logs, in particular for plotting geo-localization or time-series data. Think of it as a poor nam's Google Analytics, that can help you vizualise the requests to your server.
+
+Installation
+-------------
+
+(Soon) You can install lala through PIP
+
+.. code::
+
+    sudo pip install python-lala
+
+Alternatively, you can unzip the sources in a folder and type
+
+.. code::
+
+    sudo python setup.py install
+
+Usage
+-----
+
+.. code:: python
+
+    import lala
+
+    with open('access_logs.txt'), 'r') as f:
+        entries, errored_lines = lala.logs_lines_to_dataframe(f)
+
+Similarly, to fetch logs on a distant server (for which you have access keys)
+you would write:
+
+.. code:: python
+
+    logs= lala.get_remote_file_content(
+        host="cuba.genomefoundry.org", user='root',
+        filename='/var/log/nginx_cuba/access.log'
+    )
+    entries, errors = lala.logs_lines_to_dataframe(logs.split('\n'))
+
+Now ``entries`` is a `Pandas <https://pandas.pydata.org/>`_ dataframe where each row is one server access, with fields such as ``IP``, ``date``, ``referrer``, ``country_name``, etc. The data can be analyzed using Pandas' built-in filtering and plotting functions.
+
+For practicality, Lala provides a few methods, such as a pie-chart plotter::
+
+.. code:: python
+
+    ax, country_values = lala.plot_piechart(entries, 'country_name')
+
+.. raw:: html
+
+    <p align="center">
+    <img src="https://raw.githubusercontent.com/Edinburgh-Genome-Foundry/Proglog/master/examples/basic_example_piechart.png" width="500">
+    </p>
+
+Next we plot the location (cities) providing the most connexions:
+
+.. code:: python
+
+    ax = lala.countries_colormap(country_values.iteritems(), figsize=(12, 8))
+    lala.plot_geo_positions(entries, ax)
+
+.. raw:: html
+
+    <p align="center">
+    <img src="https://raw.githubusercontent.com/Edinburgh-Genome-Foundry/Proglog/master/examples/basic_example_worldmap.png" width="500">
+    </p>
+
+Finally, we restrict the entries to the UK, and we plot a timeline of connexions:
+
+.. code:: python
+
+    uk_entries = entries[entries.country_name == 'United Kingdom']
+    ax = lala.plot_entries_in_time(uk_entries, bins_per_day=2)
+
+.. raw:: html
+
+    <p align="center">
+    <img src="https://raw.githubusercontent.com/Edinburgh-Genome-Foundry/Proglog/master/examples/basic_example_timeline.png" width="500">
+    </p>
+
+
+License = MIT
+--------------
+
+lala is an open-source software originally written at the `Edinburgh Genome Foundry <http://genomefoundry.org>`_ by `Zulko <https://github.com/Zulko>`_ and `released on Github <https://github.com/Edinburgh-Genome-Foundry/lala>`_ under the MIT licence (¢ Edinburg Genome Foundry).
+
+Everyone is welcome to contribute !
