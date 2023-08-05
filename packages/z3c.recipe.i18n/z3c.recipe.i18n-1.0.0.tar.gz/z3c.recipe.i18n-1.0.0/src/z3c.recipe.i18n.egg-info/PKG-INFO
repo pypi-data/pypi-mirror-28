@@ -1,0 +1,301 @@
+Metadata-Version: 1.1
+Name: z3c.recipe.i18n
+Version: 1.0.0
+Summary: Zope3 egg based i18n locales extration recipes
+Home-page: https://github.com/zopefoundation/z3c.recipe.i18n
+Author: Roger Ineichen and the Zope Community
+Author-email: zope-dev@zope.org
+License: ZPL 2.1
+Description: ***************
+        z3c.recipe.i18n
+        ***************
+        
+        This Zope 3 recipes offers different tools which allows to extract i18n 
+        translation messages from egg based packages.
+        
+        
+        =======
+        CHANGES
+        =======
+        
+        1.0.0 (2018-01-10)
+        ------------------
+        
+        - Python 3 compatibility.
+        
+        0.9.0 (2013-11-02)
+        ------------------
+        
+        - Depend on zc.buildout 2.0+. Features introduced with zc.buildout 1.5 are removed (don't work with the 2.x branch).
+        
+        - Update trove classifiers to show that this package is currently only
+          compatible with Python 2.7.
+        
+        0.8.1 (2012-01-06)
+        ------------------
+        
+        - Exit with a non-zero status code when one or more msgmerge calls fail.
+        
+        - Use subprocess instead of os.system.
+        
+        
+        0.8.0 (2010-10-07)
+        ------------------
+        
+        - Depend on and use the new features of the zc.buildout 1.5 line. At the same
+          time support for zc.buildout <= 1.5.1 has been dropped.
+        
+        - Fixed test setup to run with current zopetoolkit packages.
+          Made sure tests still run on older platforms, particularly Zope 2.12.
+        
+        - Using python's `doctest` module instead of deprecated
+          `zope.testing.doctest`.
+        
+        - Typo change in configuration: exludeDirNames becomes excludeDirNames (old
+          name is still supported for backward compatibility).
+        
+        0.7.0 (2010-02-18)
+        ------------------
+        
+        - Fixed test setup to run with current packages.
+        
+        - Added buildout option `verify_domain`. When set to ``true``
+          i18nextract only retrives the message ids of specified domain from
+          python files. Otherwise (default and previous behavior) all messages
+          ids in all domains in python files are retrieved.
+        
+        
+        0.6.0 (2009-12-02)
+        ------------------
+        
+        - Feature: Added new 'headerTemplate' option that allows to specify the path
+          of a customized pot header template.
+        
+        - Feature: Added new 'extraPaths` option that is included in the PYTHONPATH.
+          This allows for instance the use with Zope 2.11.
+        
+        - Makers are now called with additional keyword arguments.
+        
+        - Fixed dependencies: The 'extract' extra of zope.app.locales is required.
+        
+        0.5.4 (2009-06-08)
+        ------------------
+        
+        - Fix bug where zcml_strings collect the same path more then once because it
+          follows the configuration zcml for each package.
+        
+        - Fix bug where i18ncompile miscalculated domains containing ".", everything
+          after the "." was ignored.
+        
+        - The ``excludeDefaultDomain`` option actually works now.
+        
+        0.5.3 (2009-03-12)
+        ------------------
+        
+        - Fix bug where i18nmerge miscalculated domains containing ".", everything
+          after the "." was ignored.
+        
+        
+        0.5.2 (2009-03-10)
+        ------------------
+        
+        - Feature: Generate ``*.po`` file based on ``*.pot`` file if non exists in
+          i18nmerge script
+        
+        - Feature: Implemented i18ncompile script which uses ``msgfmt -o moPath poPath``
+        
+        
+        0.5.1 (2009-02-22)
+        ------------------
+        
+        - fix tests
+        
+        - Updated docs to render nicely when fed to docutils. [ulif]
+        
+        - Added `zip_safe` flag in `setup.py` to avoid meaningless warnings
+          when used with buildout. [ulif]
+        
+        
+        0.5.0 (2009-09-09)
+        ------------------
+        
+        - Implemented environment section argument support for i18nextract.py script.
+          This is a name of a section which defines a set of environment variables that
+          should be exported before starting the extraction.
+        
+        - Initial Release
+        
+        
+        **********************
+        Detailed Documentation
+        **********************
+        
+        =============================
+        Translation domain extraction
+        =============================
+        
+        z3c.recipe.i18n
+        ---------------
+        
+        This Zope 3 recipes offers different tools which allows to extract i18n
+        translation messages from egg based packages.
+        
+        The 'i18n' recipe can be used to generate the required scripts for extract
+        message ids from egg based packages. The i18nmerge allows to merge them into
+        a .po file. And the i18nstats script gives you an overview about the state
+        of the translated files.
+        
+        Note
+        ----
+        
+        This i18nextract.py file uses different semantic for the arguments. The script
+        offers to define egg packages instead of one package path. This makes it easy
+        to define eggs as source where we extract the messages from.
+        
+        
+        Options
+        *******
+        
+        The i18n recipe accepts the following options:
+        
+        eggs
+          The names of one or more eggs, with their dependencies that should
+          be included in the Python path of the generated scripts.
+        
+        packages
+          The names of one or more eggs which the messages should get extracted from.
+          Note, this is different to the original zope.app.locales implementation.
+          The original implementation uses one path as -d argument which assumes a
+          specific zope.* package structure with an old style trunk setup.
+        
+        domain
+          The translation domain.
+        
+        output
+          The path of the output file relative to the package root.
+        
+        maker
+          One or more module name which can get used as additional maker. This module
+          must be located in the python path because it get resolved by
+          zope.configuration.name.resolve. For a sample maker see
+          z3c.csvvocabulary.csvStrings.
+          Makers are called with these arguments: 'path', 'base_path', 'exclude_dirs',
+          'domain', 'include_default_domain' and 'site_zcml'. The return value has to
+          be a catalog dictionary.
+        
+        zcml (required)
+          The contents of configuration used for extraction.  Normaly used for load meta
+          configuration.  Note: To include a ZCML file outside package, you can use,
+          ``include`` directive with ``file`` option.  For example: ``<include
+          file="${buildout:directory}/etc/site.zcml" />``
+        
+        excludeDefaultDomain (optional, default=False)
+          Exclude all messages found as part of the default domain. Messages are in
+          this domain, if their domain could not be determined. This usually happens
+          in page template snippets. (False if not used)
+        
+        pythonOnly (optional, default=False)
+          Only extract message ids from Python (False if not used)
+        
+        verify_domain (optional, default=False)
+          Retrieve all the messages in all the domains in python files when
+          verify_domain is False otherwise only retrive the messages of the
+          specified domain. (False if not used)
+        
+        excludeDirectoryName (optional, default=[])
+          Allows to specify one or more directory name, relative to the package, to
+          exclude. (None if not used)
+        
+        headerTemplate (optional, default=None)
+          The path of the pot header template relative to the buildout directory.
+        
+        environment
+          A section name defining a set of environment variables that should be
+          exported before starting the tests. Can be used for set product
+          configuration enviroment.
+        
+        extraPaths
+           A new line separated list of directories which are added to the PYTHONPATH.
+        
+        Test
+        ****
+        
+        Lets define some (bogus) eggs that we can use in our application:
+        
+          >>> mkdir('outputDir')
+          >>> mkdir('demo1')
+          >>> write('demo1', 'setup.py',
+          ... '''
+          ... from setuptools import setup
+          ... setup(name = 'demo1')
+          ... ''')
+        
+          >>> mkdir('demo2')
+          >>> write('demo2', 'setup.py',
+          ... '''
+          ... from setuptools import setup
+          ... setup(name = 'demo2', install_requires='demo1')
+          ... ''')
+        
+        Now check if the setup was correct:
+        
+          >>> ls('bin')
+          -  buildout
+        
+        Lets create a minimal `buildout.cfg` file:
+        
+          >>> write('buildout.cfg',
+          ... '''
+          ... [buildout]
+          ... parts = i18n
+          ... offline = true
+          ...
+          ... [i18n]
+          ... recipe = z3c.recipe.i18n:i18n
+          ... eggs = z3c.recipe.i18n
+          ... packages = demo1
+          ... domain = recipe
+          ... output = outputDir
+          ... zcml = <include package="z3c.recipe.tests" file="extract.zcml" />"
+          ... ''' % globals())
+        
+        Now, Let's run the buildout and see what we get:
+        
+          >>> print(system(join('bin', 'buildout')))
+          Installing i18n.
+          i18n: setting up i18n tools
+          Generated script '/sample-buildout/bin/i18nextract'.
+          Generated script '/sample-buildout/bin/i18nmergeall'.
+          Generated script '/sample-buildout/bin/i18nstats'.
+          Generated script '/sample-buildout/bin/i18ncompile'.
+        
+        After running buildout, the bin folder contains the different i18n script:
+        
+          >>> ls('bin')
+          -  buildout
+          -  i18ncompile
+          -  i18nextract
+          -  i18nmergeall
+          -  i18nstats
+        
+        
+Keywords: zope3 z3c i18n locales extraction recipe
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Zope Public License
+Classifier: Programming Language :: Python
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Framework :: Buildout
