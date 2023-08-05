@@ -1,0 +1,1 @@
+from ShExJSG.shex_schema import Schema
