@@ -1,0 +1,303 @@
+Metadata-Version: 1.1
+Name: mathmaker
+Version: 0.7.3
+Summary: Mathmaker creates automatically elementary maths exercises and their (detailed) answers.
+Home-page: http://github.com/nicolas.hainaux/mathmaker/
+Author: Nicolas Hainaux
+Author-email: nh.techn@gmail.com
+License: GNU General Public License v3 or later (GPLv3+)
+Description: |PyPI1| |PyPI2| |PyPI3| |Build Status| |Coveralls branch| |Documentation Status1| |Documentation Status2| |Maintenance|
+        
+        |PyPI4|
+        
+        Overview
+        ========
+        
+        Mathmaker creates elementary maths worksheets with detailed solutions.
+        
+        The output documents can be compiled into pdf files by lualatex.
+        Examples of available themes are: first degree equations, pythagorean
+        theorem, fractions calculation...
+        
+        It can run from command line, but can be controlled via http requests
+        too.
+        
+        `Licence <https://github.com/nicolashainaux/mathmaker/blob/master/LICENSE>`__
+        `Documentation (master
+        release) <http://mathmaker.readthedocs.io/en/master/index.html>`__
+        `Documentation (latest development
+        version)) <http://mathmaker.readthedocs.io/en/dev/index.html>`__.
+        
+        Quickstart
+        ==========
+        
+        Complete install
+        ----------------
+        
+        .. note::
+        
+          python3.6 is mandatory for mathmaker to work, so check is installed on your system
+        
+        -  on Ubuntu 14.04 or later:
+        
+           External dependencies:
+        
+           ::
+        
+               $ sudo apt-get install eukleides libxml2-utils gettext texlive-full
+        
+           Note: to avoid installing ``texlive-full``, check the
+           `documentation <http://mathmaker.readthedocs.io/en/master/user_doc.html#install>`__.
+        
+           Then:
+        
+           ::
+        
+               $ pip3 install mathmaker
+        
+        -  on FreeBSD 10.\*:
+        
+           External dependencies:
+        
+           ::
+        
+               $ sudo pkg install python36 py36-sqlite3 gettext eukleides libxml2 texlive-full
+               $ rehash
+        
+               **note**
+        
+               Because of a bug in current FreeBSD's eukleides package you'll
+               have to fix eukleides install. See
+               `here <http://mathmaker.readthedocs.io/en/master/user_doc.html#eukleides-fix>`__.
+        
+           Once you're done, you can proceed installing mathmaker:
+        
+           ::
+        
+               $ pip3 install mathmaker
+        
+               **note**
+        
+               If you stumble upon an error during the install of the
+               python-daemon dependency, you'll find the way to solve it
+               `there <http://mathmaker.readthedocs.io/en/master/user_doc.html#python-daemon-error-at-install>`__
+        
+        Basic use
+        ---------
+        
+        ::
+        
+            $ mathmaker pythagorean-theorem-short-test > out.tex
+            $ lualatex out.tex
+        
+        or directly:
+        
+        ::
+        
+            $ mathmaker pythagorean-theorem-short-test --pdf > out.pdf
+        
+        Get the list of all provided sheets(3):
+        
+        ::
+        
+            $ mathmaker list
+        
+        To get the command-line options, you can use ``mathmaker --help``.
+        
+        Several settings can be overriden by user defined values in
+        ``~/.config/mathmaker/user_config.yaml``. Read `the complete
+        documentation <http://mathmaker.readthedocs.io/en/master/user_doc.html#user-settings>`__
+        for more information.
+        
+        Advanced use
+        ------------
+        
+        It's possible to create your own sheets in yaml. Read from `the complete
+        documentation <http://mathmaker.readthedocs.io/en/master/user_doc.html#yaml-sheets>`__
+        for more information.
+        
+        Contribute
+        ==========
+        
+        You can contribute to mathmaker:
+        
+        As a wordings contributor
+        -------------------------
+        
+        Mathmaker needs contexts for problems wordings. There are already some,
+        but the more there is, the better. Existing wordings can be found
+        `here <https://github.com/nicolashainaux/mathmaker/tree/dev/mathmaker/data/wordings>`__.
+        You can submit any new idea as an enhancement proposal
+        `there <https://github.com/nicolashainaux/mathmaker/issues>`__ (should
+        be written in english, french or german).
+        
+        Any question can be sent to nh dot techn (hosted at gmail dot com).
+        
+        As a translator
+        ---------------
+        
+        You can help translating mathmaker to your language (or any language you
+        like, if you have enough elementary maths vocabulary for that).
+        
+        If the translation to your language isn't started yet, there are several
+        pot files to get
+        `here <https://github.com/nicolashainaux/mathmaker/tree/dev/mathmaker/locale>`__
+        (see explanations about their respective roles
+        `there <http://mathmaker.readthedocs.io/en/dev/dev_doc.html#the-real-and-the-fake-translation-files>`__).
+        You can use an editor like `poedit <https://poedit.net/>`__ or any other
+        you like better, to create po files from them and start to translate.
+        
+        If you want to add missing translations, or to correct some, you can
+        find the po files in the subdirectories
+        `here <https://github.com/nicolashainaux/mathmaker/tree/dev/mathmaker/locale>`__.
+        
+        Once you're done, you can make a pull request
+        `here <https://github.com/nicolashainaux/mathmaker/pulls>`__.
+        
+        Any question can be sent to nh dot techn (hosted at gmail dot com).
+        
+        As a developer
+        --------------
+        
+        Before submitting a PR, please ensure you've had a look at the `writing
+        rules <http://mathmaker.readthedocs.io/en/dev/dev_doc.html#writing-rules>`__.
+        
+        More details can be found in the `documentation for
+        developers <http://mathmaker.readthedocs.io/en/dev/dev_index.html>`__.
+        
+        Any question can be sent to nh dot techn (hosted at gmail dot com).
+        
+        Additional informations
+        -----------------------
+        
+        Contact: nh dot techn (hosted by gmail dot com)
+        
+        `Changelog <https://github.com/nicolashainaux/mathmaker/blob/master/CHANGELOG.rst>`__
+        
+        `Contributors <https://github.com/nicolashainaux/mathmaker/blob/master/CONTRIBUTORS.rst>`__
+        
+        .. |PyPI1| image:: https://img.shields.io/pypi/v/mathmaker.svg?maxAge=2592000
+           :target: https://pypi.python.org/pypi/mathmaker
+        .. |PyPI2| image:: https://img.shields.io/pypi/status/mathmaker.svg?maxAge=2592000
+        .. |PyPI3| image:: https://img.shields.io/pypi/pyversions/mathmaker.svg?maxAge=2592000
+        .. |Build Status| image:: https://travis-ci.org/nicolashainaux/mathmaker.svg?branch=dev
+           :target: https://travis-ci.org/nicolashainaux/mathmaker
+        .. |Coveralls branch| image:: https://img.shields.io/coveralls/nicolashainaux/mathmaker/dev.svg?maxAge=2592000
+           :target: https://coveralls.io/github/nicolashainaux/mathmaker
+        .. |Documentation Status1| image:: https://readthedocs.org/projects/mathmaker/badge/?version=master
+           :target: http://mathmaker.readthedocs.io/en/master/
+        .. |Documentation Status2| image:: https://readthedocs.org/projects/mathmaker/badge/?version=dev
+           :target: http://mathmaker.readthedocs.io/en/dev/
+        .. |Maintenance| image:: https://img.shields.io/maintenance/yes/2017.svg?maxAge=2592000
+        .. |PyPI4| image:: https://img.shields.io/pypi/l/mathmaker.svg?maxAge=2592000
+           :target: https://github.com/nicolashainaux/mathmaker/blob/master/LICENSE
+        
+        Contributors
+        ============
+        
+        Development
+        -----------
+        
+        * Lead developer: Nicolas Hainaux
+        
+        * Developers: Vaibhav Gupta
+        
+        * Clever advices: Olivier Cecillon
+        
+        Translation
+        -----------
+        
+        * French: Nicolas Hainaux
+        
+        Problems wordings
+        -----------------
+        
+        Nicolas Hainaux
+        
+        Patience and chocolate cakes
+        ----------------------------
+        
+        Sophie Reboud
+        Changelog
+        =========
+        
+        New in version 0.7.3 (2018-01-15)
+        ---------------------------------
+        
+        * Add mental calculation sheets for fourth level ("yellow belt, 1st stripe")
+        
+        New in version 0.7.2 (2017-10-18)
+        ---------------------------------
+        
+        * Add mental calculation sheets for third level ("yellow belt")
+        * The mental calculation pdf may now be "interactive" (answers can be written in text fields, they can be validated pushing a button; this validation is done by some javascript)
+        * The daemon now accepts an optional argument in the request (written right after sheet's name, separated with a '|'. Only interactive is allowed, so far)
+        
+        New in version 0.7.1-3 (2017-08-30)
+        -----------------------------------
+        
+        * Patch the daemon to let it accept the new YAML sheet names.
+        * The output dir will always be in user's home.
+        * Fix several bugs.
+        
+        New in version 0.7.1 (2017-08-29)
+        ---------------------------------
+        
+        * Support for python3.6 only, drop support for older python versions.
+        * Mental calculation sheets can now be created as slideshows. Add a default slideshows series for white belt, 1st and 2d stripes.
+        * Reorganization of mental calculation in belts: White belt, 1st stripe and 2d stripe have been added (including new sheets: addition/subtraction, fraction of a rectangle, complements)
+        * New sheet: order of precedence in operations.
+        * YAML files will be used to store sheets. The previous ways (XML and Python) will be dropped.
+        * Huge reorganization of the lib/ source code.
+        * Fair bunch of bug fixes.
+        * Issue warnings instead of exceptions when the version of a dependency could not be determined. [0.7.1dev5 (2017-05-04)]
+        * New sheets about trigonometry: [0.7.1dev4 (2017-05-03)]
+        
+          - vocabulary in the right triangle
+          - write the correct formulae
+          - calculate a length
+          - calculate an angle
+        
+        * New sheets: [0.7.1dev3 (2016-10-21)]
+        
+          - intercept theorem: "butterfly" configuration
+          - intercept theorem: converse
+        
+        * New sheets: [0.7.1dev2 (2016-10-13)]
+        
+          - expansion of simple brackets (declined in two versions)
+          - clever multiplications (mental calculation)
+          - intercept theorem: write the correct quotients' equalities
+          - intercept theorem: solve simple exercises
+        
+        * A new sheet (declined in two versions): expansion of double brackets. Defined in an xml sheet as for mental calculation sheets. [0.7.1dev1 (2016-09-14)]
+        
+        New in version 0.7.0-6 (2016-08-19)
+        -----------------------------------
+        
+        * Added a setting to let the user change mathmaker's path (to be used by the daemon)
+        * Bugfix [0.7.0-5 (2016-08-19)]
+        * If an IP address is passed as parameter to mathmaker's daemon, it will return a 429 http status code (too many requests) if the last request from the same address is not older than 10 seconds. [0.7.0-4 (2016-08-19)]
+        * Fixed the install of locale files and font listing file [0.7.0-3 (2016-07-18)]
+        
+        New in version 0.7 (2016-07-15)
+        -------------------------------
+        
+        * Standardized structure (``mathmaker`` becomes pip3-installable, available on PyPI and github; its documentation is hosted on readthedocs; tests are made with py.test)
+        * A daemon is added (``mathmakerd``) to provide communication with ``mathmaker`` through http connections.
+        * A bunch of mental calculation sheets
+        * The use of XML frameworks for the sheets (yet only for mental calculation, so far)
+        
+Platform: any
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Development Status :: 3 - Alpha
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Topic :: Education :: Computer Aided Instruction (CAI)
+Classifier: Environment :: Web Environment
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Education
+Classifier: Operating System :: Unix
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Operating System :: POSIX :: BSD
