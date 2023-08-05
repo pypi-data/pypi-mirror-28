@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+import click
+import sys
+from logging import getLogger, StreamHandler, DEBUG
+from accloudtant.aws.prices import Prices
+from accloudtant.aws.reports import Reports
+
+
+logger = getLogger('accloudtant')
+logger.setLevel(DEBUG)
+logger.addHandler(StreamHandler(sys.stdout))
+
+@click.group()
+def cli():
+    pass
+
+@cli.command('list', short_help='prints current price lists')
+def price_list():
+    logger.info(Prices())
+
+@cli.command(short_help='provides price/usage reports')
+@click.option('--output', default='table', type=click.Choice(['table', 'csv']),
+              help='Change output format')
+def report(output):
+    logger.info(Reports(output_format=output))
+
+if __name__ == '__main__':
+    cli()
