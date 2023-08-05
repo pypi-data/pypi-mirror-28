@@ -1,0 +1,14 @@
+{% load i18n highlight %}
+{% for result in page_obj.object_list %}
+<li class="search-item">
+    {% if result.text %}
+    <p><a href="{{ result.url }}">{{ result.title }}</a> {% highlight result.text with request.GET.q %}</p>
+    {% else %}
+    <a href="/{{ result.path }}">{{ result.title }}</a>
+    {% endif %}
+</li>
+{% empty %}
+{% if request.GET.q %}
+    <li>{% trans "No results found for" %} "{{ request.GET.q }}"</li>
+{% endif %}
+{% endfor %}

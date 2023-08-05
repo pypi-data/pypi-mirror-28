@@ -1,0 +1,15 @@
+{% load i18n cms_tags %}
+
+<form action="." method="get" class="frm frm-search">
+    <input name="" type="submit" value="">
+	{{ form.q }}
+</form>
+
+{% if request.GET.q %}
+<div class="search-results well">
+	<ul class="nav nav-tabs nav-stacked" >
+		{% include "djangocms_search/search_items.html" %}
+	</ul>
+{% include "djangocms_search/pagination.html" with obj_string=_('results') %}
+</div>
+{% endif %}
