@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<!--
+The following defines the transport map
+
+T(x_{0:4}) = [T_0(x_0), T_1(x_1), ..., T_4(x_4)]^T
+
+where the components are integrated exponential functions and
+such that T is a linear diagonal
+-->
+
+<trimap 
+    xmlns="TransportMaps"
+    xmlns:st="SpectralToolbox"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="map.xsd"
+    type="intexp" dim="5">
+  <component id="*">
+    <avars>
+      <vars>d</vars>
+    </avars>
+    <approx>
+      <intexp>
+	    <constant>
+	      <linspan multidimtype="tensorized" spantype="total">
+	        <spanorder>
+	          <maxord coord="d">0</maxord>
+	        </spanorder>
+	        <spanbasis coord="d">
+              <st:HermiteProbabilistsPolynomial/>
+            </spanbasis>
+	      </linspan>
+	    </constant>
+	    <exponential>
+	      <linspan multidimtype="tensorized" spantype="total">
+	        <spanorder>
+	          <maxord coord="d">0</maxord>
+	        </spanorder>
+	        <spanbasis coord="d"> 
+              <st:ConstantExtendedHermiteProbabilistsFunction/>
+            </spanbasis>
+	      </linspan>
+	    </exponential>
+      </intexp>
+    </approx>
+  </component>
+</trimap>

@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+
+<!-- This file is part of TransportMaps. -->
+
+<!-- TransportMaps is free software: you can redistribute it and/or modify -->
+<!-- it under the terms of the GNU Lesser General Public License as published by -->
+<!-- the Free Software Foundation, either version 3 of the License, or -->
+<!-- (at your option) any later version. -->
+
+<!-- TransportMaps is distributed in the hope that it will be useful, -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the -->
+<!-- GNU Lesser General Public License for more details. -->
+
+<!-- You should have received a copy of the GNU Lesser General Public License -->
+<!-- along with TransportMaps.  If not, see <http://www.gnu.org/licenses/>. -->
+
+<!-- Transport Maps Library -->
+<!-- Copyright (C) 2015-2017 Massachusetts Institute of Technology -->
+<!-- Uncertainty Quantification group -->
+<!-- Department of Aeronautics and Astronautics -->
+
+<!-- Authors: Transport Map Team -->
+<!-- Website: transportmaps.mit.edu -->
+<!-- Support: transportmaps.mit.edu/qa/ -->
+
+
+<xs:schema 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:tmap="TransportMaps"
+    xmlns:st="SpectralToolbox"
+	targetNamespace="TransportMaps"
+	elementFormDefault="qualified">
+
+  <xs:import namespace="SpectralToolbox"
+             schemaLocation="basis.xsd"/>
+
+  <xs:element name="trimap" type="tmap:sc_map"/>
+
+  <xs:complexType name="sc_map">
+    <xs:sequence>
+      <xs:element name="component" type="tmap:sc_component"
+		  minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="type" type="tmap:sc_map_type" use="required"/>
+    <xs:attribute name="dim" type="xs:positiveInteger" use="required"/>
+  </xs:complexType>
+
+  <xs:simpleType name="sc_map_type">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="linspan"/>
+      <xs:enumeration value="monotlinspan"/>
+      <xs:enumeration value="intexp"/>
+      <xs:enumeration value="intsq"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="sc_component">
+    <xs:sequence>
+      <xs:element name="avars" type="tmap:sc_avars"
+		  minOccurs="1" maxOccurs="1"/>
+      <xs:element name="approx" type="tmap:sc_approx"
+		  minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="tmap:sc_component_id" use="required"/>
+  </xs:complexType>
+
+  <xs:simpleType name="sc_component_id">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([0-9])+"/>
+      <xs:pattern value="\*"/>
+      <xs:pattern value=":([0-9])+"/>
+      <xs:pattern value="([0-9])+:"/>
+      <xs:pattern value="([0-9])+:([0-9])+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="sc_avars">
+    <xs:sequence>
+      <xs:element name="vars" type="tmap:sc_vars"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:simpleType name="sc_vars">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="([0-9])+"/>
+      <xs:pattern value="([0-9])+:"/>
+      <xs:pattern value=":([0-9])+"/>
+      <xs:pattern value="([0-9])+:([0-9])+"/>
+      <xs:pattern value="d(-([0-9])+)?"/>
+      <xs:pattern value="d(-([0-9])+)?:"/>
+      <xs:pattern value=":d((-([0-9])+)?|(\+1)?)"/>
+      <xs:pattern value="([0-9])+:d((-([0-9])+)?|(\+1)?)"/>
+      <xs:pattern value="d(-([0-9])+)?:d((-([0-9])+)?|(\+1)?)"/>
+      <xs:pattern value="\*"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="sc_approx">
+      <xs:choice>
+	<xs:element name="linspan" type="tmap:sc_linspan"/>
+	<xs:element name="monotlinspan" type="tmap:sc_monotlinspan"/>
+	<xs:element name="intexp" type="tmap:sc_intexp"/>
+	<xs:element name="intsq" type="tmap:sc_intsq"/>
+      </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="sc_monotlinspan">
+    <xs:complexContent>
+      <xs:extension base="tmap:sc_linspan"/>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="sc_intexp">
+    <xs:sequence>
+      <xs:element name="constant" type="tmap:sc_funapprox"/>
+      <xs:element name="exponential" type="tmap:sc_funapprox"/>
+    </xs:sequence>
+    <xs:attribute name="integration_multiplier" type="xs:positiveInteger" default="6"/>
+  </xs:complexType>
+
+  <xs:complexType name="sc_intsq">
+    <xs:sequence>
+      <xs:element name="constant" type="tmap:sc_funapprox"/>
+      <xs:element name="squared" type="tmap:sc_funapprox"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sc_funapprox">
+    <xs:choice>
+      <xs:element name="linspan" type="tmap:sc_linspan"/>
+    </xs:choice>
+  </xs:complexType>
+  
+  <xs:complexType name="sc_linspan">
+    <xs:sequence>
+      <xs:choice>
+	<xs:element name="spanorder" type="tmap:sc_maxordspan"/> <!-- Total/Full span -->
+      	<xs:element name="midxlist" type="tmap:sc_midxlist"/> <!-- Multi index list -->
+      </xs:choice>
+      <xs:element name="spanbasis" type="tmap:sc_spanbasis" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="multidimtype" type="tmap:sc_multidimtype"/>
+    <xs:attribute name="spantype" type="tmap:sc_spantype"/>
+  </xs:complexType>
+
+  <xs:simpleType name="sc_multidimtype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="tensorized"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="sc_spantype">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="total"/>
+      <xs:enumeration value="full"/>
+      <xs:enumeration value="midx"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="sc_maxordspan">
+    <xs:sequence>
+      <xs:element name="maxord" type="tmap:sc_maxord" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sc_maxord">
+    <xs:simpleContent>
+      <xs:extension base="xs:integer">
+	<xs:attribute name="coord" type="tmap:sc_vars" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="sc_midxlist">
+    <xs:sequence>
+      <xs:element name="midx" type="tmap:sc_midx" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="sc_midx">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(([0-9])+,)*(([0-9])+)+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="sc_spanbasis">
+    <xs:complexContent>
+      <xs:extension base="st:sc_basis">
+        <xs:attribute name="coord" type="tmap:sc_vars" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+</xs:schema>

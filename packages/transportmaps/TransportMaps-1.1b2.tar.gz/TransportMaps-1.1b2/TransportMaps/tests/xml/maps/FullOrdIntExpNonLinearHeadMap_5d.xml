@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+
+<!--
+The following defines the transport map
+
+T(x_{0:4}) = [T_0(x_0), T_1(x_0,x_1), T_2(x_2), ..., T_4(x_4)]^T
+
+where the components are integrated exponential functions and
+such that T has a second full order full head for the first two dimensions
+and linear diagonal components for the remaining
+-->
+
+<trimap 
+    xmlns="TransportMaps"
+    xmlns:st="SpectralToolbox"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="map.xsd"
+	type="intexp" dim="5">
+  <component id=":2">
+    <avars>
+      <vars>*</vars>
+    </avars>
+    <approx>
+      <intexp>
+	<constant>
+	  <linspan multidimtype="tensorized" spantype="full">
+	    <spanorder>
+	      <maxord coord=":d">2</maxord>
+	      <maxord coord="d">0</maxord>
+	    </spanorder>
+        <spanbasis coord="*">
+          <st:HermiteProbabilistsPolynomial/>
+        </spanbasis> 
+	  </linspan>
+	</constant>
+	<exponential>
+	  <linspan multidimtype="tensorized" spantype="full">
+	    <spanorder>
+	      <maxord coord=":d">2</maxord>
+	      <maxord coord="d">1</maxord>
+	    </spanorder>
+        <spanbasis coord="*">
+          <st:ConstantExtendedHermiteProbabilistsFunction/>
+        </spanbasis>
+	  </linspan>
+	</exponential>
+      </intexp>
+    </approx>
+  </component>
+  <component id="2:">
+    <avars>
+      <vars>d</vars>
+    </avars>
+    <approx>
+      <intexp>
+	<constant>
+	  <linspan multidimtype="tensorized" spantype="full">
+	    <spanorder>
+ 	      <maxord coord="*">0</maxord>
+	    </spanorder>
+        <spanbasis coord="*">
+          <st:HermiteProbabilistsPolynomial/>
+        </spanbasis> 
+	  </linspan>
+	</constant>
+	<exponential>
+	  <linspan multidimtype="tensorized" spantype="full">
+	    <spanorder>
+	      <maxord coord="*">1</maxord>
+	    </spanorder>
+        <spanbasis coord="*">
+          <st:ConstantExtendedHermiteProbabilistsFunction/>
+        </spanbasis>
+	  </linspan>
+	</exponential>
+      </intexp>
+    </approx>
+  </component>
+</trimap>

@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<!--
+The following defines the transport map
+
+T(x_{0:4}) = [T_0(x_0), T_1(x_0,x_1), ..., T_4(x_{0:4})]^T
+
+where the components are integrated exponential functions and
+such that T is a second order map
+-->
+
+<trimap 
+    xmlns="TransportMaps"
+    xmlns:st="SpectralToolbox"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="map.xsd"
+    type="intexp" dim="5">
+  <component id="*">
+    <avars>
+      <vars>*</vars>
+    </avars>
+    <approx>
+      <intexp>
+	    <constant>
+	      <linspan multidimtype="tensorized" spantype="full">
+	        <spanorder>
+	          <maxord coord=":d">2</maxord>
+	          <maxord coord="d">0</maxord>
+	        </spanorder>
+	        <spanbasis coord="*">
+              <st:LinearExtendedHermiteProbabilistsRadialBasisFunction nbasis="2" scale="0.9"/>
+            </spanbasis>
+	      </linspan>
+	    </constant>
+	    <exponential>
+	      <linspan multidimtype="tensorized" spantype="total">
+	        <spanorder>
+	          <maxord coord=":d">2</maxord>
+	          <maxord coord="d">1</maxord>
+	        </spanorder>
+            <spanbasis coord="*">
+              <st:ConstantExtendedHermiteProbabilistsRadialBasisFunction nbasis="2" scale="0.9"/>
+            </spanbasis>
+	      </linspan>
+	    </exponential>
+      </intexp>
+    </approx>
+  </component>
+</trimap>

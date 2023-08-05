@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<!--
+The following defines the transport map
+
+T(x_{0:4}) = [T_0(x_0), T_1(x_0,x_1), ..., T_4(x_{0:4})]^T
+
+where the components are linear span functions and
+such that T is a linear map
+-->
+
+<trimap 
+    xmlns="TransportMaps"
+    xmlns:st="SpectralToolbox"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="map.xsd"
+    type="monotlinspan" dim="5">
+  <component id="*">
+    <avars>
+      <vars>*</vars>
+    </avars>
+    <approx>
+      <monotlinspan multidimtype="tensorized" spantype="total">
+	<spanorder>
+	  <maxord coord="*">1</maxord>
+	</spanorder>
+	<spanbasis coord="*">
+          <st:HermiteProbabilistsPolynomial/>
+        </spanbasis>
+      </monotlinspan>
+    </approx>
+  </component>
+</trimap>
