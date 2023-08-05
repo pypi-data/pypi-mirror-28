@@ -1,0 +1,25 @@
+---
+- name: "load ini variables from linchpin.conf"
+  include: load_vars_from_ini.yml
+  when: from_api is not defined
+
+- name: "initialize rundb"
+  include: initialize_rundb.yml
+  when: from_api is not defined
+
+#- name: "load resources"
+
+- name: "assign async value"
+  set_fact:
+    async: "{{ _async }}"
+  when: async is not defined
+
+- name: "declare async_types array"
+  set_fact:
+    async_types: []
+  when: async
+
+- name: "output vars"
+  set_fact:
+    topology_outputs: {}
+
