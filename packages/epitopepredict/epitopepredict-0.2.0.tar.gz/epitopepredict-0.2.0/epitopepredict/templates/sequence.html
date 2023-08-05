@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block heading %}
+  <h3> epitopepredict:sequence view: {{name}} </h3>
+{% end %}
+
+{% block main %}
+
+	  <div class="main">
+		<div class="floatleft">
+		<form action="/sequence">
+			{{ form.path.label }}
+			{{ form.path }}
+			{{ form.name.label }}
+			{{ form.name }}
+			{{ form.cutoff.label }}
+			{{ form.cutoff }}
+			{{ form.n.label }}
+			{{ form.n }}
+			{{ form.cutoff_method.label }}
+			{{ form.cutoff_method }}
+			{{ form.kind.label }}
+			{{ form.kind }}
+			{{ form.view.label }}
+			{{ form.view }}
+			<input type="submit" class="button" value="Submit">
+		</form>
+		</div>
+		{%if status == 0 %}
+	    </div>
+		<div class="warning">{{ msg }}</div>
+		{% else %}
+
+		<div class="floatright">
+			 <div class="monospace" >
+			  download:
+			  {% for l in links %}
+				 {{ l }}
+			  {% end %}
+			 </div>
+		</div>
+
+		<div class="floatleft">
+
+		  {{ script }}
+		  {{ div }}
+
+		  <!--<div class="monospace">
+			 <!-- {{ info }}
+		  </div>-->
+		</div>
+
+		<div class="floatright">
+			{{ tables }}
+		</div>
+		{% end %}
+
+	  </div>
+
+{% end %}

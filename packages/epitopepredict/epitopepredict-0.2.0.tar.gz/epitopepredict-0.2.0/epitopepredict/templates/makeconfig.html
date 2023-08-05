@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+	  <div class="main">
+		<div class="floatleft">
+		This form creates a config file for running binding predictions.
+
+	  <form action="/makeconfig">
+			<div>
+		  <div class="configform" style="float:left;">
+			 <table class="configform">
+			  <tr>
+				<td>{{ form.path.label }}</td>
+				<td>{{ form.path }}</td>
+			 </tr>
+				<tr>
+			    <td>{{ form.predictors.label }}</td>
+				<td>{{ form.predictors }}
+			 </tr>
+			  <tr>
+			    <td>{{ form.mhc1_length.label }}</td>
+			    <td>{{ form.mhc1_length }}</td>
+		      </tr>
+			  <tr>
+			    <td>{{ form.mhc2_length.label }}</td>
+			    <td>{{ form.mhc2_length }}</td>
+		     </tr>
+			  <tr>
+			    <td>{{ form.sequence_file.label }}</td>
+			    <td>{{ form.sequence_file }}</td>
+		     </tr>
+			  <tr>
+			    <td>{{ form.overwrite.label }}</td>
+			    <td>{{ form.overwrite }}</td>
+		     </tr>
+			  <tr>
+			    <td>{{ form.cpus.label }}</td>
+			    <td>{{ form.cpus }}</td>
+		     </tr>
+ 		    </table>
+			 </div>
+
+		  <div class="configform" style="float:right;">
+			  <table class="configform">
+			   <tr>
+				 <td>{{ form.iedbmhc1_path.label }}</td>
+				 <td>{{ form.iedbmhc1_path }}</td>
+			  </tr>
+			   <tr>
+				 <td>{{ form.iedbmhc2_path.label }}</td>
+				 <td>{{ form.iedbmhc2_path }}</td>
+			  </tr>
+			  </table>
+			</div>
+			</div>
+
+		  <div class="configform">
+				<table class="configform">
+					<tr>
+				<td>{{ form.mhc1_presets.label}}
+				{{ form.mhc1_presets}}</td>
+				<td>{{ form.mhc2_presets.label}}
+				{{ form.mhc2_presets}}</td>
+				<td>{{ form.mhc1_alleles.label }}
+				{{ form.mhc1_alleles }}</td>
+				<td>{{ form.mhc2_alleles.label }}
+				{{ form.mhc2_alleles}}</td></tr>
+				</table>
+				</div>
+
+			<input type="submit" class="button", value="Update">
+		</form>
+	  </div>
+
+		<div class="floatright">
+			<p>
+				This page generates a configuration file from a form that can be used to then call the
+				command line interface to generate epitope predictions. You can then view the results in this
+				web application. Select one or more predictors and appropriate alleles which are then run
+				for all the proteins in the chosen genome/sequence file. Selection of alleles should always
+				be tailored to your own requirements.
+			</p>
+			<div class="monospace" style="background: #F7DDD8;">
+				{{errors}}
+			</div>
+			<div class="monospace">
+				{{conftext}}
+			</div>
+			<p>You can save the text above to a configuration file and then use it to run
+			<b class="monospace">epitopepredict -r -c conffile</b> </p>
+		</div>
+
+	  </div>
+
+{% end %}
