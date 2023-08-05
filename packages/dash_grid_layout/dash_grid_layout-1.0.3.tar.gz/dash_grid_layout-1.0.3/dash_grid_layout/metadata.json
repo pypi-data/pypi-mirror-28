@@ -1,0 +1,432 @@
+{
+  "src/components/GridItem.react.js": {
+    "description": "A class for displaying an item in a grid\nDesigned to be wrapped in a function, similar to a higher-order component. Otherwise\nthe layout will render incorrectly",
+    "displayName": "GridItem",
+    "methods": [
+      {
+        "name": "relayoutChildren",
+        "docblock": "Iterate over children and trigger a relayout event",
+        "modifiers": [],
+        "params": [],
+        "returns": null,
+        "description": "Iterate over children and trigger a relayout event"
+      },
+      {
+        "name": "relayout",
+        "docblock": "Relayout the Plotly objects; modify their sizes to fit inside the columns",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "child"
+          }
+        ],
+        "returns": null,
+        "description": "Relayout the Plotly objects; modify their sizes to fit inside the columns"
+      }
+    ],
+    "props": {
+      "i": {
+        "type": {
+          "name": "string"
+        },
+        "required": true,
+        "description": "An identifier for the component.\nSynonymous with `key`, but `key` cannot be specified as\na PropType without causing errors. A caveat to this is that when using\nthe component in pure React (as opposed to via Dash), both `i` and `key`\nmust be specified"
+      },
+      "children": {
+        "type": {
+          "name": "node"
+        },
+        "required": false,
+        "description": "A list of child elements to place inside the grid ite,"
+      },
+      "layout": {
+        "type": {
+          "name": "shape",
+          "value": {
+            "x": {
+              "name": "number",
+              "description": "The x-value of the element location, in grid units",
+              "required": true
+            },
+            "y": {
+              "name": "number",
+              "description": "The y-value of the element location, in grid units",
+              "required": true
+            },
+            "w": {
+              "name": "number",
+              "description": "The width of the element, in grid units",
+              "required": true
+            },
+            "h": {
+              "name": "number",
+              "description": "The height of the element, in grid units",
+              "required": true
+            },
+            "minW": {
+              "name": "number",
+              "description": "The minimum width of the element, in grid units",
+              "required": false
+            },
+            "maxW": {
+              "name": "number",
+              "description": "The maximum width of the element, in grid units",
+              "required": false
+            },
+            "minH": {
+              "name": "number",
+              "description": "The minimum height of the element, in grid units",
+              "required": false
+            },
+            "maxH": {
+              "name": "number",
+              "description": "The maximum height of the element, in grid units",
+              "required": false
+            },
+            "static": {
+              "name": "bool",
+              "description": "Is static: if true, the element is not resizable or draggable",
+              "required": false
+            },
+            "isDraggable": {
+              "name": "bool",
+              "description": "If false, element can not be dragged",
+              "required": false
+            },
+            "isResizable": {
+              "name": "bool",
+              "description": "If false, the element can not be resized",
+              "required": false
+            }
+          }
+        },
+        "required": false,
+        "description": "An object describing the layout of the element"
+      },
+      "setProps": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Dash-assigned callback that should be called whenever any of the properties change"
+      }
+    }
+  },
+  "src/components/GridLayout.react.js": {
+    "description": "",
+    "displayName": "GridLayout",
+    "methods": [
+      {
+        "name": "unpackChildren",
+        "docblock": "By default, Dash wraps children in an element, obfuscating the key.\nIf a child has no key, this function npacks the children so that `key`\nis exposed and the layout can be used",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "children"
+          }
+        ],
+        "returns": null,
+        "description": "By default, Dash wraps children in an element, obfuscating the key.\nIf a child has no key, this function npacks the children so that `key`\nis exposed and the layout can be used"
+      },
+      {
+        "name": "wrapChildren",
+        "docblock": "Wrap children inside a wrapper that conforms to react-grid-layout",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "children"
+          }
+        ],
+        "returns": null,
+        "description": "Wrap children inside a wrapper that conforms to react-grid-layout"
+      },
+      {
+        "name": "onLayoutChange",
+        "docblock": "Callback for the onLayoutChange",
+        "modifiers": [],
+        "params": [
+          {
+            "name": "layout"
+          }
+        ],
+        "returns": null,
+        "description": "Callback for the onLayoutChange"
+      }
+    ],
+    "props": {
+      "id": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "The ID used to identify the component in Dash callbacks"
+      },
+      "children": {
+        "type": {
+          "name": "node"
+        },
+        "required": false,
+        "description": "A list of renderable child elements, that will be placed inside the grid"
+      },
+      "rowHeight": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "The height, in pixels of a row in the grid",
+        "defaultValue": {
+          "value": "150",
+          "computed": false
+        }
+      },
+      "cols": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "The number of columns to display on the grid",
+        "defaultValue": {
+          "value": "12",
+          "computed": false
+        }
+      },
+      "width": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "The width, in pixels, of the grid",
+        "defaultValue": {
+          "value": "1200",
+          "computed": false
+        }
+      },
+      "autoSize": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "If true, containers will automatically resize to fit the content",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
+      },
+      "draggableCancel": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "CSS selector for tags that will not be draggable. Requires a leading '.'",
+        "defaultValue": {
+          "value": "''",
+          "computed": false
+        }
+      },
+      "draggableHandle": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "CSS selector for tags that will act as the draggable handle. Requires a leading '.'",
+        "defaultValue": {
+          "value": "''",
+          "computed": false
+        }
+      },
+      "verticalCompact": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "If true, the layout will compact vertically",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
+      },
+      "compactType": {
+        "type": {
+          "name": "enum",
+          "value": [
+            {
+              "value": "'vertical'",
+              "computed": false
+            },
+            {
+              "value": "'horizontal'",
+              "computed": false
+            }
+          ]
+        },
+        "required": false,
+        "description": "Compaction type.\nOne of 'vertical' and 'horizontal'",
+        "defaultValue": {
+          "value": "'vertical'",
+          "computed": false
+        }
+      },
+      "layout": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "shape",
+            "value": {
+              "x": {
+                "name": "number",
+                "required": true
+              },
+              "y": {
+                "name": "number",
+                "required": true
+              },
+              "w": {
+                "name": "number",
+                "required": true
+              },
+              "h": {
+                "name": "number",
+                "required": true
+              },
+              "i": {
+                "name": "custom",
+                "raw": "PropTypes.Number",
+                "required": false
+              }
+            }
+          }
+        },
+        "required": false,
+        "description": "Array of objects with the format:\n{ x: number, y: number, w: number, h: number }\nIf custom keys are used, then an optional `i` parameter can\nbe added that matches the key"
+      },
+      "margin": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "number"
+          }
+        },
+        "required": false,
+        "description": "Margin between items [x, y] in px",
+        "defaultValue": {
+          "value": "[10, 10]",
+          "computed": false
+        }
+      },
+      "containerPadding": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "number"
+          }
+        },
+        "required": false,
+        "description": "Padding inside the container [x, y] in px",
+        "defaultValue": {
+          "value": "[10,10]",
+          "computed": false
+        }
+      },
+      "isDraggable": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Elements can be dragged",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
+      },
+      "isResizable": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Elements can be resized",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
+      },
+      "useCSSTransforms": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Use CSS transforms instead of Position. Improves performance if switched on",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
+      },
+      "preventCollision": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "If true, grid items won't change position when being\ndragged over",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      },
+      "onLayoutChange": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Callback upon the layout changed\n@param layout: the layout"
+      },
+      "onDragStart": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Callback when dragging is started"
+      },
+      "onDrag": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Callback upon each drag movement"
+      },
+      "onDragStop": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Callback upon drag completion"
+      },
+      "onResizeStart": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Calls when resize starts"
+      },
+      "onResize": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Calls when resize movement happens"
+      },
+      "onResizeStop": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Calls when resize is complete"
+      },
+      "setProps": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Dash-assigned callback that should be called whenever any of the properties change"
+      }
+    }
+  }
+}
