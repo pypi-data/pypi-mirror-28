@@ -1,0 +1,213 @@
+Metadata-Version: 2.0
+Name: django-groups-cache
+Version: 1.0.2
+Summary: Caches the groups a user is in so requests don't have to make calls to the database to check group status.
+Home-page: https://github.com/audiolion/django-groups-cache
+Author: Ryan Castner
+Author-email: castner.rr@gmail.com
+License: MIT
+Description-Content-Type: UNKNOWN
+Keywords: django-groups-cache
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 1.8
+Classifier: Framework :: Django :: 1.11
+Classifier: Framework :: Django :: 2.0
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+
+=============================
+django-groups-cache
+=============================
+
+.. image:: https://badge.fury.io/py/django-groups-cache.svg
+    :target: https://badge.fury.io/py/django-groups-cache
+
+.. image:: https://travis-ci.org/audiolion/django-groups-cache.svg?branch=master
+    :target: https://travis-ci.org/audiolion/django-groups-cache
+
+.. image:: https://codecov.io/gh/audiolion/django-groups-cache/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/audiolion/django-groups-cache
+
+Caches the groups a user is in so requests don't have to make calls to the database to check group status.
+
+Support
+-------
+
+Currently supporting Django 1.8, 1.11, and 2.0 with Python 2.7/Python 3 where support for versions aligns with
+Django's support. See the `tox.ini` file for specific Python and Django version pairings.
+
+Documentation
+-------------
+
+The full documentation is at https://django-groups-cache.readthedocs.io.
+
+Quickstart
+----------
+
+Install django-groups-cache::
+
+    pip install django-groups-cache
+
+Add it to your `INSTALLED_APPS`:
+
+.. code-block:: python
+
+    INSTALLED_APPS = (
+        ...
+        'groups_cache.apps.GroupsCacheConfig',
+        ...
+    )
+
+Add the middleware to your `MIDDLEWARE_CLASSES`:
+
+.. code-block:: python
+
+    MIDDLEWARE_CLASSES = (
+        'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.contrib.auth.middleware.AuthenticationMiddleware',
+        ...
+        'groups_cache.middleware.GroupsCacheMiddleware',
+    )
+
+Checking in a Django Template if the user is in a group name:
+
+.. code-block:: python
+
+    {% if "admins" in request.groups_cache %}
+      <a href="/admin">Admin Panel</a>
+    {% endif %}
+
+    # or use templatetag, note that templatetag is slower
+
+    {% load has_group %}
+
+    {% if request.user|has_group:"admins" %}
+      <a href="/admin">Admin Panel</a>
+    {% endif %}
+
+Turn on caching:
+
+.. code-block:: python
+
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:11211',
+        }
+    }
+
+See https://docs.djangoproject.com/en/1.10/topics/cache/#memcached for more details on setting
+up memcached.
+
+Note**
+
+Using `django.core.cache.backends.locmem.LocMemCache` is not safe for production unless you are
+only running a single process (and odds are you aren't).
+
+See https://docs.djangoproject.com/en/1.10/topics/cache/#local-memory-caching for more details.
+
+Features
+--------
+
+* Adds `groups_cache` property to `request` object
+* Provides templatetag `has_group`
+* Invalidates cache on `User` or `Group` model changes and on m2m `groups` ManyToManyField changes
+* Fully tested with high coverage
+
+
+Running Tests
+-------------
+
+::
+
+    source <YOURVIRTUALENV>/bin/activate
+    (myenv) $ pip install tox
+    (myenv) $ tox
+
+Credits
+-------
+
+Tools used in rendering this package:
+
+*  Cookiecutter_
+*  `cookiecutter-djangopackage`_
+
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _`cookiecutter-djangopackage`: https://github.com/pydanny/cookiecutter-djangopackage
+
+
+
+
+History
+-------
+
+0.5.5 (2017-01-13)
+++++++++++++++++++
+
+* Bug fix for templatetag `has_group`
+* Tests added for 100% coverage of templatetag folder
+
+0.5.5 (2017-01-12)
+++++++++++++++++++
+
+* Omit urls.py from coverage report (not used but needed for django package)
+* Omit apps.py from coverage report (default apps file)
+
+0.5.4 (2017-01-12)
+++++++++++++++++++
+
+* Removal of py32/django1.8 support from Travis CI build
+
+0.5.3 (2017-01-12)
+++++++++++++++++++
+
+* Fixing .travis.yml file and CI builds
+
+0.5.2 (2017-01-12)
+++++++++++++++++++
+
+* Typo in README.rst
+
+0.5.1 (2017-01-12)
+++++++++++++++++++
+
+* Add codecov.io support
+* Documentation updates
+
+0.5.0 (2017-01-12)
+++++++++++++++++++
+
+* Add requirements.txt to tox.ini so tests can run
+* Fix broken compatibility with Django 1.8/1.9 due to backwards incompatible changes in 1.9/1.10 code
+
+0.4.0 (2017-01-12)
+++++++++++++++++++
+
+* Add test suite that generates 100% coverage
+* Fixed a bug found by test suite with cache not invalidating on the `groups` ManyToManyField changing
+
+0.3.1 (2017-01-11)
+++++++++++++++++++
+
+* Documentation updates
+
+0.3.0 (2017-01-11)
+++++++++++++++++++
+
+* First stable and working release on PyPI.
+
+0.1.0 (2017-01-11)
+++++++++++++++++++
+
+* First release on PyPI.
+
+
