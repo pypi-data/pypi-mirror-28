@@ -1,0 +1,1 @@
+(function(){"use strict";Promise.withResolver=function withResolver(){var resolver=void 0;var promise=new Promise(function(resolve,reject){resolver=resolve});return[promise,resolver]}}).call(this);
