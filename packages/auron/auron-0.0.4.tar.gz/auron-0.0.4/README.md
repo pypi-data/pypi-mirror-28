@@ -1,0 +1,43 @@
+# Auron
+
+Auron uses the Yuna package to generate a graph network from the layer polygons
+of a superconducting circuit as given by Yuna.
+
+## Depenencies
+
+Install the package manager
+
+```
+sudo apt-get install python-pip
+sudo apt-get install python3-pip
+```
+
+Make sure TKinter is installed
+
+```
+sudo apt-get install python-tk
+sudo apt-get install python3-tk
+```
+
+Install GMSH on your system
+
+```
+sudo apt-get install gmsh
+sudo apt-get install libblas-dev liblapack-dev libatlas-base-dev gfortran
+```
+
+## Installation
+
+You can install Auron directly from the Python package manager *pip* using:
+
+```
+sudo pip install auron
+```
+
+To instead install Auron from source, clone this repository, *cd* into it, and run:
+
+```
+sudo pip install -r requirements.txt
+sudo pip install .
+sudo pip install -e .
+```
