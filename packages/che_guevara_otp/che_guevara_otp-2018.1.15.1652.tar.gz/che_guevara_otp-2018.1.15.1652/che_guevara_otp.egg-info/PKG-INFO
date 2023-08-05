@@ -1,0 +1,79 @@
+Metadata-Version: 1.0
+Name: che-guevara-otp
+Version: 2018.1.15.1652
+Summary: Python OTP
+Home-page: https://github.com/wdbm/che_guevara_otp
+Author: Will Breaden Madden
+Author-email: wbm@protonmail.ch
+License: GPLv3
+Description-Content-Type: UNKNOWN
+Description: che\_guevara\_otp
+        =================
+        
+        .. figure:: https://raw.githubusercontent.com/wdbm/che_guevara_otp/master/2017_Che_Guevara_Éire_stamp.png
+           :alt: 
+        
+        This module generates one-time passcodes that are based either on a
+        counter or time using a secret key that is assumed known by server and
+        client.
+        
+        The counter-based passcodes are hash-based one-time passcodes (HOTP) and
+        are defined in `RFC 4226 <https://tools.ietf.org/html/rfc4226>`__. The
+        time-based passcodes are time-based one-time passcodes (TOTP) and are
+        defined in `RFC 6238 <https://tools.ietf.org/html/rfc6238>`__. For HOTP,
+        the pseudorandom function used is HMAC-SHA-1 and the associated counter
+        should be incremented after each passcode generation. TOTP is HOTP with
+        a specified time interval for validity. A common time interval is 30
+        seconds.
+        
+        setup
+        =====
+        
+        .. code:: bash
+        
+            pip install che_guevara_otp
+        
+        module
+        ======
+        
+        HOTP passcodes can be generated in a way like the following:
+        
+        .. code:: python
+        
+            >>> import che_guevara_otp
+            >>> secret = "XXXXXXXXXXXXXXXX"
+            >>> for nonce in range(0, 3):
+            ...     print(che_guevara_otp.HOTP(secret = secret, nonce = nonce))
+            ... 
+            561452
+            686073
+            840123
+        
+        TOTP passcodes can be generated in a way like the following, where the
+        default time interval is 30 seconds:
+        
+        .. code:: python
+        
+            >>> import che_guevara_otp
+            >>> secret = "XXXXXXXXXXXXXXXX"
+            >>> print(che_guevara_otp.TOTP(secret = secret))
+            826402
+        
+        display\_che\_guevara\_otp.py
+        =============================
+        
+        .. figure:: https://raw.githubusercontent.com/wdbm/che_guevara_otp/master/display_che_guevara_otp.png
+           :alt: 
+        
+        The script ``display_che_guevara_otp.py`` displays time-based one-time
+        passcodes at 30 second intervals based on secrets stored in a specified
+        file. The file is unencrypted plaintext so userspace encryption combined
+        with other security is assumed. The contents of the secrets file should
+        be of the following form:
+        
+        ::
+        
+            OmegaBay:         XXXXXXXXXXXXXXXXXXXXXXXX
+            Missile Emporium: YYYYYYYYYYYYYYYYYYYYYYYY
+        
+Platform: UNKNOWN
