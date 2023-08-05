@@ -1,0 +1,33 @@
+{% load i18n %}
+{% if form.selected_office %}
+{% with office=form.selected_office %}
+<br>
+<div class="row">
+<div class="col-md-6">
+    <dl class="dl-horizontal">
+        {% if office.place_max_weight_allowed %}
+        <dt>{% trans "Max weight for place" %}</dt><dd>{{ office.place_max_weight_allowed }}</dd>
+        {% endif %}
+        {% if office.total_max_weight_allowed %}
+        <dt>{% trans "Total max weight" %}</dt><dd>{{ office.total_max_weight_allowed }}</dd>
+        {% endif %}
+        <dt>{% trans "POS terminal" %}</dt><dd>{% if office.pos_terminal %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</dd>
+        <dt>{% trans "Post finance" %}</dt><dd>{% if office.post_finance %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</dd>
+        <dt>{% trans "Bicycle parking" %}</dt><dd>{% if office.bicycle_parking %}{% trans "Yes" %}{% else %}{% trans "No" %}{% endif %}</dd>
+        <dt>{% trans "Phone" %}</dt><dd><a href="tel:{{ office.phone }}">{{ office.phone }}</a></dd>
+    </dl>
+</div>
+<div class="col-md-6">
+    <dl class="dl-horizontal">
+        <dt>{% trans "Monday" %}</dt><dd>{{ office.reception.Monday }}</dd>
+        <dt>{% trans "Tuesday" %}</dt><dd>{{ office.reception.Tuesday }}</dd>
+        <dt>{% trans "Wednesday" %}</dt><dd>{{ office.reception.Wednesday }}</dd>
+        <dt>{% trans "Thursday" %}</dt><dd>{{ office.reception.Thursday }}</dd>
+        <dt>{% trans "Friday" %}</dt><dd>{{ office.reception.Friday }}</dd>
+        <dt>{% trans "Saturday" %}</dt><dd>{{ office.reception.Saturday }}</dd>
+        <dt>{% trans "Sunday" %}</dt><dd>{{ office.reception.Sunday }}</dd>
+    </dl>
+</div>
+</div>
+{% endwith %}
+{% endif %}
