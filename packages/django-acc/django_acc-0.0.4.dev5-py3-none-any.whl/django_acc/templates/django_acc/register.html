@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="{% url 'accounts:register' %}" method="post">
+        {% csrf_token %}
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" name="username" id="username" value="" />
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" value="" />
+        </div>
+        <div>
+            <label for="fullname">Full Name:</label> 
+            <input type="text" name="fullname" id="fullname" value="" />
+        </div>
+        <div>
+            <label for="email">Email (optional)</label>
+            <input type="email" name="email" id="email" value="" />
+        </div>
+        <div>
+            <button type="submit">Register</button>
+            {% if err %}
+                <p>{{err}}</p>
+            {% endif %}
+        </div>
+    </form>
+{% endblock content %}
