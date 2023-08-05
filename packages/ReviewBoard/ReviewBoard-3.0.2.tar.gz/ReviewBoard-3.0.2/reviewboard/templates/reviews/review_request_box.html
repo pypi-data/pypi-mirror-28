@@ -1,0 +1,113 @@
+{% load djblets_utils i18n reviewtags staticfiles %}
+
+<div class="review-request-section review-request-summary">
+ <label class="review-request-section-label" for="field_summary">{% trans "Summary" %}: </label>
+{% review_request_field review_request_details 'summary' %}
+ {{field.as_html}}
+{% end_review_request_field %}
+ <p>
+{% with review_request_details.time_added|date as dateadded and latest_diffset.timestamp|date:"c" as lastdiffdateraw and latest_diffset.timestamp as lastdiffdate %}
+{%  blocktrans with review_request.display_id as review_request_id and review_request.get_absolute_url as review_request_url %}
+   Review Request <a href="{{review_request_url}}">#{{review_request_id}}</a> -
+{%  endblocktrans %}
+{%  if review_request.status == 'S' %}
+{%   blocktrans with close_timestamp|date:"c" as closedateraw and close_timestamp as closedate %}
+  Created {{dateadded}} and submitted
+  <time class="timesince" datetime="{{closedateraw}}">{{closedate}}</time>
+{%   endblocktrans %}
+{%  elif review_request.status == 'D' %}
+{%   blocktrans with close_timestamp|date:"c" as closedateraw and close_timestamp as closedate %}
+  Created {{dateadded}} and discarded
+  <time class="timesince" datetime="{{closedateraw}}">{{closedate}}</time>
+{%   endblocktrans %}
+{%  elif review_request.status == 'P' %}
+{%   blocktrans with review_request_details.last_updated as lastupdated and review_request_details.last_updated|date:"c" as lastupdatedraw %}
+  Created {{dateadded}} and updated
+  <time class="timesince" datetime="{{lastupdatedraw}}">{{lastupdated}}</time>
+{%   endblocktrans %}
+{%  endif %}
+{%  if latest_diffset %}
+{%   blocktrans %}
+  - Latest diff uploaded
+  <time class="timesince" datetime="{{lastdiffdateraw}}">{{lastdiffdate}}</time>
+{%   endblocktrans %}
+{%  endif %}
+{% endwith %}
+ </p>
+</div>
+<div id="review-request-warning"></div>
+
+<table id="review-request-details" class="review-request-section">
+ <colgroup>
+  <col width="0%" />
+  <col width="100%" />
+ </colgroup>
+{% for_review_request_fieldset review_request_details %}
+{%  if fieldset.fieldset_id != 'main' %}
+ <thead id="fieldset_{{fieldset.fieldset_id}}_head"{% if forloop.first %} class="first-fieldset"{% endif %}>
+  <tr>
+   <th class="review-request-section-label" colspan="2">{{fieldset.label}}
+{%   if show_fieldset_required %}
+    <span class="required-flag" aria-label="{% trans 'This field is required' %}" title="{% trans 'This field is required' %}">*</span>
+{%   endif %}
+  </tr>
+ </thead>
+ <tbody id="fieldset_{{fieldset.fieldset_id}}_body">
+{%   for_review_request_field review_request_details fieldset %}
+  <tr>
+   <th><label for="field_{{field.field_id}}">{{field.label}}:</label></th>
+   <td>{{field.as_html}}</td>
+  </tr>
+{%   end_for_review_request_field %}
+ </tbody>
+{%  endif %}
+{% end_for_review_request_fieldset %}
+</table>
+
+<div id="review-request-main">
+{% for_review_request_field review_request_details 'main' %}
+{%  if field.field_id != 'summary' %}
+ <div class="review-request-section">
+  <label class="review-request-section-label" for="field_{{field.field_id}}">{{field.label}}</label>
+  <div class="field-container">{{field.as_html}}</div>
+ </div>
+{%  endif %}
+{% end_for_review_request_field %}
+</div>
+
+<div id="review-request-extra">
+ <div class="review-request-section"{% if not screenshots %} style="display: none;"{% endif %}>
+  <label class="review-request-section-label">{% trans "Screenshots" %}</label>
+  <div id="screenshot-thumbnails">
+{% for image in screenshots %}
+   <div class="screenshot-container" data-screenshot-id="{{image.id}}">
+    <div class="image" onclick="javascript:window.location='{{image.get_absolute_url}}'; return false;"><a href="{{image.get_absolute_url}}">{{image.thumb}}</a></div>
+    <div class="screenshot-caption">
+     <a href="{{image.get_absolute_url}}" class="edit">{% if draft %}{{image.draft_caption|default:image.caption}}{% else %}{{image.caption}}{% endif %}</a>
+{%  if request.user.pk == review_request.submitter_id or perms.reviews.delete_screenshot %}
+{%   if review_request.status == 'P' %}
+     <a href="#" class="delete rb-icon rb-icon-delete" title="{% trans "Delete Screenshot" %}"></a>
+{%   endif %}
+{%  endif %}
+    </div>
+   </div>
+{% endfor %}
+   <br clear="both" />
+  </div>
+ </div>
+
+ <div id="file-list-container" class="review-request-section clearfix"{% if not file_attachments %} style="display: none;"{% endif %}>
+  <label class="review-request-section-label">{% trans "Files" %}</label>
+  <div id="review-request-files-placeholder">
+   <span class="fa fa-spinner fa-pulse" aria-hidden="true"></span>
+   {% trans "Loading file attachments..." %}
+  </div>
+  <div id="file-list">
+   <br clear="both" />
+  </div>
+ </div>
+
+{% if show_issue_summary_table %}
+{%  include "reviews/review_issue_summary_table.html" %}
+{% endif %}
+</div>
