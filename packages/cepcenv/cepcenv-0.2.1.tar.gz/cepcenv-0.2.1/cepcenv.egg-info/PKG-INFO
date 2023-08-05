@@ -1,0 +1,91 @@
+Metadata-Version: 1.1
+Name: cepcenv
+Version: 0.2.1
+Summary: CEPC software management toolkit
+Home-page: https://github.com/cepc/cepcenv
+Author: Xianghu Zhao
+Author-email: zhaoxh@ihep.ac.cn
+License: MIT
+Description: cepcenv
+        =======
+        
+        CEPC software management toolkit
+        
+        
+        Install cepcenv
+        ---------------
+        
+        Install ``cepcenv`` with ``curl`` or ``wget`` ::
+        
+            curl -sSL http://cepcsoft.ihep.ac.cn/package/cepcenv/script/install.sh | sh -s [CEPCENV_DIR]
+        
+        or ::
+        
+            wget -qO- http://cepcsoft.ihep.ac.cn/package/cepcenv/script/install.sh | sh -s [CEPCENV_DIR]
+        
+        If ``CEPCENV_DIR`` is omitted, ``cepcenv`` will be installed in the
+        current directory.
+        
+        
+        Install cepcsoft with cepcenv
+        -----------------------------
+        
+        Setup ``cepcenv``::
+        
+            . <CEPCENV_DIR>/setup.sh
+        
+        List available CEPC software version::
+        
+            cepcenv ls-remote
+        
+        Specify CEPC software version and where to install::
+        
+            cepcenv [-r <SOFTWARE_ROOT>] install <version>
+        
+        If ``-r <SOFTWARE_ROOT>`` is not specified, everything will be
+        installed in the current directory.
+        
+        Multiple versions could be installed under the same software root
+        directory.
+        
+        
+        Configuration
+        -------------
+        
+        Create the configuration file if it does not exist::
+        
+            [ -e ~/.cepcenv.conf ] || cepcenv config -e > ~/.cepcenv.conf
+        
+        Edit `~/.cepcenv.conf` and uncomment `software_root`::
+        
+            software_root: <SOFTWARE_ROOT>
+        
+        
+        Select cepcsoft Version
+        -----------------------
+        
+        List local installed CEPC software version::
+        
+            cepcenv -r <SOFTWARE_ROOT> ls
+        
+        Select local CEPC software version you would like to use::
+        
+            cepcenv -r <SOFTWARE_ROOT> use <version>
+        
+Keywords: CEPC
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Topic :: System :: Software Distribution
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
