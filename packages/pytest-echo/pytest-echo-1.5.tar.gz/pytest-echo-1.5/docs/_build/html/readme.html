@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pytest-echo &mdash; pytest-echo 1.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pytest-echo 1.2 documentation" href="index.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Welcome to pytest-echo’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pytest-echo’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">pytest-echo 1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pytest-echo">
+<h1>pytest-echo<a class="headerlink" href="#pytest-echo" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://crate.io/packages/pytest-echo/"><img alt="https://pypip.in/v/pytest-echo/badge.png" src="https://pypip.in/v/pytest-echo/badge.png" /></a>
+<a class="reference external image-reference" href="https://crate.io/packages/pytest-echo/"><img alt="https://pypip.in/d/pytest-echo/badge.png" src="https://pypip.in/d/pytest-echo/badge.png" /></a>
+<p>Print environment variables, package version and generic attributes.</p>
+<p>Useful in the continuous integration to dump test configuration/environment.</p>
+<div class="section" id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<p>install via:</p>
+<div class="highlight-python"><div class="highlight"><pre>pip install pytest-echo
+</pre></div>
+</div>
+<p>The plugin provides ability to print some extra information prior to run the tests.</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="dump-environment-variables">
+<h3>Dump environment variables<a class="headerlink" href="#dump-environment-variables" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>py.test --echo-env<span class="o">=</span><span class="nv">HOME</span>
+<span class="o">=============================</span> <span class="nb">test </span>session <span class="nv">starts</span> <span class="o">=========================</span>
+platform linux2 -- Python 2.7.4 -- py-1.4.22 -- pytest-2.6.0 -- /bin/python
+HOME: /home/sax
+plugins: <span class="nb">echo</span>, pydev, cov, cache, django
+</pre></div>
+</div>
+</div>
+<div class="section" id="dump-package-version">
+<h3>Dump package version<a class="headerlink" href="#dump-package-version" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>py.test --echo-version<span class="o">=</span><span class="nv">pytest_echo</span>
+<span class="o">=============================</span> <span class="nb">test </span>session <span class="nv">starts</span> <span class="o">=========================</span>
+platform linux2 -- Python 2.7.4 -- py-1.4.22 -- pytest-2.6.0 -- /bin/python
+pytest_echo: 0.1
+plugins: <span class="nb">echo</span>, pydev, cov, cache, django
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The first attempt to retrieve the version is done via setuptools
+if it fails, the module is imported (<tt class="docutils literal"><span class="pre">__import__(package)</span></tt>) to retrieve the version reading
+<tt class="docutils literal"><span class="pre">get_version</span></tt>, <tt class="docutils literal"><span class="pre">__version__</span></tt>, <tt class="docutils literal"><span class="pre">VERSION</span></tt>, <tt class="docutils literal"><span class="pre">version</span></tt> so any module
+level code is executed. This should be not an issue as no problematic code
+should be present in the first level of the package</p>
+</div>
+</div>
+<div class="section" id="dump-attributes">
+<h3>Dump attributes<a class="headerlink" href="#dump-attributes" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>py.test --echo-attr<span class="o">=</span>django.conf.settings.DEBUG
+<span class="o">=============================</span> <span class="nb">test </span>session <span class="nv">starts</span> <span class="o">=========================</span>
+platform linux2 -- Python 2.7.4 -- py-1.4.22 -- pytest-2.6.0 -- /bin/python
+DEBUG: False
+plugins: <span class="nb">echo</span>, pydev, cov, cache, django
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Be careful when use <tt class="docutils literal"><span class="pre">--echo-attr</span></tt>. It load any module in the path and this will
+execute any module&#8217;s level code
+If you try to dump a property, related <tt class="docutils literal"><span class="pre">getter</span></tt> will be executed.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You cannot dump callable result.</p>
+</div>
+</div>
+<div class="section" id="configure-via-tox-ini-setup-cfg-pytest-cfg">
+<h3>Configure via tox.ini/setup.cfg/pytest.cfg<a class="headerlink" href="#configure-via-tox-ini-setup-cfg-pytest-cfg" title="Permalink to this headline">¶</a></h3>
+<p>Example of use in a django project:</p>
+<div class="highlight-inifile"><div class="highlight"><pre>[pytest]
+addopts = -vvv
+        --tb=short
+        --capture=no
+        --echo-env PWD
+        --echo-env VIRTUAL_ENV
+        --echo-env DBENGINE
+        --echo-version django
+        --echo-version pip
+        --echo-version pytest_echo
+        --echo-attr django.conf.settings.DATABASES.default.ENGINE
+</pre></div>
+</div>
+<div class="highlight-sh"><div class="highlight"><pre><span class="nv">$ </span>py.test
+<span class="o">=============================</span> <span class="nb">test </span>session <span class="nv">starts</span> <span class="o">=========================</span>
+platform linux2 -- Python 2.7.4 -- py-1.4.22 -- pytest-2.6.0 -- /bin/python
+Environment:
+    DJANGO_SETTINGS_MODULE: tests.settings
+    PWD: /data/PROGETTI/sem
+    VIRTUAL_ENV: /data/VENV/sem
+    DBENGINE: &lt;not <span class="nb">set</span>&gt;
+Package version:
+    django: 1.6.5
+    pip: 1.5.6
+    pytest_echo: 1.2
+Inspections:
+    django.conf.settings.DATABASES.default.ENGINE: <span class="s1">&#39;django.db.backends.postgresql_psycopg2&#39;</span>
+plugins: <span class="nb">echo</span>, cache, capturelog, contextfixture, cov, django, pydev
+collected 14 items
+.............
+14 passed in 4.95 seconds
+</pre></div>
+</div>
+</div>
+<div class="section" id="links">
+<h3>Links<a class="headerlink" href="#links" title="Permalink to this headline">¶</a></h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="31%" />
+<col width="23%" />
+<col width="0%" />
+<col width="20%" />
+<col width="0%" />
+<col width="25%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>Project home page:</td>
+<td colspan="5"><a class="reference external" href="https://github.com/saxix/pytest-echo">https://github.com/saxix/pytest-echo</a></td>
+</tr>
+<tr class="row-even"><td>Issue tracker:</td>
+<td colspan="5"><a class="reference external" href="https://github.com/saxix/pytest-echo/issues?sort">https://github.com/saxix/pytest-echo/issues?sort</a></td>
+</tr>
+<tr class="row-odd"><td>Download:</td>
+<td colspan="5"><a class="reference external" href="http://pypi.python.org/pypi/pytest-echo/">http://pypi.python.org/pypi/pytest-echo/</a></td>
+</tr>
+<tr class="row-even"><td>Documentation:</td>
+<td colspan="5"><a class="reference external" href="https://pytest-echo.readthedocs.org/en/latest/">https://pytest-echo.readthedocs.org/en/latest/</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pytest-echo</a><ul>
+<li><a class="reference internal" href="#install">Install</a></li>
+<li><a class="reference internal" href="#example">Example</a><ul>
+<li><a class="reference internal" href="#dump-environment-variables">Dump environment variables</a></li>
+<li><a class="reference internal" href="#dump-package-version">Dump package version</a></li>
+<li><a class="reference internal" href="#dump-attributes">Dump attributes</a></li>
+<li><a class="reference internal" href="#configure-via-tox-ini-setup-cfg-pytest-cfg">Configure via tox.ini/setup.cfg/pytest.cfg</a></li>
+<li><a class="reference internal" href="#links">Links</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to pytest-echo&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="changelog.html"
+                        title="next chapter">Changelog</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/readme.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to pytest-echo’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">pytest-echo 1.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Stefano Apostolico.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
