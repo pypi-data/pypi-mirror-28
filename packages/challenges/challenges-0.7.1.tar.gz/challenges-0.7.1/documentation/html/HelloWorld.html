@@ -1,0 +1,224 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>HelloWorld package &#8212; Challenges 0.7.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.7.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="challenges package" href="challenges.html" />
+    <link rel="prev" title="README: Challenges" href="README.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="helloworld-package">
+<h1>HelloWorld package<a class="headerlink" href="#helloworld-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-HelloWorld.challenge">
+<span id="helloworld-challenge-module"></span><h2>HelloWorld.challenge module<a class="headerlink" href="#module-HelloWorld.challenge" title="Permalink to this headline">¶</a></h2>
+<p>This is the HelloWorld challenge to teach the usage of the library by a
+minimal example.</p>
+<p>This challenge takes a number and a word and composes a new word based
+on the input.</p>
+<p>The class fully focuses on the “business logic” by overwriting just two
+methods of parent class &lt;challenge.challenge.Challenge&gt;:</p>
+<blockquote>
+<div><ul class="simple">
+<li>&lt;build&gt;: This sets up the data model from the given input lines.</li>
+<li>&lt;calc&gt;: This is the core algorithm of the challenge.</li>
+</ul>
+</div></blockquote>
+<p>This design pattern is called the “Template Method Pattern”. While the parent
+class handles the common parts of the challenge flow, the child class just
+encapsulates what is special.</p>
+<p>The two methods above is just the bare minimum to implement. For more complex
+challenges you will overwrite or extend other parts of the parent class.</p>
+<p>Have a look into the parent class, especially into the &lt;main&gt; function, that
+controls the execution of the challenge. Also have a look into the parents
+&lt;__init__&gt; method to see what instance attributes are already prepared to serve
+the communication of the methods.</p>
+<p>By the class attribute &lt;sample&gt; a small example of the possible input is
+given. This is recommended for every challenge. It is useful as input of
+unit tests or for the smoke tests with the -k option. For more extended
+input, in example from the given data files, this class attribute will be
+overwritten by injection of an instance attribute of the same name.</p>
+<p>The optional class attribute &lt;expect&gt; the expected output for the given
+&lt;sample&gt; sets the expected output. This is typically used by unit tests.</p>
+<p>Together &lt;sample&gt; and &lt;expect&gt; serve as documantation of the intention of
+the challenge.</p>
+<dl class="class">
+<dt id="HelloWorld.challenge.HelloWorldChallenge">
+<em class="property">class </em><code class="descclassname">HelloWorld.challenge.</code><code class="descname">HelloWorldChallenge</code><a class="reference internal" href="_modules/HelloWorld/challenge.html#HelloWorldChallenge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#HelloWorld.challenge.HelloWorldChallenge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="challenges.html#challenges.challenge.Challenge" title="challenges.challenge.Challenge"><code class="xref py py-class docutils literal"><span class="pre">challenges.challenge.Challenge</span></code></a></p>
+<p>This is the HelloWorld Challenge class.</p>
+<p>This challenge takes a word as input and a number at which position
+to split the word. It returns a new word composed of the switched parts
+with a blank in between.</p>
+<dl class="method">
+<dt id="HelloWorld.challenge.HelloWorldChallenge.build">
+<code class="descname">build</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/HelloWorld/challenge.html#HelloWorldChallenge.build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#HelloWorld.challenge.HelloWorldChallenge.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the input lines and set up the model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="HelloWorld.challenge.HelloWorldChallenge.calc">
+<code class="descname">calc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/HelloWorld/challenge.html#HelloWorldChallenge.calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#HelloWorld.challenge.HelloWorldChallenge.calc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Swap head and tail of the model and store to result.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="HelloWorld.challenge.HelloWorldChallenge.expect">
+<code class="descname">expect</code><em class="property"> = 'Hello World'</em><a class="headerlink" href="#HelloWorld.challenge.HelloWorldChallenge.expect" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the expected output for the given sample.</p>
+<p>It is used by unit tests, especially by the full integration test.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="HelloWorld.challenge.HelloWorldChallenge.sample">
+<code class="descname">sample</code><em class="property"> = '\n        5\n        WorldHello\n    '</em><a class="headerlink" href="#HelloWorld.challenge.HelloWorldChallenge.sample" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a small exsample of the input. It can be overwritten by
+injection.</p>
+<blockquote>
+<div><p>It is used by the –klass option of the challenge runner.
+It is also used by unit tests.</p>
+<p>prompt&gt; challenge HelloWorld/ –klass
+Hello World</p>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-HelloWorld.test">
+<span id="helloworld-test-module"></span><h2>HelloWorld.test module<a class="headerlink" href="#module-HelloWorld.test" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="HelloWorld.test.HelloWorldTest">
+<em class="property">class </em><code class="descclassname">HelloWorld.test.</code><code class="descname">HelloWorldTest</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/HelloWorld/test.html#HelloWorldTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#HelloWorld.test.HelloWorldTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></code></p>
+<dl class="method">
+<dt id="HelloWorld.test.HelloWorldTest.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/HelloWorld/test.html#HelloWorldTest.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#HelloWorld.test.HelloWorldTest.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="HelloWorld.test.HelloWorldTest.test__init__">
+<code class="descname">test__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/HelloWorld/test.html#HelloWorldTest.test__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#HelloWorld.test.HelloWorldTest.test__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="HelloWorld.test.HelloWorldTest.test_build">
+<code class="descname">test_build</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/HelloWorld/test.html#HelloWorldTest.test_build"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#HelloWorld.test.HelloWorldTest.test_build" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="HelloWorld.test.HelloWorldTest.test_calc">
+<code class="descname">test_calc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/HelloWorld/test.html#HelloWorldTest.test_calc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#HelloWorld.test.HelloWorldTest.test_calc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="HelloWorld.test.HelloWorldTest.test_full_integration">
+<code class="descname">test_full_integration</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/HelloWorld/test.html#HelloWorldTest.test_full_integration"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#HelloWorld.test.HelloWorldTest.test_full_integration" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-HelloWorld">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-HelloWorld" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HelloWorld package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-HelloWorld.challenge">HelloWorld.challenge module</a></li>
+<li><a class="reference internal" href="#module-HelloWorld.test">HelloWorld.test module</a></li>
+<li><a class="reference internal" href="#module-HelloWorld">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="README.html" title="previous chapter">README: Challenges</a></li>
+      <li>Next: <a href="challenges.html" title="next chapter">challenges package</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/HelloWorld.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Elmar Hinz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/HelloWorld.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
