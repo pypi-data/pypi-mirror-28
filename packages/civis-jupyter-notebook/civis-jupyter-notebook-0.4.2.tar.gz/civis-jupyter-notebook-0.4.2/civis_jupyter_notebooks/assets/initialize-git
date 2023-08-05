@@ -1,0 +1,21 @@
+#!/bin/bash
+# TODO: write conditional for setting up SSH Key
+
+if test $GIT_CREDENTIAL; then
+  git config --global core.excludesfile ~/.gitignore_global
+  echo "civis-notebook-logs.log" > ~/.gitignore_global
+
+  git config --global user.name "$USER_NAME"
+  git config --global user.email "$USER_EMAIL"
+  git config --global core.editor "nano"
+
+  # Store GIT_CREDENTIAL in the credential cache to avoid writing token to disk
+  # This will only work with Github tokens!
+  git config --global credential.helper 'cache --timeout=10000000'
+  git credential approve <<EOF
+protocol=https
+host=github.com
+username=$GIT_CREDENTIAL
+password=x-oauth-basic
+EOF
+fi
