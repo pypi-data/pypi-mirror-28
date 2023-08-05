@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+
+import sys
+import requests
+
+import aws4o
+
+if __name__ == '__main__':
+
+    # version = open( "VERSION" , "r" ).read()
+    # ver = version.split('.')
+
+    # HACK
+    # version = "0.2"
+    # ver = version.split('.')
+
+    print( " " )
+    print( "------------------------------------------------------------------------------------------" )
+    print( " STANFORD GSB AWS CLI CONSOLE" )
+    print( "------------------------------------------------------------------------------------------" )
+    print( " " )
+    print( "  Version %s" % aws4o.__version__ )
+    print( "  For support, email gsb_circle_research@stanford.edu" )
+    print( " " )
+    ver = aws4o.__version__.split('.')
+    r = requests.get( "https://rand.stanford.edu/software/awscli-console/VERSION" )
+    if ( r.status_code == 200 ) : 
+        VER = r.text.split( '.' )
+        if( int(ver[0]) < int(VER[0]) ) : 
+            print( "  NOTE: major version update available. Visit https://code.stanford.edu/morrowwr/awscli-console." )
+            print( " " )
+        else : 
+            if( int(ver[1]) < int(VER[1]) ) : 
+                print( "  NOTE: minor version update available. Visit https://code.stanford.edu/morrowwr/awscli-console." )
+                print( " " )
+    print( "------------------------------------------------------------------------------------------" )
+    print( " " )
+
+    # check version and run
+    if(   sys.version_info[0] == 2 ) : aws4o.py27console( )
+    elif( sys.version_info[0] == 3 ) : aws4o.py36console( )
+    else : 
+        print( "  Sorry, the AWS CLI console tool is only currently supported on python 2 and 3." )
+        print( " " )
+        print( "  You are currently running ")
+        print( " " )
+        print( "     " , sys.version.split('\n')[0] )
+        print( " " )
+        print( "  Change your default python executable or setup a virtualenv/conda env to run." )
+        print( " " )
+        print( "------------------------------------------------------------------------------------------" )
+        print( " " )
+        sys.exit(0)
