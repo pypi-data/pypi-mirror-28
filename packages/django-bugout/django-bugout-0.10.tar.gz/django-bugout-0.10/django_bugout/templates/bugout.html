@@ -1,0 +1,100 @@
+<link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css?v={{ settings.VERSION }}20140221" rel="stylesheet">
+<script src="{{ STATIC_URL }}bower_components/jquery/dist/jquery.min.js" type="text/javascript"></script>
+<style type="text/css">
+    .minwith{
+        min-width: 600px;
+    }
+    .minheight{
+        min-height: 200px;
+    }
+    .textright{
+        text-align: right;
+    }
+</style>
+
+<div>
+    <form action="." method="post" id="debug-form">
+        <table>
+            <tbody>
+                <tr>
+                    <td>URI:</td>
+                    <td><input type="text" name="parse_uri" class="minwith"/></td>
+                </tr>
+                <tr>
+                    <td>METHOD</td>
+                    <td>
+                        <select name="parse_method">
+                            <option value="get" selected>GET</option>
+                            <option value="post">POST</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>DATA for POST</td>
+                    <td>
+{#                        <textarea id="myTextArea" cols=50 rows=10></textarea>#}
+                        <textarea id="parse_data_text" class="minwith minheight" placeholder="JSON format..."></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        CONTENT-TYPE
+                    </td>
+                    <td>
+                        <select name="post_contenttype">
+                            <option value="application/json" selected>Application/Json</option>
+                            <option value="">Default</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>RENDER METHOD</td>
+                    <td>
+                        <select name="render_method">
+                            <option value="orignal" selected>Original</option>
+                            <option value="html" >HTML</option>
+                            <option value="text" >PLAIN TEXT</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td class="textright"><button id="btn-submit" type="submit">Submit!!</button></td>
+                </tr>
+            </tfoot>
+        </table>
+
+
+
+    </form>
+
+</div>
+<script type="text/javascript">
+    $(function(){
+        //alert('ready');
+        {#$('#btn-submit').click(function(){#}
+        {#    var parse_data=JSON.parse($('#parse_data').text());#}
+        {##}
+        {#});#}
+
+        $('#debug-form').submit(function(){
+
+            {#alert('submit');#}
+            if ($.trim($('#parse_data_text').val()).lenght>0){
+                     var parse_data_json=JSON.parse($('#parse_data_text').val());
+                    var newFormField=$('<input  name="parse_data" >');
+                    $(newFormField).val(JSON.stringify(parse_data_json));
+
+                    {#alert(parse_data_json);#}
+                    $(this).append($(newFormField));
+                    //alert(parse_data_json);
+                    
+
+            }
+            return true;
+        });
+    })
+
+</script>
