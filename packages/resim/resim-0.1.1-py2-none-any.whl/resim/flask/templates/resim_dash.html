@@ -1,0 +1,279 @@
+{% extends "layout.html" %}
+{% block title %}ReSim Demo{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <!-- Modal-Params-->
+  <div id="InfoModal" class="modal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Info</h4>
+        </div>
+        <div class="modal-body">
+          <p>Hover over parameter to get more information.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal-Plotly-->
+  <div id="InfoModalPlotly" class="modal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Info</h4>
+        </div>
+        <div class="modal-body">
+          <p>
+            Plots can be intereactively zoom in/out.<br>
+            Click on the legend to show/hide data.<br>
+            Hover over the plot to show datapoints.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-8">
+      <!--Panel-primary: Form Container-->
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title"><i class="fa fa-cog"></i>&nbsp;&nbsp;&nbsp;Parameters Settings
+            <span class="pull-right"><a data-toggle="modal" data-target="#InfoModal"><i class="fa fa-info-circle"></i></a></span>
+          </h3>
+        </div>
+
+        <div class="panel-body">
+          <!--Form-->
+          <form class="form" action="" method=post>
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <!--Panel-default: SubForm Container-->
+            <div class="panel-group" id="accordion">
+              <!--Panel-default: SubForm Container-->
+              <!--collapsible panel: form.Simulation-->
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse1">Simulation
+                    <span class="pull-right"><i class="fa fa-angle-double-down"></i></span></a>
+                  </h3>
+                </div>
+                <div id="collapse1" class="panel-collapse collapse in">
+                  <div class="panel-body" style="padding: 2rem 6rem;">
+                    {% for field in form.Simulation %}
+                    {% if field.errors %}
+                    <div class="form-group row has-success" style="font-family: 'Oxygen Mono', monospace;">
+                      {% for error in field.errors %}
+                        <label class="control-label col-sm-7" style="font-size:14px; font-family:'Lato';">{{ error|safe }}</label>
+                      {% endfor %}
+                      <div class="input-group col-sm-7">
+                        {{ render_inputaddon_span_withtooltip(field.name)|safe }}{{ field.label }}</span>
+                        {{ field(class_="form-control") }}
+                        <span class="input-group-addon">{{ field.description|safe }}</span>
+                      </div>
+                    </div>
+                    {% else %}
+                    <div class="form-group row" style="font-family: 'Oxygen Mono', monospace;">
+                      <div class="input-group col-sm-7">
+                        {{ render_inputaddon_span_withtooltip(field.name)|safe }}{{ field.label }}</span>
+                        {{ field(class_="form-control") }}
+                        <span class="input-group-addon">{{ field.description|safe }}</span>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+
+              <!--collapsible panel: form.Drug-->
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Drug
+                    <span class="pull-right"><i class="fa fa-angle-double-down"></i></span></a>
+                  </h4>
+                </div>
+                <div id="collapse2" class="panel-collapse collapse">
+                  <div class="panel-body" style="padding: 2rem 6rem;">
+                    {% for field in form.Drug %}
+                    {% if field.errors %}
+                    <div class="form-group row has-success" style="font-family: 'Oxygen Mono', monospace;">
+                      {% for error in field.errors %}
+                        <label class="control-label col-sm-7" style="font-size:14px; font-family:'Lato';">{{ error }}</label>
+                      {% endfor %}
+                      <div class="input-group col-sm-7">
+                        {{ render_inputaddon_span_withtooltip(field.name)|safe }}{{ field.label }}</span>
+                        {{ field(class_="form-control") }}
+                        <span class="input-group-addon">{{ field.description|safe }}</span>
+                      </div>
+                    </div>
+                    {% else %}
+                    <div class="form-group row" style="font-family: 'Oxygen Mono', monospace;">
+                      <div class="input-group col-sm-7">
+                        {{ render_inputaddon_span_withtooltip(field.name)|safe }}{{ field.label }}</span>
+                        {{ field(class_="form-control") }}
+                        <span class="input-group-addon">{{ field.description|safe }}</span>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+
+              <!--collapsible panel: form.GrowthRate-->
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Growth Rate
+                    <span class="pull-right"><i class="fa fa-angle-double-down"></i></span></a>
+                  </h4>
+                </div>
+                <div id="collapse3" class="panel-collapse collapse">
+                  <div class="panel-body" style="padding: 2rem 6rem;">
+                    {% for field in form.GrowthRate %}
+                    {% if field.errors %}
+                    <div class="form-group row has-success" style="font-family: 'Oxygen Mono', monospace;">
+                      {% for error in field.errors %}
+                        <label class="control-label col-sm-7" style="font-size:14px; font-family:'Lato';">{{ error }}</label>
+                      {% endfor %}
+                      <div class="input-group col-sm-7">
+                        {{ render_inputaddon_span_withtooltip(field.name)|safe }}{{ field.label }}</span>
+                        {{ field(class_="form-control") }}
+                        <span class="input-group-addon">{{ field.description|safe }}</span>
+                      </div>
+                    </div>
+                    {% else %}
+                    <div class="form-group row" style="font-family: 'Oxygen Mono', monospace;">
+                      <div class="input-group col-sm-7">
+                        {{ render_inputaddon_span_withtooltip(field.name)|safe }}{{ field.label }}</span>
+                        {{ field(class_="form-control") }}
+                        <span class="input-group-addon">{{ field.description|safe }}</span>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+
+              <!--collapsible panel: form.InitialState-->
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h4 class="panel-title"><a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Initial State
+                    <span class="pull-right"><i class="fa fa-angle-double-down"></i></span></a>
+                  </h4>
+                </div>
+                <div id="collapse4" class="panel-collapse collapse">
+                  <div class="panel-body" style="padding: 2rem 6rem;">
+                    {% for field in form.InitialState %}
+                    {% if field.errors %}
+                    <div class="form-group row has-success" style="font-family: 'Oxygen Mono', monospace;">
+                      {% for error in field.errors %}
+                        <label class="control-label col-sm-7" style="font-size:14px; font-family:'Lato';">{{ error }}</label>
+                      {% endfor %}
+                      <div class="input-group col-sm-7">
+                        {{ render_inputaddon_span_withtooltip(field.name)|safe }}{{ field.label }}</span>
+                        {{ field(class_="form-control") }}
+                        <span class="input-group-addon">{{ field.description|safe }}</span>
+                      </div>
+                    </div>
+                    {% else %}
+                    <div class="form-group row" style="font-family: 'Oxygen Mono', monospace;">
+                      <div class="input-group col-sm-7">
+                        {{ render_inputaddon_span_withtooltip(field.name)|safe }}{{ field.label }}</span>
+                        {{ field(class_="form-control") }}
+                        <span class="input-group-addon">{{ field.description|safe }}</span>
+                      </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!--end of collapsible panel-->
+            <!--submit button-->
+            <div class="form-group" style="padding:3rem 0rem;">
+              <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary"><i class="fa fa-angle-double-right"></i>&nbsp;<b>Simulate</b></button>
+                <button type="reset" class="btn btn-default"><i class="fa fa-refresh"></i>&nbsp;Reset</button>
+              </div>
+            </div>
+            <!--end of submit button-->
+          </form>
+          <!--end of form-->
+        </div>
+      </div>
+      <!--end of panel-primary: form container-->
+    </div>
+    <!--end of col-sm-6 class for panel-primary form container-->
+
+
+    <div class="col-sm-4">
+      <!--form alert indicator-->
+      {% for field in form %}
+      {% if field.errors %}
+      <div class="alert alert-dismissible alert-info">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Opps!</strong><br>
+        Please check and change a few things up in {{ field.name }} and try submitting again.
+      </div>
+      {% endif %}
+      {% endfor %}
+
+      <!--right panel message-->
+      <div class="well well-lg" style="min-height:30rem">
+        <h4>Welcome to ReSim Demo!</h4>
+        <hr>
+        <p>
+          This a simplified version of ReSim. If you want full control/customization, please install resim package locally. <br><br>
+
+          In this demo, you can play around with the params and see the result. Simulation time increase with <i>n</i> and <i>t</i>. And it greatly depends on the machine computing power. Please be patient. <br><br>
+
+          Have fun simulating!
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <!--Panel-primary: Plotly Container-->
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Simulation Result
+        <span class="pull-right"><a data-toggle="modal" data-target="#InfoModalPlotly"><i class="fa fa-info-circle"></i></a></span>
+      </h3>
+    </div>
+    <div class="panel-body">
+      {% for id in ids %}
+        <div id="{{id}}"></div><br><hr><br>
+      {% endfor %}
+    </div>
+  </div>
+  <!--end of panel-primary: plotly container-->
+
+{% endblock %}
+
+{% block footer %}
+  <script type="text/javascript">
+    var graphs = {{  graphJSON|safe  }};
+    var ids = {{  ids|safe  }};
+    for(var i in graphs) {
+        Plotly.plot(ids[i], // the ID of the div, created above
+                    graphs[i].data,
+                    graphs[i].layout || {});
+    }
+  </script>
+  <script>
+    $(document).ready(function(){
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+  </script>
+{% endblock %}
