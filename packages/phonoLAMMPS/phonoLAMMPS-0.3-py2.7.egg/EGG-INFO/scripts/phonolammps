@@ -1,0 +1,52 @@
+#!/usr/local/opt/python/bin/python2.7
+
+import numpy as np
+import argparse
+
+from phonolammps import Phonolammps
+from phonolammps.iofile import read_from_file_structure_poscar
+
+
+parser = argparse.ArgumentParser(description='rfc_calc options')
+
+parser.add_argument('lammps_input_file', metavar='lammps_file', type=str,
+                    help='input file containing lammps script')
+
+parser.add_argument('-o', metavar='file', type=str, default='FORCE_CONSTANTS',
+                    help='force constants output file [default: FORCE_CONSTANTS]')
+
+parser.add_argument('--dim', metavar='file', type=int, nargs=3,  default=[1, 1, 1],
+                    help='dimensions of the supercell')
+
+parser.add_argument('-p', action='store_true',
+                   help='plot phonon band structure')
+
+parser.add_argument('-c', '--cell', metavar='file', type=str, default='POSCAR',
+                    help='POSCAR type file containing the unit cell')
+
+parser.add_argument('-pa', '--primitive_axis', metavar='F', type=float, nargs=9,  default=[1, 0, 0,
+                                                                              0, 1, 0,
+                                                                              0, 0, 1],
+                    help='primitive axis')
+
+parser.add_argument('--amplitude', type=str, default=0.01,
+                    help='Displacement distance [default: 0.01 angstrom]')
+
+
+args = parser.parse_args()
+
+structure = read_from_file_structure_poscar(args.cell)
+
+phlammps = Phonolammps(structure,
+                       args.lammps_input_file,
+                       supercell_matrix=np.diag(args.dim),
+                       primitive_matrix=np.array(args.primitive_axis).reshape((3, 3)),
+                       displacement_distance=args.amplitude,
+                       show_log=False,
+                       show_progress=True)
+
+if args.p:
+    phlammps.plot_phonon_dispersion_bands()
+
+print ('writing force constants')
+phlammps.write_force_constants(filename=args.o)
