@@ -1,0 +1,32 @@
+<h1>
+  <a href="{% url 'url_simplify:index' %}">URL simplifier</a>
+</h1>
+<h2>
+  <a href="{% url 'url_simplify:urls' %}">All urls</a>
+</h2>
+
+<style type="text/css">
+td
+{
+    padding:0 50px 0 50px;
+}
+</style>
+
+<table id="urls">
+    <tr>
+      <th>created_at</th>
+      <th>full_url</th>
+      <th>redirects</th>
+      <th>short_id</th>
+      <th>short_url</th>
+    </tr>
+        <tr>
+            <td>{{ url.created_at|date:'Y-m-d H:i' }}</td>
+            <td>{{ url.full_url }}</td>
+            <td>{{ url.redirects }}</td>
+            <td>{{ url.short_id }}</td>
+            <td>
+              <a href="{% url 'url_simplify:short_redirect' url.short_id %}">{% url 'url_simplify:short_redirect' url.short_id %}</a>
+            </td>
+        </tr>
+</table>

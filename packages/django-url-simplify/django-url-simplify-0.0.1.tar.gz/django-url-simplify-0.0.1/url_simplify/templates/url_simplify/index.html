@@ -1,0 +1,23 @@
+<h1>URL simplifier</h1>
+<h2>
+  <a href="{% url 'url_simplify:urls' %}">All urls</a>
+</h2>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'url_simplify:add_url' %}" method="post">
+{% csrf_token %}
+<input name="input_url" placeholder="Your original URL here" required/>
+<input type="submit" value="Shorten URL" />
+</form>
+
+{% if popular_url_list %}
+    <h3>Most popular urls</h3>
+    <ol>
+    {% for url in popular_url_list %}
+        <li><a href="{% url 'url_simplify:detail' url.id %}">{{ url.full_url }}, {{ url.redirects }}</a></li>
+    {% endfor %}
+    </ol>
+{% else %}
+    <p>No simplified urls are available.</p>
+{% endif %}
