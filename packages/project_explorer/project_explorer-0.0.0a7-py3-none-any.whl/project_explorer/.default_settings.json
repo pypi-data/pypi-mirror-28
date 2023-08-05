@@ -1,0 +1,101 @@
+// This file contains the settings for project_explorer.
+//
+// All settings are re-applied when this file is modified. If this file is deleted, then it will be
+// recreated with the default settings.
+//
+// Relative paths will be interpreted as relative to the installation.
+
+{
+
+    // Paths matching any of these regular expressions will not be shown.
+    "regex_filters" : [
+        ".*/\\.git",
+        ".*/\\.coverage",
+        ".*\\.pyc",
+        ".*\\.egg-info",
+        ".*/__pycache__"
+    ],
+
+    // Open with settings that override the system settings.
+    // This should be a list of regex patterns and commands. The command corresponding to the first
+    // pattern in the list will be executed. In the command string {path} will be replaced with the
+    // path of the file that is being opened.
+    "open_with" : [
+        // [".*\\.py", "\"C:/Program Files (x86)/Notepad++/notepad++.exe\" {path}"]
+    ],
+
+    // Selected items context menu.
+    // This should be a list of dictionaries, where each dictionary can have:
+    //      - label (required)
+    //          The text to show in the context menu.
+    //
+    //      - command (required)
+    //          The command string to execute when the menu item is selected.
+    //
+    //          In this string, {0}, {1}, etc... can be used and will be replaced with the first,
+    //          second, and so on file paths. If the number of selected paths differs from the
+    //          highest path reference + 1, the menu item will be disabled.
+    //
+    //          {selected} will be replaced with the full list of selected paths. If this is
+    //          specified, and there are no selected items, then the menu item will be disabled.
+    //
+    //          {current_directory} will be replaced with the directory containing the current item,
+    //          or the current item if it is a directory. If there is no current item, the menu item
+    //          will be disabled.
+    //
+    //      - require
+    //          A list of regular expression patterns. If this is specified then the menu item will
+    //          be disabled if any of the selected items doesn't match at least one of the patterns.
+    //          Also, at least one item must be selected for the menu item to be enabled.
+    //
+    //      - exclude
+    //          A list of regular expression patterns. If this is specified then the menu item will
+    //          be disabled if any of the selected items matches at least one of the patterns.
+    //
+    //      - show_if_disabled
+    //          If specified and true, then the menu item will be visible, even if it is disabled.
+    "context_menu" : [
+        {
+            "label"   : "Diff Selected",
+            "command" : "\"c:/Program Files (x86)/WinMerge/WinMergeU.exe\" {0} {1}"
+        },
+        {
+            "label"   : "Build Wheel",
+            "command" : "start cmd /k \"cd /d {current_directory} & python setup.py bdist_wheel\"",
+            "require" : [".*/setup\\.py"]
+        },
+        {
+            "label"   : "Pylint",
+            "command" : "start cmd /k \"cd /d {current_directory} & pylint -r n {0}\"",
+            "require" : [".*\\.py"]
+        },
+        {
+            "label"   : "Run",
+            "command" : "start cmd /k \"cd /d {current_directory} & python {0}\"",
+            "require" : [".*\\.py"],
+            "exclude" : [".*/setup\\.py"]
+        },
+        {
+            "label"   : "Shell Here",
+            "command" : "start cmd /k cd /d {current_directory}"
+        },
+        {
+            "label"   : "Git",
+            "command" : "start cmd /k \"cd /d {current_directory} & git status\""
+        },
+        {
+            "label"   : "Explorer Here",
+            "command" : "cmd /c \"cd /d {current_directory} & explorer .\""
+        }
+    ],
+
+    // Directory to store trash in.
+    "trash_directory" : ".trash",
+
+    // Directory to store projects in.
+    "projects_directory" : ".projects",
+
+    // Path to the theme file to use.
+    "theme" : "default_theme.scss"
+
+}
