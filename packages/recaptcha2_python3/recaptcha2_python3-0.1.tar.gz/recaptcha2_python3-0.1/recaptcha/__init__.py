@@ -1,0 +1,1 @@
+from recaptcha.client import submit
