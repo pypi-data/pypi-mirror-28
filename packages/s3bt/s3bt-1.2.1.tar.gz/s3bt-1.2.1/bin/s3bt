@@ -1,0 +1,413 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import s3bt
+import requests
+import argparse
+
+if(   sys.version_info[0] == 2 ) : 
+    import ConfigParser
+elif( sys.version_info[0] == 3 ) : 
+	from configparser import ConfigParser
+else : 
+    pass
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# 
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+def _cli_opts():
+
+    '''
+
+    Parse command line options.
+    
+    :returns the arguments
+
+    '''
+    mepath = os.path.abspath(sys.argv[0]).encode('utf-8')
+    mebase = os.path.basename(mepath)
+
+    description = '''
+
+  ================================================================================================
+
+  S3BT - a command line tool for S3-intermediated bulk data transfers
+  https://code.stanford.edu/gsb-circle-research/s3bt
+
+  Author(s): W. Ross Morrow, GSB CIRCLE RSS
+
+  Copyright Stanford University, 2017+
+
+  ================================================================================================
+
+  S3BT facilitates (bulk) file transfers between machines, such as the yens and cf2 instances,
+  or cf2 instances and laptops/desktops. This tool uses SHA256 encryption of all data by default. 
+  You can disable this feature, but transfering unencrypted data is not recommended. 
+
+  Per Stanford ISO Minimum Security rules for cloud services you MUST use encryption if your data
+  contains moderate to high risk components. See
+
+  	https://uit.stanford.edu/guide/securitystandards/iaas
+  	https://uit.stanford.edu/guide/riskclassifications
+
+  for more information, or contact ISO via the request link at 
+
+    https://uit.stanford.edu/organization/iso
+
+  RSS is not responsible for any consequences related to data breaches if you disable encryption
+  for transfers. 
+
+  ================================================================================================
+
+  For example, the command
+
+  	asunetid@cf2$ python s3bt.py -U -f results/*.csv
+
+  on a cf2 instance will archive, encrypt, and ship any files matching the pattern "results/*.csv" 
+  from the instance to a temporary location in S3 and register this transfer with a database, and 
+  the command
+
+  	asunetid@yenX$ python s3bt.py -D -l -f ./
+
+  on a yen server will download the "latest" (most recent) transfer for the user "asunetid", 
+  unencrypting and unpacking the archive into the current directory ("./"). The same data could 
+  be downloaded onto a local machine with 
+
+  	asunetid@local$ python s3bt.py -D -l -f ./
+
+  S3BT reads the current user from the environment (the USER variable). If you have a different 
+  username on the cf2 instance (e.g., "ubuntu") you can force a different username with the -u flag: 
+
+  	ubuntu@cf2$ python s3bt.py -U -f results/*.csv -u asunetid
+
+  The download commands on a yen server or local machine would be the same. 
+
+  ================================================================================================
+
+  Transfers are held in S3 for only 3 days; after 3 days they are deleted. 
+
+  Various options are available: 
+
+  ================================================================================================
+
+'''.format( mebase.decode('ascii', 'ignore') )
+
+    parser = argparse.ArgumentParser(prog=mebase,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter,
+                                     description=description)
+
+    group = parser.add_mutually_exclusive_group( required=True )
+    group.add_argument( '-U', '--upload'   	, action='store_true' , help='upload mode'   )
+    group.add_argument( '-C', '--check' 	, action='store_true' , help='check mode' )
+    group.add_argument( '-D', '--download' 	, action='store_true' , help='download mode' )
+    group.add_argument( '-X', '--delete' 	, action='store_true' , help='delete mode' )
+
+    parser.add_argument( '-f', '--files',
+                        action='store',
+                        help='-U mode: bash-like regex for which files/folders to upload; -D mode: location to put download in' )
+
+    parser.add_argument( '-a', '--archive',
+                        action='store',
+                        help='(-U mode only) name for archive built for transfer')
+
+    parser.add_argument( '-s', '--safemode' , 
+    					action='store_true' , 
+    					help='safe mode (no encryption). NOTE: Using safe mode with moderate or high risk data is a violation of Stanford UIT Minimum Security requirements.' )
+
+    parser.add_argument( '-p', '--password',
+                        action='store',
+                        help='passphrase for encrypt/decrypt operations')
+
+    parser.add_argument( '-K', '--keymode' , 
+    					action='store_true' , 
+    					help='' )
+    parser.add_argument( '-k', '--keyfile',
+                        action='store',
+                        help='use a key from a file (~/.s3bt/keys by default)')
+
+    parser.add_argument( '-u', '--user',
+                        action='store',
+                        help='force a specific user')
+
+    parser.add_argument( '-d', '--description',
+                        action='store',
+                        help='(-U mode only) short description of files for transfer')
+
+    parser.add_argument( '-l', '--latest',
+                        action='store_true',
+                        help='(-D mode only) just download the latest entry in the transfer table')
+
+    parser.add_argument( '-c', '--clean',
+                        action='store_true',
+                        help='(-D mode only) clean up after downloading; that is, delete from transfer table')
+
+    parser.add_argument( '-n', '--name',
+                        action='store',
+                        help='(-D mode only) just download the transfer table entry with this name (if it exists)')
+
+    parser.add_argument( '-q', '--quiet',
+                        action='store_true',
+                        help='quiet mode' )
+
+    parser.add_argument( '-v', '--version',
+                        action='version',
+                        version='%(prog)s ' + s3bt.__version__)
+
+    args = parser.parse_args()
+    return args
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# 
+# 
+# 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+if __name__ == "__main__" : 
+
+	args = _cli_opts()
+
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+	if not args.quiet : 
+		print( "" )
+		print( "__S3BT________________________________________________________________________________________________" )
+		print( "" )
+
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+	config = ConfigParser()
+	config.read( "%s/.s3bt/config" % os.path.expanduser("~") )
+
+	awsdata = { 'access_key_id' : "" , 
+				'secret_ax_key' : "" , 
+				'transf_bucket' : "" , 
+				'bucket_region' : "" }
+
+	fields = {  'access_key_id' : { 'name'  : 'aws_access_key_id' , 
+									'fname' : "AWS access key id" , 
+									'input' : "  AWS access key id     : " } , 
+				'secret_ax_key' : { 'name'  : 'aws_secret_access_key' , 
+									'fname' : "AWS secret access key" , 
+									'input' : "  AWS secret access key : " } , 
+				'transf_bucket' : { 'name'  : 'aws_bucket_name' , 
+									'fname' : "AWS transfer bucket" , 
+									'input' : "  AWS transfer bucket   : " } , 
+				'bucket_region' : { 'name'  : 'aws_bucket_region' , 
+									'fname' : "AWS bucket region" , 
+									'input' : "  AWS bucket region     : " }
+				 }
+
+	if( config.sections() ) : 
+
+		add_to_config = False
+
+		for field in fields : 
+
+			if config.has_option( 'default' , fields[field]['name'] ) : 
+				awsdata[field] = config['default'][ fields[field]['name'] ]
+			else : 
+				print( "Config file missing %s... please enter to add to default profile." % fields[field]['fname'] )
+				awsdata[field] = input( fields[field]['input'] )
+				config['default'][ fields[field]['name'] ] = awsdata[field]
+				add_to_config = True
+			
+		if add_to_config : 
+			with open( "%s/.s3bt/config" % os.path.expanduser("~") , 'w+' ) as configfile :
+				config.write( configfile )
+
+	else : 
+
+		print( 'Config file DOES NOT exist... please enter the following to create a default profile.' )
+
+		config['default'] = {}
+		for field in fields : 
+			awsdata[field] = input( fields[field]['input'] )
+			config['default'][ fields[field]['name'] ] = awsdata[field]
+
+		with open( "%s/.s3bt/config" % os.path.expanduser("~") , 'w+' ) as configfile :
+			config.write( configfile )
+
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+	# upload specified files, 
+	if args.files is None : 
+		if args.upload : 
+			print( "WARNING: no files specified for upload mode; transfering the current directory" )
+			args.files = "./???*"
+		if args.download : 
+			args.files = "."
+
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+	# default user from the environment
+	if( args.user is None ) : 
+		args.user = os.environ['USER']
+
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+	if( args.password is not None ) : 
+		res = s3bt.complex_password( args.password )
+		if( not res[0] ) :
+			print( "ERROR: %s" % res[1] ) 
+			sys.exit(1)
+
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+	# if -k, assert -K true; -K alone gives default key location so assert -k "~/.s3bt/keys"
+	if( args.keyfile is not None ) : 
+
+		args.keymode = True
+		if not os.path.isfile( args.keyfile ) :
+			print( "ERROR: cannot open keyfile \"%s\"" % args.keyfile )
+			sys.exit(1)
+		else : 
+			config = ConfigParser()
+			config.read( args.keyfile )
+			if( args.user in config.sections() ) : 
+				args.password = config[args.user]['key']
+			else : 
+				if( args.upload ) : # we can generate a key and store it
+					config[args.user] = { 'key' : hashlib.sha224( ("%s %s" % (args.user,datetime.now())).encode('utf-8') ).hexdigest() }
+					args.password = config[args.user]['key']
+					with open( args.keyfile , 'w+' ) as configfile :
+						config.write( configfile )
+				else : 
+					print( "ERROR: keyfile \"%s\" doesn't have a profile for user \"%s\"" % (args.keyfile,args.user) )
+					sys.exit(1)
+
+	else : # -k wasn't provided, use default location for keymode
+		if args.keymode : 
+			default = { 'dir' : "%s/.s3bt/" % os.path.expanduser("~") , 'file' : "%s/.s3bt/keys" % os.path.expanduser("~") }
+			args.keyfile = default['file']
+			if args.upload : 
+				if not os.path.exists( default['dir'] ) :
+					os.makedirs( default['dir'] )
+				if not os.path.isfile( default['file'] ) :
+					config = ConfigParser()
+					config[args.user] = { 'key' : hashlib.sha224( ("%s %s" % (args.user,datetime.now())).encode('utf-8') ).hexdigest() }
+					args.password = config[args.user]['key']
+					with open( args.keyfile , 'w+' ) as configfile :
+						config.write( configfile )
+				else : # default key file exists
+					config = ConfigParser()
+					config.read( args.keyfile )
+					if( args.user in config.sections() ) : 
+						args.password = config[args.user]['key']
+					else : 
+						config[args.user] = { 'key' : hashlib.sha224( ("%s %s" % (args.user,datetime.now())).encode('utf-8') ).hexdigest() }
+						args.password = config[args.user]['key']
+						with open( args.keyfile , 'w+' ) as configfile :
+							config.write( configfile )
+			elif args.download :
+				if not os.path.isfile( args.keyfile ) :
+					print( "ERROR: cannot open keyfile \"%s\"" % args.keyfile )
+					sys.exit(1)
+				else : 
+					config = ConfigParser()
+					config.read( args.keyfile )
+					if( args.user in config.sections() ) : 
+						args.password = config[args.user]['key']
+					else : 
+						print( "ERROR: keyfile \"%s\" doesn't have a profile for user \"%s\"" % (args.keyfile,args.user) )
+						sys.exit(1)
+
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+	if( args.safemode ) : 
+		message = """ 
+
+ WARNING____________________________________________________________
+
+ By electing "safemode" you are not encrypting data transfered in 
+ motion or at rest. This is a violation of Stanford IT's Minimum 
+ Security guidelines if your data is moderate or high risk. See 
+
+  	https://uit.stanford.edu/guide/securitystandards/iaas
+  	https://uit.stanford.edu/guide/riskclassifications
+
+ for more information. 
+ ___________________________________________________________________
+
+ By continuing, you agree to take complete responsibility for the 
+ security of your data. 
+
+"""
+		print( message )
+		confirm( prompt=" Do you wish to continue (y/n)? " )
+		print( " " )
+
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+	# check server
+	use_server = False;
+	r = requests.get( '%sping' % s3bt.server )
+	if ( r.status_code == 200 ) :
+		use_server = True;
+
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+	if( args.upload ) : 
+
+		s3bt.upload( 	use_server  = use_server ,
+						files 		= args.files , 
+						archive 	= args.archive , 
+						user 		= args.user , 
+						description = args.description , 
+						encrypt 	= not args.safemode , 
+						password 	= args.password , 
+						verbose 	= not args.quiet , 
+						awsdata 	= awsdata )
+
+	elif( args.check ) : 
+
+		s3bt.check( 	user = args.user )
+
+	elif( args.download ) : 
+
+		s3bt.download( 	use_server  = use_server ,
+						user 		= args.user ,  
+						password 	= args.password ,
+						latest 		= args.latest , 
+						name 		= args.name , 
+						path 		= args.files , 
+						cleanup 	= args.clean , 
+						verbose 	= not args.quiet , 
+						awsdata 	= awsdata )
+
+	elif( args.delete ) : 
+
+		if not use_server : 
+			print( "Delete mode not available without server." )
+			sys.exit(1);
+		s3bt.delete( 	user 		= args.user , 
+						name 		= args.name , 
+						verbose 	= not args.quiet ,
+						awsdata 	= awsdata )
+	else : 
+		print( "What?" )
+
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+	# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
