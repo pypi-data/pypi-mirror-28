@@ -1,0 +1,14 @@
+#!/bin/sh
+
+if [[ "${2}" == "x86_64" ]]; then
+	name="amd64"
+elif [[ "${2}" == "i386" ]] || [[ "${2}" == "i686" ]]; then
+	name="i386"
+	if [[ "${4}" == "--pae" ]]; then
+		name="${name}-pae"
+	fi
+fi
+name="config.${name}"
+echo "Downloading ${name} from Liquorix"
+wget --quiet "http://liquorix.net/sources/${3}/${name}"
+cp "${name}" "${1}"
