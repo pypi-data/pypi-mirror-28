@@ -1,0 +1,81 @@
+Metadata-Version: 1.1
+Name: backup2s3
+Version: 0.2
+Summary: Backup files and mysql to AWS S3
+Home-page: https://github.com/wavedocs/backup2s3
+Author: Nazar Suryev
+Author-email: wavedocs@gmail.com
+License: GPLv3
+Download-URL: https://github.com/wavedocs/backup2s3/archive/0.1.tar.gz
+Description-Content-Type: UNKNOWN
+Description: backup2s3
+        =========
+        
+        Backup files and mysql databases to Amazon S3
+        
+        Requirements
+        ------------
+        
+        - mysql-client
+        
+        Installation
+        ------------
+        Using PIP via PyPI::
+        
+            pip install backup2s3
+        
+        Using PIP via Github::
+        
+            pip install git+https://github.com/wavedocs/backup2s3#egg=backup2s3
+        
+        Usage
+        -----
+        
+        Create new IAM User
+        
+        - In the IAM Management Console on Amazon, click Create New User and follow on-screen instructions.
+        - Click Create User Policy on the user page, then select Custom Policy, then paste the following text in the text area. Replace INSERT_YOUR_BUCKET_NAME with the bucket name you have previously created, and submit the form:
+        
+        
+        ```
+        {
+        	"Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Effect": "Allow",
+                    "Action": [
+                        "s3:*"
+                    ],
+                    "Resource": [
+                        "arn:aws:s3:::INSERT_YOUR_BUCKET_NAME",
+                        "arn:aws:s3:::INSERT_YOUR_BUCKET_NAME/*"
+                    ]
+                }
+            ]
+        }
+        ```
+        
+        Сopy and edit the config
+        
+        ```
+        $ cp /etc/backup2s3-sample.yml /etc/backup2s3.yml
+        ```
+        
+        Run backup files and mysql databases
+        
+        ```
+        /usr/bin/backup2s3
+        
+        Usage: backup2s3 [options]
+            Options:
+              -a, --all Backup files and mysql db
+              -f, --files Backup files
+              -d, --databases Backup mysql databases
+              -h, --help Print man
+Keywords: backup,s3,mysql
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Topic :: System :: Archiving :: Backup
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6

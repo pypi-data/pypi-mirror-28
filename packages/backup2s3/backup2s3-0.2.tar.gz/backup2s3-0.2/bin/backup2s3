@@ -1,0 +1,123 @@
+#!/usr/bin/env python
+
+import sys
+import os
+import os.path
+import subprocess
+import yaml
+import boto3
+import tarfile
+import logging
+from time import gmtime, strftime
+
+
+def backup_files(cfg):
+    if len(cfg['dirs']) > 0:
+
+        current_time = strftime("%Y-%m-%d_%H-%M", gmtime())
+        backup_files_name = "backup_files_{}.tar".format(current_time)
+        tar_file = tarfile.open("{}/{}".format(cfg['tmp_path'], backup_files_name), "w")
+
+        for dir in cfg['dirs']:
+            logging.info("Add folder to archive")
+            tar_file.add(dir)
+
+        tar_file.close()
+        upload_s3(cfg, backup_files_name)
+        os.remove("{}/{}".format(cfg['tmp_path'], backup_files_name))
+
+
+def backup_mysql(cfg):
+    if len(cfg['mysql']['databases']) > 0:
+
+        for db in cfg['mysql']['databases']:
+            try:
+                current_time = strftime("%Y-%m-%d_%H-%M", gmtime())
+                backup_db_name = "backup_db_{}_{}.sql".format(db, current_time)
+                tar_db = tarfile.open("{}/{}.tar".format(cfg['tmp_path'], backup_db_name), "w")
+                logging.info("Dump creating")
+                command = "mysqldump -h{} -u{} -p{} {} > {}/{}".format(cfg['mysql']['host'], cfg['mysql']['user'],
+                                                                       cfg['mysql']['password'], db, cfg['tmp_path'],
+                                                                       backup_db_name)
+                p = subprocess.Popen(command, shell=True)
+                p.communicate()
+                if p.returncode != 0:
+                    logging.error("Backup mysql error!")
+                    sys.exit(1)
+                tar_db.add("{}/{}".format(cfg['tmp_path'], backup_db_name))
+                tar_db.close()
+                logging.info("Dump created")
+                logging.info("S3 uploading")
+                upload_s3(cfg, backup_db_name)
+                os.remove("{}/{}".format(cfg['tmp_path'], backup_db_name))
+                os.remove("{}/{}.tar".format(cfg['tmp_path'], backup_db_name))
+                logging.info("S3 uploaded")
+            except Exception as e:
+                logging.info(e)
+
+
+def upload_s3(cfg, backup_files_name):
+    logging.info("Connecting to S3")
+    s3 = boto3.client(
+        's3',
+        aws_access_key_id=cfg['aws_access_key_id'],
+        aws_secret_access_key=cfg['aws_secret_access_key']
+    )
+
+    logging.info("Upload to s3")
+    s3.upload_file("{}/{}".format(cfg['tmp_path'], backup_files_name), cfg['aws_bucket'], backup_files_name)
+    logging.info("Finish upload")
+
+
+def man():
+    print("Usage: backup2s3 [options]\n"
+          "Options:\n"
+          "  -a, --all\n"
+          "    Backup files and mysql db\n"
+          "  -f, --files\n"
+          "    Backup files\n"
+          "  -d, --databases\n"
+          "    Backup mysql databases\n"
+          "  -h, --help\n"
+          "    Print man\n")
+
+
+def main():
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                        filename="/var/log/backup2s3.log", level=logging.INFO)
+    logging.info("Backup started")
+
+    config = "/etc/backup2s3-sample.yml"
+
+    if os.path.isfile(config):
+        with open("/etc/backup2s3.yml", 'r') as ymlfile:
+            cfg = yaml.load(ymlfile)
+    else:
+        logging.error("Config /etc/backup2s3.yml not found!")
+        print("config /etc/backup2s3.yml not found!\n"
+              "Sample configuration file: /etc/backup2s3-sample.yml")
+        sys.exit(1)
+
+    if len(sys.argv) > 1:
+        for param in sys.argv[1:]:
+            if param == "-h" or param == "--help":
+                man()
+                continue
+            if param == "-a" or param == "--all":
+                backup_files(cfg)
+                backup_mysql(cfg)
+                continue
+            if param == "-f" or param == "--files":
+                backup_files(cfg)
+                continue
+            if param == "-d" or param == "--databases":
+                backup_mysql(cfg)
+                continue
+    else:
+        man()
+        sys.exit(1)
+
+    logging.info("Backup complete!!!")
+
+if __name__ == "__main__":
+    main()
