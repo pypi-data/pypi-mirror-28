@@ -1,0 +1,104 @@
+<?xml version="1.0" ?>
+<?xml-stylesheet href="atom.css" type="text/css"?>
+<feed xmlns="http://www.w3.org/2005/Atom"
+      xmlns:dc="http://purl.org/dc/elements/1.1/"
+      xml:base=""
+      xml:lang="en"
+      xmlns:ev="http://purl.org/rss/1.0/modules/event/"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      tal:define="feed view/feed;
+                  url feed/link;"
+      tal:attributes="xml:base url; xml:lang feed/language"
+      i18n:domain="Products.CMFPlone">
+  <link rel="self"
+        href=""
+        tal:attributes="href request/ACTUAL_URL" />
+  <title type="html" tal:content="feed/title" />
+  <subtitle tal:content="feed/description" />
+  <updated tal:content="python:feed.modified.ISO8601()" />
+  <link tal:attributes="href url" rel="alternate" type="text/html" />
+  <id tal:content="string:urn:syndication:${feed/uid}" />
+  <logo tal:content="feed/logo" />
+  <icon tal:content="feed/icon" />
+  <generator uri="http://www.plone.org" version="1.0">plone</generator>
+  <rights tal:content="feed/rights" tal:condition="feed/rights" />
+  <author tal:condition="feed/show_about">
+    <name tal:content="feed/author_name" />
+    <email tal:content="feed/author_email" tal:condition="feed/author_email" />
+  </author>
+
+  <tal:repeat repeat="item feed/items">
+    <entry tal:define="published item/published;
+                       modified item/modified;">
+      <title tal:content="item/title"></title>
+      <link rel="alternate" type="text/html" href="" tal:attributes="href item/link" />
+      <link tal:condition="item/has_enclosure" rel="enclosure"
+          tal:attributes="href item/file_url;
+                          length item/file_length;
+                          type item/file_type;" />
+      <tal:cond tal:condition="python: getattr(item, 'image_obj', False)">
+      <link  rel="enclosure"
+            tal:attributes="href item/image_obj/url;
+                            length item/image_obj/size;
+                            type item/image_obj/type;
+                            name item/image_obj/title" />
+      </tal:cond>
+      <id tal:content="string:urn:syndication:${item/uid}">urn:syndication:12345678</id>
+      <summary tal:condition="not: feed/settings/render_body" ><div tal:replace="item/description"/> </summary>
+      <content tal:condition="feed/settings/render_body"  type="html" xml:base="" xml:lang="en-US" xml:space="preserve"
+               tal:attributes="xml:base url; xml:lang feed/language;">
+        <tal:block tal:replace="structure string:&lt;![CDATA["/>
+        <!-- <tal:block tal:condition="item/image_obj">
+          <img class="banner_image" tal:condition="item/image_obj/url" tal:attributes="src item/image_obj/url;alt item/title" />
+        </tal:block> -->
+        <div class="description" tal:condition="item/description" tal:content="item/description" />
+        <tal:block tal:condition="python: item.context.portal_type=='Event'">
+        <ev:organizer>
+          <tal:cond tal:condition="item/contactname">
+            <name tal:content="item/contactname"/><br />
+          </tal:cond>
+          <tal:cond tal:condition="item/contactemail">
+            <email tal:content="item/contactemail" /><br />
+          </tal:cond>
+          <tal:cond tal:condition="item/contactphone">
+            <phone tal:content="item/contactphone" /><br />
+          </tal:cond>
+        </ev:organizer>
+        <tal:cond tal:condition="item/location">
+          <ev:location tal:content="structure item/location">Washington, DC</ev:location><br />
+        </tal:cond>
+        <tal:cond tal:condition="item/eventurl">
+          <ev:url tal:content="item/eventurl">www.plone.org</ev:url><br />
+        </tal:cond>
+        <tal:cond tal:condition="item/startdate">
+          du <ev:startdate tal:content="python: item.formated_date(item.startdate)">2001-09-18</ev:startdate>
+        </tal:cond>
+        <tal:cond tal:condition="item/enddate">
+          au <ev:enddate tal:content="python: item.formated_date(item.enddate)">2001-09-21</ev:enddate>
+        </tal:cond>
+        </tal:block>
+
+        <details><tal:block tal:replace="structure item/body"/></details>
+
+        <tal:block tal:replace="structure string:]]&gt;"/>
+
+      </content>
+
+      <author>
+        <name tal:content="item/author_name" />
+        <email tal:content="item/author_email" tal:condition="item/author_email" />
+      </author>
+      <published tal:content="python: published and published.ISO8601() or modified.ISO8601()"></published>
+
+      <updated tal:content="python:modified.ISO8601()"></updated>
+
+      <tal:block repeat="category item/categories">
+        <category tal:attributes="term category"/>
+      </tal:block>
+
+    </entry>
+
+  </tal:repeat>
+
+</feed>
