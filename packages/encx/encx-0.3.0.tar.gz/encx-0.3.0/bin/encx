@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+
+from encxlib.cli import EncxClient
+
+import argparse
+import sys
+
+
+def global_parser():
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument('-c', '--config', help="Path to configuration file")
+    return parser.parse_known_args()
+
+def main():
+    global_args, remaining_args = global_parser()
+    client = EncxClient(config_path=global_args.config)
+    client.run_command(remaining_args)
+
+if __name__ == '__main__':
+    main()
