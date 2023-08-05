@@ -1,0 +1,15 @@
+var jsonSchema = {};
+{% for ns in schemas %}
+jsonSchema["{{ns}}"] = {};
+    {% for method, schema in schemas[ns].items() %}
+jsonSchema["{{ns}}"]["{{method}}"] = {{schema | jsonDumps}};
+    {% endfor %}
+{% endfor %}
+
+if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+        exports = module.exports = jsonSchema;
+    }
+    exports.jsonSchema = jsonSchema;
+}
+
