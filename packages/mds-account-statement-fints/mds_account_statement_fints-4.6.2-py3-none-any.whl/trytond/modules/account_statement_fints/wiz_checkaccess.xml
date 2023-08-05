@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+
+        <!-- wizard: CheckBankAccessWizard -->
+        <record model="ir.action.wizard" id="act_checkbankaccess_wizard">
+            <field name="name">check online access</field>
+            <field name="wiz_name">account_statement_fints.wiz_checkbankaccess</field>
+        </record>
+        
+        <!-- form: enterpin -->
+        <record model="ir.ui.view" id="wiz_checkbankaccess_enterpin_form">
+            <field name="model">account_statement_fints.wiz_checkbankaccess.enterpin</field>
+            <field name="type">form</field>
+            <field name="name">wiz_checkbankaccess_enterpin_form</field>
+        </record>
+        <!-- form: check result -->
+        <record model="ir.ui.view" id="wiz_checkbankaccess_checkresult_form">
+            <field name="model">account_statement_fints.wiz_checkbankaccess.checkresult</field>
+            <field name="type">form</field>
+            <field name="name">wiz_checkbankaccess_checkresult_form</field>
+        </record>
+
+        <!-- action button on table 'accounts' -->
+        <record model="ir.action.keyword" id="key_checkbankaccess_wizard">
+            <field name="keyword">form_action</field>
+            <field name="model">bank.account,-1</field>
+            <field name="action" ref="act_checkbankaccess_wizard"/>
+        </record>
+
+    </data>
+</tryton>

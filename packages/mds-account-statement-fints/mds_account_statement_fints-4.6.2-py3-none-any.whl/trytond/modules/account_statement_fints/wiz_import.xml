@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+
+        <!-- wizard: ImportByFinTSWizard -->
+        <record model="ir.action.wizard" id="act_import_wizard">
+            <field name="name">Import bank statements online</field>
+            <field name="wiz_name">account_statement_fints.wiz_import</field>
+        </record>
+
+        <!-- form: selaccounts -->
+        <record model="ir.ui.view" id="wiz_import_selaccounts_form">
+            <field name="model">account_statement_fints.wiz_import.selaccounts</field>
+            <field name="type">form</field>
+            <field name="name">wiz_import_selaccounts_form</field>
+        </record>
+        <!-- form: enterdata -->
+        <record model="ir.ui.view" id="wiz_import_enterdata_form">
+            <field name="model">account_statement_fints.wiz_import.enterdata</field>
+            <field name="type">form</field>
+            <field name="name">wiz_import_enterdata_form</field>
+        </record>
+        <!-- form: checkresult -->
+        <record model="ir.ui.view" id="wiz_import_checkresult_form">
+            <field name="model">account_statement_fints.wiz_import.checkresult</field>
+            <field name="type">form</field>
+            <field name="name">wiz_import_checkresult_form</field>
+        </record>
+
+        <!-- action button on table 'account.statement' -->
+        <record model="ir.action.keyword" id="key_import_wizard">
+            <field name="keyword">form_action</field>
+            <field name="model">account.statement,-1</field>
+            <field name="action" ref="act_import_wizard"/>
+        </record>
+
+    </data>
+</tryton>
