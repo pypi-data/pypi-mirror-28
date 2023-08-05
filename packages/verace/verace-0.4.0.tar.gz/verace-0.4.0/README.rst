@@ -1,0 +1,109 @@
+|License| |Build Status|
+
+Introduction
+============
+
+This project provides a Python 2.7/3.x library to aid checking strings
+in files. Verace’s main use case is checking that version strings are
+consistent in project files. The main features of this library are:
+
+-  Custom parse any project files for strings.
+
+-  Easily determine if all strings are consistent.
+
+-  Quickly updated tracked strings.
+
+-  Should work on any platform without additional dependencies;
+   `Qprompt <https://github.com/jeffrimko/Qprompt>`__ is recommended for
+   default prompts.
+
+Status
+======
+
+Currently, this project is in the **development release** stage. While
+this project is suitable for use, please note that there may be
+incompatibilities in new releases.
+
+Requirements
+============
+
+Verace should run on any Python 2.7/3.x interpreter without additional
+dependencies.
+
+Installation
+============
+
+Verace can be installed with pip using the following command:
+``pip install verace``
+
+Additional, Verace can be installed from source by running:
+``python setup.py install``
+
+Usage
+=====
+
+Start by importing Verace into your Python script:
+
+.. code:: python
+
+    import verace
+
+Create a ``VerChecker`` object, name it and set the root location:
+
+.. code:: python
+
+    mychk = verace.VerChecker("My Checker", __file__)
+
+Include a file to check. If no check function is provided,
+``check_basic()`` will be used by default. Let’s look for the version
+string in ``setup.py``:
+
+.. code:: python
+
+    mychk.include(r"lib\setup.py", match="version = ", splits=[('"',1)])
+
+Get the string found by the checker:
+
+.. code:: python
+
+    print("version found = " + mychk.string())
+    # version found = 0.4.0
+
+The string can be updated in all associated files:
+
+.. code:: python
+
+    mychk.update("something different!")
+
+That’s the basics. Check out `the
+documentation <http://verace.readthedocs.io>`__ for more info.
+
+Here are some real-world examples of Verace in action:
+
+-  `Auxly <https://github.com/jeffrimko/Auxly/blob/master/_Check_Versions.py>`__
+
+-  `Qprompt <https://github.com/jeffrimko/Qprompt/blob/master/_Check_Versions.py>`__
+
+-  `Verace
+   (meta) <https://github.com/jeffrimko/Verace/blob/master/_Check_Versions.py>`__
+
+Documentation
+=============
+
+The full documentation for this project can be found `here on Read the
+Docs <http://verace.readthedocs.io>`__.
+
+FAQ
+===
+
+How is **Verace** pronounced?
+
+-  "ver-AH-che" - Italian word for "truthful/accurate".
+
+Is this library only for Python projects?
+
+-  Not at all! Any project can use Verace!
+
+.. |Verace| image:: doc/logo/verace.png
+.. |License| image:: http://img.shields.io/:license-mit-blue.svg
+.. |Build Status| image:: https://travis-ci.org/jeffrimko/Verace.svg?branch=master
