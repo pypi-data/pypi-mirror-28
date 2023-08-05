@@ -1,0 +1,284 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<xsd:schema xmlns:xsd = "http://www.w3.org/2001/XMLSchema" elementFormDefault = "qualified">
+	<xsd:element name = "scenario">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "scenarioinfo"/>
+				<xsd:element ref = "weapons"/>
+				<xsd:element ref = "units"/>
+				<xsd:element ref = "locations"/>
+				<xsd:element ref = "objectives"/>
+				<xsd:element ref = "map"/>
+			</xsd:sequence>
+			<xsd:attribute name = "version" use = "required" type = "xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "scenarioinfo">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "name"/>
+				<xsd:element ref = "turns"/>
+				<xsd:element ref = "location"/>
+				<xsd:element ref = "date"/>
+				<xsd:element ref = "description"/>
+				<xsd:element ref = "missions"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "weapons">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "weapon" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "units">
+		<xsd:complexType/>
+	</xsd:element>
+	<xsd:element name = "locations">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "location" minOccurs = "0" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "objectives">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "objective" minOccurs = "0" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "map">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "hexes"/>
+			</xsd:sequence>
+			<xsd:attribute name = "xsize" type = "xsd:string"/>
+			<xsd:attribute name = "ysize" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "name" type = "xsd:string"/>
+	<xsd:element name = "turns">
+		<xsd:complexType>
+			<xsd:attribute name = "current" use = "required" type = "xsd:integer"/>
+			<xsd:attribute name = "max" use = "required" type = "xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "location">
+		<xsd:complexType>
+			<xsd:simpleContent>
+				<xsd:extension base = "xsd:string">
+					<xsd:attribute name = "x" type = "xsd:string"/>
+					<xsd:attribute name = "y" type = "xsd:string"/>
+				</xsd:extension>
+			</xsd:simpleContent>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "date">
+		<xsd:complexType>
+			<xsd:attribute name = "year" use = "required" type = "xsd:integer"/>
+			<xsd:attribute name = "month" use = "required" type = "xsd:integer"/>
+			<xsd:attribute name = "day" use = "required" type = "xsd:integer"/>
+			<xsd:attribute name = "hour" use = "required" type = "xsd:integer"/>
+			<xsd:attribute name = "minute" use = "required" type = "xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "description">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "para"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "para" type = "xsd:string"/>
+	<xsd:element name = "missions">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "rebel"/>
+				<xsd:element ref = "union"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "rebel">
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:element ref = "para"/>
+				<xsd:element ref = "brigade"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "union">
+		<xsd:complexType>
+			<xsd:choice>
+				<xsd:element ref = "para"/>
+				<xsd:element ref = "brigade"/>
+			</xsd:choice>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "weapon">
+		<xsd:complexType>
+			<xsd:attribute name = "id" use = "required" type = "xsd:ID"/>
+			<xsd:attribute name = "name" type = "xsd:string"/>
+			<xsd:attribute name = "type" type = "xsd:string"/>
+			<xsd:attribute name = "range" type = "xsd:integer"/>
+			<xsd:attribute name = "damage" type = "xsd:integer"/>
+			<xsd:attribute name = "accuracy" type = "xsd:integer"/>
+			<xsd:attribute name = "ok" type = "xsd:string"/>
+			<xsd:attribute name = "destroyed" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "brigade">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "headquarter"/>
+				<xsd:sequence>
+					<xsd:element ref = "regiment" minOccurs = "0" maxOccurs = "unbounded"/>
+				</xsd:sequence>
+			</xsd:sequence>
+			<xsd:attribute name = "id" use = "required" type = "xsd:ID"/>
+			<xsd:attribute name = "name" use = "required" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "headquarter">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "commander"/>
+				<xsd:element ref = "pos"/>
+				<xsd:element ref = "facing"/>
+				<xsd:element ref = "men"/>
+				<xsd:element ref = "morale"/>
+				<xsd:element ref = "fatigue"/>
+				<xsd:element ref = "experience"/>
+				<xsd:element ref = "weapon"/>
+			</xsd:sequence>
+			<xsd:attribute name = "id" use = "required" type = "xsd:ID"/>
+			<xsd:attribute name = "name" use = "required" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "commander">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "rank"/>
+				<xsd:element ref = "experience"/>
+				<xsd:element ref = "aggressiveness"/>
+				<xsd:element ref = "rally"/>
+				<xsd:element ref = "motivation"/>
+			</xsd:sequence>
+			<xsd:attribute name = "name" use = "required" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "rank" type = "xsd:string"/>
+	<xsd:element name = "experience">
+		<xsd:complexType>
+			<xsd:attribute name = "value" use = "required" type = "xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "aggressiveness">
+		<xsd:complexType>
+			<xsd:attribute name = "value" use = "required" type = "xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "rally">
+		<xsd:complexType>
+			<xsd:attribute name = "value" use = "required" type = "xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "motivation">
+		<xsd:complexType>
+			<xsd:attribute name = "value" use = "required" type = "xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "pos">
+		<xsd:complexType>
+			<xsd:attribute name = "x" type = "xsd:string"/>
+			<xsd:attribute name = "y" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "facing">
+		<xsd:complexType>
+			<xsd:attribute name = "value" use = "required" type = "xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "men">
+		<xsd:complexType>
+			<xsd:attribute name = "ok" type = "xsd:string"/>
+			<xsd:attribute name = "killed" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "morale">
+		<xsd:complexType>
+			<xsd:attribute name = "value" use = "required" type = "xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "fatigue">
+		<xsd:complexType>
+			<xsd:attribute name = "value" use = "required" type = "xsd:integer"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "regiment">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "headquarter"/>
+				<xsd:sequence>
+					<xsd:element ref = "battallion" minOccurs = "0" maxOccurs = "unbounded"/>
+				</xsd:sequence>
+			</xsd:sequence>
+			<xsd:attribute name = "id" use = "required" type = "xsd:ID"/>
+			<xsd:attribute name = "name" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "battallion">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "headquarter"/>
+				<xsd:sequence>
+					<xsd:element ref = "company" minOccurs = "0" maxOccurs = "unbounded"/>
+				</xsd:sequence>
+			</xsd:sequence>
+			<xsd:attribute name = "id" use = "required" type = "xsd:ID"/>
+			<xsd:attribute name = "name" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "company">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "commander"/>
+				<xsd:element ref = "pos"/>
+				<xsd:element ref = "men"/>
+				<xsd:element ref = "facing"/>
+				<xsd:element ref = "morale"/>
+				<xsd:element ref = "fatigue"/>
+				<xsd:element ref = "experience"/>
+				<xsd:element ref = "weapon"/>
+			</xsd:sequence>
+			<xsd:attribute name = "id" use = "required" type = "xsd:ID"/>
+			<xsd:attribute name = "name" type = "xsd:string"/>
+			<xsd:attribute name = "type" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "objective">
+		<xsd:complexType>
+			<xsd:attribute name = "id" use = "required" type = "xsd:ID"/>
+			<xsd:attribute name = "x" type = "xsd:string"/>
+			<xsd:attribute name = "y" type = "xsd:string"/>
+			<xsd:attribute name = "name" type = "xsd:string"/>
+			<xsd:attribute name = "points" type = "xsd:string"/>
+			<xsd:attribute name = "owner" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "hexes">
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element ref = "hex" maxOccurs = "unbounded"/>
+			</xsd:sequence>
+		</xsd:complexType>
+	</xsd:element>
+	<xsd:element name = "hex">
+		<xsd:complexType>
+			<xsd:attribute name = "x" type = "xsd:string"/>
+			<xsd:attribute name = "y" type = "xsd:string"/>
+			<xsd:attribute name = "terrain" type = "xsd:string"/>
+		</xsd:complexType>
+	</xsd:element>
+</xsd:schema>

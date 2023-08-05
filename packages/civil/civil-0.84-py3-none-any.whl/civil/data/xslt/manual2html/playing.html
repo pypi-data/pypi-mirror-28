@@ -1,0 +1,2418 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "XHTML-Transitional.dtd">
+<html><head><META http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><title>Civil Playing manual</title><link type="text/css" rel="Stylesheet" href="manual-style.css"></head><body>
+  
+    <h1 class="book">Playing Civil</h1>
+  
+  
+  
+
+<a name="overview" href="#"></a>
+  <h1 class="chapter">Overview</h1>
+  <p>
+    <em>Civil</em> simulates battles from the American Civil War. It focuses on
+    smaller tactical battles, but bigger ones can also be played. 
+  </p>
+
+  <p>
+    Playing <em>Civil</em> is fairly easy, but requires some knowledge about the
+    orders that can be given to units and how they do things. Apart from that, the user interface
+    follows that of most other strategy games: units, targets and movement positions are all
+    selected with the mouse, and keyboard shortcuts can be used to speed up playing.
+  </p>
+  
+  <p>
+    This document goes through all the needed details for playing <em>Civil</em>,
+    starting with how a game is created, to gaming details and saving games. The first part of the
+    document outlines the needed steps for starting a new or a saved game, and the
+    latter parts concentrate on the actual gameplay mechanics.
+  </p>
+
+  <p>
+    <em>Civil</em> is a strategy game that simulates battles of the American Civil War
+    on a company level, where a company is roughly 100 men (this can be less). Artillery batteries
+    have a few guns each. The action in <em>Civil</em> is turnbased, where the
+    action is played as a movie after both players have given their orders. 
+    A game that use a similar system is <em>Combat
+      Mission</em>, from which <em>Civil</em> inherits many of its
+    ideas. <em>Civil</em> differs from purely turnbased games such as the
+    <em>Civilization</em> series that are pure turnbased and the popular realtime
+    games such as <em>Command &amp; Conquer</em>. <em>Civil</em> will use
+    turns of about 10 minutes each.
+  </p>
+
+  <p>
+    Players give orders to units by clicking on the unit in question, then giving the order. More
+    about this in the section <a href="#giving-orders">giving-orders</a>. After orders have been given the player
+    ends the orders phase and the game will calculate the action for the turn. The action can then
+    be visualized by the player(s). After this the orders phase begins again.
+  </p>
+
+
+
+
+
+  
+
+<a name="setting-up" href="#"></a>
+  <h1 class="chapter">Setting up</h1>
+
+  <p>
+    This chapter describes how to set up a <em>Civil</em> game.
+  </p>
+
+
+  <a name="starting" href="#"></a>
+    <h2 class="sect1">Starting Civil</h2>
+    <p>
+      <em>Civil</em> is always run with the union and confederate as separate
+      applications. It is either played as a human against an computer (AI) player or by two human
+      players. The other player (either human or AI) can be located anywhere on the Internet or an
+      Intranet. One of the human players always works as a server for the game, which in practise
+      means just that the player must start his/her game first, and the other player will connect
+      to the server player. The AI player can never be a server, it must always connect to a human
+      played server.
+    </p>
+    
+    <p>
+      To start the game issue the command:
+    </p>
+
+    <pre>
+      <b>%</b> civil
+    </pre>
+
+    <p>
+      If the game is not in the normal search path then the full path to the client will need to be
+      given, such as: 
+    </p>
+
+    <pre>
+      <b>%</b> /usr/local/bin/civil
+    </pre>
+
+    <p>
+      The client needs no commandline arguments, although the parameter
+      --fullscreen or -f can be given to start up
+      <em>Civil</em> in fullscreen mode. Fullscreen mode can also be toggled from
+      within the game.
+    </p>
+
+    <p>
+      To start the game on Windows or Mac OS X just doubleclick on the icon that was installed
+      along with the game. This will bring up the <em>Civil</em> window.
+
+      
+    </p>
+
+  
+
+  
+
+  
+  <a name="run-server-or-client" href="#"></a>
+    <h2 class="sect1">Running as server or client</h2>
+    
+    <p>
+      When <em>Civil</em> has been started a window is shown to the player. This is
+      where the player must decide wether he/she will run as a server or client. If the player
+      wants to run as a server the other player (or AI) will connect to him/her. If the player wants to
+      be the client he/she must connect to another human player that runs as a server.
+    </p>
+
+    <p>
+      TODO: screenshot of <em>Setup Network Information</em>
+    </p>
+
+    <p>
+      In this window is a field where the player can input a nickname that is used in the
+      game. This name can be anything, and default to the username on Unix machines.
+    </p>
+
+    <p>
+      By clicking <b class="gui">Toggle fullscreen mode</b> <em>Civil</em> will
+      switch between a fullscreen mode and a windowed mode. Fullscreen mode is not available on all
+      platforms, and may silently fail without any harm.
+    </p>
+
+    <p>
+      The player can view the game credits by pressing the <b class="gui">Credits</b>
+      button. This shows a new window with information about all developers and contributors.
+    </p>
+
+    <p>
+      The button <b class="gui">Lounge</b> takes the player to the lounge login. See <a href="#lounge">lounge</a> for more information about the lounge.
+    </p>
+
+    <p>
+      You can choose to play <em>Civil</em> against another human player or against the
+      computer. The latter is the default, as you can see from the checked checkbox. When playing
+      against the computer you do not need a network connection, as the AI client is run on the same
+      machine as the player uses. See <a href="#starting-ai">starting-ai</a> for more info on playing against
+      the computer.
+    </p>
+
+    <p>
+      To proceed setting up the game click the appropriate checkbox and press
+      <b class="gui">Ok</b>. Pressing <b class="gui">Cancel</b> terminates
+      <em>Civil</em>. 
+    </p>
+
+    <p>
+      If the player chooses to run as a client, then another dialog is shown after
+      <b class="gui">Ok</b> is pressed.
+    </p>
+
+    <p>
+      TODO: screenshot of <em>Client Setup</em>
+    </p>
+    
+    <p>
+      Here the player can input the name of the host where the server runs and the port number it
+      uses. Do not change the port unless you're sure that the server actually uses that
+      port. Pressing <b class="gui">Ok</b> in this dialog connects to the server and
+      <b class="gui">Back</b> returns to the previous dialog. The client will wait after the
+      dialog is accepted for the player running the server to setup the game, and then all data is
+      downloaded from the server. This may take some time, especially over a slow network, as the
+      full scenario is downloaded too. Note that the player running as a client can not do any setup
+      of the game, all is taken care of by the server player. If <em>Civil</em> fails to
+      connect to the server an error will be shown and the player is given the opportunity to
+      correct any faulty parameters.
+    </p>
+
+    <p>
+      If the player chooses to run as a server he/she will be presented with a dialog where the
+      port for the server can be set. 
+    </p>
+
+    <p>
+      TODO: screenshot of <em>Server Setup</em>
+    </p>
+    
+    <p>
+      No hostname is needed in this case. Pressing <b class="gui">Back</b> returns to the
+      previous dialog and <b class="gui">Ok</b> makes the server start waiting for a new
+      client. At <em>this point</em> the client player can connect, not sooner. After
+      the client has connected the server player can continue setting up the game. See <a href="#setting-up">setting-up</a> for information on how to set up a game.
+    </p>
+  
+
+  
+
+  <a name="starting-ai" href="#"></a>
+    <h2 class="sect1">Playing against the computer</h2>
+    <p>
+      Normally <em>Civil</em> requires two human players, one playing the union side
+      and the other playing the confederates. There is also support to play against a simple AI
+      client. To play against the computer the <b class="gui">Play against the computer</b>
+      checkbox must be checked in the initial dialog. You are still required to enter a network port
+      that the AI client will use to communicate with <em>Civil</em>. Accept the default
+      port unless you have reasons to change it.
+    </p>
+
+    <p>
+      After you click <b class="gui">Ok</b> in the <em>Server setup</em> dialog the
+      AI client will be started and you will proceed to setting up the type of game you want.
+    </p>
+
+
+    
+      <h3 class="sect2">Starting the Ai client manually</h3>
+      <p>
+        It is also possible to start the AI client manually if you want to. The only difference is
+        how the AI was started, when playing there is no difference at all. To do this choose to
+        play against another human as the server. Click <b class="gui">Ok</b> in the
+        <em>Server setup</em> dialog. <em>Civil</em> will now wait for the
+        other player to connect. At this point start the Ai client with:
+      </p>
+
+      <pre>
+        <b>%</b> civil-ai <em>[options]</em>
+      </pre>
+
+      <p>
+        The AI client has no user interface of any kind, so all needed parameters must be given on
+        the command line. The recognized options are:
+      </p>
+    
+      <ol>
+        <li>
+          <p>--host=<em>hostname</em> which tells the AI
+            client what server to connect to. This is a required parameter if the server does not
+            run on the same machine as the AI client.</p>
+        </li>
+
+        <li>
+          <p>--port=<em>port</em> which tells the AI client
+            what port on the given server to use. Default is 20000. This is a required parameter if
+            the server you are trying to connect to does not use port 20000.  </p>
+        </li>
+      </ol>
+    
+      <p>
+        An example setup, where the server is located on server.example.com
+        is shown below. The port is the default, i.e. 20000.
+      </p>
+    
+      <pre>
+        <b>%</b> civil-ai --host=server.example.com 
+      </pre>
+      
+      <p>
+        To start the AI client on Windows doubleclick on the installed icon or select the AI player
+        from the <em>Civil</em> menu.
+      </p>
+
+      <p>
+        The AI client can be connected as soon as a human player running as a server has been
+        started. If started before this the AI client will print an error and terminate. When the AI
+        client has connected successfully it will require no more human interaction. From the
+        server's point of view the AI client looks just like a human client. In fact there is
+        actually no way of knowing whether a client that connects to the server is a human or an AI,
+        except by the fact that the AI player does not respond in an intelligent way to chat (see
+        <a href="#chat">chat</a>).
+      </p>
+    
+
+  
+
+
+  
+
+  <a name="game-settings" href="#"></a>
+    <h2 class="sect1">Game settings</h2>
+    <p>
+      Setting up a game involves basically two things: starting a new game or continuing a saved
+      game. For restoring a saved game see <a href="#loading">loading</a>.
+    </p>
+
+    <p>
+      TODO: screenshot of main setup dialog
+    </p>
+
+    <p>
+      To start a completely new game click the button <b class="gui">New game</b>. This will
+      show the scenario dialog:
+    </p>
+
+    <p>
+      TODO: screenshot of scenario setup dialog
+    </p>
+
+    <p>
+      To select the scenario you want to play click the button <b class="gui">Scenario</b>. This
+      will retrieve info about all available scenarios from the server and may take a few
+      seconds. When the scenarios are retrieved you are presented with a dialog that lists them, as seen below:
+    </p>
+
+    <p>
+      TODO: screenshot of scenario selection dialog
+    </p>
+
+    <p>
+      Click on a scenario to select it. If you want more information about the currently selected
+      scenario click the button <b class="gui">More info</b>. This will show a dialog with more
+      background information about the scenario. When you're satisfied with the scenario selection
+      press <b class="gui">Ok</b> to accept the scenario. You are now taken back to the scenario
+      selection dialog. Here you may also need to select which side to play as.
+    </p>
+
+    <p>
+      Please note that you must agree with your opponent before starting the game as to which scenario to
+      play and who will play as union/confederate. <em>Civil</em> currently has no facilities
+      for letting players communicate about this matter, except the <em>lounge</em>
+      (see <a href="#lounge">lounge</a> for more information about the lounge). The AI or human client
+      player will just be given the scenario and side that the server player selects. 
+    </p>
+  
+
+
+  
+
+
+  <a name="loading" href="#"></a>
+    <h2 class="sect1">Loading a saved game</h2>
+    <p>
+      Loading a saved game is done after having connected to a server. On the dialog
+      that is shown after the connection is complete is a button: <b class="gui">Load game</b> that
+      is used to load a saved game. When pressing this button a list of all saved games is
+      shown. The saved games are stored by the server player.
+    </p>
+
+    <p>
+      TODO: screenshot of available saved games dialog.
+    </p>
+
+    <p>
+      Select a saved game from the list by clicking on it and then press
+      <b class="gui">Ok</b> to load it. Pressing <b class="gui">Cancel</b> cancels the
+      loading and returns to the main dialog. Note that both players must agree to continue the
+      same saved game.
+    </p>
+
+    <p>
+      Note that in the actual game both players can choose to save the game at any time. If only
+      one player saves a game then that player must also be the one that loads it, as only that
+      player has the save game file.
+    </p>
+  
+
+  
+
+  <a name="starting-game" href="#"></a>
+    <h2 class="sect1">Starting the game</h2>
+    <p>
+      When all is set up properly and you have selected a new scenario or loaded a saved game you
+      are ready to start playing Civil. Press <b class="gui">Start Game</b> to begin. The
+      server now sends the scenario and all other data to the human/AI client. This can take some
+      time on a slow connection. If something goes badly wrong an error is shown:
+    </p>
+
+    <p>
+      TODO: screenshot of error dialog
+    </p>
+
+    <p>
+      At this stage the full scenario data is retrieved from the server, so it may take some time
+      depending on the size of the scenario and the network connection speed. The progress bar in
+      the dialog shows the progress of the sending/receiving.
+    </p>
+
+  
+
+
+
+
+
+
+  
+
+
+<a name="lounge" href="#"></a>
+  <h1 class="chapter">Lounge</h1>
+  
+  <p>
+    The <em>lounge</em> is a separate module of the <em>Civil</em>
+    system. It works as a separate optional server where players can do the following things:
+  </p>
+
+  <ol>
+    <li>
+      <b class="firstterm">chat</b>
+    </li>
+    
+    <li>
+      <b class="firstterm">download new scenarios</b>
+    </li>
+  </ol>
+  
+  <p>
+    The lounge can be entered by clicking the <b class="gui">Lounge</b> button on the first
+    shown dialog. This will present the player with another dialog where the parameters for the
+    lounge connection must be set.
+  </p>
+
+  <p>
+    TODO: screenshot of lounge setup dialog
+  </p>
+
+  <p>
+    Enter the name of the host where the lounge is running and the port it is using. This
+    information must not be confused with the data for the normal game server. The lounge is a
+    totally separate server application that is not run by default. See <a href="#lounge-server">lounge-server</a> for information about starting the lounge server. Any lounge server
+    on the Internet can be used.
+  </p>
+
+
+  
+
+
+  <a name="lounge-server" href="#"></a>
+    <h2 class="sect1">Lounge server</h2>
+    <p>
+      The lounge server is not started by default when starting an instance of
+      <em>Civil</em>. It is an extra component that can be run by players that want to
+      run it. To start the lounge server do the following:
+    </p>
+    
+    <pre>
+      <b>%</b> civil-lounge 
+    </pre>
+    
+    <p> 
+      OS X users should start the terminal application and type the above, ensuring the lounge is in your
+      path.
+    </p>
+
+    <p>
+      Windows users; doubleclick the <em>Civil Lounge Server</em> icon or
+      choose the appropriate entry from the <em>Civil</em> menu.
+    </p>
+
+    <p>
+      When the server starts it does not show any window or similar, it's a fully console based
+      application. After the server has started clients can join the lounge.
+    </p>
+
+    <p>
+      TODO: describe which scenarios are provided.
+    </p>
+  
+
+
+  
+
+
+  <a name="lounge-chat" href="#"></a>
+    <h2 class="sect1">Chatting in the lounge</h2>
+    <p>
+      TODO: text
+    </p>
+  
+
+
+  
+
+
+  <a name="lounge-scenarios" href="#"></a>
+    <h2 class="sect1">Downloading scenarios from the lounge</h2>
+    <p>
+      TODO: text
+    </p>
+  
+
+
+
+
+
+  
+
+<a name="playing-civil" href="#"></a>
+  <h1 class="chapter">Playing Civil</h1>
+
+  <p>   
+    When a game has been setup and the scenario data has been downloaded, the main game
+    window will be shown. This chapter describes the basic information needed to play a game, with
+    references to more in-depth information in later chapters.
+  </p>
+
+  
+
+  
+    <h2 class="sect1">Turnbased gaming</h2>
+    <p>
+      <em>Civil</em> is a turnbased strategic game. This means that the player gives
+      orders to the units in his/her army. An engine then
+      resolves the orders for the turn and generates action. The game is thus divided into two
+      separate <em>phases</em>:
+    </p>
+
+    <ol>
+      <li>
+        <p>
+		  <b class="firstterm">
+          orders phase
+        </b>
+        
+          where the player gives orders for a given turn to all his/her units.
+        </p>
+      </li>
+
+      <li>
+       <p>
+		  <b class="firstterm">
+          action phase
+        </b>
+       
+          where the player watches the action for the current turn. The player can not affect the
+          action at this stage, it is merely a <em>movie</em> that represents what actions the
+          orders given resulted in.
+        </p>
+      </li>
+    </ol>
+
+    <p>
+      This system is really a form of pseudo realtime, as the action is always resolved by the
+      game engine second by second. This makes it very fair, as no player gets the "first go", and
+      all kinds of cheating that can be done in a fully turnbased game are not possible. The
+      player can use as much time as he/she wants for the orders, thus avoiding the stress
+      associated with fully realtime based games.
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Orders</h2>
+    <p>
+      TODO: orders
+    </p>
+  
+
+
+
+
+
+
+  
+
+<a name="displays" href="#"></a>
+  <h1 class="chapter">Displays</h1>
+  <p>
+    The main display contains several windows above the playfield, which normally only
+    shows only part of the whole game terrain, the actual battlefield is usually several times as
+    big as the part shown by the map.
+  </p>
+
+  <p>
+    The battlefield in <em>Civil</em> is viewed from above. Heights can be seen as
+    shadowed formations on the terrain. Units will be rectangles painted in dark blue and grey for
+    union and confederate units respectively. A small triangle inside the unit shows the direction it is
+    currently facing.
+  </p>
+
+  
+
+  <a name="windows" href="#"></a>
+    <h2 class="sect1">Windows</h2>
+
+    <p>
+      The floating dialogs give information
+      about the current state of the game. One features an overview map of the entire
+      battlefield, and a rectangle within it shows the portion of the battlefield that the map view currently
+      shows. Clicking in the overview (mini-map) display moves the main map display to the
+      co-ordinates selected.
+    </p>
+
+    <p>
+      The next window contains the game time and unit information. Each turn in <em>Civil</em>
+      represents a number of minutes, typically 10, so advancing to the next turn increments the clock accordingly.
+      During the action phase it also "ticks" to visualize how the action moves on. 
+    </p>
+
+    <p>
+      Above the time display, is information that depends on
+      the current state of the game. Usually, it is here where information is shown about the
+      currently selected unit. If an enemy unit is shown the information is very limited, but for
+      an own unit all available information is shown.
+    </p>
+
+    <p>
+      To the right is a window that shows the orders for the current friendly unit. For an enemy
+      unit nothing will be shown. Orders to a unit as applied sequentially, i.e. in the order they
+      were issued. In this window the player can see all issued orders for the unit.
+    </p>
+
+    <p>
+      At the top right of the screen <em>Civil</em> will show for messages to the
+      player. These messages are usually information that <em>Civil</em> thinks the
+      player should know. Messages that the other player may send (chat) are displayed here also. 
+      See <a href="#chat">chat</a> for more information on chatting.
+    </p>
+
+    <p>
+      The messages will slowly scroll upwards until they will disappear. If a certain
+      number of messages appear at the same time, causing the allocated space to fill up, then
+      older messages will be removed immediately.
+    </p>
+    
+    <p>
+      TODO: add screenshot of all the windows.
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Map</h2>
+    <p>
+      The map display contains all the action within the game. All units that can be seen by your
+      own units are also visible on the map. Your own units are always visible, but enemy units
+      are only visible if at least one of your units can see it. This simulates the normal effect:
+      <em>fog of war</em>. The map is always fully visible, as the commanders of both
+      armies can be considered to have detailed maps of the battlefield, or local guides that know
+      the environment.
+    </p>
+
+    <p>
+      Union troops are shown as blue rectangles with a yellow triangle on them, and confederate as
+      grey rectangles with a red triangle. The triangle indicates the <em>facing</em>
+      of the unit. 
+    </p>
+
+    <p>
+      TODO: small screenshot with troops
+    </p>
+
+    <p>
+      The map consists of several types of terrain, all with different charateristics. Roads are
+      easy to move troops on, while providing very little cover. Woods provide cover but restrict
+      movement. See <a href="#terrain">terrain</a> for more information about terrain effects. Learning
+      the effect of the terrain is key to winning games.
+    </p>
+
+    <p>
+      On the map there are also drawn different types of lines. These lines tell the
+      player what the units are currently performing; where they are moving and what their chain
+      of command is. The lines
+      are divided into three categories:
+    </p>
+
+    <ol>
+      <li>
+        <p><b class="firstterm">Movement orders</b> which show which units are moving and where
+          and how they are moving.
+        </p>
+      </li>
+
+      <li>
+        <p><b class="firstterm">Attack orders</b> which shows the current targets the units
+          have. It is thus easy to see which units are attacking which enemies, and how.
+        </p>
+      </li>
+
+      <li>
+        <p><b class="firstterm">Command control</b> which shows the commanding unit for a
+          particular unit. The player can thus easily keep related units close to their commanders
+          in order to have a good command control. See <a href="#command-control">command-control</a> for more
+          information about command control.
+        </p>
+      </li>
+    </ol>
+
+    <p>
+      Different colors are used for different types of orders. It is fairly important to learn
+      what the colors mean in order to easily grasp the situation on the battlefield.
+    </p>
+  
+
+
+  
+
+  <a name="map-view" href="#"></a>
+    <h2 class="sect1">Toggling what to show on the map</h2>
+    <p>
+      Most of the features that are shown on the map can be toggled on or off as desired. This
+      allows a lot of information can be presented if wanted, but all unwanted information
+      can be turned off.
+    </p>
+
+    <p>
+      The list below contains the keys that can be used to toggle features on and off. All the
+      keys toggle features, so pressing the same key returns the feature to its
+      previous state.
+    </p>
+
+    <ol>
+      <li>
+        <p><b class="firstterm">1</b> toggles viewing of <em>objectives</em>. See
+          <a href="#objectives">objectives</a> for more info about objectives.
+        </p>
+      </li>
+
+      <li>
+        <p><b class="firstterm">2</b> toggles viewing of labels on the map. Certain locations of
+          interest may have labels attached to them that name the location. The labels are there to
+          add more "feeling" to the map, and can be useful when the scenario is an implementation of
+          an actual battle. The labels can be toggled on and off as needed.
+        </p>
+      </li>
+
+      <li>
+        <p><b class="firstterm">3</b> toggles viewing of your units. Sometimes it may be of
+          interest to view the map without the your units on it.
+        </p>
+      </li>
+      
+      <li>
+        <p><b class="firstterm">4</b> toggles viewing of enemy units. 
+        </p>
+      </li>
+
+      <li>
+        <p><b class="firstterm">5</b> toggles viewing of unit orders. Normally a line of a
+          certain color indicates what action the unit is performing. If the display becomes too
+          cluttered this display can be toggled using this key.
+        </p>
+      </li>
+
+      <li>
+        <p><b class="firstterm">6</b> toggles viewing of commander links. Normally a line is
+          drawn from the selected unit to its superior commander, and a line from the superior
+          commander to its superior commander and so on. Click <b class="key">6</b> to disable this
+          feature. 
+        </p>
+      </li>
+    </ol>
+
+  
+
+  
+
+  <a name="fullscreen-mode" href="#"></a>
+    <h2 class="sect1">Fullscreen mode</h2>
+    <p>
+      <em>Civil</em> can be executed in so called <em>fullscreen mode</em>
+      which means that instead of running in a window as is default, the game runs fullscreen,
+      obsuring your window manager. This can be comfortable when you are not montitoring any other windows or
+      multitasking in any way. 
+    </p>
+
+    <p>
+      To activate the fullscreen mode press <b class="key">F10</b>. Press it once again to restore
+      the previous setting.
+    </p>
+
+  
+
+
+
+
+
+  
+
+  <a name="giving-orders" href="#"></a>
+  <h1 class="chapter">Giving orders</h1>
+  <p>
+    To give orders to your own units you first need to active them. Activating a unit is as
+    simple as clicking on its icon in the map. To select multiple units press the left mousebutton
+    and drag the mouse (a rectangle will appear) until you have selected the wanted units. At that point release
+    the left mouse button. The units are now selected. Note that one unit is always the primary
+    selected unit, and it has a selection marker that is the same color as the one used when only
+    one unit is selected. This affects a few things, such as moving groups of units. But more
+    about that later on.
+  </p>
+
+  <p>
+    Clicking on enemy units will not activate them, but instead give you some short information about
+    the unit. You can not do anything with enemy units by clicking on them. Note that the information
+    presented to you about the enemy unit will most likely be inaccurate, as it is information that is
+    approximated by your commanders who happen to see the enemy. The information is more inaccurate if
+    the distance is large (try for yourself to identify the number of men in a mass of people 1 km
+    away! ;-), but the validity increases as the commanders see the unit for longer and their
+    distance apart shortens. 
+  </p>
+
+  <p>
+    When you have activated a friendly unit all known information about it will be displayed in the
+    status panel. There you can see for instance the number of men, morale, fatigue, etc the unit
+    currently has. If the unit
+    has movement and/or attack orders these will be shown in the map as lines.
+  </p>
+
+  
+    <p>
+      Check up on this later and provide screenshots!
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Moving units</h2>
+    <p>
+      TBD
+    </p>
+
+    
+      <h3 class="sect2">Moving using pathfinding</h3>
+      <p>
+        TBD
+      </p>
+    
+  
+
+  
+
+  
+    <h2 class="sect1">Attacking enemies</h2>
+    <p>
+      TBD
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Changing unit mode</h2>
+    <p>
+      TBD
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Resting and rallying</h2>
+    <p>
+      TBD
+    </p>
+  
+
+  
+
+  <a name="combat-policy" href="#"></a>
+    <h2 class="sect1">Setting a combat policy</h2>
+
+    <p>
+      To give the player control over when and how the targets are assigned to units, there is a
+      feature called <em>combat policy</em>. A unit will get assigned targets
+      based on what policy the player has set. There are three possible values for the policy that
+      a unit may have:
+    </p>
+
+    <ol>
+      <li>
+        <p>
+          <b class="firstterm">hold fire</b> which means that the unit will never automatically get
+          assigned a skirmish target. It just waits in it's current mode. The exception to this
+          policy is when the unit gets assaulted by an enemy unit and it gets close. At that point
+          a unit with a <em>hold fire</em> policy will override the policy and fire
+          back to avoid being overrun.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          <b class="firstterm">defensive fire only</b> which means that the unit will skirmish back
+          at units firing at it, but it will never initiate combat. The unit will target the
+          closest and most dangerous enemy, preferably one in front of it. The same exception
+          applies to this policy as for <em>hold fire</em>.
+        </p>
+      </li>
+
+      <li>
+        <p>
+          <b class="firstterm">fire at will</b> which means that the unit is free to pick skirmish
+          targets at will. It will not wait until it's being fired upon, but will start firing
+          immediately that a suitable target comes within range.
+        </p>
+      </li>
+
+    </ol>
+    
+    <p>
+      To set the policy of a unit press the <b class="key">p</b> key, or choose the menuitem
+      <b class="gui">change combat policy</b> from the popup menu (see <a href="#popup-menu">popup-menu</a>). This brings up the dialog below:
+    </p>
+
+    <p>
+      TODO: small screenshot of combat policy dialog
+    </p>
+
+    <p>
+      The previous policy is highlighted. Choose the wanted policy and click
+      <b class="gui">Ok</b> to set the new policy. To set the same policy for many units at
+      the same time select all the wanted units and do the same as above. Note that now there is
+      no previous policy selected. Select the wanted policy and press <b class="gui">Ok</b>,
+      thus setting the same policy to all units. 
+    </p>
+
+    <p>
+      The dialog can be cancelled by pressing <b class="key">Escape</b> at any time. If several
+      units are selected, but no policy is chosen before <b class="gui">Ok</b> is clicked
+      nothing will be done.
+    </p>
+  
+
+  
+
+  <a name="help" href="#"></a>
+    <h2 class="sect1">Help system</h2>
+    <p>
+      At any time you can press <b class="key">F1</b> to get a small help dialog that describes
+      the currently available actions that can be performed. The actions vary depending on what
+      you are currently performing.
+    </p>
+
+    <p>
+      TODO: small screenshot of help dialog
+    </p>
+
+    <p>
+      To close the helo dialog click <b class="gui">Close</b> or press
+      <b class="key">Escape</b>. 
+    </p>
+  
+
+  
+
+  <a name="popup-menu" href="#"></a>
+    <h2 class="sect1">Popup menu</h2>
+
+    <p>
+      When one of your own units is selected, the right mouse button can be pressed to bring up a small popup
+      menu. The menu lists all the available actions that can be performed with the current
+      unit. Choose the wanted action from the menu.
+    </p>
+
+    <p>
+      TODO: small screenshot of popup menu
+    </p>
+  
+
+  
+
+  <a name="ending-orders" href="#"></a>
+    <h2 class="sect1">Ending orders</h2>
+    
+    <p>
+      Once you are satisfied with the orders for the turn the orders phase can be ended. This
+      means that <em>Civil</em> will calculate the action for the turn, and
+      then present what happened to the player. See <a href="#action">action</a> for more information
+      about the action phase.
+    </p>
+
+    <p>
+      To end the orders phase select <b class="gui">End orders</b> from the popup menu, or
+      press <b class="key">Alt</b> and <b class="key">e</b>. You will be asked for confirmation
+      before the orders phase is really ended.
+    </p>
+  
+  
+
+
+
+
+  
+
+<a name="action" href="#"></a>
+  <h1 class="chapter">Action phase</h1>
+  <p>
+    This chapter explains how the action is visualized within <em>Civil</em>.
+  </p>
+
+  <p>
+    When a player ends the orders phase (see <a href="#ending-orders">ending-orders</a>)
+    <em>Civil</em> will calculate the action for the turn. The game will wait
+    for both players to finish their orders before the calculations will be made. This means that
+    if you were the first player to end the orders phase  you will have to wait for the other player to
+    finish his/her orders before the action can be calculated. 
+  </p>
+  
+  <p>
+    Once both players have finished the orders <em>Civil</em> will calculate what
+    happened during the orders phase, and then send <em>action data</em> to both
+    clients. The action data can be seen as a movie that shows what happened step by
+    step. Internally <em>Civil</em> uses a high resolution for the time, so a single
+    turn will result in movie with a lot of "frames".
+  </p>
+  
+  <p>
+    You can control the movie playback and watch the action several times, maybe for
+    instance for viewing some interesting part of the map in detail. To start viewing the action
+    wait for the action to be computed and then received. From that point <em>Civil</em>
+    will enter the <em>action phase</em>. During this phase only the action can be
+    viewed, no orders can be given. To start the action press <b class="key">p</b> or choose
+    <b class="gui">Pause</b> from the popup menu. This starts the action, and will show
+    one step of the movie each second.
+  </p>
+
+  <p>
+    To pause the action press <b class="key">p</b> or choose <b class="gui">Pause</b> from
+    the popup menu. The action phase can be paused at any time.
+  </p>
+  
+  <p>
+    When you have seen all the action and want to review some part of it you can move to the
+    beginning of the action by pressing <b class="key">a</b> or choose <b class="gui">Beginning of
+      action</b> from the popup menu.
+  </p>
+
+  <p>
+    To skip some parts of the action phase use the keys <b class="key">f</b> and  <b class="key">b</b>
+    to move forward and backward, or use the popup menu entries
+    <b class="gui">Forward</b> and <b class="gui">Backward</b>.
+  </p>
+
+  <p>
+    When you have seen as much of the action as you need and want to start giving orders for
+    the next turn, select <b class="gui">End orders</b> from the popup menu, or press
+    <b class="key">Alt</b> and <b class="key">e</b>. You will be asked for confirmation before the
+    action ends. Note that you do not have to view the whole action phase before ending. When 
+    the action phase ends new orders can be made in the <em>orders phase</em>
+    (see <a href="#giving-orders">giving-orders</a>).
+  </p>
+
+
+
+
+
+  
+
+<a name="chat" href="#"></a>
+  <h1 class="chapter">Chatting</h1>
+  <p>
+    This chapter explains how <em>chat</em> is used within <em>Civil</em>.
+  </p>
+
+  <p>
+    The chat feature allows players to send messages between themselves. The AI player
+    will not chat, it simply discards chat messages without replying. 
+  </p>
+
+  <p>
+    Press the key <b class="key">0</b> to bring up a small window above the panel.
+  </p>
+
+  <p>
+    TODO: screenshot with chat window active
+  </p>
+
+  <p>
+    Everything that is typed on the keyboard is echoed in the chat window. When
+    <b class="key">Enter</b> is pressed the message is sent to the other player and will be shown
+    in the messages window of the panel (see <a href="#panel">panel</a>). If you decide not to send
+    the message for some reason, just press <b class="key">Escape</b> to close the small window and
+    resume normal playing. The game will continue to display actions in the background, although
+    the player can not give any orders while writing a chat message.
+  </p>
+
+
+
+
+
+  
+
+<a name="command-control" href="#"></a>
+  <h1 class="chapter">Command control</h1>
+  <p>
+    <em>Command control</em> is very important in <em>Civil</em>. CC determines
+    how well a unit is in touch with its commanding unit, i.e. leader. A unit that has a good
+    link to its commanding unit receives orders faster and can thus react faster to the orders given by
+    the player. A unit with a bad command control will receive orders much more slowly, and in extreme cases
+    may not receive them at all.
+  </p>
+
+  <p>
+    Command control is determined by the distance to the commanding unit. A short distance means that
+    orders can be sent to the unit faster. It is thus important to make sure that units always stay
+    within a suitable distance from its commanding unit, and not break up (for instance) regiments into
+    companies spread out all over the map.
+  </p>
+
+  <p>
+    TODO: screenshot with nice command control "lines"
+  </p>
+
+  <p>
+    In future versions of the game CC may be modelled more accurately considering the battlefield
+    status. A unit that would be surrounded by enemies and have all routes cut off to the
+    commanding unit would of course not be in command control, and thus its reactions would be
+    totally dependant on its leader.
+  </p>
+
+
+
+
+
+  
+
+<a name="units" href="#"></a>
+  <h1 class="chapter">Units</h1>
+  <p>
+    This chapter describes the use of units in <em>Civil</em>. It describes the
+    different stats available to units as well as the different types of units.
+  </p>
+
+  
+    <h2 class="sect1">Types of units</h2>
+    <p>
+      A few different types of units are available in the game. Each are very different, and all
+      types must be successfully utilized in order to win a game. The various types are listed
+      below. Apart from only "primitive" types there are also the normal military organizations (see
+      <a href="#organizations">organizations</a>) such as regiments, brigades etc.
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Infantry</h2>
+    <p>
+      This is the base unit of all armies. Without infantry you wouldn't be able to do much!
+      Infantry units move by foot and are thus quite slow when compared to cavalry. Their speed
+      can be increased by arranging the infantry units in column mode, which will increase
+      marching speed at the cost of decreased combat efficiency. Infantry is often quite
+      vulnerable without good protective artillery-fire when attacking.
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Artillery</h2>
+    <p>
+      The artillery unittype works as a support unit and provides artillery-fire at selected
+      locations. Artillery-units may attack from long ranges and still inflict considerable damage
+      upon their target. Successful attacks often require a combination of artillery-fire and an
+      actual attack by infantry.  Artillery can be devastating when defending against assaulting
+      close-range units, or it may totally fail. However, being under heavy artillery attack
+      reduces the morale of the targeted unit considerably.
+    </p>
+
+    <p>
+      If artillery gets overrun by an attacker the outcome is usually disaster for the
+      artillery. Keep them out of range of enemy assaulting units, or provide some infantry
+      support. Artillery has a suppressing factor for the target as well as lowering the morale if
+      the fire is effective. Attacking artillery from the flank is usually very effective, as it
+      always takes some time (sometimes considerable) for the gun crews to change the facing of
+      the guns in order to be able to fire upon a flanking enemy.
+    </p>
+
+    <p>
+      Artillery may only move when limbered. Short distances may be moved by hand, but this is very
+      expensive when considering movement-points. Unlimbered artillery keeps the horses and other supplies
+      behind the main line of the guns. When artillery is limbered the guns are mounted to special
+      horsedrawn carriers, and can then be moved at the pace of infantry. Before the artilery may fire it
+      must again be unlimbered and setup for combat. Limbered artillery is very vulnerable from attacks, as
+      it is basically a very weak infantry-unit without its guns. It is very difficult to do a frontal
+      attack on unlimbered and prepared artillery, and the morale of the attackers will often not
+      suffice. Doing a flank attack on artillery is thus easier and will normally give better results.
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Cavalry</h2>
+    <p>
+      Cavalry is the most mobile unit type, as they are horse-mounted. Cavalry is best used when attacking,
+      especially for flanking maneuvres. Due to the use of horses cavalry has the best movement speed,
+      especially when charging. Defending infantry may rout when being charged by cavalry, especially if
+      morale or experience is very low.
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Headquarter</h2>
+    <p>
+      This type of unit is the headquarter for all organizations above company level. So each battallion,
+      regiment, brigade etc has a separate unit that acts as the headquarters unit for that
+      organization. Headquarters that are directly superior to companies mostly affect that way the
+      companies perform in combat, while higher headquarters mostly affect command delay. A nearby high
+      headquarter can affect the way units perform in combat by improving rally efficiency and
+      boosting morale. The player is supposed to be the highest commander of the entire army.
+    </p>
+    
+    <p>
+      Destroying/disordering a headquarter would also affect the troops commanded by that headquarter.
+    </p>
+
+    <p>
+      In <em>Civil</em> headquarters are modelled by having some normal units "contain" the
+      headquarter unit. When the unit suffers casualities there is always a chance of the actual commander
+      being wounded or killed. In this case another leader is appointed from the same unit.
+    </p>
+  
+
+
+
+
+
+  
+
+<a name="unit-stats" href="#"></a>
+  <h1 class="chapter">Unit stats</h1>
+  <p>
+    All units have some stats that affect their combat strength. Units might otherwise be strong but
+    failing seriously in an important stat might make the unit quite useless. For instance it's no good
+    having a strong brigade of infantry which has no fighting morale at all, and who routes for every
+    single battle. This chapter clarifies the various states units can have.
+  </p>
+
+  
+    <h2 class="sect1">Men</h2>
+    <p>
+      This is simply the number of men that are ready for combat. Originally the unit has all men ready
+      for battle, but combat of various types will wound and kill men. The strength is derived
+      from those men who are ready for
+      combat and who add to the overall combat strength. Resting units may transform some men from wounded
+      to ready, and being out of combat may also do the same.
+    </p>
+
+  
+
+  
+
+  
+    <h2 class="sect1">Morale</h2>
+    <p>
+      The morale of a unit directly reflects its willingness to fight and what it does when it takes
+      casualities. Morale is always reduced when a unit takes casualities, retreats or otherwise has a bad
+      day! It can also be decreased when other units visible to it take heavy casualities. It is
+      increased after successful combat, i.e. when the unit manages to inflict damage on the enemy
+      and it can
+      also be increased when a neighbor does a 'good fight'. Morale is thus a stat that can be spread out
+      among units like a disease if bad battles are fought.  The rallying skills of leaders are important
+      when trying to keep the men in line.
+    </p>
+
+    <p>
+      The possible values are:
+    </p>
+
+    <ol>
+      <li><p>very poor
+        </p></li>
+
+      <li><p>poor
+        </p></li>
+
+      <li><p>medium
+        </p></li>
+
+      <li><p>good
+        </p></li>
+
+      <li><p>extremely good
+        </p></li>
+    </ol>
+
+
+    
+
+    
+      <h3 class="sect2">Morale when attacking</h3>
+      <p>
+        A unit that attacks another has a higher probability of breaking the attack if it has a low
+        morale. They don't like the casualitites that they get and want to withdraw from the attack. A
+        really bad morale level might send the attacking unit fleeing if the defenders stand firm or losses are
+        taken. Good morale keeps the unit fighting longer, and it can even resist some casualities without
+        halting the attack. A unit with high morale is usually one that has the best chances of doing real
+        damange to defenders. In combination with a skilled and aggressive leader the ingredients for
+        decisive victories are at hand.</p>
+    
+
+    
+
+    
+      <h3 class="sect2">Morale when defending</h3>
+      <p>
+        Units with bad morale are more likely to retreat when attacked, and when retreating they are more
+        likely to rout. Units with strong morale will normally keep their lines together when forced to
+        retreat, or withdraw rather than retreat, or retreat rather than rout. 
+      </p>
+    
+
+  
+
+  
+
+  
+    <h2 class="sect1">Fatigue</h2>
+    <p>
+      Units gain fatigue when they do anything except rest! Every move they make will give them some
+      fatigue, and battle is tiring. The units will lose fatigue by resting, i.e. doing nothing. It
+      is wise to not drive the units too hard for too long, as constantly being fatigued and in battle
+      will seriously effect morale. Switch the units in the front-line if possible and let units who've
+      taken a beating rest behind the lines for a while.
+    </p>
+
+    <p>
+      The possible values are:
+    </p>
+
+    <ol>
+      <li><p>exhausted
+        </p></li>
+
+      <li><p>tired
+        </p></li>
+
+      <li><p>normal
+        </p></li>
+
+      <li><p>rested
+        </p></li>
+    </ol>
+
+
+  
+
+  
+
+  <a name="unit-experience" href="#"></a>
+    <h2 class="sect1">Experience</h2>
+    <p>
+      The modifier <em>experience</em> is a general skill modifier for a unit. A unit that has
+      seen a lot of battle is usually quite experienced in the art of war. Rookie troops are not used to
+      the battlefield and have higher chances of doing stupid things, and less experienced in handling the
+      equipment (such as guns).
+    </p>
+
+    <p>
+      The experience of a unit is a direct modifier as to how good the unit fares in battle. A experienced
+      unit is more likely to withstand heavy attacks without incurring high casualities, while an experienced
+      attacker has a higher chance of breaking through and achieving decisive victories.  For artillery
+      skill is the most important stat, especially when firing from a distance, as it directly determines
+      the chance of hitting the target.
+    </p>
+
+    <p>
+      This modifier also affects the melee skill of a unit and directly modifies how good the unit is
+      when it comes to close combat. Melees are the result of assaults where the defender and attacker
+      engage in hand-to-hand combat, and neither has retreated.
+    </p>
+
+    <p>
+      The possible values are:
+    </p>
+
+    <ol>
+      <li><p>Green
+        </p></li>
+
+      <li><p>Regular
+        </p></li>
+
+      <li><p>Veteran
+        </p></li>
+
+      <li><p>Elite
+        </p></li>
+    </ol>
+  
+
+
+
+
+
+
+  
+
+<a name="unit-states" href="#"></a>
+  <h1 class="chapter">Unit states</h1>
+  <p>
+    Each unit is always in a certain <em>state</em>. The state affects what the unit can
+    currently do an how it reacts on different events. The state of a unit is changed by giving it
+    various orders. The state is not directly for a unit, but is set indirectly by issuing various
+    orders. All types of units can not enter all possible states.
+  </p>
+
+  
+
+  
+    <h2 class="sect1">Resting</h2>
+    <p>
+      This state is the resting-state for any unit. It lets the unit regain strength and reduce
+      fatigue. Units will also get medical treatment, thus reducing the number of wounded men, generally
+      increasing morale. The longer a unit rests the better the effect. A very short rest has no effect.
+    </p>
+
+    <p>
+      Applies to: <em>all units</em>
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Normal</h2>
+    <p>
+      This state means that the unit is in normal combat mode and ready to perform attacks, assaults and
+      defend against enemy actions. A unit in this state may move normally, but movement is more expensive
+      than for the Column state, as the unit moves with all men ready for combat at any
+      time. Consequently, fatigue levels
+      increase faster.
+    </p>
+
+    <p>
+      Applies to: <em>infantry</em>
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Column</h2>
+    <p>
+      This state is used when a unit is moved a long distance, and when enemy actions are not
+      expected. The men are arranged in a column-mode and can efficiently use roads and paths, which makes
+      movement for infantry cheaper in this state. The unit is however very vulnerable to attacks, as it
+      does not maintain a high combat-readiness. Fatigue is not gained as quickly as when moving in normal
+      state.
+    </p>
+
+    <p>
+      Applies to: <em>infantry</em>
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Dug in</h2>
+    <p>
+      This state is the ultimate defensive state. The unit will prepare good defensive entrenchments and
+      prepare for enemy attacks. It is very expensive to enter this state, and it generally takes a a lot
+      of time, however, it is quite cheap to leave this state for the 'normal' state of the unit.  Artillery
+      in this state may fire normally, and is better protected from enemy artillery fire.
+    </p>
+
+    <p>
+      Applies to: <em>all units</em>
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Limbered</h2>
+    <p>
+      This state is used when moving artillery. The guns are assembled in special carriers and horses are
+      used to pull them. It is quite expensive to limber artillery, but moving in this state is as cheap
+      as moving infantry in column mode. Artillery is very vulnerable to attacks in this state, and if the
+      attack is close-range, i.e. comes from a neighbouring hex and is followed by assault, the artillery
+      basically defends as a weak infantry-unit. It will try to unlimber guns and use them for defense if
+      attacked, but this depends on the skills of the men and the leader, the morale and also fatigue.
+    </p>
+
+    <p>
+      Applies to: <em>artillery</em>
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Unlimbered</h2>
+    <p>
+      This state is the standard firing state for artillery. The guns are ready to fire and the men are
+      ready for combat. The unit may move while unlimbered, but it is very expensive, as the guns are
+      basically pulled by the men themselves.
+    </p>
+
+    <p>
+      Applies to: <em>artillery</em>
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Mounted</h2>
+    <p>
+      This state is the normal state for cavalry. This state is used when moving the units, as well as
+      attacking. Cavalry is the only unit that is most efficient in attacking in its standard movement
+      state. Other units may only attack at greatly reduced strength when in some movement state.
+    </p>
+
+    <p>
+      Applies to: <em>cavalry</em>
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Dismounted</h2>
+    <p>
+      This state is used by cavalry when defending against attackers. Cavalry may move while dismounted,
+      but there is generally no point in doing so, as mounting is cheap for cavalry, and moving when
+      mounted is much faster.
+    </p>
+
+    <p>
+      Applies to: <em>cavalry</em>
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Disordered</h2>
+    <p>
+      This state is entered when a unit retreats and the skill of the leaders and the unit is not enough
+      to keep the unit retreating in an orderly manner. The morale is higher than for routing units, the
+      men are just a bit disordered, something usually quite simple to sort out. Disordered units have a defensive
+      penalty when attacked and may not perform most missions, such as attacks. Units recover from
+      disordered states by rallying.
+    </p>
+
+    <p>
+      Applies to: <em>all units</em>
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Retreating</h2>
+    <p>
+      A retreating unit will back away from the enemy in a somewhat ordered fashion. A retreating state
+      may be entered by manually ordering the unit to retreat, or if it is forced to retreat due to enemy
+      attacks. Depending on the <em>rally skill</em> of the leader it may take a while before
+      a retreating unit is restored to normal. A forced retreat often means that the unit has suffered more
+      severe losses than when manually ordered to retreat, thus it will take longer for units on forced
+      retreat to rally.
+    </p>
+
+    <p>
+      Applies to: <em>all units</em>
+    </p>
+
+  
+
+  
+
+  
+    <h2 class="sect1">Routed</h2>
+    <p>
+      The ultimate state of disorderedness. The unit is fleeing from the attacker. Requires leader to
+      rally the unit, and this may not always succeed.  The unit needs to get its morale up, maybe resting
+      for a while to regain it.
+    </p>
+
+    <p>
+      Applies to: <em>all units</em>
+    </p>
+  
+
+
+
+
+
+
+  
+
+<a name="terrain" href="#"></a>
+  <h1 class="chapter">Terrain</h1>
+  <p>
+    This chapter describes the various types of terrain that can be found in scenarios within
+    <em>Civil</em>. Knowing how terrain affects movement, combat etc is key to winning
+    battles. 
+  </p>
+
+
+
+
+
+
+  
+
+<a name="commanders" href="#"></a>
+  <h1 class="chapter">Commanders</h1>
+  <p>
+    Each unit has one immediate leader and any number of leaders above that. The immediate leader is the
+    one that has most influence over what the unit does, and is thus most responsible for outcomes of
+    battles. A leader has a few important stats that very much influence the outcome of battles.
+  </p>
+
+  
+
+  
+    <h2 class="sect1">Battle skill</h2>
+    <p>
+      A leader with a low skill level is bound to make bad decisions, while a skilled leader may
+      make extraordinarily
+      good decisions when needed. The skill level is important when doing anything! It's very important when
+      doing assaults, attacks or other actions that may have big changes.  Skill directly modifies all
+      results. The battle skill is more or less the skill taught to the leader in military school,
+      i.e. theory. The practical knowledge is experience. Together these directly modify what a leader
+      is capable of doing. 
+    </p>
+
+    <p>
+      The possible values are:
+    </p>
+
+    <ol>
+      <li><p>Very poor
+        </p></li>
+
+      <li><p>Poor
+        </p></li>
+
+      <li><p>Medium
+        </p></li>
+
+      <li><p>Good
+        </p></li>
+
+      <li><p>Extremely good
+        </p></li>
+    </ol>
+  
+
+  
+
+  
+    <h2 class="sect1">Rally skill</h2>
+    <p>
+      This skill is used by leaders when they try to keep the 'spirits high' and avoid having the unit
+      retreat under battle. It also reflects the leader's ability to rally the troops after a retreat and
+      again create a unit ready for fighting. When the unit takes casualities this stat is very
+      important. 
+    </p>
+
+    <p>
+      The possible values are:
+    </p>
+
+    <ol>
+      <li><p>Very poor
+        </p></li>
+
+      <li><p>Poor
+        </p></li>
+
+      <li><p>Medium
+        </p></li>
+
+      <li><p>Good
+        </p></li>
+
+      <li><p>Extremely good
+        </p></li>
+    </ol>
+  
+
+  
+
+  
+    <h2 class="sect1">Experience</h2>
+    <p>
+      All leaders have more or less battle experience which influences the descicions made in battle. A
+      leader may have low battle skill, but has fought many battles and built up much experience, which
+      means that in order to be a successful leader, experience is often quite sufficient. A leader with
+      good battle skill and experience is often virtually unbeatable. 
+    </p>
+
+    <p>
+      The possible values are:
+    </p>
+
+    <ol>
+      <li><p>Very poor
+        </p></li>
+
+      <li><p>Poor
+        </p></li>
+
+      <li><p>Medium
+        </p></li>
+
+      <li><p>Good
+        </p></li>
+
+      <li><p>Extremely good
+        </p></li>
+    </ol>
+
+    <p>
+      A leader's experience is different from the experience of the unit the leader commands (see
+      <a href="#unit-experience">unit-experience</a>). An inexperienced leader is more likely to make bad
+      decisions, such as ill-informed attacks, unnecessary retreats etc, while an experienced
+      leader knows the battlefield better. The experience of the unit only determines how the unit
+      performs in executing the actions dictated by the leader.
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Personality</h2>
+    <p>
+      A leader has a special personal style which influences the way the troops are led. An
+      aggressive leader has a much higher chance of doing radical stuff, such as assaults and
+      pursuits when enemies have failed and are retreating/routing. A careful leader extremely
+      rarely pursues when the enemies are just pulling back, but is more likely to when they are
+      retreating or even fleeing. This may cause him to miss some good opportunities but instead
+      save him from hastened descicions that may lead to serious losses, such as a pursuit of a
+      strong enemy that turns into a trap.
+    </p>
+
+    <p>
+      The possible values are:
+    </p>
+
+    <ol>
+      <li><p>Careful 
+        </p></li>
+
+      <li><p>Normal
+        </p></li>
+
+      <li><p>Aggressive
+        </p></li>
+    </ol>
+
+    <p>
+      An aggressive leader that is very inexperienced can lead to some major disasters for a unit.
+    </p>
+  
+  
+
+
+
+
+
+  
+
+<a name="combat" href="#"></a>
+  <h1 class="chapter">Combat</h1>
+  <p>
+    This chapter explains the possible forms of combat that can take place within
+    <em>Civil</em> and how they affect the parties involved.
+  </p>
+
+
+  
+
+  <a name="skirmish" href="#"></a>
+    <h2 class="sect1">Skirmish</h2>
+    <p>
+      A <em>skirmish</em> is the basic form of combat in
+      <em>Civil</em>. Skirmishing means that the unit fires constantly at a target in
+      an organized manner, i.e. when ordered.
+    </p>
+
+    <p>
+      A skirmishing unit will fire in a cycle. How fast a unit fires depends on its stats, such
+      as the skill and morale. After a volley of fire the unit will reload and reorganize its
+      lines for the next volley. The unit will continue firing at the enemy as long as the enemy
+      is visible, in range and the unit itself can fire. A unit will stop skirmishing if it gets
+      disorganized or is forced to retreat or rout. It will also stop firing if its ammunition
+      supply is running low.
+    </p>
+  
+
+  
+
+  <a name="attack" href="#"></a>
+    <h2 class="sect1">Attack</h2>
+    <p>
+      An <em>attack</em> means that the unit advances against the defending unit. It
+      will advance in a slow march in combat formation while periodically firing against the enemy
+      unit. 
+    </p>
+
+    <p>
+      Doing an attack instead of just a <em>skirmish</em> may lead to the enemy unit
+      breaking up and retreating. It is thus a good idea to attack an enemy unit if their position
+      is wanted, or if the enemy needs to be driven away. As the attacking unit
+      advances slowly the attack can be aborted easily with less risk compared to an
+      <em>assault</em> (<a href="#assault">assault</a>). If a fast advance or maximum damage
+      is important, an <em>assault</em> is probably a better choice.
+    </p>
+
+    <p>
+      Attacks can only be performed by:
+    </p>
+
+    <ol>
+      <li>
+        <p>
+          infantry in formation mode
+        </p>
+      </li>
+
+      <li>
+        <p>
+          mounted cavalry
+        </p>
+      </li>
+    </ol>
+  
+
+  
+
+  <a name="assault" href="#"></a>
+    <h2 class="sect1">Assault</h2>
+    <p>
+      An <em>assault</em> is the most devastating form of attack, as it means the
+      attacker storms the defender and attempts to overrun it. When a unit is ordered to assault
+      an enemy it will start a fast march against the position. When the unit reaches a certain 
+      distance it will stop and fire a few volleys against the enemy, before eventually
+      storming the last distance and engaging in hand-to-hand combat. Either or both units usually
+      end up disorganized after the hand-to-hand combat, and usually one of the units retreats or
+      routs.
+    </p>
+    
+    <p>
+      The assaulting unit will not run full speed when assaulting, as that would make the troops
+      too tired. Instead they use a fast march/slow jog that keeps the lines intact and makes
+      organized volleys of fire possible.
+    </p>
+
+    <p>
+      Many assaults will never have the final storming stage, as the exchange of fire at close
+      range is often devastating, and may lead to either unit breaking up and retreating or
+      routing. If neither unit gets disorganized the assaulting unit will storm the defender after
+      a few volleys of fire. This leads to a battle with large casualities.
+    </p>
+
+    <p>
+      Assaults can only be performed by:
+    </p>
+
+    <ol>
+      <li>
+        <p>
+          infantry in formation mode
+        </p>
+      </li>
+
+      <li>
+        <p>
+          mounted cavalry
+        </p>
+      </li>
+    </ol>
+
+    <p>
+      Artillery can not engage in an assault, as it is simply not possible to drag the heavy guns
+      and do something useful. Artillery can support assaulting units by
+      <em>skirmishing</em> with the target (i.e. fire at it).
+    </p>
+  
+
+
+
+
+
+  
+
+<a name="organisations" href="#"></a>
+  <h1 class="chapter">Organizations</h1>
+  <p>
+    This chapter describes the organizational layout of the troops in <em>Civil</em>, the
+    normal sizes, types of leaders an so on. The definition "organization" in this context means the
+    normal historical hierarchical military organizations such as companies, regiments, brigades,
+    divisions, corps and armies. These are partially included in <em>Civil</em> to make it
+    more meaningful to simulate command control, leader influence and command delays.
+  </p>
+
+  <p>
+    The actual "seen" units on the map are always companies. Some companies can contain the needed
+    organizational leaders for higher organizations too. So there can be a company that has the command
+    for a regiment or brigade, but still show up only as a single company. These units are worthwile
+    targets, as killing or capturing the important commanders disrupts the entire organization. A lost
+    commander in a regiment will be replaced, but usually with a commander of lower rank, and often also
+    of worse quality. Companies with commanders for higher organizations should therefore be protected
+    from heavy casualities, and should be kept near the center of the organization they command, in
+    order to minimize the distance to all other suborganizations in its command.
+  </p>
+
+  <p>
+    Seen as a graph the command structure builds up a tree with the root in the highest commander on the
+    battlefield (such as a division commander) and spreading out to lower organizations. The sections
+    below will describe the normal organizations found on the battle field and their characteristics.
+  </p>
+
+  
+
+  
+    <h2 class="sect1">Companies</h2>
+    <p>
+      TBD
+    </p>
+
+  
+
+  
+
+  
+    <h2 class="sect1">Regiments</h2>
+    <p>
+    </p>
+
+    <p>
+      TODO: figure with typical regiment
+    </p>
+  
+
+  
+
+  
+    <h2 class="sect1">Brigades</h2>
+    <p>
+    </p>
+
+    <p>
+      TODO: figure with typical brigade
+    </p>
+
+  
+
+  
+
+  
+    <h2 class="sect1">Divisions</h2>
+    <p>
+    </p>
+
+    <p>
+      TODO: figure with typical division
+    </p>
+
+  
+
+
+
+
+
+  
+
+<a name="objectives" href="#"></a>
+  <h1 class="chapter">Objectives</h1>
+  <p>
+    This chapter describes how <em>objectives</em> are used in <em>Civil</em>.
+  </p>
+  
+  <a name="what-are-objectives" href="#"></a>
+    <h2 class="sect1">What are objectives</h2>
+    <p>
+      Objectives can be present in a scenario to mark out certain parts of the map that are
+      especially important for some reason. An objective can be an important terrain feature, such
+      as a bridge, a hill, a ford or a road crossing. Objectives are something the player should try
+      to capture, as victory points are awarded to the player who controls objectives at the end of
+      the game.
+    </p>
+
+    <p>
+      On the map, objectives are shown with these symbols:
+    </p>
+
+    <p>
+      TODO: small screenshot of objective on map
+    </p>
+
+    <p>
+      There are two kinds of objectives. The golden objective is a primary objective and is worth
+      more victory points than the silver one See <a href="#victory-points">victory-points</a> for more
+      information. A scenario may not always use both objectives types, it may not even use
+      objectives at all, if it does not fit into the scenario type.
+    </p>
+
+    <p>
+      Objectives are captured by making sure that no enemy units are within a certain range from the
+      objective, and that at least one friendly unit that has not disrupted or routed is near the objective.
+    </p>
+
+  
+
+
+  <a name="victory-points" href="#"></a>
+    <h2 class="sect1">Victory points</h2>
+    <p>
+      When the game ends victory points are awarded for each objective the player holds. An
+      objective that is not held by any player is considered to be neutral, and does not award
+      either player victory points.  There are two kinds of objectives:
+    </p>
+
+    <ol>
+      <li>
+        <b class="firstterm">primary</b><p> objectives are worth <em>500</em> points.
+        </p>
+      </li>
+
+      <li>
+        <b class="firstterm">secondary</b><p>objectives are worth <em>250</em> points.
+        </p>
+      </li>
+    </ol>
+    
+    <p>
+      A primary objective is thus worth double the points awarded for secondary objectives. Points
+      are only awarded at the end of the game.
+    </p>
+
+    <p>
+      TODO: maybe objectives should award some points for each turn a player holds them? Could maybe
+      avoid the "final turn objective rushes" a little bit?
+    </p>
+  
+
+
+
+
+
+  
+
+<a name="reinforcements" href="#"></a>
+  <h1 class="chapter">Reinforcements</h1>
+  <p>
+    This chapter discusses how reinforcements work in <em>Civil</em>.
+  </p>
+  
+  <p>
+    Reinforcements are troops that arrive late to a battlefield. Usually most
+    troops are already present at the location for the battle, but some troops
+    may arrive later during the day, or over the course of several days if it's a long
+    battle. Not all scenarios have reinforcements, it's up to the scenario
+    designer to decide if reinforcements are available.
+  </p>
+
+  <p>
+    Reinforcements arrive at some location very near the edge of the map, usually in the rear. If
+    several units arrive at the same location (for instance a road) the first ones to arrive may
+    be placed a bit from the edge to give space to the others. As soon as units have arrived on the
+    map they may be controlled in the same way as any other unit.
+  </p>
+
+  <p>
+    The time and location where reinforcements arrive is decided by the
+    scenario designer; the player can in no way affect the arrival times.
+  </p>
+
+
+
+
+
+  
+
+<a name="ending" href="#"></a>
+  <h1 class="chapter">Ending a game</h1>
+  <p>
+  </p>
+
+
+
+
+
+  
+
+<a name="saving" href="#"></a>
+  <h1 class="chapter">Saving a game</h1>
+
+  <p>
+    This chapter explains how to save games.
+  </p>
+
+  <p>
+    Saving games in <em>Civil</em> is very simple. The game can only be saved during the
+    orders phase, not the action phase. To save the game,  press the keys <b class="key">Alt</b> and
+    <b class="key">s</b>. This will bring up a dialog where you will be asked wether the game should
+    be saved or not.
+  </p>
+
+  <p>
+    TODO: screenshot of question.
+  </p>
+
+  <p>
+    Click <b class="gui">Ok</b> to save and <b class="gui">Cancel</b> to abort the
+    saving. If you chose to save the game another dialog will be shown where you can enter a
+    name.
+  </p>
+
+  <p>
+    TODO: screenshot of input dialog.
+  </p>
+
+  <p>
+    Press <b class="gui">Ok</b> or <b class="key">Enter</b> to accept the name and save the
+    game. If the given name was empty, ie. nothing was written then the saving is aborted. The
+    actual saving process will take some time, so please be patient. 
+  </p>
+
+  <p>
+    <em>Civil</em> saves games in a directory
+    <b class="filename">$HOME./civil/saved_games</b>. The saved games are available for loading from
+    the main dialog (see <a href="#loading">loading</a>).
+  </p>
+
+
+
+
+
+  
+
+<a name="tactics" href="#"></a>
+  <h1 class="chapter">Tactics</h1>
+  <p>
+    This chapter aims to give a brief overview of the tactics that were used at the time and some
+    tips on how to do combat.
+  </p>
+
+
+
+
+
+
+  
+
+<a name="scenario-management" href="#"></a>
+  <h1 class="chapter">Scenario management</h1>
+  <p>
+    This chapter explains how scenarios are managed.
+  </p>
+
+  
+    <p>
+      This chapter is still very much vapour!
+    </p>
+  
+
+  
+
+  <a name="adding-scenarios-globally" href="#"></a>
+    <h2 class="sect1">Adding scenarios globally</h2>
+
+    <p>
+      All scenarios in <em>Civil</em> are managed by the player that acts as the
+      server. The client player only downloads them from the server when a game is started, and does
+      not store them locally in any way. So players can play a game where only one player has a
+      scenario by having that player act as the server. To add a new scenario to a server the server
+      must be made aware of the new scenario.
+    </p>
+
+    <p>
+      The first step is to download the scenario from somewhere, and then copy the files (two
+      <em>XML</em> files) into the <b class="filename">scenarios</b> directory of the
+      <em>Civil</em> installation. This is typically:
+    </p>
+
+    <ol>
+      <li>
+        <p><b class="firstterm">Unix</b>: <b class="filename">/usr/share/games/civil/scenarios/</b>
+          or <b class="filename">/usr/share/games/civil/scenarios/</b>. TODO: check these paths.
+        </p>
+      </li>
+
+      <li>
+        <p><b class="firstterm">Windows</b>: <b class="filename">c:\Program Files\Civil\scenarios\</b>
+        </p>
+      </li>
+    </ol>
+
+    <p>
+      After this <em>Civil</em> can be restarted with the player that just
+      installed the new scenarios acting as the server. The new scenario will be selectable from the
+      list of scenarios when a new game is started (see <a href="#game-settings">game-settings</a>).
+    </p>
+
+    <p>
+      Scenarios installed in this way are available to all users that can play
+      <em>Civil</em> on the host machine. To install a scenario for only one player see the
+      next section.
+    </p>
+    <p>
+      Windows NT, 2000 and XP users should check they have the correct permissions to access the 
+      installation directory and run civil. In extreme cases your system administrator can deny 
+      users full rights to the installation directory, in which case consult with your local expert on 
+      how to correctly setup Civil for multi-user play.
+    </p>
+  
+
+  
+
+  <a name="adding-scenarios-locally" href="#"></a>
+    <h2 class="sect1">Adding scenarios locally</h2>
+
+    <p>
+      Scenarios can also be added so that only the local player can use them. Do do this follow the
+      instructions above, but replace the path
+      <b class="filename">/usr/share/games/civil/scenarios/</b> with the path
+      <b class="filename">$HOME/.civil/scenarios/</b>. Now the downloaded scenarios are only available
+      to the player who installed them.
+    </p>
+  
+
+
+  
+
+
+  <a name="adding-scenarios-lounge" href="#"></a>
+    <h2 class="sect1">Getting scenarios from the lounge</h2>
+
+    <p>
+      Scenarios can also be downloaded from the <em>lounge</em> (see <a href="#lounge">lounge</a>). This is done in a fully graphical way, and the scenarios can be
+      downloaded from any lounge on the Internet. Scenarios downloaded in this way will be saved
+      locally for the player downloading, just like in the section above (see <a href="#adding-scenarios-locally">adding-scenarios-locally</a>).
+    </p>
+  
+
+
+  
+
+
+  <a name="using-admin-tool" href="#"></a>
+    <h2 class="sect1">Using the tool civil-scenario-admin</h2>
+
+    <p>
+      <em>Civil</em> can also download scenarios from scenario repositories through a
+      scenario server. To do this use the tool <b class="filename">civil-scenario-admin</b> that is
+      not yet written, and thus is very much vaporware. This tool allows the player to conenct to
+      scenario servers around the world, check for new scenarios and download interesting
+      ones. Note that these servers have nothing to do with the normal game server,
+      i.e. <b class="filename">civil-server</b>, which is used when playing the game. The scenario
+      server just manage scenarios and let players browse scenarios.
+    </p>
+
+    <p>
+      To use the tool <b class="filename">civil-scenario-admin</b> start it like this:
+    </p>
+
+    <pre>
+      <b>%</b> civil-scenario-admin --server=server.example.com --port=8080 
+    </pre>
+
+    <p>
+      After it has started it will show a simple menu which allows you to list scenarios that are
+      available for download from the server and to download one or more of the scenarios. When a
+      scenario is downloaded it is automatically added to the scenarios that the local game server
+      can use. No extra configuration is needed.
+    </p>
+  
+
+  
+
+  <a name="scenario-server" href="#"></a>
+    <h2 class="sect1">Scenario server</h2>
+    
+    <p>
+      You can also run your own scenario server if you want to share your scenarios with
+      people all around the net. To do this you need to use the server
+      <b class="filename">civil-scenario-server</b> that performs the sharing. To start the server
+      run the following command:
+    </p>
+    
+    <pre>
+      <b>%</b> civil-scenario-server 
+    </pre>
+
+    <p>
+      This will launch the server and make it listen on port 8080. It will then share out
+      scenarios to players that connect to the server using
+      <b class="filename">civil-scenario-admin</b>. Clients can get listings of the scenarios your
+      server shares and optionally download one or more of them. 
+    </p>
+
+    <p>
+      By default the server shares out all the normal scenarios that it can find, i.e. the same
+      that the normal game server would use.
+    </p>
+  
+
+  
+
+  <a name="creating-scenarios" href="#"></a>
+    <h2 class="sect1">Creating scenarios</h2>
+    <p>
+      TODO: add text
+    </p>
+  
+
+
+
+
+
+
+  
+
+
+  <h1 class="appendix">Frequently Asked Questions</h1>
+
+  
+    <div class="qanda">
+      <h3 class="question">
+          No keys seem to do anything?
+        </h3>
+      
+      <blockquote class="answer">
+        
+          This one is weird. Probably a bug somewhere in our code. The solution seems to be to make
+          sure that <b class="key">Num Lock</b> is not pressed. Having it pressed (lit) seems to
+          lose all keyboard input.
+        
+        
+          Some Apple keyboards (TiBook, PowerBook etc.) require a qualifer key: <b class="key">FN</b> to 
+          be pressed in order to access Functions keys. Don't forget this during the game! If you still
+          have difficulty under OS X, check your Pygame installation. There have been known problems
+          with keyboard input under Fullscreen mode in OS X that have been fixed by reinstallation of
+          Pygame. 
+        
+      </blockquote>
+    </div>
+
+
+    <div class="qanda">
+      <h3 class="question">
+          Is Python 2.1 hardcoded? Can I change to use Python 2.2 instead? Or any other version?
+        </h3>
+      
+      <blockquote class="answer">
+        
+          Sure, check the switches to <b class="filename">./configure</b>. Do this:
+        
+
+        <pre>
+          <b>%</b> ./configure --with-python=/path/to/my/python
+        </pre>
+
+      </blockquote>
+    </div>
+
+    <div class="qanda">
+      <h3 class="question">
+	  After installing Civil under Windows I get a weird error when I try to launch it: KeyError: HOME
+	</h3>
+
+      <blockquote class="answer">
+        
+	  Currently, the Civil installer doesn't configure a HOME environment variable, which is something the game needs in
+          order to save games and store scenarios. The document: README.WINDOWS explains how to configure this for most
+          versions of Windows.
+        
+      </blockquote>
+    </div>
+
+    
+  
+
+
+
+
+
+  
+
+
+  <h1 class="appendix">Licenses for used software</h1>
+
+  <p>
+    <em>Civil</em> uses a few software packages that are integrated into the source
+    tree. The licenses for these are here.
+  </p>
+
+  
+    <h2 class="sect1">xmlrpclib</h2>
+    <p>
+      The xmlrpclib library is
+    </p>
+
+    <p>
+      Copyright 1999 by Secret Labs AB, 
+      Copyright 1999 by Fredrik Lundh
+    </p>
+
+    <p>
+      By obtaining, using, and/or copying this software and/or its associated documentation, you
+      agree that you have read, understood, and will comply with the following terms and
+      conditions: Permission to use, copy, modify, and distribute this software and its associated
+      documentation for any purpose and without fee is hereby granted, provided that the above
+      copyright notice appears in all copies, and that both that copyright notice and this
+      permission notice appear in supporting documentation, and that the name of Secret Labs AB or
+      the author not be used in advertising or publicity pertaining to distribution of the
+      software without specific, written prior permission.
+    </p>
+
+    <p>
+      SECRET LABS AB AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE,
+      INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS.  IN NO EVENT SHALL SECRET
+      LABS AB OR THE AUTHOR BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY
+      DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF
+      CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE
+      OR PERFORMANCE OF THIS SOFTWARE.
+    </p>
+  
+
+
+
+
+
+
+</body></html>
