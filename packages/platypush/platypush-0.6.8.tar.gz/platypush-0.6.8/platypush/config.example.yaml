@@ -1,0 +1,68 @@
+backend.kafka:
+    disabled: False
+    pusher: True  # The pusher executable will use this backend by default
+    server: your_server:9092
+    topic: platypush
+
+backend.pushbullet:
+    disabled: True
+    token: your_pushbullet_token_here
+    device: your_pushbullet_virtual_device_name
+
+backend.local:
+    request_fifo: /tmp/platypush-requests.fifo
+    response_fifo: /tmp/platypush-responses.fifo
+
+# device_id: <your_device_id> (default: current hostname)
+
+music.mpd:
+    host: localhost
+    port: 6600
+
+light.hue:
+    bridge: hue  # Bridge IP or hostname
+    # lights:  # Default lights you want to manage
+    #     - Living Room Ground Right
+    #     - Living Room Ground Left
+    #     - Hue bloom
+    #     - Kitchen Lampm
+    #     - Living room ceiling right
+    #     - Living room ceiling left
+    #     - Kitchen LED Strip
+    #     - Kitchen Table LED Strip
+    groups:  # Default groups you want to manage
+        - Living Room
+
+# ---
+# --- Event hooks configuration
+# ---
+
+event.hook.AssistantConversationStarted:
+    if:
+        type: platypush.message.event.assistant.ConversationStartEvent
+    then:
+        action: shell.exec
+        args:
+            cmd: 'aplay /path/conv_start.wav'
+
+event.hook.MusicPlayAssistantCommand:
+    if:
+        type: platypush.message.event.assistant.SpeechRecognizedEvent
+        phrase: "play (the)? music"  # Regexes on single terms are supported
+    then:
+        action: music.mpd.play
+
+event.hook.LightsOnAssistantCommand:
+    if:
+        type: platypush.message.event.assistant.SpeechRecognizedEvent
+        phrase: "turn on (the)? lights"
+    then:  # Multiple actions are supported
+        -
+            action: light.hue.on
+            args:
+                groups: Living Room
+        -
+            action: switch.wemo.on
+            args:
+                device: Bulbs
+
