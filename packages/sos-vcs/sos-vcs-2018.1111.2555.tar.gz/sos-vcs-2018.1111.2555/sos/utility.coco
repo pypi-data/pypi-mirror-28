@@ -1,0 +1,457 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+# Utiliy functions
+import bz2, codecs, difflib, hashlib, logging, os, re, sys, time; START_TIME = time.time()
+try:
+  from typing import Any, Callable, Dict, FrozenSet, IO, List, Sequence, Tuple, Type, TypeVar, Union  # only required for mypy
+  Number = Union[int,float]
+except: pass  # typing not available (e.g. Python 2)
+try: import wcwidth
+except: pass  # optional dependency
+longint:Type = eval("long") if sys.version_info.major < 3 else int  # for Python 2 compatibility
+
+
+verbose = os.environ.get("DEBUG", "False").lower() == "true" or '--verbose' in sys.argv or '-v' in sys.argv  # imported from utility, and only modified here
+
+# Classes
+class Accessor(dict):
+  ''' Dictionary with attribute access. Writing only supported via dictionary access. '''
+  def __init__(_, mapping:Dict[str,Any]) -> None: dict.__init__(_, mapping)
+  def __getattribute__(_, name:str) -> Any:
+    try: return _[name]
+    except: return dict.__getattribute__(_, name)
+
+class Counter:
+  ''' A simple counter. Can be augmented to return the last value instead. '''
+  def __init__(_, initial:Number = 0) -> None: _.value:Number = initial
+  def inc(_, by = 1) -> Number: _.value += by; return _.value
+
+class EnumValue:
+  def __init__(_, tipe, name, value) -> None: _.tipe, _.name, _.value = tipe, name, value
+  def __str__(_) -> str = "%s.%s" % (_.tipe, _.name)
+  def __repr__(_) -> str = "<enum '%s.%s'>" % (_.tipe, _.name)
+
+class Enum(dict):
+  def __init__(_, name:str, values:Union[List[Union[str,Tuple[str,Number]]],Dict[str,Number]], first:int = 0, step:int = 1):
+    assert name
+    assert values
+    _.name:str = name
+    _.values:Dict[Number,EnumValue] = {}
+    if isinstance(values, list):
+      count:int = first
+      for item in values:  # type: List[Union[str,Tuple[str,Number]]]
+        if isinstance(item, tuple):
+          _.values[item[1]] = EnumValue(name, item[0], item[1])
+          count = item[1] + step
+        else:  # str
+          _.values[count] = EnumValue(name, item, count)
+          count += step
+    elif isinstance(values, dict):
+      _.values.update({k: EnumValue(name, v, k) for v, k in values.items()})
+    else: raise ValueError("Illegal values provided: expecting list(str), list of (str,num) or dict(str,num)")
+  def __str__(_) -> str = _.name
+  def __repr__(_) -> str = "<enum '%s'>" % _.name
+  def entries(_) -> EnumValue[] = list(sorted(_.values.values(), key = (v) -> v.value))
+  def names(_) -> str[] = list(sorted([v.name for v in _.values.values()]))
+  def numbers(_) -> Number[] = list(sorted(_.values.keys()))
+  def __getattribute__(_, name:str) -> EnumValue:
+    try: return [v for v in _.values.values() if v.name == name][0]
+    except: return dict.__getattribute__(_, name)
+  def __getitem__(_, key:Number) -> str =
+    assert isinstance(key, (int, float))  # or decimal
+    _.values[key]
+  # TODO implement equal / is_ comparison
+
+class Logger:
+  ''' Logger that supports many items. '''
+  def __init__(_, log): _._log = log
+  def debug(_, *s): _._log.debug(sjoin(*s))
+  def info(_, *s): _._log.info(sjoin(*s))
+  def warn(_, *s): _._log.warning(sjoin(*s))
+  def error(_, *s): _._log.error(sjoin(*s))
+
+
+# Constants
+_log = Logger(logging.getLogger(__name__)); debug, info, warn, error = _log.debug, _log.info, _log.warn, _log.error
+UTF8 = "utf_8"  # early used constant, not defined in standard library
+CONFIGURABLE_FLAGS = ["strict", "track", "picky", "compress"]
+CONFIGURABLE_LISTS = ["texttype", "bintype", "ignores", "ignoreDirs", "ignoresWhitelist", "ignoreDirsWhitelist"]
+TRUTH_VALUES = ["true", "yes", "on", "1", "enable", "enabled"]  # all lower-case normalized
+FALSE_VALUES = ["false", "no", "off", "0", "disable", "disabled"]
+PROGRESS_MARKER = ["|", "/", "-", "\\"]
+metaFolder:str = ".sos"
+metaFile:str = ".meta"
+bufSize:int = 1 << 20  # 1 MiB
+SVN = "svn"
+SLASH = "/"
+vcsFolders:Dict[str,str] = {".svn": SVN, ".git": "git", ".bzr": "bzr", ".hg": "hg", ".fslckout": "fossil", "_FOSSIL_": "fossil", ".CVS": "cvs"}
+vcsBranches:Dict[str,str?] = {SVN: "trunk", "git": "master", "bzr": "trunk", "hg": "default", "fossil": None, "cvs": None}
+lateBinding:Accessor = Accessor({"verbose": False, "start": 0})
+
+
+# Value types
+data BranchInfo(number:int, ctime:int, name:str? = None, inSync:bool = False, tracked:List[str] = [])  # tracked is a list on purpose, as serialization to JSON needs effort and frequent access is not taking place
+data CommitInfo(number:int, ctime:int, message:str? = None)
+data PathInfo(nameHash:str, size:int?, mtime:int, hash:str?)  # size == None means deleted in this revision
+data ChangeSet(additions:Dict[str,PathInfo], deletions:Dict[str,PathInfo], modifications:Dict[str,PathInfo])  # avoid default assignment of {} as it leads to runtime errors (contains data on init for unknown reason)
+data Range(tipe:int, indexes:int[])  # MergeBlockType[1,2,4], line number, length
+data MergeBlock(tipe:int, lines:str[], line:int, replaces:MergeBlock? = None, changes:Range? = None)
+data GlobBlock(isLiteral:bool, content:str, index:int)  # for file pattern rename/move matching
+data GlobBlock2(isLiteral:bool, content:str, matches:str)  # matching file pattern and input filename for translation
+
+
+# Enums
+class ConflictResolution: THEIRS, MINE, ASK, NEXT = range(4)  # prefer their changes, prefer my changes, ask user for each change, go to next deeper level (e.g. from files to lines, characters)
+class MergeOperation: INSERT, REMOVE, BOTH = 1, 2, 3  # insert remote changes into current, remove remote deletions from current, do both (replicate remote state) TODO handle inline-operations separate?
+class MergeBlockType: KEEP, INSERT, REMOVE, REPLACE, MODIFY, MOVE = range(6)  # modify = intra-line changes
+
+
+# Functions
+try:
+  import chardet  # https://github.com/chardet/chardet
+  def detectEncoding(binary:bytes) -> str = chardet.detect(binary)["encoding"]
+except:
+  def detectEncoding(binary:bytes) -> str =  # Guess the encoding
+    ''' Fallback if chardet library missing. '''
+    try: binary.decode(UTF8); return UTF8
+    except UnicodeError: pass
+    try: binary.decode("utf_16"); return "utf_16"
+    except UnicodeError: pass
+    try: binary.decode("cp1252"); return "cp1252"
+    except UnicodeError: pass
+    "ascii"  # this code will never be reached, as above is an 8-bit charset that always matches
+
+def wcswidth(string:str) -> int =
+  l:int = None
+  try:
+    l = wcwidth.wcswitdh(string)
+    if l < 0: return len(string)
+  except: return len(string)
+  l
+
+def conditionalIntersection(a:FrozenSet[str]?, b:FrozenSet[str]) -> FrozenSet[str] = a & b if a else b
+
+def openIt(file:str, mode:str, compress:bool = False) -> IO = bz2.BZ2File(file, mode) if compress else open(file, mode + "b")  # Abstraction for opening both compressed and plain files
+
+def eoldet(file:bytes) -> bytes? =
+  ''' Determine EOL style from a binary string. '''
+  lf:int = file.count(b"\n")
+  cr:int = file.count(b"\r")
+  crlf:int = file.count(b"\r\n")
+  if crlf > 0:  # DOS/Windows/Symbian etc.
+    if lf != crlf or cr != crlf: warn("Inconsistent CR/NL count with CR+NL. Mixed EOL style detected, may cause problems during merge")
+    return b"\r\n"
+  if lf != 0 and cr != 0: warn("Inconsistent CR/NL count without CR+NL. Mixed EOL style detected, may cause problems during merge")
+  if lf > cr: return b"\n"  # Linux/Unix
+  if cr > lf: return b"\r"  # older 8-bit machines
+  None  # no new line contained, cannot determine
+
+def user_input(msg:str) -> str = input(msg)  # referenceso __builtin__.raw_input on Python 2
+
+try: Splittable = TypeVar("Splittable", str, bytes)
+except: pass  # Python 2
+def safeSplit(s:Splittable, d:Splittable? = None) -> Splittable[]: return s.split(d ?? ("\n" if isinstance(s, str) else b"\n")) if len(s) > 0 else []
+
+def ajoin(sep:str, seq:str[], nl = "") -> str = (sep + (nl + sep).join(seq)) if seq else ""
+
+def sjoin(*s:Tuple[Any]) -> str = " ".join([str(e) for e in s if e != ''])
+
+def hashStr(datas:str) -> str = hashlib.sha256(datas.encode(UTF8)).hexdigest()
+
+def modified(changes:ChangeSet, onlyBinary:bool = False) -> bool = len(changes.additions) > 0 or len(changes.deletions) > 0 or len(changes.modifications) > 0
+
+def listindex(lizt:Sequence[Any], what:Any, index:int = 0) -> int = lizt[index:].index(what) + index
+
+def getTermWidth() -> int =
+  try: import termwidth
+  except: return 80
+  termwidth.getTermWidth()[0]
+
+def branchFolder(branch:int, revision:int, base = ".", file = None) -> str = os.path.join(base, metaFolder, "b%d" % branch, "r%d" % revision) + ((os.sep + file) if file else "")
+
+def Exit(message:str = "", code = 1) -> None: print("[EXIT%s]" % (" %.1fs" % (time.time() - START_TIME) if verbose else "") + (" " + message + "." if message != "" else ""), file = sys.stderr); sys.exit(code)
+
+def hashFile(path:str, compress:bool, saveTo:str? = None) -> Tuple[str,longint] =
+  ''' Calculate hash of file contents, and return compressed sized, if in write mode, or zero. '''
+  _hash = hashlib.sha256()
+  wsize:longint = 0
+  if saveTo and os.path.exists(saveTo): Exit("Hash conflict. Leaving revision in inconsistent state. This should happen only once in a lifetime.")
+  to = openIt(saveTo, "w", compress) if saveTo else None
+  with open(path, "rb") as fd:
+    while True:
+      buffer = fd.read(bufSize)
+      _hash.update(buffer)
+      if to: to.write(buffer)
+      if len(buffer) < bufSize: break
+    if to:
+      to.close()
+      wsize = os.stat(saveTo).st_size
+  (_hash.hexdigest(), wsize)
+
+def getAnyOfMap(map:Dict[str,Any], params:str[], default:Any = None) -> Any =
+  ''' Utility. '''
+  for k, v in map.items():
+    if k in params: return v
+  default
+
+def strftime(timestamp:int? = None) -> str = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(timestamp / 1000. if timestamp is not None else None))
+
+def detectAndLoad(filename:str? = None, content:bytes? = None) -> Tuple[str,bytes,str[]] =
+  encoding:str; eol:bytes; lines:str[] = []
+  if filename is not None:
+    with open(filename, "rb") as fd: content = fd.read()
+  encoding = detectEncoding(content) ?? sys.getdefaultencoding()
+  eol =  eoldet(content)
+  if filename is not None:
+    with codecs.open(filename, encoding = encoding) as fd: lines = safeSplit(fd.read(), (eol ?? b"\n").decode(encoding))
+  elif content is not None:
+    lines = safeSplit(content.decode(encoding), (eol ?? b"\n").decode(encoding))
+  else: return (sys.getdefaultencoding(), b"\n", [])
+  (encoding, eol, lines)
+
+def diffPathSets(last:Dict[str,PathInfo], diff:Dict[str,PathInfo]) -> ChangeSet =
+  ''' Computes a changeset between in-memory and on-disk file lists.
+      Additions contains PathInfo for entries in diff
+      Deletions contains PathInfo for entries not anymore in diff
+      Modifications contains PathInfo for entries changed from last to diff (new state)
+  '''
+  changes:ChangeSet = ChangeSet({}, {}, {})
+  for path, pinfo in last.items():
+    if path not in diff: continue  # now change  changes.deletions[path] = pinfo; continue
+    vs = diff[path]  # reference to potentially changed path set
+    if vs.size is None: changes.deletions[path] = pinfo; continue  # marked for deletion
+    if pinfo.size == None: changes.additions[path] = pinfo; continue  # re-added
+    if pinfo.size != vs.size or pinfo.mtime != vs.mtime or pinfo.hash != vs.hash: changes.modifications[path] = vs  # not need to make hash comparison optional here
+  for path, pinfo in diff.items():  # added loop
+    if path not in last: changes.additions[path] = pinfo
+  assert not any([path in changes.deletions for path in changes.additions])  # invariant checks
+  assert not any([path in changes.additions for path in changes.deletions])
+  changes
+
+try: DataType = TypeVar("DataType", ChangeSet, MergeBlock, BranchInfo)
+except: pass  # Python 2
+
+def dataCopy(_tipe:Type[DataType], _old:DataType, *_args, **_kwargs) -> DataType: r = _old._asdict(); r.update(**_kwargs); return makedata(_tipe, *(list(_args) + [r[field] for field in _old._fields]))
+# TODO test namedtuple instead of instantiated tuple types in "datatype"?
+
+def merge(file:bytes? = None, into:bytes? = None, filename:str? = None, intoname:str? = None, mergeOperation = MergeOperation.BOTH, conflictResolution = ConflictResolution.ASK, diffOnly:bool = False) -> Union[bytes,List[MergeBlock]] =
+  ''' Merges binary text contents 'file' into file 'into', returning merged result. '''
+  encoding:str; othr:str[]; othreol:bytes?; curr:str[]; curreol:bytes?
+  differ = difflib.Differ()
+  try:  # load files line-wise and normalize line endings (keep the one of the current file) TODO document
+    encoding, othreol, othr = detectAndLoad(filename = filename, content = file)
+    encoding, curreol, curr = detectAndLoad(filename = intoname, content = into)
+  except Exception as E: Exit("Cannot merge '%s' into '%s': %r" % (filename, intoname, E))
+  if None not in [othreol, curreol] and othreol != curreol: warn("Differing EOL-styles detected during merge. Using current file's style for merge output")
+  output:List[str] = list(differ.compare(othr, curr))  # from generator expression
+  debug("Diff output: " + "".join([o.replace("\n", "\\n") for o in output]))
+  blocks:List[MergeBlock] = []  # merged result in blocks
+  tmp:List[str] = []  # block lines
+  last = " "
+  for no, line in enumerate(output + ["X"]):  # EOF marker (difflib's output will never be "X" alone)
+    if line[0] == last: tmp.append(line[2:]); continue  # continue filling consecutive block, no matter what type of block
+    if line == "X":  # EOF marker - perform action for remaining block
+      if len(tmp) == 0: break  # nothing left to do
+    if last == " ":  # block is same in both files TODO sometimes adds empty keep block at beginning of file?
+      if len(tmp) > 0: blocks.append(MergeBlock(MergeBlockType.KEEP, [line for line in tmp], line = no - len(tmp)))
+    elif last == "-":  # may be a deletion or replacement, store for later
+      blocks.append(MergeBlock(MergeBlockType.REMOVE, [line for line in tmp], line = no - len(tmp)))
+    elif last == "+":  # may be insertion or replacement
+      blocks.append(MergeBlock(MergeBlockType.INSERT, [line for line in tmp], line = no - len(tmp)))
+      if len(blocks) >= 2 and len(blocks[-1].lines) == len(blocks[-2].lines):  # replaces previously removed section entirely if any
+        if len(blocks[-1].lines) >= 2 or (blocks[-1].changes is None and blocks[-2].changes is None):  # full block or no intra-line comment
+          blocks[-2] = MergeBlock(MergeBlockType.REPLACE, blocks[-1].lines, line = no - len(tmp) - 1, replaces = blocks[-2])  # remember replaced stuff TODO why -1 necessary?
+        else:  # may have intra-line modifications
+          blocks[-2] = MergeBlock(MergeBlockType.MODIFY, blocks[-1].lines, line = no - len(tmp), replaces = blocks[-2], changes = blocks[-1].changes)
+        blocks.pop()  # remove TOS
+    elif last == "?":  # intra-line change comment
+      ilm = getIntraLineMarkers(tmp[0])  # tipe is one of MergeBlockType 1, 2, 4. # "? " line includes a trailing \n for some reason
+      blocks[-1] = dataCopy(MergeBlock, blocks[-1], tipe = MergeBlockType.MODIFY, changes = ilm)  # update to MODIFY, otherwise may be REPLACE instead
+    last = line[0]
+    tmp[:] = [line[2:]]
+  debug("Diff blocks: " + repr(blocks))
+  if diffOnly: return blocks
+  output = []
+  for block in blocks:
+    if block.tipe == MergeBlockType.KEEP:
+      output.extend(block.lines)
+    elif block.tipe == MergeBlockType.INSERT and not(mergeOperation & MergeOperation.REMOVE):
+      output.extend(block.lines)
+    elif block.tipe == MergeBlockType.REPLACE:  # complete block replacement
+      if mergeOperation & MergeOperation.INSERT: output.extend(block.replaces.lines)  # replaced stuff TODO allow insertion BEFORE and alternatively AFTER?
+      if not (mergeOperation & MergeBlockType.REMOVE): output.extend(block.lines)  # if remove, don't add replaced lines, otherwise do
+    elif block.tipe == MergeBlockType.REMOVE and mergeOperation & MergeOperation.INSERT:
+      output.extend(block.lines)
+    elif block.tipe == MergeBlockType.MODIFY:  # changes.tipe marks intra-line changes
+      if block.changes is not None and block.changes.tipe == MergeBlockType.INSERT:  # cannot be REMOVE, because it's always "-" then "+"  character insert
+          output.extend(block.lines if mergeOperation & MergeOperation.INSERT else block.replaces.lines)  # TODO logic?
+      elif block.replaces.changes is not None and block.replaces.changes.tipe == MergeBlockType.REMOVE:
+          output.extend(block.lines if mergeOperation & MergeOperation.REMOVE else block.replaces.lines)
+      elif block.changes is not None and block.changes.tipe == MergeBlockType.MODIFY:  # always both sides modified, but may differ in markers
+        if conflictResolution == ConflictResolution.THEIRS:
+          output.extend(block.replaces.lines)
+        elif conflictResolution == ConflictResolution.MINE:
+          output.extend(block.lines)
+        elif conflictResolution == ConflictResolution.ASK:
+          print(ajoin("THR ", block.replaces.lines, "\n"))
+          print(ajoin("MIN ", block.lines, "\n"))
+          reso:int? = {"i": ConflictResolution.MINE, "t": ConflictResolution.THEIRS, "m": ConflictResolution.NEXT, "u": None}.get(user_input(" Resolve: *M[I]ne, [T]heirs, [M]erge, [U]ser defined: ").strip().lower(), ConflictResolution.MINE)
+          debug("User selected %d" % reso)  # TODO enum output
+          match None in reso:
+            warn("Manual input not implemented yet")  # TODO allow multi-line input (CTRL+D?)
+          match =ConflictResolution.MINE in reso:
+            debug("Using mine")
+            output.extend(block.lines)
+          match =ConflictResolution.THEIRS in reso:
+            debug("Using theirs")
+            output.extend(block.replaces.lines)
+          match =ConflictResolution.NEXT in reso:
+            warn("Intra-line merge not implemented yet, skipping line(s)")
+            output.extend(block.lines)
+      else:  # e.g. contains a deletion, but user was asking for insert only??
+        warn("Investigate this case")
+        output.extend(block.lines)  # default or not .replaces?
+  debug("Merge output: " + "; ".join(output))
+  nl:bytes = curreol ?? othreol ?? b"\n"
+  nl.join([line.encode(encoding) for line in output])  # returning bytes
+  # TODO handle check for more/less lines in found -/+ blocks to find common section and splitting prefix/suffix out
+
+def getIntraLineMarkers(line:str) -> Range =
+  ''' Return (type, [affected indices]) of "? "-line diff markers ("? " suffix must be removed). '''
+  if "^" in line: return Range(MergeBlockType.MODIFY, [i for i, c in enumerate(line) if c == "^"])
+  if "+" in line: return Range(MergeBlockType.INSERT, [i for i, c in enumerate(line) if c == "+"])
+  if "-" in line: return Range(MergeBlockType.REMOVE, [i for i, c in enumerate(line) if c == "-"])
+  Range(MergeBlockType.KEEP, [])  # TODO detect and mark replacement from -/+
+
+def findSosVcsBase() -> Tuple[str?,str?,str?] =
+  ''' Attempts to find sos and legacy VCS base folders. '''
+  debug("Detecting root folders...")
+  path:str = os.getcwd()  # start in current folder, check parent until found or stopped
+  vcs:Tuple[str?,str?] = (None, None)
+  while not os.path.exists(os.path.join(path, metaFolder)):
+    contents = set(os.listdir(path))
+    vcss:str[] = [executable for folder, executable in vcsFolders.items() if folder in contents]  # determine VCS type from dot folder
+    choice:str? = None
+    if len(vcss) > 1:
+      choice = SVN if SVN in vcss else vcss[0]
+      warn("Detected more than one parallel VCS checkouts %r. Falling back to '%s'" % (vcss, choice))
+    elif len(vcss) > 0: choice = vcss[0]
+    if not vcs[0] and choice: vcs = (path, choice)  # memorize current repo root
+    new = os.path.dirname(path)  # get parent path
+    if new == path: break  # avoid infinite loop
+    path = new
+  if os.path.exists(os.path.join(path, metaFolder)):  # found something
+    if vcs[0]: return (path, vcs[0], vcs[1])  # already detected vcs base and command
+    sos = path
+    while True:  # continue search for VCS base
+      new = os.path.dirname(path)  # get parent path
+      if new == path: return (sos, None, None)  # no VCS folder found
+      path = new
+      contents = set(os.listdir(path))
+      vcss = [executable for folder, executable in vcsFolders.items() if folder in contents]  # determine VCS type
+      choice = None
+      if len(vcss) > 1:
+        choice = SVN if SVN in vcss else vcss[0]
+        warn("Detected more than one parallel VCS checkouts %r. Falling back to '%s'" % (vcss, choice))
+      elif len(vcss) > 0: choice = vcss[0]
+      if choice: return (sos, path, choice)
+  (None, vcs[0], vcs[1])
+
+def tokenizeGlobPattern(pattern:str) -> List[GlobBlock] =
+  index:int = 0
+  out:List[GlobBlock] = []  # literal = True, first index
+  while index < len(pattern):
+    if pattern[index:index + 3] in ("[?]", "[*]", "[[]", "[]]"): out.append(GlobBlock(False, pattern[index:index + 3], index)); continue
+    if pattern[index] in "*?":
+      count:int = 1
+      while index + count < len(pattern) and pattern[index] == "?" and pattern[index + count] == "?": count += 1
+      out.append(GlobBlock(False, pattern[index:index + count], index)); index += count; continue
+    if pattern[index:index + 2] == "[!": out.append(GlobBlock(False, pattern[index:pattern.index("]", index + 2) + 1], index)); index += len(out[-1][1]); continue
+    count = 1
+    while index + count < len(pattern) and pattern[index + count] not in "*?[": count += 1
+    out.append(GlobBlock(True, pattern[index:index + count], index)); index += count
+  out
+
+def tokenizeGlobPatterns(oldPattern:str, newPattern:str) -> Tuple[GlobBlock[], GlobBlock[]] =
+  ot:List[GlobBlock] = tokenizeGlobPattern(oldPattern)
+  nt:List[GlobBlock] = tokenizeGlobPattern(newPattern)
+#  if len(ot) != len(nt): Exit("Source and target patterns can't be translated due to differing number of parsed glob markers and literal strings")
+  if len([o for o in ot if not o.isLiteral]) < len([n for n in nt if not n.isLiteral]): Exit("Source and target file patterns contain differing number of glob markers and can't be translated")
+  if any(O.content != N.content for O, N in zip([o for o in ot if not o.isLiteral], [n for n in nt if not n.isLiteral])): Exit("Source and target file patterns differ in semantics")
+  (ot, nt)
+
+def convertGlobFiles(filenames:str[], oldPattern:GlobBlock[], newPattern:GlobBlock[]) -> Tuple[str,str][] =
+  ''' Converts given filename according to specified file patterns. No support for adjacent glob markers currently. '''
+  pairs:List[Tuple[str,str]] = []
+  for filename in filenames:
+    literals:List[GlobBlock] = [l for l in oldPattern if l.isLiteral]  # source literals
+    nextliteral:int = 0
+    parsedOld:List[GlobBlock2] = []
+    index:int = 0
+    for part in oldPattern:  # match everything in the old filename
+      if part.isLiteral: parsedOld.append(GlobBlock2(True, part.content, part.content)); index += len(part.content); nextliteral += 1
+      elif part.content.startswith("?"): parsedOld.append(GlobBlock2(False, part.content, filename[index:index + len(part.content)])); index += len(part.content)
+      elif part.content.startswith("["): parsedOld.append(GlobBlock2(False, part.content, filename[index])); index += 1
+      elif part.content == "*":
+        if nextliteral >= len(literals): parsedOld.append(GlobBlock2(False, part.content, filename[index:])); break
+        nxt:int = filename.index(literals[nextliteral].content, index)  # also matches empty string
+        parsedOld.append(GlobBlock2(False, part.content, filename[index:nxt])); index = nxt
+      else: Exit("Invalid file pattern specified for move/rename")
+    globs:List[GlobBlock2] = [g for g in parsedOld if not g.isLiteral]
+    literals = [l for l in newPattern if l.isLiteral]  # target literals
+    nextliteral = 0; nextglob:int = 0
+    outname:List[str] = []
+    for part in newPattern:  # generate new filename
+      if part.isLiteral: outname.append(literals[nextliteral].content); nextliteral += 1
+      else: outname.append(globs[nextglob].matches); nextglob += 1
+    pairs.append((filename, "".join(outname)))
+  pairs
+
+def reorderRenameActions(actions:Tuple[str,str][], exitOnConflict:bool = True) -> Tuple[str,str][] =
+  ''' Attempt to put all rename actions into an order that avoids target == source names.
+      Note, that it's currently not really possible to specify patterns that make this work (swapping "*" elements with a reference).
+      An alternative would be to always have one (or all) files renamed to a temporary name before renaming to target filename.
+  '''
+  if not actions: return []
+  sources:List[str]; targets:List[str]
+  sources, targets = [list(l) for l in zip(*actions)]
+  last:int = len(actions)
+  while last > 1:
+    clean:bool = True
+    for i in range(1, last):
+      try:
+        index:int = targets[:i].index(sources[i])
+        sources.insert(index, sources.pop(i))  # bubble up the action right before conflict
+        targets.insert(index, targets.pop(i))
+        clean = False
+      except: continue  # target not found in sources: good!
+    if clean: break
+    last -= 1  # we know that the last entry in the list has the least conflicts, so we can disregard it in the next iteration
+  if exitOnConflict:
+    for i in range(1, len(actions)):
+      if sources[i] in targets[:i]: Exit("There is no order of renaming actions that avoids copying over not-yet renamed files: '%s' is contained in matching source filenames" % (targets[i]))
+  list(zip(sources, targets))
+
+def relativize(root:str, path:str) -> Tuple[str,str] =
+  ''' Determine OS-independent relative folder path, and relative pattern path. '''
+  relpath = os.path.relpath(os.path.dirname(os.path.abspath(path)), root).replace(os.sep, SLASH)
+  relpath, os.path.join(relpath, os.path.basename(path)).replace(os.sep, SLASH)
+
+def parseOnlyOptions(root:str, options:str[]) -> Tuple[FrozenSet[str]?, FrozenSet[str]?] =
+  ''' Returns set of --only arguments, and set or --except arguments. '''
+  cwd:str = os.getcwd()
+  onlys:List[str] = []; excps:List[str] = []; index:int = 0
+  while True:
+    try:
+      index = 1 + listindex(options, "--only", index)
+      onlys.append(options[index])
+    except: break
+  index = 0
+  while True:
+    try:
+      index = 1 + listindex(options, "--except", index)
+      excps.append(options[index])
+    except: break
+  (frozenset(relativize(root, o)[1] for o in onlys) if onlys else None, frozenset(relativize(root, e)[1] for e in excps) if excps else None)
