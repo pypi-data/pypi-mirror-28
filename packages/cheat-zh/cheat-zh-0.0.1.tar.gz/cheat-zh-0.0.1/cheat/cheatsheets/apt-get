@@ -1,0 +1,27 @@
+# 描述: 允许用来更新操作系统（新版本->apt）
+
+# 获取包列表
+apt-get update
+
+# 下载安装更新，不安装新包
+apt-get upgrade
+
+# 下载安装更新，同时安装需要的新包
+
+# 命令拼接:
+apt-get update && apt-get dist-upgrade
+
+# 安装一个新包
+apt-get install package(s)
+
+# 下载一个包但不安装它. (会保存到当前目录)
+apt-get download modsecurity-crs
+
+# 更改缓存目录并打包目录(.deb排序).
+apt-get -o Dir::Cache="/path/to/destination/dir/" -o Dir::Cache::archives="./" install ...
+
+# 展示apt-get安装过的包.
+grep 'install ' /var/log/dpkg.log
+
+# 在批量更新时，默认保持旧配置
+apt-get update -o DPkg::Options::='--force-confold' ...

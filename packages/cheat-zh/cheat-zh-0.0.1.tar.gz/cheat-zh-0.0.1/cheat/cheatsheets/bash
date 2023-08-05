@@ -1,0 +1,28 @@
+# for循环:
+```bash
+for file in *;
+do
+    echo $file found;
+done
+```
+# case选项命令:
+case "$1"
+in
+    0) echo "zero found";;
+    1) echo "one found";;
+    2) echo "two found";;
+    3*) echo "something beginning with 3 found";;
+esac
+
+# 开启Debug:
+set -x
+
+# 关闭Debug:
+set +x
+
+# 遍历N个管道命令的退出状态
+printf 'foo' | fgrep 'foo' | sed 's/foo/bar/'
+echo ${PIPESTATUS[0]}  # replace 0 with N
+
+# 锁定文件:
+( set -o noclobber; echo > my.lock ) || echo 'Failed to create lock file'

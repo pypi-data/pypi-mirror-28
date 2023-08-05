@@ -1,0 +1,29 @@
+# 安装
+# ==============================================================================
+# 编辑 /etc/default/distcc 设置以下的变量
+# STARTDISTCC="true"
+# ALLOWEDNETS="127.0.0.1 192.168.1.0/24"# 你的计算机和本地计算机
+# #LISTENER="127.0.0.1"# 注释掉它
+# ZEROCONF="true"# 自动配置
+
+# 谨记 1:
+# 启动/重启 your distccd servers before using one of these commands.
+# service distccd start
+
+# 谨记 2:
+# Do not forget to install on each machine DISTCC.
+# No need to install libs ! Only main host need libs !
+
+# 用法
+# ==============================================================================
+
+# Run make with 4 thread (a cross network) in auto configuration.
+# Note: for gcc, Replace CXX by CC and g++ by gcc
+ZEROCONF='+zeroconf' make -j4 CXX='distcc g++'
+
+# Run make with 4 thread (a cross network) in static configuration (2 ip)
+# Note: for gcc, Replace CXX by CC and g++ by gcc
+DISTCC_HOSTS='127.0.0.1 192.168.1.69' make -j4 CXX='distcc g++'
+
+# 显示可用的主机
+ZEROCONF='+zeroconf' distcc --show-hosts

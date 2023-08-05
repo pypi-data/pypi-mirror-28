@@ -1,0 +1,21 @@
+# set a shell
+SHELL=/bin/bash
+
+# crontab 格式
+* * * * *  要执行的命令
+- - - - -
+| | | | |
+| | | | +- 周几 (0 - 7) (where sunday is 0 and 7)
+| | | +--- 月 (1 - 12)
+| | +----- 日 (1 - 31)
+| +------- 小时 (0 - 23)
++--------- 分钟 (0 - 59)
+
+# 实例：每15分钟执行一次
+*/15 * * * * /home/user/command.sh
+
+# 实例：每天半夜零点执行一次
+0 0 * * * /home/user/command.sh
+
+# 每周六上午8:05执行一次
+5 8 * * 6 /home/user/command.sh

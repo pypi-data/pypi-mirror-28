@@ -1,0 +1,18 @@
+# 描述: Apparmor will protect the system by confining programs to a limited set of resources.
+
+# 激活一个配置文件:
+sudo aa-enforce usr.bin.firefox
+# 或
+export _PROFILE_='usr.bin.firefox' sudo $(rm /etc/apparmor.d/disable/$_PROFILE_ ; cat /etc/apparmor.d/$_PROFILE_ | apparmor_parser -a )
+
+# 关闭一个配置文件:
+sudo aa-disable usr.bin.firefox
+# 或
+export _PROFILE_='usr.bin.firefox' sudo $(ln -s /etc/apparmor.d/$_PROFILE_ /etc/apparmor.d/disable/ && apparmor_parser -R /etc/apparmor.d/$_PROFILE_)
+
+# 列出已经加载的配置文件:
+sudo aa-status
+# 或
+sudo apparmor_status
+
+# 可用配置文件列表: /etc/apparmor.d/

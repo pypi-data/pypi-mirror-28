@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+# coding:utf-8
+
+"""cheat
+
+创建和查看命令行作弊条。
+
+用法:
+  cheat <作弊条>
+  cheat -e <作弊条>
+  cheat -s <关键字>
+  cheat -l
+  cheat -d
+  cheat -v
+
+选项:
+  -d --directories  列出CHEATPATH(cheat路径)下的目录
+  -e --edit         编辑作弊条
+  -l --list         列出作弊条
+  -s --search       搜索<关键字>相关的作弊条
+  -v --version      打印版本号
+
+示例:
+
+  查看 `tar` 作弊条:
+    cheat tar
+
+  编辑 (或 创建) `foo` 作弊条:
+    cheat -e foo
+
+  列出所有可用的作弊条:
+    cheat -l
+
+  在所有的作弊条中搜索"ssh":
+    cheat -s ssh
+"""
+
+# 依赖
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
+import os
+from cheat import sheets, sheet
+from cheat.utils import colorize
+from cheat.docopt import docopt
+
+
+if __name__ == '__main__':
+    # 解析命令行选项
+    options = docopt(__doc__, version='cheat-zh 2.2.3')
+
+    # 列出目录
+    if options['--directories']:
+        print("\n".join(sheets.paths()))
+
+    # 列出作弊条
+    elif options['--list']:
+        print(sheets.list())
+
+    # 创建/编辑 作弊条
+    elif options['--edit']:
+        sheet.create_or_edit(options['<作弊条>'])
+
+    # 在所有作弊条中搜索
+    elif options['--search']:
+        print(colorize(sheets.search(options['<关键字>'])))
+
+    # 打印作弊条
+    else:
+        content = colorize(sheet.read(options['<作弊条>']))
+        cmd = u"echo '{}' | more".format(content)
+        os.system(cmd)

@@ -1,0 +1,41 @@
+# 下载单个文件
+curl http://path.to.the/file
+
+# 下载一个文件并指定新的文件名
+curl http://example.com/file.zip -o new_file.zip
+
+# 下载多个文件
+curl -O URLOfFirstFile -O URLOfSecondFile
+
+# 下载所有适配地址的文件 (1-24)
+curl http://example.com/pic[1-24].jpg
+
+# HTTP用户验证下载
+curl -u 用户名:密码 URL
+
+# 通过带来下载一个文件
+curl -x proxysever.server.com:PORT http://addressiwantto.access
+
+# 通过FTP协议下载一个文件
+curl -u 用户名:密码 -O ftp://example.com/pub/file.zip
+
+# 获取一个FTP目录下的 文件/文件夹 列表
+curl ftp://username:password@example.com
+
+# 重试之前失败的下载
+curl -C - -o partial_file.zip http://example.com/file.zip
+
+# 从一个HTTP响应中只获取HTTP Header数据
+curl -I http://example.com
+
+# 获取JSON格式的本地网路信息
+curl http://ifconfig.me/all/json
+
+# 限制一个下载任务的速率
+curl --limit-rate 1000B -O http://path.to.the/file
+
+# 获取你的全局IP
+curl httpbin.org/ip
+
+# 仅获取HTTP 状态码
+curl -o /dev/null -w '%{http_code}\n' -s -I URL

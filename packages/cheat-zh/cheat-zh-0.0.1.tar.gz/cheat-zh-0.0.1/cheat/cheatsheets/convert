@@ -1,0 +1,21 @@
+# 改变图片尺寸，设定宽度，高度同比例:
+convert original-image.jpg -resize 100x converted-image.jpg
+
+# 改变图片尺寸，设定高度，宽度同比例:
+convert original-image.jpg -resize x100 converted-image.jpg
+
+# 同时指定宽度和高度改变图片尺寸:
+convert original-image.jpg -resize 100x100 converted-image.jpg
+
+# 改变图片格式:
+convert original-image.jpg -resize 100x converted-image.png
+
+# 改变一个目录下所有图片的尺寸:
+# 通过循环实现:
+```bash
+for file in `ls original/image/path/`;
+    do new_path=${file%.*};
+    new_file=`basename $new_path`;
+    convert $file -resize 150 conerted/image/path/$new_file.png;
+done
+```
