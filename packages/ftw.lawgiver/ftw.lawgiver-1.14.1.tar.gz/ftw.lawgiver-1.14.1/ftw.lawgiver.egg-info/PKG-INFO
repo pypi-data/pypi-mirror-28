@@ -1,0 +1,1010 @@
+Metadata-Version: 1.1
+Name: ftw.lawgiver
+Version: 1.14.1
+Summary: Generate your Plone workflows by describing it in plain text with a DSL.
+Home-page: https://github.com/4teamwork/ftw.lawgiver
+Author: 4teamwork AG
+Author-email: mailto:info@4teamwork.ch
+License: GPL2
+Description: ftw.lawgiver
+        ============
+        
+        ``ftw.lawgiver`` generates Plone workflows based on a human readable
+        specification written in a custom
+        `DSL <http://en.wikipedia.org/wiki/Domain-specific_language>`_.
+        
+        .. contents:: Table of Contents
+        
+        
+        Motivation
+        ----------
+        
+        Developing and maintaining complex Plone workflows is a time-consuming and
+        cumbersome endeavor. Dozens of permissions need to be managed for different
+        roles and different workflow states. Usually, this has to be done directly in
+        the ZMI of Zope by selecting or unselecting thousands of checkboxes. This
+        process has been shown to be very tedious and prone to errors. Furthermore, it
+        is no simple task to document the workflow and the associated design decisions
+        which led to the resulting configuration of permissions and roles. The extension
+        or adaption of an existing workflow becomes very difficult, leading to workflows
+        which are barely maintainable.
+        
+        Another problem is the communication between workflow integrator and
+        customer. The security system of Zope is based on a role-based access control
+        (RBAC) which is intrinsically complex due to its use of roles, permissions, and
+        workflow states. Experience has shown that these security concepts can be hard
+        to convey to customers.
+        
+        
+        How it works
+        ------------
+        
+        ``ftw.lawgiver`` helps solving these problems by using a DSL to describe how
+        a workflow should work. The lawgiver then generates the complete workflow
+        definition (``definition.xml``) based on this specification.  By separating this
+        specification from the resulting workflow definition (which is in XML) the
+        specification does not have to use permissions--handling the permissions is the
+        job of the lawgiver.
+        
+        Using the specification file the workflow can easily be regenerated at any time
+        and will handle additional permissions automatically when regenerated. However,
+        it is still the developer's task to regenerate the ``definition.xml`` whenever
+        more or other permissions have to be managed. He or she has to make sure that
+        the workflow is properly installed with an upgrade step / reindexing security.
+        
+        
+        Installation
+        ------------
+        
+        - Add ``ftw.lawgiver`` to your buildout configuration:
+        
+        .. code:: rst
+        
+            [instance]
+            eggs +=
+                ftw.lawgiver
+        
+        - Install the generic setup profile of ``ftw.lawgiver``.
+        
+        
+        Compatibility
+        -------------
+        
+        Plone 4.3
+        
+        
+        Action groups
+        -------------
+        
+        In the specification we use the concept of so called action groups for
+        describing what a role is allowed to do. It basically groups together a bunch of
+        semantically similar Plone / Zope permissions so that we only have to define the
+        workflow based on these action groups and not on individual permissions.
+        
+        For example there is a ``view`` action group which contains permissions such
+        as ``View`` and ``Access Contents Information``.
+        
+        
+        Registering permissions to an action group
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        The registration of a permission to an action group should be done in the
+        package where the permission is defined.  This allows to keep changes of the
+        permissions and action group registrations together in branches, for reviews
+        etc. ``ftw.lawgiver`` already assigns default Plone / Zope permissions to action
+        groups.
+        
+        The registration is done in ZCML.
+        Here is an example ``lawgiver.zcml``:
+        
+        .. code:: xml
+        
+            <configure
+                xmlns="http://namespaces.zope.org/zope"
+                xmlns:lawgiver="http://namespaces.zope.org/lawgiver"
+                i18n_domain="my.package">
+        
+                <include package="ftw.lawgiver" />
+        
+                <lawgiver:map_permissions
+                    action_group="add"
+                    permissions="my.package: Add Foo,
+                                 my.package: Add Bar"
+                    />
+        
+            </configure>
+        
+        If you define multiple permissions in the same `map_permissions` directive
+        make sure to separate them by comma.
+        
+        By putting the ZCML in a separate ``lawgiver.zcml`` file you can define
+        lawgiver in your addon package without having to define a dependency on
+        ``ftw.lawgiver`` by using ``zcml:condition`` while loading it in your default
+        ``configure.zcml``:
+        
+        .. code:: xml
+        
+            <configure
+                xmlns="http://namespaces.zope.org/zope"
+                xmlns:zcml="http://namespaces.zope.org/zcml"
+                i18n_domain="my.package">
+        
+                <include zcml:condition="installed ftw.lawgiver" file="lawgiver.zcml" />
+        
+            </configure>
+        
+        
+        Overriding action groups
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        Maybe the permission to action group mapping does not work well for a specific
+        workflow and you would like to change to mapping for this workflow only.
+        
+        This can be easily achieved by also defining the workflow in the ZCML:
+        
+        .. code:: xml
+        
+            <configure
+                xmlns="http://namespaces.zope.org/zope"
+                xmlns:lawgiver="http://namespaces.zope.org/lawgiver"
+                i18n_domain="my.package">
+        
+                <include package="ftw.lawgiver" />
+        
+                <lawgiver:map_permissions
+                    action_group="add"
+                    permissions="my.package: Add Foo,
+                                 my.package: Add Bar"
+                    workflow="my_workflow"
+                    />
+        
+            </configure>
+        
+        
+        Assigning permission to multiple action groups
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        Sometimes, a permission should be assigned to multiple action groups.
+        This can be done with the ``move`` attribute of the ``map_permissions`` directive.
+        Just make sure that all other ``map_permissions`` ZCMLs are loaded before doing that,
+        especially the default ``lawgiver.zcml`` of ``ftw.lawgiver``.
+        
+        .. code:: xml
+        
+            <configure
+                xmlns="http://namespaces.zope.org/zope"
+                xmlns:lawgiver="http://namespaces.zope.org/lawgiver"
+                i18n_domain="my.package">
+        
+                <include package="ftw.lawgiver" />
+        
+                <lawgiver:map_permissions
+                    action_group="add"
+                    permissions="Add portal content"
+                    />
+        
+                <lawgiver:map_permissions
+                    action_group="add ticket"
+                    permissions="my.package: Add Ticket"
+                    workflow="my_workflow"
+                    />
+        
+                <!-- We want to have "Add portal content" in the "add ticket" action group too,
+                     but we should not remove it from "add".
+                     By using move="False" we can add "Add portal content" to "add ticket" without
+                     removing it from "add".
+                     /-->
+        
+                <lawgiver:map_permissions
+                    action_group="add ticket"
+                    permissions="Add portal content"
+                    workflow="my_workflow"
+                    move="False"
+                    />
+        
+            </configure>
+        
+        
+        Workflow scope
+        ~~~~~~~~~~~~~~
+        
+        The ``lawgiver:workflow`` directive can be used to group multiple statements and
+        apply them to a specific workflow.
+        
+        .. code:: xml
+        
+            <configure
+                xmlns="http://namespaces.zope.org/zope"
+                xmlns:lawgiver="http://namespaces.zope.org/lawgiver"
+                i18n_domain="my.package">
+        
+              <include package="ftw.lawgiver" />
+        
+              <lawgiver:workflow name="the-workflow">
+        
+                <lawgiver:map_permissions
+                    action_group="add folder"
+                    permissions="Add folder"
+                    />
+        
+                <lawgiver:ignore
+                    permissions="ATContentTypes: View history"
+                    />
+        
+              </lawgiver:workflow>
+        
+            </configure>
+        
+        
+        
+        
+        The workflow specification
+        --------------------------
+        
+        The specification is written in a plain text file (``specification.txt``) in
+        the same directory where the ``definition.xml`` is saved.
+        
+        **Examples:**
+        
+        - `specification.txt (English) <https://github.com/4teamwork/ftw.lawgiver/blob/master/ftw/lawgiver/tests/assets/languages/specification.txt>`_
+        - `specification.de.txt (German) <https://github.com/4teamwork/ftw.lawgiver/blob/master/ftw/lawgiver/tests/assets/languages/specification.de.txt>`_
+        
+        
+        States and transitions
+        ~~~~~~~~~~~~~~~~~~~~~~
+        
+        The states and transitions are defined in simple lists:
+        
+        .. code:: rst
+        
+            [My Custom Workflow]
+            Description: A three state publication workflow
+            Initial Status: Private
+        
+            Status Private:
+        
+            Status Pending:
+        
+            Status Published:
+        
+            Transitions:
+              Publish (Private => Published)
+              Submit for publication (Private => Pending)
+              Reject (Pending => Private)
+              Retract (Pending => Private)
+              Publish (Pending => Published)
+              Reject (Published => Private)
+        
+        We are not using any internal ids for workflow states or
+        transitions. Instead, we use the same labels which the user will actually
+        see--the ids are automatically generated by ``ftw.lawgiver``.
+        
+        
+        Role mapping
+        ~~~~~~~~~~~~
+        
+        In Plone we have a given set of rather technical roles (e.g. Editor,
+        Contributor, Reader) which may not apply for all use cases in real life. The
+        customer may have own roles with different names.  Since the existing roles are
+        already well established in Plone it is usually not a good thing to add new
+        roles to Plone. It is better to try to reuse the existing roles.
+        
+        Because the customer has different labels for his roles we need to map
+        customer roles to Plone roles:
+        
+        .. code:: rst
+        
+            Role mapping:
+              editor-in-chief => Reviewer
+              editor => Editor
+              everyone => Anonymous
+        
+        In our example we have only "normal" editors and an "editor-in-chief" who can
+        review and publish the contents.  We do not have to use the Contributor role
+        since our editors can edit, add new content, and request a review for existing
+        content. Therefore, it is not necessary to distinguish Editor and Contributor
+        role.
+        
+        
+        General statements
+        ~~~~~~~~~~~~~~~~~~
+        
+        Usually there are some general statements, for example that a user with the
+        Adminstrator role can always edit the contents in any workflow state.  Such
+        statements should not be repeated for every state but defined once as a general
+        statement.
+        
+        An example:
+        
+        .. code:: rst
+        
+            General:
+              An administrator can always view the content
+              An administrator can always edit the content
+              An administrator can always delete the content
+        
+        These general statements apply for all states.
+        
+        
+        Describing states
+        ~~~~~~~~~~~~~~~~~
+        
+        For each state we describe the actions a user with a certain role can perform.
+        We follow the principle that any user / role is NOT allowed do anything by
+        default, we have to explicitly list every action he will be allowed to perform.
+        
+        .. code:: rst
+        
+            Status Private:
+              An editor can view this content.
+              An editor can edit this content.
+              An editor can delete this content.
+              An editor can add new content.
+              An editor can submit for publication.
+              An editor-in-chief can view this content.
+              An editor-in-chief can edit this content.
+              An editor-in-chief can delete this content.
+              An editor-in-chief can add new content.
+              An editor-in-chief can publish this content.
+        
+            Status Pending:
+              An editor can view this content.
+              An editor can add new content.
+              An editor can retract this content.
+              An editor-in-chief can view this content.
+              An editor-in-chief can edit this content.
+              An editor-in-chief can delete this content.
+              An editor-in-chief can add new content.
+              An editor-in-chief can publish this content.
+              An editor-in-chief can reject this content.
+        
+            Status Published:
+              An editor can view this content.
+              An editor can add new content.
+              An editor can retract this content.
+              An editor-in-chief can view this content.
+              An editor-in-chief can add new content.
+              An editor-in-chief can retract this content.
+              Anyone can view this content.
+        
+        
+        Role inheritance
+        ~~~~~~~~~~~~~~~~
+        
+        Roles can be inherited from other roles, globally and for a single status:
+        
+        .. code:: rst
+        
+            [Role Inheritance Workflow]
+            Initial Status: Foo
+        
+            Role mapping:
+              editor => Editor
+              editor-in-chief => Reviewer
+              administrator => Site Administrator
+        
+            General:
+              An administrator can always perform the same actions as an editor.
+              An administrator can always perform the same actions as an editor-in-chief.
+        
+            Status Foo:
+              An editor-in-chief can perform the same actions as an editor.
+              An editor can view this content.
+              An editor can edit this content.
+        
+            Status Bar:
+              An editor can view this content.
+              An editor-in-chief can view this content.
+              An editor-in-chief can edit this content.
+        
+        
+        Worklists
+        ~~~~~~~~~
+        
+        Worklists are automatically generated for you when you grant access to the
+        worklist:
+        
+        .. code:: rst
+        
+            [A workflow]
+            ...
+        
+            Status Pending:
+              An editor-in-chief can access the worklist.
+        
+        Those "can access the worklist" statements do not work in the "General" section,
+        they need to be defined a "Status" section.
+        
+        For each status with "can access the worklist" statements a worklist is
+        generated, guarded with the role for which there is a statement.
+        
+        
+        Workflow specification discovery
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        All workflow directories in registered generic setup profiles
+        are automatically scanned for workflow specifications.
+        Just place a ``specification.txt`` in a workflow directory and ``ftw.lawgiver``
+        will discover it automatically.
+        
+        Example paths:
+        
+        - Specification: ``profiles/default/workflows/my_custom_workflow/specification.txt``
+        - Workflow XML: ``profiles/default/workflows/my_custom_workflow/definition.txt``
+        
+        In this example it is assumed that ``profiles/default`` is a registered generic setup
+        profile directory.
+        
+        
+        Changing Transition URLs
+        ~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        Sometimes the transition URLs need to point to another view.  This can be
+        achieved by using the ``transition-url`` option, where a string can be passed
+        which will then be substituted with the ``transition`` id.  Be sure to use a
+        double ``%%`` for parts which should not be replaced when generating the workflow,
+        such as the ``%%(content_url)s``.
+        
+        Example:
+        
+        .. code:: rst
+        
+            transition-url = %%(content_url)s/custom_wf_action?workflow_action=%(transition)s
+        
+        
+        Languages
+        ~~~~~~~~~
+        
+        Currently supported languages:
+        
+        **English** (default)
+        
+        - Filename: ``specification.txt``
+        - Example: `ftw/lawgiver/tests/assets/languages/specification.txt <https://github.com/4teamwork/ftw.lawgiver/blob/master/ftw/lawgiver/tests/assets/languages/specification.txt>`_
+        
+        **German**
+        
+        - Filename: ``specification.de.txt``
+        - Example: `ftw/lawgiver/tests/assets/languages/specification.de.txt <https://github.com/4teamwork/ftw.lawgiver/blob/master/ftw/lawgiver/tests/assets/languages/specification.de.txt>`_
+        
+        
+        **Contributing new languages**
+        
+        We happily accept pull requests with new languages!
+        
+        Creating a new language is as simple:
+        
+        - Create a new specification example in ``ftw/lawgiver/tests/assets/languages/``,
+          implementing the same workflow as ``specification.txt``.
+        - Run the tests with ``bin/test``. It should fail at this point. Keep running them
+          after each change.
+        - Add a new language module to ``ftw/lawgiver/wdl/languages/``.
+        - Register the new language in ``ftw/lawgiver/wdl/languages/__init__.py``.
+        - Implement the language specific constraints and extraction methods in your new
+          language class until all tests pass.
+        - Add the language to the readme.
+        - Send us a pull request!
+        
+        
+        Generating the workflow
+        -----------------------
+        
+        For generating the workflow go to the lawgiver control panel (in the Plone
+        control panel). There you can see a list of all workflows and by selecting one
+        you can see the specification and other details, such as the action groups.
+        
+        On this view you can generate the workflow (automatically saved to the
+        ``definition.xml`` in the same directory as the ``specification.txt``) and you
+        can install the workflow / update the security.
+        
+        .. image:: https://raw.github.com/4teamwork/ftw.lawgiver/master/docs/screenshot-workflow-details.png
+        
+        
+        Updating translations
+        ~~~~~~~~~~~~~~~~~~~~~
+        
+        The button ``Update translations in locales directory`` in the workflow
+        details view helps you keep your translations up to date.
+        It writes directly to the locales directory on your machine.
+        
+        When updating the translations, these files are written:
+        
+        - ``your/package/locales/plone.pot``
+        - ``your/package/locales/en/LC_MESSAGES/plone.po``
+        
+        When updating the messages in your locales file, all no longer valid messages
+        which start with the workflow ID prefix are removed automatically.
+        
+        
+        Testing the workflow
+        --------------------
+        
+        It is important to detect when you have to rebuild your workflow.
+        It is also important to detect permissions from third party addons which
+        are not yet mapped to action groups.
+        
+        By subclassing the `WorkflowTest` it is easy to write a test for your
+        workflow:
+        
+        .. code:: python
+        
+            from ftw.lawgiver.tests.base import WorkflowTest
+            from my.package.testing import MY_INTEGRATION_TESTING
+        
+        
+            class TestMyWorkflow(WorkflowTest):
+        
+                # The workflow path may be a path relative to the this file or
+                # an absolute path.
+                workflow_path = '../profiles/default/workflows/my-workflow'
+        
+                # Use an integration testing layer.
+                layer = MY_INTEGRATION_TESTING
+        
+        What is tested?
+        
+        - The test will fail when your workflow (``definition.xml``) needs to be
+          regenerated. This may be because new permissions should be managed.
+        
+        - The test will fail when you install new addons which provide new
+          permissions. The permissions should be mapped to action groups or marked
+          as unmanaged explicitly:
+        
+        .. code:: xml
+        
+            <configure
+                xmlns="http://namespaces.zope.org/zope"
+                xmlns:lawgiver="http://namespaces.zope.org/lawgiver"
+                i18n_domain="ftw.lawgiver">
+        
+                <include package="ftw.lawgiver" />
+        
+                <lawgiver:ignore
+                    workflow="my_workflow"
+                    permissions="ATContentTypes: Upload via url,
+                                 ATContentTypes: View history"
+                    />
+        
+            </configure>
+        
+        
+        Customizing the sharing view
+        ----------------------------
+        
+        Lawgiver allows you to customize the sharing view to your needs.
+        
+        
+        Roles in sharing view
+        ~~~~~~~~~~~~~~~~~~~~~
+        
+        By default the ``@@sharing`` view lists some default Plone roles:
+        
+        - Can add (``Contributor``)
+        - Can edit (``Editor``)
+        - Can review (``Reviewer``)
+        - Can view (``Reader``)
+        
+        Often the workflow does not use all of those roles, or uses different ones.
+        Lawgiver allows you to configure which roles are showing up in at the ``sharing``
+        view. If your users are granting roles on the ``@@sharing`` view, you should probably
+        configure the roles so that they have meanigful names and only the relevant ones
+        are listed.
+        
+        If you want to customize the displayed roles for your workflow, you
+        can do this right in your workflow specification:
+        
+        .. code:: rst
+        
+            [A workflow]
+        
+            Role mapping:
+              editor => Editor
+              editor-in-chief => Reviewer
+              administrator => Site Administrator
+        
+            Visible roles:
+              editor
+              editor-in-chief
+        
+        The lawgiver then sets the permissions required for managing a role correctly.
+        This works for registered roles. Plone only registers ``Contributor``, ``Editor``,
+        ``Reviewer`` and ``Reader`` by default.
+        See the `Registering additional roles`_ section.
+        
+        
+        Translating the roles
+        ~~~~~~~~~~~~~~~~~~~~~
+        
+        The lawgiver extends Plone's role translation system so that the
+        roles in the ``@@sharing`` view can be translated per workflow.
+        
+        This is done through the Plone standard role utilites, allowing addon
+        tools to also use the corrent role translation without the need of
+        customization.
+        
+        The lawgiver provides example translations (``plone.pot`` / ``plone.po``) in
+        the lawgiver control panel, which can easily be copied to your local plone
+        translations (``locales``). These translations also include role translations
+        and can be modified to your needs.
+        
+        The lawgiver automatically looks up the right translation of the roles, depending
+        on your workflow.
+        
+        
+        Registering additional roles
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        You can easily register custom roles or Plone default roles which are not visible
+        by default (such as ``Site Manager``).
+        
+        Use the lawgiver directive for registering new roles:
+        
+        .. code:: xml
+        
+            <configure
+                xmlns="http://namespaces.zope.org/zope"
+                xmlns:lawgiver="http://namespaces.zope.org/lawgiver"
+                i18n_domain="my.package">
+        
+                <include package="ftw.lawgiver" />
+        
+                <lawgiver:role name="Site Manager" />
+        
+            </configure>
+        
+        The ``lawgiver:role`` directive does all the required things for you, such as
+        registering the permission in zope, mapping the permission to the default
+        lawgiver ``manage security`` action group and registering the required utility
+        and adapter.
+        
+        Optional arguments:
+        
+        - ``permission``: the required permission for granting this role. The permission
+          is automatically generated as ``Sharing page: Delegate [ROLE] role``.
+        
+        - ``register_permission``: automatically registers the permissions in Zope. This
+          is ``True`` by default.
+        
+        - ``map_permission``: automatically map the permission to the default lawgiver
+          ``manage security`` action group. Lawgiver will also re-map the permission
+          according to your ``Visible roles`` configuration in the workflow specification.
+        
+        
+        Description of roles in sharing view
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        ``ftw.lawgiver`` automatically registers an overlay when clicking on the
+        role text in the table header on the sharing view.
+        The overlay displays a description of what this role can do in each state of
+        the current workflow:
+        
+        
+        .. image:: https://raw.github.com/4teamwork/ftw.lawgiver/master/docs/screenshot-sharing-overlay.png
+        
+        
+        Adding text to the overlay
+        ++++++++++++++++++++++++++
+        
+        You can add text to the overlay per role directly in your workflow specification:
+        
+        
+        .. code:: rst
+        
+            [A workflow]
+        
+            Role mapping:
+              editor => Editor
+              editor-in-chief => Reviewer
+              administrator => Site Administrator
+        
+            editor-in-chief role description:
+              The editor-in-chief reviews and publishes content.
+        
+        This text is included as translation proposal for the ``plone`` domain, which
+        makes it easy to translate it to other languages for multilingual sites.
+        
+        
+        Specialities
+        ------------
+        
+        Deleting content with ``collective.deletepermission``
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        `collective.deletepermission`_ solves a delete problem, which occurs in certain
+        situations, by adding a new delete permission. See its readme for further
+        details.
+        
+        For being able to delete content, the user should have the ``delete`` action
+        group (``Delete portal content``) on the content but also ``add`` (``Delete objects``)
+        on the parent content.
+        
+        ``ftw.lawgiver`` works well with `collective.deletepermission`_.
+        Use the extras ``ftw.lawgiver [deletepermission]`` in order to install the
+        lawgiver with `collective.deletepermission`_.
+        
+        Be aware that when you generate your workflows with `collective.deletepermission`_
+        installed, you need to install `collective.deletepermission`_ in production too.
+        
+        
+        Uninstall
+        ---------
+        
+        This package provides an uninstall Generic Setup profile, however, it will
+        not uninstall the package dependencies.
+        Make sure to uninstall the dependencies if you no longer use them.
+        
+        
+        Rebuild with console
+        --------------------
+        
+        ``ftw.lawgiver`` registers a zopectl command so that all workflows can be
+        rebuilt at once using the console::
+        
+          $ ./bin/instance rebuild_workflows --help
+          usage: interpreter [-h] [-s SITE]
+        
+          Rebuild ftw.lawgiver workflows.
+        
+          optional arguments:
+            -h, --help            show this help message and exit
+            -s SITE, --site SITE  Path to the Plone site for discovering the worklfows.
+                                  (default: Plone)
+        
+        
+        Links
+        -----
+        
+        - Github: https://github.com/4teamwork/ftw.lawgiver
+        - Issues: https://github.com/4teamwork/ftw.lawgiver/issues
+        - Pypi: http://pypi.python.org/pypi/ftw.lawgiver
+        - Continuous integration: https://jenkins.4teamwork.ch/search?q=ftw.lawgiver
+        
+        
+        Copyright
+        ---------
+        
+        This package is copyright by `4teamwork <http://www.4teamwork.ch/>`_.
+        
+        ``ftw.lawgiver`` is licensed under GNU General Public License, version 2.
+        
+        .. _collective.deletepermission: https://github.com/4teamwork/collective.deletepermission
+        .. _ftw.recipe.translations: https://github.com/4teamwork/ftw.recipe.translations
+        
+        Changelog
+        =========
+        
+        
+        1.14.1 (2018-01-15)
+        -------------------
+        
+        - Fix translation domains in ZCML files. [jone]
+        - Fix encoding problem when describing roles with non-ASCII characters titles. [jone]
+        
+        1.14.0 (2018-01-08)
+        -------------------
+        
+        - Drop support for Plone 4.2. [mbaechtold]
+        
+        - Add support for Plone 5.1. [mbaechtold]
+        
+        
+        1.13.0 (2017-12-18)
+        -------------------
+        
+        - Add new lawgiver:workflow directive. [jone]
+        
+        
+        1.12.0 (2017-12-15)
+        -------------------
+        
+        - Ignore plone.restapi permissions because they are managed globally. [elioschmutz]
+        
+        
+        1.11.0 (2017-12-06)
+        -------------------
+        
+        - Also translate states and transitions with their IDs. [jone]
+        - Control panel: separate unmapped permissions into ignored and unknown groups. [jone]
+        
+        1.10.1 (2017-07-27)
+        -------------------
+        
+        - Fix review state translation in sharing page role description popup.
+          The review state is now translated by the state title, not the id. [jone]
+        
+        1.10.0 (2017-07-11)
+        -------------------
+        
+        - Make ``collective.deletepermission`` dependency optional.
+          If you upgrade to this version of ``ftw.lawgiver`` you most likely
+          want to enable the ``ftw.lawgiver [deletepermission]`` extra. [jone]
+        
+        
+        1.9.1 (2017-07-10)
+        ------------------
+        
+        - Fix typos in German translation [raphael-s]
+        
+        
+        1.9.0 (2017-01-03)
+        ------------------
+        
+        - Added control panel button for rebuilding specifications and creating an upgrade step. [jone]
+        
+        
+        1.8.0 (2016-06-30)
+        ------------------
+        
+        - Add plone.app.contenttypes permissions to lawgiver.zcml.
+          Since plone.app.contenttypes is standard Plone we add the
+          plone.app.contenttypes mapping to the lawgiver.zcml.
+          [elioschmutz]
+        
+        
+        1.7.0 (2016-05-02)
+        ------------------
+        
+        - Add manage translations permissions for plone.app.locales support.
+          [raphael-s]
+        
+        - Ignore the permissions to access inactive and future content because the
+          portal catalog checks the Plone root for these permissions, not the context.
+          [mbaechtold]
+        
+        - No longer ignore the permissions to add collection portlet and static
+          portlet but rather map them to the existing "manage portlets" action group.
+          [mbaechtold]
+        
+        
+        1.6.2 (2015-11-16)
+        ------------------
+        
+        - Fix UnicodeDecodeError.
+          [mbaechtold]
+        
+        
+        1.6.1 (2015-10-08)
+        ------------------
+        
+        - Fix translation issues by translationg label instead of ids of
+          states and transitions.
+          Please rebuild translations for your existing workflows.
+          [jone]
+        
+        
+        1.6.0 (2015-05-21)
+        ------------------
+        
+        - Add support for assigning permissions to multiple action groups.
+          This is done using the ``move="False"`` in ``map_permissions``.
+          [jone]
+        
+        
+        1.5.0 (2014-12-08)
+        ------------------
+        
+        - Plone 4.3.4: map "Edit comments" permission to "edit" action group.
+          [jone]
+        
+        
+        1.4.0 (2014-09-09)
+        ------------------
+        
+        - Implement bin/instance rebuild_workflows command.
+          [jone]
+        
+        - Add button for rebuilding all workflow specifications at once.
+          [jone]
+        
+        - Show a warning on workflows of released eggs.
+          [jone]
+        
+        - i18n generator: escape quotes in generated message strings.
+          [jone]
+        
+        
+        1.3.1 (2014-05-28)
+        ------------------
+        
+        - Extract `generate_role_translation_id` and `translate_role_for_workflow`
+          into utils.
+          [jone]
+        
+        - Fix definition.xml pretty printing on OSX Mavericks.
+          On Mavericks most of the definition.xml was written onto a single line.
+          [jone]
+        
+        
+        1.3.0 (2014-05-19)
+        ------------------
+        
+        - Add role description statements for describing roles.
+          This allows to add a text description per role, which will
+          be displayed in the new role description overlay in the sharing
+          view.
+          [jone]
+        
+        - Fix bug with default permission of "role" directive.
+          The default permission used to not be set correctly.
+          [jone]
+        
+        - Implement uninstall profile.
+          [jone]
+        
+        - Workflow details: new button for updating the translations in
+          the locales directory of your package.
+          [jone]
+        
+        - Implement overlay in sharing view, describing the actions and transitions
+          for a role.
+          [jone]
+        
+        - Add German specification support.
+          [jone]
+        
+        - Add support for non-English specifications parsing.
+          [jone]
+        
+        
+        1.2.2 (2014-01-09)
+        ------------------
+        
+        - Fix wrong role title when traversing over views.
+          [jone]
+        
+        - Fix local roles adapter lookup when no traversal happened beforehand.
+          This is a rare issue occured because of the context guessing happing
+          in the dynamic role adapter lookup (DynamicRolesUtility.get_role_adapter).
+          [jone]
+        
+        
+        1.2.1 (2013-11-26)
+        ------------------
+        
+        - Map plone.app.event's "Import Ical" permission to "manage content settings".
+          [jone]
+        
+        
+        1.2 (2013-08-26)
+        ----------------
+        
+        - Workflow generation: sort worklists so that the result is constant.
+          [jone]
+        
+        - Support remapping permission per workflow when it is ignored globally. #22
+          [jone]
+        
+        - **Support for configuring visible roles in sharing view.**
+          The specification now allows to define a list of roles which
+          should appear one the sharing view.
+          [jone]
+        
+        - **Context / workflow sensitive role translations for sharing view.**
+          Dynamic roles: replacing Plone's default roles utilities,
+          allowing us to change the translation of the role for the
+          sharing view depending on the workflow of the current context.
+          Lawgiver's new default role utility / adapter provides per-workflow
+          translations of the roles.
+          [jone]
+        
+        
+        1.1 (2013-08-08)
+        ----------------
+        
+        - Ignore plone.resourceeditor permission for workflows.
+          [jone]
+        
+        
+        1.0 (2013-05-28)
+        ----------------
+        
+        - Initial implementation.
+          [jone]
+        
+Keywords: ftw lawgiver generate workflows dsl
+Platform: UNKNOWN
+Classifier: Framework :: Plone
+Classifier: Framework :: Plone :: 4.3
+Classifier: Framework :: Plone :: 5.1
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules

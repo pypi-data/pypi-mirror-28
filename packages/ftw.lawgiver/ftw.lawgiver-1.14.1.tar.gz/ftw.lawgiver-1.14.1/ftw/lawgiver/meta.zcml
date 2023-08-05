@@ -1,0 +1,46 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:meta="http://namespaces.zope.org/meta"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="ftw.lawgiver">
+
+  <meta:directives namespace="http://namespaces.zope.org/lawgiver">
+
+    <meta:complexDirective
+        name="workflow"
+        schema=".meta.IWorkflowDirective"
+        handler=".meta.WorkflowContext">
+
+      <meta:subdirective
+          name="map_permissions"
+          schema=".meta.IMapPermissionsDirective"
+          />
+
+      <meta:subdirective
+          name="ignore"
+          schema=".meta.IIgnorePermissionsDirective"
+          />
+
+    </meta:complexDirective>
+
+    <meta:directive
+        name="map_permissions"
+        schema=".meta.IMapPermissionsDirective"
+        handler=".meta.mapPermissions"
+        />
+
+    <meta:directive
+        name="ignore"
+        schema=".meta.IIgnorePermissionsDirective"
+        handler=".meta.ignorePermissions"
+        />
+
+    <meta:directive
+        name="role"
+        schema=".meta.ISharingPageRoleDirective"
+        handler=".meta.sharingPageRole"
+        />
+
+  </meta:directives>
+
+</configure>

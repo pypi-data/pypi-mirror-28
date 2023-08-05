@@ -1,0 +1,230 @@
+Changelog
+=========
+
+
+1.14.1 (2018-01-15)
+-------------------
+
+- Fix translation domains in ZCML files. [jone]
+- Fix encoding problem when describing roles with non-ASCII characters titles. [jone]
+
+1.14.0 (2018-01-08)
+-------------------
+
+- Drop support for Plone 4.2. [mbaechtold]
+
+- Add support for Plone 5.1. [mbaechtold]
+
+
+1.13.0 (2017-12-18)
+-------------------
+
+- Add new lawgiver:workflow directive. [jone]
+
+
+1.12.0 (2017-12-15)
+-------------------
+
+- Ignore plone.restapi permissions because they are managed globally. [elioschmutz]
+
+
+1.11.0 (2017-12-06)
+-------------------
+
+- Also translate states and transitions with their IDs. [jone]
+- Control panel: separate unmapped permissions into ignored and unknown groups. [jone]
+
+1.10.1 (2017-07-27)
+-------------------
+
+- Fix review state translation in sharing page role description popup.
+  The review state is now translated by the state title, not the id. [jone]
+
+1.10.0 (2017-07-11)
+-------------------
+
+- Make ``collective.deletepermission`` dependency optional.
+  If you upgrade to this version of ``ftw.lawgiver`` you most likely
+  want to enable the ``ftw.lawgiver [deletepermission]`` extra. [jone]
+
+
+1.9.1 (2017-07-10)
+------------------
+
+- Fix typos in German translation [raphael-s]
+
+
+1.9.0 (2017-01-03)
+------------------
+
+- Added control panel button for rebuilding specifications and creating an upgrade step. [jone]
+
+
+1.8.0 (2016-06-30)
+------------------
+
+- Add plone.app.contenttypes permissions to lawgiver.zcml.
+  Since plone.app.contenttypes is standard Plone we add the
+  plone.app.contenttypes mapping to the lawgiver.zcml.
+  [elioschmutz]
+
+
+1.7.0 (2016-05-02)
+------------------
+
+- Add manage translations permissions for plone.app.locales support.
+  [raphael-s]
+
+- Ignore the permissions to access inactive and future content because the
+  portal catalog checks the Plone root for these permissions, not the context.
+  [mbaechtold]
+
+- No longer ignore the permissions to add collection portlet and static
+  portlet but rather map them to the existing "manage portlets" action group.
+  [mbaechtold]
+
+
+1.6.2 (2015-11-16)
+------------------
+
+- Fix UnicodeDecodeError.
+  [mbaechtold]
+
+
+1.6.1 (2015-10-08)
+------------------
+
+- Fix translation issues by translationg label instead of ids of
+  states and transitions.
+  Please rebuild translations for your existing workflows.
+  [jone]
+
+
+1.6.0 (2015-05-21)
+------------------
+
+- Add support for assigning permissions to multiple action groups.
+  This is done using the ``move="False"`` in ``map_permissions``.
+  [jone]
+
+
+1.5.0 (2014-12-08)
+------------------
+
+- Plone 4.3.4: map "Edit comments" permission to "edit" action group.
+  [jone]
+
+
+1.4.0 (2014-09-09)
+------------------
+
+- Implement bin/instance rebuild_workflows command.
+  [jone]
+
+- Add button for rebuilding all workflow specifications at once.
+  [jone]
+
+- Show a warning on workflows of released eggs.
+  [jone]
+
+- i18n generator: escape quotes in generated message strings.
+  [jone]
+
+
+1.3.1 (2014-05-28)
+------------------
+
+- Extract `generate_role_translation_id` and `translate_role_for_workflow`
+  into utils.
+  [jone]
+
+- Fix definition.xml pretty printing on OSX Mavericks.
+  On Mavericks most of the definition.xml was written onto a single line.
+  [jone]
+
+
+1.3.0 (2014-05-19)
+------------------
+
+- Add role description statements for describing roles.
+  This allows to add a text description per role, which will
+  be displayed in the new role description overlay in the sharing
+  view.
+  [jone]
+
+- Fix bug with default permission of "role" directive.
+  The default permission used to not be set correctly.
+  [jone]
+
+- Implement uninstall profile.
+  [jone]
+
+- Workflow details: new button for updating the translations in
+  the locales directory of your package.
+  [jone]
+
+- Implement overlay in sharing view, describing the actions and transitions
+  for a role.
+  [jone]
+
+- Add German specification support.
+  [jone]
+
+- Add support for non-English specifications parsing.
+  [jone]
+
+
+1.2.2 (2014-01-09)
+------------------
+
+- Fix wrong role title when traversing over views.
+  [jone]
+
+- Fix local roles adapter lookup when no traversal happened beforehand.
+  This is a rare issue occured because of the context guessing happing
+  in the dynamic role adapter lookup (DynamicRolesUtility.get_role_adapter).
+  [jone]
+
+
+1.2.1 (2013-11-26)
+------------------
+
+- Map plone.app.event's "Import Ical" permission to "manage content settings".
+  [jone]
+
+
+1.2 (2013-08-26)
+----------------
+
+- Workflow generation: sort worklists so that the result is constant.
+  [jone]
+
+- Support remapping permission per workflow when it is ignored globally. #22
+  [jone]
+
+- **Support for configuring visible roles in sharing view.**
+  The specification now allows to define a list of roles which
+  should appear one the sharing view.
+  [jone]
+
+- **Context / workflow sensitive role translations for sharing view.**
+  Dynamic roles: replacing Plone's default roles utilities,
+  allowing us to change the translation of the role for the
+  sharing view depending on the workflow of the current context.
+  Lawgiver's new default role utility / adapter provides per-workflow
+  translations of the roles.
+  [jone]
+
+
+1.1 (2013-08-08)
+----------------
+
+- Ignore plone.resourceeditor permission for workflows.
+  [jone]
+
+
+1.0 (2013-05-28)
+----------------
+
+- Initial implementation.
+  [jone]
