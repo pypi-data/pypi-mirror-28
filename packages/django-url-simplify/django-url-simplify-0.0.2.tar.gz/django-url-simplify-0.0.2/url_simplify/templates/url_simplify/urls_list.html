@@ -1,0 +1,67 @@
+<h1>
+  <a href="{% url 'url_simplify:index' %}">URL simplifier</a>
+</h1>
+<h2>
+  All urls
+</h2>
+
+<style type="text/css">
+td
+{
+    padding:0 50px 0 50px;
+}
+</style>
+
+{% if url_list %}
+    <table id="urls">
+        <tr>
+          <th>created_at</th>
+          <th>full_url</th>
+          <th>redirects</th>
+          <th>short_id</th>
+          <th>short_url</th>
+          <th>delete</th>
+        </tr>
+        {% for url in url_list %}
+            <tr>
+                <td>{{ url.created_at|date:'Y-m-d H:i' }}</td>
+                <td>{{ url.full_url }}</td>
+                <td>{{ url.redirects }}</td>
+                <td>{{ url.short_id }}</td>
+                <td>
+                  <a href="{% url 'url_simplify:short_redirect' url.short_id %}">{% url 'url_simplify:short_redirect' url.short_id %}</a>
+                </td>
+                <td>
+                  <a type="button" href="{% url 'url_simplify:delete_url' url.id %}">remove</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    {# .... **Now the pagination section** .... #}
+    {% if is_paginated %}
+      <div class="pagination">
+        <span class="page-links">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+        {% else %}
+          <span class="disabled">&laquo;</span>
+        {% endif %}
+        {% for i in paginator.page_range %}
+          {% if page_obj.number == i %}
+            <span class="active">{{ i }} <span class="sr-only">(current)</span></span>
+          {% else %}
+            <a href="?page={{ i }}">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+        {% else %}
+          <span class="disabled">&raquo;</span>
+        {% endif %}
+      </span>
+      </div>
+    {% endif %}
+{% else %}
+    <h3>Urls</h3>
+    <p>No urls found!!! :(</p>
+{% endif %}
