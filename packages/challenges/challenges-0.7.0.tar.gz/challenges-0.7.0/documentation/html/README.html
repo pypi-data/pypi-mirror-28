@@ -1,0 +1,411 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>README: Challenges &#8212; Challenges 0.7.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HelloWorld package" href="HelloWorld.html" />
+    <link rel="prev" title="Challenges" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="readme-challenges">
+<h1>README: Challenges<a class="headerlink" href="#readme-challenges" title="Permalink to this headline">¶</a></h1>
+<p>Library to assist programming, testing and execution of solutions for coding challenges like those on stepik.org or
+rosalind.info.</p>
+<p>Find the full documentation at <a class="reference external" href="http://challenges.readthedocs.io">Readthedocs</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">State:</th><td class="field-body">alpha</td>
+</tr>
+<tr class="field-even field"><th class="field-name">License:</th><td class="field-body">MIT</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Author:</th><td class="field-body">Elmar Hinz</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Repository:</th><td class="field-body"><a class="reference external" href="https://github.com/elmar-hinz/Python.Challenges">https://github.com/elmar-hinz/Python.Challenges</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Documentation Server:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><a class="reference external" href="http://challenges.readthedocs.io">http://challenges.readthedocs.io</a> <a class="reference external" href="http://challenges.readthedocs.io/en/latest/?badge=latest"><img alt="Documentation Status" src="https://readthedocs.org/projects/challenges/badge/?version=latest" /></a></td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="hello-world">
+<h2>Hello world<a class="headerlink" href="#hello-world" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">challenges</span> <span class="kn">import</span> <span class="n">Challenge</span>
+
+<span class="k">class</span> <span class="nc">AddChallenge</span><span class="p">(</span><span class="n">Challenge</span><span class="p">):</span>
+    <span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        5, 6</span>
+<span class="s1">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_to_integers</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The class to write lets you focus on the core algorithms of the challenge while keeping stuff like opening, reading and
+writing of files out of the way. You inherit several methods to set up the model or to format your result for writing.</p>
+<p>While the class attribute <cite>sample</cite> just holds a minimal example of the input, the actual input is later injected by
+the <strong>Challenge Runner</strong> via the command line. In Bioinformatics this is often a large file of DNA.</p>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p>See a more verbose example of HelloWorld.</p>
+<ul class="last simple">
+<li><a class="reference external" href="https://github.com/elmar-hinz/Python.Challenges/blob/master/HelloWorld/challenge.py">HelloWorldChallenge</a></li>
+<li><a class="reference external" href="https://github.com/elmar-hinz/Python.Challenges/blob/master/HelloWorld/test.py">HelloWorldTest</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><ul class="simple">
+<li>Listing available challenges</li>
+<li>Scaffolding a new challenge directory with a challenge class and a unit test class</li>
+<li>Executing the <cite>sample</cite> from the sample class attribute</li>
+<li>Reading input files from the command line</li>
+<li>Output formatted result on the command line</li>
+<li>Writing <cite>sample.txt</cite> and matching <cite>result.txt</cite> into the challenges directory</li>
+<li>Running the unit test case of a challenge</li>
+<li>Reading lines with integers</li>
+<li>Reading lines with floats</li>
+<li>Reading lines with words</li>
+<li>Reading fasta input</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="directory-layout">
+<h2>Directory layout<a class="headerlink" href="#directory-layout" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>anyDirectory/
+    Challenge1/__init__.py
+    Challenge1/challenge.py
+    Challenge1/test.py
+    Challenge2/__init__.py
+    Challenge2/challenge.py
+    Challenge2/test.py
+    ... more challenges ...
+</pre></div>
+</div>
+<p>The names <cite>Challenge1</cite> and <cite>Challenge2</cite> are just placeholders for the names you choose during scaffolding.</p>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p class="last">The files <cite>__init__.py</cite> are empty. They help unittest tools like <em>nosetest</em> to locate the test files.</p>
+</div>
+</div>
+<div class="section" id="challenge-runner">
+<h2>Challenge runner<a class="headerlink" href="#challenge-runner" title="Permalink to this headline">¶</a></h2>
+<p>The directory <cite>myChallenges/</cite> is the base directory of your challenges project. It’s the directory from where to use the
+<strong>Challenge Runner</strong>.</p>
+<div class="section" id="list-the-available-challenges">
+<h3>List the available challenges<a class="headerlink" href="#list-the-available-challenges" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; challenge --list
+* Challenge1
+* Challenge2
+* ...
+</pre></div>
+</div>
+</div>
+<div class="section" id="scaffolding-a-new-challenge">
+<h3>Scaffolding a new challenge<a class="headerlink" href="#scaffolding-a-new-challenge" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; challenge --scaffold Challenge3
+</pre></div>
+</div>
+<p>You now find the files:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>myChallenges/
+    Challenge3/__init__.py
+    Challenge3/challenge.py
+    Challenge3/test.py
+</pre></div>
+</div>
+<p>Check it’s working by running the unit test case.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; challenge --unittest Challenge3
+.sss.
+----------------------------------------------------------------------
+Ran <span class="m">5</span> tests in <span class="m">0</span>.006s
+
+OK <span class="o">(</span><span class="nv">skipped</span><span class="o">=</span><span class="m">3</span><span class="o">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="run-sample-from-the-class-file">
+<h3>Run &lt;sample&gt; from the class file<a class="headerlink" href="#run-sample-from-the-class-file" title="Permalink to this headline">¶</a></h3>
+<p>This is the small sample directly coded into the challenge class.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; challenge --klass Challenge1
+<span class="o">[</span>the result output goes here<span class="o">]</span>
+</pre></div>
+</div>
+<div class="admonition hint">
+<p class="first admonition-title">Hint</p>
+<p>You will automatically find the latest output in two files, independent from the input method you choose.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>myChallenges/Challenge1/latest.txt
+myChallenges/latest.txt
+</pre></div>
+</div>
+<p class="last">These files are just for convenience and are overwritten by the next run.</p>
+</div>
+</div>
+<div class="section" id="read-sample-from-an-input-file">
+<h3>Read sample from an input file<a class="headerlink" href="#read-sample-from-an-input-file" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; challenge Challenge1 --file ~/Downloads/data.txt
+<span class="o">[</span>the result output goes here<span class="o">]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="storing-data-and-results">
+<h3>Storing data and results<a class="headerlink" href="#storing-data-and-results" title="Permalink to this headline">¶</a></h3>
+<p>Did you pass the challenge? Was the online grader content with the upload of <cite>latest.txt</cite>? Then you should store data
+and result.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; challenge Challenge1 --file ~/Downloads/data.txt --write
+</pre></div>
+</div>
+<p>You will find the files:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>myChallenges/Challenge1/sample.txt
+myChallenges/Challenge1/result.txt
+</pre></div>
+</div>
+<p>This files are stored until the next run with the <cite>–write</cite> flag.</p>
+</div>
+<div class="section" id="help">
+<h3>Help<a class="headerlink" href="#help" title="Permalink to this headline">¶</a></h3>
+<p>To quickly see all available options.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>challenge --help
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>For every double dashed option there is a single dashed one letter shortcut. Help lists them all.</p>
+<blockquote class="last">
+<div>prompt&gt; challenge Challenge1 –scaffold
+prompt&gt; challenge Challenge1 -s</div></blockquote>
+</div>
+</div>
+</div>
+<div class="section" id="naming-conventions">
+<h2>Naming conventions<a class="headerlink" href="#naming-conventions" title="Permalink to this headline">¶</a></h2>
+<p>The naming conventions follow the standards as defined by <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a> <strong>Style Guide for Python Code</strong></p>
+<p>There are two deliberate exceptions:</p>
+<ol class="arabic">
+<li><p class="first">Challenge module names are <strong>CamelCase</strong>:</p>
+<blockquote>
+<div><p>In contradiction to the style guide directories of the challenges are not all lowercase. Especially the
+first character must be uppercase. This is used to find and list the challenge directories between other modules.
+If the name of your challenge is <strong>ExampleProblem</strong> then this are the required names:</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Directory:</th><td class="field-body"><code class="docutils literal"><span class="pre">ExampleProblem/</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Challenge file:</th><td class="field-body"><code class="docutils literal"><span class="pre">ExampleProblem/challenge.py</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Unittest file:</th><td class="field-body"><code class="docutils literal"><span class="pre">ExampleProblem/test.py</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Full qualified challenge class:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><code class="docutils literal"><span class="pre">ExampleProblem.challenge.ExampleProblemChallenge</span></code></td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Full qualified test class:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"><code class="docutils literal"><span class="pre">ExampleProblem.test.ExampleProblemTest</span></code></td>
+</tr>
+</tbody>
+</table>
+<p>This is automatically wired up during scaffolding.</p>
+</div></blockquote>
+</li>
+<li><p class="first">Inherited class attributes and methods don’t have a leading underscore:</p>
+<blockquote>
+<div><p>The inherited functions and methods of the challenge are not a public API and the style guides recommends leading
+underscores. As inheritance is a core concept of the challenge class, this would lead to a hell of leading
+underscores. For this reason we don’t follow the style guide in this recommendation.</p>
+</div></blockquote>
+</li>
+</ol>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>One useful advantage of naming the directory just like your challenge is, that you can use the path expansion
+mechanism of the shell. Write the first characters of the directory name and hit &lt;TAB&gt;. Now you can use the
+directory name as name of the challenge. A trailing slash is discarded. The following two inputs are equivalent.</p>
+<div class="last highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; challenge -k ExampleProblem
+prompt&gt; challenge -k ExampleProblem/
+</pre></div>
+</div>
+</div>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p>You can palce the dashed options behind the name of the challenge. This makes it easy to exchange them.
+Practical usage may look like this.</p>
+<div class="last highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; challenge ExampleProblem -s
+prompt&gt; challenge ExampleProblem/ -u
+prompt&gt; challenge ExampleProblem/ -k
+prompt&gt; challenge ExampleProblem/ -f ~/Downloads/data.txt
+prompt&gt; challenge ExampleProblem/ -f ~/Downloads/data.txt -w
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="admonition important">
+<p class="first admonition-title">Important</p>
+<p class="last">This software requires Python 3.</p>
+</div>
+<div class="section" id="clone-from-github">
+<h3>Clone from Github<a class="headerlink" href="#clone-from-github" title="Permalink to this headline">¶</a></h3>
+<p>You can clone (or download) the Challenges project directly from Github. In this case the scripts and paths are not
+configured globally. Either you configure it globally or you place your challenges immediately into the projects folder
+so that the paths are detected relatively.</p>
+<div class="section" id="put-your-challenges-immediately-into-the-projects-folder">
+<h4>Put your challenges immediately into the projects folder<a class="headerlink" href="#put-your-challenges-immediately-into-the-projects-folder" title="Permalink to this headline">¶</a></h4>
+<p>This is the most simple setup to get started. After downloading change into the download folder an try to run the
+<cite>HelloWorld</cite> unit test. In this case the command is in the <cite>bin</cite> directory, you call it as <cite>bin/challenge</cite>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; bin/challenge --unittest HelloWorld
+...
+----------------------------------------------------------------------
+Ran <span class="m">3</span> tests in <span class="m">0</span>.001s
+
+OK
+</pre></div>
+</div>
+<p>Now you are ready to create your challenge side-by-side with the <cite>HelloWorld</cite> challenge.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; bin/challenge --scaffold MyChallenge
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="use-pip-to-install-challenges">
+<h3>Use &lt;pip&gt; to install &lt;challenges&gt;<a class="headerlink" href="#use-pip-to-install-challenges" title="Permalink to this headline">¶</a></h3>
+<p>If you have a fully configured python 3 environment up and running you can install &lt;challenges&gt; with pip3.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; pip3 search challenges
+prompt&gt; pip3 install challenges
+</pre></div>
+</div>
+<p>The library will be included into the python class path. The runner will be globally available as <cite>challenge</cite>,
+alternatively as <cite>stepik</cite> or <cite>rosalind</cite>.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>prompt&gt; challenge --version
+challenge <span class="m">0</span>.6.0
+
+prompt&gt; stepik --version
+stepik <span class="m">0</span>.6.0
+
+prompt&gt; rosalind --version
+rosalind <span class="m">0</span>.6.0
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">README: Challenges</a><ul>
+<li><a class="reference internal" href="#hello-world">Hello world</a></li>
+<li><a class="reference internal" href="#features">Features</a></li>
+<li><a class="reference internal" href="#directory-layout">Directory layout</a></li>
+<li><a class="reference internal" href="#challenge-runner">Challenge runner</a><ul>
+<li><a class="reference internal" href="#list-the-available-challenges">List the available challenges</a></li>
+<li><a class="reference internal" href="#scaffolding-a-new-challenge">Scaffolding a new challenge</a></li>
+<li><a class="reference internal" href="#run-sample-from-the-class-file">Run &lt;sample&gt; from the class file</a></li>
+<li><a class="reference internal" href="#read-sample-from-an-input-file">Read sample from an input file</a></li>
+<li><a class="reference internal" href="#storing-data-and-results">Storing data and results</a></li>
+<li><a class="reference internal" href="#help">Help</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#naming-conventions">Naming conventions</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#clone-from-github">Clone from Github</a><ul>
+<li><a class="reference internal" href="#put-your-challenges-immediately-into-the-projects-folder">Put your challenges immediately into the projects folder</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#use-pip-to-install-challenges">Use &lt;pip&gt; to install &lt;challenges&gt;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Challenges</a></li>
+      <li>Next: <a href="HelloWorld.html" title="next chapter">HelloWorld package</a></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/README.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Elmar Hinz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/README.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

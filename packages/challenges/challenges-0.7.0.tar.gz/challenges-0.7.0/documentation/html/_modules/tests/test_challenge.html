@@ -1,0 +1,346 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tests.test_challenge &#8212; Challenges 0.7.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for tests.test_challenge</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">unittest</span>
+
+<span class="kn">from</span> <span class="nn">types</span> <span class="k">import</span> <span class="n">SimpleNamespace</span>
+
+<span class="kn">from</span> <span class="nn">challenges</span> <span class="k">import</span> <span class="n">Challenge</span>
+
+
+<div class="viewcode-block" id="ChallengeTestCase"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase">[docs]</a><span class="k">class</span> <span class="nc">ChallengeTestCase</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Test cases of the challenge base class.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ChallengeTestCase.setUp"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span> <span class="o">=</span> <span class="n">Challenge</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_class_attributes"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_class_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">test_class_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check setting of class attributes.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;sample&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;expected result&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">expect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Challenge</span><span class="o">.</span><span class="n">br</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">Challenge</span><span class="o">.</span><span class="n">br</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Challenge</span><span class="o">.</span><span class="n">split_pattern</span><span class="p">,</span> <span class="s1">&#39;\s+|\s?,\s?&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">Challenge</span><span class="o">.</span><span class="n">edge_pattern</span><span class="p">,</span> <span class="s1">&#39;^(\d+)-&gt;(\d+)(:(\d+))?$&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_instance_attributes"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_instance_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">test_instance_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check setting of instance attributes.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">lines</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">SimpleNamespace</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">result</span><span class="p">,</span> <span class="n">SimpleNamespace</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_instance_shadows_class_attribute_of_sample"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_instance_shadows_class_attribute_of_sample">[docs]</a>    <span class="k">def</span> <span class="nf">test_instance_shadows_class_attribute_of_sample</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Show that instance attribute shadows class attribute.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;sample&#39;</span><span class="p">,</span> <span class="n">Challenge</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;sample&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;mine&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;sample&#39;</span><span class="p">,</span> <span class="n">Challenge</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;mine&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_instance_shadows_class_attribute_of_expect"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_instance_shadows_class_attribute_of_expect">[docs]</a>    <span class="k">def</span> <span class="nf">test_instance_shadows_class_attribute_of_expect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Show that instance attribute shadows class attribute.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;expected result&#39;</span><span class="p">,</span> <span class="n">Challenge</span><span class="o">.</span><span class="n">expect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;expected result&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">expect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">expect</span> <span class="o">=</span> <span class="s1">&#39;my result&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;expected result&#39;</span><span class="p">,</span> <span class="n">Challenge</span><span class="o">.</span><span class="n">expect</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;my result&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">expect</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_read"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_read">[docs]</a>    <span class="k">def</span> <span class="nf">test_read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show that read creates list of lines.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;one</span><span class="se">\n</span><span class="s1">two&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">lines</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_build"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_build">[docs]</a>    <span class="k">def</span> <span class="nf">test_build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show that build is callable.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">build</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_calc"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_calc">[docs]</a>    <span class="k">def</span> <span class="nf">test_calc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show that calc is callable.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">calc</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_format"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_format">[docs]</a>    <span class="k">def</span> <span class="nf">test_format</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show that format writes result into output as string.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">format</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_line"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_line">[docs]</a>    <span class="k">def</span> <span class="nf">test_line</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Show that a line is retrievable by index.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;two&#39;</span><span class="p">,</span> <span class="s1">&#39;three&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;two&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_line_to_integers"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_line_to_integers">[docs]</a>    <span class="k">def</span> <span class="nf">test_line_to_integers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show a line can be retrieved as integers.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;1, 2, 3&#39;</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">line_to_integers</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_line_to_floats"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_line_to_floats">[docs]</a>    <span class="k">def</span> <span class="nf">test_line_to_floats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show a line can be retrieved as floats.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;1.11, 2.22&#39;</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">line_to_floats</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="p">[</span><span class="mf">1.11</span><span class="p">,</span> <span class="mf">2.22</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_line_to_edge"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_line_to_edge">[docs]</a>    <span class="k">def</span> <span class="nf">test_line_to_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show a line can be retrieved as edge.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;1-&gt;2:12&#39;</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">line_to_edge</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">SimpleNamespace</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">tail</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">head</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_line_to_edge_without_weight"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_line_to_edge_without_weight">[docs]</a>    <span class="k">def</span> <span class="nf">test_line_to_edge_without_weight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show a line can be retrieved as edge.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">lines</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;one&#39;</span><span class="p">,</span> <span class="s1">&#39;1-&gt;2&#39;</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">line_to_edge</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsInstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">SimpleNamespace</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">tail</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">head</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertRaises</span><span class="p">(</span><span class="ne">AttributeError</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_read_edges_from_to"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_read_edges_from_to">[docs]</a>    <span class="k">def</span> <span class="nf">test_read_edges_from_to</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show reading edges limited by start and stop.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        0</span>
+<span class="s1">        1-&gt;9</span>
+<span class="s1">        2-&gt;9</span>
+<span class="s1">        3-&gt;9</span>
+<span class="s1">        4-&gt;9</span>
+<span class="s1">        5</span>
+<span class="s1">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s1">&#39;edges&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">)),</span> <span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_read_edges_from"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_read_edges_from">[docs]</a>    <span class="k">def</span> <span class="nf">test_read_edges_from</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show reading edges self limiting.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        0</span>
+<span class="s1">        1-&gt;9</span>
+<span class="s1">        2-&gt;9</span>
+<span class="s1">        3-&gt;9</span>
+<span class="s1">        4-&gt;9</span>
+<span class="s1">        5</span>
+<span class="s1">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">edges</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">)),</span> <span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_read_edges_without_given_range"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_read_edges_without_given_range">[docs]</a>    <span class="k">def</span> <span class="nf">test_read_edges_without_given_range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show reading edges without given range starting from line 0.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        1-&gt;9</span>
+<span class="s1">        2-&gt;9</span>
+<span class="s1">        3-&gt;9</span>
+<span class="s1">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">edges</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">)),</span> <span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_read_fasta_from_to"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_read_fasta_from_to">[docs]</a>    <span class="k">def</span> <span class="nf">test_read_fasta_from_to</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show reading FASTA limited by start and stop.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        0</span>
+<span class="s1">        1</span>
+<span class="s1">        &gt;FAS_1</span>
+<span class="s1">        CCTGCGGAAGATCGGCACTAGAATAGCCAGAACCGTTTCTCTGAGGCTTCCGGCCTTCCC</span>
+<span class="s1">        TCCCACTAATAATTCTGAGG</span>
+<span class="s1">        &gt;FAS_2</span>
+<span class="s1">        CCATCGGTAGCGCATCCTTAGTCCAATTAAGTCCCTATCCAGGCGCTCCGCCGAAGGTCT</span>
+<span class="s1">        ATATCCATTTGTCAGCAGACACGC</span>
+<span class="s1">        &gt;FAS_3</span>
+<span class="s1">        CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGAC</span>
+<span class="s1">        TGGGAACCTGCGGGCAGTAGGTGGAAT</span>
+<span class="s1">        &gt;FAS_4</span>
+<span class="s1">        CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGAC</span>
+<span class="s1">        TGGGAACCTGCGGGCAGTAGGTGGAAT</span>
+<span class="s1">        14</span>
+<span class="s1">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">fasta</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s1">&#39;fasta&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">)),</span> <span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_read_fasta_from"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_read_fasta_from">[docs]</a>    <span class="k">def</span> <span class="nf">test_read_fasta_from</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show reading FASTA self limiting.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        0</span>
+<span class="s1">        1</span>
+<span class="s1">        &gt;FAS_1</span>
+<span class="s1">        CCTGCGGAAGATCGGCACTAGAATAGCCAGAACCGTTTCTCTGAGGCTTCCGGCCTTCCC</span>
+<span class="s1">        TCCCACTAATAATTCTGAGG</span>
+<span class="s1">        &gt;FAS_2</span>
+<span class="s1">        CCATCGGTAGCGCATCCTTAGTCCAATTAAGTCCCTATCCAGGCGCTCCGCCGAAGGTCT</span>
+<span class="s1">        ATATCCATTTGTCAGCAGACACGC</span>
+<span class="s1">        &gt;FAS_3</span>
+<span class="s1">        CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGAC</span>
+<span class="s1">        TGGGAACCTGCGGGCAGTAGGTGGAAT</span>
+<span class="s1">        &gt;FAS_4</span>
+<span class="s1">        AAA</span>
+<span class="s1">        TTT</span>
+<span class="s1">        14</span>
+<span class="s1">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">fasta</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s1">&#39;fasta&#39;</span><span class="p">)</span>
+        <span class="n">fasta</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;AAATTT&#39;</span><span class="p">,</span> <span class="n">fasta</span><span class="p">[</span><span class="s1">&#39;FAS_4&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fasta</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_read_fasta_without_given_range"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_read_fasta_without_given_range">[docs]</a>    <span class="k">def</span> <span class="nf">test_read_fasta_without_given_range</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show reading FASTA limited by start and stop.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        &gt;FAS_1</span>
+<span class="s1">        CCTGCGGAAGATCGGCACTAGAATAGCCAGAACCGTTTCTCTGAGGCTTCCGGCCTTCCC</span>
+<span class="s1">        TCCCACTAATAATTCTGAGG</span>
+<span class="s1">        &gt;FAS_2</span>
+<span class="s1">        CCATCGGTAGCGCATCCTTAGTCCAATTAAGTCCCTATCCAGGCGCTCCGCCGAAGGTCT</span>
+<span class="s1">        ATATCCATTTGTCAGCAGACACGC</span>
+<span class="s1">        &gt;FAS_3</span>
+<span class="s1">        CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGAC</span>
+<span class="s1">        TGGGAACCTGCGGGCAGTAGGTGGAAT</span>
+<span class="s1">        &gt;FAS_4</span>
+<span class="s1">        CCACCCTCGTGGTATGGCTAGGCATTCAGGAACCGGAGAACGCTTCAGACCAGCCCGGAC</span>
+<span class="s1">        TGGGAACCTGCGGGCAGTAGGTGGAAT</span>
+<span class="s1">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">fasta</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s1">&#39;fasta&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">)),</span> <span class="mi">4</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_read_fasta_format"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_read_fasta_format">[docs]</a>    <span class="k">def</span> <span class="nf">test_read_fasta_format</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show reading FASTA matches expected format.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        0</span>
+<span class="s1">        1</span>
+<span class="s1">        &gt;FAS_1</span>
+<span class="s1">        LLL</span>
+<span class="s1">        ---</span>
+<span class="s1">        MMM</span>
+<span class="s1">        *</span>
+<span class="s1">        &gt;FAS_2</span>
+<span class="s1">        AAA</span>
+<span class="s1">        TTT</span>
+<span class="s1">        8</span>
+<span class="s1">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">fasta</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="s1">&#39;fasta&#39;</span><span class="p">)</span>
+        <span class="n">fasta</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;FAS_1&#39;</span><span class="p">,</span> <span class="n">fasta</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;LLL---MMM*&#39;</span><span class="p">,</span> <span class="n">fasta</span><span class="p">[</span><span class="s1">&#39;FAS_1&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s1">&#39;FAS_2&#39;</span><span class="p">,</span> <span class="n">fasta</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s1">&#39;AAATTT&#39;</span><span class="p">,</span> <span class="n">fasta</span><span class="p">[</span><span class="s1">&#39;FAS_2&#39;</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_fasta_strands"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_fasta_strands">[docs]</a>    <span class="k">def</span> <span class="nf">test_fasta_strands</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Check the method works as expected. &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        &gt;FAS_1</span>
+<span class="s1">        AAA</span>
+<span class="s1">        &gt;FAS_2</span>
+<span class="s1">        CCC</span>
+<span class="s1">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">fasta_strands</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">([</span><span class="s1">&#39;AAA&#39;</span><span class="p">,</span> <span class="s1">&#39;CCC&#39;</span><span class="p">],</span> <span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_format_list_of_integers"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_format_list_of_integers">[docs]</a>    <span class="k">def</span> <span class="nf">test_format_list_of_integers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show concatenation of list of integers.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">format_list_of_integers</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span>
+                         <span class="s1">&#39;1, 2&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ChallengeTestCase.test_format_path"><a class="viewcode-back" href="../../tests.html#tests.test_challenge.ChallengeTestCase.test_format_path">[docs]</a>    <span class="k">def</span> <span class="nf">test_format_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show concatenation of list of nodes to a path.&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">format_path</span><span class="p">([</span><span class="mi">11</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">33</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;11-&gt;22-&gt;33&#39;</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">challenge</span><span class="o">.</span><span class="n">format_path</span><span class="p">([</span><span class="mi">11</span><span class="p">,</span> <span class="mi">22</span><span class="p">,</span> <span class="mi">33</span><span class="p">],</span> <span class="n">backwards</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;11&lt;-22&lt;-33&#39;</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Elmar Hinz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

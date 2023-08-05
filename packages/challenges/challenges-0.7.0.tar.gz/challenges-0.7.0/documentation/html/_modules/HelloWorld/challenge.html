@@ -1,0 +1,164 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>HelloWorld.challenge &#8212; Challenges 0.7.0 documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.7.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for HelloWorld.challenge</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This is the HelloWorld challenge to teach the usage of the library by a</span>
+<span class="sd">minimal example.</span>
+
+<span class="sd">This challenge takes a number and a word and composes a new word based</span>
+<span class="sd">on the input.</span>
+
+<span class="sd">The class fully focuses on the &quot;business logic&quot; by overwriting just two</span>
+<span class="sd">methods of parent class &lt;challenge.challenge.Challenge&gt;:</span>
+
+<span class="sd">    * &lt;build&gt;: This sets up the data model from the given input lines.</span>
+<span class="sd">    * &lt;calc&gt;: This is the core algorithm of the challenge.</span>
+
+<span class="sd">This design pattern is called the &quot;Template Method Pattern&quot;. While the parent</span>
+<span class="sd">class handles the common parts of the challenge flow, the child class just</span>
+<span class="sd">encapsulates what is special.</span>
+
+<span class="sd">The two methods above is just the bare minimum to implement. For more complex</span>
+<span class="sd">challenges you will overwrite or extend other parts of the parent class.</span>
+
+<span class="sd">Have a look into the parent class, especially into the &lt;main&gt; function, that</span>
+<span class="sd">controls the execution of the challenge. Also have a look into the parents</span>
+<span class="sd">&lt;__init__&gt; method to see what instance attributes are already prepared to serve</span>
+<span class="sd">the communication of the methods.</span>
+
+<span class="sd">By the class attribute &lt;sample&gt; a small example of the possible input is</span>
+<span class="sd">given. This is recommended for every challenge. It is useful as input of</span>
+<span class="sd">unit tests or for the smoke tests with the -k option. For more extended</span>
+<span class="sd">input, in example from the given data files, this class attribute will be</span>
+<span class="sd">overwritten by injection of an instance attribute of the same name.</span>
+
+<span class="sd">The optional class attribute &lt;expect&gt; the expected output for the given</span>
+<span class="sd">&lt;sample&gt; sets the expected output. This is typically used by unit tests.</span>
+
+<span class="sd">Together &lt;sample&gt; and &lt;expect&gt; serve as documantation of the intention of</span>
+<span class="sd">the challenge.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">challenges</span> <span class="k">import</span> <span class="n">Challenge</span>
+
+
+<div class="viewcode-block" id="HelloWorldChallenge"><a class="viewcode-back" href="../../HelloWorld.html#HelloWorld.challenge.HelloWorldChallenge">[docs]</a><span class="k">class</span> <span class="nc">HelloWorldChallenge</span><span class="p">(</span><span class="n">Challenge</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This is the HelloWorld Challenge class.</span>
+
+<span class="sd">    This challenge takes a word as input and a number at which position</span>
+<span class="sd">    to split the word. It returns a new word composed of the switched parts</span>
+<span class="sd">    with a blank in between.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">sample</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">        5</span>
+<span class="s1">        WorldHello</span>
+<span class="s1">    &#39;&#39;&#39;</span>
+
+    <span class="sd">&quot;&quot;&quot;This is a small exsample of the input. It can be overwritten by </span>
+<span class="sd">    injection.</span>
+<span class="sd">        </span>
+<span class="sd">        It is used by the --klass option of the challenge runner.</span>
+<span class="sd">        It is also used by unit tests.</span>
+<span class="sd">        </span>
+<span class="sd">        prompt&gt; challenge HelloWorld/ --klass</span>
+<span class="sd">        Hello World</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">expect</span> <span class="o">=</span> <span class="s1">&#39;Hello World&#39;</span>
+
+    <span class="sd">&quot;&quot;&quot;This is the expected output for the given sample. </span>
+<span class="sd">    </span>
+<span class="sd">        It is used by unit tests, especially by the full integration test.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="HelloWorldChallenge.build"><a class="viewcode-back" href="../../HelloWorld.html#HelloWorld.challenge.HelloWorldChallenge.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Parse the input lines and set up the model.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">split_at</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_to_integers</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">word</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="HelloWorldChallenge.calc"><a class="viewcode-back" href="../../HelloWorld.html#HelloWorld.challenge.HelloWorldChallenge.calc">[docs]</a>    <span class="k">def</span> <span class="nf">calc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Swap head and tail of the model and store to result.&quot;&quot;&quot;</span>
+        <span class="n">first</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">word</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">split_at</span><span class="p">:]</span>
+        <span class="n">second</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">word</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">split_at</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">first</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">second</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, Elmar Hinz.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
