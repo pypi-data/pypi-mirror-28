@@ -1,0 +1,68 @@
+.. -*- mode: rst; coding: utf-8 -*-
+
+==============================================================================
+pytest-twisted - test twisted code with pytest
+==============================================================================
+
+
+:Authors: Ralf Schmitt, Victor Titor
+:Version: 1.6
+:Date:    2018-01-12
+:Download: https://pypi.python.org/pypi/pytest-twisted#downloads
+:Code: https://github.com/pytest-dev/pytest-twisted
+
+
+pytest-twisted is a plugin for pytest, which allows to test code,
+which uses the twisted framework. test functions can return Deferred
+objects and pytest will wait for their completion with this plugin.
+
+Installation
+==================
+Install the plugin with::
+
+    pip install pytest-twisted
+
+
+Using the plugin
+==================
+
+The plugin is available after installation and can be disabled using
+``-p no:twisted``.
+
+
+inlineCallbacks
+=================
+Using `twisted.internet.defer.inlineCallbacks` as a decorator for test
+functions, which take funcargs, does not work. Please use
+`pytest.inlineCallbacks` instead::
+
+  @pytest.inlineCallbacks
+  def test_some_stuff(tmpdir):
+      res = yield threads.deferToThread(os.listdir, tmpdir.strpath)
+      assert res == []
+
+Waiting for deferreds in fixtures
+=================================
+`pytest.blockon` allows fixtures to wait for deferreds::
+
+  @pytest.fixture
+  def val():
+      d = defer.Deferred()
+      reactor.callLater(1.0, d.callback, 10)
+      return pytest.blockon(d)
+
+
+The twisted greenlet
+====================
+Some libraries (e.g. corotwine) need to know the greenlet, which is
+running the twisted reactor. It's available from the
+`twisted_greenlet` funcarg. The following code can be used to make
+corotwine work with pytest-twisted::
+
+  @pytest.fixture(scope="session", autouse=True)
+  def set_MAIN(request, twisted_greenlet):
+      from corotwine import protocol
+      protocol.MAIN = twisted_greenlet
+
+
+That's all.
