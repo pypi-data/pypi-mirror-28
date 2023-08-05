@@ -1,0 +1,146 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Contributing and developing &#8212; Plyvel 1.0.2 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="Version history" href="news.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="contributing-and-developing">
+<h1>Contributing and developing<a class="headerlink" href="#contributing-and-developing" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="reporting-issues">
+<h2>Reporting issues<a class="headerlink" href="#reporting-issues" title="Permalink to this headline">¶</a></h2>
+<p>Plyvel uses Github’s issue tracker. See the <a class="reference external" href="https://github.com/wbolster/plyvel">Plyvel project page</a> on Github.</p>
+</div>
+<div class="section" id="obtaining-the-source-code">
+<h2>Obtaining the source code<a class="headerlink" href="#obtaining-the-source-code" title="Permalink to this headline">¶</a></h2>
+<p>The Plyvel source code can be found on Github. See the <a class="reference external" href="https://github.com/wbolster/plyvel">Plyvel project page</a> on
+Github.</p>
+</div>
+<div class="section" id="compiling-from-source">
+<h2>Compiling from source<a class="headerlink" href="#compiling-from-source" title="Permalink to this headline">¶</a></h2>
+<p>A simple <code class="docutils literal"><span class="pre">make</span></code> suffices to build the Plyvel extension. Note that the
+<code class="docutils literal"><span class="pre">setup.py</span></code> script does <em>not</em> invoke Cython, so that installations using <code class="docutils literal"><span class="pre">pip</span>
+<span class="pre">install</span></code> do not need to depend on Cython.</p>
+<p>A few remarks about the code:</p>
+<ul class="simple">
+<li>Plyvel is mostly written in Cython. The LevelDB API is described in
+<cite>leveldb.pxd</cite>, and subsequently used from Cython.</li>
+<li>The custom comparator support is written in C++ since it contains a C++ class
+that extends a LevelDB C++ class. The Python C API is used for the callbacks
+into Python. This custom class is made available in Cython using
+<cite>comparator.pxd</cite>.</li>
+</ul>
+</div>
+<div class="section" id="running-the-tests">
+<h2>Running the tests<a class="headerlink" href="#running-the-tests" title="Permalink to this headline">¶</a></h2>
+<p>Almost all Plyvel code is covered by the unit tests. Plyvel uses <em>pytest</em> and
+<em>tox</em> for running those tests. Type <code class="docutils literal"><span class="pre">make</span> <span class="pre">test</span></code> to run the unit tests, or run
+<code class="docutils literal"><span class="pre">tox</span></code> to run the tests against multiple Python versions.</p>
+</div>
+<div class="section" id="producing-binary-packages">
+<h2>Producing binary packages<a class="headerlink" href="#producing-binary-packages" title="Permalink to this headline">¶</a></h2>
+<p>To build a non-portable binary package for a single platform:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">bdist_wheel</span>
+</pre></div>
+</div>
+<p>See the comments at the top of the <code class="docutils literal"><span class="pre">Dockerfile</span></code> for instructions on
+how to build portable <code class="docutils literal"><span class="pre">manylinux1</span></code> wheels for multiple Python
+versions that should work on many Linux platforms.</p>
+</div>
+<div class="section" id="generating-the-documentation">
+<h2>Generating the documentation<a class="headerlink" href="#generating-the-documentation" title="Permalink to this headline">¶</a></h2>
+<p>The documentation is written in ReStructuredText (reST) format and processed
+using <em>Sphinx</em>. Type <code class="docutils literal"><span class="pre">make</span> <span class="pre">doc</span></code> to build the HTML documentation.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Contributing and developing</a><ul>
+<li><a class="reference internal" href="#reporting-issues">Reporting issues</a></li>
+<li><a class="reference internal" href="#obtaining-the-source-code">Obtaining the source code</a></li>
+<li><a class="reference internal" href="#compiling-from-source">Compiling from source</a></li>
+<li><a class="reference internal" href="#running-the-tests">Running the tests</a></li>
+<li><a class="reference internal" href="#producing-binary-packages">Producing binary packages</a></li>
+<li><a class="reference internal" href="#generating-the-documentation">Generating the documentation</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="news.html" title="previous chapter">Version history</a></li>
+      <li>Next: <a href="license.html" title="next chapter">License</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2012‒2018, Wouter Bolsterlee.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
