@@ -1,0 +1,25 @@
+{% from 'crosscompute:templates/type.jinja2' import render_uploadable_argument %}
+
+{% macro head_style_loaded(request) %}{% endmacro %}
+{% macro head_style_inline(request) %}{% endmacro %}
+
+{% macro head_script_inline(request) %}
+x = CC.image = {};
+x.import_url = '{{ request.route_path('image/import_image') }}';
+{% endmacro %}
+
+{% macro body_script_loaded(request) %}{% endmacro %}
+{% macro body_script_inline(request) %}{% endmacro %}
+
+{% macro render_argument(request, data_item) %}
+{{ render_uploadable_argument(request, data_item, 'image-upload', render_property) }}
+{% endmacro %}
+
+{% macro render_property(request, data_item, stamp='') %}
+{% set image_url = base_url.rstrip('/') + data_item.render_value() %}
+{% if image_url %}
+<div class="image-container">
+<img src="{{ image_url }}">
+</div>
+{% endif %}
+{% endmacro %}
