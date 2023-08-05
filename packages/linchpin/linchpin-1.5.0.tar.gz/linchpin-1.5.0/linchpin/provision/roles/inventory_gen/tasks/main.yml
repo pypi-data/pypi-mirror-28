@@ -1,0 +1,20 @@
+---
+# parse inventory generation files here
+
+- name: "set topology_name"
+  set_fact:
+    topology_name: "{{ topo_data['topology_name'] }}"
+
+- name: "Set inventory_layout"
+  set_fact:
+    inventory_layout: "{{ layout_data | ordered_yaml }}"
+
+- name: "Updating inventory_path with the absolute path"
+  set_fact:
+    inventory_path: "{{ inventory_path | default( workspace +'/'+inventories_folder+'/'+
+    topology_name.replace(' ', '_').lower() ) + '-' + uhash }}.inventory"
+
+- name: "Generate Generic Inventory"
+  template:
+    src: "templates/generic_inventory_formatter.j2"
+    dest: "{{ inventory_path }}"
