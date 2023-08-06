@@ -1,0 +1,77 @@
+#!/usr/bin/env python
+
+import sys, math, argparse
+import os.path
+import ConfigParser
+
+from pymonetdb.sql.connections import Connection as connect
+from pymonetdb.exceptions import Error as DBError
+
+from gsm import utils as gu
+from gsm.exceptions import GSMException
+
+parser = argparse.ArgumentParser(prog='GSM')
+parser.add_argument('--dbconf', '-d', help='config file of GSM database setting'\
+                                           '(default ./dbconfig.cfg)')
+parser.add_argument('--conf', "-c", help='config file of input params'\
+                                         '(default ./config.cfg)')
+parser.add_argument('--version', "-v", action='version', version='%(prog)s 2.1.3')
+
+args = parser.parse_args()
+
+dbconf = args.dbconf
+conf = args.conf
+
+if dbconf is None:
+    dbconf = './dbconfig.cfg'
+if conf is None:
+    conf = './config.cfg'
+
+if not os.path.isfile(dbconf):
+    raise GSMException('No valid dbconfig file is specified.')
+if not os.path.isfile(conf):
+    raise GSMException('No valid config file is specified.')
+
+dbcfg = ConfigParser.ConfigParser(allow_no_value=True)
+dbcfg.read(dbconf)
+cfg = ConfigParser.ConfigParser(allow_no_value=True)
+cfg.read(conf)
+
+basecat = cfg.get("gsmparams", "basecat")
+cutoff = cfg.getfloat("gsmparams", "fluxCutoff")
+if basecat == 'VLSS':
+    if cutoff is None:
+        cutoff = 4.0
+elif basecat == 'TGSS':
+    if cutoff is None:
+        cutoff = 0.3
+else:
+    raise GSMException("Basecat '%s' is not valid." % (basecat))
+
+theta = cfg.getfloat("gsmparams", "assocTheta")
+if theta is None:
+    theta = 0.00278
+storespectraplots = cfg.getboolean("gsmparams", "storespectraplots")
+
+try:
+    conn = connect(hostname = dbcfg.get("database", "host")
+                  ,database = dbcfg.get("database", "dbname")
+                  ,username = dbcfg.get("database", "uname")
+                  ,password = dbcfg.get("database", "pword")
+                  ,port = dbcfg.get("database", "port")
+                  )
+    gu.expected_fluxes_in_fov(conn
+                             ,basecat
+                             ,cfg.getfloat("gsmparams", "RA")
+                             ,cfg.getfloat("gsmparams", "DEC")
+                             ,cfg.getfloat("gsmparams", "radius")
+                             ,theta
+                             ,cfg.get("gsmparams", "outfile")
+                             ,cutoff
+                             ,cfg.get("gsmparams", "patchname")
+                             ,storespectraplots
+                             ,cfg.getfloat("gsmparams", "deRuiter_radius")
+                             )
+except DBError, e:
+    raise
+
