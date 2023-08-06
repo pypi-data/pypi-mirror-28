@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module logging &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Inmanta modules" href="../modules.html"/>
+        <link rel="next" title="Module mongodb" href="mongodb.html"/>
+        <link rel="prev" title="Module ip" href="ip.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Inmanta Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands.html">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">Inmanta API reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html">Inmanta modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ansible.html">Module ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apache.html">Module apache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apt.html">Module apt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aws.html">Module aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bind.html">Module bind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collectd.html">Module collectd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dns.html">Module dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docker.html">Module docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drupal.html">Module drupal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exec.html">Module exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="graphite.html">Module graphite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip.html">Module ip</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module logging</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#entities">Entities</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mongodb.html">Module mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="monitoring.html">Module monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mysql.html">Module mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="net.html">Module net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openstack.html">Module openstack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openvswitch.html">Module openvswitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="param.html">Module param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="php.html">Module php</a></li>
+<li class="toctree-l3"><a class="reference internal" href="platform.html">Module platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="redhat.html">Module redhat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssh.html">Module ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="std.html">Module std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu.html">Module ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">Module user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="varnish.html">Module varnish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html">Module web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="yum.html">Module yum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Inmanta Reference</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Inmanta modules</a> &raquo;</li>
+        
+      <li>Module logging</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-logging">
+<h1>Module logging<a class="headerlink" href="#module-logging" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li>License: Apache 2.0</li>
+<li>Version: 0.4.1</li>
+<li>Author: Inmanta &lt;<a class="reference external" href="mailto:code&#37;&#52;&#48;inmanta&#46;com">code<span>&#64;</span>inmanta<span>&#46;</span>com</a>&gt;</li>
+<li>Upstream project: <a class="reference external" href="https://github.com/inmanta/logging.git">https://github.com/inmanta/logging.git</a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="entities">
+<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<dl class="entity">
+<dt id="entity-logging::LogDir">
+<em class="property">entity </em><code class="descclassname">logging::LogDir</code><a class="headerlink" href="#entity-logging::LogDir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>Models a log file in the configuration model</p>
+<dl class="attribute">
+<dt id="attribute-logging::LogDir.type">
+<em class="property">attribute </em>string <code class="descclassname">type</code>=''<a class="headerlink" href="#attribute-logging::LogDir.type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-logging::LogDir.path">
+<em class="property">attribute </em>string <code class="descclassname">path</code><a class="headerlink" href="#attribute-logging::LogDir.path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-logging::LogDir.tag">
+<em class="property">attribute </em>string <code class="descclassname">tag</code>=''<a class="headerlink" href="#attribute-logging::LogDir.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-logging::LogDir.priority">
+<em class="property">attribute </em>string <code class="descclassname">priority</code><a class="headerlink" href="#attribute-logging::LogDir.priority" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-logging::LogDir.matches">
+<em class="property">attribute </em>string <code class="descclassname">matches</code>='.*\.log'<a class="headerlink" href="#attribute-logging::LogDir.matches" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-logging::LogDir.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-logging::LogDir.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-logging::LogDir.host">
+<em class="property">relation </em>std::Host <code class="descclassname">host</code> [1]<a class="headerlink" href="#relation-logging::LogDir.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <code class="xref inmanta inmanta-relation docutils literal"><span class="pre">std::Host.log_dirs</span> <span class="pre">[0:*]</span></code></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-logging::LogFile">
+<em class="property">entity </em><code class="descclassname">logging::LogFile</code><a class="headerlink" href="#entity-logging::LogFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>Models a log file in the configuration model</p>
+<dl class="attribute">
+<dt id="attribute-logging::LogFile.type">
+<em class="property">attribute </em>string <code class="descclassname">type</code>=''<a class="headerlink" href="#attribute-logging::LogFile.type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-logging::LogFile.path">
+<em class="property">attribute </em>string <code class="descclassname">path</code><a class="headerlink" href="#attribute-logging::LogFile.path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-logging::LogFile.tag">
+<em class="property">attribute </em>string <code class="descclassname">tag</code>=''<a class="headerlink" href="#attribute-logging::LogFile.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-logging::LogFile.host">
+<em class="property">relation </em>std::Host <code class="descclassname">host</code> [1]<a class="headerlink" href="#relation-logging::LogFile.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <code class="xref inmanta inmanta-relation docutils literal"><span class="pre">std::Host.log_files</span> <span class="pre">[0:*]</span></code></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="mongodb.html" class="btn btn-neutral float-right" title="Module mongodb" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="ip.html" class="btn btn-neutral" title="Module ip" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

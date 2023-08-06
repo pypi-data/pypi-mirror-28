@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module drupal &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Inmanta modules" href="../modules.html"/>
+        <link rel="next" title="Module exec" href="exec.html"/>
+        <link rel="prev" title="Module docker" href="docker.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Inmanta Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands.html">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">Inmanta API reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html">Inmanta modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ansible.html">Module ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apache.html">Module apache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apt.html">Module apt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aws.html">Module aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bind.html">Module bind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collectd.html">Module collectd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dns.html">Module dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docker.html">Module docker</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module drupal</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#entities">Entities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#implementations">Implementations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="exec.html">Module exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="graphite.html">Module graphite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip.html">Module ip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Module logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mongodb.html">Module mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="monitoring.html">Module monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mysql.html">Module mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="net.html">Module net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openstack.html">Module openstack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openvswitch.html">Module openvswitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="param.html">Module param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="php.html">Module php</a></li>
+<li class="toctree-l3"><a class="reference internal" href="platform.html">Module platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="redhat.html">Module redhat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssh.html">Module ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="std.html">Module std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu.html">Module ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">Module user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="varnish.html">Module varnish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html">Module web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="yum.html">Module yum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Inmanta Reference</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Inmanta modules</a> &raquo;</li>
+        
+      <li>Module drupal</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-drupal">
+<h1>Module drupal<a class="headerlink" href="#module-drupal" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li>License: Apache 2.0</li>
+<li>Version: 0.7.0</li>
+<li>Author: Inmanta &lt;<a class="reference external" href="mailto:code&#37;&#52;&#48;inmanta&#46;com">code<span>&#64;</span>inmanta<span>&#46;</span>com</a>&gt;</li>
+<li>Upstream project: <a class="reference external" href="https://github.com/inmanta/drupal.git">https://github.com/inmanta/drupal.git</a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="entities">
+<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<dl class="entity">
+<dt id="entity-drupal::Application">
+<em class="property">entity </em><code class="descclassname">drupal::Application</code><a class="headerlink" href="#entity-drupal::Application" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="php.html#entity-php::Application" title="php::Application entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">php::Application</span></code></a></p>
+<p>A single drupal application.</p>
+<dl class="attribute">
+<dt id="attribute-drupal::Application.run_install">
+<em class="property">attribute </em>bool <code class="descclassname">run_install</code>=True<a class="headerlink" href="#attribute-drupal::Application.run_install" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-drupal::Application.admin_password">
+<em class="property">attribute </em>string <code class="descclassname">admin_password</code><a class="headerlink" href="#attribute-drupal::Application.admin_password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-drupal::Application.admin_user">
+<em class="property">attribute </em>string <code class="descclassname">admin_user</code><a class="headerlink" href="#attribute-drupal::Application.admin_user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-drupal::Application.site_name">
+<em class="property">attribute </em>string <code class="descclassname">site_name</code><a class="headerlink" href="#attribute-drupal::Application.site_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-drupal::Application.admin_email">
+<em class="property">attribute </em>string <code class="descclassname">admin_email</code><a class="headerlink" href="#attribute-drupal::Application.admin_email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-drupal::Application._exec">
+<em class="property">relation </em>exec::Run <code class="descclassname">_exec</code> [1]<a class="headerlink" href="#relation-drupal::Application._exec" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-drupal::Application.database">
+<em class="property">relation </em>mysql::Database <code class="descclassname">database</code> [1]<a class="headerlink" href="#relation-drupal::Application.database" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-drupal::installer" title="drupal::installer implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">drupal::installer</span></code></a></li>
+<li><a class="reference internal" href="#implementation-drupal::noInstaller" title="drupal::noInstaller implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">drupal::noInstaller</span></code></a></li>
+<li><a class="reference internal" href="#implementation-drupal::drupalSiteRPM" title="drupal::drupalSiteRPM implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">drupal::drupalSiteRPM</span></code></a></li>
+<li><a class="reference internal" href="#implementation-drupal::drupalSiteDEB" title="drupal::drupalSiteDEB implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">drupal::drupalSiteDEB</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-drupal::installer" title="drupal::installer implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">drupal::installer</span></code></a>
+constraint <code class="docutils literal"><span class="pre">run_install</span></code></li>
+<li><a class="reference internal" href="#implementation-drupal::noInstaller" title="drupal::noInstaller implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">drupal::noInstaller</span></code></a>
+constraint <code class="docutils literal"><span class="pre">(not</span> <span class="pre">run_install)</span></code></li>
+<li><a class="reference internal" href="#implementation-drupal::drupalSiteRPM" title="drupal::drupalSiteRPM implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">drupal::drupalSiteRPM</span></code></a>, <a class="reference internal" href="php.html#implementation-php::phpApacheRPM" title="php::phpApacheRPM implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">php::phpApacheRPM</span></code></a>, <a class="reference internal" href="apache.html#implementation-apache::appImplRPM" title="apache::appImplRPM implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">apache::appImplRPM</span></code></a>
+constraint <code class="docutils literal"><span class="pre">(std::familyof(container.host.os,'rhel')</span> <span class="pre">or</span> <span class="pre">std::familyof(container.host.os,'fedora'))</span></code></li>
+<li><a class="reference internal" href="#implementation-drupal::drupalSiteDEB" title="drupal::drupalSiteDEB implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">drupal::drupalSiteDEB</span></code></a>, <a class="reference internal" href="php.html#implementation-php::phpApacheDEB" title="php::phpApacheDEB implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">php::phpApacheDEB</span></code></a>, <a class="reference internal" href="apache.html#implementation-apache::appImplDEB" title="apache::appImplDEB implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">apache::appImplDEB</span></code></a>
+constraint <code class="docutils literal"><span class="pre">std::familyof(container.host.os,'ubuntu')</span></code></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="implementations">
+<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
+<dl class="implementation">
+<dt id="implementation-drupal::drupalSiteDEB">
+<em class="property">implementation </em><code class="descclassname">drupal::drupalSiteDEB</code><a class="headerlink" href="#implementation-drupal::drupalSiteDEB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-drupal::drupalSiteRPM">
+<em class="property">implementation </em><code class="descclassname">drupal::drupalSiteRPM</code><a class="headerlink" href="#implementation-drupal::drupalSiteRPM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-drupal::installer">
+<em class="property">implementation </em><code class="descclassname">drupal::installer</code><a class="headerlink" href="#implementation-drupal::installer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-drupal::noInstaller">
+<em class="property">implementation </em><code class="descclassname">drupal::noInstaller</code><a class="headerlink" href="#implementation-drupal::noInstaller" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="exec.html" class="btn btn-neutral float-right" title="Module exec" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="docker.html" class="btn btn-neutral" title="Module docker" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,810 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>inmanta.resources &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">Inmanta Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>inmanta.resources</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for inmanta.resources</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Copyright 2017 Inmanta</span>
+
+<span class="sd">    Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span>
+<span class="sd">    you may not use this file except in compliance with the License.</span>
+<span class="sd">    You may obtain a copy of the License at</span>
+
+<span class="sd">        http://www.apache.org/licenses/LICENSE-2.0</span>
+
+<span class="sd">    Unless required by applicable law or agreed to in writing, software</span>
+<span class="sd">    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="sd">    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="sd">    See the License for the specific language governing permissions and</span>
+<span class="sd">    limitations under the License.</span>
+
+<span class="sd">    Contact: code@inmanta.com</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="kn">from</span> <span class="nn">inmanta.execute</span> <span class="k">import</span> <span class="n">util</span>
+<span class="kn">from</span> <span class="nn">inmanta.execute.proxy</span> <span class="k">import</span> <span class="n">DynamicProxy</span><span class="p">,</span> <span class="n">UnknownException</span><span class="p">,</span> <span class="n">UnsetException</span><span class="p">,</span> <span class="n">DictProxy</span><span class="p">,</span> <span class="n">SequenceProxy</span>
+<span class="kn">from</span> <span class="nn">inmanta.module</span> <span class="k">import</span> <span class="n">Project</span>
+
+
+<span class="n">LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="resource"><a class="viewcode-back" href="../../reference/api.html#inmanta.resources.resource">[docs]</a><span class="k">class</span> <span class="nc">resource</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>  <span class="c1"># noqa: H801</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A decorator that registers a new resource. The decorator must be applied to classes that inherit from</span>
+<span class="sd">        :class:`~inmanta.resources.Resource`</span>
+
+<span class="sd">        :param name: The name of the entity in the configuration model it creates a resources from. For example</span>
+<span class="sd">                     :inmanta:entity:`std::File`</span>
+<span class="sd">        :param id_attribute: The attribute of `this` resource that uniquely identifies a resource on an agent. This attribute</span>
+<span class="sd">                             can be mapped.</span>
+<span class="sd">        :param agent: This string indicates how the agent of this resource is determined. This string points to an attribute,</span>
+<span class="sd">                      but it can navigate relations (this value cannot be mapped). For example, the agent argument could be</span>
+<span class="sd">                      ``host.name``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_resources</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">id_attribute</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">agent</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cls_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;agent&quot;</span><span class="p">:</span> <span class="n">agent</span><span class="p">,</span> <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">id_attribute</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The wrapping</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cls_name</span> <span class="ow">in</span> <span class="n">resource</span><span class="o">.</span><span class="n">_resources</span><span class="p">:</span>
+            <span class="n">LOGGER</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Reloading module </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cls_name</span><span class="p">)</span>
+            <span class="k">del</span> <span class="n">resource</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_cls_name</span><span class="p">]</span>
+
+        <span class="n">resource</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_cls_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_entity_resources</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns a list of entity types for which a resource has been registered</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the class definition for the given entity.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_resources</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_resources</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">sources</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get all source files that define resources</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">resource_to_sources</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">resource</span><span class="p">,</span> <span class="n">_options</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_resources</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">sources</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">resource_to_sources</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">sources</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getsourcefile</span><span class="p">(</span><span class="n">resource</span><span class="p">)</span>
+
+            <span class="n">source_code</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fd</span><span class="p">:</span>
+                <span class="n">source_code</span> <span class="o">=</span> <span class="n">fd</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+            <span class="n">sha1sum</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;sha1&quot;</span><span class="p">)</span>
+            <span class="n">sha1sum</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">source_code</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+
+            <span class="n">hv</span> <span class="o">=</span> <span class="n">sha1sum</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">hv</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">sources</span><span class="p">:</span>
+                <span class="n">module_name</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="vm">__module__</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">req</span> <span class="o">=</span> <span class="n">Project</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="n">module_name</span><span class="p">]</span><span class="o">.</span><span class="n">get_python_requirements_as_list</span><span class="p">()</span>
+                <span class="n">sources</span><span class="p">[</span><span class="n">hv</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">resource</span><span class="o">.</span><span class="vm">__module__</span><span class="p">,</span> <span class="n">source_code</span><span class="p">,</span> <span class="n">req</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">resource_to_sources</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_resources</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+
+<span class="k">class</span> <span class="nc">ResourceNotFoundExcpetion</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This exception is thrown when a resource is not found</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="IgnoreResourceException"><a class="viewcode-back" href="../../reference/api.html#inmanta.resources.IgnoreResourceException">[docs]</a><span class="k">class</span> <span class="nc">IgnoreResourceException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Throw this exception when a resource should not be included by the exported.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<span class="k">def</span> <span class="nf">to_id</span><span class="p">(</span><span class="n">entity</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert an entity from the model to its resource id</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">entity_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">entity</span><span class="o">.</span><span class="n">_type</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">cls_name</span> <span class="ow">in</span> <span class="p">[</span><span class="n">entity_name</span><span class="p">]</span> <span class="o">+</span> <span class="n">entity</span><span class="o">.</span><span class="n">_type</span><span class="p">()</span><span class="o">.</span><span class="n">get_all_parent_names</span><span class="p">():</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">cls_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">obj_id</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">object_to_id</span><span class="p">(</span><span class="n">entity</span><span class="p">,</span> <span class="n">cls_name</span><span class="p">,</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;agent&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj_id</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">class</span> <span class="nc">ResourceMeta</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_get_parent_fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">bases</span><span class="p">):</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">base</span> <span class="ow">in</span> <span class="n">bases</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;fields&quot;</span> <span class="ow">in</span> <span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;fields attribute of </span><span class="si">%s</span><span class="s2"> should be a tuple or list&quot;</span> <span class="o">%</span> <span class="n">base</span><span class="p">)</span>
+
+                <span class="n">fields</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">])</span>
+
+            <span class="n">fields</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_get_parent_fields</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="vm">__bases__</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">fields</span>
+
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">dct</span><span class="p">):</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_parent_fields</span><span class="p">(</span><span class="n">bases</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;fields&quot;</span> <span class="ow">in</span> <span class="n">dct</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dct</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">],</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;fields attribute of </span><span class="si">%s</span><span class="s2"> should be a tuple or list&quot;</span> <span class="o">%</span> <span class="n">class_name</span><span class="p">)</span>
+
+            <span class="n">fields</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">dct</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">])</span>
+
+        <span class="n">dct</span><span class="p">[</span><span class="s2">&quot;fields&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">fields</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">class_name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">dct</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">serialize_proxy</span><span class="p">(</span><span class="n">d</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">DictProxy</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">serialize_proxy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">SequenceProxy</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">serialize_proxy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">d</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">d</span>
+
+
+<div class="viewcode-block" id="Resource"><a class="viewcode-back" href="../../reference/api.html#inmanta.resources.Resource">[docs]</a><span class="k">class</span> <span class="nc">Resource</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ResourceMeta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plugins should inherit resource from this class so a resource from a model can be serialized and deserialized.</span>
+
+<span class="sd">        Such as class is registered when the :func:`~inmanta.resources.resource` decorator is used. Each class needs to indicate</span>
+<span class="sd">        the fields the resource will have with a class field named &quot;fields&quot;. A metaclass merges all fields lists from the class</span>
+<span class="sd">        itself and all superclasses. If a field it not available directly in the model object the serializer will look for</span>
+<span class="sd">        static methods in the class with the name &quot;get_$fieldname&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;send_event&quot;</span><span class="p">,)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_send_event</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">send_event</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">convert_requires</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">resources</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">ignored_resources</span><span class="p">:</span> <span class="nb">set</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Convert all requires</span>
+
+<span class="sd">            :param resources A dict with a mapping from model objects to resource objects</span>
+<span class="sd">            :param ignored_resources A set of model objects that have been ignored (and not converted to resources)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">resources</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">final_requires</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="n">initial_requires</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">res</span><span class="o">.</span><span class="n">requires</span><span class="p">]</span>
+
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">initial_requires</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">resources</span><span class="p">:</span>
+                    <span class="n">final_requires</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">resources</span><span class="p">[</span><span class="n">r</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">final_requires</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_requires</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">initial_requires</span><span class="p">:</span>
+                    <span class="c1"># do not warn about resources that either contain unknowns or are ignored</span>
+                    <span class="k">if</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">ignored_resources</span><span class="p">:</span>
+                        <span class="n">initial_requires</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_requires</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">LOGGER</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;The resource </span><span class="si">%s</span><span class="s2"> had requirements before flattening, but not after flattening.&quot;</span>
+                                   <span class="s2">&quot; Initial set was </span><span class="si">%s</span><span class="s2">. Perhaps provides relation is not wired through correctly?&quot;</span><span class="p">,</span>
+                                   <span class="n">res</span><span class="p">,</span> <span class="n">initial_requires</span><span class="p">)</span>
+
+            <span class="n">res</span><span class="o">.</span><span class="n">requires</span> <span class="o">=</span> <span class="n">final_requires</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">object_to_id</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">model_object</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">agent_attribute</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Convert the given object to a textual id</span>
+
+<span class="sd">        :param model_object The object to convert to an id</span>
+<span class="sd">        :param entity_name The entity type</span>
+<span class="sd">        :param attribute_name The name of the attribute that uniquely identifies the entity</span>
+<span class="sd">        :param agent_attribute The &quot;path&quot; to the attribute that defines the agent</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># first get the agent attribute</span>
+        <span class="n">path_elements</span> <span class="o">=</span> <span class="n">agent_attribute</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+        <span class="n">agent_value</span> <span class="o">=</span> <span class="n">model_object</span>
+        <span class="k">for</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">path_elements</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># TODO cleanup this hack</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">agent_value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">agent_value</span> <span class="o">=</span> <span class="n">agent_value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="n">agent_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">agent_value</span><span class="p">,</span> <span class="n">el</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="n">UnsetException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span>
+            <span class="k">except</span> <span class="n">UnknownException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">e</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Unable to get the name of agent </span><span class="si">%s</span><span class="s2"> belongs to. In path </span><span class="si">%s</span><span class="s2">, &#39;</span><span class="si">%s</span><span class="s2">&#39; does not exist&quot;</span>
+                                <span class="o">%</span> <span class="p">(</span><span class="n">model_object</span><span class="p">,</span> <span class="n">agent_attribute</span><span class="p">,</span> <span class="n">el</span><span class="p">))</span>
+
+        <span class="n">attribute_value</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">map_field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">model_object</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attribute_value</span><span class="p">,</span> <span class="n">util</span><span class="o">.</span><span class="n">Unknown</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">UnknownException</span><span class="p">(</span><span class="n">attribute_value</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Id</span><span class="p">(</span><span class="n">entity_name</span><span class="p">,</span> <span class="n">agent_value</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">map_field</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">exporter</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">model_object</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;get_&quot;</span> <span class="o">+</span> <span class="n">field_name</span><span class="p">):</span>
+                    <span class="n">mthd</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;get_&quot;</span> <span class="o">+</span> <span class="n">field_name</span><span class="p">)</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">mthd</span><span class="p">(</span><span class="n">exporter</span><span class="p">,</span> <span class="n">DynamicProxy</span><span class="o">.</span><span class="n">return_value</span><span class="p">(</span><span class="n">model_object</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;map&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">map</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">map</span><span class="p">[</span><span class="n">field_name</span><span class="p">](</span><span class="n">exporter</span><span class="p">,</span> <span class="n">DynamicProxy</span><span class="o">.</span><span class="n">return_value</span><span class="p">(</span><span class="n">model_object</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">model_object</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+
+                <span class="c1"># copy dict and sequence proxy before passing it to handler code</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="n">DynamicProxy</span><span class="p">,</span> <span class="n">SequenceProxy</span><span class="p">)):</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">serialize_proxy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+                <span class="k">return</span> <span class="n">value</span>
+            <span class="k">except</span> <span class="n">UnknownException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">unknown</span>
+
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Attribute </span><span class="si">%s</span><span class="s2"> does not exist on entity of type </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">))</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">create_from_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">exporter</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">,</span> <span class="n">model_object</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Build a resource from a given configuration model entity</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">options</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">entity_name</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;No resource class registered for entity </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">entity_name</span><span class="p">)</span>
+
+        <span class="c1"># build the id of the object</span>
+        <span class="n">obj_id</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">object_to_id</span><span class="p">(</span><span class="n">model_object</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">,</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;agent&quot;</span><span class="p">])</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">obj_id</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">map_field</span><span class="p">(</span><span class="n">exporter</span><span class="p">,</span> <span class="n">entity_name</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">model_object</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="n">obj</span><span class="o">.</span><span class="n">requires</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">model_object</span><span class="p">,</span> <span class="s2">&quot;requires&quot;</span><span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model_object</span>
+
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">deserialize</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">obj_map</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Deserialize the resource from the given dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">obj_id</span> <span class="o">=</span> <span class="n">Id</span><span class="o">.</span><span class="n">parse_id</span><span class="p">(</span><span class="n">obj_map</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">_options</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="n">obj_id</span><span class="o">.</span><span class="n">entity_type</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;No resource class registered for entity </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">obj_id</span><span class="o">.</span><span class="n">entity_type</span><span class="p">)</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">obj_id</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">obj_map</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">obj_map</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Resource with id </span><span class="si">%s</span><span class="s2"> does not have field </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj_map</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span> <span class="n">field</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">require</span> <span class="ow">in</span> <span class="n">obj_map</span><span class="p">[</span><span class="s2">&quot;requires&quot;</span><span class="p">]:</span>
+            <span class="n">obj</span><span class="o">.</span><span class="n">requires</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Id</span><span class="o">.</span><span class="n">parse_id</span><span class="p">(</span><span class="n">require</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">_id</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requires</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requires_queue</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unknowns</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_reload</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">require_failed</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;fields&quot;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;A resource should have a list of fields&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Set the version of this resource</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">version</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">version</span>
+
+    <span class="k">def</span> <span class="nf">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">util</span><span class="o">.</span><span class="n">Unknown</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unknowns</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">add_require</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rid</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This resource required resource with id $rid to be at version $version</span>
+<span class="sd">            or higher.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requires_queue</span><span class="p">[</span><span class="n">rid</span><span class="p">]</span> <span class="o">=</span> <span class="n">version</span>
+
+    <span class="k">def</span> <span class="nf">update_require</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rid</span><span class="p">,</span> <span class="n">version</span><span class="p">,</span> <span class="n">failed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This method is called when a resource with id $rid is updated to</span>
+<span class="sd">            $version</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">failed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">require_failed</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">rid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">requires_queue</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">requires_queue</span><span class="p">[</span><span class="n">rid</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">version</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">requires_queue</span><span class="p">[</span><span class="n">rid</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">requires_queue</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Resource.clone"><a class="viewcode-back" href="../../reference/api.html#inmanta.resources.Resource.clone">[docs]</a>    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;Resource&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Create a clone of this resource. The given kwargs can be used to override attributes.</span>
+
+<span class="sd">            :return: The cloned resource</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">Resource</span><span class="o">.</span><span class="n">deserialize</span><span class="p">(</span><span class="n">Resource</span><span class="o">.</span><span class="n">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">res</span></div>
+
+    <span class="k">def</span> <span class="nf">serialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Serialize this resource to its dictionary representation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dictionary</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
+            <span class="n">dictionary</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+
+        <span class="n">dictionary</span><span class="p">[</span><span class="s2">&quot;requires&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">requires</span><span class="p">]</span>
+        <span class="n">dictionary</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
+        <span class="n">dictionary</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dictionary</span>
+
+    <span class="k">def</span> <span class="nf">is_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">_get_instance</span><span class="p">()</span><span class="o">.</span><span class="n">get_type</span><span class="p">())</span> <span class="o">==</span> <span class="n">type_name</span></div>
+
+
+<div class="viewcode-block" id="PurgeableResource"><a class="viewcode-back" href="../../reference/api.html#inmanta.resources.PurgeableResource">[docs]</a><span class="k">class</span> <span class="nc">PurgeableResource</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        See :inmanta:entity:`std::PurgeableResource` for more information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;purged&quot;</span><span class="p">,</span> <span class="s2">&quot;purge_on_delete&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ManagedResource"><a class="viewcode-back" href="../../reference/api.html#inmanta.resources.ManagedResource">[docs]</a><span class="k">class</span> <span class="nc">ManagedResource</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        See :inmanta:entity:`std::ManagedResource` for more information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;managed&quot;</span><span class="p">,)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_managed</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">obj</span><span class="o">.</span><span class="n">managed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">IgnoreResourceException</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">managed</span></div>
+
+
+<span class="k">class</span> <span class="nc">Id</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A unique id that idenfies a resource that is managed by an agent</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity_type</span><span class="p">,</span> <span class="n">agent_name</span><span class="p">,</span> <span class="n">attribute</span><span class="p">,</span> <span class="n">attribute_value</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entity_type</span> <span class="o">=</span> <span class="n">entity_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_agent_name</span> <span class="o">=</span> <span class="n">agent_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_attribute</span> <span class="o">=</span> <span class="n">attribute</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_value</span> <span class="o">=</span> <span class="n">attribute_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="n">version</span>
+
+    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;entity_type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity_type</span><span class="p">,</span>
+                <span class="s2">&quot;agent_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_name</span><span class="p">,</span>
+                <span class="s2">&quot;attribute&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute</span><span class="p">,</span>
+                <span class="s2">&quot;attribute_value&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_value</span><span class="p">,</span>
+                <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
+                <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">get_entity_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity_type</span>
+
+    <span class="k">def</span> <span class="nf">get_agent_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_name</span>
+
+    <span class="k">def</span> <span class="nf">get_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute</span>
+
+    <span class="k">def</span> <span class="nf">get_attribute_value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_value</span>
+
+    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version</span>
+
+    <span class="k">def</span> <span class="nf">set_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">version</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;can&#39;t set attribute version&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">=</span> <span class="n">version</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%(type)s</span><span class="s2">[</span><span class="si">%(agent)s</span><span class="s2">,</span><span class="si">%(attribute)s</span><span class="s2">=</span><span class="si">%(value)s</span><span class="s2">],v=</span><span class="si">%(version)s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity_type</span><span class="p">,</span>
+                <span class="s2">&quot;agent&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_name</span><span class="p">,</span>
+                <span class="s2">&quot;attribute&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_value</span><span class="p">,</span>
+                <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_version</span><span class="p">,</span>
+            <span class="p">}</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">resource_str</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">resource_str</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%(type)s</span><span class="s2">[</span><span class="si">%(agent)s</span><span class="s2">,</span><span class="si">%(attribute)s</span><span class="s2">=</span><span class="si">%(value)s</span><span class="s2">]&quot;</span> <span class="o">%</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entity_type</span><span class="p">,</span>
+            <span class="s2">&quot;agent&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_agent_name</span><span class="p">,</span>
+            <span class="s2">&quot;attribute&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute</span><span class="p">,</span>
+            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attribute_value</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Create an instance of this class and set the identifying attribute already</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">get_class</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">entity_type</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">obj</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">parse_id</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">resource_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Parse the resource id and return the type, the hostname and the</span>
+<span class="sd">            resource identifier.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;^(?P&lt;id&gt;(?P&lt;type&gt;(?P&lt;ns&gt;[\w-]+::)+(?P&lt;class&gt;[\w-]+))\[(?P&lt;hostname&gt;[^,]+),&quot;</span> <span class="o">+</span>
+                           <span class="s2">&quot;(?P&lt;attr&gt;[^=]+)=(?P&lt;value&gt;[^\]]+)\])(,v=(?P&lt;version&gt;[0-9]+))?$&quot;</span><span class="p">,</span> <span class="n">resource_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Invalid id for resource </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">resource_id</span><span class="p">)</span>
+
+        <span class="n">version</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;version&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">version</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">version</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">parts</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;hostname&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;hostname&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;attr&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;attr&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;value&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="n">id_obj</span> <span class="o">=</span> <span class="n">Id</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="s2">&quot;attr&quot;</span><span class="p">],</span> <span class="n">parts</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">],</span> <span class="n">version</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">id_obj</span>
+
+    <span class="n">entity_type</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_entity_type</span><span class="p">)</span>
+    <span class="n">agent_name</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_agent_name</span><span class="p">)</span>
+    <span class="n">attribute</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_attribute</span><span class="p">)</span>
+    <span class="n">attribute_value</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_attribute_value</span><span class="p">)</span>
+    <span class="n">version</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_version</span><span class="p">,</span> <span class="n">set_version</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">HostNotFoundException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This exception is raise when the deployment agent cannot access a host to manage a resource (Use mainly with remote io)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hostname</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">error</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">hostname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error</span> <span class="o">=</span> <span class="n">error</span>
+
+    <span class="k">def</span> <span class="nf">to_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">inmanta.data</span> <span class="k">import</span> <span class="n">ResourceAction</span>
+        <span class="n">ra</span> <span class="o">=</span> <span class="n">ResourceAction</span><span class="p">()</span>  <span class="c1"># @UndefinedVariable</span>
+        <span class="n">ra</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;Failed to access host </span><span class="si">%s</span><span class="s2"> as user </span><span class="si">%s</span><span class="s2"> over ssh.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">ra</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;host&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">ra</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

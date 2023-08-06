@@ -1,0 +1,649 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Language Reference &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="index.html"/>
+        <link rel="next" title="Guides" href="guides.html"/>
+        <link rel="prev" title="Architecture" href="architecture.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="index.html">
+
+
+
+  
+    <img src="_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Language Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#modules">Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#variables">Variables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#literals-values">Literals values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#primitive-types">Primitive types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conditions">Conditions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#function-calls-plugins">Function calls / Plugins</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#entities">Entities</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#relations">Relations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#instantiation">Instantiation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#refinements">Refinements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#indexes-and-queries">Indexes and queries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#for-loop">For loop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transformations">Transformations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#string-interpolation">String interpolation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#templates">Templates</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#plug-ins">Plug-ins</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Inmanta Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Language Reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="language-reference">
+<h1>Language Reference<a class="headerlink" href="#language-reference" title="Permalink to this headline">¶</a></h1>
+<p>The Inmanta language is a declarative language to model the configuration of an infrastructure.</p>
+<p>The evaluation order of statements is determined by their dependencies on other statements and not based on the lexical order. i.e. The code is not necessarily executed top to bottom.</p>
+<div class="section" id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h2>
+<p>The source is organized in modules. Each module is a git repository with the following structure:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">module</span><span class="o">/</span>
+<span class="o">+--</span> <span class="n">files</span><span class="o">/</span>
+<span class="o">+--</span> <span class="n">model</span><span class="o">/</span>
+<span class="o">|</span>  <span class="o">+--</span> <span class="n">_init</span><span class="o">.</span><span class="n">cf</span>
+<span class="o">+--</span> <span class="n">plugins</span><span class="o">/</span>
+<span class="o">+--</span> <span class="n">templates</span><span class="o">/</span>
+<span class="o">+--</span> <span class="n">module</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">module.yaml</span></code> file, the <code class="docutils literal"><span class="pre">model</span></code> directory and the <code class="docutils literal"><span class="pre">model/_init.cf</span></code> are required.</p>
+<p>For example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">test</span><span class="o">/</span>
+<span class="o">+--</span> <span class="n">files</span><span class="o">/</span>
+<span class="o">+--</span> <span class="n">model</span><span class="o">/</span>
+<span class="o">|</span>  <span class="o">+--</span> <span class="n">_init</span><span class="o">.</span><span class="n">cf</span>
+<span class="o">|</span>  <span class="o">+--</span> <span class="n">services</span><span class="o">.</span><span class="n">cf</span>
+<span class="o">|</span>  <span class="o">+--</span> <span class="n">policy</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+--</span> <span class="n">_init</span><span class="o">.</span><span class="n">cf</span>
+<span class="o">|</span>  <span class="o">|</span>  <span class="o">+--</span> <span class="n">other</span><span class="o">.</span><span class="n">cf</span>
+<span class="o">+--</span> <span class="n">plugins</span><span class="o">/</span>
+<span class="o">+--</span> <span class="n">templates</span><span class="o">/</span>
+<span class="o">+--</span> <span class="n">module</span><span class="o">.</span><span class="n">yaml</span>
+</pre></div>
+</div>
+<p>The model code is in the <code class="docutils literal"><span class="pre">.cf</span></code> files. Each file forms a namespace. The namespaces for the files are the following.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="55%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">File</th>
+<th class="head">Namespace</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>test/model/_init.cf</td>
+<td>test</td>
+</tr>
+<tr class="row-odd"><td>test/model/services.cf</td>
+<td>test::services</td>
+</tr>
+<tr class="row-even"><td>test/model/policy/_init.cf</td>
+<td>test::policy</td>
+</tr>
+<tr class="row-odd"><td>test/model/policy/other.cf</td>
+<td>test::policy::other</td>
+</tr>
+</tbody>
+</table>
+<p>Modules are only loaded when they are imported by a loaded module or the <code class="docutils literal"><span class="pre">main.cf</span></code> file of the project.</p>
+<p>To access members from another namespace, it must be imported into the current namespace.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">test</span><span class="p">::</span><span class="n">services</span>
+</pre></div>
+</div>
+<p>Imports can also define an alias, to shorten long names:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">test</span><span class="p">::</span><span class="n">services</span> <span class="k">as</span> <span class="n">services</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="variables">
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h2>
+<p>Variables can be defined in any lexical scope. They are visible in their defining scope and its children.
+A lexical scope is either a namespaces or a code block (area between <code class="docutils literal"><span class="pre">:</span></code> and <code class="docutils literal"><span class="pre">end</span></code>).</p>
+<p>Variable names must start with a lower case character and can consist of the characters: <code class="docutils literal"><span class="pre">a-zA-Z_0-9-</span></code></p>
+<p>A value can be assigned to a variable exactly once. The type of the variable is the type of the value.
+Assigning a value to the same variable twice will produce a compiler error, unless the values are identical.</p>
+<p>Variables from other modules can be referenced by prefixing them with the module name (or alias)</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="n">redhat</span><span class="w"></span>
+<span class="n">os</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redhat</span><span class="o">::</span><span class="n">fedora23</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="n">ubuntu</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">ubnt</span><span class="w"></span>
+<span class="n">os2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ubnt</span><span class="o">::</span><span class="n">ubuntu1204</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="literals-values">
+<h2>Literals values<a class="headerlink" href="#literals-values" title="Permalink to this headline">¶</a></h2>
+<p>Literal values can be assigned to variables</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="n">var1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="c1"># assign an integer, var1 contains now a number</span>
+<span class="n">var2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.14</span><span class="w"> </span><span class="c1"># assign a float, var2 also contains a number</span>
+<span class="n">var3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;This is a string&quot;</span><span class="w"> </span><span class="c1"># var3 contains a string</span>
+
+<span class="c1"># var 4 and 5 are both booleans</span>
+<span class="n">var4</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">true</span><span class="w"></span>
+<span class="n">var5</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="w"></span>
+
+<span class="c1"># var6 is a list of values</span>
+<span class="n">var6</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="s">&quot;fedora&quot;</span><span class="o">,</span><span class="w"> </span><span class="s">&quot;ubuntu&quot;</span><span class="o">,</span><span class="w"> </span><span class="s">&quot;rhel&quot;</span><span class="o">]</span><span class="w"></span>
+
+<span class="c1"># a dictionary with string keys and any type of values is also a primitive</span>
+<span class="n">var7</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{</span><span class="w"> </span><span class="s">&quot;foo&quot;</span><span class="o">:</span><span class="s">&quot;bar&quot;</span><span class="o">,</span><span class="w"> </span><span class="s">&quot;baz&quot;</span><span class="o">:</span><span class="w"> </span><span class="mi">1</span><span class="o">}</span><span class="w"></span>
+
+<span class="c1"># var8 contains the same value as var2</span>
+<span class="n">var8</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">var2</span><span class="w"></span>
+
+<span class="c1"># next assignment will not return an error because var1 already contains this value</span>
+<span class="n">var1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+
+<span class="c1"># next assignment would return an error because var1 already has a different value</span>
+<span class="c1">#var1 = &quot;test&quot;</span>
+
+<span class="c1">#ref to a variable from another namespace</span>
+<span class="k">import</span><span class="w"> </span><span class="n">ip</span><span class="o">::</span><span class="n">services</span><span class="w"></span>
+<span class="n">sshservice</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ip</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">ssh</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="primitive-types">
+<h2>Primitive types<a class="headerlink" href="#primitive-types" title="Permalink to this headline">¶</a></h2>
+<p>The basic primitive types are <code class="docutils literal"><span class="pre">string</span></code>, <code class="docutils literal"><span class="pre">number</span></code> or <code class="docutils literal"><span class="pre">bool</span></code>.</p>
+<p>Constrained primitive types can be derived from the basic primitive type with a typedef statement.
+Constrained primitive types add additional constraints to the basic primitive type with either a regex or a logical condition.
+The name of the constrained primitive type must not collide with the name of a variable or type in the same lexical scope.</p>
+<div class="highlight-antlr"><div class="highlight"><pre><span></span><span class="nl">typedef</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&#39;typedef&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="s">&#39;as&#39;</span><span class="w"> </span><span class="no">PRIMITIVE</span><span class="w"> </span><span class="s">&#39;matching&#39;</span><span class="w"> </span><span class="nv">condition</span><span class="o">|</span><span class="nv">regex</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For example</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="n">tcp_port</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nb">number</span><span class="w"> </span><span class="k">matching</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">self</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">65565</span><span class="w"></span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">mac_addr</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nb">string</span><span class="w"> </span><span class="k">matching</span><span class="w"> </span><span class="sr">/([0-9a-fA-F]{2})(:[0-9a-fA-F]{2}){5}$/</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Lists of primitive types are also primitive types: <code class="docutils literal"><span class="pre">string[]</span></code>, <code class="docutils literal"><span class="pre">number[]</span></code>, <code class="docutils literal"><span class="pre">bool[]</span></code> or <code class="docutils literal"><span class="pre">mac_addr[]</span></code></p>
+<p><code class="docutils literal"><span class="pre">dict</span></code> is the primitive type that represents a dictionary</p>
+</div>
+<div class="section" id="conditions">
+<h2>Conditions<a class="headerlink" href="#conditions" title="Permalink to this headline">¶</a></h2>
+<p>Conditions can have the following forms</p>
+<div class="highlight-antlr"><div class="highlight"><pre><span></span><span class="nl">condition</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s">&#39;(&#39;</span><span class="w"> </span><span class="nv">condition</span><span class="w"> </span><span class="s">&#39;)&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nv">condition</span><span class="w"> </span><span class="s">&#39;or&#39;</span><span class="w"> </span><span class="nv">condition</span><span class="w"></span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nv">condition</span><span class="w"> </span><span class="s">&#39;and&#39;</span><span class="w"> </span><span class="nv">condition</span><span class="w"></span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="s">&#39;not&#39;</span><span class="w"> </span><span class="nv">condition</span><span class="w"></span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nv">value</span><span class="w"> </span><span class="o">(</span><span class="s">&#39;&gt;&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">&#39;&gt;=&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">&#39;&lt;&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">&#39;&lt;=&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">&#39;==&#39;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="s">&#39;!=&#39;</span><span class="o">)</span><span class="w"> </span><span class="nv">value</span><span class="w"></span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nv">value</span><span class="w"> </span><span class="s">&#39;in&#39;</span><span class="w"> </span><span class="nv">value</span><span class="w"></span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="s">&#39;true&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="s">&#39;false&#39;</span><span class="w"></span>
+<span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="nv">functioncall</span><span class="w"></span>
+<span class="w">    </span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="function-calls-plugins">
+<h2>Function calls / Plugins<a class="headerlink" href="#function-calls-plugins" title="Permalink to this headline">¶</a></h2>
+<p>Each module can define plugins. Plugins can contribute functions to the module’s namespace. The function call syntax is</p>
+<div class="highlight-antlr"><div class="highlight"><pre><span></span><span class="nl">functioncall</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nv">moduleref</span><span class="w"> </span><span class="s">&#39;.&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="s">&#39;(&#39;</span><span class="w"> </span><span class="nv">arglist</span><span class="o">?</span><span class="w"> </span><span class="s">&#39;)&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="nl">arglist</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nv">value</span><span class="w"></span>
+<span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="nv">arglist</span><span class="w"> </span><span class="s">&#39;,&#39;</span><span class="w"> </span><span class="nv">value</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For example</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="n">std</span><span class="o">::</span><span class="n">familyof</span><span class="o">(</span><span class="n">host</span><span class="o">.</span><span class="n">os</span><span class="o">,</span><span class="w"> </span><span class="s">&quot;rhel&quot;</span><span class="o">)</span><span class="w"></span>
+<span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param</span><span class="o">::</span><span class="n">one</span><span class="o">(</span><span class="s">&quot;region&quot;</span><span class="o">,</span><span class="w"> </span><span class="s">&quot;demo::forms::AWSForm&quot;</span><span class="o">)</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="entities">
+<span id="lang-entity"></span><h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<p>Entities model configuration concepts. They are like classes in other object oriented languages: they can be instantiated and they define the structure of their instances.</p>
+<p>Entity names must start with an upper case character and can consist of the characters: <code class="docutils literal"><span class="pre">a-zA-Z_0-9-</span></code></p>
+<p>Entities can have a number of attributes and relations to other entities. Entity attributes have primitive types, with an optional default value. An attribute has to have
+a value unless the nulable variant of the primitive type is used. An attribute that can be null uses a primitive type with a <code class="docutils literal"><span class="pre">?</span></code> such as <code class="docutils literal"><span class="pre">string?</span></code>. A value can also be assigned
+only once to an attribute that can be null. To indicate that no value will be assigned, the literal <code class="docutils literal"><span class="pre">null</span></code> is available. <code class="docutils literal"><span class="pre">null</span></code> can also be the default value of an
+attribute.</p>
+<p>Entities can inherit from multiple other entities. Entities inherits attributes and relations from parent entities.
+All entities inherit from <code class="docutils literal"><span class="pre">std::Entity</span></code>.</p>
+<p>It is not possible to override or rename attributes or relations. However, it is possible to
+override defaults. Default values for attributes defined in the class take precedence over those in
+the parent classes. When a class has multiple parents, the left parent takes precedence over the
+others. A default value can be removed by setting its value to <code class="docutils literal"><span class="pre">undef</span></code>.</p>
+<p>The syntax for defining entities is:</p>
+<div class="highlight-antlr"><div class="highlight"><pre><span></span><span class="nl">entity</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;entity&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="o">(</span><span class="s">&#39;extends&#39;</span><span class="w"> </span><span class="nv">classlist</span><span class="o">)?</span><span class="w"> </span><span class="s">&#39;:&#39;</span><span class="w"> </span><span class="nv">attribute</span><span class="o">*</span><span class="w"> </span><span class="s">&#39;end&#39;</span><span class="p">;</span><span class="w"></span>
+
+<span class="nl">classlist</span><span class="p">:</span><span class="w"> </span><span class="nv">class</span><span class="w"></span>
+<span class="w">          </span><span class="o">|</span><span class="w"> </span><span class="nv">class</span><span class="w"> </span><span class="s">&#39;,&#39;</span><span class="w"> </span><span class="nv">classlist</span><span class="p">;</span><span class="w"></span>
+
+<span class="nl">attribute</span><span class="p">:</span><span class="w"> </span><span class="nv">primitve_type</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="o">(</span><span class="s">&#39;=&#39;</span><span class="w"> </span><span class="nv">literal</span><span class="o">)?</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Defining entities in a configuration model</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="k">entity</span><span class="w"> </span><span class="nc">File</span><span class="o">:</span><span class="w"></span>
+<span class="w">   </span><span class="nb">string</span><span class="w"> </span><span class="n">path</span><span class="w"></span>
+<span class="w">   </span><span class="nb">string</span><span class="w"> </span><span class="n">content</span><span class="w"></span>
+<span class="w">   </span><span class="nb">number</span><span class="w"> </span><span class="n">mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">640</span><span class="w"></span>
+<span class="w">   </span><span class="nb">string</span><span class="o">[]</span><span class="w"> </span><span class="nb">list</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[]</span><span class="w"></span>
+<span class="w">   </span><span class="k">dict</span><span class="w"> </span><span class="n">things</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">{}</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="relations">
+<span id="lang-relation"></span><h2>Relations<a class="headerlink" href="#relations" title="Permalink to this headline">¶</a></h2>
+<p>A Relation is a unidirectional or bidirectional relation between two entities. The consistency of a bidirectional double binding is maintained by the compiler: assignment to one side of the relation is an implicit assignment of the reverse relation.</p>
+<p>Relations are defined by specifying each end of the relation together with the multiplicity of each relation end. Each end of the relation is named and is maintained as a double binding by the compiler.</p>
+<p>Defining relations between entities in the domain model</p>
+<div class="highlight-antlr"><div class="highlight"><pre><span></span><span class="nl">relation</span><span class="p">:</span><span class="w"> </span><span class="nv">class</span><span class="w"> </span><span class="s">&#39;.&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="nv">multi</span><span class="w"> </span><span class="s">&#39;--&#39;</span><span class="w"> </span><span class="nv">class</span><span class="w"> </span><span class="s">&#39;.&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="nv">multi</span><span class="w"></span>
+<span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="nv">class</span><span class="w"> </span><span class="s">&#39;.&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="nv">multi</span><span class="w"> </span><span class="nv">annotation_list</span><span class="w"> </span><span class="nv">class</span><span class="w"> </span><span class="s">&#39;.&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="nv">multi</span><span class="w"> </span><span class="p">;</span><span class="w"></span>
+<span class="nl">annotation_list</span><span class="p">:</span><span class="w"> </span><span class="nv">value</span><span class="w"></span>
+<span class="w">        </span><span class="o">|</span><span class="w"> </span><span class="nv">annotation_list</span><span class="w"> </span><span class="s">&#39;,&#39;</span><span class="w"> </span><span class="nv">value</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For example a bidirectional relation:</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="nc">File</span><span class="o">.</span><span class="nf">service</span><span class="w"> </span><span class="o">[1] --</span><span class="w"> </span><span class="nc">Service</span><span class="o">.</span><span class="n">file</span><span class="w"> </span><span class="o">[</span><span class="mi">1</span><span class="o">:]</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Or a unidirectional relation</p>
+<div class="highlight-antlr"><div class="highlight"><pre><span></span><span class="nl">uni_relation</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nv">class</span><span class="w"> </span><span class="s">&#39;.&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="nv">multi</span><span class="w"> </span><span class="s">&#39;--&#39;</span><span class="w"> </span><span class="nv">class</span><span class="w"></span>
+<span class="w">       </span><span class="o">|</span><span class="w"> </span><span class="nv">class</span><span class="w"> </span><span class="s">&#39;.&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="nv">multi</span><span class="w"> </span><span class="nv">annotation_list</span><span class="w"> </span><span class="nv">class</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For example</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="nc">Service</span><span class="o">.</span><span class="nf">file</span><span class="w"> </span><span class="o">[1:] --</span><span class="w"> </span><span class="nc">File</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Relation multiplicities are enforced by the compiler. If they are violated a compilation error
+is issued.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In previous version another relation syntax was used that was less natural to read and allowed only bidirectional relations. The relation above was defined as <code class="docutils literal"><span class="pre">File</span> <span class="pre">file</span> <span class="pre">[1:]</span> <span class="pre">--</span> <span class="pre">[1]</span> <span class="pre">Service</span> <span class="pre">service</span></code>
+This synax is deprecated but still widely used in many modules.</p>
+</div>
+</div>
+<div class="section" id="instantiation">
+<span id="lang-instance"></span><h2>Instantiation<a class="headerlink" href="#instantiation" title="Permalink to this headline">¶</a></h2>
+<p>Instances of an entity are created with a constructor statement</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="nc">File</span><span class="o">(</span><span class="n">path</span><span class="o">=</span><span class="s">&quot;/etc/motd&quot;</span><span class="o">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>A constructor can assign values to any of the properties (attributes or relations) of the entity. It can also leave the properties unassigned.
+For attributes with default values, the constructor is the only place where the defaults can be overridden.</p>
+<p>Values can be assigned to the remaining properties as if they are variables. To relations with a higher arity, multiple values can be assigned</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="nc">Host</span><span class="o">.</span><span class="nf">files</span><span class="w"> </span><span class="o">[0:] --</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">host</span><span class="w"> </span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="w"></span>
+
+<span class="n">h1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Host</span><span class="o">(</span><span class="s">&quot;test&quot;</span><span class="o">)</span><span class="w"></span>
+<span class="n">f1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">File</span><span class="o">(</span><span class="n">host</span><span class="o">=</span><span class="n">h1</span><span class="o">,</span><span class="w"> </span><span class="n">path</span><span class="o">=</span><span class="s">&quot;/opt/1&quot;</span><span class="o">)</span><span class="w"></span>
+<span class="n">f2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">File</span><span class="o">(</span><span class="n">host</span><span class="o">=</span><span class="n">h1</span><span class="o">,</span><span class="w"> </span><span class="n">path</span><span class="o">=</span><span class="s">&quot;/opt/2&quot;</span><span class="o">)</span><span class="w"></span>
+<span class="n">f3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">File</span><span class="o">(</span><span class="n">host</span><span class="o">=</span><span class="n">h1</span><span class="o">,</span><span class="w"> </span><span class="n">path</span><span class="o">=</span><span class="s">&quot;/opt/3&quot;</span><span class="o">)</span><span class="w"></span>
+
+<span class="c1">// h1.files equals [f1, f2, f3]</span>
+
+<span class="nc">FileSet</span><span class="o">.</span><span class="nf">files</span><span class="w"> </span><span class="o">[0:] --</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">set</span><span class="w"> </span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="w"></span>
+
+<span class="n">s1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">FileSet</span><span class="o">()</span><span class="w"></span>
+<span class="n">s1</span><span class="o">.</span><span class="n">files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="n">f1</span><span class="o">,</span><span class="n">f2</span><span class="o">]</span><span class="w"></span>
+<span class="n">s1</span><span class="o">.</span><span class="n">files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f3</span><span class="w"></span>
+
+<span class="c1">// s1.files equals [f1, f2, f3]</span>
+
+<span class="n">s1</span><span class="o">.</span><span class="n">files</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f3</span><span class="w"></span>
+<span class="c1">// adding a value twice does not affect the relation,</span>
+<span class="c1">// s1.files still equals [f1, f2, f3]</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="refinements">
+<h2>Refinements<a class="headerlink" href="#refinements" title="Permalink to this headline">¶</a></h2>
+<p>Entities define what should be deployed.
+Entities can either be deployed directly (such as files and packages) or they can be refined.
+Refinement expands an abstract entity into one or more more concrete entities.</p>
+<p>For example, <a class="reference internal" href="reference/modules/apache.html#entity-apache::Server" title="apache::Server entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">apache::Server</span></code></a> is refined as follows</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="k">implementation</span><span class="w"> </span><span class="n">apacheServerDEB</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nc">Server</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="n">pkg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">std::Package</span><span class="o">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="o">,</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="s">&quot;apache2-mpm-worker&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">state</span><span class="o">=</span><span class="s">&quot;installed&quot;</span><span class="o">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">pkg2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">std::Package</span><span class="o">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="o">,</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="s">&quot;apache2&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">state</span><span class="o">=</span><span class="s">&quot;installed&quot;</span><span class="o">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">svc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">std::Service</span><span class="o">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="o">,</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="s">&quot;apache2&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">state</span><span class="o">=</span><span class="s">&quot;running&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">onboot</span><span class="o">=</span><span class="k">true</span><span class="o">,</span><span class="w"> </span><span class="n">reload</span><span class="o">=</span><span class="k">true</span><span class="o">,</span><span class="w"> </span><span class="n">requires</span><span class="o">=[</span><span class="n">pkg</span><span class="o">,</span><span class="w"> </span><span class="n">pkg2</span><span class="o">])</span><span class="w"></span>
+<span class="w">    </span><span class="n">svc</span><span class="o">.</span><span class="n">requires</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">self</span><span class="o">.</span><span class="n">requires</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1"># put an empty index.html in the default documentroot so health checks do not fail</span>
+<span class="w">    </span><span class="n">index_html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">std::ConfigFile</span><span class="o">(</span><span class="n">host</span><span class="o">=</span><span class="n">host</span><span class="o">,</span><span class="w"> </span><span class="n">path</span><span class="o">=</span><span class="s">&quot;/var/www/html/index.html&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">content</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="o">,</span><span class="w"></span>
+<span class="w">                             </span><span class="n">requires</span><span class="o">=</span><span class="n">pkg</span><span class="o">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">user</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;www-data&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;www-data&quot;</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">implement</span><span class="w"> </span><span class="nc">Server</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">apacheServerDEB</span><span class="w"> </span><span class="k">when</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">familyof</span><span class="o">(</span><span class="n">host</span><span class="o">.</span><span class="n">os</span><span class="o">,</span><span class="w"> </span><span class="s">&quot;ubuntu&quot;</span><span class="o">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For each entity one or more refinements can be defined with the <code class="docutils literal"><span class="pre">implementation</span></code> statement.
+Implementation are connected to entities using the <code class="docutils literal"><span class="pre">implement</span></code> statement.</p>
+<p>When an instance of an entity is constructed, the runtime searches for refinements.
+One or more refinements are selected based on the associated conditions. When no implementation is found, an exception is raised.
+Entities for which no implementation is required are implemented using <a class="reference internal" href="reference/modules/std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::none</span></code></a>.</p>
+<p>In the implementation block, the entity instance itself can be accessed through the variable self.</p>
+<p><code class="docutils literal"><span class="pre">implement</span></code> statements are not inherited.</p>
+<p>The syntax for implements and implementation is:</p>
+<div class="highlight-antlr"><div class="highlight"><pre><span></span><span class="nl">implementation</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;implementation&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="s">&#39;for&#39;</span><span class="w"> </span><span class="nv">class</span><span class="w"> </span><span class="s">&#39;:&#39;</span><span class="w"> </span><span class="nv">statement</span><span class="o">*</span><span class="w"> </span><span class="s">&#39;end&#39;</span><span class="p">;</span><span class="w"></span>
+<span class="nl">implement</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;implement&#39;</span><span class="w"> </span><span class="nv">class</span><span class="w"> </span><span class="s">&#39;using&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="o">(</span><span class="s">&#39;when&#39;</span><span class="w"> </span><span class="nv">condition</span><span class="o">)?</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="indexes-and-queries">
+<h2>Indexes and queries<a class="headerlink" href="#indexes-and-queries" title="Permalink to this headline">¶</a></h2>
+<p>Index definitions make sure that an entity is unique. An index definition defines a list of properties that uniquely identify an instance of an entity.
+If a second instance is constructed with the same identifying properties, the first instance is returned instead.</p>
+<p>All identifying properties must be set in the constructor.</p>
+<p>Indices are inherited. i.e. all identifying properties of all parent types must be set in the constructor.</p>
+<p>Defining an index</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="k">entity</span><span class="w"> </span><span class="nc">Host</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w">  </span><span class="n">name</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">index</span><span class="w"> </span><span class="nc">Host</span><span class="o">(</span><span class="n">name</span><span class="o">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Explicit index lookup is performed with a query statement</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="n">testhost</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Host</span><span class="o">[</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;test&quot;</span><span class="o">]</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For indices on relations (instead of attributes) an alternative syntax can be used</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="k">entity</span><span class="w"> </span><span class="nc">File</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">path</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="nc">Host</span><span class="o">.</span><span class="nf">files</span><span class="w"> </span><span class="o">[0:] --</span><span class="w"> </span><span class="nc">File</span><span class="o">.</span><span class="n">host</span><span class="w"> </span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="w"></span>
+
+<span class="k">index</span><span class="w"> </span><span class="nc">File</span><span class="o">(</span><span class="n">host</span><span class="o">,</span><span class="w"> </span><span class="n">path</span><span class="o">)</span><span class="w"></span>
+
+<span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">File</span><span class="o">[</span><span class="n">host</span><span class="o">=</span><span class="n">vm1</span><span class="o">,</span><span class="w"> </span><span class="n">path</span><span class="o">=</span><span class="s">&quot;/etc/passwd&quot;</span><span class="o">]</span><span class="w">  </span><span class="c1"># normal index lookup</span>
+<span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vm1</span><span class="o">.</span><span class="n">files</span><span class="o">[</span><span class="n">path</span><span class="o">=</span><span class="s">&quot;/etc/passwd&quot;</span><span class="o">]</span><span class="w">  </span><span class="c1"># selector style index lookup</span>
+<span class="c1"># a == b</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="for-loop">
+<h2>For loop<a class="headerlink" href="#for-loop" title="Permalink to this headline">¶</a></h2>
+<p>To iterate over the items of a list, a for loop can be used</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">sequence</span><span class="o">(</span><span class="n">size</span><span class="o">,</span><span class="w"> </span><span class="mi">1</span><span class="o">):</span><span class="w"></span>
+<span class="w">    </span><span class="n">app_vm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Host</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;app{{i}}&quot;</span><span class="o">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The syntax is:</p>
+<div class="highlight-antlr"><div class="highlight"><pre><span></span><span class="nl">for</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;for&#39;</span><span class="w"> </span><span class="no">ID</span><span class="w"> </span><span class="s">&#39;in&#39;</span><span class="w"> </span><span class="nv">value</span><span class="w"> </span><span class="s">&#39;:&#39;</span><span class="w"> </span><span class="nv">statement</span><span class="o">*</span><span class="w"> </span><span class="s">&#39;end&#39;</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="transformations">
+<h2>Transformations<a class="headerlink" href="#transformations" title="Permalink to this headline">¶</a></h2>
+<p>At the lowest level of abstraction the configuration of an infrastructure often consists of
+configuration files. To construct configuration files, templates and string interpolation can be used.</p>
+<div class="section" id="string-interpolation">
+<h3>String interpolation<a class="headerlink" href="#string-interpolation" title="Permalink to this headline">¶</a></h3>
+<p>String interpolation allows variables to be include as parameters inside a string.</p>
+<p>The included variables are resolved in the lexical scope of the string they are included in.</p>
+<p>Interpolating strings</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;serv1.example.org&quot;</span><span class="w"></span>
+<span class="n">motd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">&quot;&quot;&quot;Welcome to {{hostname}}\n&quot;&quot;&quot;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="templates">
+<h3>Templates<a class="headerlink" href="#templates" title="Permalink to this headline">¶</a></h3>
+<p>Inmanta integrates the Jinja2 template engine. A template is evaluated in the lexical
+scope where the <code class="docutils literal"><span class="pre">std::template</span></code> function is called. This function accepts as an argument the
+path of a template file. The first part of the path is the module that contains the template and the remainder of the path is the path within the template
+directory of the module.</p>
+<p>The integrated Jinja2 engine supports to the entire Jinja feature set, except for subtemplates. During execution Jinja2 has access to all variables and plug-ins that are
+available in the scope where the template is evaluated. However, the <code class="docutils literal"><span class="pre">::</span></code> in paths needs to be replaced with a
+<code class="docutils literal"><span class="pre">.</span></code>. The result of the template is returned by the template function.</p>
+<p>Using a template to transform variables to a configuration file</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="n">hostname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;wwwserv1.example.com&quot;</span><span class="w"></span>
+<span class="n">admin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;joe@example.com&quot;</span><span class="w"></span>
+<span class="n">motd_content</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">template</span><span class="o">(</span><span class="s">&quot;motd/message.tmpl&quot;</span><span class="o">)</span><span class="w"></span>
+</pre></div>
+</div>
+<p>The template used in the previous listing</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="nc">Welcome</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="o">{{</span><span class="w"> </span><span class="n">hostname</span><span class="w"> </span><span class="o">}}</span><span class="w"></span>
+<span class="nc">This</span><span class="w"> </span><span class="n">machine</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">maintainted</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">{{</span><span class="w"> </span><span class="n">admin</span><span class="w"> </span><span class="o">}}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="plug-ins">
+<span id="lang-plugins"></span><h2>Plug-ins<a class="headerlink" href="#plug-ins" title="Permalink to this headline">¶</a></h2>
+<p>For more complex operations, python plugins can be used. Plugins are exposed in the Inmanta language as function calls, such as the template function call. A template
+accepts parameters and returns a value that it computed out of the variables. Each module that is included can also provide plug-ins. These plug-ins are accessible within the namespace of the
+module. The <a class="reference internal" href="guides/modules.html#module-plugins"><span class="std std-ref">Plugins</span></a> section of the module guid provides more details about how to write a plugin.</p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="guides.html" class="btn btn-neutral float-right" title="Guides" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="architecture.html" class="btn btn-neutral" title="Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

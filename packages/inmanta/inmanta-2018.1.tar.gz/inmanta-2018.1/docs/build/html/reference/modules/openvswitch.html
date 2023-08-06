@@ -1,0 +1,515 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module openvswitch &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Inmanta modules" href="../modules.html"/>
+        <link rel="next" title="Module param" href="param.html"/>
+        <link rel="prev" title="Module openstack" href="openstack.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Inmanta Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands.html">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">Inmanta API reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html">Inmanta modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ansible.html">Module ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apache.html">Module apache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apt.html">Module apt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aws.html">Module aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bind.html">Module bind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collectd.html">Module collectd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dns.html">Module dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docker.html">Module docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drupal.html">Module drupal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exec.html">Module exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="graphite.html">Module graphite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip.html">Module ip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Module logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mongodb.html">Module mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="monitoring.html">Module monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mysql.html">Module mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="net.html">Module net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openstack.html">Module openstack</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module openvswitch</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#entities">Entities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#implementations">Implementations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="param.html">Module param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="php.html">Module php</a></li>
+<li class="toctree-l3"><a class="reference internal" href="platform.html">Module platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="redhat.html">Module redhat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssh.html">Module ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="std.html">Module std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu.html">Module ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">Module user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="varnish.html">Module varnish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html">Module web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="yum.html">Module yum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Inmanta Reference</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Inmanta modules</a> &raquo;</li>
+        
+      <li>Module openvswitch</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-openvswitch">
+<h1>Module openvswitch<a class="headerlink" href="#module-openvswitch" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li>License: Apache 2.0</li>
+<li>Version: 0.4</li>
+<li>Author: Inmanta &lt;<a class="reference external" href="mailto:code&#37;&#52;&#48;inmanta&#46;com">code<span>&#64;</span>inmanta<span>&#46;</span>com</a>&gt;</li>
+<li>Upstream project: <a class="reference external" href="https://github.com/inmanta/openvswitch.git">https://github.com/inmanta/openvswitch.git</a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="entities">
+<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<dl class="entity">
+<dt id="entity-openvswitch::Bond">
+<em class="property">entity </em><code class="descclassname">openvswitch::Bond</code><a class="headerlink" href="#entity-openvswitch::Bond" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openvswitch::OVSPort" title="openvswitch::OVSPort entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openvswitch::OVSPort</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-openvswitch::Bond.mtu">
+<em class="property">attribute </em>number <code class="descclassname">mtu</code><a class="headerlink" href="#attribute-openvswitch::Bond.mtu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openvswitch::Bond.lacp_time">
+<em class="property">attribute </em>string <code class="descclassname">lacp_time</code>='fast'<a class="headerlink" href="#attribute-openvswitch::Bond.lacp_time" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openvswitch::Bond.trunks">
+<em class="property">attribute </em>string <code class="descclassname">trunks</code><a class="headerlink" href="#attribute-openvswitch::Bond.trunks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openvswitch::Bond.interfaces">
+<em class="property">attribute </em>string <code class="descclassname">interfaces</code><a class="headerlink" href="#attribute-openvswitch::Bond.interfaces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openvswitch::Bond.lacp">
+<em class="property">attribute </em>bool <code class="descclassname">lacp</code>=True<a class="headerlink" href="#attribute-openvswitch::Bond.lacp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openvswitch::Bond.bond_mode">
+<em class="property">attribute </em>string <code class="descclassname">bond_mode</code>='balance-tcp'<a class="headerlink" href="#attribute-openvswitch::Bond.bond_mode" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openvswitch::Bridge">
+<em class="property">entity </em><code class="descclassname">openvswitch::Bridge</code><a class="headerlink" href="#entity-openvswitch::Bridge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A network bridge</p>
+<dl class="attribute">
+<dt id="attribute-openvswitch::Bridge.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openvswitch::Bridge.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openvswitch::Bridge.ports">
+<em class="property">relation </em>openvswitch::OVSPort <code class="descclassname">ports</code> [0:*]<a class="headerlink" href="#relation-openvswitch::Bridge.ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openvswitch::OVSPort.bridge" title="openvswitch::OVSPort.bridge relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openvswitch::OVSPort.bridge</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openvswitch::Bridge.patch_from">
+<em class="property">relation </em>openvswitch::Bridge <code class="descclassname">patch_from</code> [0:*]<a class="headerlink" href="#relation-openvswitch::Bridge.patch_from" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openvswitch::Bridge.patch_to" title="openvswitch::Bridge.patch_to relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openvswitch::Bridge.patch_to</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openvswitch::Bridge.host">
+<em class="property">relation </em>std::Host <code class="descclassname">host</code> [1]<a class="headerlink" href="#relation-openvswitch::Bridge.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <code class="xref inmanta inmanta-relation docutils literal"><span class="pre">std::Host.bridges</span> <span class="pre">[0:*]</span></code></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openvswitch::Bridge.patch_to">
+<em class="property">relation </em>openvswitch::Bridge <code class="descclassname">patch_to</code> [0:*]<a class="headerlink" href="#relation-openvswitch::Bridge.patch_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openvswitch::Bridge.patch_from" title="openvswitch::Bridge.patch_from relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openvswitch::Bridge.patch_from</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openvswitch::bridgeUCA" title="openvswitch::bridgeUCA implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openvswitch::bridgeUCA</span></code></a></li>
+<li><a class="reference internal" href="#implementation-openvswitch::bridgeRDO" title="openvswitch::bridgeRDO implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openvswitch::bridgeRDO</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openvswitch::bridgeUCA" title="openvswitch::bridgeUCA implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openvswitch::bridgeUCA</span></code></a>
+constraint <code class="docutils literal"><span class="pre">std::familyof(host.os,'ubuntu')</span></code></li>
+<li><a class="reference internal" href="#implementation-openvswitch::bridgeRDO" title="openvswitch::bridgeRDO implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openvswitch::bridgeRDO</span></code></a>
+constraint <code class="docutils literal"><span class="pre">((std::familyof(host.os,'rhel')</span> <span class="pre">and</span> <span class="pre">(host.os.version</span> <span class="pre">&gt;=</span> <span class="pre">7))</span> <span class="pre">or</span> <span class="pre">std::familyof(host.os,'fedora'))</span></code></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openvswitch::Interface">
+<em class="property">entity </em><code class="descclassname">openvswitch::Interface</code><a class="headerlink" href="#entity-openvswitch::Interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openvswitch::OVSPort" title="openvswitch::OVSPort entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openvswitch::OVSPort</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-openvswitch::Interface.tag">
+<em class="property">attribute </em>number <code class="descclassname">tag</code><a class="headerlink" href="#attribute-openvswitch::Interface.tag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openvswitch::Interface.netmask">
+<em class="property">attribute </em>ip::ip <code class="descclassname">netmask</code><a class="headerlink" href="#attribute-openvswitch::Interface.netmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openvswitch::Interface.mtu">
+<em class="property">attribute </em>number <code class="descclassname">mtu</code><a class="headerlink" href="#attribute-openvswitch::Interface.mtu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openvswitch::Interface.ip_address">
+<em class="property">attribute </em>ip::ip <code class="descclassname">ip_address</code><a class="headerlink" href="#attribute-openvswitch::Interface.ip_address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openvswitch::OVSCommon">
+<em class="property">entity </em><code class="descclassname">openvswitch::OVSCommon</code><a class="headerlink" href="#entity-openvswitch::OVSCommon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>Installation and configuration of openvswitch (without adding any switches)</p>
+<dl class="attribute">
+<dt id="attribute-openvswitch::OVSCommon.sdn_controller">
+<em class="property">attribute </em>string <code class="descclassname">sdn_controller</code>=''<a class="headerlink" href="#attribute-openvswitch::OVSCommon.sdn_controller" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openvswitch::OVSCommon.host">
+<em class="property">relation </em>ip::Host <code class="descclassname">host</code> [1]<a class="headerlink" href="#relation-openvswitch::OVSCommon.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::Host.ovs_common</span> <span class="pre">[0:1]</span></code></p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openvswitch::ovsCommonUCA" title="openvswitch::ovsCommonUCA implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openvswitch::ovsCommonUCA</span></code></a></li>
+<li><a class="reference internal" href="#implementation-openvswitch::ovsCommonRDO" title="openvswitch::ovsCommonRDO implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openvswitch::ovsCommonRDO</span></code></a></li>
+<li><a class="reference internal" href="#implementation-openvswitch::ovsSDN" title="openvswitch::ovsSDN implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openvswitch::ovsSDN</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openvswitch::ovsCommonUCA" title="openvswitch::ovsCommonUCA implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openvswitch::ovsCommonUCA</span></code></a>
+constraint <code class="docutils literal"><span class="pre">std::familyof(host.os,'ubuntu')</span></code></li>
+<li><a class="reference internal" href="#implementation-openvswitch::ovsCommonRDO" title="openvswitch::ovsCommonRDO implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openvswitch::ovsCommonRDO</span></code></a>
+constraint <code class="docutils literal"><span class="pre">((std::familyof(host.os,'rhel')</span> <span class="pre">and</span> <span class="pre">(host.os.version</span> <span class="pre">&gt;=</span> <span class="pre">7))</span> <span class="pre">or</span> <span class="pre">std::familyof(host.os,'fedora'))</span></code></li>
+<li><a class="reference internal" href="#implementation-openvswitch::ovsSDN" title="openvswitch::ovsSDN implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openvswitch::ovsSDN</span></code></a>
+constraint <code class="docutils literal"><span class="pre">(sdn_controller</span> <span class="pre">!=</span> <span class="pre">'')</span></code></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openvswitch::OVSPort">
+<em class="property">entity </em><code class="descclassname">openvswitch::OVSPort</code><a class="headerlink" href="#entity-openvswitch::OVSPort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-openvswitch::OVSPort.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openvswitch::OVSPort.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openvswitch::OVSPort.bridge">
+<em class="property">relation </em>openvswitch::Bridge <code class="descclassname">bridge</code> [1]<a class="headerlink" href="#relation-openvswitch::OVSPort.bridge" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openvswitch::Bridge.ports" title="openvswitch::Bridge.ports relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openvswitch::Bridge.ports</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="implementations">
+<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
+<dl class="implementation">
+<dt id="implementation-openvswitch::bridgeRDO">
+<em class="property">implementation </em><code class="descclassname">openvswitch::bridgeRDO</code><a class="headerlink" href="#implementation-openvswitch::bridgeRDO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-openvswitch::bridgeUCA">
+<em class="property">implementation </em><code class="descclassname">openvswitch::bridgeUCA</code><a class="headerlink" href="#implementation-openvswitch::bridgeUCA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-openvswitch::ovsCommonRDO">
+<em class="property">implementation </em><code class="descclassname">openvswitch::ovsCommonRDO</code><a class="headerlink" href="#implementation-openvswitch::ovsCommonRDO" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-openvswitch::ovsCommonUCA">
+<em class="property">implementation </em><code class="descclassname">openvswitch::ovsCommonUCA</code><a class="headerlink" href="#implementation-openvswitch::ovsCommonUCA" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-openvswitch::ovsSDN">
+<em class="property">implementation </em><code class="descclassname">openvswitch::ovsSDN</code><a class="headerlink" href="#implementation-openvswitch::ovsSDN" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="param.html" class="btn btn-neutral float-right" title="Module param" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="openstack.html" class="btn btn-neutral" title="Module openstack" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

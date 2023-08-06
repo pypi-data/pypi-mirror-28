@@ -1,0 +1,857 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module ip &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Inmanta modules" href="../modules.html"/>
+        <link rel="next" title="Module logging" href="logging.html"/>
+        <link rel="prev" title="Module graphite" href="graphite.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Inmanta Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands.html">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">Inmanta API reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html">Inmanta modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ansible.html">Module ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apache.html">Module apache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apt.html">Module apt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aws.html">Module aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bind.html">Module bind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collectd.html">Module collectd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dns.html">Module dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docker.html">Module docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drupal.html">Module drupal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exec.html">Module exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="graphite.html">Module graphite</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module ip</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#entities">Entities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#implementations">Implementations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plugins">Plugins</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Module logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mongodb.html">Module mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="monitoring.html">Module monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mysql.html">Module mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="net.html">Module net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openstack.html">Module openstack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openvswitch.html">Module openvswitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="param.html">Module param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="php.html">Module php</a></li>
+<li class="toctree-l3"><a class="reference internal" href="platform.html">Module platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="redhat.html">Module redhat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssh.html">Module ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="std.html">Module std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu.html">Module ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">Module user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="varnish.html">Module varnish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html">Module web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="yum.html">Module yum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Inmanta Reference</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Inmanta modules</a> &raquo;</li>
+        
+      <li>Module ip</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-ip">
+<h1>Module ip<a class="headerlink" href="#module-ip" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li>License: Apache 2.0</li>
+<li>Version: 0.10.0</li>
+<li>Author: Inmanta &lt;<a class="reference external" href="mailto:code&#37;&#52;&#48;inmanta&#46;com">code<span>&#64;</span>inmanta<span>&#46;</span>com</a>&gt;</li>
+<li>This module requires compiler version 2016.5 or higher</li>
+<li>Upstream project: <a class="reference external" href="https://github.com/inmanta/ip.git">https://github.com/inmanta/ip.git</a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<dl class="typedef">
+<dt id="typedef-ip::cidr">
+<em class="property">typedef </em><code class="descclassname">ip::cidr</code><a class="headerlink" href="#typedef-ip::cidr" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Base type <code class="docutils literal"><span class="pre">string</span></code></li>
+<li>Type constraint <code class="docutils literal"><span class="pre">(self</span> <span class="pre">regex</span> <span class="pre">re.compile('^([0-9]{1,3})(\\.[0-9]{1,3}){3}.[0-9]{1,2}$'))</span></code></li>
+</ul>
+</dd></dl>
+
+<dl class="typedef">
+<dt id="typedef-ip::ip">
+<em class="property">typedef </em><code class="descclassname">ip::ip</code><a class="headerlink" href="#typedef-ip::ip" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Base type <code class="docutils literal"><span class="pre">string</span></code></li>
+<li>Type constraint <code class="docutils literal"><span class="pre">(ip::is_valid_ip(self)</span> <span class="pre">==</span> <span class="pre">True)</span></code></li>
+</ul>
+</dd></dl>
+
+<dl class="typedef">
+<dt id="typedef-ip::port">
+<em class="property">typedef </em><code class="descclassname">ip::port</code><a class="headerlink" href="#typedef-ip::port" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Base type <code class="docutils literal"><span class="pre">number</span></code></li>
+<li>Type constraint <code class="docutils literal"><span class="pre">((self</span> <span class="pre">&gt;=</span> <span class="pre">0)</span> <span class="pre">and</span> <span class="pre">(self</span> <span class="pre">&lt;</span> <span class="pre">65536))</span></code></li>
+</ul>
+</dd></dl>
+
+<dl class="typedef">
+<dt id="typedef-ip::protocol">
+<em class="property">typedef </em><code class="descclassname">ip::protocol</code><a class="headerlink" href="#typedef-ip::protocol" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Base type <code class="docutils literal"><span class="pre">string</span></code></li>
+<li>Type constraint <code class="docutils literal"><span class="pre">(((((self</span> <span class="pre">==</span> <span class="pre">'tcp')</span> <span class="pre">or</span> <span class="pre">(self</span> <span class="pre">==</span> <span class="pre">'udp'))</span> <span class="pre">or</span> <span class="pre">(self</span> <span class="pre">==</span> <span class="pre">'icmp'))</span> <span class="pre">or</span> <span class="pre">(self</span> <span class="pre">==</span> <span class="pre">'sctp'))</span> <span class="pre">or</span> <span class="pre">(self</span> <span class="pre">==</span> <span class="pre">'all'))</span></code></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="entities">
+<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<dl class="entity">
+<dt id="entity-ip::Address">
+<em class="property">entity </em><code class="descclassname">ip::Address</code><a class="headerlink" href="#entity-ip::Address" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::Alias" title="ip::Alias entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::Alias</span></code></a></p>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::Alias">
+<em class="property">entity </em><code class="descclassname">ip::Alias</code><a class="headerlink" href="#entity-ip::Alias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::IP" title="ip::IP entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::IP</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-ip::Alias.netmask">
+<em class="property">attribute </em>ip::ip <code class="descclassname">netmask</code>='0.0.0.0'<a class="headerlink" href="#attribute-ip::Alias.netmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-ip::Alias.alias">
+<em class="property">attribute </em>number <code class="descclassname">alias</code>=0<a class="headerlink" href="#attribute-ip::Alias.alias" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-ip::Alias.dhcp">
+<em class="property">attribute </em>bool <code class="descclassname">dhcp</code>=False<a class="headerlink" href="#attribute-ip::Alias.dhcp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-ip::Alias.server">
+<em class="property">relation </em>ip::services::Server <code class="descclassname">server</code> [0:*]<a class="headerlink" href="#relation-ip::Alias.server" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::services::Server.ips" title="ip::services::Server.ips relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::services::Server.ips</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::DstService">
+<em class="property">entity </em><code class="descclassname">ip::DstService</code><a class="headerlink" href="#entity-ip::DstService" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::Service" title="ip::Service entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::Service</span></code></a></p>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::Host">
+<em class="property">entity </em><code class="descclassname">ip::Host</code><a class="headerlink" href="#entity-ip::Host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Host" title="std::Host entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Host</span></code></a></p>
+<p>A host that has an ip attribute for easy ip address access in the configuration
+model.</p>
+<dl class="attribute">
+<dt id="attribute-ip::Host.remote_user">
+<em class="property">attribute </em>string <code class="descclassname">remote_user</code>='root'<a class="headerlink" href="#attribute-ip::Host.remote_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>The remote user for the remote agent to login with</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-ip::Host.remote_port">
+<em class="property">attribute </em>ip::port <code class="descclassname">remote_port</code>=22<a class="headerlink" href="#attribute-ip::Host.remote_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>The remote port for this remote agent to use.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-ip::Host.remote_agent">
+<em class="property">attribute </em>bool <code class="descclassname">remote_agent</code>=False<a class="headerlink" href="#attribute-ip::Host.remote_agent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start the mgmt agent for this node on the server and use remote io (ssh)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-ip::Host.ip">
+<em class="property">attribute </em>ip::ip <code class="descclassname">ip</code><a class="headerlink" href="#attribute-ip::Host.ip" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ipaddress of this node</p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-ip::Host.clients">
+<em class="property">relation </em>ip::services::Client <code class="descclassname">clients</code> [0:*]<a class="headerlink" href="#relation-ip::Host.clients" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::services::Client.host" title="ip::services::Client.host relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::services::Client.host</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-ip::Host.servers">
+<em class="property">relation </em>ip::services::Server <code class="descclassname">servers</code> [0:*]<a class="headerlink" href="#relation-ip::Host.servers" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::services::Server.host" title="ip::services::Server.host relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::services::Server.host</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::hostDefaults" title="std::hostDefaults implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::hostDefaults</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::IP">
+<em class="property">entity </em><code class="descclassname">ip::IP</code><a class="headerlink" href="#entity-ip::IP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>Base class for all ip addresses</p>
+<dl class="attribute">
+<dt id="attribute-ip::IP.v4">
+<em class="property">attribute </em>ip::ip <code class="descclassname">v4</code>='0.0.0.0'<a class="headerlink" href="#attribute-ip::IP.v4" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::Network">
+<em class="property">entity </em><code class="descclassname">ip::Network</code><a class="headerlink" href="#entity-ip::Network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A network in this infrastructure.</p>
+<dl class="attribute">
+<dt id="attribute-ip::Network.dhcp">
+<em class="property">attribute </em>bool <code class="descclassname">dhcp</code><a class="headerlink" href="#attribute-ip::Network.dhcp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-ip::Network.netmask">
+<em class="property">attribute </em>string <code class="descclassname">netmask</code><a class="headerlink" href="#attribute-ip::Network.netmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-ip::Network.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-ip::Network.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-ip::Network.network">
+<em class="property">attribute </em>string <code class="descclassname">network</code><a class="headerlink" href="#attribute-ip::Network.network" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::Port">
+<em class="property">entity </em><code class="descclassname">ip::Port</code><a class="headerlink" href="#entity-ip::Port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::PortRange" title="ip::PortRange entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::PortRange</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-ip::Port.high">
+<em class="property">attribute </em>ip::port <code class="descclassname">high</code>=0<a class="headerlink" href="#attribute-ip::Port.high" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::PortRange">
+<em class="property">entity </em><code class="descclassname">ip::PortRange</code><a class="headerlink" href="#entity-ip::PortRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-ip::PortRange.high">
+<em class="property">attribute </em>ip::port <code class="descclassname">high</code><a class="headerlink" href="#attribute-ip::PortRange.high" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-ip::PortRange.low">
+<em class="property">attribute </em>ip::port <code class="descclassname">low</code><a class="headerlink" href="#attribute-ip::PortRange.low" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::Service">
+<em class="property">entity </em><code class="descclassname">ip::Service</code><a class="headerlink" href="#entity-ip::Service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>Define a service as a protocol and a source and destination port range</p>
+<dl class="attribute">
+<dt id="attribute-ip::Service.proto">
+<em class="property">attribute </em>ip::protocol <code class="descclassname">proto</code><a class="headerlink" href="#attribute-ip::Service.proto" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-ip::Service.dst_range">
+<em class="property">relation </em>ip::PortRange <code class="descclassname">dst_range</code> [0:*]<a class="headerlink" href="#relation-ip::Service.dst_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-ip::Service.listening_servers">
+<em class="property">relation </em>ip::services::BaseServer <code class="descclassname">listening_servers</code> [0:*]<a class="headerlink" href="#relation-ip::Service.listening_servers" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::services::BaseServer.services" title="ip::services::BaseServer.services relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::services::BaseServer.services</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-ip::Service.src_range">
+<em class="property">relation </em>ip::PortRange <code class="descclassname">src_range</code> [0:*]<a class="headerlink" href="#relation-ip::Service.src_range" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::BaseClient">
+<em class="property">entity </em><code class="descclassname">ip::services::BaseClient</code><a class="headerlink" href="#entity-ip::services::BaseClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>Base client class that connects to a server</p>
+<dl class="relation">
+<dt id="relation-ip::services::BaseClient.servers">
+<em class="property">relation </em>ip::services::BaseServer <code class="descclassname">servers</code> [0:*]<a class="headerlink" href="#relation-ip::services::BaseClient.servers" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::services::BaseServer.clients" title="ip::services::BaseServer.clients relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::services::BaseServer.clients</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::BaseServer">
+<em class="property">entity </em><code class="descclassname">ip::services::BaseServer</code><a class="headerlink" href="#entity-ip::services::BaseServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>Base class for servers that accept connections from clients</p>
+<dl class="relation">
+<dt id="relation-ip::services::BaseServer.clients">
+<em class="property">relation </em>ip::services::BaseClient <code class="descclassname">clients</code> [0:*]<a class="headerlink" href="#relation-ip::services::BaseServer.clients" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::services::BaseClient.servers" title="ip::services::BaseClient.servers relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::services::BaseClient.servers</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-ip::services::BaseServer.services">
+<em class="property">relation </em>ip::Service <code class="descclassname">services</code> [0:*]<a class="headerlink" href="#relation-ip::services::BaseServer.services" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::Service.listening_servers" title="ip::Service.listening_servers relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::Service.listening_servers</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::Client">
+<em class="property">entity </em><code class="descclassname">ip::services::Client</code><a class="headerlink" href="#entity-ip::services::Client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::services::BaseClient" title="ip::services::BaseClient entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::BaseClient</span></code></a></p>
+<p>This interface models a client that is linked to a host</p>
+<dl class="relation">
+<dt id="relation-ip::services::Client.host">
+<em class="property">relation </em>ip::Host <code class="descclassname">host</code> [1]<a class="headerlink" href="#relation-ip::services::Client.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::Host.clients" title="ip::Host.clients relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::Host.clients</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::Server">
+<em class="property">entity </em><code class="descclassname">ip::services::Server</code><a class="headerlink" href="#entity-ip::services::Server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::services::BaseServer" title="ip::services::BaseServer entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::BaseServer</span></code></a></p>
+<p>This interface models a server that accepts connections from a client</p>
+<dl class="relation">
+<dt id="relation-ip::services::Server.host">
+<em class="property">relation </em>ip::Host <code class="descclassname">host</code> [1]<a class="headerlink" href="#relation-ip::services::Server.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::Host.servers" title="ip::Host.servers relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::Host.servers</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-ip::services::Server.ips">
+<em class="property">relation </em>ip::Alias <code class="descclassname">ips</code> [0:*]<a class="headerlink" href="#relation-ip::services::Server.ips" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::Alias.server" title="ip::Alias.server relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::Alias.server</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::VirtualClient">
+<em class="property">entity </em><code class="descclassname">ip::services::VirtualClient</code><a class="headerlink" href="#entity-ip::services::VirtualClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::services::BaseClient" title="ip::services::BaseClient entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::BaseClient</span></code></a>, <a class="reference internal" href="#entity-ip::services::VirtualSide" title="ip::services::VirtualSide entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::VirtualSide</span></code></a></p>
+<p>This interface models a virtual client. It can for example represent
+all clients that exist on the internet.</p>
+<dl class="attribute">
+<dt id="attribute-ip::services::VirtualClient.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-ip::services::VirtualClient.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::VirtualHost">
+<em class="property">entity </em><code class="descclassname">ip::services::VirtualHost</code><a class="headerlink" href="#entity-ip::services::VirtualHost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::services::VirtualScope" title="ip::services::VirtualScope entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::VirtualScope</span></code></a></p>
+<p>An address represented by a hostname</p>
+<dl class="attribute">
+<dt id="attribute-ip::services::VirtualHost.hostname">
+<em class="property">attribute </em>std::hoststring <code class="descclassname">hostname</code><a class="headerlink" href="#attribute-ip::services::VirtualHost.hostname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::VirtualIp">
+<em class="property">entity </em><code class="descclassname">ip::services::VirtualIp</code><a class="headerlink" href="#entity-ip::services::VirtualIp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::services::VirtualScope" title="ip::services::VirtualScope entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::VirtualScope</span></code></a></p>
+<p>Only one ip</p>
+<dl class="attribute">
+<dt id="attribute-ip::services::VirtualIp.address">
+<em class="property">attribute </em>ip::ip <code class="descclassname">address</code><a class="headerlink" href="#attribute-ip::services::VirtualIp.address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::VirtualNetwork">
+<em class="property">entity </em><code class="descclassname">ip::services::VirtualNetwork</code><a class="headerlink" href="#entity-ip::services::VirtualNetwork" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::services::VirtualScope" title="ip::services::VirtualScope entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::VirtualScope</span></code></a></p>
+<p>Define a virtual network segment</p>
+<dl class="attribute">
+<dt id="attribute-ip::services::VirtualNetwork.netmask">
+<em class="property">attribute </em>ip::ip <code class="descclassname">netmask</code><a class="headerlink" href="#attribute-ip::services::VirtualNetwork.netmask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-ip::services::VirtualNetwork.network">
+<em class="property">attribute </em>ip::ip <code class="descclassname">network</code><a class="headerlink" href="#attribute-ip::services::VirtualNetwork.network" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::VirtualRange">
+<em class="property">entity </em><code class="descclassname">ip::services::VirtualRange</code><a class="headerlink" href="#entity-ip::services::VirtualRange" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::services::VirtualScope" title="ip::services::VirtualScope entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::VirtualScope</span></code></a></p>
+<p>A range defined by from/to</p>
+<dl class="attribute">
+<dt id="attribute-ip::services::VirtualRange.to">
+<em class="property">attribute </em>ip::ip <code class="descclassname">to</code><a class="headerlink" href="#attribute-ip::services::VirtualRange.to" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-ip::services::VirtualRange.from">
+<em class="property">attribute </em>ip::ip <code class="descclassname">from</code><a class="headerlink" href="#attribute-ip::services::VirtualRange.from" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::VirtualScope">
+<em class="property">entity </em><code class="descclassname">ip::services::VirtualScope</code><a class="headerlink" href="#entity-ip::services::VirtualScope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>This interface represents a scope to determine what a virtual client
+or server is.</p>
+<dl class="relation">
+<dt id="relation-ip::services::VirtualScope.side">
+<em class="property">relation </em>ip::services::VirtualSide <code class="descclassname">side</code> [0:*]<a class="headerlink" href="#relation-ip::services::VirtualScope.side" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::services::VirtualSide.scope" title="ip::services::VirtualSide.scope relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::services::VirtualSide.scope</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::VirtualServer">
+<em class="property">entity </em><code class="descclassname">ip::services::VirtualServer</code><a class="headerlink" href="#entity-ip::services::VirtualServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-ip::services::BaseServer" title="ip::services::BaseServer entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::BaseServer</span></code></a>, <a class="reference internal" href="#entity-ip::services::VirtualSide" title="ip::services::VirtualSide entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::VirtualSide</span></code></a></p>
+<p>Same as VirtualClient but then for a server</p>
+<dl class="attribute">
+<dt id="attribute-ip::services::VirtualServer.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-ip::services::VirtualServer.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-ip::services::VirtualSide">
+<em class="property">entity </em><code class="descclassname">ip::services::VirtualSide</code><a class="headerlink" href="#entity-ip::services::VirtualSide" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A base class for a virtual server or client</p>
+<dl class="relation">
+<dt id="relation-ip::services::VirtualSide.scope">
+<em class="property">relation </em>ip::services::VirtualScope <code class="descclassname">scope</code> [0:*]<a class="headerlink" href="#relation-ip::services::VirtualSide.scope" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-ip::services::VirtualScope.side" title="ip::services::VirtualScope.side relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">ip::services::VirtualScope.side</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="implementations">
+<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
+<dl class="implementation">
+<dt id="implementation-ip::agentConfig">
+<em class="property">implementation </em><code class="descclassname">ip::agentConfig</code><a class="headerlink" href="#implementation-ip::agentConfig" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="plugins">
+<h2>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="ip.cidr_to_network">
+<code class="descclassname">ip.</code><code class="descname">cidr_to_network</code><span class="sig-paren">(</span><em>cidr: string</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#ip.cidr_to_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given cidr return the network address</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ip.concat">
+<code class="descclassname">ip.</code><code class="descname">concat</code><span class="sig-paren">(</span><em>host: std::hoststring</em>, <em>domain: std::hoststring</em><span class="sig-paren">)</span> &#x2192; std::hoststring<a class="headerlink" href="#ip.concat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concat host and domain</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ip.connect_to">
+<code class="descclassname">ip.</code><code class="descname">connect_to</code><span class="sig-paren">(</span><em>scope: ip::services::VirtualScope</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#ip.connect_to" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ip.hostname">
+<code class="descclassname">ip.</code><code class="descname">hostname</code><span class="sig-paren">(</span><em>fqdn: string</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#ip.hostname" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the hostname part of the fqdn</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ip.ipindex">
+<code class="descclassname">ip.</code><code class="descname">ipindex</code><span class="sig-paren">(</span><em>addr: ip::cidr</em>, <em>position: number</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#ip.ipindex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the address at position in the network.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ip.ipnet">
+<code class="descclassname">ip.</code><code class="descname">ipnet</code><span class="sig-paren">(</span><em>addr: ip::cidr</em>, <em>what: string</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#ip.ipnet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ip.is_valid_ip">
+<code class="descclassname">ip.</code><code class="descname">is_valid_ip</code><span class="sig-paren">(</span><em>addr: string</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#ip.is_valid_ip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ip.net_to_nm">
+<code class="descclassname">ip.</code><code class="descname">net_to_nm</code><span class="sig-paren">(</span><em>network_addr: string</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#ip.net_to_nm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ip.netmask">
+<code class="descclassname">ip.</code><code class="descname">netmask</code><span class="sig-paren">(</span><em>cidr: number</em><span class="sig-paren">)</span> &#x2192; ip::ip<a class="headerlink" href="#ip.netmask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the cidr, return the netmask</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ip.network">
+<code class="descclassname">ip.</code><code class="descname">network</code><span class="sig-paren">(</span><em>ip: ip::ip</em>, <em>cidr: string</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#ip.network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the ip and the cidr, return the network address</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="ip.networkaddress">
+<code class="descclassname">ip.</code><code class="descname">networkaddress</code><span class="sig-paren">(</span><em>ip: ip::Alias</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#ip.networkaddress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the network address</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="logging.html" class="btn btn-neutral float-right" title="Module logging" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="graphite.html" class="btn btn-neutral" title="Module graphite" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

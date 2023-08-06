@@ -1,0 +1,1822 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module openstack &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Inmanta modules" href="../modules.html"/>
+        <link rel="next" title="Module openvswitch" href="openvswitch.html"/>
+        <link rel="prev" title="Module net" href="net.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Inmanta Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands.html">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">Inmanta API reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html">Inmanta modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ansible.html">Module ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apache.html">Module apache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apt.html">Module apt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aws.html">Module aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bind.html">Module bind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collectd.html">Module collectd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dns.html">Module dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docker.html">Module docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drupal.html">Module drupal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exec.html">Module exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="graphite.html">Module graphite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip.html">Module ip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Module logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mongodb.html">Module mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="monitoring.html">Module monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mysql.html">Module mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="net.html">Module net</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module openstack</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#entities">Entities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#implementations">Implementations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plugins">Plugins</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resources">Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#handlers">Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="openvswitch.html">Module openvswitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="param.html">Module param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="php.html">Module php</a></li>
+<li class="toctree-l3"><a class="reference internal" href="platform.html">Module platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="redhat.html">Module redhat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssh.html">Module ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="std.html">Module std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu.html">Module ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">Module user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="varnish.html">Module varnish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html">Module web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="yum.html">Module yum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Inmanta Reference</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Inmanta modules</a> &raquo;</li>
+        
+      <li>Module openstack</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-openstack">
+<h1>Module openstack<a class="headerlink" href="#module-openstack" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li>License: Apache 2.0</li>
+<li>Version: 2.9.0</li>
+<li>Author: Inmanta &lt;<a class="reference external" href="mailto:code&#37;&#52;&#48;inmanta&#46;com">code<span>&#64;</span>inmanta<span>&#46;</span>com</a>&gt;</li>
+<li>This module requires compiler version 2017.1 or higher</li>
+<li>Upstream project: <a class="reference external" href="https://github.com/inmanta/openstack.git">https://github.com/inmanta/openstack.git</a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<dl class="typedef">
+<dt id="typedef-openstack::admin_state">
+<em class="property">typedef </em><code class="descclassname">openstack::admin_state</code><a class="headerlink" href="#typedef-openstack::admin_state" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Base type <code class="docutils literal"><span class="pre">string</span></code></li>
+<li>Type constraint <code class="docutils literal"><span class="pre">((self</span> <span class="pre">==</span> <span class="pre">'up')</span> <span class="pre">or</span> <span class="pre">(self</span> <span class="pre">==</span> <span class="pre">'down'))</span></code></li>
+</ul>
+</dd></dl>
+
+<dl class="typedef">
+<dt id="typedef-openstack::direction">
+<em class="property">typedef </em><code class="descclassname">openstack::direction</code><a class="headerlink" href="#typedef-openstack::direction" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Base type <code class="docutils literal"><span class="pre">string</span></code></li>
+<li>Type constraint <code class="docutils literal"><span class="pre">((self</span> <span class="pre">==</span> <span class="pre">'ingress')</span> <span class="pre">or</span> <span class="pre">(self</span> <span class="pre">==</span> <span class="pre">'egress'))</span></code></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="entities">
+<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<dl class="entity">
+<dt id="entity-openstack::EndPoint">
+<em class="property">entity </em><code class="descclassname">openstack::EndPoint</code><a class="headerlink" href="#entity-openstack::EndPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-openstack::EndPoint.admin_url">
+<em class="property">attribute </em>string <code class="descclassname">admin_url</code><a class="headerlink" href="#attribute-openstack::EndPoint.admin_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::EndPoint.public_url">
+<em class="property">attribute </em>string <code class="descclassname">public_url</code><a class="headerlink" href="#attribute-openstack::EndPoint.public_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::EndPoint.internal_url">
+<em class="property">attribute </em>string <code class="descclassname">internal_url</code><a class="headerlink" href="#attribute-openstack::EndPoint.internal_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::EndPoint.service_id">
+<em class="property">attribute </em>string <code class="descclassname">service_id</code><a class="headerlink" href="#attribute-openstack::EndPoint.service_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::EndPoint.region">
+<em class="property">attribute </em>string <code class="descclassname">region</code><a class="headerlink" href="#attribute-openstack::EndPoint.region" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::EndPoint.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::EndPoint.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.endpoints" title="openstack::Provider.endpoints relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.endpoints</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::EndPoint.service">
+<em class="property">relation </em>openstack::Service <code class="descclassname">service</code> [1]<a class="headerlink" href="#relation-openstack::EndPoint.service" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Service.endpoint" title="openstack::Service.endpoint relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Service.endpoint</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openstack::endPoint" title="openstack::endPoint implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::endPoint</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openstack::endPoint" title="openstack::endPoint implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::endPoint</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::FloatingIP">
+<em class="property">entity </em><code class="descclassname">openstack::FloatingIP</code><a class="headerlink" href="#entity-openstack::FloatingIP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-openstack::FloatingIP.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::FloatingIP.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::FloatingIP.port">
+<em class="property">relation </em>openstack::HostPort <code class="descclassname">port</code> [1]<a class="headerlink" href="#relation-openstack::FloatingIP.port" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::HostPort.floating_ips" title="openstack::HostPort.floating_ips relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::HostPort.floating_ips</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::FloatingIP.external_network">
+<em class="property">relation </em>openstack::Network <code class="descclassname">external_network</code> [1]<a class="headerlink" href="#relation-openstack::FloatingIP.external_network" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Network.floating_ips" title="openstack::Network.floating_ips relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Network.floating_ips</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::FloatingIP.project">
+<em class="property">relation </em>openstack::Project <code class="descclassname">project</code> [1]<a class="headerlink" href="#relation-openstack::FloatingIP.project" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Project.floating_ips" title="openstack::Project.floating_ips relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Project.floating_ips</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::FloatingIP.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::FloatingIP.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.floating_ips" title="openstack::Provider.floating_ips relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.floating_ips</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openstack::fipName" title="openstack::fipName implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::fipName</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openstack::fipName" title="openstack::fipName implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::fipName</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::GroupRule">
+<em class="property">entity </em><code class="descclassname">openstack::GroupRule</code><a class="headerlink" href="#entity-openstack::GroupRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::SecurityRule" title="openstack::SecurityRule entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::SecurityRule</span></code></a></p>
+<dl class="relation">
+<dt id="relation-openstack::GroupRule.remote_group">
+<em class="property">relation </em>openstack::SecurityGroup <code class="descclassname">remote_group</code> [1]<a class="headerlink" href="#relation-openstack::GroupRule.remote_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::SecurityGroup.remote_group_rules" title="openstack::SecurityGroup.remote_group_rules relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::SecurityGroup.remote_group_rules</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::Host">
+<em class="property">entity </em><code class="descclassname">openstack::Host</code><a class="headerlink" href="#entity-openstack::Host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="ip.html#entity-ip::Host" title="ip::Host entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::Host</span></code></a>, <a class="reference internal" href="#entity-openstack::VMAttributes" title="openstack::VMAttributes entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::VMAttributes</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-openstack::Host.purged">
+<em class="property">attribute </em>bool <code class="descclassname">purged</code>=False<a class="headerlink" href="#attribute-openstack::Host.purged" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Host.security_groups">
+<em class="property">relation </em>openstack::SecurityGroup <code class="descclassname">security_groups</code> [0:*]<a class="headerlink" href="#relation-openstack::Host.security_groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Host.key_pair">
+<em class="property">relation </em>ssh::Key <code class="descclassname">key_pair</code> [1]<a class="headerlink" href="#relation-openstack::Host.key_pair" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Host.subnet">
+<em class="property">relation </em>openstack::Subnet <code class="descclassname">subnet</code> [0:1]<a class="headerlink" href="#relation-openstack::Host.subnet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Host.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::Host.provider" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Host.vm">
+<em class="property">relation </em>openstack::VirtualMachine <code class="descclassname">vm</code> [1]<a class="headerlink" href="#relation-openstack::Host.vm" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::VirtualMachine.host" title="openstack::VirtualMachine.host relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::VirtualMachine.host</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Host.project">
+<em class="property">relation </em>openstack::Project <code class="descclassname">project</code> [1]<a class="headerlink" href="#relation-openstack::Host.project" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openstack::eth0Port" title="openstack::eth0Port implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::eth0Port</span></code></a></li>
+<li><a class="reference internal" href="#implementation-openstack::openstackVM" title="openstack::openstackVM implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::openstackVM</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openstack::eth0Port" title="openstack::eth0Port implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::eth0Port</span></code></a>
+constraint <code class="docutils literal"><span class="pre">subnet</span> <span class="pre">is</span> <span class="pre">defined</span> <span class="pre">is</span> <span class="pre">defined</span></code></li>
+<li><a class="reference internal" href="std.html#implementation-std::hostDefaults" title="std::hostDefaults implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::hostDefaults</span></code></a>, <a class="reference internal" href="#implementation-openstack::openstackVM" title="openstack::openstackVM implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::openstackVM</span></code></a></li>
+<li><a class="reference internal" href="#implementation-openstack::userData" title="openstack::userData implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::userData</span></code></a>
+constraint <code class="docutils literal"><span class="pre">install_agent</span></code></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::HostPort">
+<em class="property">entity </em><code class="descclassname">openstack::HostPort</code><a class="headerlink" href="#entity-openstack::HostPort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::Port" title="openstack::Port entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Port</span></code></a></p>
+<p>A port attached to a VM</p>
+<dl class="attribute">
+<dt id="attribute-openstack::HostPort.dhcp">
+<em class="property">attribute </em>bool <code class="descclassname">dhcp</code>=True<a class="headerlink" href="#attribute-openstack::HostPort.dhcp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable dhcp for this port or not for this port</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::HostPort.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::HostPort.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the host port.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::HostPort.retries">
+<em class="property">attribute </em>number <code class="descclassname">retries</code>=20<a class="headerlink" href="#attribute-openstack::HostPort.retries" title="Permalink to this definition">¶</a></dt>
+<dd><p>A hostport can only be attached to a VM when it is in an active state. The handler will skip this port when the VM is not ready. To speed up deployments, the handler can retry this number of times before skipping the resource.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::HostPort.portsecurity">
+<em class="property">attribute </em>bool <code class="descclassname">portsecurity</code>=True<a class="headerlink" href="#attribute-openstack::HostPort.portsecurity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable or disable port security (security groups and spoofing filters)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::HostPort.port_index">
+<em class="property">attribute </em>number <code class="descclassname">port_index</code>=0<a class="headerlink" href="#attribute-openstack::HostPort.port_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>The index of the port. This determines the order of the interfaces on the virtual machine. 0 means no specific order.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::HostPort.wait">
+<em class="property">attribute </em>number <code class="descclassname">wait</code>=5<a class="headerlink" href="#attribute-openstack::HostPort.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of seconds to wait between retries.</p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::HostPort.vm">
+<em class="property">relation </em>openstack::VirtualMachine <code class="descclassname">vm</code> [1]<a class="headerlink" href="#relation-openstack::HostPort.vm" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::VirtualMachine.ports" title="openstack::VirtualMachine.ports relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::VirtualMachine.ports</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::HostPort.floating_ips">
+<em class="property">relation </em>openstack::FloatingIP <code class="descclassname">floating_ips</code> [0:*]<a class="headerlink" href="#relation-openstack::HostPort.floating_ips" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::FloatingIP.port" title="openstack::FloatingIP.port relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::FloatingIP.port</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::HostPort.subnet">
+<em class="property">relation </em>openstack::Subnet <code class="descclassname">subnet</code> [1]<a class="headerlink" href="#relation-openstack::HostPort.subnet" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Subnet.host_ports" title="openstack::Subnet.host_ports relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Subnet.host_ports</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::IPrule">
+<em class="property">entity </em><code class="descclassname">openstack::IPrule</code><a class="headerlink" href="#entity-openstack::IPrule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::SecurityRule" title="openstack::SecurityRule entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::SecurityRule</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-openstack::IPrule.remote_prefix">
+<em class="property">attribute </em>ip::cidr <code class="descclassname">remote_prefix</code><a class="headerlink" href="#attribute-openstack::IPrule.remote_prefix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::Network">
+<em class="property">entity </em><code class="descclassname">openstack::Network</code><a class="headerlink" href="#entity-openstack::Network" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a></p>
+<p>A neutron network owned by a project</p>
+<dl class="attribute">
+<dt id="attribute-openstack::Network.external">
+<em class="property">attribute </em>bool <code class="descclassname">external</code>=False<a class="headerlink" href="#attribute-openstack::Network.external" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Network.network_type">
+<em class="property">attribute </em>string <code class="descclassname">network_type</code>=''<a class="headerlink" href="#attribute-openstack::Network.network_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Network.physical_network">
+<em class="property">attribute </em>string <code class="descclassname">physical_network</code>=''<a class="headerlink" href="#attribute-openstack::Network.physical_network" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Network.segmentation_id">
+<em class="property">attribute </em>number <code class="descclassname">segmentation_id</code>=0<a class="headerlink" href="#attribute-openstack::Network.segmentation_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Network.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::Network.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Network.routers">
+<em class="property">relation </em>openstack::Router <code class="descclassname">routers</code> [0:*]<a class="headerlink" href="#relation-openstack::Network.routers" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Router.ext_gateway" title="openstack::Router.ext_gateway relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Router.ext_gateway</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Network.subnets">
+<em class="property">relation </em>openstack::Subnet <code class="descclassname">subnets</code> [0:*]<a class="headerlink" href="#relation-openstack::Network.subnets" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Subnet.network" title="openstack::Subnet.network relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Subnet.network</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Network.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::Network.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.networks" title="openstack::Provider.networks relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.networks</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Network.floating_ips">
+<em class="property">relation </em>openstack::FloatingIP <code class="descclassname">floating_ips</code> [0:*]<a class="headerlink" href="#relation-openstack::Network.floating_ips" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::FloatingIP.external_network" title="openstack::FloatingIP.external_network relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::FloatingIP.external_network</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Network.project">
+<em class="property">relation </em>openstack::Project <code class="descclassname">project</code> [1]<a class="headerlink" href="#relation-openstack::Network.project" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Project.networks" title="openstack::Project.networks relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Project.networks</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::OpenStackResource">
+<em class="property">entity </em><code class="descclassname">openstack::OpenStackResource</code><a class="headerlink" href="#entity-openstack::OpenStackResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::PurgeableResource" title="std::PurgeableResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::PurgeableResource</span></code></a>, <a class="reference internal" href="std.html#entity-std::ManagedResource" title="std::ManagedResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::ManagedResource</span></code></a></p>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::Port">
+<em class="property">entity </em><code class="descclassname">openstack::Port</code><a class="headerlink" href="#entity-openstack::Port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a></p>
+<p>A port on a network</p>
+<dl class="attribute">
+<dt id="attribute-openstack::Port.address">
+<em class="property">attribute </em>ip::ip <code class="descclassname">address</code><a class="headerlink" href="#attribute-openstack::Port.address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Port.project">
+<em class="property">relation </em>openstack::Project <code class="descclassname">project</code> [1]<a class="headerlink" href="#relation-openstack::Port.project" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Project.ports" title="openstack::Project.ports relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Project.ports</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Port.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::Port.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.ports" title="openstack::Provider.ports relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.ports</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::Project">
+<em class="property">entity </em><code class="descclassname">openstack::Project</code><a class="headerlink" href="#entity-openstack::Project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a></p>
+<p>A project / tenant in openstack</p>
+<dl class="attribute">
+<dt id="attribute-openstack::Project.enabled">
+<em class="property">attribute </em>bool <code class="descclassname">enabled</code>=True<a class="headerlink" href="#attribute-openstack::Project.enabled" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Project.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::Project.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Project.description">
+<em class="property">attribute </em>string <code class="descclassname">description</code>=''<a class="headerlink" href="#attribute-openstack::Project.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Project.routers">
+<em class="property">relation </em>openstack::Router <code class="descclassname">routers</code> [0:*]<a class="headerlink" href="#relation-openstack::Project.routers" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Router.project" title="openstack::Router.project relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Router.project</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Project.security_groups">
+<em class="property">relation </em>openstack::SecurityGroup <code class="descclassname">security_groups</code> [0:*]<a class="headerlink" href="#relation-openstack::Project.security_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::SecurityGroup.project" title="openstack::SecurityGroup.project relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::SecurityGroup.project</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Project.roles">
+<em class="property">relation </em>openstack::Role <code class="descclassname">roles</code> [0:*]<a class="headerlink" href="#relation-openstack::Project.roles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Each user can have multiple roles</p>
+<p>other end: <a class="reference internal" href="#relation-openstack::Role.project" title="openstack::Role.project relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Role.project</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Project.networks">
+<em class="property">relation </em>openstack::Network <code class="descclassname">networks</code> [0:*]<a class="headerlink" href="#relation-openstack::Project.networks" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Network.project" title="openstack::Network.project relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Network.project</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Project.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::Project.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.projects" title="openstack::Provider.projects relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.projects</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Project.ports">
+<em class="property">relation </em>openstack::Port <code class="descclassname">ports</code> [0:*]<a class="headerlink" href="#relation-openstack::Project.ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Port.project" title="openstack::Port.project relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Port.project</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Project.floating_ips">
+<em class="property">relation </em>openstack::FloatingIP <code class="descclassname">floating_ips</code> [0:*]<a class="headerlink" href="#relation-openstack::Project.floating_ips" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::FloatingIP.project" title="openstack::FloatingIP.project relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::FloatingIP.project</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Project.subnets">
+<em class="property">relation </em>openstack::Subnet <code class="descclassname">subnets</code> [0:*]<a class="headerlink" href="#relation-openstack::Project.subnets" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Subnet.project" title="openstack::Subnet.project relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Subnet.project</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::Provider">
+<em class="property">entity </em><code class="descclassname">openstack::Provider</code><a class="headerlink" href="#entity-openstack::Provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>The configuration for accessing an Openstack based IaaS</p>
+<dl class="attribute">
+<dt id="attribute-openstack::Provider.password">
+<em class="property">attribute </em>string <code class="descclassname">password</code><a class="headerlink" href="#attribute-openstack::Provider.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Provider.admin_url">
+<em class="property">attribute </em>string <code class="descclassname">admin_url</code>=''<a class="headerlink" href="#attribute-openstack::Provider.admin_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Provider.auto_agent">
+<em class="property">attribute </em>bool <code class="descclassname">auto_agent</code>=True<a class="headerlink" href="#attribute-openstack::Provider.auto_agent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Provider.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::Provider.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Provider.token">
+<em class="property">attribute </em>string <code class="descclassname">token</code>=''<a class="headerlink" href="#attribute-openstack::Provider.token" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Provider.tenant">
+<em class="property">attribute </em>string <code class="descclassname">tenant</code><a class="headerlink" href="#attribute-openstack::Provider.tenant" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Provider.username">
+<em class="property">attribute </em>string <code class="descclassname">username</code><a class="headerlink" href="#attribute-openstack::Provider.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Provider.connection_url">
+<em class="property">attribute </em>string <code class="descclassname">connection_url</code><a class="headerlink" href="#attribute-openstack::Provider.connection_url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.routers">
+<em class="property">relation </em>openstack::Router <code class="descclassname">routers</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.routers" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Router.provider" title="openstack::Router.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Router.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.subnets">
+<em class="property">relation </em>openstack::Subnet <code class="descclassname">subnets</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.subnets" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Subnet.provider" title="openstack::Subnet.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Subnet.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.projects">
+<em class="property">relation </em>openstack::Project <code class="descclassname">projects</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.projects" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Project.provider" title="openstack::Project.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Project.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.floating_ips">
+<em class="property">relation </em>openstack::FloatingIP <code class="descclassname">floating_ips</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.floating_ips" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::FloatingIP.provider" title="openstack::FloatingIP.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::FloatingIP.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.security_groups">
+<em class="property">relation </em>openstack::SecurityGroup <code class="descclassname">security_groups</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.security_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::SecurityGroup.provider" title="openstack::SecurityGroup.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::SecurityGroup.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.endpoints">
+<em class="property">relation </em>openstack::EndPoint <code class="descclassname">endpoints</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.endpoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::EndPoint.provider" title="openstack::EndPoint.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::EndPoint.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.networks">
+<em class="property">relation </em>openstack::Network <code class="descclassname">networks</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.networks" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Network.provider" title="openstack::Network.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Network.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.services">
+<em class="property">relation </em>openstack::Service <code class="descclassname">services</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.services" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Service.provider" title="openstack::Service.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Service.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.roles">
+<em class="property">relation </em>openstack::Role <code class="descclassname">roles</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.roles" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Role.provider" title="openstack::Role.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Role.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.virtual_machines">
+<em class="property">relation </em>openstack::VirtualMachine <code class="descclassname">virtual_machines</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.virtual_machines" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::VirtualMachine.provider" title="openstack::VirtualMachine.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::VirtualMachine.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.users">
+<em class="property">relation </em>openstack::User <code class="descclassname">users</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.users" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::User.provider" title="openstack::User.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::User.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Provider.ports">
+<em class="property">relation </em>openstack::Port <code class="descclassname">ports</code> [0:*]<a class="headerlink" href="#relation-openstack::Provider.ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Port.provider" title="openstack::Port.provider relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Port.provider</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openstack::agentConfig" title="openstack::agentConfig implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::agentConfig</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+<li><a class="reference internal" href="#implementation-openstack::agentConfig" title="openstack::agentConfig implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::agentConfig</span></code></a>
+constraint <code class="docutils literal"><span class="pre">auto_agent</span></code></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::Role">
+<em class="property">entity </em><code class="descclassname">openstack::Role</code><a class="headerlink" href="#entity-openstack::Role" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a></p>
+<p>A role in openstack. A role defines membership of a user in a project.
+This entity is used to connect users to projects. With this, it
+implicitly defines the role.</p>
+<dl class="attribute">
+<dt id="attribute-openstack::Role.role_id">
+<em class="property">attribute </em>string <code class="descclassname">role_id</code><a class="headerlink" href="#attribute-openstack::Role.role_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Role.role">
+<em class="property">attribute </em>string <code class="descclassname">role</code><a class="headerlink" href="#attribute-openstack::Role.role" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Role.user">
+<em class="property">relation </em>openstack::User <code class="descclassname">user</code> [1]<a class="headerlink" href="#relation-openstack::Role.user" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::User.roles" title="openstack::User.roles relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::User.roles</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Role.project">
+<em class="property">relation </em>openstack::Project <code class="descclassname">project</code> [1]<a class="headerlink" href="#relation-openstack::Role.project" title="Permalink to this definition">¶</a></dt>
+<dd><p>Each user can have multiple roles</p>
+<p>other end: <a class="reference internal" href="#relation-openstack::Project.roles" title="openstack::Project.roles relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Project.roles</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Role.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::Role.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.roles" title="openstack::Provider.roles relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.roles</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openstack::roleImpl" title="openstack::roleImpl implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::roleImpl</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-openstack::roleImpl" title="openstack::roleImpl implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::roleImpl</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::Route">
+<em class="property">entity </em><code class="descclassname">openstack::Route</code><a class="headerlink" href="#entity-openstack::Route" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A routing rule to add</p>
+<dl class="attribute">
+<dt id="attribute-openstack::Route.destination">
+<em class="property">attribute </em>ip::cidr <code class="descclassname">destination</code><a class="headerlink" href="#attribute-openstack::Route.destination" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Route.nexthop">
+<em class="property">attribute </em>ip::ip <code class="descclassname">nexthop</code><a class="headerlink" href="#attribute-openstack::Route.nexthop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Route.router">
+<em class="property">relation </em>openstack::Router <code class="descclassname">router</code> [0:1]<a class="headerlink" href="#relation-openstack::Route.router" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Router.routes" title="openstack::Router.routes relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Router.routes</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::Router">
+<em class="property">entity </em><code class="descclassname">openstack::Router</code><a class="headerlink" href="#entity-openstack::Router" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a></p>
+<p>A router</p>
+<dl class="attribute">
+<dt id="attribute-openstack::Router.admin_state">
+<em class="property">attribute </em>openstack::admin_state <code class="descclassname">admin_state</code>='up'<a class="headerlink" href="#attribute-openstack::Router.admin_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Router.ha">
+<em class="property">attribute </em>bool <code class="descclassname">ha</code>=False<a class="headerlink" href="#attribute-openstack::Router.ha" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Router.distributed">
+<em class="property">attribute </em>bool <code class="descclassname">distributed</code>=False<a class="headerlink" href="#attribute-openstack::Router.distributed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Router.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::Router.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Router.routes">
+<em class="property">relation </em>openstack::Route <code class="descclassname">routes</code> [0:*]<a class="headerlink" href="#relation-openstack::Router.routes" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Route.router" title="openstack::Route.router relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Route.router</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Router.subnets">
+<em class="property">relation </em>openstack::Subnet <code class="descclassname">subnets</code> [0:*]<a class="headerlink" href="#relation-openstack::Router.subnets" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Subnet.router" title="openstack::Subnet.router relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Subnet.router</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Router.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::Router.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.routers" title="openstack::Provider.routers relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.routers</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Router.ext_gateway">
+<em class="property">relation </em>openstack::Network <code class="descclassname">ext_gateway</code> [0:1]<a class="headerlink" href="#relation-openstack::Router.ext_gateway" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Network.routers" title="openstack::Network.routers relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Network.routers</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Router.ports">
+<em class="property">relation </em>openstack::RouterPort <code class="descclassname">ports</code> [0:*]<a class="headerlink" href="#relation-openstack::Router.ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::RouterPort.router" title="openstack::RouterPort.router relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::RouterPort.router</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Router.project">
+<em class="property">relation </em>openstack::Project <code class="descclassname">project</code> [1]<a class="headerlink" href="#relation-openstack::Router.project" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Project.routers" title="openstack::Project.routers relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Project.routers</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::RouterPort">
+<em class="property">entity </em><code class="descclassname">openstack::RouterPort</code><a class="headerlink" href="#entity-openstack::RouterPort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::Port" title="openstack::Port entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Port</span></code></a></p>
+<p>A port attached to a router</p>
+<dl class="attribute">
+<dt id="attribute-openstack::RouterPort.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::RouterPort.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::RouterPort.router">
+<em class="property">relation </em>openstack::Router <code class="descclassname">router</code> [0:1]<a class="headerlink" href="#relation-openstack::RouterPort.router" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Router.ports" title="openstack::Router.ports relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Router.ports</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::RouterPort.subnet">
+<em class="property">relation </em>openstack::Subnet <code class="descclassname">subnet</code> [0:1]<a class="headerlink" href="#relation-openstack::RouterPort.subnet" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Subnet.routers" title="openstack::Subnet.routers relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Subnet.routers</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::SecurityGroup">
+<em class="property">entity </em><code class="descclassname">openstack::SecurityGroup</code><a class="headerlink" href="#entity-openstack::SecurityGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-openstack::SecurityGroup.manage_all">
+<em class="property">attribute </em>bool <code class="descclassname">manage_all</code>=True<a class="headerlink" href="#attribute-openstack::SecurityGroup.manage_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::SecurityGroup.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::SecurityGroup.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::SecurityGroup.retries">
+<em class="property">attribute </em>number <code class="descclassname">retries</code>=10<a class="headerlink" href="#attribute-openstack::SecurityGroup.retries" title="Permalink to this definition">¶</a></dt>
+<dd><p>A security group can only be deleted when it is no longer in use. The API confirms the delete of a virtual machine for example, but it might still be in progress. This results in a failure to delete the security group. To speed up deployments, the handler can retry this number of times before skipping the resource.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::SecurityGroup.wait">
+<em class="property">attribute </em>number <code class="descclassname">wait</code>=5<a class="headerlink" href="#attribute-openstack::SecurityGroup.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of seconds to wait between retries.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::SecurityGroup.description">
+<em class="property">attribute </em>string <code class="descclassname">description</code>=''<a class="headerlink" href="#attribute-openstack::SecurityGroup.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::SecurityGroup.remote_group_rules">
+<em class="property">relation </em>openstack::GroupRule <code class="descclassname">remote_group_rules</code> [0:*]<a class="headerlink" href="#relation-openstack::SecurityGroup.remote_group_rules" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::GroupRule.remote_group" title="openstack::GroupRule.remote_group relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::GroupRule.remote_group</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::SecurityGroup.project">
+<em class="property">relation </em>openstack::Project <code class="descclassname">project</code> [1]<a class="headerlink" href="#relation-openstack::SecurityGroup.project" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Project.security_groups" title="openstack::Project.security_groups relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Project.security_groups</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::SecurityGroup.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::SecurityGroup.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.security_groups" title="openstack::Provider.security_groups relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.security_groups</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::SecurityGroup.rules">
+<em class="property">relation </em>openstack::SecurityRule <code class="descclassname">rules</code> [0:*]<a class="headerlink" href="#relation-openstack::SecurityGroup.rules" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::SecurityRule.group" title="openstack::SecurityRule.group relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::SecurityRule.group</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::SecurityGroup.virtual_machines">
+<em class="property">relation </em>openstack::VirtualMachine <code class="descclassname">virtual_machines</code> [0:*]<a class="headerlink" href="#relation-openstack::SecurityGroup.virtual_machines" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::VirtualMachine.security_groups" title="openstack::VirtualMachine.security_groups relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::VirtualMachine.security_groups</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::SecurityRule">
+<em class="property">entity </em><code class="descclassname">openstack::SecurityRule</code><a class="headerlink" href="#entity-openstack::SecurityRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A filter rule in the a security group</p>
+<dl class="attribute">
+<dt id="attribute-openstack::SecurityRule.port_max">
+<em class="property">attribute </em>ip::port <code class="descclassname">port_max</code>=0<a class="headerlink" href="#attribute-openstack::SecurityRule.port_max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::SecurityRule.port_min">
+<em class="property">attribute </em>ip::port <code class="descclassname">port_min</code>=0<a class="headerlink" href="#attribute-openstack::SecurityRule.port_min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::SecurityRule.direction">
+<em class="property">attribute </em>openstack::direction <code class="descclassname">direction</code><a class="headerlink" href="#attribute-openstack::SecurityRule.direction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::SecurityRule.ip_protocol">
+<em class="property">attribute </em>ip::protocol <code class="descclassname">ip_protocol</code><a class="headerlink" href="#attribute-openstack::SecurityRule.ip_protocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of ip protocol to allow. Currently this support tcp/udp/icmp/sctp or all</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::SecurityRule.port">
+<em class="property">attribute </em>ip::port <code class="descclassname">port</code>=0<a class="headerlink" href="#attribute-openstack::SecurityRule.port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::SecurityRule.group">
+<em class="property">relation </em>openstack::SecurityGroup <code class="descclassname">group</code> [1]<a class="headerlink" href="#relation-openstack::SecurityRule.group" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::SecurityGroup.rules" title="openstack::SecurityGroup.rules relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::SecurityGroup.rules</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::Service">
+<em class="property">entity </em><code class="descclassname">openstack::Service</code><a class="headerlink" href="#entity-openstack::Service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-openstack::Service.type">
+<em class="property">attribute </em>string <code class="descclassname">type</code><a class="headerlink" href="#attribute-openstack::Service.type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Service.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::Service.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Service.description">
+<em class="property">attribute </em>string <code class="descclassname">description</code><a class="headerlink" href="#attribute-openstack::Service.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Service.endpoint">
+<em class="property">relation </em>openstack::EndPoint <code class="descclassname">endpoint</code> [0:1]<a class="headerlink" href="#relation-openstack::Service.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::EndPoint.service" title="openstack::EndPoint.service relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::EndPoint.service</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Service.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::Service.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.services" title="openstack::Provider.services relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.services</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::Subnet">
+<em class="property">entity </em><code class="descclassname">openstack::Subnet</code><a class="headerlink" href="#entity-openstack::Subnet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a></p>
+<p>A neutron network subnet</p>
+<dl class="attribute">
+<dt id="attribute-openstack::Subnet.network_address">
+<em class="property">attribute </em>ip::cidr <code class="descclassname">network_address</code><a class="headerlink" href="#attribute-openstack::Subnet.network_address" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Subnet.allocation_end">
+<em class="property">attribute </em>string <code class="descclassname">allocation_end</code>=''<a class="headerlink" href="#attribute-openstack::Subnet.allocation_end" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Subnet.dhcp">
+<em class="property">attribute </em>bool <code class="descclassname">dhcp</code><a class="headerlink" href="#attribute-openstack::Subnet.dhcp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Subnet.allocation_start">
+<em class="property">attribute </em>string <code class="descclassname">allocation_start</code>=''<a class="headerlink" href="#attribute-openstack::Subnet.allocation_start" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Subnet.dns_servers">
+<em class="property">attribute </em>ip::ip <code class="descclassname">dns_servers</code>=List()<a class="headerlink" href="#attribute-openstack::Subnet.dns_servers" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::Subnet.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::Subnet.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Subnet.router">
+<em class="property">relation </em>openstack::Router <code class="descclassname">router</code> [0:1]<a class="headerlink" href="#relation-openstack::Subnet.router" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Router.subnets" title="openstack::Router.subnets relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Router.subnets</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Subnet.routers">
+<em class="property">relation </em>openstack::RouterPort <code class="descclassname">routers</code> [0:*]<a class="headerlink" href="#relation-openstack::Subnet.routers" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::RouterPort.subnet" title="openstack::RouterPort.subnet relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::RouterPort.subnet</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Subnet.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::Subnet.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.subnets" title="openstack::Provider.subnets relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.subnets</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Subnet.host_ports">
+<em class="property">relation </em>openstack::HostPort <code class="descclassname">host_ports</code> [0:*]<a class="headerlink" href="#relation-openstack::Subnet.host_ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::HostPort.subnet" title="openstack::HostPort.subnet relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::HostPort.subnet</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Subnet.project">
+<em class="property">relation </em>openstack::Project <code class="descclassname">project</code> [1]<a class="headerlink" href="#relation-openstack::Subnet.project" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Project.subnets" title="openstack::Project.subnets relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Project.subnets</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::Subnet.network">
+<em class="property">relation </em>openstack::Network <code class="descclassname">network</code> [1]<a class="headerlink" href="#relation-openstack::Subnet.network" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Network.subnets" title="openstack::Network.subnets relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Network.subnets</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::User">
+<em class="property">entity </em><code class="descclassname">openstack::User</code><a class="headerlink" href="#entity-openstack::User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a></p>
+<p>A user in openstack. A handler for this entity type is loaded by agents.</p>
+<dl class="attribute">
+<dt id="attribute-openstack::User.password">
+<em class="property">attribute </em>string <code class="descclassname">password</code>=''<a class="headerlink" href="#attribute-openstack::User.password" title="Permalink to this definition">¶</a></dt>
+<dd><p>The password for this user. The handler will always reset back to this password. The handler will ignore this attribute when an empty string is set.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::User.enabled">
+<em class="property">attribute </em>bool <code class="descclassname">enabled</code>=True<a class="headerlink" href="#attribute-openstack::User.enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enable or disable this user</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::User.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::User.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the user. The name of the user has to be unique on a specific IaaS. The handler will use this name to query for the exact user and its ID.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::User.email">
+<em class="property">attribute </em>string <code class="descclassname">email</code><a class="headerlink" href="#attribute-openstack::User.email" title="Permalink to this definition">¶</a></dt>
+<dd><p>The email address of the user to use.</p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::User.roles">
+<em class="property">relation </em>openstack::Role <code class="descclassname">roles</code> [0:*]<a class="headerlink" href="#relation-openstack::User.roles" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Role.user" title="openstack::Role.user relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Role.user</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::User.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::User.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.users" title="openstack::Provider.users relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.users</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::VMAttributes">
+<em class="property">entity </em><code class="descclassname">openstack::VMAttributes</code><a class="headerlink" href="#entity-openstack::VMAttributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="platform.html#entity-platform::UserdataVM" title="platform::UserdataVM entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">platform::UserdataVM</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-openstack::VMAttributes.flavor">
+<em class="property">attribute </em>string <code class="descclassname">flavor</code><a class="headerlink" href="#attribute-openstack::VMAttributes.flavor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::VMAttributes.user_data">
+<em class="property">attribute </em>string <code class="descclassname">user_data</code><a class="headerlink" href="#attribute-openstack::VMAttributes.user_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::VMAttributes.install_agent">
+<em class="property">attribute </em>bool <code class="descclassname">install_agent</code>=False<a class="headerlink" href="#attribute-openstack::VMAttributes.install_agent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::VMAttributes.config_drive">
+<em class="property">attribute </em>bool <code class="descclassname">config_drive</code>=False<a class="headerlink" href="#attribute-openstack::VMAttributes.config_drive" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-openstack::VMAttributes.image">
+<em class="property">attribute </em>string <code class="descclassname">image</code><a class="headerlink" href="#attribute-openstack::VMAttributes.image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-openstack::VirtualMachine">
+<em class="property">entity </em><code class="descclassname">openstack::VirtualMachine</code><a class="headerlink" href="#entity-openstack::VirtualMachine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-openstack::OpenStackResource" title="openstack::OpenStackResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::OpenStackResource</span></code></a>, <a class="reference internal" href="#entity-openstack::VMAttributes" title="openstack::VMAttributes entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::VMAttributes</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-openstack::VirtualMachine.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-openstack::VirtualMachine.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::VirtualMachine.security_groups">
+<em class="property">relation </em>openstack::SecurityGroup <code class="descclassname">security_groups</code> [0:*]<a class="headerlink" href="#relation-openstack::VirtualMachine.security_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::SecurityGroup.virtual_machines" title="openstack::SecurityGroup.virtual_machines relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::SecurityGroup.virtual_machines</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::VirtualMachine.eth0_port">
+<em class="property">relation </em>openstack::HostPort <code class="descclassname">eth0_port</code> [1]<a class="headerlink" href="#relation-openstack::VirtualMachine.eth0_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::VirtualMachine.provider">
+<em class="property">relation </em>openstack::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-openstack::VirtualMachine.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Provider.virtual_machines" title="openstack::Provider.virtual_machines relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Provider.virtual_machines</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::VirtualMachine.host">
+<em class="property">relation </em>openstack::Host <code class="descclassname">host</code> [0:1]<a class="headerlink" href="#relation-openstack::VirtualMachine.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::Host.vm" title="openstack::Host.vm relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::Host.vm</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::VirtualMachine.ports">
+<em class="property">relation </em>openstack::HostPort <code class="descclassname">ports</code> [0:*]<a class="headerlink" href="#relation-openstack::VirtualMachine.ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-openstack::HostPort.vm" title="openstack::HostPort.vm relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">openstack::HostPort.vm</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::VirtualMachine.key_pair">
+<em class="property">relation </em>ssh::Key <code class="descclassname">key_pair</code> [1]<a class="headerlink" href="#relation-openstack::VirtualMachine.key_pair" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-openstack::VirtualMachine.project">
+<em class="property">relation </em>openstack::Project <code class="descclassname">project</code> [1]<a class="headerlink" href="#relation-openstack::VirtualMachine.project" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+<li><a class="reference internal" href="#implementation-openstack::userData" title="openstack::userData implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">openstack::userData</span></code></a>
+constraint <code class="docutils literal"><span class="pre">install_agent</span></code></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="implementations">
+<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
+<dl class="implementation">
+<dt id="implementation-openstack::agentConfig">
+<em class="property">implementation </em><code class="descclassname">openstack::agentConfig</code><a class="headerlink" href="#implementation-openstack::agentConfig" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-openstack::endPoint">
+<em class="property">implementation </em><code class="descclassname">openstack::endPoint</code><a class="headerlink" href="#implementation-openstack::endPoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-openstack::eth0Port">
+<em class="property">implementation </em><code class="descclassname">openstack::eth0Port</code><a class="headerlink" href="#implementation-openstack::eth0Port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-openstack::fipName">
+<em class="property">implementation </em><code class="descclassname">openstack::fipName</code><a class="headerlink" href="#implementation-openstack::fipName" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-openstack::openstackVM">
+<em class="property">implementation </em><code class="descclassname">openstack::openstackVM</code><a class="headerlink" href="#implementation-openstack::openstackVM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-openstack::roleImpl">
+<em class="property">implementation </em><code class="descclassname">openstack::roleImpl</code><a class="headerlink" href="#implementation-openstack::roleImpl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-openstack::userData">
+<em class="property">implementation </em><code class="descclassname">openstack::userData</code><a class="headerlink" href="#implementation-openstack::userData" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="plugins">
+<h2>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="openstack.find_flavor">
+<code class="descclassname">openstack.</code><code class="descname">find_flavor</code><span class="sig-paren">(</span><em>provider: openstack::Provider</em>, <em>vcpus: number</em>, <em>ram: number</em>, <em>pinned: bool=False</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#openstack.find_flavor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the flavor that matches the closest to the resources requested.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>vcpus</strong> – The number of virtual cpus in the flavor</li>
+<li><strong>ram</strong> – The amount of ram in megabyte</li>
+<li><strong>pinned</strong> – Wether the CPUs need to be pinned (#vcpu == #pcpu)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="openstack.find_image">
+<code class="descclassname">openstack.</code><code class="descname">find_image</code><span class="sig-paren">(</span><em>provider: openstack::Provider</em>, <em>os: std::OS</em>, <em>name: string=None</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#openstack.find_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Search for an image that matches the given operating system. This plugin uses
+the os_distro and os_version tags of an image and the name and version attributes of
+the OS parameter.</p>
+<p>If multiple images match, the most recent image is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>provider</strong> – The provider to query for an image</li>
+<li><strong>os</strong> – The operating system and version (using os_distro and os_version metadata)</li>
+<li><strong>name</strong> – An optional string that the image name should contain</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="openstack.EndPoint">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">EndPoint</code><a class="headerlink" href="#openstack.EndPoint" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>An endpoint for a service</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::EndPoint" title="openstack::EndPoint entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::EndPoint</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">service_id</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.EndpointHandler" title="openstack.EndpointHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.EndpointHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.FloatingIP">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">FloatingIP</code><a class="headerlink" href="#openstack.FloatingIP" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>A floating ip</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::FloatingIP" title="openstack::FloatingIP entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::FloatingIP</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.FloatingIPHandler" title="openstack.FloatingIPHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.FloatingIPHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.HostPort">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">HostPort</code><a class="headerlink" href="#openstack.HostPort" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>A port in a router</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::HostPort" title="openstack::HostPort entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::HostPort</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.HostPortHandler" title="openstack.HostPortHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.HostPortHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.Network">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">Network</code><a class="headerlink" href="#openstack.Network" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>This class represents a network in neutron</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::Network" title="openstack::Network entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Network</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.NetworkHandler" title="openstack.NetworkHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.NetworkHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.Project">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">Project</code><a class="headerlink" href="#openstack.Project" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>This class represents a project in keystone</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::Project" title="openstack::Project entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Project</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.ProjectHandler" title="openstack.ProjectHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.ProjectHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.Role">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">Role</code><a class="headerlink" href="#openstack.Role" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>A role that adds a user to a project</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::Role" title="openstack::Role entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Role</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">role_id</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.RoleHandler" title="openstack.RoleHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.RoleHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.Router">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">Router</code><a class="headerlink" href="#openstack.Router" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>This class represent a router in neutron</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::Router" title="openstack::Router entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Router</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.RouterHandler" title="openstack.RouterHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.RouterHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.RouterPort">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">RouterPort</code><a class="headerlink" href="#openstack.RouterPort" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>A port in a router</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::RouterPort" title="openstack::RouterPort entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::RouterPort</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.RouterPortHandler" title="openstack.RouterPortHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.RouterPortHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.SecurityGroup">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">SecurityGroup</code><a class="headerlink" href="#openstack.SecurityGroup" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>A security group in an OpenStack tenant</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::SecurityGroup" title="openstack::SecurityGroup entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::SecurityGroup</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.SecurityGroupHandler" title="openstack.SecurityGroupHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.SecurityGroupHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.Service">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">Service</code><a class="headerlink" href="#openstack.Service" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>A service for which endpoints can be registered</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::Service" title="openstack::Service entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Service</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.ServiceHandler" title="openstack.ServiceHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.ServiceHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.Subnet">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">Subnet</code><a class="headerlink" href="#openstack.Subnet" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>This class represent a subnet in neutron</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::Subnet" title="openstack::Subnet entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Subnet</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.SubnetHandler" title="openstack.SubnetHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.SubnetHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.User">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">User</code><a class="headerlink" href="#openstack.User" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>A user in keystone</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::User" title="openstack::User entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::User</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.UserHandler" title="openstack.UserHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.UserHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.VirtualMachine">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">VirtualMachine</code><a class="headerlink" href="#openstack.VirtualMachine" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>A virtual machine managed by a hypervisor or IaaS</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-openstack::VirtualMachine" title="openstack::VirtualMachine entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::VirtualMachine</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#openstack.VirtualMachineHandler" title="openstack.VirtualMachineHandler"><code class="xref py py-class docutils literal"><span class="pre">openstack.VirtualMachineHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="handlers">
+<h2>Handlers<a class="headerlink" href="#handlers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="openstack.RouterPortHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">RouterPortHandler</code><a class="headerlink" href="#openstack.RouterPortHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::RouterPort" title="openstack::RouterPort entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::RouterPort</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.HostPortHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">HostPortHandler</code><a class="headerlink" href="#openstack.HostPortHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::HostPort" title="openstack::HostPort entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::HostPort</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.FloatingIPHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">FloatingIPHandler</code><a class="headerlink" href="#openstack.FloatingIPHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::FloatingIP" title="openstack::FloatingIP entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::FloatingIP</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.EndpointHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">EndpointHandler</code><a class="headerlink" href="#openstack.EndpointHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::EndPoint" title="openstack::EndPoint entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::EndPoint</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.RoleHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">RoleHandler</code><a class="headerlink" href="#openstack.RoleHandler" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>creates roles and user, project, role assocations</div></blockquote>
+<ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::Role" title="openstack::Role entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Role</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.SubnetHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">SubnetHandler</code><a class="headerlink" href="#openstack.SubnetHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::Subnet" title="openstack::Subnet entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Subnet</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.ProjectHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">ProjectHandler</code><a class="headerlink" href="#openstack.ProjectHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::Project" title="openstack::Project entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Project</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.VirtualMachineHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">VirtualMachineHandler</code><a class="headerlink" href="#openstack.VirtualMachineHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::VirtualMachine" title="openstack::VirtualMachine entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::VirtualMachine</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.ServiceHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">ServiceHandler</code><a class="headerlink" href="#openstack.ServiceHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::Service" title="openstack::Service entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Service</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.SecurityGroupHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">SecurityGroupHandler</code><a class="headerlink" href="#openstack.SecurityGroupHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::SecurityGroup" title="openstack::SecurityGroup entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::SecurityGroup</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.RouterHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">RouterHandler</code><a class="headerlink" href="#openstack.RouterHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::Router" title="openstack::Router entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Router</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.NetworkHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">NetworkHandler</code><a class="headerlink" href="#openstack.NetworkHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::Network" title="openstack::Network entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Network</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="openstack.UserHandler">
+<em class="property">class </em><code class="descclassname">openstack.</code><code class="descname">UserHandler</code><a class="headerlink" href="#openstack.UserHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">openstack</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-openstack::User" title="openstack::User entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::User</span></code></a></li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="openvswitch.html" class="btn btn-neutral float-right" title="Module openvswitch" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="net.html" class="btn btn-neutral" title="Module net" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

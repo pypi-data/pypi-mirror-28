@@ -1,0 +1,567 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module monitoring &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Inmanta modules" href="../modules.html"/>
+        <link rel="next" title="Module mysql" href="mysql.html"/>
+        <link rel="prev" title="Module mongodb" href="mongodb.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Inmanta Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands.html">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">Inmanta API reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html">Inmanta modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ansible.html">Module ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apache.html">Module apache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apt.html">Module apt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aws.html">Module aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bind.html">Module bind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collectd.html">Module collectd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dns.html">Module dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docker.html">Module docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drupal.html">Module drupal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exec.html">Module exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="graphite.html">Module graphite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip.html">Module ip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Module logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mongodb.html">Module mongodb</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module monitoring</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#entities">Entities</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mysql.html">Module mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="net.html">Module net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openstack.html">Module openstack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openvswitch.html">Module openvswitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="param.html">Module param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="php.html">Module php</a></li>
+<li class="toctree-l3"><a class="reference internal" href="platform.html">Module platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="redhat.html">Module redhat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssh.html">Module ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="std.html">Module std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu.html">Module ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">Module user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="varnish.html">Module varnish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html">Module web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="yum.html">Module yum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Inmanta Reference</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Inmanta modules</a> &raquo;</li>
+        
+      <li>Module monitoring</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-monitoring">
+<h1>Module monitoring<a class="headerlink" href="#module-monitoring" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li>License: Apache 2.0</li>
+<li>Version: 0.2</li>
+<li>Author: Inmanta &lt;<a class="reference external" href="mailto:code&#37;&#52;&#48;inmanta&#46;com">code<span>&#64;</span>inmanta<span>&#46;</span>com</a>&gt;</li>
+<li>Upstream project: <a class="reference external" href="https://github.com/inmanta/monitoring.git">https://github.com/inmanta/monitoring.git</a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="entities">
+<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<dl class="entity">
+<dt id="entity-monitoring::Aggregator">
+<em class="property">entity </em><code class="descclassname">monitoring::Aggregator</code><a class="headerlink" href="#entity-monitoring::Aggregator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A generic aggregator</p>
+<dl class="relation">
+<dt id="relation-monitoring::Aggregator.host">
+<em class="property">relation </em>std::Host <code class="descclassname">host</code> [1]<a class="headerlink" href="#relation-monitoring::Aggregator.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <code class="xref inmanta inmanta-relation docutils literal"><span class="pre">std::Host.aggregators</span> <span class="pre">[0:*]</span></code></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::EventAggregator">
+<em class="property">entity </em><code class="descclassname">monitoring::EventAggregator</code><a class="headerlink" href="#entity-monitoring::EventAggregator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-monitoring::Aggregator" title="monitoring::Aggregator entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::Aggregator</span></code></a></p>
+<p>Aggregate events</p>
+<dl class="relation">
+<dt id="relation-monitoring::EventAggregator.event_transport">
+<em class="property">relation </em>monitoring::HostTransport <code class="descclassname">event_transport</code> [0:*]<a class="headerlink" href="#relation-monitoring::EventAggregator.event_transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-monitoring::HostTransport.event_aggregators" title="monitoring::HostTransport.event_aggregators relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">monitoring::HostTransport.event_aggregators</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::EventSource">
+<em class="property">entity </em><code class="descclassname">monitoring::EventSource</code><a class="headerlink" href="#entity-monitoring::EventSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-monitoring::Source" title="monitoring::Source entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::Source</span></code></a></p>
+<p>A source of events</p>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::HostTransport">
+<em class="property">entity </em><code class="descclassname">monitoring::HostTransport</code><a class="headerlink" href="#entity-monitoring::HostTransport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A component on a host that transports metrics, logs and events to
+somewhere. That can be over the network or to a file.</p>
+<dl class="relation">
+<dt id="relation-monitoring::HostTransport.event_aggregators">
+<em class="property">relation </em>monitoring::EventAggregator <code class="descclassname">event_aggregators</code> [0:1]<a class="headerlink" href="#relation-monitoring::HostTransport.event_aggregators" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-monitoring::EventAggregator.event_transport" title="monitoring::EventAggregator.event_transport relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">monitoring::EventAggregator.event_transport</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-monitoring::HostTransport.metric_aggregators">
+<em class="property">relation </em>monitoring::MetricAggregator <code class="descclassname">metric_aggregators</code> [0:1]<a class="headerlink" href="#relation-monitoring::HostTransport.metric_aggregators" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-monitoring::MetricAggregator.metric_transport" title="monitoring::MetricAggregator.metric_transport relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">monitoring::MetricAggregator.metric_transport</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-monitoring::HostTransport.host">
+<em class="property">relation </em>std::Host <code class="descclassname">host</code> [1]<a class="headerlink" href="#relation-monitoring::HostTransport.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <code class="xref inmanta inmanta-relation docutils literal"><span class="pre">std::Host.monitoring_transport</span> <span class="pre">[0:*]</span></code></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-monitoring::HostTransport.log_aggregators">
+<em class="property">relation </em>monitoring::LogAggregator <code class="descclassname">log_aggregators</code> [0:1]<a class="headerlink" href="#relation-monitoring::HostTransport.log_aggregators" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-monitoring::LogAggregator.log_transport" title="monitoring::LogAggregator.log_transport relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">monitoring::LogAggregator.log_transport</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-monitoring::HostTransport.query_aggregators">
+<em class="property">relation </em>monitoring::QueryAggregator <code class="descclassname">query_aggregators</code> [1]<a class="headerlink" href="#relation-monitoring::HostTransport.query_aggregators" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-monitoring::QueryAggregator.query_transport" title="monitoring::QueryAggregator.query_transport relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">monitoring::QueryAggregator.query_transport</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::JmxSource">
+<em class="property">entity </em><code class="descclassname">monitoring::JmxSource</code><a class="headerlink" href="#entity-monitoring::JmxSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-monitoring::LogSource" title="monitoring::LogSource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::LogSource</span></code></a>, <a class="reference internal" href="#entity-monitoring::MetricSource" title="monitoring::MetricSource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::MetricSource</span></code></a>, <a class="reference internal" href="#entity-monitoring::EventSource" title="monitoring::EventSource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::EventSource</span></code></a></p>
+<p>Collect monitoring data from JMX</p>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::JournaldTail">
+<em class="property">entity </em><code class="descclassname">monitoring::JournaldTail</code><a class="headerlink" href="#entity-monitoring::JournaldTail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-monitoring::LogSource" title="monitoring::LogSource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::LogSource</span></code></a></p>
+<p>Tail the output of journald and collect messages</p>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::LogAggregator">
+<em class="property">entity </em><code class="descclassname">monitoring::LogAggregator</code><a class="headerlink" href="#entity-monitoring::LogAggregator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-monitoring::Aggregator" title="monitoring::Aggregator entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::Aggregator</span></code></a></p>
+<p>Aggregate logs</p>
+<dl class="relation">
+<dt id="relation-monitoring::LogAggregator.log_transport">
+<em class="property">relation </em>monitoring::HostTransport <code class="descclassname">log_transport</code> [0:*]<a class="headerlink" href="#relation-monitoring::LogAggregator.log_transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-monitoring::HostTransport.log_aggregators" title="monitoring::HostTransport.log_aggregators relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">monitoring::HostTransport.log_aggregators</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::LogSource">
+<em class="property">entity </em><code class="descclassname">monitoring::LogSource</code><a class="headerlink" href="#entity-monitoring::LogSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-monitoring::Source" title="monitoring::Source entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::Source</span></code></a></p>
+<p>A source of log data</p>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::LogTail">
+<em class="property">entity </em><code class="descclassname">monitoring::LogTail</code><a class="headerlink" href="#entity-monitoring::LogTail" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-monitoring::LogSource" title="monitoring::LogSource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::LogSource</span></code></a></p>
+<p>Put a tail on a log file and collect the log message</p>
+<dl class="attribute">
+<dt id="attribute-monitoring::LogTail.path">
+<em class="property">attribute </em>string <code class="descclassname">path</code><a class="headerlink" href="#attribute-monitoring::LogTail.path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::MetricAggregator">
+<em class="property">entity </em><code class="descclassname">monitoring::MetricAggregator</code><a class="headerlink" href="#entity-monitoring::MetricAggregator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-monitoring::Aggregator" title="monitoring::Aggregator entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::Aggregator</span></code></a></p>
+<p>Aggregate metrics</p>
+<dl class="relation">
+<dt id="relation-monitoring::MetricAggregator.metric_transport">
+<em class="property">relation </em>monitoring::HostTransport <code class="descclassname">metric_transport</code> [0:*]<a class="headerlink" href="#relation-monitoring::MetricAggregator.metric_transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-monitoring::HostTransport.metric_aggregators" title="monitoring::HostTransport.metric_aggregators relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">monitoring::HostTransport.metric_aggregators</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::MetricCollector">
+<em class="property">entity </em><code class="descclassname">monitoring::MetricCollector</code><a class="headerlink" href="#entity-monitoring::MetricCollector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-monitoring::MetricSource" title="monitoring::MetricSource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::MetricSource</span></code></a></p>
+<p>Enable a sensor collect on a host</p>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::MetricSource">
+<em class="property">entity </em><code class="descclassname">monitoring::MetricSource</code><a class="headerlink" href="#entity-monitoring::MetricSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-monitoring::Source" title="monitoring::Source entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::Source</span></code></a></p>
+<p>A source of metric data</p>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::QueryAggregator">
+<em class="property">entity </em><code class="descclassname">monitoring::QueryAggregator</code><a class="headerlink" href="#entity-monitoring::QueryAggregator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-monitoring::Aggregator" title="monitoring::Aggregator entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">monitoring::Aggregator</span></code></a></p>
+<p>The query interface</p>
+<dl class="relation">
+<dt id="relation-monitoring::QueryAggregator.query_transport">
+<em class="property">relation </em>monitoring::HostTransport <code class="descclassname">query_transport</code> [0:*]<a class="headerlink" href="#relation-monitoring::QueryAggregator.query_transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-monitoring::HostTransport.query_aggregators" title="monitoring::HostTransport.query_aggregators relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">monitoring::HostTransport.query_aggregators</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::Source">
+<em class="property">entity </em><code class="descclassname">monitoring::Source</code><a class="headerlink" href="#entity-monitoring::Source" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A source of monitoring data</p>
+<dl class="relation">
+<dt id="relation-monitoring::Source.host">
+<em class="property">relation </em>std::Host <code class="descclassname">host</code> [1]<a class="headerlink" href="#relation-monitoring::Source.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <code class="xref inmanta inmanta-relation docutils literal"><span class="pre">std::Host.monitoring_source</span> <span class="pre">[0:*]</span></code></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-monitoring::Source.tags">
+<em class="property">relation </em>monitoring::Tag <code class="descclassname">tags</code> [0:*]<a class="headerlink" href="#relation-monitoring::Source.tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-monitoring::Tag.base" title="monitoring::Tag.base relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">monitoring::Tag.base</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-monitoring::Tag">
+<em class="property">entity </em><code class="descclassname">monitoring::Tag</code><a class="headerlink" href="#entity-monitoring::Tag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A tag on a data source for monitoring tools</p>
+<dl class="attribute">
+<dt id="attribute-monitoring::Tag.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-monitoring::Tag.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the tag</p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-monitoring::Tag.base">
+<em class="property">relation </em>monitoring::Source <code class="descclassname">base</code> [1]<a class="headerlink" href="#relation-monitoring::Tag.base" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-monitoring::Source.tags" title="monitoring::Source.tags relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">monitoring::Source.tags</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="mysql.html" class="btn btn-neutral float-right" title="Module mysql" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="mongodb.html" class="btn btn-neutral" title="Module mongodb" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,677 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>OpenStack &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Module guides" href="../../moduleguides.html"/>
+        <link rel="next" title="Forms" href="../param/index.html"/>
+        <link rel="prev" title="Ansible module" href="../ansible/index.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../moduleguides.html">Module guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ansible/index.html">Ansible module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">OpenStack</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#creating-machines">Creating machines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#getting-the-agent-on-the-machine">Getting the agent on the machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pushing-config-to-the-machine">Pushing config to the machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#actual-usage">Actual usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../param/index.html">Forms</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">Inmanta Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../moduleguides.html">Module guides</a> &raquo;</li>
+        
+      <li>OpenStack</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="openstack">
+<h1>OpenStack<a class="headerlink" href="#openstack" title="Permalink to this headline">¶</a></h1>
+<p>The openstack module provides support for managing various resources on OpenStack, including virtual
+machines, networks, routers, …</p>
+<p>This guide explains how to start virtual machines on OpenStack.</p>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>This tutorial requires you to have an account on an OpenStack. The example below loads the required
+credentials from environment variables, just like the OpenStack command line tools. Additionally,
+the following parameters are also required:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="22%" />
+<col width="78%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>ssh_public_key</td>
+<td>Your public ssh key (the key itself, not the name of the file it is in)</td>
+</tr>
+<tr class="row-even"><td>network_name</td>
+<td>The name of the Openstack network to connect the VM to</td>
+</tr>
+<tr class="row-odd"><td>subnet_name</td>
+<td>The name of the Openstack subnet to connect the VM to</td>
+</tr>
+<tr class="row-even"><td>network_address</td>
+<td>The network address of the subnet above</td>
+</tr>
+<tr class="row-odd"><td>flavor_name</td>
+<td>The name of the Openstack flavor to create the VM from</td>
+</tr>
+<tr class="row-even"><td>image_id</td>
+<td>The ID of the Openstack image to boot the VM from</td>
+</tr>
+<tr class="row-odd"><td>os</td>
+<td>The OS of the image</td>
+</tr>
+</tbody>
+</table>
+<p>The model below exposes these parameters at the top of the code snippet.</p>
+</div>
+<div class="section" id="creating-machines">
+<h2>Creating machines<a class="headerlink" href="#creating-machines" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-inmanta"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="n">openstack</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="n">ssh</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="n">redhat</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="n">ubuntu</span><span class="w"></span>
+
+<span class="c1">## Edit this parameters</span>
+<span class="n">image_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="n">network_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="n">subnet_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="n">network_address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+
+<span class="n">flavor_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="n">ssh_public_key</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="w"></span>
+
+<span class="c1"># change OS parameter to match the actual image. If an OS is not modelled in an existing module,</span>
+<span class="c1"># std::linux can be used for example. However, other modules might not have support for a</span>
+<span class="c1"># generic os definition such as std::linux</span>
+<span class="n">os</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redhat</span><span class="o">::</span><span class="n">fedora23</span><span class="w"></span>
+<span class="c1">## End edit</span>
+
+<span class="c1"># register ssh key</span>
+<span class="n">ssh_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ssh::Key</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;mykey&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">public_key</span><span class="o">=</span><span class="n">ssh_public_key</span><span class="o">)</span><span class="w"></span>
+
+<span class="c1"># Define the OpenStack provider to use</span>
+<span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">openstack::Provider</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;iaas_openstack&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">connection_url</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">get_env</span><span class="o">(</span><span class="s">&quot;OS_AUTH_URL&quot;</span><span class="o">),</span><span class="w"></span>
+<span class="w">                               </span><span class="n">username</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">get_env</span><span class="o">(</span><span class="s">&quot;OS_USERNAME&quot;</span><span class="o">),</span><span class="w"></span>
+<span class="w">                               </span><span class="n">password</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">get_env</span><span class="o">(</span><span class="s">&quot;OS_PASSWORD&quot;</span><span class="o">),</span><span class="w"></span>
+<span class="w">                               </span><span class="n">tenant</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">get_env</span><span class="o">(</span><span class="s">&quot;OS_PROJECT_NAME&quot;</span><span class="o">))</span><span class="w"></span>
+
+<span class="c1"># Define the project/tenant to boot the VM in, but do not let inmanta manage it</span>
+<span class="n">project</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">openstack::Project</span><span class="o">(</span><span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="o">,</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="n">provider</span><span class="o">.</span><span class="n">tenant</span><span class="o">,</span><span class="w"> </span><span class="n">description</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">enabled</span><span class="o">=</span><span class="k">true</span><span class="o">,</span><span class="w"></span>
+<span class="w">                             </span><span class="n">managed</span><span class="o">=</span><span class="k">false</span><span class="o">)</span><span class="w"></span>
+
+<span class="c1"># Define the network objects to connect the virtual machine to but again, do not manage them</span>
+<span class="n">net</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">openstack::Network</span><span class="o">(</span><span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="o">,</span><span class="w"> </span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="o">,</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="n">network_name</span><span class="o">,</span><span class="w"> </span><span class="n">managed</span><span class="o">=</span><span class="k">false</span><span class="o">)</span><span class="w"></span>
+<span class="n">subnet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">openstack::Subnet</span><span class="o">(</span><span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="o">,</span><span class="w"> </span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="o">,</span><span class="w"> </span><span class="n">network</span><span class="o">=</span><span class="n">net</span><span class="o">,</span><span class="w"> </span><span class="n">dhcp</span><span class="o">=</span><span class="k">true</span><span class="o">,</span><span class="w"> </span><span class="n">managed</span><span class="o">=</span><span class="k">false</span><span class="o">,</span><span class="w"></span>
+<span class="w">                           </span><span class="n">name</span><span class="o">=</span><span class="n">subnet_name</span><span class="o">,</span><span class="w"> </span><span class="n">network_address</span><span class="o">=</span><span class="n">network_address</span><span class="o">)</span><span class="w"></span>
+
+<span class="c1"># Define the virtual machine</span>
+<span class="n">vm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">openstack::Host</span><span class="o">(</span><span class="n">provider</span><span class="o">=</span><span class="n">provider</span><span class="o">,</span><span class="w"> </span><span class="n">project</span><span class="o">=</span><span class="n">project</span><span class="o">,</span><span class="w"> </span><span class="n">key_pair</span><span class="o">=</span><span class="n">ssh_key</span><span class="o">,</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="s">&quot;testhost&quot;</span><span class="o">,</span><span class="w"></span>
+<span class="w">                     </span><span class="n">image</span><span class="o">=</span><span class="n">image_id</span><span class="o">,</span><span class="w"> </span><span class="n">os</span><span class="o">=</span><span class="n">os</span><span class="o">,</span><span class="w"> </span><span class="n">flavor</span><span class="o">=</span><span class="n">flavor_name</span><span class="o">,</span><span class="w"> </span><span class="n">user_data</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">subnet</span><span class="o">=</span><span class="n">subnet</span><span class="o">)</span><span class="w"></span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="getting-the-agent-on-the-machine">
+<h2>Getting the agent on the machine<a class="headerlink" href="#getting-the-agent-on-the-machine" title="Permalink to this headline">¶</a></h2>
+<p>The user_data attribute of the <a class="reference internal" href="../../reference/modules/openstack.html#entity-openstack::VirtualMachine" title="openstack::VirtualMachine entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::VirtualMachine</span></code></a> entity can inject a shell script that is executed
+at first boot of the virtual machine (through cloud-init). Below is an example script to install
+the inmanta agent (from RPM) and let it connect back to the management server.</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+
+hostname <span class="o">{{</span> name <span class="o">}}</span>
+setenforce <span class="m">0</span>
+
+cat &gt; /etc/yum.repos.d/inmanta.repo <span class="s">&lt;&lt;EOF</span>
+<span class="s">[bartvanbrabant-inmanta]</span>
+<span class="s">name=Copr repo for inmanta owned by bartvanbrabant</span>
+<span class="s">baseurl=https://copr-be.cloud.fedoraproject.org/results/bartvanbrabant/inmanta/fedora-\$releasever-\$basearch/</span>
+<span class="s">type=rpm-md</span>
+<span class="s">skip_if_unavailable=True</span>
+<span class="s">gpgcheck=1</span>
+<span class="s">gpgkey=https://copr-be.cloud.fedoraproject.org/results/bartvanbrabant/inmanta/pubkey.gpg</span>
+<span class="s">repo_gpgcheck=0</span>
+<span class="s">enabled=1</span>
+<span class="s">enabled_metadata=1</span>
+<span class="s">EOF</span>
+
+dnf install -y python3-inmanta-agent
+
+cat &gt; /etc/inmanta/agent.cfg <span class="s">&lt;&lt;EOF</span>
+<span class="s">[config]</span>
+<span class="s">heartbeat-interval = 60</span>
+<span class="s">fact-expire = 60</span>
+<span class="s">state-dir=/var/lib/inmanta</span>
+<span class="s">environment={{ env_id }}</span>
+<span class="s">agent-names=\$node-name</span>
+<span class="s">[agent_rest_transport]</span>
+<span class="s">port={{port}}</span>
+<span class="s">host={{env_server}}</span>
+<span class="s">EOF</span>
+
+systemctl start inmanta-agent
+systemctl <span class="nb">enable</span> inmanta-agent
+</pre></div>
+</div>
+</div>
+<div class="section" id="pushing-config-to-the-machine">
+<h2>Pushing config to the machine<a class="headerlink" href="#pushing-config-to-the-machine" title="Permalink to this headline">¶</a></h2>
+<p>To install config:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#put a file on the machine</span>
+<span class="n">std</span><span class="p">::</span><span class="n">ConfigFile</span><span class="p">(</span><span class="n">host</span> <span class="o">=</span> <span class="n">host1</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;/tmp/test&quot;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="s2">&quot;I did it!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="actual-usage">
+<h2>Actual usage<a class="headerlink" href="#actual-usage" title="Permalink to this headline">¶</a></h2>
+<p>Creating instances of <a class="reference internal" href="../../reference/modules/openstack.html#entity-openstack::Host" title="openstack::Host entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">openstack::Host</span></code></a>, as shown above requires many parameters and relations,
+creating a model that is hard to read. Often, these parameters are all the same within a single
+model. This means that Inmanta can encapsulate this complexity.</p>
+<p>In a larger model, a new <code class="docutils literal"><span class="pre">Host</span></code> type can encapsulate all settings that are the same for all hosts.
+Additionally, an entity that represents the <cite>infrastructure</cite> can hold shared configuration such as
+the provider, monitoring, shared networks, global parameters,…)</p>
+<p>For example (<a class="reference external" href="https://github.com/inmanta/openstack/tree/master/docs/examples/openstackclean">full source here</a>)</p>
+<p>Applied to the example above the main file is reduced to:</p>
+<div class="highlight-inmanta"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="n">mymodule</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="n">ssh</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="n">redhat</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="n">ubuntu</span><span class="w"></span>
+
+<span class="c1">## Edit this parameters</span>
+<span class="n">image_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="n">network_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="n">subnet_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="n">network_address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+
+<span class="n">flavor_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="w"></span>
+<span class="n">ssh_public_key</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="w"></span>
+
+<span class="c1"># change OS parameter to match the actual image. If an OS is not modelled in an existing module,</span>
+<span class="c1"># std::linux can be used for example. However, other modules might not have support for a</span>
+<span class="c1"># generic os definition such as std::linux</span>
+<span class="n">os</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">redhat</span><span class="o">::</span><span class="n">fedora23</span><span class="w"></span>
+<span class="c1">## End edit</span>
+
+<span class="c1"># register ssh key</span>
+<span class="n">ssh_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">ssh::Key</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;mykey&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">public_key</span><span class="o">=</span><span class="n">ssh_public_key</span><span class="o">)</span><span class="w"></span>
+
+<span class="c1"># create the cluster</span>
+<span class="n">cluster</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">mymodule::MyCluster</span><span class="o">(</span><span class="n">network_name</span><span class="o">=</span><span class="n">network_name</span><span class="o">,</span><span class="w"> </span><span class="n">subnet_name</span><span class="o">=</span><span class="n">subnet_name</span><span class="o">,</span><span class="w"></span>
+<span class="w">                              </span><span class="n">image_id</span><span class="o">=</span><span class="n">image_id</span><span class="o">,</span><span class="w"> </span><span class="n">flavor</span><span class="o">=</span><span class="n">flavor_name</span><span class="o">,</span><span class="w"> </span><span class="n">key</span><span class="o">=</span><span class="n">ssh_key</span><span class="o">,</span><span class="w"></span>
+<span class="w">                              </span><span class="n">network_address</span><span class="o">=</span><span class="n">network_address</span><span class="o">,</span><span class="w"> </span><span class="n">os</span><span class="o">=</span><span class="n">os</span><span class="o">)</span><span class="w"></span>
+
+<span class="c1"># make a vm!</span>
+<span class="n">host1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">mymodule::MyHost</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;testhost&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">cluster</span><span class="o">=</span><span class="n">cluster</span><span class="o">)</span><span class="w"></span>
+</pre></div>
+</td></tr></table></div>
+<p>With the following module:</p>
+<div class="highlight-inmanta"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="n">openstack</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="n">ssh</span><span class="w"></span>
+
+
+<span class="k">entity</span><span class="w"> </span><span class="nc">MyCluster</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="cm">&quot;&quot;&quot;</span>
+<span class="cm">        A cluster object that represents all shared config and infrastructure,</span>
+<span class="cm">        including connecting to OpenStack.</span>
+<span class="cm">    &quot;&quot;&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">network_name</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">subnet_name</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">network_address</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">image_id</span><span class="w"> </span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">flavor</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="c1">#input: the ssh key for all VMs</span>
+<span class="nc">MyCluster</span><span class="o">.</span><span class="nf">key</span><span class="w"> </span><span class="o">[1] --</span><span class="w"> </span><span class="nc">ssh::Key</span><span class="w"></span>
+
+<span class="c1">#input: the OS for all VMs</span>
+<span class="nc">MyCluster</span><span class="o">.</span><span class="nf">os</span><span class="w"> </span><span class="o">[1] --</span><span class="w"> </span><span class="nc">std::OS</span><span class="w"></span>
+
+<span class="c1">#internal: objects needed to construct hosts</span>
+<span class="nc">MyCluster</span><span class="o">.</span><span class="nf">provider</span><span class="w"> </span><span class="o">[1] --</span><span class="w"> </span><span class="nc">openstack::Provider</span><span class="w"></span>
+<span class="nc">MyCluster</span><span class="o">.</span><span class="nf">project</span><span class="w"> </span><span class="o">[1] --</span><span class="w"> </span><span class="nc">openstack::Project</span><span class="w"></span>
+<span class="nc">MyCluster</span><span class="o">.</span><span class="nf">net</span><span class="w"> </span><span class="o">[1] --</span><span class="w"> </span><span class="nc">openstack::Network</span><span class="w"></span>
+<span class="nc">MyCluster</span><span class="o">.</span><span class="nf">subnet</span><span class="w"> </span><span class="o">[1] --</span><span class="w"> </span><span class="nc">openstack::Subnet</span><span class="w"></span>
+
+<span class="k">implementation</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nc">MyCluster</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1"># Define the OpenStack provider to use</span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">openstack::Provider</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">&quot;iaas_openstack&quot;</span><span class="o">,</span><span class="w"></span>
+<span class="w">                                        </span><span class="n">connection_url</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">get_env</span><span class="o">(</span><span class="s">&quot;OS_AUTH_URL&quot;</span><span class="o">),</span><span class="w"></span>
+<span class="w">                                        </span><span class="n">username</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">get_env</span><span class="o">(</span><span class="s">&quot;OS_USERNAME&quot;</span><span class="o">),</span><span class="w"></span>
+<span class="w">                                        </span><span class="n">password</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">get_env</span><span class="o">(</span><span class="s">&quot;OS_PASSWORD&quot;</span><span class="o">),</span><span class="w"></span>
+<span class="w">                                        </span><span class="n">tenant</span><span class="o">=</span><span class="n">std</span><span class="o">::</span><span class="n">get_env</span><span class="o">(</span><span class="s">&quot;OS_PROJECT_NAME&quot;</span><span class="o">))</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1"># Define the project/tenant to boot the VM in, but do not let inmanta manage it</span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">project</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">openstack::Project</span><span class="o">(</span><span class="n">provider</span><span class="o">=</span><span class="n">self</span><span class="o">.</span><span class="n">provider</span><span class="o">,</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="n">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">tenant</span><span class="o">,</span><span class="w"></span>
+<span class="w">                                      </span><span class="n">description</span><span class="o">=</span><span class="s">&quot;&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">enabled</span><span class="o">=</span><span class="k">true</span><span class="o">,</span><span class="w"> </span><span class="n">managed</span><span class="o">=</span><span class="k">false</span><span class="o">)</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1"># Define the network objects to connect the virtual machine to but again, do not manage them</span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">net</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">openstack::Network</span><span class="o">(</span><span class="n">provider</span><span class="o">=</span><span class="n">self</span><span class="o">.</span><span class="n">provider</span><span class="o">,</span><span class="w"> </span><span class="n">project</span><span class="o">=</span><span class="n">self</span><span class="o">.</span><span class="n">project</span><span class="o">,</span><span class="w"></span>
+<span class="w">                                  </span><span class="n">name</span><span class="o">=</span><span class="n">self</span><span class="o">.</span><span class="n">network_name</span><span class="o">,</span><span class="w"> </span><span class="n">managed</span><span class="o">=</span><span class="k">false</span><span class="o">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">subnet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">openstack::Subnet</span><span class="o">(</span><span class="n">provider</span><span class="o">=</span><span class="n">self</span><span class="o">.</span><span class="n">provider</span><span class="o">,</span><span class="w"> </span><span class="n">project</span><span class="o">=</span><span class="n">self</span><span class="o">.</span><span class="n">project</span><span class="o">,</span><span class="w"></span>
+<span class="w">                                    </span><span class="n">network</span><span class="o">=</span><span class="n">self</span><span class="o">.</span><span class="n">net</span><span class="o">,</span><span class="w"> </span><span class="n">dhcp</span><span class="o">=</span><span class="k">true</span><span class="o">,</span><span class="w"> </span><span class="n">name</span><span class="o">=</span><span class="n">self</span><span class="o">.</span><span class="n">subnet_name</span><span class="o">,</span><span class="w"></span>
+<span class="w">                                    </span><span class="n">network_address</span><span class="o">=</span><span class="n">self</span><span class="o">.</span><span class="n">network_address</span><span class="o">,</span><span class="w"> </span><span class="n">managed</span><span class="o">=</span><span class="k">false</span><span class="o">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">implement</span><span class="w"> </span><span class="nc">MyCluster</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">connection</span><span class="w"></span>
+
+<span class="c1">#define our own host type</span>
+<span class="k">entity</span><span class="w"> </span><span class="nc">MyHost</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">openstack::Host</span><span class="o">:</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="c1">#input: the cluster object</span>
+<span class="nc">MyCluster</span><span class="o">.</span><span class="nf">hosts</span><span class="w"> </span><span class="o">[0:] --</span><span class="w"> </span><span class="nc">MyHost</span><span class="o">.</span><span class="n">cluster</span><span class="w"> </span><span class="o">[</span><span class="mi">1</span><span class="o">]</span><span class="w"></span>
+
+<span class="k">implementation</span><span class="w"> </span><span class="n">myhost</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nc">MyHost</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="c1">#wire up all config for agent injection</span>
+<span class="w">    </span><span class="n">env_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">environment_name</span><span class="o">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">env_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">environment</span><span class="o">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">env_server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">environment_server</span><span class="o">()</span><span class="w"></span>
+<span class="w">    </span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">server_port</span><span class="o">()</span><span class="w"></span>
+
+<span class="w">    </span><span class="c1">#wire up all config for vm creation</span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">provider</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cluster</span><span class="o">.</span><span class="n">provider</span><span class="w"></span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">project</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cluster</span><span class="o">.</span><span class="n">project</span><span class="w"></span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">image</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cluster</span><span class="o">.</span><span class="n">image_id</span><span class="w"></span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">subnet</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cluster</span><span class="o">.</span><span class="n">subnet</span><span class="w"></span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">user_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">template</span><span class="o">(</span><span class="s">&quot;mymodule/user_data.tmpl&quot;</span><span class="o">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">key_pair</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cluster</span><span class="o">.</span><span class="n">key</span><span class="w"></span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">os</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cluster</span><span class="o">.</span><span class="n">os</span><span class="w"></span>
+<span class="w">    </span><span class="n">self</span><span class="o">.</span><span class="n">flavor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cluster</span><span class="o">.</span><span class="n">flavor</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="c1"># use our implemenation</span>
+<span class="c1"># and also the catchall std::hostDefaults</span>
+<span class="c1"># and the openstackVM implementation that sets the ip and create the eth0 port</span>
+<span class="k">implement</span><span class="w"> </span><span class="nc">MyHost</span><span class="w"> </span><span class="k">using</span><span class="w"> </span><span class="n">myhost</span><span class="o">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">hostDefaults</span><span class="o">,</span><span class="w"> </span><span class="n">openstack</span><span class="o">::</span><span class="n">openstackVM</span><span class="o">,</span><span class="w"> </span><span class="n">openstack</span><span class="o">::</span><span class="n">eth0Port</span><span class="w"></span>
+</pre></div>
+</td></tr></table></div>
+<p>If this were not an example, we would make the following changes:</p>
+<ul class="simple">
+<li>hardcode the <code class="docutils literal"><span class="pre">image_id</span></code> and <code class="docutils literal"><span class="pre">os</span></code> (and perhaps <code class="docutils literal"><span class="pre">flavor</span></code>) into the defintion of <code class="docutils literal"><span class="pre">myhost</span></code>.</li>
+<li>the parameters on top would be moved to either a <a class="reference internal" href="../param/index.html"><span class="doc">forms</span></a> or filled in directly into the constructor.</li>
+<li>use <code class="docutils literal"><span class="pre">std::password</span></code> to store passwords, to prevent accidential check-ins with passwords in the source</li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../param/index.html" class="btn btn-neutral float-right" title="Forms" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../ansible/index.html" class="btn btn-neutral" title="Ansible module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

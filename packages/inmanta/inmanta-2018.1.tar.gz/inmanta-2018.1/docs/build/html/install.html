@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Install Inmanta &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="index.html"/>
+        <link rel="next" title="Architecture" href="architecture.html"/>
+        <link rel="prev" title="Quickstart" href="quickstart.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="index.html">
+
+
+
+  
+    <img src="_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Install Inmanta</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-software">Install software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#with-pip">With pip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#from-source">From source</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fedora-and-centos-7">Fedora and CentOS 7</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#configure-server">Configure server</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#optional-step-1-setup-ssl-and-authentication">Optional step 1: Setup SSL and authentication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-2-setup-mongodb">Step 2: Setup mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-3-set-the-server-address">Step 3: Set the server address</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-4-configure-ssh-of-the-inmanta-user">Step 4: Configure ssh of the inmanta user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#step-5-start-the-server">Step 5: Start the server</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference/index.html">Inmanta Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Install Inmanta</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="install-inmanta">
+<h1>Install Inmanta<a class="headerlink" href="#install-inmanta" title="Permalink to this headline">¶</a></h1>
+<p>This page explain how to install the Inmanta orchestrator software and setup an orchestration server.</p>
+<div class="section" id="install-software">
+<h2>Install software<a class="headerlink" href="#install-software" title="Permalink to this headline">¶</a></h2>
+<p>Inmanta requires python3 on your system. If you install it from source, python3 and pip need to be
+installed. If you install from package, your package manager installs python3 if not yet available
+on your system.</p>
+<p>Systems that run the compiler or agent may require to install python packages with pip. These packages are requirments
+of configuration modules. Some python packages, such as OpenStack clients have dependencies that require gcc and
+python3-devel to be availabe as well. The pre-packaged rpms contain the correct dependencies. When Inmanta is installed from
+source or pypi they need to be installed manually.</p>
+<div class="section" id="with-pip">
+<h3>With pip<a class="headerlink" href="#with-pip" title="Permalink to this headline">¶</a></h3>
+<p>Inmanta can be installed with pip.</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>pip install inmanta
+</pre></div>
+</div>
+</div>
+<div class="section" id="from-source">
+<h3>From source<a class="headerlink" href="#from-source" title="Permalink to this headline">¶</a></h3>
+<p>Either checkout of the code or use the releases page: <a class="reference external" href="https://github.com/inmanta/inmanta/releases">https://github.com/inmanta/inmanta/releases</a></p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>git clone https://github.com/inmanta/inmanta.git
+<span class="nb">cd</span> inmanta
+pip install .
+</pre></div>
+</div>
+</div>
+<div class="section" id="fedora-and-centos-7">
+<h3>Fedora and CentOS 7<a class="headerlink" href="#fedora-and-centos-7" title="Permalink to this headline">¶</a></h3>
+<p>For Fedora use dnf:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>cat &gt; /etc/yum.repos.d/inmanta_oss_stable.repo <span class="s">&lt;&lt;EOF</span>
+<span class="s">[inmanta-oss-stable]</span>
+<span class="s">name=Inmanta OSS stable</span>
+<span class="s">baseurl=https://pkg.inmanta.com/inmanta-oss-stable/f$releasever/</span>
+<span class="s">gpgcheck=1</span>
+<span class="s">gpgkey=https://pkg.inmanta.com/inmanta-oss-stable/inmanta-oss-stable-public-key</span>
+<span class="s">repo_gpgcheck=1</span>
+<span class="s">enabled=1</span>
+<span class="s">enabled_metadata=1</span>
+<span class="s">EOF</span>
+sudo dnf install -y python3-inmanta python3-inmanta-server python3-inmanta-agent mongodb-server
+</pre></div>
+</div>
+<p>For CentOS use yum and install epel-release:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>cat &gt; /etc/yum.repos.d/inmanta_oss_stable.repo <span class="s">&lt;&lt;EOF</span>
+<span class="s">[inmanta-oss-stable]</span>
+<span class="s">name=Inmanta OSS stable</span>
+<span class="s">baseurl=https://pkg.inmanta.com/inmanta-oss-stable/el7/</span>
+<span class="s">gpgcheck=1</span>
+<span class="s">gpgkey=https://pkg.inmanta.com/inmanta-oss-stable/inmanta-oss-stable-public-key</span>
+<span class="s">repo_gpgcheck=1</span>
+<span class="s">enabled=1</span>
+<span class="s">enabled_metadata=1</span>
+<span class="s">EOF</span>
+
+sudo yum install -y epel-release
+sudo yum install -y python3-inmanta python3-inmanta-server python3-inmanta-agent mongodb-server
+</pre></div>
+</div>
+<p>The first package (python3-inmanta) contains all the code and the commands. The server and the agent
+packages install config files and systemd unit files. The dashboard is installed with the server
+package.</p>
+</div>
+</div>
+<div class="section" id="configure-server">
+<h2>Configure server<a class="headerlink" href="#configure-server" title="Permalink to this headline">¶</a></h2>
+<p>This guide goes through the steps to setup an Inmanta service orchestrator server. This guide assumes a RHEL 7 or CentOS 7
+server. The rpm packages install the server configuration file in /etc/inmanta/server.cfg</p>
+<div class="section" id="optional-step-1-setup-ssl-and-authentication">
+<h3>Optional step 1: Setup SSL and authentication<a class="headerlink" href="#optional-step-1-setup-ssl-and-authentication" title="Permalink to this headline">¶</a></h3>
+<p>Follow the instructions in <a class="reference internal" href="guides/auth.html#auth-setup"><span class="std std-ref">Setup authentication</span></a> to configure both SSL and authentication. It is not mandatory but still highly
+recommended.</p>
+</div>
+<div class="section" id="step-2-setup-mongodb">
+<h3>Step 2: Setup mongodb<a class="headerlink" href="#step-2-setup-mongodb" title="Permalink to this headline">¶</a></h3>
+<p>Make sure mongodb is started and reachable by the Inmanta server. By default Inmanta tries to connect to the local server
+and uses the database inmanta. See the <a class="reference internal" href="reference/config.html#database" title="database"><code class="xref inmanta.config inmanta.config-group docutils literal"><span class="pre">database</span></code></a> section in the configfile for other options.</p>
+</div>
+<div class="section" id="step-3-set-the-server-address">
+<h3>Step 3: Set the server address<a class="headerlink" href="#step-3-set-the-server-address" title="Permalink to this headline">¶</a></h3>
+<p>When virtual machines are started by this server that install the inmanta agent, the correct
+<a class="reference internal" href="reference/config.html#server.server-address" title="server-address"><code class="xref inmanta.config inmanta.config-option docutils literal"><span class="pre">server.server-address</span></code></a> needs to be
+configured. This address is used to create the correct boot script for the virtual machine.</p>
+<p>Set this value to the hostname or IP address that others systems use to connect to the server.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you deploy configuration models that modify resolver configuration it is recommended to use the IP address instead
+of the hostname.</p>
+</div>
+</div>
+<div class="section" id="step-4-configure-ssh-of-the-inmanta-user">
+<h3>Step 4: Configure ssh of the inmanta user<a class="headerlink" href="#step-4-configure-ssh-of-the-inmanta-user" title="Permalink to this headline">¶</a></h3>
+<p>The inmanta user that runs the server needs a working ssh client. This client is required to checkout git repositories over
+ssh and if the remote agent is used.</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p class="first">Provide the inmanta user with one or more private keys:</p>
+<ol class="loweralpha simple">
+<li>Generate a new key with ssh-keygen as the inmanta user: <code class="docutils literal"><span class="pre">sudo</span> <span class="pre">-u</span> <span class="pre">inmanta</span> <span class="pre">ssh-keygen</span> <span class="pre">-N</span> <span class="pre">&quot;&quot;</span></code></li>
+<li>Install an exiting key in /var/lib/inmanta/.ssh/id_rsa Make sure the permissions and ownership are set correctly.</li>
+</ol>
+</li>
+<li><p class="first">Configure ssh to accept all host keys or white list the hosts that are allowed or use signed host keys
+(depends on your security requirements). This guide configures ssh client for the inmanta user to accept all host keys.
+Create /var/lib/inmanta/.ssh/config and create the following content:</p>
+<div class="highlight-text"><div class="highlight"><pre><span></span>Host *
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+</pre></div>
+</div>
+</li>
+</ol>
+<blockquote>
+<div><ol class="arabic simple" start="3">
+<li>Add the public key to any git repositories and save if to include in configuration models that require remote agents.</li>
+<li>Test if you can login into a machine that has the public key and make sure ssh does not show you any prompts to store
+the host key.</li>
+</ol>
+</div></blockquote>
+</div></blockquote>
+</div>
+<div class="section" id="step-5-start-the-server">
+<h3>Step 5: Start the server<a class="headerlink" href="#step-5-start-the-server" title="Permalink to this headline">¶</a></h3>
+<p>Start the server and make sure it is started at boot.</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>sudo systemctl <span class="nb">enable</span> inmanta-server
+sudo systemctl start inmanta-server
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="architecture.html" class="btn btn-neutral float-right" title="Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="quickstart.html" class="btn btn-neutral" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

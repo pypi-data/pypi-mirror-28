@@ -1,0 +1,542 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module docker &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Inmanta modules" href="../modules.html"/>
+        <link rel="next" title="Module drupal" href="drupal.html"/>
+        <link rel="prev" title="Module dns" href="dns.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Inmanta Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands.html">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">Inmanta API reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html">Inmanta modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ansible.html">Module ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apache.html">Module apache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apt.html">Module apt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aws.html">Module aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bind.html">Module bind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collectd.html">Module collectd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dns.html">Module dns</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module docker</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#entities">Entities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#implementations">Implementations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resources">Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#handlers">Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="drupal.html">Module drupal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exec.html">Module exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="graphite.html">Module graphite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip.html">Module ip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Module logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mongodb.html">Module mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="monitoring.html">Module monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mysql.html">Module mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="net.html">Module net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openstack.html">Module openstack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openvswitch.html">Module openvswitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="param.html">Module param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="php.html">Module php</a></li>
+<li class="toctree-l3"><a class="reference internal" href="platform.html">Module platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="redhat.html">Module redhat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssh.html">Module ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="std.html">Module std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu.html">Module ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">Module user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="varnish.html">Module varnish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html">Module web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="yum.html">Module yum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Inmanta Reference</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Inmanta modules</a> &raquo;</li>
+        
+      <li>Module docker</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-docker">
+<h1>Module docker<a class="headerlink" href="#module-docker" title="Permalink to this headline">¶</a></h1>
+<p>Module to manage docker based containers</p>
+<blockquote>
+<div><ul class="simple">
+<li>License: Apache 2.0</li>
+<li>Version: 0.4.0</li>
+<li>Author: Inmanta &lt;<a class="reference external" href="mailto:code&#37;&#52;&#48;inmanta&#46;com">code<span>&#64;</span>inmanta<span>&#46;</span>com</a>&gt;</li>
+<li>Upstream project: <a class="reference external" href="https://github.com/inmanta/docker.git">https://github.com/inmanta/docker.git</a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<dl class="typedef">
+<dt id="typedef-docker::container_state">
+<em class="property">typedef </em><code class="descclassname">docker::container_state</code><a class="headerlink" href="#typedef-docker::container_state" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Base type <code class="docutils literal"><span class="pre">string</span></code></li>
+<li>Type constraint <code class="docutils literal"><span class="pre">((((self</span> <span class="pre">==</span> <span class="pre">'running')</span> <span class="pre">or</span> <span class="pre">(self</span> <span class="pre">==</span> <span class="pre">'stopped'))</span> <span class="pre">or</span> <span class="pre">(self</span> <span class="pre">==</span> <span class="pre">'latest'))</span> <span class="pre">or</span> <span class="pre">(self</span> <span class="pre">==</span> <span class="pre">'purged'))</span></code></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="entities">
+<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<dl class="entity">
+<dt id="entity-docker::Container">
+<em class="property">entity </em><code class="descclassname">docker::Container</code><a class="headerlink" href="#entity-docker::Container" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A docker container deployed on a container service</p>
+<dl class="attribute">
+<dt id="attribute-docker::Container.image">
+<em class="property">attribute </em>string <code class="descclassname">image</code><a class="headerlink" href="#attribute-docker::Container.image" title="Permalink to this definition">¶</a></dt>
+<dd><p>The image to base this container on</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-docker::Container.state">
+<em class="property">attribute </em>docker::container_state <code class="descclassname">state</code>='running'<a class="headerlink" href="#attribute-docker::Container.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>The state of the container</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-docker::Container.entrypoint">
+<em class="property">attribute </em>string <code class="descclassname">entrypoint</code>=''<a class="headerlink" href="#attribute-docker::Container.entrypoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>The entrypoint of the container</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-docker::Container.memory_limit">
+<em class="property">attribute </em>string <code class="descclassname">memory_limit</code>='0'<a class="headerlink" href="#attribute-docker::Container.memory_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>RAM allocated to the container in human readable format (“128MB”)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-docker::Container.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-docker::Container.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the docker container</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-docker::Container.command">
+<em class="property">attribute </em>string <code class="descclassname">command</code>=''<a class="headerlink" href="#attribute-docker::Container.command" title="Permalink to this definition">¶</a></dt>
+<dd><p>The command to execute</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-docker::Container.detach">
+<em class="property">attribute </em>bool <code class="descclassname">detach</code>=True<a class="headerlink" href="#attribute-docker::Container.detach" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detach this container when started?</p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-docker::Container.volumes">
+<em class="property">relation </em>docker::Volume <code class="descclassname">volumes</code> [0:*]<a class="headerlink" href="#relation-docker::Container.volumes" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-docker::Volume.container" title="docker::Volume.container relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">docker::Volume.container</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-docker::Container.service">
+<em class="property">relation </em>docker::Service <code class="descclassname">service</code> [1]<a class="headerlink" href="#relation-docker::Container.service" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-docker::Service.containers" title="docker::Service.containers relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">docker::Service.containers</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-docker::Container.ports">
+<em class="property">relation </em>docker::Port <code class="descclassname">ports</code> [0:*]<a class="headerlink" href="#relation-docker::Container.ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-docker::Port.container" title="docker::Port.container relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">docker::Port.container</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-docker::Port">
+<em class="property">entity </em><code class="descclassname">docker::Port</code><a class="headerlink" href="#entity-docker::Port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A portmapping between the container and the host</p>
+<dl class="attribute">
+<dt id="attribute-docker::Port.host_ip">
+<em class="property">attribute </em>ip::ip <code class="descclassname">host_ip</code>='0.0.0.0'<a class="headerlink" href="#attribute-docker::Port.host_ip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-docker::Port.host_port">
+<em class="property">attribute </em>ip::port <code class="descclassname">host_port</code><a class="headerlink" href="#attribute-docker::Port.host_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-docker::Port.container_port">
+<em class="property">attribute </em>ip::port <code class="descclassname">container_port</code><a class="headerlink" href="#attribute-docker::Port.container_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-docker::Port.container">
+<em class="property">relation </em>docker::Container <code class="descclassname">container</code> [1]<a class="headerlink" href="#relation-docker::Port.container" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-docker::Container.ports" title="docker::Container.ports relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">docker::Container.ports</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-docker::Registry">
+<em class="property">entity </em><code class="descclassname">docker::Registry</code><a class="headerlink" href="#entity-docker::Registry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="ip.html#entity-ip::services::Server" title="ip::services::Server entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::Server</span></code></a></p>
+<p>Deploy a docker registry</p>
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-docker::dockerRegistry" title="docker::dockerRegistry implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">docker::dockerRegistry</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-docker::dockerRegistry" title="docker::dockerRegistry implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">docker::dockerRegistry</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-docker::Service">
+<em class="property">entity </em><code class="descclassname">docker::Service</code><a class="headerlink" href="#entity-docker::Service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="ip.html#entity-ip::services::Server" title="ip::services::Server entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::Server</span></code></a></p>
+<p>A docker service</p>
+<dl class="attribute">
+<dt id="attribute-docker::Service.bridge_ip">
+<em class="property">attribute </em>ip::cidr <code class="descclassname">bridge_ip</code>='172.17.0.1/16'<a class="headerlink" href="#attribute-docker::Service.bridge_ip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-docker::Service.containers">
+<em class="property">relation </em>docker::Container <code class="descclassname">containers</code> [0:*]<a class="headerlink" href="#relation-docker::Service.containers" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-docker::Container.service" title="docker::Container.service relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">docker::Container.service</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-docker::docker" title="docker::docker implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">docker::docker</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-docker::docker" title="docker::docker implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">docker::docker</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-docker::Volume">
+<em class="property">entity </em><code class="descclassname">docker::Volume</code><a class="headerlink" href="#entity-docker::Volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A volume mounted from the host into the container</p>
+<dl class="attribute">
+<dt id="attribute-docker::Volume.options">
+<em class="property">attribute </em>string <code class="descclassname">options</code>='rw'<a class="headerlink" href="#attribute-docker::Volume.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-docker::Volume.container_path">
+<em class="property">attribute </em>string <code class="descclassname">container_path</code><a class="headerlink" href="#attribute-docker::Volume.container_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-docker::Volume.host_path">
+<em class="property">attribute </em>string <code class="descclassname">host_path</code><a class="headerlink" href="#attribute-docker::Volume.host_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-docker::Volume.container">
+<em class="property">relation </em>docker::Container <code class="descclassname">container</code> [1]<a class="headerlink" href="#relation-docker::Volume.container" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-docker::Container.volumes" title="docker::Container.volumes relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">docker::Container.volumes</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="implementations">
+<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
+<dl class="implementation">
+<dt id="implementation-docker::docker">
+<em class="property">implementation </em><code class="descclassname">docker::docker</code><a class="headerlink" href="#implementation-docker::docker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-docker::dockerRegistry">
+<em class="property">implementation </em><code class="descclassname">docker::dockerRegistry</code><a class="headerlink" href="#implementation-docker::dockerRegistry" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="docker.Container">
+<em class="property">class </em><code class="descclassname">docker.</code><code class="descname">Container</code><a class="headerlink" href="#docker.Container" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>This class represents a docker container</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-docker::Container" title="docker::Container entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">docker::Container</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">service.host.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#docker.ContainerHandler" title="docker.ContainerHandler"><code class="xref py py-class docutils literal"><span class="pre">docker.ContainerHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="handlers">
+<h2>Handlers<a class="headerlink" href="#handlers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="docker.ContainerHandler">
+<em class="property">class </em><code class="descclassname">docker.</code><code class="descname">ContainerHandler</code><a class="headerlink" href="#docker.ContainerHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">docker</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-docker::Container" title="docker::Container entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">docker::Container</span></code></a></li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="drupal.html" class="btn btn-neutral float-right" title="Module drupal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="dns.html" class="btn btn-neutral" title="Module dns" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,1871 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Inmanta API reference &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../index.html"/>
+        <link rel="up" title="Inmanta Reference" href="index.html"/>
+        <link rel="next" title="Inmanta modules" href="modules.html"/>
+        <link rel="prev" title="Configuration Reference" href="config.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../index.html">
+
+
+
+  
+    <img src="../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Inmanta Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="commands.html">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">Configuration Reference</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Inmanta API reference</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#plugins">Plugins</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#resources">Resources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#handlers">Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html">Inmanta modules</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Inmanta Reference</a> &raquo;</li>
+        
+      <li>Inmanta API reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="inmanta-api-reference">
+<h1>Inmanta API reference<a class="headerlink" href="#inmanta-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="plugins">
+<h2>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="inmanta.plugins.Context">
+<em class="property">class </em><code class="descclassname">inmanta.plugins.</code><code class="descname">Context</code><span class="sig-paren">(</span><em>resolver</em>, <em>queue</em>, <em>owner</em>, <em>result</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/plugins.html#Context"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.plugins.Context" title="Permalink to this definition">¶</a></dt>
+<dd><p>An instance of this class is used to pass context to the plugin</p>
+<dl class="method">
+<dt id="inmanta.plugins.Context.emit_expression">
+<code class="descname">emit_expression</code><span class="sig-paren">(</span><em>stmt</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/plugins.html#Context.emit_expression"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.plugins.Context.emit_expression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new statement</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.plugins.Context.get_client">
+<code class="descname">get_client</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/plugins.html#Context.get_client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.plugins.Context.get_client" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="inmanta.plugins.Context.get_compiler">
+<code class="descname">get_compiler</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/plugins.html#Context.get_compiler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.plugins.Context.get_compiler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="inmanta.plugins.Context.get_data_dir">
+<code class="descname">get_data_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/plugins.html#Context.get_data_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.plugins.Context.get_data_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the path to the data dir (and create if it does not exist yet</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.plugins.Context.get_queue_scheduler">
+<code class="descname">get_queue_scheduler</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/plugins.html#Context.get_queue_scheduler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.plugins.Context.get_queue_scheduler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="inmanta.plugins.Context.get_resolver">
+<code class="descname">get_resolver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/plugins.html#Context.get_resolver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.plugins.Context.get_resolver" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="inmanta.plugins.Context.get_type">
+<code class="descname">get_type</code><span class="sig-paren">(</span><em>name: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/plugins.html#Context.get_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.plugins.Context.get_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a type from the configuration model.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.plugins.Context.run_sync">
+<code class="descname">run_sync</code><span class="sig-paren">(</span><em>function: typing.Callable</em>, <em>timeout: int = 5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/plugins.html#Context.run_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.plugins.Context.run_sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute the async function and return its result. This method takes care of starting and stopping the ioloop. The
+main use for this function is to use the inmanta internal rpc to communicate with the server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>function</strong> (<code class="xref py py-class docutils literal"><span class="pre">Callable</span></code>) – The async function to execute. This function should return a yieldable object.</li>
+<li><strong>timeout</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – A timeout for the async function.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">The result of the async call.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ConnectionRefusedError</strong> – When the function timeouts this exception is raised.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="inmanta.plugins.plugin">
+<code class="descclassname">inmanta.plugins.</code><code class="descname">plugin</code><span class="sig-paren">(</span><em>function: typing.Callable = None</em>, <em>commands: typing.List[str] = None</em>, <em>emits_statements: bool = False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/plugins.html#plugin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.plugins.plugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python decorator to register functions with inmanta as plugin</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>function</strong> (<code class="xref py py-class docutils literal"><span class="pre">Callable</span></code>) – The function to register with inmanta. This is the first argument when it is used as decorator.</li>
+<li><strong>commands</strong> (<code class="xref py py-class docutils literal"><span class="pre">List</span></code>) – A list of command paths that need to be available. Inmanta raises an exception when the command is
+not available.</li>
+<li><strong>emits_statements</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – Set to true if this plugin emits new statements that the compiler should execute. This is only
+required for complex plugins such as integrating a template engine.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="inmanta.resources.resource">
+<code class="descclassname">inmanta.resources.</code><code class="descname">resource</code><span class="sig-paren">(</span><em>name: str</em>, <em>id_attribute: str</em>, <em>agent: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/resources.html#resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.resources.resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>A decorator that registers a new resource. The decorator must be applied to classes that inherit from
+<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – The name of the entity in the configuration model it creates a resources from. For example
+<a class="reference internal" href="modules/std.html#entity-std::File" title="std::File entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::File</span></code></a></li>
+<li><strong>id_attribute</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – The attribute of <cite>this</cite> resource that uniquely identifies a resource on an agent. This attribute
+can be mapped.</li>
+<li><strong>agent</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – This string indicates how the agent of this resource is determined. This string points to an attribute,
+but it can navigate relations (this value cannot be mapped). For example, the agent argument could be
+<code class="docutils literal"><span class="pre">host.name</span></code></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="inmanta.resources.Resource">
+<em class="property">class </em><code class="descclassname">inmanta.resources.</code><code class="descname">Resource</code><span class="sig-paren">(</span><em>_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/resources.html#Resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.resources.Resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plugins should inherit resource from this class so a resource from a model can be serialized and deserialized.</p>
+<p>Such as class is registered when the <a class="reference internal" href="#inmanta.resources.resource" title="inmanta.resources.resource"><code class="xref py py-func docutils literal"><span class="pre">resource()</span></code></a> decorator is used. Each class needs to indicate
+the fields the resource will have with a class field named “fields”. A metaclass merges all fields lists from the class
+itself and all superclasses. If a field it not available directly in the model object the serializer will look for
+static methods in the class with the name “get_$fieldname”.</p>
+<dl class="method">
+<dt id="inmanta.resources.Resource.clone">
+<code class="descname">clone</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span> &#x2192; inmanta.resources.Resource<a class="reference internal" href="../_modules/inmanta/resources.html#Resource.clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.resources.Resource.clone" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a clone of this resource. The given kwargs can be used to override attributes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The cloned resource</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="inmanta.resources.PurgeableResource">
+<em class="property">class </em><code class="descclassname">inmanta.resources.</code><code class="descname">PurgeableResource</code><span class="sig-paren">(</span><em>_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/resources.html#PurgeableResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.resources.PurgeableResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="modules/std.html#entity-std::PurgeableResource" title="std::PurgeableResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::PurgeableResource</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="inmanta.resources.ManagedResource">
+<em class="property">class </em><code class="descclassname">inmanta.resources.</code><code class="descname">ManagedResource</code><span class="sig-paren">(</span><em>_id</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/resources.html#ManagedResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.resources.ManagedResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>See <a class="reference internal" href="modules/std.html#entity-std::ManagedResource" title="std::ManagedResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::ManagedResource</span></code></a> for more information.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="inmanta.resources.IgnoreResourceException">
+<em class="property">class </em><code class="descclassname">inmanta.resources.</code><code class="descname">IgnoreResourceException</code><a class="reference internal" href="../_modules/inmanta/resources.html#IgnoreResourceException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.resources.IgnoreResourceException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Throw this exception when a resource should not be included by the exported.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="handlers">
+<h2>Handlers<a class="headerlink" href="#handlers" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="inmanta.agent.handler.cache">
+<code class="descclassname">inmanta.agent.handler.</code><code class="descname">cache</code><span class="sig-paren">(</span><em>f=None</em>, <em>ignore: typing.List[str] = []</em>, <em>timeout: int = 5000</em>, <em>for_version: bool = True</em>, <em>cache_none: bool = True</em>, <em>cacheNone: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/handler.html#cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>decorator for methods in resource handlers to provide caching</p>
+<p>this decorator works similar to memoization:
+when the decorate method is called, its return value is cached,
+for subsequent calls, the cached value is used instead of the actual value</p>
+<p>The name of the method + the arguments of the method form the cache key</p>
+<p>If an argument named version is present and for_version is True,
+the cache entry is flushed after this version has been deployed
+If an argument named resource is present,
+it is assumed to be a resource and its ID is used, without the version information</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>timeout</strong> (<code class="docutils literal"><span class="pre">int</span></code>) – the number of second this cache entry should live</li>
+<li><strong>for_version</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – if true, this value is evicted from the cache when this deploy is ready</li>
+<li><strong>ignore</strong> (<code class="xref py py-class docutils literal"><span class="pre">List</span></code>) – a list of argument names that should not be part of the cache key</li>
+<li><strong>cache_none</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – cache returned none values</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="inmanta.agent.handler.provider">
+<code class="descclassname">inmanta.agent.handler.</code><code class="descname">provider</code><span class="sig-paren">(</span><em>resource_type: str</em>, <em>name: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/handler.html#provider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>A decorator that registers a new handler.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>resource_type</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – The type of the resource this handler provides an implementation for.
+For example, <a class="reference internal" href="modules/std.html#entity-std::File" title="std::File entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::File</span></code></a></li>
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – A name to reference this provider.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="inmanta.agent.handler.SkipResource">
+<em class="property">class </em><code class="descclassname">inmanta.agent.handler.</code><code class="descname">SkipResource</code><a class="reference internal" href="../_modules/inmanta/agent/handler.html#SkipResource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.SkipResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<p>A handler should raise this exception when a resource should be skipped. The resource will be marked as skipped
+instead of failed.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="inmanta.agent.handler.ResourcePurged">
+<em class="property">class </em><code class="descclassname">inmanta.agent.handler.</code><code class="descname">ResourcePurged</code><a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourcePurged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourcePurged" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the <a class="reference internal" href="#inmanta.agent.handler.CRUDHandler.read_resource" title="inmanta.agent.handler.CRUDHandler.read_resource"><code class="xref py py-func docutils literal"><span class="pre">read_resource()</span></code></a> method raises this exception, the agent will
+mark the current state of the resource as purged.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="inmanta.agent.handler.HandlerContext">
+<em class="property">class </em><code class="descclassname">inmanta.agent.handler.</code><code class="descname">HandlerContext</code><span class="sig-paren">(</span><em>resource</em>, <em>dry_run=False</em>, <em>action_id=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Context passed to handler methods for state related “things”</p>
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.add_change">
+<code class="descname">add_change</code><span class="sig-paren">(</span><em>name: str</em>, <em>desired: typing.Any</em>, <em>current: typing.Any = None</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.add_change"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.add_change" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report a change of a field. This field is added to the set of updated fields</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – The name of the field that was updated</li>
+<li><strong>desired</strong> – The desired value to which the field was updated (or should be updated)</li>
+<li><strong>current</strong> – The value of the field before it was updated</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.add_changes">
+<code class="descname">add_changes</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.add_changes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.add_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report a list of changes at once as kwargs</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>key</strong> – The name of the field that was updated. This field is also added to the set of updated fields</li>
+<li><strong>value</strong> – The desired value of the field.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>To report the previous value of the field, use the add_change method</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.critical">
+<code class="descname">critical</code><span class="sig-paren">(</span><em>msg: str</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.critical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.critical" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log ‘msg % args’ with severity ‘CRITICAL’.</p>
+<p>To pass exception information, use the keyword argument exc_info with
+a true value, e.g.</p>
+<p><code class="docutils literal"><span class="pre">logger.critical(&quot;Houston,</span> <span class="pre">we</span> <span class="pre">have</span> <span class="pre">a</span> <span class="pre">%s&quot;,</span> <span class="pre">&quot;major</span> <span class="pre">disaster&quot;,</span> <span class="pre">exc_info=1)</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.debug">
+<code class="descname">debug</code><span class="sig-paren">(</span><em>msg: str</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log ‘msg % args’ with severity ‘DEBUG’.</p>
+<p>To pass exception information, use the keyword argument exc_info with
+a true value, e.g.</p>
+<p><code class="docutils literal"><span class="pre">logger.debug(&quot;Houston,</span> <span class="pre">we</span> <span class="pre">have</span> <span class="pre">a</span> <span class="pre">%s&quot;,</span> <span class="pre">&quot;thorny</span> <span class="pre">problem&quot;,</span> <span class="pre">exc_info=1)</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.error">
+<code class="descname">error</code><span class="sig-paren">(</span><em>msg: str</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log ‘msg % args’ with severity ‘ERROR’.</p>
+<p>To pass exception information, use the keyword argument exc_info with
+a true value, e.g.</p>
+<p><code class="docutils literal"><span class="pre">logger.error(&quot;Houston,</span> <span class="pre">we</span> <span class="pre">have</span> <span class="pre">a</span> <span class="pre">%s&quot;,</span> <span class="pre">&quot;major</span> <span class="pre">problem&quot;,</span> <span class="pre">exc_info=1)</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.exception">
+<code class="descname">exception</code><span class="sig-paren">(</span><em>msg: str</em>, <em>*args</em>, <em>exc_info=True</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.exception"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.exception" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience method for logging an ERROR with exception information.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.fields_updated">
+<code class="descname">fields_updated</code><span class="sig-paren">(</span><em>fields</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.fields_updated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.fields_updated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report that fields have been updated</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.info">
+<code class="descname">info</code><span class="sig-paren">(</span><em>msg: str</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log ‘msg % args’ with severity ‘INFO’.</p>
+<p>To pass exception information, use the keyword argument exc_info with
+a true value, e.g.</p>
+<p><code class="docutils literal"><span class="pre">logger.info(&quot;Houston,</span> <span class="pre">we</span> <span class="pre">have</span> <span class="pre">a</span> <span class="pre">%s&quot;,</span> <span class="pre">&quot;interesting</span> <span class="pre">problem&quot;,</span> <span class="pre">exc_info=1)</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.is_dry_run">
+<code class="descname">is_dry_run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.is_dry_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.is_dry_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is this a dryrun?</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.set_status">
+<code class="descname">set_status</code><span class="sig-paren">(</span><em>status: inmanta.const.ResourceState</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.set_status"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.set_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the status of the handler operation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.update_changes">
+<code class="descname">update_changes</code><span class="sig-paren">(</span><em>changes: dict</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.update_changes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.update_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the changes list with changes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>changes</strong> (<code class="docutils literal"><span class="pre">dict</span></code>) – This should be a dict with a value a dict containing “current” and “desired” keys</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.HandlerContext.warning">
+<code class="descname">warning</code><span class="sig-paren">(</span><em>msg: str</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#HandlerContext.warning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.HandlerContext.warning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Log ‘msg % args’ with severity ‘WARNING’.</p>
+<p>To pass exception information, use the keyword argument exc_info with
+a true value, e.g.</p>
+<p><code class="docutils literal"><span class="pre">logger.warning(&quot;Houston,</span> <span class="pre">we</span> <span class="pre">have</span> <span class="pre">a</span> <span class="pre">%s&quot;,</span> <span class="pre">&quot;bit</span> <span class="pre">of</span> <span class="pre">a</span> <span class="pre">problem&quot;,</span> <span class="pre">exc_info=1)</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="inmanta.agent.handler.ResourceHandler">
+<em class="property">class </em><code class="descclassname">inmanta.agent.handler.</code><code class="descname">ResourceHandler</code><span class="sig-paren">(</span><em>agent</em>, <em>io=None</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>A baseclass for classes that handle resources. New handler are registered with the
+<a class="reference internal" href="#inmanta.agent.handler.provider" title="inmanta.agent.handler.provider"><code class="xref py py-func docutils literal"><span class="pre">provider()</span></code></a> decorator.</p>
+<p>The implementation of a handler should use the <code class="docutils literal"><span class="pre">self._io</span></code> instance to execute io operations. This io objects
+makes abstraction of local or remote operations. See <a class="reference internal" href="#inmanta.agent.io.local.LocalIO" title="inmanta.agent.io.local.LocalIO"><code class="xref py py-class docutils literal"><span class="pre">LocalIO</span></code></a> for the available
+operations.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>agent</strong> – The agent that is executing this handler.</li>
+<li><strong>io</strong> – The io object to use.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler._diff">
+<code class="descname">_diff</code><span class="sig-paren">(</span><em>current: inmanta.resources.Resource</em>, <em>desired: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; typing.Dict[str, typing.Dict[str, typing.Any]]<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler._diff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler._diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the diff between the current and desired resource state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal"><span class="pre">Dict</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>current</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The current state of the resource</li>
+<li><strong>desired</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The desired state of the resource</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dict with key the name of the field and value another dict with “current” and “desired” as keys for
+fields that require changes.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.available">
+<code class="descname">available</code><span class="sig-paren">(</span><em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.available"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if this handler is available for the given resource</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – Is this handler available for the given resource?</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Available or not?</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.can_process_events">
+<code class="descname">can_process_events</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.can_process_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.can_process_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can this handler process events? This is a more generic version of the reload mechanism.</p>
+<p>See the <code class="xref py py-func docutils literal"><span class="pre">ResourceHandler.process_events()</span></code> for more details about this mechanism.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Return true if this handler processes events.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.can_reload">
+<code class="descname">can_reload</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.can_reload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.can_reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can this handler reload?</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Return true if this handler needs to reload on requires changes.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.check_facts">
+<code class="descname">check_facts</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.check_facts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.check_facts" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the agent to query for facts. It runs <a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.pre" title="inmanta.agent.handler.ResourceHandler.pre"><code class="xref py py-func docutils literal"><span class="pre">pre()</span></code></a>
+and <a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.post" title="inmanta.agent.handler.ResourceHandler.post"><code class="xref py py-func docutils literal"><span class="pre">post()</span></code></a>. This method calls
+<a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.facts" title="inmanta.agent.handler.ResourceHandler.facts"><code class="xref py py-func docutils literal"><span class="pre">facts()</span></code></a> to do the actually querying.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">dict</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to query facts for.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dict with fact names as keys and facts values.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.check_resource">
+<code class="descname">check_resource</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; inmanta.resources.Resource<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.check_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.check_resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the current state of a resource</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to check the current state of.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A resource to represents the current state. Use the <a class="reference internal" href="#inmanta.resources.Resource.clone" title="inmanta.resources.Resource.clone"><code class="xref py py-func docutils literal"><span class="pre">clone()</span></code></a> to create
+clone of the given resource that can be modified.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.do_changes">
+<code class="descname">do_changes</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em>, <em>changes: dict</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.do_changes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.do_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do the changes required to bring the resource on this system in the state of the given resource.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to check the current state of.</li>
+<li><strong>changes</strong> (<code class="docutils literal"><span class="pre">dict</span></code>) – The changes that need to occur as reported by
+<a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.list_changes" title="inmanta.agent.handler.ResourceHandler.list_changes"><code class="xref py py-func docutils literal"><span class="pre">list_changes()</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.do_reload">
+<code class="descname">do_reload</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.do_reload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.do_reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a reload of this resource.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to reload.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em>, <em>dry_run: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the given resource. This method is called by the agent. Most handlers will not override this method
+and will only override <a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.check_resource" title="inmanta.agent.handler.ResourceHandler.check_resource"><code class="xref py py-func docutils literal"><span class="pre">check_resource()</span></code></a>, optionally
+<a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.list_changes" title="inmanta.agent.handler.ResourceHandler.list_changes"><code class="xref py py-func docutils literal"><span class="pre">list_changes()</span></code></a> and
+<a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.do_changes" title="inmanta.agent.handler.ResourceHandler.do_changes"><code class="xref py py-func docutils literal"><span class="pre">do_changes()</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to check the current state of.</li>
+<li><strong>dry_run</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – True will only determine the required changes but will not execute them.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.facts">
+<code class="descname">facts</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.facts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.facts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns facts about this resource. Override this method to implement fact querying.
+<a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.pre" title="inmanta.agent.handler.ResourceHandler.pre"><code class="xref py py-func docutils literal"><span class="pre">pre()</span></code></a> and <a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.post" title="inmanta.agent.handler.ResourceHandler.post"><code class="xref py py-func docutils literal"><span class="pre">post()</span></code></a> are
+called before and after this method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">dict</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to query facts for.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dict with fact names as keys and facts values.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.get_client">
+<code class="descname">get_client</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; inmanta.protocol.AgentClient<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.get_client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.get_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the client instance that identifies itself with the agent session.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A client that is associated with the session of the agent that executes this handler.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.get_file">
+<code class="descname">get_file</code><span class="sig-paren">(</span><em>hash_id</em><span class="sig-paren">)</span> &#x2192; bytes<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.get_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.get_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a file from the fileserver identified with the given id. The convention is to use the sha1sum of the
+content to identify it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bytes</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hash_id</strong> – The id of the content/file to retrieve from the server.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The content in the form of a bytestring or none is the content does not exist.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.list_changes">
+<code class="descname">list_changes</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; typing.Dict[str, typing.Dict[str, typing.Any]]<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.list_changes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.list_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the changes required to bring the resource on this system in the state described in the resource entry.
+This method calls <a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.check_resource" title="inmanta.agent.handler.ResourceHandler.check_resource"><code class="xref py py-func docutils literal"><span class="pre">check_resource()</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal"><span class="pre">Dict</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to check the current state of.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dict with key the name of the field and value another dict with “current” and “desired” as keys for
+fields that require changes.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method executed after an operation. Override this method to run after an operation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to query facts for.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.pre">
+<code class="descname">pre</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.pre"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.pre" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method executed before a handler operation (Facts, dryrun, real deployment, …) is executed. Override this method
+to run before an operation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to query facts for.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.process_events">
+<code class="descname">process_events</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em>, <em>events: dict</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.process_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.process_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process events generated by changes to required resources. Override this method to process events in a handler.
+This method implements the deprecated reload mechanism. Make sure to call this method from a subclass if the
+reload behaviour is required.</p>
+<p>This method is called for all dependents of the given resource (inverse of the requires relationship)
+that have send_event set to true and for which a deploy was started. These are the only conditions, even if all
+dependents have failed or no changes were deployed. It is up to the handler to decide what to do.</p>
+<p>The default implementation provides the reload mechanism. It will call do_reload when the handler can_reload() and
+if at least one of the dependents have successfully deployed and there were changes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to process the events for.</li>
+<li><strong>dict</strong> – A dict with events of the resource the given resource requires. The keys of the dict are the resources.
+Each value is a dict with the items status (const.ResourceState), changes (dict) and
+change (const.Change).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.restore">
+<code class="descname">restore</code><span class="sig-paren">(</span><em>resource: inmanta.resources.Resource</em>, <em>snapshot_id: str</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.restore"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.restore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore a resource from a snapshot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource for which a snapshot needs to be restored.</li>
+<li><strong>snapshot_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – The id of the “file” on the server that contains the snapshot data. This data can be retrieved
+with the <a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.get_file" title="inmanta.agent.handler.ResourceHandler.get_file"><code class="xref py py-func docutils literal"><span class="pre">get_file()</span></code></a> method</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.run_sync">
+<code class="descname">run_sync</code><span class="sig-paren">(</span><em>func: typing.Callable</em><span class="sig-paren">)</span> &#x2192; typing.Any<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.run_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.run_sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a the given async function on the ioloop of the agent. It will block the current thread until the future
+resolves.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>func</strong> (<code class="xref py py-class docutils literal"><span class="pre">Callable</span></code>) – A function that returns a yieldable future.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The result of the async function.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.set_cache">
+<code class="descname">set_cache</code><span class="sig-paren">(</span><em>cache: inmanta.agent.cache.AgentCache</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.set_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.set_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.snapshot">
+<code class="descname">snapshot</code><span class="sig-paren">(</span><em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; bytes<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.snapshot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new snapshot and upload it to the server</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bytes</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The state of the resource for which a snapshot is created</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The data that needs to be uploaded to the server. This data is passed back to the restore method on
+snapshot restore.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.stat_file">
+<code class="descname">stat_file</code><span class="sig-paren">(</span><em>hash_id: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.stat_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.stat_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a file exists on the server. This method does and async call to the server and blocks on the result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hash_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – The id of the file on the server. The convention is the use the sha1sum of the content as id.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the file is available on the server.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.ResourceHandler.upload_file">
+<code class="descname">upload_file</code><span class="sig-paren">(</span><em>hash_id: str</em>, <em>content: bytes</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#ResourceHandler.upload_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.ResourceHandler.upload_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload a file to the server</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hash_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – The id to identify the content. The convention is to use the sha1sum of the content to identify it.</li>
+<li><strong>content</strong> (<code class="docutils literal"><span class="pre">bytes</span></code>) – A byte string with the content</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="inmanta.agent.handler.CRUDHandler">
+<em class="property">class </em><code class="descclassname">inmanta.agent.handler.</code><code class="descname">CRUDHandler</code><span class="sig-paren">(</span><em>agent</em>, <em>io=None</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#CRUDHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.CRUDHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>This handler base class requires CRUD methods to be implemented: create, read, update and delete. Such a handler
+only works on purgeable resources.</p>
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.available">
+<code class="descname">available</code><span class="sig-paren">(</span><em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if this handler is available for the given resource</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – Is this handler available for the given resource?</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Available or not?</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.can_process_events">
+<code class="descname">can_process_events</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.can_process_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can this handler process events? This is a more generic version of the reload mechanism.</p>
+<p>See the <code class="xref py py-func docutils literal"><span class="pre">ResourceHandler.process_events()</span></code> for more details about this mechanism.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Return true if this handler processes events.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.can_reload">
+<code class="descname">can_reload</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.can_reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Can this handler reload?</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Return true if this handler needs to reload on requires changes.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.check_facts">
+<code class="descname">check_facts</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.check_facts" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the agent to query for facts. It runs <a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.pre" title="inmanta.agent.handler.ResourceHandler.pre"><code class="xref py py-func docutils literal"><span class="pre">pre()</span></code></a>
+and <a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.post" title="inmanta.agent.handler.ResourceHandler.post"><code class="xref py py-func docutils literal"><span class="pre">post()</span></code></a>. This method calls
+<a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.facts" title="inmanta.agent.handler.ResourceHandler.facts"><code class="xref py py-func docutils literal"><span class="pre">facts()</span></code></a> to do the actually querying.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">dict</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to query facts for.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dict with fact names as keys and facts values.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.check_resource">
+<code class="descname">check_resource</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; inmanta.resources.Resource<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.check_resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the current state of a resource</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to check the current state of.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A resource to represents the current state. Use the <a class="reference internal" href="#inmanta.resources.Resource.clone" title="inmanta.resources.Resource.clone"><code class="xref py py-func docutils literal"><span class="pre">clone()</span></code></a> to create
+clone of the given resource that can be modified.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.close" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.create_resource">
+<code class="descname">create_resource</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.PurgeableResource</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#CRUDHandler.create_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.create_resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the handler when the resource should be created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>context</strong> – Context can be used to get values discovered in the read method. For example, the id used in API
+calls. This context should also be used to let the handler know what changes were made to the
+resource.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.PurgeableResource" title="inmanta.resources.PurgeableResource"><code class="xref py py-class docutils literal"><span class="pre">PurgeableResource</span></code></a>) – The desired resource state.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.delete_resource">
+<code class="descname">delete_resource</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.PurgeableResource</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#CRUDHandler.delete_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.delete_resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the handler when the resource should be deleted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context can be used to get values discovered in the read method. For example, the id used in API
+calls. This context should also be used to let the handler know what changes were made to the
+resource.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.PurgeableResource" title="inmanta.resources.PurgeableResource"><code class="xref py py-class docutils literal"><span class="pre">PurgeableResource</span></code></a>) – The desired resource state.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.do_changes">
+<code class="descname">do_changes</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em>, <em>changes: dict</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.do_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do the changes required to bring the resource on this system in the state of the given resource.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to check the current state of.</li>
+<li><strong>changes</strong> (<code class="docutils literal"><span class="pre">dict</span></code>) – The changes that need to occur as reported by
+<a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.list_changes" title="inmanta.agent.handler.ResourceHandler.list_changes"><code class="xref py py-func docutils literal"><span class="pre">list_changes()</span></code></a></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.do_reload">
+<code class="descname">do_reload</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.do_reload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform a reload of this resource.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to reload.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.PurgeableResource</em>, <em>dry_run: bool = None</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#CRUDHandler.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the given resource. This method is called by the agent. Override the CRUD methods of this class.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.PurgeableResource" title="inmanta.resources.PurgeableResource"><code class="xref py py-class docutils literal"><span class="pre">PurgeableResource</span></code></a>) – The resource to check the current state of.</li>
+<li><strong>dry_run</strong> (<code class="docutils literal"><span class="pre">bool</span></code>) – True will only determine the required changes but will not execute them.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.facts">
+<code class="descname">facts</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.facts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns facts about this resource. Override this method to implement fact querying.
+<a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.pre" title="inmanta.agent.handler.ResourceHandler.pre"><code class="xref py py-func docutils literal"><span class="pre">pre()</span></code></a> and <a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.post" title="inmanta.agent.handler.ResourceHandler.post"><code class="xref py py-func docutils literal"><span class="pre">post()</span></code></a> are
+called before and after this method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">dict</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to query facts for.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dict with fact names as keys and facts values.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.get_client">
+<code class="descname">get_client</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; inmanta.protocol.AgentClient<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.get_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the client instance that identifies itself with the agent session.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A client that is associated with the session of the agent that executes this handler.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.get_file">
+<code class="descname">get_file</code><span class="sig-paren">(</span><em>hash_id</em><span class="sig-paren">)</span> &#x2192; bytes<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.get_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a file from the fileserver identified with the given id. The convention is to use the sha1sum of the
+content to identify it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bytes</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hash_id</strong> – The id of the content/file to retrieve from the server.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The content in the form of a bytestring or none is the content does not exist.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.list_changes">
+<code class="descname">list_changes</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; typing.Dict[str, typing.Dict[str, typing.Any]]<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.list_changes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the changes required to bring the resource on this system in the state described in the resource entry.
+This method calls <a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.check_resource" title="inmanta.agent.handler.ResourceHandler.check_resource"><code class="xref py py-func docutils literal"><span class="pre">check_resource()</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal"><span class="pre">Dict</span></code></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to check the current state of.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A dict with key the name of the field and value another dict with “current” and “desired” as keys for
+fields that require changes.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method executed after an operation. Override this method to run after an operation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to query facts for.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.pre">
+<code class="descname">pre</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.pre" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method executed before a handler operation (Facts, dryrun, real deployment, …) is executed. Override this method
+to run before an operation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to query facts for.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.process_events">
+<code class="descname">process_events</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.Resource</em>, <em>events: dict</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.process_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process events generated by changes to required resources. Override this method to process events in a handler.
+This method implements the deprecated reload mechanism. Make sure to call this method from a subclass if the
+reload behaviour is required.</p>
+<p>This method is called for all dependents of the given resource (inverse of the requires relationship)
+that have send_event set to true and for which a deploy was started. These are the only conditions, even if all
+dependents have failed or no changes were deployed. It is up to the handler to decide what to do.</p>
+<p>The default implementation provides the reload mechanism. It will call do_reload when the handler can_reload() and
+if at least one of the dependents have successfully deployed and there were changes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context object to report changes and logs to the agent and server.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource to process the events for.</li>
+<li><strong>dict</strong> – A dict with events of the resource the given resource requires. The keys of the dict are the resources.
+Each value is a dict with the items status (const.ResourceState), changes (dict) and
+change (const.Change).</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.read_resource">
+<code class="descname">read_resource</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>resource: inmanta.resources.PurgeableResource</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#CRUDHandler.read_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.read_resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method reads the current state of the resource. It provides a copy of the resource that should be deployed,
+the method implementation should modify the attributes of this resource to the current state.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context can be used to pass value discovered in the read method to the CUD methods. For example, the
+id used in API calls</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.PurgeableResource" title="inmanta.resources.PurgeableResource"><code class="xref py py-class docutils literal"><span class="pre">PurgeableResource</span></code></a>) – A clone of the desired resource state. The read method need to set values on this object.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#inmanta.agent.handler.SkipResource" title="inmanta.agent.handler.SkipResource"><strong>SkipResource</strong></a> – Raise this exception when the handler should skip this resource</li>
+<li><a class="reference internal" href="#inmanta.agent.handler.ResourcePurged" title="inmanta.agent.handler.ResourcePurged"><strong>ResourcePurged</strong></a> – Raise this exception when the resource does not exist yet.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.restore">
+<code class="descname">restore</code><span class="sig-paren">(</span><em>resource: inmanta.resources.Resource</em>, <em>snapshot_id: str</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.restore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore a resource from a snapshot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The resource for which a snapshot needs to be restored.</li>
+<li><strong>snapshot_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – The id of the “file” on the server that contains the snapshot data. This data can be retrieved
+with the <a class="reference internal" href="#inmanta.agent.handler.ResourceHandler.get_file" title="inmanta.agent.handler.ResourceHandler.get_file"><code class="xref py py-func docutils literal"><span class="pre">get_file()</span></code></a> method</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.run_sync">
+<code class="descname">run_sync</code><span class="sig-paren">(</span><em>func: typing.Callable</em><span class="sig-paren">)</span> &#x2192; typing.Any<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.run_sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a the given async function on the ioloop of the agent. It will block the current thread until the future
+resolves.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>func</strong> (<code class="xref py py-class docutils literal"><span class="pre">Callable</span></code>) – A function that returns a yieldable future.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The result of the async function.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.set_cache">
+<code class="descname">set_cache</code><span class="sig-paren">(</span><em>cache: inmanta.agent.cache.AgentCache</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.set_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.snapshot">
+<code class="descname">snapshot</code><span class="sig-paren">(</span><em>resource: inmanta.resources.Resource</em><span class="sig-paren">)</span> &#x2192; bytes<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new snapshot and upload it to the server</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bytes</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a>) – The state of the resource for which a snapshot is created</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The data that needs to be uploaded to the server. This data is passed back to the restore method on
+snapshot restore.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.stat_file">
+<code class="descname">stat_file</code><span class="sig-paren">(</span><em>hash_id: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.stat_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a file exists on the server. This method does and async call to the server and blocks on the result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal"><span class="pre">bool</span></code></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hash_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – The id of the file on the server. The convention is the use the sha1sum of the content as id.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">True if the file is available on the server.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.update_resource">
+<code class="descname">update_resource</code><span class="sig-paren">(</span><em>ctx: inmanta.agent.handler.HandlerContext</em>, <em>changes: dict</em>, <em>resource: inmanta.resources.PurgeableResource</em><span class="sig-paren">)</span> &#x2192; None<a class="reference internal" href="../_modules/inmanta/agent/handler.html#CRUDHandler.update_resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.update_resource" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the handler when the resource should be updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ctx</strong> (<a class="reference internal" href="#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) – Context can be used to get values discovered in the read method. For example, the id used in API
+calls. This context should also be used to let the handler know what changes were made to the
+resource.</li>
+<li><strong>changes</strong> (<code class="docutils literal"><span class="pre">dict</span></code>) – A map of resource attributes that should be changed. Each value is a tuple with the current and the
+desired value.</li>
+<li><strong>resource</strong> (<a class="reference internal" href="#inmanta.resources.PurgeableResource" title="inmanta.resources.PurgeableResource"><code class="xref py py-class docutils literal"><span class="pre">PurgeableResource</span></code></a>) – The desired resource state.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.handler.CRUDHandler.upload_file">
+<code class="descname">upload_file</code><span class="sig-paren">(</span><em>hash_id: str</em>, <em>content: bytes</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#inmanta.agent.handler.CRUDHandler.upload_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload a file to the server</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hash_id</strong> (<code class="docutils literal"><span class="pre">str</span></code>) – The id to identify the content. The convention is to use the sha1sum of the content to identify it.</li>
+<li><strong>content</strong> (<code class="docutils literal"><span class="pre">bytes</span></code>) – A byte string with the content</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="inmanta.agent.io.local.LocalIO">
+<em class="property">class </em><code class="descclassname">inmanta.agent.io.local.</code><code class="descname">LocalIO</code><span class="sig-paren">(</span><em>uri</em>, <em>config</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides handler IO methods</p>
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.chmod">
+<code class="descname">chmod</code><span class="sig-paren">(</span><em>path</em>, <em>permissions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.chmod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.chmod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the permissions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) – The path of the file or directory to change the permission of.</li>
+<li><strong>permissions</strong> (<em>str</em>) – An octal string with the permission to set.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.chown">
+<code class="descname">chown</code><span class="sig-paren">(</span><em>path</em>, <em>user=None</em>, <em>group=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.chown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.chown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the ownership of a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) – The path of the file or directory to change the ownership of.</li>
+<li><strong>user</strong> (<em>str</em>) – The user to change to</li>
+<li><strong>group</strong> (<em>str</em>) – The group to change to</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close any resources</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.file_exists">
+<code class="descname">file_exists</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.file_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.file_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a given file exists</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – The path to check if it exists.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns true if the file exists</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.file_stat">
+<code class="descname">file_stat</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.file_stat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.file_stat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Do a stat call on a file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – The file or direct to stat</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A dict with the owner, group and permissions of the given path</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict[str, str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.hash_file">
+<code class="descname">hash_file</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.hash_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.hash_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the sha1sum of the file at path</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – The path of the file to hash the content of</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The sha1sum in a hex string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.is_remote">
+<code class="descname">is_remote</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.is_remote"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.is_remote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Are operation executed remote</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns true if the io operations are remote.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.is_symlink">
+<code class="descname">is_symlink</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.is_symlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.is_symlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the given path a symlink</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – The path of the symlink</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns true if the given path points to a symlink</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.mkdir">
+<code class="descname">mkdir</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.mkdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – Create this directory. The parent needs to exist.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>path</em>, <em>content</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.put"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put the given content at the given path</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) – The location where to write the file</li>
+<li><strong>content</strong> (<em>bytes</em>) – The binarystring content to write to the file.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read in the file in path and return its content as string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – The path of the file to read.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The string content of the file</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.read_binary">
+<code class="descname">read_binary</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.read_binary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.read_binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read in the file in path and return its content as a bytestring</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – The path of the file to read.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The byte content of the file</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bytes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.readlink">
+<code class="descname">readlink</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.readlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.readlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the target of the path</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – The symlink to get the target for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The target of the symlink</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.remove">
+<code class="descname">remove</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – The path of the file to remove.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.rmdir">
+<code class="descname">rmdir</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.rmdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.rmdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – The directory to remove</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>command</em>, <em>arguments=[]</em>, <em>env=None</em>, <em>cwd=None</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execute a command with the given argument and return the result</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>command</strong> (<em>str</em>) – The command to execute.</li>
+<li><strong>arguments</strong> (<em>list</em>) – The arguments of the command</li>
+<li><strong>env</strong> (<em>dict</em>) – A dictionary with environment variables.</li>
+<li><strong>cwd</strong> (<em>str</em>) – The working dir to execute the command in.</li>
+<li><strong>timeout</strong> (<em>int</em>) – The timeout for this command. This parameter is ignored if the command is executed remotely with
+a python 2 interpreter.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A tuple with (stdout, stderr, returncode)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="inmanta.agent.io.local.LocalIO.symlink">
+<code class="descname">symlink</code><span class="sig-paren">(</span><em>source</em>, <em>target</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/inmanta/agent/io/local.html#LocalIO.symlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#inmanta.agent.io.local.LocalIO.symlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Symlink source to target</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>source</strong> (<em>str</em>) – Create a symlink of this path to target</li>
+<li><strong>target</strong> (<em>str</em>) – The path of the symlink to create</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="modules.html" class="btn btn-neutral float-right" title="Inmanta modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="config.html" class="btn btn-neutral" title="Configuration Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

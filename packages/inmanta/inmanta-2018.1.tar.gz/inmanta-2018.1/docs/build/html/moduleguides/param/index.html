@@ -1,0 +1,599 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Forms &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Module guides" href="../../moduleguides.html"/>
+        <link rel="next" title="Developer documentation" href="../../developers.html"/>
+        <link rel="prev" title="OpenStack" href="../openstack/index.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../moduleguides.html">Module guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ansible/index.html">Ansible module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../openstack/index.html">OpenStack</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Forms</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#defining-forms">Defining Forms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-forms">Using Forms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-the-cli">Using the CLI</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#using-the-api">Using the API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">Inmanta Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../moduleguides.html">Module guides</a> &raquo;</li>
+        
+      <li>Forms</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="forms">
+<h1>Forms<a class="headerlink" href="#forms" title="Permalink to this headline">¶</a></h1>
+<p>Inmanta is capable of generating forms for the dashboard automatically. This makes customizing models a lot easier for end-users (and it creates a rest interface for your model).</p>
+<p>In this example, we show how to make a form to choose OpenStack or Amazon and collect the credentials.</p>
+<p>For example:</p>
+<a class="reference internal image-reference" href="../../_images/forms_detail.png"><img alt="Example Form" src="../../_images/forms_detail.png" style="width: 100%;" /></a>
+<p><a class="reference external" href="https://github.com/inmanta/inmanta/tree/master/docs/examples/forms">Full source here</a></p>
+<div class="section" id="defining-forms">
+<h2>Defining Forms<a class="headerlink" href="#defining-forms" title="Permalink to this headline">¶</a></h2>
+<p>Forms always have to be in a module. So, in the module formtest, we define our forms.</p>
+<p>To define a form, just create an entity that extends <a class="reference internal" href="../../reference/modules/param.html#entity-param::Form" title="param::Form entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">param::Form</span></code></a></p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="n">param</span><span class="w"></span>
+
+<span class="k">entity</span><span class="w"> </span><span class="nc">CloudProvider</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">param::Form</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">_title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Cloud provider&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">_help</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Select a cloud provider to deploy the application to.&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">_record_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">provider</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">provider__widget</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;options&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">provider__options</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;AWS,Openstack&quot;</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+<span class="k">entity</span><span class="w"> </span><span class="nc">OpenStackForm</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">param::Form</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">_title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;OpenStack credentials&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">_help</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Specify the credentials to login into your OpenStack provider.&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">_record_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">connection_url</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">username</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">password</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">tenant</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">network_name</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">network_name__help</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;The name of the network to boot the VMs in.&quot;</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">entity</span><span class="w"> </span><span class="nc">AWSForm</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">param::Form</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">_title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Amazon AWS credentials&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">_help</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Specify the credentials to login into your AWS account.&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">_record_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
+
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">region</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">access_key</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">secret_key</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">availability_zone</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">vpc_subnet</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+
+<span class="k">entity</span><span class="w"> </span><span class="nc">User</span><span class="w"> </span><span class="k">extends</span><span class="w"> </span><span class="nc">param::Form</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">_title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Users&quot;</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">_help</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Add users to create them automatically&quot;</span><span class="w"></span>
+
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="w">    </span><span class="nb">bool</span><span class="w"> </span><span class="n">admin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">false</span><span class="w"></span>
+<span class="w">    </span><span class="nb">string</span><span class="w"> </span><span class="n">admin__widget</span><span class="o">=</span><span class="s">&quot;checkbox&quot;</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Special fields and conventions:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Each field in the entity becomes a field in the form.</li>
+<li>Fields with an _ in the name can be used to pass metadata to the forms api.</li>
+</ul>
+</div></blockquote>
+<table border="1" class="docutils">
+<colgroup>
+<col width="16%" />
+<col width="84%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>_title</td>
+<td>the title of the form</td>
+</tr>
+<tr class="row-even"><td>_help</td>
+<td>help text of the form</td>
+</tr>
+<tr class="row-odd"><td>_record_count</td>
+<td>if you set this value to 1, the form can be filled in only once, otherwise multiple records can be created</td>
+</tr>
+<tr class="row-even"><td>fieldname__widget</td>
+<td>what widget to use in the form, options are ‘options’,’checkbox’,’slider’. Omit for textbox.</td>
+</tr>
+<tr class="row-odd"><td>fieldname__options</td>
+<td>comma separated list of options, for use with option widget</td>
+</tr>
+<tr class="row-even"><td>fieldname__min</td>
+<td>lowest value for numerical values</td>
+</tr>
+<tr class="row-odd"><td>fieldname__max</td>
+<td>highest value for numerical values</td>
+</tr>
+<tr class="row-even"><td>fieldname__help</td>
+<td>help text for the field</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="using-forms">
+<h2>Using Forms<a class="headerlink" href="#using-forms" title="Permalink to this headline">¶</a></h2>
+<p>To access a form with only one record, use <a class="reference internal" href="../../reference/modules/param.html#param.one" title="param.one"><code class="xref py py-func docutils literal"><span class="pre">param::one</span></code></a>. Note that you don’t get an instance of the form object back, but that you have to get the information out, one field at a time.</p>
+<p>To access a form with multiple records, use <a class="reference internal" href="../../reference/modules/param.html#param.instances" title="param.instances"><code class="xref py py-func docutils literal"><span class="pre">param::instances</span></code></a> to get a list of instances. Then use <a class="reference internal" href="../../reference/modules/param.html#param.get" title="param.get"><code class="xref py py-func docutils literal"><span class="pre">param::get</span></code></a> to get the fields of the instances.</p>
+<div class="highlight-inmanta"><div class="highlight"><pre><span></span><span class="k">import</span><span class="w"> </span><span class="n">param</span><span class="w"></span>
+<span class="k">import</span><span class="w"> </span><span class="n">formtest</span><span class="w"></span>
+
+<span class="n">provider_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param</span><span class="o">::</span><span class="n">one</span><span class="o">(</span><span class="s">&quot;provider&quot;</span><span class="o">,</span><span class="w"> </span><span class="s">&quot;formtest::CloudProvider&quot;</span><span class="o">)</span><span class="w"></span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">print</span><span class="o">(</span><span class="n">provider_name</span><span class="o">)</span><span class="w"></span>
+
+
+<span class="n">users</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param</span><span class="o">::</span><span class="n">instances</span><span class="o">(</span><span class="s">&quot;formtest::User&quot;</span><span class="o">)</span><span class="w"></span>
+<span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">users</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="n">user_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">param</span><span class="o">::</span><span class="n">get</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">,</span><span class="w"> </span><span class="n">i</span><span class="o">)</span><span class="w"></span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">print</span><span class="o">(</span><span class="n">user_name</span><span class="o">)</span><span class="w"></span>
+<span class="k">end</span><span class="w"></span>
+</pre></div>
+</div>
+<p>When you compile a model with a form, on first compile, the form definitions are sent to the server.
+All calls to <a class="reference internal" href="../../reference/modules/param.html#param.one" title="param.one"><code class="xref py py-func docutils literal"><span class="pre">param::one</span></code></a> and <a class="reference internal" href="../../reference/modules/param.html#param.instances" title="param.instances"><code class="xref py py-func docutils literal"><span class="pre">param::instances</span></code></a> return ‘Unknown’ which means that parts of the model that use these values are dropped from the output.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">When compiling models with forms, the compiler must always be able to connect to a server, or compilation will fail.</p>
+</div>
+<p>In the dashboard, you will now see the forms you have defined. If you fill in values and recompile, the values are used in the model.</p>
+</div>
+<div class="section" id="using-the-cli">
+<h2>Using the CLI<a class="headerlink" href="#using-the-cli" title="Permalink to this headline">¶</a></h2>
+<p>Forms can also be accessed via the CLI</p>
+<p>There are two main endpoint: forms and records.
+Forms gives you access to all form definitions per environment, records gives you access to all record for each form.</p>
+<p>For example:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$&gt; inmanta-cli form list -e b6a0357f-8936-4db5-91f9-2c5ca75bf134
++-------------------------+--------------------------------------+
+<span class="p">|</span> Form Type               <span class="p">|</span> Form ID                              <span class="p">|</span>
++-------------------------+--------------------------------------+
+<span class="p">|</span> formtest::CloudProvider <span class="p">|</span> <span class="m">78616841</span>-d757-4112-ac79-033373c72ff4 <span class="p">|</span>
+<span class="p">|</span> formtest::User          <span class="p">|</span> e1f21a14-5e21-4c6d-82b8-2303f3a7ce60 <span class="p">|</span>
++-------------------------+--------------------------------------+
+$&gt; inmanta-cli form show  -e b6a0357f-8936-4db5-91f9-2c5ca75bf134 -t formtest::User
++-------+---------------------------------------+
+<span class="p">|</span> Field <span class="p">|</span> Value                                 <span class="p">|</span>
++-------+---------------------------------------+
+<span class="p">|</span> name  <span class="p">|</span> type: string                          <span class="p">|</span>
+<span class="p">|</span> admin <span class="p">|</span> type: bool, default: <span class="o">{</span><span class="s1">&#39;admin&#39;</span>: False<span class="o">}</span> <span class="p">|</span>
++-------+---------------------------------------+
+$&gt; inmanta-cli record list -e b6a0357f-8936-4db5-91f9-2c5ca75bf134 -t formtest::User
++--------------------------------------+----------------------------+
+<span class="p">|</span> Record ID                            <span class="p">|</span> Changed                    <span class="p">|</span>
++--------------------------------------+----------------------------+
+<span class="p">|</span> 38d2a543-89c3-4e90-9602-d827f9d1e6cb <span class="p">|</span> <span class="m">2016</span>-11-08T16:20:11.229000 <span class="p">|</span>
+<span class="p">|</span> 64211c57-1874-4445-8ede-c2dfa3be3bd4 <span class="p">|</span> <span class="m">2016</span>-11-08T16:20:17.047000 <span class="p">|</span>
++--------------------------------------+----------------------------+
+$&gt; inmanta-cli record list -e b6a0357f-8936-4db5-91f9-2c5ca75bf134 -t formtest::User -a
++--------------------------------------+----------------------------+-------+-----------+
+<span class="p">|</span> Record ID                            <span class="p">|</span> Changed                    <span class="p">|</span> admin <span class="p">|</span> name      <span class="p">|</span>
++--------------------------------------+----------------------------+-------+-----------+
+<span class="p">|</span> 38d2a543-89c3-4e90-9602-d827f9d1e6cb <span class="p">|</span> <span class="m">2016</span>-11-08T16:20:11.229000 <span class="p">|</span> True  <span class="p">|</span> adminuser <span class="p">|</span>
+<span class="p">|</span> 64211c57-1874-4445-8ede-c2dfa3be3bd4 <span class="p">|</span> <span class="m">2016</span>-11-08T16:20:17.047000 <span class="p">|</span> False <span class="p">|</span> testuser  <span class="p">|</span>
++--------------------------------------+----------------------------+-------+-----------+
+</pre></div>
+</div>
+<p>To create records</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$&gt; inmanta-cli record create -e b6a0357f-8936-4db5-91f9-2c5ca75bf134 -t formtest::User -p <span class="nv">admin</span><span class="o">=</span>False -p <span class="nv">name</span><span class="o">=</span>TestCLi
++-------+---------+
+<span class="p">|</span> Field <span class="p">|</span> Value   <span class="p">|</span>
++-------+---------+
+<span class="p">|</span> admin <span class="p">|</span> False   <span class="p">|</span>
+<span class="p">|</span> name  <span class="p">|</span> TestCLi <span class="p">|</span>
++-------+---------+
+$&gt; inmanta-cli record list -e b6a0357f-8936-4db5-91f9-2c5ca75bf134 -t formtest::User -a
++--------------------------------------+----------------------------+-------+-----------+
+<span class="p">|</span> Record ID                            <span class="p">|</span> Changed                    <span class="p">|</span> admin <span class="p">|</span> name      <span class="p">|</span>
++--------------------------------------+----------------------------+-------+-----------+
+<span class="p">|</span> 38d2a543-89c3-4e90-9602-d827f9d1e6cb <span class="p">|</span> <span class="m">2016</span>-11-08T16:20:11.229000 <span class="p">|</span> True  <span class="p">|</span> adminuser <span class="p">|</span>
+<span class="p">|</span> 64211c57-1874-4445-8ede-c2dfa3be3bd4 <span class="p">|</span> <span class="m">2016</span>-11-08T16:20:17.047000 <span class="p">|</span> False <span class="p">|</span> testuser  <span class="p">|</span>
+<span class="p">|</span> c954706f-c13d-40e1-8daf-e596b54e6567 <span class="p">|</span> <span class="m">2016</span>-11-08T16:32:13.614000 <span class="p">|</span> False <span class="p">|</span> TestCLi   <span class="p">|</span>
++--------------------------------------+----------------------------+-------+-----------+
+</pre></div>
+</div>
+</div>
+<div class="section" id="using-the-api">
+<h2>Using the API<a class="headerlink" href="#using-the-api" title="Permalink to this headline">¶</a></h2>
+<p>Forms can also be access via the API. This is similar to the CLI, but easier to use in scripts.
+Examples use <a class="reference external" href="https://httpie.org/">httpie</a></p>
+<p>Important is that the environment is passed as a header called <em>X-Inmanta-tid</em></p>
+<p>The same as above, but via http:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$&gt; http GET <span class="m">127</span>.0.0.1:8888/form X-Inmanta-tid:b6a0357f-8936-4db5-91f9-2c5ca75bf134
+<span class="o">{</span>
+    <span class="s2">&quot;forms&quot;</span>: <span class="o">[</span>
+        <span class="o">{</span>
+            <span class="s2">&quot;form_id&quot;</span>: <span class="s2">&quot;78616841-d757-4112-ac79-033373c72ff4&quot;</span>,
+            <span class="s2">&quot;form_type&quot;</span>: <span class="s2">&quot;formtest::CloudProvider&quot;</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+            <span class="s2">&quot;form_id&quot;</span>: <span class="s2">&quot;e1f21a14-5e21-4c6d-82b8-2303f3a7ce60&quot;</span>,
+            <span class="s2">&quot;form_type&quot;</span>: <span class="s2">&quot;formtest::User&quot;</span>
+        <span class="o">}</span>
+    <span class="o">]</span>
+<span class="o">}</span>
+
+$&gt; http GET <span class="m">127</span>.0.0.1:8888/form/formtest::CloudProvider X-Inmanta-tid:b6a0357f-8936-4db5-91f9-2c5ca75bf134
+<span class="o">{</span>
+    <span class="s2">&quot;form&quot;</span>: <span class="o">{</span>
+        <span class="s2">&quot;defaults&quot;</span>: <span class="o">{}</span>,
+        <span class="s2">&quot;field_options&quot;</span>: <span class="o">{</span>
+            <span class="s2">&quot;provider&quot;</span>: <span class="o">{</span>
+                <span class="s2">&quot;options&quot;</span>: <span class="s2">&quot;AWS,Openstack&quot;</span>,
+                <span class="s2">&quot;widget&quot;</span>: <span class="s2">&quot;options&quot;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>,
+        <span class="s2">&quot;fields&quot;</span>: <span class="o">{</span>
+            <span class="s2">&quot;provider&quot;</span>: <span class="s2">&quot;string&quot;</span>
+        <span class="o">}</span>,
+        <span class="s2">&quot;form_id&quot;</span>: <span class="s2">&quot;78616841-d757-4112-ac79-033373c72ff4&quot;</span>,
+        <span class="s2">&quot;form_type&quot;</span>: <span class="s2">&quot;formtest::CloudProvider&quot;</span>,
+        <span class="s2">&quot;options&quot;</span>: <span class="o">{</span>
+            <span class="s2">&quot;help&quot;</span>: <span class="s2">&quot;Select a cloud provider to deploy the application to.&quot;</span>,
+            <span class="s2">&quot;record_count&quot;</span>: <span class="m">1</span>,
+            <span class="s2">&quot;title&quot;</span>: <span class="s2">&quot;Cloud provider&quot;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+$&gt; http GET <span class="m">127</span>.0.0.1:8888/records <span class="nv">form_type</span><span class="o">=</span>formtest::User  X-Inmanta-tid:b6a0357f-8936-4db5-91f9-2c5ca75bf134
+<span class="o">{</span>
+    <span class="s2">&quot;records&quot;</span>: <span class="o">[</span>
+        <span class="o">{</span>
+            <span class="s2">&quot;changed&quot;</span>: <span class="s2">&quot;2016-11-08T16:20:11.229000&quot;</span>,
+            <span class="s2">&quot;record_id&quot;</span>: <span class="s2">&quot;38d2a543-89c3-4e90-9602-d827f9d1e6cb&quot;</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+            <span class="s2">&quot;changed&quot;</span>: <span class="s2">&quot;2016-11-08T16:20:17.047000&quot;</span>,
+            <span class="s2">&quot;record_id&quot;</span>: <span class="s2">&quot;64211c57-1874-4445-8ede-c2dfa3be3bd4&quot;</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+            <span class="s2">&quot;changed&quot;</span>: <span class="s2">&quot;2016-11-08T16:32:13.614000&quot;</span>,
+            <span class="s2">&quot;record_id&quot;</span>: <span class="s2">&quot;c954706f-c13d-40e1-8daf-e596b54e6567&quot;</span>
+        <span class="o">}</span>
+    <span class="o">]</span>
+<span class="o">}</span>
+$&gt; http GET <span class="m">127</span>.0.0.1:8888/records <span class="nv">form_type</span><span class="o">=</span>formtest::User <span class="nv">include_record</span><span class="o">=</span>True  X-Inmanta-tid:b6a0357f-8936-4db5-91f9-2c5ca75bf134
+<span class="o">{</span>
+    <span class="s2">&quot;records&quot;</span>: <span class="o">[</span>
+        <span class="o">{</span>
+            <span class="s2">&quot;changed&quot;</span>: <span class="s2">&quot;2016-11-08T16:20:11.229000&quot;</span>,
+            <span class="s2">&quot;fields&quot;</span>: <span class="o">{</span>
+                <span class="s2">&quot;admin&quot;</span>: true,
+                <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;adminuser&quot;</span>
+            <span class="o">}</span>,
+            <span class="s2">&quot;form_id&quot;</span>: <span class="s2">&quot;e1f21a14-5e21-4c6d-82b8-2303f3a7ce60&quot;</span>,
+            <span class="s2">&quot;form_type&quot;</span>: <span class="s2">&quot;formtest::User&quot;</span>,
+            <span class="s2">&quot;record_id&quot;</span>: <span class="s2">&quot;38d2a543-89c3-4e90-9602-d827f9d1e6cb&quot;</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+            <span class="s2">&quot;changed&quot;</span>: <span class="s2">&quot;2016-11-08T16:20:17.047000&quot;</span>,
+            <span class="s2">&quot;fields&quot;</span>: <span class="o">{</span>
+                <span class="s2">&quot;admin&quot;</span>: false,
+                <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;testuser&quot;</span>
+            <span class="o">}</span>,
+            <span class="s2">&quot;form_id&quot;</span>: <span class="s2">&quot;e1f21a14-5e21-4c6d-82b8-2303f3a7ce60&quot;</span>,
+            <span class="s2">&quot;form_type&quot;</span>: <span class="s2">&quot;formtest::User&quot;</span>,
+            <span class="s2">&quot;record_id&quot;</span>: <span class="s2">&quot;64211c57-1874-4445-8ede-c2dfa3be3bd4&quot;</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+            <span class="s2">&quot;changed&quot;</span>: <span class="s2">&quot;2016-11-08T16:32:13.614000&quot;</span>,
+            <span class="s2">&quot;fields&quot;</span>: <span class="o">{</span>
+                <span class="s2">&quot;admin&quot;</span>: false,
+                <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;TestCLi&quot;</span>
+            <span class="o">}</span>,
+            <span class="s2">&quot;form_id&quot;</span>: <span class="s2">&quot;e1f21a14-5e21-4c6d-82b8-2303f3a7ce60&quot;</span>,
+            <span class="s2">&quot;form_type&quot;</span>: <span class="s2">&quot;formtest::User&quot;</span>,
+            <span class="s2">&quot;record_id&quot;</span>: <span class="s2">&quot;c954706f-c13d-40e1-8daf-e596b54e6567&quot;</span>
+        <span class="o">}</span>
+    <span class="o">]</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+<p>To create records:</p>
+<div class="highlight-bash"><div class="highlight"><pre><span></span>$&gt; http POST <span class="m">127</span>.0.0.1:8888/records <span class="nv">form_type</span><span class="o">=</span>formtest::User X-Inmanta-tid:b6a0357f-8936-4db5-91f9-2c5ca75bf134 form:<span class="o">=</span><span class="s1">&#39;{&quot;name&quot;:&quot;apitest&quot;,&quot;admin&quot;:false}&#39;</span>
+<span class="o">{</span>
+    <span class="s2">&quot;record&quot;</span>: <span class="o">{</span>
+        <span class="s2">&quot;changed&quot;</span>: <span class="s2">&quot;2016-11-08T16:49:50.239000&quot;</span>,
+        <span class="s2">&quot;fields&quot;</span>: <span class="o">{</span>
+            <span class="s2">&quot;admin&quot;</span>: false,
+            <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;apitest&quot;</span>
+        <span class="o">}</span>,
+        <span class="s2">&quot;form_id&quot;</span>: <span class="s2">&quot;e1f21a14-5e21-4c6d-82b8-2303f3a7ce60&quot;</span>,
+        <span class="s2">&quot;form_type&quot;</span>: <span class="s2">&quot;formtest::User&quot;</span>,
+        <span class="s2">&quot;record_id&quot;</span>: <span class="s2">&quot;d652db64-77b7-477b-b4f6-e222883f4a47&quot;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+$&gt; http GET <span class="m">127</span>.0.0.1:8888/records <span class="nv">form_type</span><span class="o">=</span>formtest::User <span class="nv">include_record</span><span class="o">=</span>True  X-Inmanta-tid:b6a0357f-8936-4db5-91f9-2c5ca75bf134
+<span class="o">{</span>
+    <span class="s2">&quot;records&quot;</span>: <span class="o">[</span>
+        <span class="o">{</span>
+            <span class="s2">&quot;changed&quot;</span>: <span class="s2">&quot;2016-11-08T16:20:11.229000&quot;</span>,
+            <span class="s2">&quot;fields&quot;</span>: <span class="o">{</span>
+                <span class="s2">&quot;admin&quot;</span>: true,
+                <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;adminuser&quot;</span>
+            <span class="o">}</span>,
+            <span class="s2">&quot;form_id&quot;</span>: <span class="s2">&quot;e1f21a14-5e21-4c6d-82b8-2303f3a7ce60&quot;</span>,
+            <span class="s2">&quot;form_type&quot;</span>: <span class="s2">&quot;formtest::User&quot;</span>,
+            <span class="s2">&quot;record_id&quot;</span>: <span class="s2">&quot;38d2a543-89c3-4e90-9602-d827f9d1e6cb&quot;</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+            <span class="s2">&quot;changed&quot;</span>: <span class="s2">&quot;2016-11-08T16:20:17.047000&quot;</span>,
+            <span class="s2">&quot;fields&quot;</span>: <span class="o">{</span>
+                <span class="s2">&quot;admin&quot;</span>: false,
+                <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;testuser&quot;</span>
+            <span class="o">}</span>,
+            <span class="s2">&quot;form_id&quot;</span>: <span class="s2">&quot;e1f21a14-5e21-4c6d-82b8-2303f3a7ce60&quot;</span>,
+            <span class="s2">&quot;form_type&quot;</span>: <span class="s2">&quot;formtest::User&quot;</span>,
+            <span class="s2">&quot;record_id&quot;</span>: <span class="s2">&quot;64211c57-1874-4445-8ede-c2dfa3be3bd4&quot;</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+            <span class="s2">&quot;changed&quot;</span>: <span class="s2">&quot;2016-11-08T16:32:13.614000&quot;</span>,
+            <span class="s2">&quot;fields&quot;</span>: <span class="o">{</span>
+                <span class="s2">&quot;admin&quot;</span>: false,
+                <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;TestCLi&quot;</span>
+            <span class="o">}</span>,
+            <span class="s2">&quot;form_id&quot;</span>: <span class="s2">&quot;e1f21a14-5e21-4c6d-82b8-2303f3a7ce60&quot;</span>,
+            <span class="s2">&quot;form_type&quot;</span>: <span class="s2">&quot;formtest::User&quot;</span>,
+            <span class="s2">&quot;record_id&quot;</span>: <span class="s2">&quot;c954706f-c13d-40e1-8daf-e596b54e6567&quot;</span>
+        <span class="o">}</span>,
+        <span class="o">{</span>
+            <span class="s2">&quot;changed&quot;</span>: <span class="s2">&quot;2016-11-08T16:49:50.239000&quot;</span>,
+            <span class="s2">&quot;fields&quot;</span>: <span class="o">{</span>
+                <span class="s2">&quot;admin&quot;</span>: false,
+                <span class="s2">&quot;name&quot;</span>: <span class="s2">&quot;apitest&quot;</span>
+            <span class="o">}</span>,
+            <span class="s2">&quot;form_id&quot;</span>: <span class="s2">&quot;e1f21a14-5e21-4c6d-82b8-2303f3a7ce60&quot;</span>,
+            <span class="s2">&quot;form_type&quot;</span>: <span class="s2">&quot;formtest::User&quot;</span>,
+            <span class="s2">&quot;record_id&quot;</span>: <span class="s2">&quot;d652db64-77b7-477b-b4f6-e222883f4a47&quot;</span>
+        <span class="o">}</span>
+    <span class="o">]</span>
+<span class="o">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../developers.html" class="btn btn-neutral float-right" title="Developer documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../openstack/index.html" class="btn btn-neutral" title="OpenStack" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

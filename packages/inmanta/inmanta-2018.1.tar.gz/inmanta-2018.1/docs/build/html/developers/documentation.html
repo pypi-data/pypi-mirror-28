@@ -1,0 +1,329 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Documentation writing &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../index.html"/>
+        <link rel="up" title="Developer documentation" href="../developers.html"/>
+        <link rel="next" title="Platform Developers Guide" href="platform.html"/>
+        <link rel="prev" title="Developer documentation" href="../developers.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../index.html">
+
+
+
+  
+    <img src="../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../developers.html">Developer documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Documentation writing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#inmanta-code-documentation">Inmanta code documentation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#modules">Modules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#python-core">Python core</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sphinx-tooling">Sphinx tooling</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#install-inmanta-sphinx-extension">Install inmanta sphinx extension</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sphinxcontrib-inmanta-config">sphinxcontrib.inmanta.config</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sphinxcontrib-inmanta-dsl">sphinxcontrib.inmanta.dsl</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#sphinx-inmanta-api">sphinx-inmanta-api</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="platform.html">Platform Developers Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Inmanta Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../developers.html">Developer documentation</a> &raquo;</li>
+        
+      <li>Documentation writing</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="documentation-writing">
+<h1>Documentation writing<a class="headerlink" href="#documentation-writing" title="Permalink to this headline">¶</a></h1>
+<p>Inmanta uses Sphinx to generate documentation.</p>
+<div class="section" id="inmanta-code-documentation">
+<h2>Inmanta code documentation<a class="headerlink" href="#inmanta-code-documentation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="modules">
+<h3>Modules<a class="headerlink" href="#modules" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="python-core">
+<h3>Python core<a class="headerlink" href="#python-core" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="sphinx-tooling">
+<h2>Sphinx tooling<a class="headerlink" href="#sphinx-tooling" title="Permalink to this headline">¶</a></h2>
+<p>The inmanta-sphinx package provides additional sphinx directives. The directives can render inmanta module documentation
+and configuration documentation.</p>
+<div class="section" id="install-inmanta-sphinx-extension">
+<h3>Install inmanta sphinx extension<a class="headerlink" href="#install-inmanta-sphinx-extension" title="Permalink to this headline">¶</a></h3>
+<p>Install the inmanta sphinx extension by installing the inmanta-sphinx package from pypi. Adding the extensions to the extension
+list in conf.py enables the extensions. The names are <code class="docutils literal"><span class="pre">`sphinxcontrib.inmanta.config`</span></code> and <code class="docutils literal"><span class="pre">`sphinxcontrib.inmanta.dsl`</span></code>.</p>
+<p>This module also install the sphinx-inmanta-api script. This script can be used to generate an RST file with the full
+API documentation from a module. This script is used to generate for example the API docs included in the
+documentation on <a class="reference external" href="https://docs.inmanta.com">https://docs.inmanta.com</a></p>
+</div>
+<div class="section" id="sphinxcontrib-inmanta-config">
+<h3>sphinxcontrib.inmanta.config<a class="headerlink" href="#sphinxcontrib-inmanta-config" title="Permalink to this headline">¶</a></h3>
+<p>This extension loads all the defined configuration options in the Inmanta core and uses
+the embedded documentation to generate a config reference.</p>
+<p>It adds the show-options directive and a number of config objects to sphinx. Use it like this to
+generate documentation:</p>
+<div class="highlight-rst"><div class="highlight"><pre><span></span><span class="p">..</span> <span class="ow">show-options</span><span class="p">::</span>
+
+    inmanta.server.config
+    inmanta.agent.config
+</pre></div>
+</div>
+</div>
+<div class="section" id="sphinxcontrib-inmanta-dsl">
+<h3>sphinxcontrib.inmanta.dsl<a class="headerlink" href="#sphinxcontrib-inmanta-dsl" title="Permalink to this headline">¶</a></h3>
+<p>This exention adds objects and directives to add documentation for Inmanta dsl objects such as
+entities, relations, …</p>
+<p>RST files can reference to inmanta configuration code with <code class="docutils literal"><span class="pre">`:inmanta:entity:`std::File``</span></code>. This renders to
+<a class="reference internal" href="../reference/modules/std.html#entity-std::File" title="std::File entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::File</span></code></a></p>
+</div>
+<div class="section" id="sphinx-inmanta-api">
+<h3>sphinx-inmanta-api<a class="headerlink" href="#sphinx-inmanta-api" title="Permalink to this headline">¶</a></h3>
+<p>This scripts generates an RST file that provides the API documentation of a module. The documentation is generated
+by compiling an empty project with this module included. The generator then uses the compiler representation to emit
+RST code, using the directives from the inmanta.dsl domain extension. This script has the following options:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">`--module_repo`</span></code> A local directory that function as the repo where all modules are stored that are required to generate the API documentation.</li>
+<li><code class="docutils literal"><span class="pre">`--module`</span></code> The name of the module to generate api docs for.</li>
+<li><code class="docutils literal"><span class="pre">`-m`</span></code> or <code class="docutils literal"><span class="pre">`--extra-modules`</span></code>  An optional argument that can be provided multiple times. This is a list of modules that should be loaded
+as well when the API docs are generated. This might be required when other modules also provided implementations that have to be listed.</li>
+<li><code class="docutils literal"><span class="pre">`--source-repo`</span></code> The repo where the upstream source is located. This is used to include a url in the documentation.</li>
+<li><code class="docutils literal"><span class="pre">`-f`</span></code> or <code class="docutils literal"><span class="pre">`--file`</span></code> The file to save the generated documentation in.</li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="platform.html" class="btn btn-neutral float-right" title="Platform Developers Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../developers.html" class="btn btn-neutral" title="Developer documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

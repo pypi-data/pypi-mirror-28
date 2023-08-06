@@ -1,0 +1,499 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Setup authentication &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../index.html"/>
+        <link rel="up" title="Guides" href="../guides.html"/>
+        <link rel="next" title="Create a configuration model" href="configurationmodel.html"/>
+        <link rel="prev" title="Guides" href="../guides.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../index.html">
+
+
+
+  
+    <img src="../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guides.html">Guides</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Setup authentication</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#ssl">SSL</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#authentication">Authentication</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#setup-server-auth">Setup server auth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#jwt-auth-configuration">JWT auth configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#external-authentication-providers">External authentication providers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#keycloak-configuration">Keycloak configuration</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="configurationmodel.html">Create a configuration model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html">Module Developers Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Inmanta Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../guides.html">Guides</a> &raquo;</li>
+        
+      <li>Setup authentication</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="setup-authentication">
+<span id="auth-setup"></span><h1>Setup authentication<a class="headerlink" href="#setup-authentication" title="Permalink to this headline">¶</a></h1>
+<p>This guide explains how to enable ssl and setup authentication.</p>
+<div class="section" id="ssl">
+<h2>SSL<a class="headerlink" href="#ssl" title="Permalink to this headline">¶</a></h2>
+<p>SSL is not strictly required for authentication but higly recommended. Inmanta uses bearer tokens
+for authorizing users and services. These tokens should be kept private and are visible in plain-text in the request headers
+without SSL.</p>
+<p>Setting a private key and a public key in the server configuration enables SSL on the server. The two
+options to set are <a class="reference internal" href="../reference/config.html#server.ssl-cert-file" title="ssl-cert-file"><code class="xref inmanta.config inmanta.config-option docutils literal"><span class="pre">server.ssl-cert-file</span></code></a> and <a class="reference internal" href="../reference/config.html#server.ssl-key-file" title="ssl-key-file"><code class="xref inmanta.config inmanta.config-option docutils literal"><span class="pre">server.ssl-key-file</span></code></a>.</p>
+<p>For each of the transport configurations (compiler, agent, rpc client, …) <code class="docutils literal"><span class="pre">ssl</span></code> has to be
+enabled: <a class="reference internal" href="../reference/config.html#agent_rest_transport" title="agent_rest_transport"><code class="xref inmanta.config inmanta.config-group docutils literal"><span class="pre">agent_rest_transport</span></code></a>, <a class="reference internal" href="../reference/config.html#cmdline_rest_transport" title="cmdline_rest_transport"><code class="xref inmanta.config inmanta.config-group docutils literal"><span class="pre">cmdline_rest_transport</span></code></a> and
+<a class="reference internal" href="../reference/config.html#compiler_rest_transport" title="compiler_rest_transport"><code class="xref inmanta.config inmanta.config-group docutils literal"><span class="pre">compiler_rest_transport</span></code></a>.</p>
+<p>The client needs to trust the SSL certificate of the server. When a self-signed SSL cert is used on the server,
+either add the CA cert to the trusted certificates of the system running the agent or configure the <code class="docutils literal"><span class="pre">ssl-ca-cert-file</span></code> option
+in the transport configuration.</p>
+<p>For example for an agent this is <a class="reference internal" href="../reference/config.html#agent_rest_transport.ssl" title="ssl"><code class="xref inmanta.config inmanta.config-option docutils literal"><span class="pre">agent_rest_transport.ssl</span></code></a> and
+<a class="reference internal" href="../reference/config.html#agent_rest_transport.ssl-ca-cert-file" title="ssl-ca-cert-file"><code class="xref inmanta.config inmanta.config-option docutils literal"><span class="pre">agent_rest_transport.ssl-ca-cert-file</span></code></a></p>
+</div>
+<div class="section" id="authentication">
+<h2>Authentication<a class="headerlink" href="#authentication" title="Permalink to this headline">¶</a></h2>
+<p>Inmanta authentication uses JSON Web Tokens for authentication (bearer token). Inmanta issues tokens for service to service
+interaction (agent to server, compiler to server, cli to server and 3rd party API interactions). For user interaction through
+the dashboard Inmanta uses 3rd party auth brokers. Currently the dashboard only supports redirecting users to keycloak for
+authentication.</p>
+<p>Inmanta expects a token of which it can validate the signature. Inmanta can verify both symmetric signatures with
+HS256 and asymmetric signatures with RSA (RS256). Tokens it signs itself for other processes are always signed using HS256.
+There are no key distribution issues because the server is both the signing and the validating party.</p>
+<p>The server also provides limited authorization by checking for inmanta specific claims inside the token. All inmanta claims
+are prefixed with <code class="docutils literal"><span class="pre">urn:inmanta:</span></code>. These claims are:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">urn:inmanta:ct</span></code> A <em>required</em> comma delimited list of client types for which this client is authenticated. Each API call
+has a one or more allowed client types. The list of valid client types (ct) are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>agent</li>
+<li>compiler</li>
+<li>api (cli, dashboard, 3rd party service)</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">urn:inmanta:env</span></code> An <em>optional</em> claim. When this claim is present the token is scoped to this inmanta environment. All
+tokens that the server generates for agents and compilers have this claim present to limit their access to the environment
+they belong to.</p>
+</li>
+</ul>
+</div></blockquote>
+<div class="section" id="setup-server-auth">
+<h3>Setup server auth<a class="headerlink" href="#setup-server-auth" title="Permalink to this headline">¶</a></h3>
+<p>The server requests authentication for all API calls when <a class="reference internal" href="../reference/config.html#server.auth" title="auth"><code class="xref inmanta.config inmanta.config-option docutils literal"><span class="pre">server.auth</span></code></a> is set to true. When
+authentication is enabled all other components require a valid token.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When multiple servers are used in a HA setup, each server requires the same configuration (SSL enabled and
+private keys).</p>
+</div>
+<p>In the server configuration multiple token providers (issuers) can be configured (See <a class="reference internal" href="#auth-config"><span class="std std-ref">JWT auth configuration</span></a>). Inmanta requires at
+least one issuer with the HS256 algorithm. The server uses this to sign tokens it issues itself. This provider is indicated with
+sign set to true. Inmanta issues tokens for compilers the servers runs itself and for autostarted agents.</p>
+<p>Compilers, cli and agents that are not started by the server itself, require a token in their transport configuration. This
+token is configured with the <code class="docutils literal"><span class="pre">token</span></code> option in the groups <a class="reference internal" href="../reference/config.html#agent_rest_transport" title="agent_rest_transport"><code class="xref inmanta.config inmanta.config-group docutils literal"><span class="pre">agent_rest_transport</span></code></a>,
+<a class="reference internal" href="../reference/config.html#cmdline_rest_transport" title="cmdline_rest_transport"><code class="xref inmanta.config inmanta.config-group docutils literal"><span class="pre">cmdline_rest_transport</span></code></a> and <a class="reference internal" href="../reference/config.html#compiler_rest_transport" title="compiler_rest_transport"><code class="xref inmanta.config inmanta.config-group docutils literal"><span class="pre">compiler_rest_transport</span></code></a>.</p>
+<p>A token can be retrieved either with <code class="docutils literal"><span class="pre">inmanta-cli</span> <span class="pre">token</span> <span class="pre">create</span></code> or under Settings of the environment in the dashboard.</p>
+<div class="figure align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/dashboard_token.png"><img alt="Generating a new token in the dashboard." src="../_images/dashboard_token.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Generating a new token in the dashboard.</span></p>
+</div>
+<p>Configure an external issuer (See <a class="reference internal" href="#auth-ext"><span class="std std-ref">External authentication providers</span></a>) for dashboard access to bootstrap access to the create token api call.
+When no external issuer is available and dashboard access is not required, the <code class="docutils literal"><span class="pre">inmanta-cli</span> <span class="pre">token</span> <span class="pre">bootstrap</span></code> command
+can be used to create a token that has access to everything. However, it expires after 3600s for security reasons.</p>
+<p>For this command to function, it requires the issuers configuration with sign=true to be available for the cli command.</p>
+</div>
+<div class="section" id="jwt-auth-configuration">
+<span id="auth-config"></span><h3>JWT auth configuration<a class="headerlink" href="#jwt-auth-configuration" title="Permalink to this headline">¶</a></h3>
+<p>The server searches for configuration sections that start with <code class="docutils literal"><span class="pre">auth_jwt_</span></code>, after the last _ an id has to be present. This
+section expects the following keys:</p>
+<ul class="simple">
+<li>algorithm: The algorithm used for this key. Only HS256 and RS256 are supported.</li>
+<li>sign: Whether the server can use this key to sign JWT it issues. Only one section may have this set to true.</li>
+<li>client_types: The client types from the <a class="reference external" href="urn:inmanta:ct">urn:inmanta:ct</a> claim that can be valided and/or signed with this key.</li>
+<li>key: The secret key used by symmetric algorithms such as HS256. Generate the key with a secure prng with minimal length equal
+to the length of the HMAC (For HS256 == 256). The key should be a urlsafe base64 encoded bytestring without padding.
+(see below of a command to generate such a key)</li>
+<li>expire: The default expire for tokens issued with this key (when sign = true). Use 0 for tokens that do not expire.</li>
+<li>issuer: The url of the issuer that should match for tokens to be valid (also used to sign this). The default value is
+<a class="reference external" href="https://localhost:8888/">https://localhost:8888/</a> This value is used to match auth_jwt_* sections configuration with JWT tokens. Make sure this is
+unique.</li>
+<li>audience: The audience for tokens, as per RFC this should match or the token is rejected.</li>
+<li>jwks_uri: The uri to the public key information. This is required for algorithm RS256. The keys are loaded the first time
+a token needs to be verified after a server restart. There is not key refresh mechanism.</li>
+</ul>
+<p>An example configuration is:</p>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[auth_jwt_default]</span>
+<span class="na">algorithm</span><span class="o">=</span><span class="s">HS256</span>
+<span class="na">sign</span><span class="o">=</span><span class="s">true</span>
+<span class="na">client_types</span><span class="o">=</span><span class="s">agent,compiler</span>
+<span class="na">key</span><span class="o">=</span><span class="s">rID3kG4OwGpajIsxnGDhat4UFcMkyFZQc1y3oKQTPRs</span>
+<span class="na">expire</span><span class="o">=</span><span class="s">0</span>
+<span class="na">issuer</span><span class="o">=</span><span class="s">https://localhost:8888/</span>
+<span class="na">audience</span><span class="o">=</span><span class="s">https://localhost:8888/</span>
+</pre></div>
+</div>
+<p>To generate a secure key symmetric key and encode it correctly use the following command:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>openssl rand <span class="m">32</span> <span class="p">|</span> python3 -c <span class="s2">&quot;import sys; import base64; print(base64.urlsafe_b64encode(sys.stdin.buffer.read()).decode().rstrip(&#39;=&#39;));&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="external-authentication-providers">
+<span id="auth-ext"></span><h2>External authentication providers<a class="headerlink" href="#external-authentication-providers" title="Permalink to this headline">¶</a></h2>
+<p>Inmanta supports all external authentication providers that support JWT tokens with RS256 or HS256. These providers need to
+add a claims that indicate the allowed client type (<a class="reference external" href="urn:inmanta:ct">urn:inmanta:ct</a>). Currently, the dashboard only has support for keycloak.
+However, each provider that can insert custom (private) claims should work. The dashboard now relies on the keycloak js library
+to implement the OAuth2 implicit flow, required to obtain a JWT.</p>
+<div class="admonition tip">
+<p class="first admonition-title">Tip</p>
+<p class="last">All patches to support additional providers such as Auth0 are welcome. Alternativelyr contact Inmanta NV for custom
+integration services.</p>
+</div>
+<div class="section" id="keycloak-configuration">
+<h3>Keycloak configuration<a class="headerlink" href="#keycloak-configuration" title="Permalink to this headline">¶</a></h3>
+<p>The dashboard has out of the box support for authentication with <a class="reference external" href="http://www.keycloak.org">Keycloak</a>. Install keycloak and
+create an initial login as decribed in the Keycloak documentation and login with admin credentials.</p>
+<p>This guide was made based on Keycloak 3.3</p>
+<p>If inmanta is configured to use SSL, the authentication provider should also use SSL. Otherwise, the dashboard will not be
+able to fetch user information from the authentication provider.</p>
+<div class="section" id="step-1-optionally-create-a-new-realm">
+<h4>Step 1: Optionally create a new realm<a class="headerlink" href="#step-1-optionally-create-a-new-realm" title="Permalink to this headline">¶</a></h4>
+<p>Create a new realm if you want to use keycloak for other purposes (it is an SSO solution) than Inmanta authentication. Another
+reason to create a new realm (or not) is that the master realm also provides the credentials to configure keycloak itself.</p>
+<p>For example call the realm inmanta</p>
+<div class="figure align-center" id="id2">
+<a class="reference internal image-reference" href="../_images/kc_realm.png"><img alt="../_images/kc_realm.png" src="../_images/kc_realm.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Create a new realm</span></p>
+</div>
+<div class="figure align-center" id="id3">
+<a class="reference internal image-reference" href="../_images/kc_add_realm.png"><img alt="../_images/kc_add_realm.png" src="../_images/kc_add_realm.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Specify a name for the realm</span></p>
+</div>
+</div>
+<div class="section" id="step-2-add-a-new-client-to-keycloak">
+<h4>Step 2: Add a new client to keycloak<a class="headerlink" href="#step-2-add-a-new-client-to-keycloak" title="Permalink to this headline">¶</a></h4>
+<p>Make sure the correct realm is active (the name is shown in the title of the left sidebar) to which you want to add a new client.</p>
+<div class="figure align-center" id="id4">
+<a class="reference internal image-reference" href="../_images/kc_start.png"><img alt="../_images/kc_start.png" src="../_images/kc_start.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">The start page of a realm. Here you can edit names, policies, … of the realm. The defaults are sufficient for inmanta
+authentication. This shows the inmanta realm.</span></p>
+</div>
+<p>Go to client and click create on the right hand side of the screen.</p>
+<div class="figure align-center" id="id5">
+<a class="reference internal image-reference" href="../_images/kc_clients.png"><img alt="../_images/kc_clients.png" src="../_images/kc_clients.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Clients in the master realm. Click the create button to create an inmanta client.</span></p>
+</div>
+<p>Provide an id for the client and make sure that the client protocol is <code class="docutils literal"><span class="pre">openid-connect</span></code> and click save.</p>
+<div class="figure align-center" id="id6">
+<a class="reference internal image-reference" href="../_images/kc_new_client.png"><img alt="../_images/kc_new_client.png" src="../_images/kc_new_client.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Create client screen</span></p>
+</div>
+<p>After clicking save, keycloak opens the configuration of the client. Modify the client to allow implicit flows and add
+vallid callback URLs. As a best practice, also add the allowed origins. See the screenshot below as an example.</p>
+<div class="figure align-center" id="id7">
+<a class="reference internal image-reference" href="../_images/kc_client_details.png"><img alt="../_images/kc_client_details.png" src="../_images/kc_client_details.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Allow implicits flows (others may be disabled) and configure allowed callback urls of the dashboard.</span></p>
+</div>
+<p>Add a mapper to add custom claims to the issued tokens for the API client type. Open de mappers tab of your new client and click
+<cite>add</cite>.</p>
+<div class="figure align-center" id="id8">
+<a class="reference internal image-reference" href="../_images/kc_mappers.png"><img alt="../_images/kc_mappers.png" src="../_images/kc_mappers.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Add a custom mapper to the client to include <cite>:urn:inmanta:ct</cite></span></p>
+</div>
+<p>Select hardcoded claim, enter <cite>:urn:inmanta:ct</cite> as claim name and <cite>api</cite> as claim value and string as type. It should only be
+added to the access token.</p>
+<div class="figure align-center" id="id9">
+<a class="reference internal image-reference" href="../_images/kc_ct_mapper.png"><img alt="../_images/kc_ct_mapper.png" src="../_images/kc_ct_mapper.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Add the ct claim to all access tokens for this client.</span></p>
+</div>
+</div>
+<div class="section" id="step-3-configure-inmanta-server">
+<h4>Step 3: Configure inmanta server<a class="headerlink" href="#step-3-configure-inmanta-server" title="Permalink to this headline">¶</a></h4>
+<p>Go to the installation tab and select JSON format in the select box. This JSON string provides you with the details to
+configure the server correctly to redirect dashboard users to this keycloak instance and to valide the tokens
+issued by keycloak.</p>
+<div class="figure align-center" id="id10">
+<a class="reference internal image-reference" href="../_images/kc_install.png"><img alt="../_images/kc_install.png" src="../_images/kc_install.png" style="width: 100%;" /></a>
+<p class="caption"><span class="caption-text">Show the correct configuration parameters in JSON format.</span></p>
+</div>
+<p>Add a keycloak configuration parameters to the dashboard section of the server configuration file.
+(/etc/inmanta/server.cfg in most installs.) This section should already contain enabled=true and the
+path to the dashboard source.</p>
+<p>Add the realm, auth_url and client_id to the dashboard section. Use the parameters from the installation json file created
+by keycloak.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[dashboard]</span>
+<span class="na">enabled</span><span class="o">=</span><span class="s">true</span>
+<span class="na">path</span><span class="o">=</span><span class="s">/opt/inmanta/dashboard</span>
+
+<span class="c1"># keycloack specific configuration</span>
+<span class="na">realm</span><span class="o">=</span><span class="s">master</span>
+<span class="na">auth_url</span><span class="o">=</span><span class="s">http://localhost:8080/auth</span>
+<span class="na">client_id</span><span class="o">=</span><span class="s">inmanta</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">In a real setup, the url should contain public names instead of localhost, otherwise logins will only work
+on the machine that hosts inmanta server.</p>
+</div>
+<p>Configure a <code class="docutils literal"><span class="pre">auth_jwt_</span></code> block (for example <code class="docutils literal"><span class="pre">auth_jwt_keycloak</span></code>) and configure it to valide the tokens keycloak issues.</p>
+<div class="highlight-ini"><div class="highlight"><pre><span></span><span class="k">[auth_jwt_keycloak]</span>
+<span class="na">algorithm</span><span class="o">=</span><span class="s">RS256</span>
+<span class="na">sign</span><span class="o">=</span><span class="s">false</span>
+<span class="na">client_types</span><span class="o">=</span><span class="s">api</span>
+<span class="na">issuer</span><span class="o">=</span><span class="s">http://localhost:8080/auth/realms/master</span>
+<span class="na">audience</span><span class="o">=</span><span class="s">inmanta</span>
+<span class="na">jwks_uri</span><span class="o">=</span><span class="s">http://localhost:8080/auth/realms/master/protocol/openid-connect/certs</span>
+</pre></div>
+</div>
+<p>Set the algorithm to RS256, sign should be false and client_types should be limited to api only. Next set the issuer to the
+correct value (watch out for the realm). Set the audience to the value of the resource key in the json file. Finally, set the
+jwks_uri so the server knows how to fetch the public keys to verify the signature on the tokens. (inmanta server needs to be
+able to access this url).</p>
+<p>Both the correct url for the issuer and the jwks_uri is also defined in the openid-configuration endpoint of keycloack. For
+the examples above this url is <a class="reference external" href="http://localhost:8080/auth/realms/master/.well-known/openid-configuration">http://localhost:8080/auth/realms/master/.well-known/openid-configuration</a>
+(<a class="reference external" href="http://www.keycloak.org/docs/3.3/securing_apps/topics/oidc/oidc-generic.html">http://www.keycloak.org/docs/3.3/securing_apps/topics/oidc/oidc-generic.html</a>)</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">When the certificate of keycloak is not trusted by the system on which inmanta is installed, set <code class="docutils literal"><span class="pre">validate_cert</span></code>
+to false in the <code class="docutils literal"><span class="pre">auth_jwt_keycloak</span></code> block for keycloak.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="configurationmodel.html" class="btn btn-neutral float-right" title="Create a configuration model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../guides.html" class="btn btn-neutral" title="Guides" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

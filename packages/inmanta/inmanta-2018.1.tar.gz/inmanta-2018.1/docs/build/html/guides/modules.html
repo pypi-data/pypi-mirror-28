@@ -1,0 +1,555 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module Developers Guide &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../index.html"/>
+        <link rel="up" title="Guides" href="../guides.html"/>
+        <link rel="next" title="Module guides" href="../moduleguides.html"/>
+        <link rel="prev" title="Create a configuration model" href="configurationmodel.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../index.html">
+
+
+
+  
+    <img src="../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guides.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="auth.html">Setup authentication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="configurationmodel.html">Create a configuration model</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Module Developers Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-layout">Module layout</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-metadata">Module metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#versioning">Versioning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extending-inmanta">Extending Inmanta</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#plugins">Plugins</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resources-and-handlers">Resources and handlers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Inmanta Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../guides.html">Guides</a> &raquo;</li>
+        
+      <li>Module Developers Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-developers-guide">
+<h1>Module Developers Guide<a class="headerlink" href="#module-developers-guide" title="Permalink to this headline">¶</a></h1>
+<p>In inmanta all configuration model code and related files, templates, plugins and resource handlers
+are packaged in a module.</p>
+<div class="section" id="module-layout">
+<h2>Module layout<a class="headerlink" href="#module-layout" title="Permalink to this headline">¶</a></h2>
+<p>Inmanta expects that each module is a git repository with a specific layout:</p>
+<ul class="simple">
+<li>The name of the module is determined by the top-level directory. Within this module directory, a
+<code class="docutils literal"><span class="pre">module.yml</span></code> file has to be specified.</li>
+<li>The only mandatory subdirectory is the <code class="docutils literal"><span class="pre">model</span></code> directory containing a file called <code class="docutils literal"><span class="pre">_init.cf</span></code>.
+What is defined in the <code class="docutils literal"><span class="pre">_init.cf</span></code> file is available in the namespace linked with the name of the
+module. Other files in the model directory create subnamespaces.</li>
+<li>The <code class="docutils literal"><span class="pre">plugins</span></code> directory contains Python files that are loaded by the platform and can extend it
+using the Inmanta API.  This python code can provide plugins or resource handlers.</li>
+</ul>
+<p>The template, file and source plugins from the std module expect the following directories as well:</p>
+<ul class="simple">
+<li>The <code class="docutils literal"><span class="pre">files</span></code> directory contains files that are deployed verbatim to managed machines.</li>
+<li>The <code class="docutils literal"><span class="pre">templates</span></code> directory contains templates that use parameters from the configuration model to
+generate configuration files.</li>
+</ul>
+<p>A complete module might contain the following files:</p>
+<div class="highlight-sh"><div class="highlight"><pre><span></span>module
+<span class="p">|</span>
+<span class="p">|</span>__ module.yml
+<span class="p">|</span>
+<span class="p">|</span>__ files
+<span class="p">|</span>    <span class="p">|</span>__ file1.txt
+<span class="p">|</span>
+<span class="p">|</span>__ model
+<span class="p">|</span>    <span class="p">|</span>__ _init.cf
+<span class="p">|</span>    <span class="p">|</span>__ services.cf
+<span class="p">|</span>
+<span class="p">|</span>__ plugins
+<span class="p">|</span>    <span class="p">|</span>__ functions.py
+<span class="p">|</span>
+<span class="p">|</span>__ templates
+     <span class="p">|</span>__ conf_file.conf.tmpl
+</pre></div>
+</div>
+</div>
+<div class="section" id="module-metadata">
+<h2>Module metadata<a class="headerlink" href="#module-metadata" title="Permalink to this headline">¶</a></h2>
+<p>The module.yml file provides metadata about the module. This file is a yaml file with the following
+three keys mandatory:</p>
+<ul class="simple">
+<li><em>name</em>: The name of the module. This name should also match the name of the module directory.</li>
+<li><em>license</em>: The license under which the module is distributed.</li>
+<li><em>version</em>: The version of this module. For a new module a start version could be 0.1dev0 These
+versions are parsed using the same version parser as python setuptools.</li>
+</ul>
+<p>For example the following module.yaml from the <a class="reference internal" href="../quickstart.html"><span class="doc">Quickstart</span></a></p>
+<div class="highlight-yaml"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">lamp</span>
+<span class="l l-Scalar l-Scalar-Plain">license</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Apache 2.0</span>
+<span class="l l-Scalar l-Scalar-Plain">version</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">0.1</span>
+</pre></div>
+</div>
+<p>Module depdencies are indicated by importing a module in a model file. However, these import do not
+have a specifc version identifier. The version of a module import can be constrained in the
+module.yml file. The <em>requires</em> key excepts a list of version specs. These version specs use <a class="reference external" href="https://www.python.org/dev/peps/pep-0440/#version-specifiers">PEP440
+syntax</a>.</p>
+<p>To specify specific version are required, constraints can be added to the requires list:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">license</span><span class="p">:</span> <span class="n">Apache</span> <span class="mf">2.0</span>
+<span class="n">name</span><span class="p">:</span> <span class="n">ip</span>
+<span class="n">source</span><span class="p">:</span> <span class="n">git</span><span class="nd">@github</span><span class="o">.</span><span class="n">com</span><span class="p">:</span><span class="n">inmanta</span><span class="o">/</span><span class="n">ip</span>
+<span class="n">version</span><span class="p">:</span> <span class="mf">0.1</span><span class="o">.</span><span class="mi">15</span>
+<span class="n">requires</span><span class="p">:</span>
+    <span class="n">net</span><span class="p">:</span> <span class="n">net</span> <span class="o">~=</span> <span class="mf">0.2</span><span class="o">.</span><span class="mi">4</span>
+    <span class="n">std</span><span class="p">:</span> <span class="n">std</span> <span class="o">&gt;</span><span class="mf">1.0</span> <span class="o">&lt;</span><span class="mf">2.5</span>
+</pre></div>
+</div>
+<p>A module can also indicate a minimal compiler version with the <em>compiler_version</em> key.</p>
+<p><em>source</em> indicates the authoritative repository where the module is maintained.</p>
+</div>
+<div class="section" id="versioning">
+<h2>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h2>
+<p>Inmanta modules should be versioned. The current version is reflected in the module.yml file and in
+the commit is should be tagged in the git repository as well. To ease the use inmanta provides a
+command (inmanta modules commit) to modify module versions, commit to git and place the correct tag.</p>
+<p>To make changes to a module, first create a new git branch:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">mywork</span>
+</pre></div>
+</div>
+<p>When done, first use git to add files:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">add</span> <span class="o">*</span>
+</pre></div>
+</div>
+<p>To commit, use the module tool. It will autmatically set the right tags on the module:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">inmanta</span> <span class="n">moduletool</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;First commit&quot;</span>
+</pre></div>
+</div>
+<p>This will create a new dev release. To make an actual release:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">inmanta</span> <span class="n">moduletool</span> <span class="n">commit</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;First Release&quot;</span>
+</pre></div>
+</div>
+<p>To set a specific version:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">inmanta</span> <span class="n">moduletool</span> <span class="n">commit</span> <span class="o">-</span><span class="n">r</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;First Release&quot;</span> <span class="o">-</span><span class="n">v</span> <span class="mf">1.0</span><span class="o">.</span><span class="mi">1</span>
+</pre></div>
+</div>
+<p>The module tool also support semantic versioning instead of setting versions directly. Use one
+of <code class="docutils literal"><span class="pre">--major</span></code>, <code class="docutils literal"><span class="pre">--minor</span></code> or <code class="docutils literal"><span class="pre">--patch</span></code> to update version numbers: &lt;major&gt;.&lt;minor&gt;.&lt;patch&gt;</p>
+</div>
+<div class="section" id="extending-inmanta">
+<h2>Extending Inmanta<a class="headerlink" href="#extending-inmanta" title="Permalink to this headline">¶</a></h2>
+<p>Inmanta offers module developers an orchestration platform with many extension possibilities. When
+modelling with existing modules is not sufficient, a module developer can use the Python SDK of
+Inmanta to extend the platform. Python code that extends Inmanta is stored in the plugins directory
+of a module. All python modules in the plugins subdirectory will be loaded by the compiler when at
+least a <code class="docutils literal"><span class="pre">__init__.py</span></code> file exists, exactly like any other python package.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">It is not possible to import python modules from other Inmanta modules.</p>
+</div>
+<p>The Inmanta Python SDK offerts several extension mechanism:</p>
+<ul class="simple">
+<li>Plugins</li>
+<li>Resources</li>
+<li>Resource handlers</li>
+<li>Dependency managers</li>
+</ul>
+<p>Only the compiler and agents load code included in modules (See <a class="reference internal" href="../architecture.html"><span class="doc">Architecture</span></a>). A module can
+include a requirements.txt file with all external dependencies. Both the compiler and the agent will
+install this dependencies with <code class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span></code> in an virtual environment dedicated to the compiler
+or agent. By default this is in <cite>.env</cite> of the project for the compiler and in
+<cite>/var/lib/inmanta/agent/env</cite> for the agent.</p>
+<p>Inmanta uses a special format of requirements that was defined in a python PEP but never fully
+implemented in all python tools (setuptools and pip). Inmanta rewrites this to the syntax pip
+requires. This format allows module developers to specify a python dependency in a repo on a
+dedicated branch. And it allows inmanta to resolve the requirements of all module to a
+single set of requirements, because the name of module is unambiguously defined in the requirement.
+The format for requires in requirements.txt is the folllowing:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Either, the name of the module and an optional constraint</li>
+<li>Or a repository location such as  git+https://github.com/project/python-foo The correct syntax
+to use is then: eggname&#64;git+https://../repository#branch with branch being optional.</li>
+</ul>
+</div></blockquote>
+<div class="section" id="plugins">
+<span id="module-plugins"></span><h3>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h3>
+<p>Plugins provide <a class="reference internal" href="../language.html#lang-plugins"><span class="std std-ref">functions</span></a> that can be called from the <a class="reference internal" href="../glossary.html#term-dsl"><span class="xref std std-term">DSL</span></a>. This is the
+primary mechanism to interface Python code with the configuration model at compile time. This
+mechanism is also used std::template or std::file. Inmanta also registers all plugins with the
+template engine (Jinja2) to use as filter.</p>
+<p>A plugin is a python function, registered with the platform with the <a class="reference internal" href="../reference/api.html#inmanta.plugins.plugin" title="inmanta.plugins.plugin"><code class="xref py py-func docutils literal"><span class="pre">plugin()</span></code></a>
+decorator. This plugin accepts arguments from the DSL and can return a value. Both the arguments and
+the return value must by annotated with the allowed types from the configuration model. Type
+annotations are provided as a string (Python3 style argument annotation). <code class="docutils literal"><span class="pre">any</span></code> is the special
+type that effectively disables type validation.</p>
+<p>Through the arguments of the function, the Python code in the plugin can navigate the configuration
+model. The compiler takes care of scheduling the execution at the correct point in the model
+evaluation.</p>
+<p>A simple plugin that accepts no arguments, prints out “hello world” and returns no value requires
+the following code:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">inmanta.plugins</span> <span class="kn">import</span> <span class="n">plugin</span>
+
+<span class="nd">@plugin</span>
+<span class="k">def</span> <span class="nf">hello</span><span class="p">():</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Hello world!&quot;</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>If the code above is placed in the plugins directory of the example module
+(<code class="docutils literal"><span class="pre">examples/plugins/__init__.py</span></code>) the plugin can be invoked from the configuration model as
+follows:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>import example
+
+example::hello()
+</pre></div>
+</div>
+<p>The plugin decorator accepts an argument name. This can be used to change the name of the plugin in
+the DSL. This can be used to create plugins that use python reserved names such as <code class="docutils literal"><span class="pre">print</span></code>.</p>
+<p>A more complex plugin accepts arguments and returns a value. The following example creates a plugin
+that converts a string to uppercase:</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">inmanta.plugins</span> <span class="kn">import</span> <span class="n">plugin</span>
+
+<span class="nd">@plugin</span>
+<span class="k">def</span> <span class="nf">upper</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;string&quot;</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+</pre></div>
+</td></tr></table></div>
+<p>This plugin can be tested with:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>import example
+
+std::print(example::upper(&quot;hello world&quot;))
+</pre></div>
+</div>
+<p>Argument type annotations are strings that refer to Inmanta primitive types or to entities. If an
+entity is passed to a plugin, the python code of the plugin can navigate relations throughout the
+configuration model to access attributes of other entities.</p>
+<p>If your plugin requires external libraries, include a requirements.txt in the module. The libraries
+listed in this file are automatically installed by the compiler and agents.</p>
+<p>..todo:: context
+..todo:: new statements</p>
+</div>
+<div class="section" id="resources-and-handlers">
+<h3>Resources and handlers<a class="headerlink" href="#resources-and-handlers" title="Permalink to this headline">¶</a></h3>
+<p>A module can add additional <a class="reference internal" href="../glossary.html#term-resource"><span class="xref std std-term">resources</span></a> and/or handlers for resources to Inmanta. A
+resource defines a type that resembles an <a class="reference internal" href="../glossary.html#term-entity"><span class="xref std std-term">entity</span></a> but without any relations. This is required
+for the serializing resources for communication between the compiler, server and agents.</p>
+<div class="section" id="resource">
+<h4>Resource<a class="headerlink" href="#resource" title="Permalink to this headline">¶</a></h4>
+<p>A resource is represented by a Python class that is registered with Inmanta using the
+<a class="reference internal" href="../reference/api.html#inmanta.resources.resource" title="inmanta.resources.resource"><code class="xref py py-func docutils literal"><span class="pre">resource()</span></code></a> decorator. This decorator decorates a class that inherits from
+the <a class="reference internal" href="../reference/api.html#inmanta.resources.Resource" title="inmanta.resources.Resource"><code class="xref py py-class docutils literal"><span class="pre">Resource</span></code></a> class.</p>
+<p>The fields of the resource are indicated with a <code class="docutils literal"><span class="pre">fields</span></code> field in the class. This field is a tuple
+or list of strings with the name of the desired fields of the resource. The orchestrator uses these
+fields to determine which attributes of the matching entity need to be included in the resource.</p>
+<p>Fields of a resource cannot refer to instance in the configuration model or fields of other
+resources. The resource serializers allows to map field values. Instead of referring directly to an
+attribute of the entity is serializes (path in std::File and path in the resource map one on one).
+This mapping is done by adding a static method to the resource class with <code class="docutils literal"><span class="pre">get_$(field_name)</span></code> as
+name. This static method has two arguments: a reference to the exporter and the instance of the
+entity it is serializing.</p>
+<div class="highlight-python"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">inmanta.resources</span> <span class="kn">import</span> <span class="n">resource</span><span class="p">,</span> <span class="n">Resource</span>
+
+<span class="nd">@resource</span><span class="p">(</span><span class="s2">&quot;std::File&quot;</span><span class="p">,</span> <span class="n">agent</span><span class="o">=</span><span class="s2">&quot;host.name&quot;</span><span class="p">,</span> <span class="n">id_attribute</span><span class="o">=</span><span class="s2">&quot;path&quot;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">File</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;path&quot;</span><span class="p">,</span> <span class="s2">&quot;owner&quot;</span><span class="p">,</span> <span class="s2">&quot;hash&quot;</span><span class="p">,</span> <span class="s2">&quot;group&quot;</span><span class="p">,</span> <span class="s2">&quot;permissions&quot;</span><span class="p">,</span> <span class="s2">&quot;purged&quot;</span><span class="p">,</span> <span class="s2">&quot;reload&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_hash</span><span class="p">(</span><span class="n">exporter</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="n">hash_id</span> <span class="o">=</span> <span class="n">md5sum</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">exporter</span><span class="o">.</span><span class="n">upload_file</span><span class="p">(</span><span class="n">hash_id</span><span class="p">,</span> <span class="n">obj</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">hash_id</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">get_permissions</span><span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+</pre></div>
+</td></tr></table></div>
+<p>Classes decorated with <a class="reference internal" href="../reference/api.html#inmanta.resources.resource" title="inmanta.resources.resource"><code class="xref py py-func docutils literal"><span class="pre">resource()</span></code></a> do not have to inherit directly from
+Resource. The orchestrator already offers two additional base classes with fields and mappings
+defined: <a class="reference internal" href="../reference/api.html#inmanta.resources.PurgeableResource" title="inmanta.resources.PurgeableResource"><code class="xref py py-class docutils literal"><span class="pre">PurgeableResource</span></code></a> and
+<a class="reference internal" href="../reference/api.html#inmanta.resources.ManagedResource" title="inmanta.resources.ManagedResource"><code class="xref py py-class docutils literal"><span class="pre">ManagedResource</span></code></a>. This mechanism is useful for resources that have fields
+in common.</p>
+<p>A resource can also indicate that it has to be ignored by raising the
+<a class="reference internal" href="../reference/api.html#inmanta.resources.IgnoreResourceException" title="inmanta.resources.IgnoreResourceException"><code class="xref py py-class docutils literal"><span class="pre">IgnoreResourceException</span></code></a> exception.</p>
+</div>
+<div class="section" id="handler">
+<h4>Handler<a class="headerlink" href="#handler" title="Permalink to this headline">¶</a></h4>
+<p>Handlers interface the orchestrator with resources in the <a class="reference internal" href="../glossary.html#term-infrastructure"><span class="xref std std-term">infrastructure</span></a> in the agents.
+Handlers take care of changing the current state of a resource to the desired state expressed in the
+configuration model.</p>
+<p>The compiler collects all python modules from Inmanta modules that provide handlers and uploads them
+to the server. When a new configuration module version is deployed, the handler code is pushed to all
+agents and imported there.</p>
+<p>Handlers should inherit the class <a class="reference internal" href="../reference/api.html#inmanta.agent.handler.ResourceHandler" title="inmanta.agent.handler.ResourceHandler"><code class="xref py py-class docutils literal"><span class="pre">ResourceHandler</span></code></a>. The
+<a class="reference internal" href="../reference/api.html#inmanta.agent.handler.provider" title="inmanta.agent.handler.provider"><code class="xref py py-func docutils literal"><span class="pre">provider()</span></code></a> decorator register the class with the orchestrator. When the
+agent needs a handler for a resource it will load all handler classes registered for that resource
+and call the <a class="reference internal" href="../reference/api.html#inmanta.agent.handler.ResourceHandler.available" title="inmanta.agent.handler.ResourceHandler.available"><code class="xref py py-func docutils literal"><span class="pre">available()</span></code></a>. This method should check
+if all conditions are fulfilled to use this handler. The agent will select a handler, only when a
+single handler is available, so the is_available method of all handlers of a resource need to be
+mutually exclusive. If no handler is available, the resource will be marked unavailable.</p>
+<p><a class="reference internal" href="../reference/api.html#inmanta.agent.handler.ResourceHandler" title="inmanta.agent.handler.ResourceHandler"><code class="xref py py-class docutils literal"><span class="pre">ResourceHandler</span></code></a> is the handler base class.
+<a class="reference internal" href="../reference/api.html#inmanta.agent.handler.CRUDHandler" title="inmanta.agent.handler.CRUDHandler"><code class="xref py py-class docutils literal"><span class="pre">CRUDHandler</span></code></a> provides a more recent base class that is better suited
+for resources that are manipulated with Create, Delete or Update operations. This operations often
+match managed APIs very well. The CRUDHandler is recommended for new handlers unless the resource
+has special resource states that do not match CRUD operations.</p>
+<p>Each handler basically needs to support two things: reading the current state and changing the state
+of the resource to the desired state in the configuration model. Reading the state is used for dry
+runs and reporting. The CRUDHandler handler also uses the result to determine whether create, delete
+or update needs to be invoked.</p>
+<p>The context (See <a class="reference internal" href="../reference/api.html#inmanta.agent.handler.HandlerContext" title="inmanta.agent.handler.HandlerContext"><code class="xref py py-class docutils literal"><span class="pre">HandlerContext</span></code></a>) passed to most methods is used to
+report results, changes and logs to the handler and the server.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../moduleguides.html" class="btn btn-neutral float-right" title="Module guides" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="configurationmodel.html" class="btn btn-neutral" title="Create a configuration model" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

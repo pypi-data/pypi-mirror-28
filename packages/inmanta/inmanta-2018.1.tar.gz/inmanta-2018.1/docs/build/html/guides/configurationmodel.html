@@ -1,0 +1,376 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Create a configuration model &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../index.html"/>
+        <link rel="up" title="Guides" href="../guides.html"/>
+        <link rel="next" title="Module Developers Guide" href="modules.html"/>
+        <link rel="prev" title="Setup authentication" href="auth.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../index.html">
+
+
+
+  
+    <img src="../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../language.html">Language Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../guides.html">Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="auth.html">Setup authentication</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Create a configuration model</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#create-a-new-source-project">Create a new source project</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initial-model">Initial model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deploy-a-file">Deploy a file</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="modules.html">Module Developers Guide</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/index.html">Inmanta Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../guides.html">Guides</a> &raquo;</li>
+        
+      <li>Create a configuration model</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="create-a-configuration-model">
+<h1>Create a configuration model<a class="headerlink" href="#create-a-configuration-model" title="Permalink to this headline">¶</a></h1>
+<p>This guide explains how to create a basic configuration model to manage an infrastructure: the
+Inmanta <em>hello world</em>.  Each configuration model is completely defined in source code:
+<a class="reference internal" href="../glossary.html#term-infrastructure-as-code"><span class="xref std std-term">infrastructure-as-code</span></a>.</p>
+<div class="section" id="create-a-new-source-project">
+<h2>Create a new source project<a class="headerlink" href="#create-a-new-source-project" title="Permalink to this headline">¶</a></h2>
+<p>The Inmanta compiler expects a <em>project</em> with basic configuration. This project is a directory that
+contains the source code of the configuration model. This project also matches with a
+<a class="reference internal" href="../glossary.html#term-project"><span class="xref std std-term">project</span></a> defined on the server, from which multiple <a class="reference internal" href="../glossary.html#term-environment"><span class="xref std std-term">environments</span></a> can be
+deployed.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>Inmanta requires that a project is a git repository. This is not strictly required when using
+the embedded or push to server model (see <a class="reference internal" href="../architecture.html"><span class="doc">Architecture</span></a>). However in the autonomous
+server model, this is the only method to get the configuration code on the server. Additionally,
+it is also a good practive to version control your infrastructure code.</p>
+<p class="last">Typically branches in this git repository are used to define multiple environments (if the
+differ in code)</p>
+</div>
+<div class="highlight-sh"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3</pre></div></td><td class="code"><div class="highlight"><pre><span></span>mkdir hello-world
+<span class="nb">cd</span> hello-world
+git init
+</pre></div>
+</td></tr></table></div>
+<p>Inside the project the compiler expects a project.yml file that defines metadata about the project,
+the location to store modules, repositories where to find modules and possibly specific versions of
+modules. project.yml defines the following settings:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">name</span></code> An optional name of the project.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">description</span></code> An optional description of the project</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">modulepath</span></code> This value is a list of paths where Inmanta should search for modules. Paths
+are separated with <code class="docutils literal"><span class="pre">:</span></code></p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">downloadpath</span></code> This value determines the path where Inmanta should download modules from
+repositories. This path is not automatically included in in modulepath!</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">install_mode</span></code> This key determines what version of a module should be selected when a module
+is downloaded. This is used when the module version is not “pinned” in the <code class="docutils literal"><span class="pre">requires</span></code> list.
+The available values are:</p>
+<blockquote>
+<div><ul class="simple">
+<li>release (default): Only use a released version, that is compatible with the current
+compiler. A version is released when there is a tag on a commit. This tag should be a
+valid version identifier (PEP440) and should not be a prerelease version. Inmanta selects
+the latest available version (version sort based on PEP440).</li>
+<li>prerelease: Similar to release, but also prerelease versions are allowed.</li>
+<li>master: Use the master branch.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">repo</span></code> This key requires a list (a yaml list) of repositories where Inmanta can find
+modules. The git url of a module is created by appending the name of the module to the repo
+in this list. Inmanta tries to clone a module in the order in which it is defined in this
+value.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">requires</span></code> Model files import other modules. These imports do not determine a version, this
+is based on the install_model setting. Modules and projects can constrain a version in the
+requires setting. Similar to the module, version constraints are defined using <a class="reference external" href="https://www.python.org/dev/peps/pep-0440/#version-specifiers">PEP440 syntax</a>.</p>
+</li>
+</ul>
+</div></blockquote>
+<p>An example project.yml could be:</p>
+<div class="highlight-yaml"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2
+3
+4
+5
+6</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">name</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Hello world</span>
+<span class="l l-Scalar l-Scalar-Plain">description</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">An Inmanta hello world like project!</span>
+<span class="l l-Scalar l-Scalar-Plain">modulepath</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">libs</span>
+<span class="l l-Scalar l-Scalar-Plain">downloadpath</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">libs</span>
+<span class="l l-Scalar l-Scalar-Plain">repo</span><span class="p p-Indicator">:</span>
+    <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">https://github.com/inmanta/</span>
+</pre></div>
+</td></tr></table></div>
+</div>
+<div class="section" id="initial-model">
+<h2>Initial model<a class="headerlink" href="#initial-model" title="Permalink to this headline">¶</a></h2>
+<p>Most infrastructure code is contained in modules, but the compiler needs an <em>entrypoint</em>. This
+entrypoint is the main.cf file in the toplevel directory of the project.</p>
+<p>The main.cf below calls the print plugin from the std module.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The std module is the only module that does not have to be imported explicitly.</p>
+</div>
+<div class="highlight-none"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1</pre></div></td><td class="code"><div class="highlight"><pre><span></span>std::print(&quot;hello world&quot;)
+</pre></div>
+</td></tr></table></div>
+<p>This example can be executed with <code class="docutils literal"><span class="pre">inmanta</span> <span class="pre">compile</span></code></p>
+<p>This prints out “hello world” on stdout. The first execution takes longer because Inmanta needs to
+fetch (clone) the std module from github. Subsequently compiles will use the std module downloaded
+to the libs directory.</p>
+</div>
+<div class="section" id="deploy-a-file">
+<h2>Deploy a file<a class="headerlink" href="#deploy-a-file" title="Permalink to this headline">¶</a></h2>
+<p>With the deploy command, Inmanta can deploy a file to a machine with an embedded server and agent.</p>
+<p>The main.cf below creates a file:</p>
+<div class="highlight-none"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre>1
+2</pre></div></td><td class="code"><div class="highlight"><pre><span></span>host = std::Host(name=&quot;localhost&quot;, os=std::linux)
+std::File(host=host, path=&quot;/tmp/test&quot;, owner=&quot;user&quot;, group=&quot;group&quot;, mode=600, content=&quot;abcde&quot;)
+</pre></div>
+</td></tr></table></div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Replace <em>user</em> and <em>group</em> in the main.cf above. The user and group should exist. If this
+command is not executed as root, make sure that user and group have the value of the current
+user.</p>
+</div>
+<p>Deploy the configuration model above with <code class="docutils literal"><span class="pre">inmanta</span> <span class="pre">deploy</span></code></p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="modules.html" class="btn btn-neutral float-right" title="Module Developers Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="auth.html" class="btn btn-neutral" title="Setup authentication" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

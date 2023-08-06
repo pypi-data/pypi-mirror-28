@@ -1,0 +1,1062 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module aws &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Inmanta modules" href="../modules.html"/>
+        <link rel="next" title="Module bind" href="bind.html"/>
+        <link rel="prev" title="Module apt" href="apt.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Inmanta Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands.html">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">Inmanta API reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html">Inmanta modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ansible.html">Module ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apache.html">Module apache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apt.html">Module apt</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module aws</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#typedefs">Typedefs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#entities">Entities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#implementations">Implementations</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#plugins">Plugins</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resources">Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#handlers">Handlers</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="bind.html">Module bind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collectd.html">Module collectd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dns.html">Module dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docker.html">Module docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drupal.html">Module drupal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exec.html">Module exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="graphite.html">Module graphite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip.html">Module ip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Module logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mongodb.html">Module mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="monitoring.html">Module monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mysql.html">Module mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="net.html">Module net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openstack.html">Module openstack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openvswitch.html">Module openvswitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="param.html">Module param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="php.html">Module php</a></li>
+<li class="toctree-l3"><a class="reference internal" href="platform.html">Module platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="redhat.html">Module redhat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssh.html">Module ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="std.html">Module std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu.html">Module ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">Module user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="varnish.html">Module varnish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html">Module web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="yum.html">Module yum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Inmanta Reference</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Inmanta modules</a> &raquo;</li>
+        
+      <li>Module aws</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-aws">
+<h1>Module aws<a class="headerlink" href="#module-aws" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li>License: Apache 2.0</li>
+<li>Version: 2.1.0</li>
+<li>Author: Inmanta &lt;<a class="reference external" href="mailto:code&#37;&#52;&#48;inmanta&#46;com">code<span>&#64;</span>inmanta<span>&#46;</span>com</a>&gt;</li>
+<li>This module requires compiler version 2017.2 or higher</li>
+<li>Upstream project: <a class="reference external" href="https://github.com/inmanta/aws.git">https://github.com/inmanta/aws.git</a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="typedefs">
+<h2>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h2>
+<dl class="typedef">
+<dt id="typedef-aws::direction">
+<em class="property">typedef </em><code class="descclassname">aws::direction</code><a class="headerlink" href="#typedef-aws::direction" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Base type <code class="docutils literal"><span class="pre">string</span></code></li>
+<li>Type constraint <code class="docutils literal"><span class="pre">((self</span> <span class="pre">==</span> <span class="pre">'ingress')</span> <span class="pre">or</span> <span class="pre">(self</span> <span class="pre">==</span> <span class="pre">'egress'))</span></code></li>
+</ul>
+</dd></dl>
+
+<dl class="typedef">
+<dt id="typedef-aws::instance_tenancy">
+<em class="property">typedef </em><code class="descclassname">aws::instance_tenancy</code><a class="headerlink" href="#typedef-aws::instance_tenancy" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Base type <code class="docutils literal"><span class="pre">string</span></code></li>
+<li>Type constraint <code class="docutils literal"><span class="pre">(self</span> <span class="pre">regex</span> <span class="pre">re.compile('^(default|dedicated|host)$'))</span></code></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="entities">
+<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<dl class="entity">
+<dt id="entity-aws::AWSResource">
+<em class="property">entity </em><code class="descclassname">aws::AWSResource</code><a class="headerlink" href="#entity-aws::AWSResource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::PurgeableResource" title="std::PurgeableResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::PurgeableResource</span></code></a>, <a class="reference internal" href="std.html#entity-std::ManagedResource" title="std::ManagedResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::ManagedResource</span></code></a></p>
+<dl class="relation">
+<dt id="relation-aws::AWSResource.provider">
+<em class="property">relation </em>aws::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-aws::AWSResource.provider" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::ELB">
+<em class="property">entity </em><code class="descclassname">aws::ELB</code><a class="headerlink" href="#entity-aws::ELB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-aws::AWSResource" title="aws::AWSResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::AWSResource</span></code></a></p>
+<p>An ELB load balancer</p>
+<dl class="attribute">
+<dt id="attribute-aws::ELB.listen_port">
+<em class="property">attribute </em>number <code class="descclassname">listen_port</code>=80<a class="headerlink" href="#attribute-aws::ELB.listen_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::ELB.protocol">
+<em class="property">attribute </em>string <code class="descclassname">protocol</code>='http'<a class="headerlink" href="#attribute-aws::ELB.protocol" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::ELB.dest_port">
+<em class="property">attribute </em>number <code class="descclassname">dest_port</code>=80<a class="headerlink" href="#attribute-aws::ELB.dest_port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::ELB.security_group">
+<em class="property">attribute </em>string <code class="descclassname">security_group</code>='default'<a class="headerlink" href="#attribute-aws::ELB.security_group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::ELB.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-aws::ELB.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::ELB.instances">
+<em class="property">relation </em>aws::VirtualMachine <code class="descclassname">instances</code> [0:*]<a class="headerlink" href="#relation-aws::ELB.instances" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::GroupRule">
+<em class="property">entity </em><code class="descclassname">aws::GroupRule</code><a class="headerlink" href="#entity-aws::GroupRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-aws::SecurityRule" title="aws::SecurityRule entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::SecurityRule</span></code></a></p>
+<dl class="relation">
+<dt id="relation-aws::GroupRule.remote_group">
+<em class="property">relation </em>aws::SecurityGroup <code class="descclassname">remote_group</code> [1]<a class="headerlink" href="#relation-aws::GroupRule.remote_group" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::Host">
+<em class="property">entity </em><code class="descclassname">aws::Host</code><a class="headerlink" href="#entity-aws::Host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-aws::VMAttributes" title="aws::VMAttributes entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::VMAttributes</span></code></a>, <a class="reference internal" href="ip.html#entity-ip::Host" title="ip::Host entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::Host</span></code></a></p>
+<p>A subclass of ip::Host that creates a virtual machine on AWS.</p>
+<dl class="relation">
+<dt id="relation-aws::Host.vm">
+<em class="property">relation </em>aws::VirtualMachine <code class="descclassname">vm</code> [1]<a class="headerlink" href="#relation-aws::Host.vm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::Host.public_ip">
+<em class="property">relation </em>ip::IP <code class="descclassname">public_ip</code> [0:1]<a class="headerlink" href="#relation-aws::Host.public_ip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::Host.provider">
+<em class="property">relation </em>aws::Provider <code class="descclassname">provider</code> [1]<a class="headerlink" href="#relation-aws::Host.provider" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::Host.subnet">
+<em class="property">relation </em>aws::Subnet <code class="descclassname">subnet</code> [0:1]<a class="headerlink" href="#relation-aws::Host.subnet" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::Host.security_groups">
+<em class="property">relation </em>aws::SecurityGroup <code class="descclassname">security_groups</code> [0:*]<a class="headerlink" href="#relation-aws::Host.security_groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::Host.private_ip">
+<em class="property">relation </em>ip::IP <code class="descclassname">private_ip</code> [1]<a class="headerlink" href="#relation-aws::Host.private_ip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::Host.public_key">
+<em class="property">relation </em>ssh::Key <code class="descclassname">public_key</code> [1]<a class="headerlink" href="#relation-aws::Host.public_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-aws::awsHost" title="aws::awsHost implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">aws::awsHost</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::hostDefaults" title="std::hostDefaults implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::hostDefaults</span></code></a>, <a class="reference internal" href="#implementation-aws::awsHost" title="aws::awsHost implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">aws::awsHost</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::IPrule">
+<em class="property">entity </em><code class="descclassname">aws::IPrule</code><a class="headerlink" href="#entity-aws::IPrule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-aws::SecurityRule" title="aws::SecurityRule entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::SecurityRule</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-aws::IPrule.remote_prefix">
+<em class="property">attribute </em>ip::cidr <code class="descclassname">remote_prefix</code><a class="headerlink" href="#attribute-aws::IPrule.remote_prefix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::InternetGateway">
+<em class="property">entity </em><code class="descclassname">aws::InternetGateway</code><a class="headerlink" href="#entity-aws::InternetGateway" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-aws::AWSResource" title="aws::AWSResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::AWSResource</span></code></a></p>
+<p>An Internet gateway for use with a VPC.</p>
+<dl class="attribute">
+<dt id="attribute-aws::InternetGateway.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-aws::InternetGateway.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::InternetGateway.vpc">
+<em class="property">relation </em>aws::VPC <code class="descclassname">vpc</code> [0:1]<a class="headerlink" href="#relation-aws::InternetGateway.vpc" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-aws::VPC.internet_gateway" title="aws::VPC.internet_gateway relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">aws::VPC.internet_gateway</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::Provider">
+<em class="property">entity </em><code class="descclassname">aws::Provider</code><a class="headerlink" href="#entity-aws::Provider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>The configuration to access Amazon Web Services</p>
+<dl class="attribute">
+<dt id="attribute-aws::Provider.auto_agent">
+<em class="property">attribute </em>bool <code class="descclassname">auto_agent</code>=True<a class="headerlink" href="#attribute-aws::Provider.auto_agent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Provider.availability_zone">
+<em class="property">attribute </em>string <code class="descclassname">availability_zone</code><a class="headerlink" href="#attribute-aws::Provider.availability_zone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Provider.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-aws::Provider.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Provider.region">
+<em class="property">attribute </em>string <code class="descclassname">region</code><a class="headerlink" href="#attribute-aws::Provider.region" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Provider.access_key">
+<em class="property">attribute </em>string <code class="descclassname">access_key</code><a class="headerlink" href="#attribute-aws::Provider.access_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Provider.secret_key">
+<em class="property">attribute </em>string <code class="descclassname">secret_key</code><a class="headerlink" href="#attribute-aws::Provider.secret_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-aws::agentConfig" title="aws::agentConfig implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">aws::agentConfig</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+<li><a class="reference internal" href="#implementation-aws::agentConfig" title="aws::agentConfig implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">aws::agentConfig</span></code></a>
+constraint <code class="docutils literal"><span class="pre">auto_agent</span></code></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::SecurityGroup">
+<em class="property">entity </em><code class="descclassname">aws::SecurityGroup</code><a class="headerlink" href="#entity-aws::SecurityGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-aws::AWSResource" title="aws::AWSResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::AWSResource</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-aws::SecurityGroup.description">
+<em class="property">attribute </em>string <code class="descclassname">description</code>=''<a class="headerlink" href="#attribute-aws::SecurityGroup.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::SecurityGroup.retries">
+<em class="property">attribute </em>number <code class="descclassname">retries</code>=10<a class="headerlink" href="#attribute-aws::SecurityGroup.retries" title="Permalink to this definition">¶</a></dt>
+<dd><p>A security group can only be deleted when it is no longer in use. The API confirms the delete of a virtual machine for example, but it might still be in progress. This results in a failure to delete the security group. To speed up deployments, the handler can retry this number of times before skipping the resource.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::SecurityGroup.manage_all">
+<em class="property">attribute </em>bool <code class="descclassname">manage_all</code>=True<a class="headerlink" href="#attribute-aws::SecurityGroup.manage_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::SecurityGroup.wait">
+<em class="property">attribute </em>number <code class="descclassname">wait</code>=5<a class="headerlink" href="#attribute-aws::SecurityGroup.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of seconds to wait between retries.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::SecurityGroup.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-aws::SecurityGroup.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::SecurityGroup.vpc">
+<em class="property">relation </em>aws::VPC <code class="descclassname">vpc</code> [1]<a class="headerlink" href="#relation-aws::SecurityGroup.vpc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::SecurityGroup.rules">
+<em class="property">relation </em>aws::SecurityRule <code class="descclassname">rules</code> [0:*]<a class="headerlink" href="#relation-aws::SecurityGroup.rules" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-aws::SecurityRule.group" title="aws::SecurityRule.group relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">aws::SecurityRule.group</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::SecurityRule">
+<em class="property">entity </em><code class="descclassname">aws::SecurityRule</code><a class="headerlink" href="#entity-aws::SecurityRule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A filter rule in the a security group</p>
+<dl class="attribute">
+<dt id="attribute-aws::SecurityRule.port">
+<em class="property">attribute </em>ip::port <code class="descclassname">port</code>=0<a class="headerlink" href="#attribute-aws::SecurityRule.port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::SecurityRule.ip_protocol">
+<em class="property">attribute </em>ip::protocol <code class="descclassname">ip_protocol</code><a class="headerlink" href="#attribute-aws::SecurityRule.ip_protocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of ip protocol to allow. Currently this support tcp/udp/icmp/sctp or all</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::SecurityRule.port_max">
+<em class="property">attribute </em>ip::port <code class="descclassname">port_max</code>=0<a class="headerlink" href="#attribute-aws::SecurityRule.port_max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::SecurityRule.direction">
+<em class="property">attribute </em>aws::direction <code class="descclassname">direction</code><a class="headerlink" href="#attribute-aws::SecurityRule.direction" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::SecurityRule.port_min">
+<em class="property">attribute </em>ip::port <code class="descclassname">port_min</code>=0<a class="headerlink" href="#attribute-aws::SecurityRule.port_min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::SecurityRule.group">
+<em class="property">relation </em>aws::SecurityGroup <code class="descclassname">group</code> [1]<a class="headerlink" href="#relation-aws::SecurityRule.group" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-aws::SecurityGroup.rules" title="aws::SecurityGroup.rules relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">aws::SecurityGroup.rules</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::Subnet">
+<em class="property">entity </em><code class="descclassname">aws::Subnet</code><a class="headerlink" href="#entity-aws::Subnet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-aws::AWSResource" title="aws::AWSResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::AWSResource</span></code></a></p>
+<p>A subnet in a vpc</p>
+<dl class="attribute">
+<dt id="attribute-aws::Subnet.cidr_block">
+<em class="property">attribute </em>ip::cidr <code class="descclassname">cidr_block</code><a class="headerlink" href="#attribute-aws::Subnet.cidr_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>The IPv4 network range for the VPC, in CIDR notation. For example, 10.0.0.0/24.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">string aws::Subnet.availability_zone=&lt;inmanta.execute.util.NoneValue object at 0x7fa196106630&gt;</code></dt>
+<dd><p>The Availability Zone for the subnet.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Subnet.map_public_ip_on_launch">
+<em class="property">attribute </em>bool <code class="descclassname">map_public_ip_on_launch</code>=False<a class="headerlink" href="#attribute-aws::Subnet.map_public_ip_on_launch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specify true to indicate that network interfaces created in the specified subnet should be assigned a public IPv4 address. This includes a network interface that’s created when launching an instance into the subnet (the instance therefore receives a public IPv4 address).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Subnet.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-aws::Subnet.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the subnet. Inmanta uses this name to idenfiy the subnet. It is set as the name tag on the subnet resource.</p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::Subnet.vpc">
+<em class="property">relation </em>aws::VPC <code class="descclassname">vpc</code> [1]<a class="headerlink" href="#relation-aws::Subnet.vpc" title="Permalink to this definition">¶</a></dt>
+<dd><p>The VPC the subnet is created in.</p>
+<p>other end: <a class="reference internal" href="#relation-aws::VPC.subnets" title="aws::VPC.subnets relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">aws::VPC.subnets</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::VMAttributes">
+<em class="property">entity </em><code class="descclassname">aws::VMAttributes</code><a class="headerlink" href="#entity-aws::VMAttributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-aws::VMAttributes.flavor">
+<em class="property">attribute </em>string <code class="descclassname">flavor</code><a class="headerlink" href="#attribute-aws::VMAttributes.flavor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::VMAttributes.source_dest_check">
+<em class="property">attribute </em>bool <code class="descclassname">source_dest_check</code>=True<a class="headerlink" href="#attribute-aws::VMAttributes.source_dest_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::VMAttributes.image">
+<em class="property">attribute </em>string <code class="descclassname">image</code><a class="headerlink" href="#attribute-aws::VMAttributes.image" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">string aws::VMAttributes.subnet_id=&lt;inmanta.execute.util.NoneValue object at 0x7fa1961627b8&gt;</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::VMAttributes.user_data">
+<em class="property">attribute </em>string <code class="descclassname">user_data</code><a class="headerlink" href="#attribute-aws::VMAttributes.user_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::VPC">
+<em class="property">entity </em><code class="descclassname">aws::VPC</code><a class="headerlink" href="#entity-aws::VPC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-aws::AWSResource" title="aws::AWSResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::AWSResource</span></code></a></p>
+<p>A VPC on Amazon</p>
+<dl class="attribute">
+<dt id="attribute-aws::VPC.enableDnsHostnames">
+<em class="property">attribute </em>bool <code class="descclassname">enableDnsHostnames</code>=False<a class="headerlink" href="#attribute-aws::VPC.enableDnsHostnames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::VPC.enableDnsSupport">
+<em class="property">attribute </em>bool <code class="descclassname">enableDnsSupport</code>=False<a class="headerlink" href="#attribute-aws::VPC.enableDnsSupport" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::VPC.cidr_block">
+<em class="property">attribute </em>ip::cidr <code class="descclassname">cidr_block</code><a class="headerlink" href="#attribute-aws::VPC.cidr_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>The IPv4 network range for the VPC, in CIDR notation. For example, 10.0.0.0/16.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::VPC.instance_tenancy">
+<em class="property">attribute </em>aws::instance_tenancy <code class="descclassname">instance_tenancy</code>='default'<a class="headerlink" href="#attribute-aws::VPC.instance_tenancy" title="Permalink to this definition">¶</a></dt>
+<dd><p>The tenancy options for instances launched into the VPC. For default , instances are launched with shared tenancy by default. You can launch instances with any tenancy into a shared tenancy VPC. For dedicated , instances are launched as dedicated tenancy instances by default. You can only launch instances with a tenancy of dedicated or host into a dedicated tenancy VPC.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::VPC.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-aws::VPC.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the VPC. Inmanta uses this name to idenfiy the vpc. It is set as the name tag on the vpc resource.</p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::VPC.subnets">
+<em class="property">relation </em>aws::Subnet <code class="descclassname">subnets</code> [0:*]<a class="headerlink" href="#relation-aws::VPC.subnets" title="Permalink to this definition">¶</a></dt>
+<dd><p>The VPC the subnet is created in.</p>
+<p>other end: <a class="reference internal" href="#relation-aws::Subnet.vpc" title="aws::Subnet.vpc relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">aws::Subnet.vpc</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::VPC.internet_gateway">
+<em class="property">relation </em>aws::InternetGateway <code class="descclassname">internet_gateway</code> [0:1]<a class="headerlink" href="#relation-aws::VPC.internet_gateway" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-aws::InternetGateway.vpc" title="aws::InternetGateway.vpc relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">aws::InternetGateway.vpc</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::VirtualMachine">
+<em class="property">entity </em><code class="descclassname">aws::VirtualMachine</code><a class="headerlink" href="#entity-aws::VirtualMachine" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-aws::VMAttributes" title="aws::VMAttributes entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::VMAttributes</span></code></a>, <a class="reference internal" href="#entity-aws::AWSResource" title="aws::AWSResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::AWSResource</span></code></a></p>
+<p>This entity represents a virtual machine that is hosted on an IaaS</p>
+<dl class="attribute">
+<dt id="attribute-aws::VirtualMachine.tags">
+<em class="property">attribute </em>dict <code class="descclassname">tags</code>=Dict()<a class="headerlink" href="#attribute-aws::VirtualMachine.tags" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::VirtualMachine.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-aws::VirtualMachine.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::VirtualMachine.subnet">
+<em class="property">relation </em>aws::Subnet <code class="descclassname">subnet</code> [0:1]<a class="headerlink" href="#relation-aws::VirtualMachine.subnet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boot the vm in this subnet. Either use this relation or provide a subnet id directly.</p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::VirtualMachine.security_groups">
+<em class="property">relation </em>aws::SecurityGroup <code class="descclassname">security_groups</code> [0:*]<a class="headerlink" href="#relation-aws::VirtualMachine.security_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>The security groups that apply to this vm. If no group is supplied the default security group will
+be applied by EC2</p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::VirtualMachine.public_key">
+<em class="property">relation </em>ssh::Key <code class="descclassname">public_key</code> [1]<a class="headerlink" href="#relation-aws::VirtualMachine.public_key" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::VirtualMachine.volumes">
+<em class="property">relation </em>aws::Volume <code class="descclassname">volumes</code> [0:*]<a class="headerlink" href="#relation-aws::VirtualMachine.volumes" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-aws::Volume.vm" title="aws::Volume.vm relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">aws::Volume.vm</span> <span class="pre">[0:1]</span></code></a></p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-aws::req" title="aws::req implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">aws::req</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-aws::req" title="aws::req implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">aws::req</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-aws::Volume">
+<em class="property">entity </em><code class="descclassname">aws::Volume</code><a class="headerlink" href="#entity-aws::Volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-aws::AWSResource" title="aws::AWSResource entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::AWSResource</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-aws::Volume.encrypted">
+<em class="property">attribute </em>bool <code class="descclassname">encrypted</code>=False<a class="headerlink" href="#attribute-aws::Volume.encrypted" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Volume.volume_type">
+<em class="property">attribute </em>string <code class="descclassname">volume_type</code>='gp2'<a class="headerlink" href="#attribute-aws::Volume.volume_type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Volume.availability_zone">
+<em class="property">attribute </em>string <code class="descclassname">availability_zone</code><a class="headerlink" href="#attribute-aws::Volume.availability_zone" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Volume.tags">
+<em class="property">attribute </em>dict <code class="descclassname">tags</code>=Dict()<a class="headerlink" href="#attribute-aws::Volume.tags" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Volume.attachmentpoint">
+<em class="property">attribute </em>string <code class="descclassname">attachmentpoint</code>='/dev/sdb'<a class="headerlink" href="#attribute-aws::Volume.attachmentpoint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Volume.size">
+<em class="property">attribute </em>number <code class="descclassname">size</code>=10<a class="headerlink" href="#attribute-aws::Volume.size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-aws::Volume.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-aws::Volume.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-aws::Volume.vm">
+<em class="property">relation </em>aws::VirtualMachine <code class="descclassname">vm</code> [0:1]<a class="headerlink" href="#relation-aws::Volume.vm" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-aws::VirtualMachine.volumes" title="aws::VirtualMachine.volumes relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">aws::VirtualMachine.volumes</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="implementations">
+<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
+<dl class="implementation">
+<dt id="implementation-aws::agentConfig">
+<em class="property">implementation </em><code class="descclassname">aws::agentConfig</code><a class="headerlink" href="#implementation-aws::agentConfig" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-aws::awsHost">
+<em class="property">implementation </em><code class="descclassname">aws::awsHost</code><a class="headerlink" href="#implementation-aws::awsHost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-aws::req">
+<em class="property">implementation </em><code class="descclassname">aws::req</code><a class="headerlink" href="#implementation-aws::req" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="plugins">
+<h2>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="aws.decrypt">
+<code class="descclassname">aws.</code><code class="descname">decrypt</code><span class="sig-paren">(</span><em>key_data: string</em>, <em>cipher_text: string</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#aws.decrypt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="aws.elbid">
+<code class="descclassname">aws.</code><code class="descname">elbid</code><span class="sig-paren">(</span><em>name: string</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#aws.elbid" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="aws.get_api_id">
+<code class="descclassname">aws.</code><code class="descname">get_api_id</code><span class="sig-paren">(</span><em>provider: aws::Provider</em>, <em>api_name: string</em><span class="sig-paren">)</span> &#x2192; string<a class="headerlink" href="#aws.get_api_id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="resources">
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="aws.ELB">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">ELB</code><a class="headerlink" href="#aws.ELB" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>Amazon Elastic loadbalancer</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-aws::ELB" title="aws::ELB entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::ELB</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#aws.ELBHandler" title="aws.ELBHandler"><code class="xref py py-class docutils literal"><span class="pre">aws.ELBHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.InternetGateway">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">InternetGateway</code><a class="headerlink" href="#aws.InternetGateway" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-aws::InternetGateway" title="aws::InternetGateway entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::InternetGateway</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#aws.InternetGatewayHandler" title="aws.InternetGatewayHandler"><code class="xref py py-class docutils literal"><span class="pre">aws.InternetGatewayHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.SecurityGroup">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">SecurityGroup</code><a class="headerlink" href="#aws.SecurityGroup" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>A security group in an OpenStack tenant</div></blockquote>
+<ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-aws::SecurityGroup" title="aws::SecurityGroup entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::SecurityGroup</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#aws.SecurityGroupHandler" title="aws.SecurityGroupHandler"><code class="xref py py-class docutils literal"><span class="pre">aws.SecurityGroupHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.Subnet">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">Subnet</code><a class="headerlink" href="#aws.Subnet" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-aws::Subnet" title="aws::Subnet entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::Subnet</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#aws.SubnetHandler" title="aws.SubnetHandler"><code class="xref py py-class docutils literal"><span class="pre">aws.SubnetHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.VPC">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">VPC</code><a class="headerlink" href="#aws.VPC" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-aws::VPC" title="aws::VPC entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::VPC</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#aws.VPCHandler" title="aws.VPCHandler"><code class="xref py py-class docutils literal"><span class="pre">aws.VPCHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.VirtualMachine">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">VirtualMachine</code><a class="headerlink" href="#aws.VirtualMachine" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-aws::VirtualMachine" title="aws::VirtualMachine entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::VirtualMachine</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#aws.VirtualMachineHandler" title="aws.VirtualMachineHandler"><code class="xref py py-class docutils literal"><span class="pre">aws.VirtualMachineHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.Volume">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">Volume</code><a class="headerlink" href="#aws.Volume" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Resource for entity <a class="reference internal" href="#entity-aws::Volume" title="aws::Volume entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::Volume</span></code></a></li>
+<li>Id attribute <code class="docutils literal"><span class="pre">name</span></code></li>
+<li>Agent name <code class="docutils literal"><span class="pre">provider.name</span></code></li>
+<li>Handlers <a class="reference internal" href="#aws.VolumeHandler" title="aws.VolumeHandler"><code class="xref py py-class docutils literal"><span class="pre">aws.VolumeHandler</span></code></a></li>
+</ul>
+</dd></dl>
+
+</div>
+<div class="section" id="handlers">
+<h2>Handlers<a class="headerlink" href="#handlers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="aws.SubnetHandler">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">SubnetHandler</code><a class="headerlink" href="#aws.SubnetHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">ec2</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-aws::Subnet" title="aws::Subnet entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::Subnet</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.InternetGatewayHandler">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">InternetGatewayHandler</code><a class="headerlink" href="#aws.InternetGatewayHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">ec2</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-aws::InternetGateway" title="aws::InternetGateway entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::InternetGateway</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.VirtualMachineHandler">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">VirtualMachineHandler</code><a class="headerlink" href="#aws.VirtualMachineHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">ec2</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-aws::VirtualMachine" title="aws::VirtualMachine entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::VirtualMachine</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.VolumeHandler">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">VolumeHandler</code><a class="headerlink" href="#aws.VolumeHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">volume</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-aws::Volume" title="aws::Volume entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::Volume</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.SecurityGroupHandler">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">SecurityGroupHandler</code><a class="headerlink" href="#aws.SecurityGroupHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">ec2</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-aws::SecurityGroup" title="aws::SecurityGroup entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::SecurityGroup</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.VPCHandler">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">VPCHandler</code><a class="headerlink" href="#aws.VPCHandler" title="Permalink to this definition">¶</a></dt>
+<dd><ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">ec2</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-aws::VPC" title="aws::VPC entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::VPC</span></code></a></li>
+</ul>
+</dd></dl>
+
+<dl class="class">
+<dt id="aws.ELBHandler">
+<em class="property">class </em><code class="descclassname">aws.</code><code class="descname">ELBHandler</code><a class="headerlink" href="#aws.ELBHandler" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>This class manages ELB instances on amazon ec2</div></blockquote>
+<ul class="simple">
+<li>Handler name <code class="docutils literal"><span class="pre">ec2</span></code></li>
+<li>Handler for entity <a class="reference internal" href="#entity-aws::ELB" title="aws::ELB entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">aws::ELB</span></code></a></li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bind.html" class="btn btn-neutral float-right" title="Module bind" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="apt.html" class="btn btn-neutral" title="Module apt" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

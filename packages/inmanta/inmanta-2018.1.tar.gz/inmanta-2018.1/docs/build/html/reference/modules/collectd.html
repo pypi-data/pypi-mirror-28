@@ -1,0 +1,885 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module collectd &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Inmanta modules" href="../modules.html"/>
+        <link rel="next" title="Module dns" href="dns.html"/>
+        <link rel="prev" title="Module bind" href="bind.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Inmanta Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands.html">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">Inmanta API reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html">Inmanta modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ansible.html">Module ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apache.html">Module apache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apt.html">Module apt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aws.html">Module aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bind.html">Module bind</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module collectd</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#entities">Entities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#implementations">Implementations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="dns.html">Module dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docker.html">Module docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drupal.html">Module drupal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exec.html">Module exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="graphite.html">Module graphite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip.html">Module ip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Module logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mongodb.html">Module mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="monitoring.html">Module monitoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mysql.html">Module mysql</a></li>
+<li class="toctree-l3"><a class="reference internal" href="net.html">Module net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openstack.html">Module openstack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openvswitch.html">Module openvswitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="param.html">Module param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="php.html">Module php</a></li>
+<li class="toctree-l3"><a class="reference internal" href="platform.html">Module platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="redhat.html">Module redhat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssh.html">Module ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="std.html">Module std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu.html">Module ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">Module user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="varnish.html">Module varnish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html">Module web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="yum.html">Module yum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Inmanta Reference</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Inmanta modules</a> &raquo;</li>
+        
+      <li>Module collectd</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-collectd">
+<h1>Module collectd<a class="headerlink" href="#module-collectd" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li>License: Apache 2.0</li>
+<li>Version: 0.2.1</li>
+<li>Author: Inmanta &lt;<a class="reference external" href="mailto:code&#37;&#52;&#48;inmanta&#46;com">code<span>&#64;</span>inmanta<span>&#46;</span>com</a>&gt;</li>
+<li>Upstream project: <a class="reference external" href="https://github.com/inmanta/collectd.git">https://github.com/inmanta/collectd.git</a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="entities">
+<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<dl class="entity">
+<dt id="entity-collectd::Agent">
+<em class="property">entity </em><code class="descclassname">collectd::Agent</code><a class="headerlink" href="#entity-collectd::Agent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-collectd::NetworkInput" title="collectd::NetworkInput entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">collectd::NetworkInput</span></code></a>, <a class="reference internal" href="#entity-collectd::NetworkOutput" title="collectd::NetworkOutput entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">collectd::NetworkOutput</span></code></a></p>
+<p>A collectd agent that collects metrics</p>
+<dl class="attribute">
+<dt id="attribute-collectd::Agent.forward">
+<em class="property">attribute </em>bool <code class="descclassname">forward</code>=False<a class="headerlink" href="#attribute-collectd::Agent.forward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instruct the network plugin to forward inputs to outputs</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::Agent._plugin_config_path">
+<em class="property">attribute </em>string <code class="descclassname">_plugin_config_path</code><a class="headerlink" href="#attribute-collectd::Agent._plugin_config_path" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::Agent._service_name">
+<em class="property">attribute </em>string <code class="descclassname">_service_name</code><a class="headerlink" href="#attribute-collectd::Agent._service_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-collectd::Agent.plugins">
+<em class="property">relation </em>collectd::Plugin <code class="descclassname">plugins</code> [0:*]<a class="headerlink" href="#relation-collectd::Agent.plugins" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-collectd::Plugin.agent" title="collectd::Plugin.agent relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">collectd::Plugin.agent</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+<dl class="relation">
+<dt id="relation-collectd::Agent.types">
+<em class="property">relation </em>collectd::Type <code class="descclassname">types</code> [0:*]<a class="headerlink" href="#relation-collectd::Agent.types" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::collectdAgent" title="collectd::collectdAgent implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::collectdAgent</span></code></a></li>
+<li><a class="reference internal" href="#implementation-collectd::collectdAgentUbuntu" title="collectd::collectdAgentUbuntu implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::collectdAgentUbuntu</span></code></a></li>
+<li><a class="reference internal" href="#implementation-collectd::customTypes" title="collectd::customTypes implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::customTypes</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::collectdAgent" title="collectd::collectdAgent implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::collectdAgent</span></code></a>
+constraint <code class="docutils literal"><span class="pre">(std::familyof(host.os,'rhel')</span> <span class="pre">or</span> <span class="pre">std::familyof(host.os,'fedora'))</span></code></li>
+<li><a class="reference internal" href="#implementation-collectd::collectdAgentUbuntu" title="collectd::collectdAgentUbuntu implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::collectdAgentUbuntu</span></code></a>
+constraint <code class="docutils literal"><span class="pre">std::familyof(host.os,'ubuntu')</span></code></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::NetworkInput">
+<em class="property">entity </em><code class="descclassname">collectd::NetworkInput</code><a class="headerlink" href="#entity-collectd::NetworkInput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="ip.html#entity-ip::services::Server" title="ip::services::Server entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::Server</span></code></a></p>
+<p>A collectd network input: accepts metrics using the collectd network protocol.</p>
+<dl class="relation">
+<dt id="relation-collectd::NetworkInput.outputs">
+<em class="property">relation </em>collectd::NetworkOutput <code class="descclassname">outputs</code> [0:*]<a class="headerlink" href="#relation-collectd::NetworkInput.outputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-collectd::NetworkOutput.inputs" title="collectd::NetworkOutput.inputs relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">collectd::NetworkOutput.inputs</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::NetworkOutput">
+<em class="property">entity </em><code class="descclassname">collectd::NetworkOutput</code><a class="headerlink" href="#entity-collectd::NetworkOutput" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="ip.html#entity-ip::services::BaseClient" title="ip::services::BaseClient entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::BaseClient</span></code></a></p>
+<p>A collectd network output: sends metrics over the network using the collect protocol.</p>
+<dl class="relation">
+<dt id="relation-collectd::NetworkOutput.inputs">
+<em class="property">relation </em>collectd::NetworkInput <code class="descclassname">inputs</code> [0:*]<a class="headerlink" href="#relation-collectd::NetworkOutput.inputs" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-collectd::NetworkInput.outputs" title="collectd::NetworkInput.outputs relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">collectd::NetworkInput.outputs</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::Plugin">
+<em class="property">entity </em><code class="descclassname">collectd::Plugin</code><a class="headerlink" href="#entity-collectd::Plugin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A collectd plugin that collects metrics</p>
+<dl class="attribute">
+<dt id="attribute-collectd::Plugin.config">
+<em class="property">attribute </em>string <code class="descclassname">config</code><a class="headerlink" href="#attribute-collectd::Plugin.config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::Plugin.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-collectd::Plugin.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::Plugin.interval">
+<em class="property">attribute </em>number <code class="descclassname">interval</code>=0<a class="headerlink" href="#attribute-collectd::Plugin.interval" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::Plugin.load_order">
+<em class="property">attribute </em>number <code class="descclassname">load_order</code>=10<a class="headerlink" href="#attribute-collectd::Plugin.load_order" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-collectd::Plugin.agent">
+<em class="property">relation </em>collectd::Agent <code class="descclassname">agent</code> [1]<a class="headerlink" href="#relation-collectd::Plugin.agent" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-collectd::Agent.plugins" title="collectd::Agent.plugins relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">collectd::Agent.plugins</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::loadPlugin" title="collectd::loadPlugin implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::loadPlugin</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::Type">
+<em class="property">entity </em><code class="descclassname">collectd::Type</code><a class="headerlink" href="#entity-collectd::Type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>Add a new type to a custom types db</p>
+<dl class="attribute">
+<dt id="attribute-collectd::Type.min">
+<em class="property">attribute </em>string <code class="descclassname">min</code>='U'<a class="headerlink" href="#attribute-collectd::Type.min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::Type.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-collectd::Type.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::Type.type">
+<em class="property">attribute </em>string <code class="descclassname">type</code><a class="headerlink" href="#attribute-collectd::Type.type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::Type.max">
+<em class="property">attribute </em>string <code class="descclassname">max</code>='U'<a class="headerlink" href="#attribute-collectd::Type.max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::Varnish">
+<em class="property">entity </em><code class="descclassname">collectd::Varnish</code><a class="headerlink" href="#entity-collectd::Varnish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-collectd::Plugin" title="collectd::Plugin entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">collectd::Plugin</span></code></a></p>
+<p>Enable the Varnish collectd plugin</p>
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::varnish" title="collectd::varnish implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::varnish</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::varnish" title="collectd::varnish implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::varnish</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::graphite::GraphiteWriter">
+<em class="property">entity </em><code class="descclassname">collectd::graphite::GraphiteWriter</code><a class="headerlink" href="#entity-collectd::graphite::GraphiteWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-collectd::Plugin" title="collectd::Plugin entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">collectd::Plugin</span></code></a></p>
+<p>A plugin to write metrics to graphite</p>
+<dl class="attribute">
+<dt id="attribute-collectd::graphite::GraphiteWriter.escape_character">
+<em class="property">attribute </em>string <code class="descclassname">escape_character</code>='_'<a class="headerlink" href="#attribute-collectd::graphite::GraphiteWriter.escape_character" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::graphite::GraphiteWriter.prefix">
+<em class="property">attribute </em>string <code class="descclassname">prefix</code>=''<a class="headerlink" href="#attribute-collectd::graphite::GraphiteWriter.prefix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::graphite::GraphiteWriter.postfix">
+<em class="property">attribute </em>string <code class="descclassname">postfix</code>=''<a class="headerlink" href="#attribute-collectd::graphite::GraphiteWriter.postfix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-collectd::graphite::GraphiteWriter.carbon">
+<em class="property">relation </em>graphite::Carbon <code class="descclassname">carbon</code> [1]<a class="headerlink" href="#relation-collectd::graphite::GraphiteWriter.carbon" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <code class="xref inmanta inmanta-relation docutils literal"><span class="pre">graphite::Carbon.collectd_writer</span> <span class="pre">[0:*]</span></code></p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::graphite::graphiteWriter" title="collectd::graphite::graphiteWriter implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::graphite::graphiteWriter</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::graphite::graphiteWriter" title="collectd::graphite::graphiteWriter implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::graphite::graphiteWriter</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::plugins::CPU">
+<em class="property">entity </em><code class="descclassname">collectd::plugins::CPU</code><a class="headerlink" href="#entity-collectd::plugins::CPU" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-collectd::Plugin" title="collectd::Plugin entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">collectd::Plugin</span></code></a></p>
+<p>Collectd CPU plugin.</p>
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::CPU.valuespercentage">
+<em class="property">attribute </em>bool <code class="descclassname">valuespercentage</code>=False<a class="headerlink" href="#attribute-collectd::plugins::CPU.valuespercentage" title="Permalink to this definition">¶</a></dt>
+<dd><p>This option is only considered when both, ReportByCpu and ReportByState are set to true. In this case, by default, metrics will be reported as Jiffies. By setting this option to true, you can request percentage values in the un-aggregated (per-CPU, per-state) mode as well.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::CPU.reportbycpu">
+<em class="property">attribute </em>bool <code class="descclassname">reportbycpu</code>=True<a class="headerlink" href="#attribute-collectd::plugins::CPU.reportbycpu" title="Permalink to this definition">¶</a></dt>
+<dd><p>When set to true, the default, reports per-CPU (per-core) metrics. When set to false, instead of reporting metrics for individual CPUs, only a global sum of CPU states is emitted.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::CPU.reportbystate">
+<em class="property">attribute </em>bool <code class="descclassname">reportbystate</code>=True<a class="headerlink" href="#attribute-collectd::plugins::CPU.reportbystate" title="Permalink to this definition">¶</a></dt>
+<dd><p>When set to true, the default, reports per-state metrics, e.g. “system”, “user” and “idle”. When set to false, aggregates (sums) all non-idle states into one “active” metric.</p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::cpu" title="collectd::plugins::cpu implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::cpu</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::cpu" title="collectd::plugins::cpu implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::cpu</span></code></a>, <a class="reference internal" href="#implementation-collectd::loadPlugin" title="collectd::loadPlugin implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::loadPlugin</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::plugins::Df">
+<em class="property">entity </em><code class="descclassname">collectd::plugins::Df</code><a class="headerlink" href="#entity-collectd::plugins::Df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-collectd::Plugin" title="collectd::Plugin entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">collectd::Plugin</span></code></a></p>
+<p>Disk free plugin</p>
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::Df.reportreserved">
+<em class="property">attribute </em>bool <code class="descclassname">reportreserved</code>=True<a class="headerlink" href="#attribute-collectd::plugins::Df.reportreserved" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::Df.valuesabsolute">
+<em class="property">attribute </em>bool <code class="descclassname">valuesabsolute</code>=True<a class="headerlink" href="#attribute-collectd::plugins::Df.valuesabsolute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables or disables reporting of free and used disk space in 1K-blocks. Defaults to true.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::Df.ignoreselected">
+<em class="property">attribute </em>bool <code class="descclassname">ignoreselected</code>=False<a class="headerlink" href="#attribute-collectd::plugins::Df.ignoreselected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invert the selection: If set to true, all partitions except the ones that match any one of the criteria are collected. By default only selected partitions are collected if a selection is made. If no selection is configured at all, all partitions are selected.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::Df.reportbydevice">
+<em class="property">attribute </em>bool <code class="descclassname">reportbydevice</code>=False<a class="headerlink" href="#attribute-collectd::plugins::Df.reportbydevice" title="Permalink to this definition">¶</a></dt>
+<dd><p>Report using the device name rather than the mountpoint. i.e. with this false, (the default), it will report a disk as “root”, but with it true, it will be “sda1” (or whichever).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::Df.device">
+<em class="property">attribute </em>string <code class="descclassname">device</code><a class="headerlink" href="#attribute-collectd::plugins::Df.device" title="Permalink to this definition">¶</a></dt>
+<dd><p>Select partitions based on the devicename.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::Df.valuespercentage">
+<em class="property">attribute </em>bool <code class="descclassname">valuespercentage</code>=False<a class="headerlink" href="#attribute-collectd::plugins::Df.valuespercentage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables or disables reporting of free and used disk space in percentage. Defaults to false. This is useful for deploying collectd on the cloud, where machines with different disk size may exist. Then it is more practical to configure thresholds based on relative disk size.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::Df.reportinodes">
+<em class="property">attribute </em>bool <code class="descclassname">reportinodes</code>=True<a class="headerlink" href="#attribute-collectd::plugins::Df.reportinodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enables or disables reporting of free, reserved and used inodes. Defaults to inode collection being disabled. Enable this option if inodes are a scarce resource for you, usually because many small files are stored on the disk. This is a usual scenario for mail transfer agents and web caches.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::Df.mountpoints">
+<em class="property">attribute </em>list <code class="descclassname">mountpoints</code><a class="headerlink" href="#attribute-collectd::plugins::Df.mountpoints" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::Df.fstypes">
+<em class="property">attribute </em>list <code class="descclassname">fstypes</code><a class="headerlink" href="#attribute-collectd::plugins::Df.fstypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::df" title="collectd::plugins::df implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::df</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::df" title="collectd::plugins::df implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::df</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::plugins::Disk">
+<em class="property">entity </em><code class="descclassname">collectd::plugins::Disk</code><a class="headerlink" href="#entity-collectd::plugins::Disk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-collectd::Plugin" title="collectd::Plugin entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">collectd::Plugin</span></code></a></p>
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::disk" title="collectd::plugins::disk implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::disk</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::disk" title="collectd::plugins::disk implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::disk</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::plugins::Interface">
+<em class="property">entity </em><code class="descclassname">collectd::plugins::Interface</code><a class="headerlink" href="#entity-collectd::plugins::Interface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-collectd::Plugin" title="collectd::Plugin entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">collectd::Plugin</span></code></a></p>
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::interface" title="collectd::plugins::interface implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::interface</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::interface" title="collectd::plugins::interface implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::interface</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::plugins::SNMP">
+<em class="property">entity </em><code class="descclassname">collectd::plugins::SNMP</code><a class="headerlink" href="#entity-collectd::plugins::SNMP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-collectd::Plugin" title="collectd::Plugin entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">collectd::Plugin</span></code></a></p>
+<dl class="relation">
+<dt id="relation-collectd::plugins::SNMP.data">
+<em class="property">relation </em>collectd::plugins::SNMPData <code class="descclassname">data</code> [0:*]<a class="headerlink" href="#relation-collectd::plugins::SNMP.data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-collectd::plugins::SNMP.hosts">
+<em class="property">relation </em>collectd::plugins::SNMPHost <code class="descclassname">hosts</code> [0:*]<a class="headerlink" href="#relation-collectd::plugins::SNMP.hosts" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::snmp" title="collectd::plugins::snmp implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::snmp</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::snmp" title="collectd::plugins::snmp implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::snmp</span></code></a>, <a class="reference internal" href="#implementation-collectd::loadPlugin" title="collectd::loadPlugin implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::loadPlugin</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::plugins::SNMPData">
+<em class="property">entity </em><code class="descclassname">collectd::plugins::SNMPData</code><a class="headerlink" href="#entity-collectd::plugins::SNMPData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::SNMPData.values">
+<em class="property">attribute </em>string <code class="descclassname">values</code><a class="headerlink" href="#attribute-collectd::plugins::SNMPData.values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::SNMPData.scale">
+<em class="property">attribute </em>number <code class="descclassname">scale</code>=1.0<a class="headerlink" href="#attribute-collectd::plugins::SNMPData.scale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::SNMPData.table">
+<em class="property">attribute </em>bool <code class="descclassname">table</code>=False<a class="headerlink" href="#attribute-collectd::plugins::SNMPData.table" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::SNMPData.type">
+<em class="property">attribute </em>string <code class="descclassname">type</code><a class="headerlink" href="#attribute-collectd::plugins::SNMPData.type" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::SNMPData.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-collectd::plugins::SNMPData.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::SNMPData.instance">
+<em class="property">attribute </em>string <code class="descclassname">instance</code><a class="headerlink" href="#attribute-collectd::plugins::SNMPData.instance" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::plugins::SNMPHost">
+<em class="property">entity </em><code class="descclassname">collectd::plugins::SNMPHost</code><a class="headerlink" href="#entity-collectd::plugins::SNMPHost" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::SNMPHost.hostname">
+<em class="property">attribute </em>string <code class="descclassname">hostname</code><a class="headerlink" href="#attribute-collectd::plugins::SNMPHost.hostname" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::SNMPHost.version">
+<em class="property">attribute </em>number <code class="descclassname">version</code><a class="headerlink" href="#attribute-collectd::plugins::SNMPHost.version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::SNMPHost.ip">
+<em class="property">attribute </em>ip::ip <code class="descclassname">ip</code><a class="headerlink" href="#attribute-collectd::plugins::SNMPHost.ip" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::SNMPHost.community">
+<em class="property">attribute </em>string <code class="descclassname">community</code><a class="headerlink" href="#attribute-collectd::plugins::SNMPHost.community" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::SNMPHost.interval">
+<em class="property">attribute </em>number <code class="descclassname">interval</code>=10<a class="headerlink" href="#attribute-collectd::plugins::SNMPHost.interval" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-collectd::plugins::SNMPHost.collect">
+<em class="property">relation </em>collectd::plugins::SNMPData <code class="descclassname">collect</code> [1:*]<a class="headerlink" href="#relation-collectd::plugins::SNMPHost.collect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="std.html#implementation-std::none" title="std::none implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">std::none</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::plugins::StatsD">
+<em class="property">entity </em><code class="descclassname">collectd::plugins::StatsD</code><a class="headerlink" href="#entity-collectd::plugins::StatsD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-collectd::Plugin" title="collectd::Plugin entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">collectd::Plugin</span></code></a></p>
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::statsd" title="collectd::plugins::statsd implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::statsd</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::statsd" title="collectd::plugins::statsd implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::statsd</span></code></a>, <a class="reference internal" href="#implementation-collectd::loadPlugin" title="collectd::loadPlugin implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::loadPlugin</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-collectd::plugins::WriteHttp">
+<em class="property">entity </em><code class="descclassname">collectd::plugins::WriteHttp</code><a class="headerlink" href="#entity-collectd::plugins::WriteHttp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-collectd::Plugin" title="collectd::Plugin entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">collectd::Plugin</span></code></a></p>
+<p>Write http plugin. The default format is JSON.</p>
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::WriteHttp.url">
+<em class="property">attribute </em>string <code class="descclassname">url</code><a class="headerlink" href="#attribute-collectd::plugins::WriteHttp.url" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-collectd::plugins::WriteHttp.format">
+<em class="property">attribute </em>string <code class="descclassname">format</code>='JSON'<a class="headerlink" href="#attribute-collectd::plugins::WriteHttp.format" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::writehttp" title="collectd::plugins::writehttp implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::writehttp</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-collectd::plugins::writehttp" title="collectd::plugins::writehttp implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::plugins::writehttp</span></code></a>, <a class="reference internal" href="#implementation-collectd::loadPlugin" title="collectd::loadPlugin implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">collectd::loadPlugin</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="implementations">
+<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
+<dl class="implementation">
+<dt id="implementation-collectd::collectdAgent">
+<em class="property">implementation </em><code class="descclassname">collectd::collectdAgent</code><a class="headerlink" href="#implementation-collectd::collectdAgent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::collectdAgentUbuntu">
+<em class="property">implementation </em><code class="descclassname">collectd::collectdAgentUbuntu</code><a class="headerlink" href="#implementation-collectd::collectdAgentUbuntu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::customTypes">
+<em class="property">implementation </em><code class="descclassname">collectd::customTypes</code><a class="headerlink" href="#implementation-collectd::customTypes" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::loadPlugin">
+<em class="property">implementation </em><code class="descclassname">collectd::loadPlugin</code><a class="headerlink" href="#implementation-collectd::loadPlugin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::varnish">
+<em class="property">implementation </em><code class="descclassname">collectd::varnish</code><a class="headerlink" href="#implementation-collectd::varnish" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::graphite::graphiteWriter">
+<em class="property">implementation </em><code class="descclassname">collectd::graphite::graphiteWriter</code><a class="headerlink" href="#implementation-collectd::graphite::graphiteWriter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::plugins::cpu">
+<em class="property">implementation </em><code class="descclassname">collectd::plugins::cpu</code><a class="headerlink" href="#implementation-collectd::plugins::cpu" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::plugins::df">
+<em class="property">implementation </em><code class="descclassname">collectd::plugins::df</code><a class="headerlink" href="#implementation-collectd::plugins::df" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::plugins::disk">
+<em class="property">implementation </em><code class="descclassname">collectd::plugins::disk</code><a class="headerlink" href="#implementation-collectd::plugins::disk" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::plugins::interface">
+<em class="property">implementation </em><code class="descclassname">collectd::plugins::interface</code><a class="headerlink" href="#implementation-collectd::plugins::interface" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::plugins::snmp">
+<em class="property">implementation </em><code class="descclassname">collectd::plugins::snmp</code><a class="headerlink" href="#implementation-collectd::plugins::snmp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::plugins::statsd">
+<em class="property">implementation </em><code class="descclassname">collectd::plugins::statsd</code><a class="headerlink" href="#implementation-collectd::plugins::statsd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-collectd::plugins::writehttp">
+<em class="property">implementation </em><code class="descclassname">collectd::plugins::writehttp</code><a class="headerlink" href="#implementation-collectd::plugins::writehttp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dns.html" class="btn btn-neutral float-right" title="Module dns" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="bind.html" class="btn btn-neutral" title="Module bind" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

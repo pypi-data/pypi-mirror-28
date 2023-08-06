@@ -1,0 +1,475 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Module mysql &mdash; Inmanta 2017.4dev documentation</title>
+  
+
+  
+  
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="Inmanta 2017.4dev documentation" href="../../index.html"/>
+        <link rel="up" title="Inmanta modules" href="../modules.html"/>
+        <link rel="next" title="Module net" href="net.html"/>
+        <link rel="prev" title="Module monitoring" href="monitoring.html"/>
+<style>
+.version a:visited {
+  color: rgba(255,255,255,0.3);
+}
+</style>
+
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+
+    <a href="../../index.html">
+
+
+
+  
+    <img src="../../_static/inmanta-logo.png" class="logo" />
+
+    </a>
+    <div class="version">
+      <a href="/" class="icon icon-home"> Documentation home</a>
+    </div>
+    <div class="version">
+      2017.4dev
+    </div>
+
+    
+  
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Install Inmanta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../architecture.html">Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../language.html">Language Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guides.html">Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../moduleguides.html">Module guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developers.html">Developer documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Inmanta Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../commands.html">Command Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../config.html">Configuration Reference</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html">Inmanta API reference</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../modules.html">Inmanta modules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ansible.html">Module ansible</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apache.html">Module apache</a></li>
+<li class="toctree-l3"><a class="reference internal" href="apt.html">Module apt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="aws.html">Module aws</a></li>
+<li class="toctree-l3"><a class="reference internal" href="bind.html">Module bind</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collectd.html">Module collectd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dns.html">Module dns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="docker.html">Module docker</a></li>
+<li class="toctree-l3"><a class="reference internal" href="drupal.html">Module drupal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="exec.html">Module exec</a></li>
+<li class="toctree-l3"><a class="reference internal" href="graphite.html">Module graphite</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ip.html">Module ip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="logging.html">Module logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mongodb.html">Module mongodb</a></li>
+<li class="toctree-l3"><a class="reference internal" href="monitoring.html">Module monitoring</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Module mysql</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#entities">Entities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#implementations">Implementations</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="net.html">Module net</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openstack.html">Module openstack</a></li>
+<li class="toctree-l3"><a class="reference internal" href="openvswitch.html">Module openvswitch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="param.html">Module param</a></li>
+<li class="toctree-l3"><a class="reference internal" href="php.html">Module php</a></li>
+<li class="toctree-l3"><a class="reference internal" href="platform.html">Module platform</a></li>
+<li class="toctree-l3"><a class="reference internal" href="redhat.html">Module redhat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ssh.html">Module ssh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="std.html">Module std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ubuntu.html">Module ubuntu</a></li>
+<li class="toctree-l3"><a class="reference internal" href="user.html">Module user</a></li>
+<li class="toctree-l3"><a class="reference internal" href="varnish.html">Module varnish</a></li>
+<li class="toctree-l3"><a class="reference internal" href="web.html">Module web</a></li>
+<li class="toctree-l3"><a class="reference internal" href="yum.html">Module yum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Inmanta</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Inmanta Reference</a> &raquo;</li>
+        
+          <li><a href="../modules.html">Inmanta modules</a> &raquo;</li>
+        
+      <li>Module mysql</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-mysql">
+<h1>Module mysql<a class="headerlink" href="#module-mysql" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><ul class="simple">
+<li>License: Apache 2.0</li>
+<li>Version: 0.5.2</li>
+<li>Author: Inmanta &lt;<a class="reference external" href="mailto:code&#37;&#52;&#48;inmanta&#46;com">code<span>&#64;</span>inmanta<span>&#46;</span>com</a>&gt;</li>
+<li>This module requires compiler version 2017.2 or higher</li>
+<li>Upstream project: <a class="reference external" href="https://github.com/inmanta/mysql.git">https://github.com/inmanta/mysql.git</a></li>
+</ul>
+</div></blockquote>
+<div class="section" id="entities">
+<h2>Entities<a class="headerlink" href="#entities" title="Permalink to this headline">¶</a></h2>
+<dl class="entity">
+<dt id="entity-mysql::DBMS">
+<em class="property">entity </em><code class="descclassname">mysql::DBMS</code><a class="headerlink" href="#entity-mysql::DBMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<p>A DB management system (a service on a machina, DBaaS, …)</p>
+<dl class="attribute">
+<dt id="attribute-mysql::DBMS.hostref">
+<em class="property">attribute </em>string <code class="descclassname">hostref</code><a class="headerlink" href="#attribute-mysql::DBMS.hostref" title="Permalink to this definition">¶</a></dt>
+<dd><p>reference to host, e.g. ip or hostname</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-mysql::DBMS.port">
+<em class="property">attribute </em>ip::port <code class="descclassname">port</code>=3306<a class="headerlink" href="#attribute-mysql::DBMS.port" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-mysql::DBMS.databases">
+<em class="property">relation </em>mysql::Database <code class="descclassname">databases</code> [0:*]<a class="headerlink" href="#relation-mysql::DBMS.databases" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-mysql::Database.server" title="mysql::Database.server relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">mysql::Database.server</span> <span class="pre">[1]</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-mysql::Database">
+<em class="property">entity </em><code class="descclassname">mysql::Database</code><a class="headerlink" href="#entity-mysql::Database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="std.html#entity-std::Entity" title="std::Entity entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">std::Entity</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-mysql::Database.collation">
+<em class="property">attribute </em>string <code class="descclassname">collation</code>='utf8-ci'<a class="headerlink" href="#attribute-mysql::Database.collation" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-mysql::Database.password">
+<em class="property">attribute </em>string <code class="descclassname">password</code><a class="headerlink" href="#attribute-mysql::Database.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-mysql::Database.name">
+<em class="property">attribute </em>string <code class="descclassname">name</code><a class="headerlink" href="#attribute-mysql::Database.name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-mysql::Database.user">
+<em class="property">attribute </em>string <code class="descclassname">user</code><a class="headerlink" href="#attribute-mysql::Database.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-mysql::Database.encoding">
+<em class="property">attribute </em>string <code class="descclassname">encoding</code>='utf8'<a class="headerlink" href="#attribute-mysql::Database.encoding" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-mysql::Database.server">
+<em class="property">relation </em>mysql::DBMS <code class="descclassname">server</code> [1]<a class="headerlink" href="#relation-mysql::Database.server" title="Permalink to this definition">¶</a></dt>
+<dd><p>other end: <a class="reference internal" href="#relation-mysql::DBMS.databases" title="mysql::DBMS.databases relation"><code class="xref inmanta inmanta-relation docutils literal"><span class="pre">mysql::DBMS.databases</span> <span class="pre">[0:*]</span></code></a></p>
+</dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-mysql::dBDependsOnServer" title="mysql::dBDependsOnServer implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::dBDependsOnServer</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-mysql::dBDependsOnServer" title="mysql::dBDependsOnServer implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::dBDependsOnServer</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-mysql::ManagedMysql">
+<em class="property">entity </em><code class="descclassname">mysql::ManagedMysql</code><a class="headerlink" href="#entity-mysql::ManagedMysql" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="#entity-mysql::DBMS" title="mysql::DBMS entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">mysql::DBMS</span></code></a></p>
+<dl class="attribute">
+<dt id="attribute-mysql::ManagedMysql.password">
+<em class="property">attribute </em>string <code class="descclassname">password</code><a class="headerlink" href="#attribute-mysql::ManagedMysql.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="attribute-mysql::ManagedMysql.user">
+<em class="property">attribute </em>string <code class="descclassname">user</code><a class="headerlink" href="#attribute-mysql::ManagedMysql.user" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="relation">
+<dt id="relation-mysql::ManagedMysql.agenthost">
+<em class="property">relation </em>ip::Host <code class="descclassname">agenthost</code> [1]<a class="headerlink" href="#relation-mysql::ManagedMysql.agenthost" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-mysql::manageManaged" title="mysql::manageManaged implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::manageManaged</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-mysql::manageManaged" title="mysql::manageManaged implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::manageManaged</span></code></a></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="entity">
+<dt id="entity-mysql::Server">
+<em class="property">entity </em><code class="descclassname">mysql::Server</code><a class="headerlink" href="#entity-mysql::Server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parents: <a class="reference internal" href="ip.html#entity-ip::services::Server" title="ip::services::Server entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">ip::services::Server</span></code></a>, <a class="reference internal" href="#entity-mysql::DBMS" title="mysql::DBMS entity"><code class="xref inmanta inmanta-entity docutils literal"><span class="pre">mysql::DBMS</span></code></a></p>
+<p>Mysql server configuration</p>
+<p>The following implementations are defined for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-mysql::ports" title="mysql::ports implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::ports</span></code></a></li>
+<li><a class="reference internal" href="#implementation-mysql::mysqlRedhat" title="mysql::mysqlRedhat implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::mysqlRedhat</span></code></a></li>
+<li><a class="reference internal" href="#implementation-mysql::mysqlMariaDB" title="mysql::mysqlMariaDB implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::mysqlMariaDB</span></code></a></li>
+<li><a class="reference internal" href="#implementation-mysql::ubuntuMysql" title="mysql::ubuntuMysql implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::ubuntuMysql</span></code></a></li>
+</ul>
+</div></blockquote>
+<p>The following implements statements select implementations for this entity:</p>
+<blockquote>
+<div><ul class="simple">
+<li><a class="reference internal" href="#implementation-mysql::ports" title="mysql::ports implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::ports</span></code></a></li>
+<li><a class="reference internal" href="#implementation-mysql::mysqlRedhat" title="mysql::mysqlRedhat implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::mysqlRedhat</span></code></a>
+constraint <code class="docutils literal"><span class="pre">(std::familyof(host.os,'rhel')</span> <span class="pre">and</span> <span class="pre">(host.os.version</span> <span class="pre">&lt;=</span> <span class="pre">6))</span></code></li>
+<li><a class="reference internal" href="#implementation-mysql::mysqlMariaDB" title="mysql::mysqlMariaDB implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::mysqlMariaDB</span></code></a>
+constraint <code class="docutils literal"><span class="pre">((std::familyof(host.os,'rhel')</span> <span class="pre">and</span> <span class="pre">(host.os.version</span> <span class="pre">&gt;=</span> <span class="pre">7))</span> <span class="pre">or</span> <span class="pre">std::familyof(host.os,'fedora'))</span></code></li>
+<li><a class="reference internal" href="#implementation-mysql::ubuntuMysql" title="mysql::ubuntuMysql implementation"><code class="xref inmanta inmanta-implementation docutils literal"><span class="pre">mysql::ubuntuMysql</span></code></a>
+constraint <code class="docutils literal"><span class="pre">std::familyof(host.os,'ubuntu')</span></code></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="implementations">
+<h2>Implementations<a class="headerlink" href="#implementations" title="Permalink to this headline">¶</a></h2>
+<dl class="implementation">
+<dt id="implementation-mysql::dBDependsOnServer">
+<em class="property">implementation </em><code class="descclassname">mysql::dBDependsOnServer</code><a class="headerlink" href="#implementation-mysql::dBDependsOnServer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-mysql::manageManaged">
+<em class="property">implementation </em><code class="descclassname">mysql::manageManaged</code><a class="headerlink" href="#implementation-mysql::manageManaged" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-mysql::mysqlMariaDB">
+<em class="property">implementation </em><code class="descclassname">mysql::mysqlMariaDB</code><a class="headerlink" href="#implementation-mysql::mysqlMariaDB" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-mysql::mysqlRedhat">
+<em class="property">implementation </em><code class="descclassname">mysql::mysqlRedhat</code><a class="headerlink" href="#implementation-mysql::mysqlRedhat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-mysql::ports">
+<em class="property">implementation </em><code class="descclassname">mysql::ports</code><a class="headerlink" href="#implementation-mysql::ports" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="implementation">
+<dt id="implementation-mysql::ubuntuMysql">
+<em class="property">implementation </em><code class="descclassname">mysql::ubuntuMysql</code><a class="headerlink" href="#implementation-mysql::ubuntuMysql" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="net.html" class="btn btn-neutral float-right" title="Module net" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="monitoring.html" class="btn btn-neutral" title="Module monitoring" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017 Inmanta NV.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'2017.4dev',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
