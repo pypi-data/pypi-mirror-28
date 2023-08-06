@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Error functions &mdash; CALCEPH  - Fortran 2003 language 3.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="CALCEPH  - Fortran 2003 language 3.0.0 documentation" href="index.html"/>
+        <link rel="next" title="Miscellaneous functions" href="calceph.misc.html"/>
+        <link rel="prev" title="Single file access functions" href="condsingle/calceph.single.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CALCEPH  - Fortran 2003 language
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="calceph.intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.interface.html">Library interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.multiple.html">Multiple file access functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="condsingle/calceph.single.html">Single file access functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Error functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#menu-calceph-seterrorhandler">calceph_seterrorhandler</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.misc.html">Miscellaneous functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.naifid.html">NAIF identification numbers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.final.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.reportbugs.html">Reporting bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.copying.html">CALCEPH Library Copying conditions</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CALCEPH  - Fortran 2003 language</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Error functions</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="error-functions">
+<h1>Error functions<a class="headerlink" href="#error-functions" title="Permalink to this headline">¶</a></h1>
+<p>The following group of functions defines the behavior of the library when errors occur during the execution.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The following examples, that can be found in the directory <em>examples</em> of the library sources, show the typical usage of this group of functions.</p>
+<p>The example in Fortran 2003 language is <code class="file docutils literal"><span class="pre">f2003error.f</span></code>.</p>
+<p>The following example shows how to stop the execution on the error.</p>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">f2003error</span>
+    <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">ISO_C_BINDING</span>
+<span class="nb">    </span><span class="k">use </span><span class="n">calceph</span>
+    <span class="k">implicit none</span>
+<span class="k">    </span><span class="kt">integer </span><span class="n">res</span>
+    <span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="n">jd0</span>
+    <span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="n">dt</span>
+    <span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="n">PV</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+
+ <span class="c">! set the  error handler to stop on error</span>
+     <span class="k">call </span><span class="n">calceph_seterrorhandler</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="nb">C_NULL_FUNPTR</span><span class="p">)</span>
+
+ <span class="c">! open the ephemeris file</span>
+    <span class="n">res</span> <span class="o">=</span> <span class="n">calceph_sopen</span><span class="p">(</span><span class="s2">&quot;example1.dat&quot;</span><span class="o">//</span><span class="nb">C_NULL_CHAR</span><span class="p">)</span>
+    <span class="p">...</span>
+
+<span class="k">stop</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+<p>The following example shows how to define a custom error handler function.</p>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="c">!/*-----------------------------------------------------------------*/</span>
+<span class="c">!/* custom error handler */</span>
+<span class="c">!/*-----------------------------------------------------------------*/</span>
+     <span class="k">subroutine </span><span class="n">myhandler</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msglen</span><span class="p">)</span> <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+        <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">ISO_C_BINDING</span>
+<span class="nb">        </span><span class="k">implicit none</span>
+<span class="k">        </span><span class="kt">character</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="kt">C_CHAR</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(</span><span class="n">msglen</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">msg</span>
+        <span class="kt">integer</span><span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">msglen</span>
+        <span class="k">write</span> <span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s2">&quot;The calceph calls the function myhandler&quot;</span>
+        <span class="k">write</span> <span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s2">&quot;The message contains &quot;</span><span class="p">,</span><span class="n">msglen</span><span class="p">,</span><span class="s2">&quot; characters&quot;</span>
+        <span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s2">&quot;The error message is :&quot;</span>
+        <span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s2">&quot;----------------------&quot;</span>
+        <span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="n">msg</span>
+        <span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s2">&quot;----------------------&quot;</span>
+        <span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s2">&quot;The error handler returns&quot;</span>
+     <span class="k">end</span>
+
+<span class="c">!/*-----------------------------------------------------------------*/</span>
+<span class="c">!/* main program */</span>
+<span class="c">!/*-----------------------------------------------------------------*/</span>
+     <span class="k">program </span><span class="n">f2003error</span>
+         <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">ISO_C_BINDING</span>
+<span class="nb">         </span><span class="k">use </span><span class="n">calceph</span>
+         <span class="k">implicit none</span>
+<span class="k">         </span><span class="kt">integer </span><span class="n">res</span>
+         <span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="n">jd0</span>
+         <span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="n">dt</span>
+         <span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="n">PV</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+
+         <span class="k">interface</span>
+<span class="k">          subroutine </span><span class="n">myhandler</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msglen</span><span class="p">)</span> <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+              <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">ISO_C_BINDING</span>
+<span class="nb">              </span><span class="k">implicit none</span>
+<span class="k">              </span><span class="kt">character</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="kt">C_CHAR</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(</span><span class="n">msglen</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="p">&amp;</span>
+    <span class="p">&amp;</span>          <span class="kd">::</span> <span class="n">msg</span>
+              <span class="kt">integer</span><span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">msglen</span>
+          <span class="k">end subroutine</span>
+<span class="k">         end interface</span>
+
+
+<span class="c">! set the  error handler to use my own callback</span>
+         <span class="k">call </span><span class="n">calceph_seterrorhandler</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nb">c_funloc</span><span class="p">(</span><span class="n">myhandler</span><span class="p">))</span>
+
+<span class="c">! open the ephemeris file</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">calceph_sopen</span><span class="p">(</span><span class="s2">&quot;example1.dat&quot;</span><span class="o">//</span><span class="nb">C_NULL_CHAR</span><span class="p">)</span>
+
+   <span class="c">! ...</span>
+
+     <span class="k">stop</span>
+<span class="k">     end</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="menu-calceph-seterrorhandler">
+<h2>calceph_seterrorhandler<a class="headerlink" href="#menu-calceph-seterrorhandler" title="Permalink to this headline">¶</a></h2>
+<dl class="subroutine">
+<dt id="f/_/calceph_seterrorhandler">
+<em class="property">subroutine  </em><code class="descname">calceph_seterrorhandler</code><span class="sig-paren">(</span><em>typehandler</em>, <em>userfunc ) BIND(C</em><span class="sig-paren">)</span><a class="headerlink" href="#f/_/calceph_seterrorhandler" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>typehandler</strong><em> [</em><em>TYPE(C_INT), VALUE, intent(in)</em><em>]</em> :: type of handler</li>
+<li><strong>userfunc</strong><em> [</em><em>TYPE(C_FUNPTR), VALUE, intent(in)</em><em>]</em> :: user function</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>This function defines the behavior of the library when an error occurs during the execution of the library's functions. This function should be (not mandatory) called before any other functions of the library. The behavior depends on the value of <em>typehandler</em>.</p>
+<p>The possible values for <em>typehandler</em> are  :</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="7%" />
+<col width="93%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">value</th>
+<th class="head">meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td><div class="first last line-block">
+<div class="line">The library displays a message and continues the execution.</div>
+<div class="line">The functions return an error code. The python interface raises an exception.</div>
+<div class="line">This is the default behavior of the library.</div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td><div class="first last line-block">
+<div class="line">The library displays a message</div>
+<div class="line">and terminates the execution with a system call to thefunction <em>exit</em>.</div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td><div class="first last line-block">
+<div class="line">The library calls the user function <em>userfunc</em> with the message.</div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>If the function is called with 1 or 2 for <em>typehandler</em>, the parameter <em>userfunc</em> must be set to <em>C_NULL_FUNPTR</em>.</p>
+<p>The function <em>userfunc</em> must be defined as</p>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="k">subroutine </span><span class="n">userfunc</span> <span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">msglen</span><span class="p">)</span>  <span class="k">BIND</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+<span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">ISO_C_BINDING</span>
+<span class="k">implicit none</span>
+<span class="kt">CHARACTER</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="kt">C_CHAR</span><span class="p">),</span> <span class="k">dimension</span><span class="p">(</span><span class="n">msglen</span><span class="p">),</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">msg</span>
+<span class="kt">INTEGER</span><span class="p">(</span><span class="kt">C_INT</span><span class="p">),</span> <span class="k">VALUE</span><span class="p">,</span> <span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span> <span class="kd">::</span> <span class="n">msglen</span>
+</pre></div>
+</div>
+<p>This function must have an explicit interface.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="calceph.misc.html" class="btn btn-neutral float-right" title="Miscellaneous functions" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="condsingle/calceph.single.html" class="btn btn-neutral" title="Single file access functions" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, CNRS, Observatoire de Paris, Observatoire de la Côte d&#39;Azur.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'3.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Library interface &mdash; CALCEPH  - Python language 3.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="CALCEPH  - Python language 3.0.0 documentation" href="index.html"/>
+        <link rel="next" title="Multiple file access functions" href="calceph.multiple.html"/>
+        <link rel="prev" title="Installation" href="calceph.install.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CALCEPH  - Python language
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="calceph.intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Library interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-simple-example-program">A simple example program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#menu-headers-and-libraries">Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#constants">Constants</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.multiple.html">Multiple file access functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.error.html">Error functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.misc.html">Miscellaneous functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.naifid.html">NAIF identification numbers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.final.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.reportbugs.html">Reporting bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.copying.html">CALCEPH Library Copying conditions</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CALCEPH  - Python language</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Library interface</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="library-interface">
+<h1>Library interface<a class="headerlink" href="#library-interface" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="a-simple-example-program">
+<h2>A simple example program<a class="headerlink" href="#a-simple-example-program" title="Permalink to this headline">¶</a></h2>
+<p>The following example program shows the typical usage of the Python interface.</p>
+<p>Other examples using the Python interface can be found in the directory <em>examples</em> of the library sources.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calcephpy</span> <span class="k">import</span> <span class="o">*</span>
+<span class="n">peph</span> <span class="o">=</span> <span class="n">CalcephBin</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;example1.dat&quot;</span><span class="p">)</span>
+<span class="n">AU</span> <span class="o">=</span> <span class="n">peph</span><span class="o">.</span><span class="n">getconstant</span><span class="p">(</span><span class="s2">&quot;AU&quot;</span><span class="p">)</span>
+<span class="n">jd0</span> <span class="o">=</span> <span class="mi">2451624</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">PV</span> <span class="o">=</span> <span class="n">peph</span><span class="o">.</span><span class="n">compute_unit</span><span class="p">(</span><span class="n">jd0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">NaifId</span><span class="o">.</span><span class="n">MOON</span><span class="p">,</span> <span class="n">NaifId</span><span class="o">.</span><span class="n">EARTH</span><span class="p">,</span>
+                       <span class="n">Constants</span><span class="o">.</span><span class="n">UNIT_KM</span><span class="o">+</span><span class="n">Constants</span><span class="o">.</span><span class="n">UNIT_SEC</span><span class="o">+</span><span class="n">Constants</span><span class="o">.</span><span class="n">USE_NAIFID</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">PV</span><span class="p">)</span>
+<span class="n">peph</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="menu-headers-and-libraries">
+<span id="calcephpy"></span><h2>Modules<a class="headerlink" href="#menu-headers-and-libraries" title="Permalink to this headline">¶</a></h2>
+<p>It is designed to work with Python interpreters compliant with the Python 2.6 or later and Python 3.0 or later.</p>
+<p>All declarations needed to use CALCEPH Library are collected in the module <code class="file docutils literal"><span class="pre">calcephpy</span></code>.
+You should import this module:</p>
+<blockquote>
+<div><div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">calcephpy</span> <span class="k">import</span> <span class="o">*</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>If you receive the following message <code class="docutils literal"><span class="pre">ImportError:</span> <span class="pre">No</span> <span class="pre">module</span> <span class="pre">named</span> <span class="pre">calcephpy</span></code> and if the configuration option <em>enable-python-package-system</em> and <em>enable-python-package-user</em> was not set, the environment variable <em>PYTHONPATH</em> should be set to the right location of the CALCEPH python package  ( e.g., PYTHONPATH=/usr/local/lib64/python3.4/site-packages/:$PYTHONPATH ) in your shell initialization file (e.g.,  ~/.bash_login or  ~/.profile), in order that the python interpreter finds the CALCEPH python package.</p>
+<p>Relative to C or Fortran interface, the prefixes  <em>calceph_</em>, <em>CALCEPH_</em>, <em>NAIFID_</em> are deleted for the naming convention of the functions, constants and NAIF identification numbers.</p>
+</div>
+<div class="section" id="types">
+<span id="naifid"></span><h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="calcephpy.CalcephBin">
+<code class="descclassname">calcephpy.</code><code class="descname">CalcephBin</code><a class="headerlink" href="#calcephpy.CalcephBin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This type contains all information to access an ephemeris file.</p>
+<dl class="attribute">
+<dt id="calcephpy.NaifId">
+<code class="descclassname">calcephpy.</code><code class="descname">NaifId</code><a class="headerlink" href="#calcephpy.NaifId" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This type contains the NAIF identification numbers.</p>
+<dl class="attribute">
+<dt id="calcephpy.Constants">
+<code class="descclassname">calcephpy.</code><code class="descname">Constants</code><a class="headerlink" href="#calcephpy.Constants" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This type contains all constants defined in the library, except the NAIF identification numbers.</p>
+</div>
+<div class="section" id="constants">
+<span id="id5"></span><h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<p>The following constants are defined in the class <strong>Constants</strong> (or <em>calcephpy.Constants</em>).</p>
+<dl class="data">
+<dt id="VERSION_MAJOR">
+<code class="descname">VERSION_MAJOR</code><a class="headerlink" href="#VERSION_MAJOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer constant defines the major revision of this library. It can be used to distinguish different releases of this library.</p>
+<dl class="data">
+<dt id="VERSION_MINOR">
+<code class="descname">VERSION_MINOR</code><a class="headerlink" href="#VERSION_MINOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer constant defines the minor revision of this library. It can be used to distinguish different releases of this library.</p>
+<dl class="data">
+<dt id="VERSION_PATCH">
+<code class="descname">VERSION_PATCH</code><a class="headerlink" href="#VERSION_PATCH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer constant defines the patch level revision of this library. It can be used to distinguish different releases of this library.</p>
+<dl class="data">
+<dt id="VERSION_STRING">
+<code class="descname">VERSION_STRING</code><a class="headerlink" href="#VERSION_STRING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This string is the version of the library, which can be compared to the result of calceph_getversion to check at run time if the header file and library used match:</p>
+<p>Note: Obtaining different strings is not necessarily an error, as in general, a program compiled with some old CALCEPH version can be dynamically linked with a newer CALCEPH library version (if allowed by the operating system).</p>
+<dl class="data">
+<dt id="ASTEROID">
+<code class="descname">ASTEROID</code><a class="headerlink" href="#ASTEROID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines the offset value for the asteroids that must be used as target or center for the computation functions, such as <a class="reference internal" href="calceph.multiple.html#calcephpy.CalcephBin.compute" title="calcephpy.CalcephBin.compute"><code class="xref py py-func docutils literal"><span class="pre">calcephpy.CalcephBin.compute()</span></code></a>.</p>
+<p>The following constants specify in which units are expressed the output of the computation functions, such as <a class="reference internal" href="calceph.multiple.html#calcephpy.CalcephBin.compute_unit" title="calcephpy.CalcephBin.compute_unit"><code class="xref py py-func docutils literal"><span class="pre">calcephpy.CalcephBin.compute_unit()</span></code></a> :</p>
+<dl class="data">
+<dt id="UNIT_AU">
+<code class="descname">UNIT_AU</code><a class="headerlink" href="#UNIT_AU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the unit of the positions and velocities is expressed in astronomical unit.</p>
+<dl class="data">
+<dt id="UNIT_KM">
+<code class="descname">UNIT_KM</code><a class="headerlink" href="#UNIT_KM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the unit of the positions and velocities is expressed in kilometer.</p>
+<dl class="data">
+<dt id="UNIT_DAY">
+<code class="descname">UNIT_DAY</code><a class="headerlink" href="#UNIT_DAY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the unit of the velocities or the quantity TT-TDB or TCG-TCB is expressed in day (one day=86400 seconds).</p>
+<dl class="data">
+<dt id="UNIT_SEC">
+<code class="descname">UNIT_SEC</code><a class="headerlink" href="#UNIT_SEC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the unit of the velocities or the quantity TT-TDB or TCG-TCB is expressed in second.</p>
+<dl class="data">
+<dt id="UNIT_RAD">
+<code class="descname">UNIT_RAD</code><a class="headerlink" href="#UNIT_RAD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the unit of the angles is expressed in radian.</p>
+<dl class="data">
+<dt id="USE_NAIFID">
+<code class="descname">USE_NAIFID</code><a class="headerlink" href="#USE_NAIFID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the NAIF identification numbers are used as target or center for the computation functions, such as <a class="reference internal" href="calceph.multiple.html#calcephpy.CalcephBin.compute_unit" title="calcephpy.CalcephBin.compute_unit"><code class="xref py py-func docutils literal"><span class="pre">calcephpy.CalcephBin.compute_unit()</span></code></a>.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="calceph.multiple.html" class="btn btn-neutral float-right" title="Multiple file access functions" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="calceph.install.html" class="btn btn-neutral" title="Installation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, CNRS, Observatoire de Paris, Observatoire de la Côte d&#39;Azur.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'3.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

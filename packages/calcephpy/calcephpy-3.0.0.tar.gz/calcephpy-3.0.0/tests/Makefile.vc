@@ -1,0 +1,696 @@
+#/*-----------------------------------------------------------------*/
+#/*! 
+#  \file Makefile.vc
+#  \brief Makefile for nmake (windows)
+#  \author  M. Gastineau 
+#           Astronomie et Systemes Dynamiques, IMCCE, CNRS, Observatoire de Paris. 
+#
+#   Copyright, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, CNRS
+#   email of the author : Mickael.Gastineau@obspm.fr
+#  
+#*/
+#/*-----------------------------------------------------------------*/
+#
+#/*-----------------------------------------------------------------*/
+#/* License  of this file :
+#  This file is "triple-licensed", you have to choose one  of the three licenses 
+#  below to apply on this file.
+#  
+#     CeCILL-C
+#     	The CeCILL-C license is close to the GNU LGPL.
+#     	( http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html )
+#  
+#  or CeCILL-B
+#        The CeCILL-B license is close to the BSD.
+#        (http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt)
+#  
+#  or CeCILL v2.1
+#       The CeCILL license is compatible with the GNU GPL.
+#       ( http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html )
+#  
+# 
+# This library is governed by the CeCILL-C, CeCILL-B or the CeCILL license under 
+# French law and abiding by the rules of distribution of free software.  
+# You can  use, modify and/ or redistribute the software under the terms 
+# of the CeCILL-C,CeCILL-B or CeCILL license as circulated by CEA, CNRS and INRIA  
+# at the following URL "http://www.cecill.info". 
+#
+# As a counterpart to the access to the source code and  rights to copy,
+# modify and redistribute granted by the license, users are provided only
+# with a limited warranty  and the software's author,  the holder of the
+# economic rights,  and the successive licensors  have only  limited
+# liability. 
+#
+# In this respect, the user's attention is drawn to the risks associated
+# with loading,  using,  modifying and/or developing or reproducing the
+# software by the user in light of its specific status of free software,
+# that may mean  that it is complicated to manipulate,  and  that  also
+# therefore means  that it is reserved for developers  and  experienced
+# professionals having in-depth computer knowledge. Users are therefore
+# encouraged to load and test the software's suitability as regards their
+# requirements in conditions enabling the security of their systems and/or 
+# data to be ensured and,  more generally, to use and operate it in the 
+# same conditions as regards security. 
+#
+# The fact that you are presently reading this means that you have had
+# knowledge of the CeCILL-C,CeCILL-B or CeCILL license and that you accept its terms.
+# */
+# /*-----------------------------------------------------------------*/
+
+#
+CALCEPHLIBS= /LIBPATH:"..\src" libcalceph.lib
+CALCEPHINCLUDE= /I"..\src"
+CALCEPHFLIBS= "..\src\libcalceph.lib"
+CALCEPHFINCLUDE= -I"..\src"
+
+CC=$(CCC)
+CFLAGS = $(CCFLAGS) $(CALCEPHINCLUDE)
+FC=$(FFC)
+FFLAGS=$(FFFLAGS) $(CALCEPHFINCLUDE)
+FLINKFLAGS = $(FFLINKFLAGS) $(CALCEPHFINCLUDE)
+
+!if "$(ENABLEF2003)" == "1" 
+F2003CHECK=f2003check
+F2003EXE=f2003exe
+!else
+F2003CHECK=
+F2003EXE=
+!endif
+
+!if "$(ENABLEF77)" == "1" 
+F77CHECK=f77check
+F77EXE=f77exe
+!else
+F77CHECK=
+F77EXE=
+!endif
+
+EXTOBJ=obj
+
+all : exec $(F2003EXE)  $(F77EXE)
+
+check  : all checkc $(F2003CHECK)  $(F77CHECK) 
+	@echo --------------------------------------
+	@echo  All tests passed 
+	@echo --------------------------------------
+
+
+
+EXECUTABLE1 = csopenfail.exe
+CPPOBJECTS1 = csopenfail.$(EXTOBJ) openfiles.$(EXTOBJ)             
+
+EXECUTABLE2 = cmopenfail.exe
+CPPOBJECTS2 = cmopenfail.$(EXTOBJ) openfiles.$(EXTOBJ)            
+
+EXECUTABLE3 = csopen.exe
+CPPOBJECTS3 = csopen.$(EXTOBJ) openfiles.$(EXTOBJ)         
+
+EXECUTABLE4 = cmopen.exe
+CPPOBJECTS4 = cmopen.$(EXTOBJ) openfiles.$(EXTOBJ)              
+
+EXECUTABLE5 = cmgetconstant.exe
+CPPOBJECTS5 = cmgetconstant.$(EXTOBJ) openfiles.$(EXTOBJ)              
+
+EXECUTABLE6 = csgetconstant.exe
+CPPOBJECTS6 = csgetconstant.$(EXTOBJ) openfiles.$(EXTOBJ)          
+
+EXECUTABLE7 = cscheck.exe
+CPPOBJECTS7 = cscheck.$(EXTOBJ) openfiles.$(EXTOBJ)             
+
+EXECUTABLE8 = csgetconstantindex.exe
+CPPOBJECTS8 = csgetconstantindex.$(EXTOBJ) openfiles.$(EXTOBJ)          
+
+EXECUTABLE9 = cmgetconstantindex.exe
+CPPOBJECTS9 = cmgetconstantindex.$(EXTOBJ) openfiles.$(EXTOBJ)      
+
+EXECUTABLE10 = cmcomputeunitfail.exe
+CPPOBJECTS10 = cmcomputeunitfail.$(EXTOBJ) openfiles.$(EXTOBJ)      
+
+EXECUTABLE11 = cmcomputeunit.exe
+CPPOBJECTS11 = cmcomputeunit.$(EXTOBJ) openfiles.$(EXTOBJ)      
+
+EXECUTABLE12 = cmcheckspktt.exe
+CPPOBJECTS12 = cmcheckspktt.$(EXTOBJ) openfiles.$(EXTOBJ)         
+
+EXECUTABLE13 = cmcomputeunit_naifid.exe
+CPPOBJECTS13 = cmcomputeunit_naifid.$(EXTOBJ) openfiles.$(EXTOBJ)      
+
+EXECUTABLE14 = cmorientunitfail.exe
+CPPOBJECTS14 = cmorientunitfail.$(EXTOBJ) openfiles.$(EXTOBJ)      
+
+EXECUTABLE15 = tfmatrix.exe
+CPPOBJECTS15 = tfmatrix.$(EXTOBJ) openfiles.$(EXTOBJ)      
+
+EXECUTABLE16 = matrixfail.exe
+CPPOBJECTS16 = matrixfail.$(EXTOBJ) openfiles.$(EXTOBJ)      
+
+EXECUTABLE17 = cmcomputeunitfail2.exe
+CPPOBJECTS17 = cmcomputeunitfail2.$(EXTOBJ) openfiles.$(EXTOBJ)      
+
+EXECUTABLE18 = cmcomputeunit_seg12.exe
+CPPOBJECTS18 = cmcomputeunit_seg12.$(EXTOBJ) openfiles.$(EXTOBJ) cmcomputeunit_hermite.$(EXTOBJ)      
+
+EXECUTABLE19 = cmcomputeunit_seg13.exe
+CPPOBJECTS19 = cmcomputeunit_seg13.$(EXTOBJ) openfiles.$(EXTOBJ) cmcomputeunit_hermite.$(EXTOBJ)      
+
+EXECUTABLE20 = cmcomputeunit_frame.exe
+CPPOBJECTS20 = cmcomputeunit_frame.$(EXTOBJ) openfiles.$(EXTOBJ) cmcomputeunit_hermite.$(EXTOBJ)      
+
+EXECUTABLE21 = cversion.exe
+CPPOBJECTS21 = cversion.$(EXTOBJ)      
+
+EXECUTABLE22 = cmorientunitfailspk.exe
+CPPOBJECTS22 = cmorientunitfailspk.$(EXTOBJ) openfiles.$(EXTOBJ)
+
+EXECUTABLE23 = cmcomputeorder01.exe
+CPPOBJECTS23 = cmcomputeorder01.$(EXTOBJ) openfiles.$(EXTOBJ)
+
+EXECUTABLE24 = cmcomputeorder23.exe
+CPPOBJECTS24 = cmcomputeorder23.$(EXTOBJ) openfiles.$(EXTOBJ) numericalderivative.$(EXTOBJ)
+
+EXECUTABLE25 = crotangmomunit.exe
+CPPOBJECTS25 = crotangmomunit.$(EXTOBJ) openfiles.$(EXTOBJ)
+
+EXECUTABLE26 = crotangmomorder0.exe
+CPPOBJECTS26 = crotangmomorder0.$(EXTOBJ) openfiles.$(EXTOBJ)
+
+EXECUTABLE27 = crotangmomorder123.exe
+CPPOBJECTS27 = crotangmomorder123.$(EXTOBJ) openfiles.$(EXTOBJ) numericalderivative.$(EXTOBJ)
+
+EXECUTABLE28 = crotangmomunitfail.exe
+CPPOBJECTS28 = crotangmomunitfail.$(EXTOBJ) openfiles.$(EXTOBJ) 
+
+EXECUTABLE29 = crotangmomunitfail2.exe
+CPPOBJECTS29 = crotangmomunitfail2.$(EXTOBJ) openfiles.$(EXTOBJ) 
+
+EXECUTABLE30 = cmtimescale.exe
+CPPOBJECTS30 = cmtimescale.$(EXTOBJ) openfiles.$(EXTOBJ) 
+
+EXECUTABLE31 = cmtimespan.exe
+CPPOBJECTS31 = cmtimespan.$(EXTOBJ) openfiles.$(EXTOBJ) 
+
+EXECUTABLE32 = cgetpositionrecordindex.exe
+CPPOBJECTS32 = cgetpositionrecordindex.$(EXTOBJ) openfiles.$(EXTOBJ) 
+
+EXECUTABLE33 = cgetorientrecordindex.exe
+CPPOBJECTS33 = cgetorientrecordindex.$(EXTOBJ) openfiles.$(EXTOBJ) 
+
+EXECUTABLE34 = cstimescale.exe
+CPPOBJECTS34 = cstimescale.$(EXTOBJ) openfiles.$(EXTOBJ) 
+
+EXECUTABLE35 = cstimespan.exe
+CPPOBJECTS35 = cstimespan.$(EXTOBJ) openfiles.$(EXTOBJ) 
+
+F2003EXECUTABLE1 = f2003sopenfail.exe
+F2003OBJECTS1 = f2003sopenfail.$(EXTOBJ)              
+
+F2003EXECUTABLE2 = f2003mopenfail.exe
+F2003OBJECTS2 = f2003mopenfail.$(EXTOBJ)              
+
+F2003EXECUTABLE3 = f2003sopen.exe
+F2003OBJECTS3 = f2003sopen.$(EXTOBJ)              
+
+F2003EXECUTABLE4 = f2003mopen.exe
+F2003OBJECTS4 = f2003mopen.$(EXTOBJ)              
+
+F2003EXECUTABLE5 = f2003sgetconstant.exe
+F2003OBJECTS5 = f2003sgetconstant.$(EXTOBJ)              
+
+F2003EXECUTABLE6 = f2003mgetconstant.exe
+F2003OBJECTS6 = f2003mgetconstant.$(EXTOBJ)              
+
+F2003EXECUTABLE7 = f2003mcheck.exe
+F2003OBJECTS7 = f2003mcheck.$(EXTOBJ)              
+
+F2003EXECUTABLE8 = f2003sgetconstantindex.exe
+F2003OBJECTS8 = f2003sgetconstantindex.$(EXTOBJ)          
+
+F2003EXECUTABLE9 = f2003mgetconstantindex.exe
+F2003OBJECTS9 = f2003mgetconstantindex.$(EXTOBJ)          
+
+F2003EXECUTABLE10 = f2003mcomputeunit_naifid.exe
+F2003OBJECTS10 = f2003mcomputeunit_naifid.$(EXTOBJ)          
+
+F2003EXECUTABLE11 = f2003mcomputeunit.exe
+F2003OBJECTS11 = f2003mcomputeunit.$(EXTOBJ)          
+
+F2003EXECUTABLE12 = f2003version.exe
+F2003OBJECTS12 = f2003version.$(EXTOBJ)          
+
+F2003EXECUTABLE13 = f2003mcomputeorder.exe
+F2003OBJECTS13 = f2003mcomputeorder.$(EXTOBJ)          
+
+F2003EXECUTABLE14 = f2003rotangmomunit.exe
+F2003OBJECTS14 = f2003rotangmomunit.$(EXTOBJ)          
+
+F2003EXECUTABLE15 = f2003rotangmomorder.exe
+F2003OBJECTS15 = f2003rotangmomorder.$(EXTOBJ)          
+
+F2003EXECUTABLE16 = f2003mtimescale.exe
+F2003OBJECTS16 = f2003mtimescale.$(EXTOBJ)          
+
+F2003EXECUTABLE17 = f2003mtimespan.exe
+F2003OBJECTS17 = f2003mtimespan.$(EXTOBJ)          
+
+F2003EXECUTABLE18 = f2003getpositionrecordindex.exe
+F2003OBJECTS18 = f2003getpositionrecordindex.$(EXTOBJ)          
+
+F2003EXECUTABLE19 = f2003getorientrecordindex.exe
+F2003OBJECTS19 = f2003getorientrecordindex.$(EXTOBJ)          
+
+F2003EXECUTABLE20 = f2003stimescale.exe
+F2003OBJECTS20 = f2003stimescale.$(EXTOBJ)          
+
+F2003EXECUTABLE21 = f2003stimespan.exe
+F2003OBJECTS21 = f2003stimespan.$(EXTOBJ)          
+
+F77EXECUTABLE1 = f77sopenfail.exe
+F77OBJECTS1 = f77sopenfail.$(EXTOBJ)              
+
+F77EXECUTABLE2 = f77mopenfail.exe
+F77OBJECTS2 = f77mopenfail.$(EXTOBJ)              
+
+F77EXECUTABLE3 = f77sopen.exe
+F77OBJECTS3 = f77sopen.$(EXTOBJ)              
+
+F77EXECUTABLE4 = f77mopen.exe
+F77OBJECTS4 = f77mopen.$(EXTOBJ)              
+
+F77EXECUTABLE5 = f77sgetconstant.exe
+F77OBJECTS5 = f77sgetconstant.$(EXTOBJ)              
+
+F77EXECUTABLE6 = f77mgetconstant.exe
+F77OBJECTS6 = f77mgetconstant.$(EXTOBJ)              
+
+F77EXECUTABLE7 = f77mcheck.exe
+F77OBJECTS7 = f77mcheck.$(EXTOBJ)  
+
+F77EXECUTABLE8 = f77sgetconstantindex.exe
+F77OBJECTS8 = f77sgetconstantindex.$(EXTOBJ)          
+
+F77EXECUTABLE9 = f77mgetconstantindex.exe
+F77OBJECTS9 = f77mgetconstantindex.$(EXTOBJ)          
+
+F77EXECUTABLE10 = f77mcomputeunit.exe
+F77OBJECTS10 = f77mcomputeunit.$(EXTOBJ)          
+
+F77EXECUTABLE11 = f77mcomputeunit_naifid.exe
+F77OBJECTS11 = f77mcomputeunit_naifid.$(EXTOBJ)          
+
+F77EXECUTABLE12 = f77version.exe
+F77OBJECTS12 = f77version.$(EXTOBJ)          
+
+F77EXECUTABLE13 = f77mcomputeorder.exe
+F77OBJECTS13 = f77mcomputeorder.$(EXTOBJ)          
+
+F77EXECUTABLE14 = f77rotangmomunit.exe
+F77OBJECTS14 = f77rotangmomunit.$(EXTOBJ)          
+
+F77EXECUTABLE15 = f77rotangmomorder.exe
+F77OBJECTS15 = f77rotangmomorder.$(EXTOBJ)          
+
+F77EXECUTABLE16 = f77mtimescale.exe
+F77OBJECTS16 = f77mtimescale.$(EXTOBJ)          
+
+F77EXECUTABLE17 = f77mtimespan.exe
+F77OBJECTS17 = f77mtimespan.$(EXTOBJ)          
+
+F77EXECUTABLE18 = f77getpositionrecordindex.exe
+F77OBJECTS18 = f77getpositionrecordindex.$(EXTOBJ)          
+
+F77EXECUTABLE19 = f77getorientrecordindex.exe
+F77OBJECTS19 = f77getorientrecordindex.$(EXTOBJ)          
+
+F77EXECUTABLE20 = f77stimescale.exe
+F77OBJECTS20 = f77stimescale.$(EXTOBJ)          
+
+F77EXECUTABLE21 = f77stimespan.exe
+F77OBJECTS21 = f77stimespan.$(EXTOBJ)          
+
+#
+# Link target: automatically builds its object dependencies before
+# executing its link command.
+#
+
+$(EXECUTABLE1) : $(CPPOBJECTS1) 
+	link.exe /out:$@ $(CPPOBJECTS1) $(CALCEPHLIBS) 
+
+$(EXECUTABLE2) : $(CPPOBJECTS2) 
+	link.exe /out:$@ $(CPPOBJECTS2) $(CALCEPHLIBS) 
+
+$(EXECUTABLE3) : $(CPPOBJECTS3) 
+	link.exe /out:$@ $(CPPOBJECTS3) $(CALCEPHLIBS) 
+
+$(EXECUTABLE4) : $(CPPOBJECTS4) 
+	link.exe /out:$@ $(CPPOBJECTS4) $(CALCEPHLIBS) 
+
+$(EXECUTABLE5) : $(CPPOBJECTS5) 
+	link.exe /out:$@ $(CPPOBJECTS5) $(CALCEPHLIBS) 
+
+$(EXECUTABLE6) : $(CPPOBJECTS6) 
+	link.exe /out:$@ $(CPPOBJECTS6) $(CALCEPHLIBS) 
+
+$(EXECUTABLE7) : $(CPPOBJECTS7) 
+	link.exe /out:$@ $(CPPOBJECTS7) $(CALCEPHLIBS) 
+
+$(EXECUTABLE8) : $(CPPOBJECTS8) 
+	link.exe /out:$@ $(CPPOBJECTS8) $(CALCEPHLIBS) 
+
+$(EXECUTABLE9) : $(CPPOBJECTS9) 
+	link.exe /out:$@ $(CPPOBJECTS9) $(CALCEPHLIBS) 
+
+$(EXECUTABLE10) : $(CPPOBJECTS10) 
+	link.exe /out:$@ $(CPPOBJECTS10) $(CALCEPHLIBS) 
+
+$(EXECUTABLE11) : $(CPPOBJECTS11) 
+	link.exe /out:$@ $(CPPOBJECTS11) $(CALCEPHLIBS) 
+
+$(EXECUTABLE12) : $(CPPOBJECTS12) 
+	link.exe /out:$@ $(CPPOBJECTS12) $(CALCEPHLIBS) 
+
+$(EXECUTABLE13) : $(CPPOBJECTS13) 
+	link.exe /out:$@ $(CPPOBJECTS13) $(CALCEPHLIBS) 
+
+$(EXECUTABLE14) : $(CPPOBJECTS14) 
+	link.exe /out:$@ $(CPPOBJECTS14) $(CALCEPHLIBS) 
+
+$(EXECUTABLE15) : $(CPPOBJECTS15) 
+	link.exe /out:$@ $(CPPOBJECTS15) $(CALCEPHLIBS) 
+
+$(EXECUTABLE16) : $(CPPOBJECTS16) 
+	link.exe /out:$@ $(CPPOBJECTS16) $(CALCEPHLIBS) 
+
+$(EXECUTABLE17) : $(CPPOBJECTS17) 
+	link.exe /out:$@ $(CPPOBJECTS17) $(CALCEPHLIBS) 
+
+$(EXECUTABLE18) : $(CPPOBJECTS18) 
+	link.exe /out:$@ $(CPPOBJECTS18) $(CALCEPHLIBS) 
+
+$(EXECUTABLE19) : $(CPPOBJECTS19) 
+	link.exe /out:$@ $(CPPOBJECTS19) $(CALCEPHLIBS) 
+
+$(EXECUTABLE20) : $(CPPOBJECTS20) 
+	link.exe /out:$@ $(CPPOBJECTS20) $(CALCEPHLIBS) 
+
+$(EXECUTABLE21) : $(CPPOBJECTS21) 
+	link.exe /out:$@ $(CPPOBJECTS21) $(CALCEPHLIBS) 
+
+$(EXECUTABLE22) : $(CPPOBJECTS22) 
+	link.exe /out:$@ $(CPPOBJECTS22) $(CALCEPHLIBS) 
+
+$(EXECUTABLE23) : $(CPPOBJECTS23) 
+	link.exe /out:$@ $(CPPOBJECTS23) $(CALCEPHLIBS) 
+
+$(EXECUTABLE24) : $(CPPOBJECTS24) 
+	link.exe /out:$@ $(CPPOBJECTS24) $(CALCEPHLIBS) 
+
+$(EXECUTABLE25) : $(CPPOBJECTS25) 
+	link.exe /out:$@ $(CPPOBJECTS25) $(CALCEPHLIBS) 
+
+$(EXECUTABLE26) : $(CPPOBJECTS26) 
+	link.exe /out:$@ $(CPPOBJECTS26) $(CALCEPHLIBS) 
+
+$(EXECUTABLE27) : $(CPPOBJECTS27) 
+	link.exe /out:$@ $(CPPOBJECTS27) $(CALCEPHLIBS) 
+
+$(EXECUTABLE28) : $(CPPOBJECTS28) 
+	link.exe /out:$@ $(CPPOBJECTS28) $(CALCEPHLIBS) 
+
+$(EXECUTABLE29) : $(CPPOBJECTS29) 
+	link.exe /out:$@ $(CPPOBJECTS29) $(CALCEPHLIBS) 
+
+$(EXECUTABLE30) : $(CPPOBJECTS30) 
+	link.exe /out:$@ $(CPPOBJECTS30) $(CALCEPHLIBS) 
+
+$(EXECUTABLE31) : $(CPPOBJECTS31) 
+	link.exe /out:$@ $(CPPOBJECTS31) $(CALCEPHLIBS) 
+
+$(EXECUTABLE32) : $(CPPOBJECTS32) 
+	link.exe /out:$@ $(CPPOBJECTS32) $(CALCEPHLIBS) 
+
+$(EXECUTABLE33) : $(CPPOBJECTS33) 
+	link.exe /out:$@ $(CPPOBJECTS33) $(CALCEPHLIBS) 
+
+$(EXECUTABLE34) : $(CPPOBJECTS34) 
+	link.exe /out:$@ $(CPPOBJECTS34) $(CALCEPHLIBS) 
+
+$(EXECUTABLE35) : $(CPPOBJECTS35) 
+	link.exe /out:$@ $(CPPOBJECTS35) $(CALCEPHLIBS) 
+
+
+$(F2003EXECUTABLE1) : $(F2003OBJECTS1) 
+	link.exe /out:$@ $(F2003OBJECTS1) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE2) : $(F2003OBJECTS2) 
+	link.exe /out:$@ $(F2003OBJECTS2) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE3) : $(F2003OBJECTS3) 
+	link.exe /out:$@ $(F2003OBJECTS3) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE4) : $(F2003OBJECTS4) 
+	link.exe /out:$@ $(F2003OBJECTS4) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE5) : $(F2003OBJECTS5) 
+	link.exe /out:$@ $(F2003OBJECTS5) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE6) : $(F2003OBJECTS6) 
+	link.exe /out:$@ $(F2003OBJECTS6) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE7) : $(F2003OBJECTS7) 
+	link.exe /out:$@ $(F2003OBJECTS7) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE8) : $(F2003OBJECTS8) 
+	link.exe /out:$@ $(F2003OBJECTS8) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE9) : $(F2003OBJECTS9) 
+	link.exe /out:$@ $(F2003OBJECTS9) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE10) : $(F2003OBJECTS10) 
+	link.exe /out:$@ $(F2003OBJECTS10) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE11) : $(F2003OBJECTS11) 
+	link.exe /out:$@ $(F2003OBJECTS11) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE12) : $(F2003OBJECTS12) 
+	link.exe /out:$@ $(F2003OBJECTS12) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE13) : $(F2003OBJECTS13) 
+	link.exe /out:$@ $(F2003OBJECTS13) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE14) : $(F2003OBJECTS14) 
+	link.exe /out:$@ $(F2003OBJECTS14) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE15) : $(F2003OBJECTS15) 
+	link.exe /out:$@ $(F2003OBJECTS15) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE16) : $(F2003OBJECTS16) 
+	link.exe /out:$@ $(F2003OBJECTS16) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE17) : $(F2003OBJECTS17) 
+	link.exe /out:$@ $(F2003OBJECTS17) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE18) : $(F2003OBJECTS18) 
+	link.exe /out:$@ $(F2003OBJECTS18) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE19) : $(F2003OBJECTS19) 
+	link.exe /out:$@ $(F2003OBJECTS19) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE20) : $(F2003OBJECTS20) 
+	link.exe /out:$@ $(F2003OBJECTS20) $(CALCEPHLIBS) 
+
+$(F2003EXECUTABLE21) : $(F2003OBJECTS21) 
+	link.exe /out:$@ $(F2003OBJECTS21) $(CALCEPHLIBS) 
+
+
+
+$(F77EXECUTABLE1) : $(F77OBJECTS1) 
+	link.exe /out:$@ $(F77OBJECTS1) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE2) : $(F77OBJECTS2) 
+	link.exe /out:$@ $(F77OBJECTS2) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE3) : $(F77OBJECTS3) 
+	link.exe /out:$@ $(F77OBJECTS3) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE4) : $(F77OBJECTS4) 
+	link.exe /out:$@ $(F77OBJECTS4) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE5) : $(F77OBJECTS5) 
+	link.exe /out:$@ $(F77OBJECTS5) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE6) : $(F77OBJECTS6) 
+	link.exe /out:$@ $(F77OBJECTS6) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE7) : $(F77OBJECTS7) 
+	link.exe /out:$@ $(F77OBJECTS7) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE8) : $(F77OBJECTS8) 
+	link.exe /out:$@ $(F77OBJECTS8) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE9) : $(F77OBJECTS9) 
+	link.exe /out:$@ $(F77OBJECTS9) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE10) : $(F77OBJECTS10) 
+	link.exe /out:$@ $(F77OBJECTS10) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE11) : $(F77OBJECTS11) 
+	link.exe /out:$@ $(F77OBJECTS11) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE12) : $(F77OBJECTS12) 
+	link.exe /out:$@ $(F77OBJECTS12) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE13) : $(F77OBJECTS13) 
+	link.exe /out:$@ $(F77OBJECTS13) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE14) : $(F77OBJECTS14) 
+	link.exe /out:$@ $(F77OBJECTS14) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE15) : $(F77OBJECTS15) 
+	link.exe /out:$@ $(F77OBJECTS15) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE16) : $(F77OBJECTS16) 
+	link.exe /out:$@ $(F77OBJECTS16) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE17) : $(F77OBJECTS17) 
+	link.exe /out:$@ $(F77OBJECTS17) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE18) : $(F77OBJECTS18) 
+	link.exe /out:$@ $(F77OBJECTS18) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE19) : $(F77OBJECTS19) 
+	link.exe /out:$@ $(F77OBJECTS19) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE20) : $(F77OBJECTS20) 
+	link.exe /out:$@ $(F77OBJECTS20) $(CALCEPHLIBS) 
+
+$(F77EXECUTABLE21) : $(F77OBJECTS21) 
+	link.exe /out:$@ $(F77OBJECTS21) $(CALCEPHLIBS) 
+
+
+#
+# Programme pour les tests.
+#
+exec : $(EXECUTABLE1) $(EXECUTABLE2) $(EXECUTABLE3) $(EXECUTABLE4) $(EXECUTABLE5) $(EXECUTABLE6) $(EXECUTABLE7) $(EXECUTABLE8) $(EXECUTABLE9)  $(EXECUTABLE10) \
+  	$(EXECUTABLE11) $(EXECUTABLE12) $(EXECUTABLE13) $(EXECUTABLE14) $(EXECUTABLE15) $(EXECUTABLE16) $(EXECUTABLE17) $(EXECUTABLE18) $(EXECUTABLE19) \
+  	 $(EXECUTABLE20) $(EXECUTABLE21)  $(EXECUTABLE22) $(EXECUTABLE23) \
+  	 $(EXECUTABLE24) $(EXECUTABLE25) $(EXECUTABLE26) $(EXECUTABLE27) $(EXECUTABLE28) $(EXECUTABLE29) $(EXECUTABLE30) \
+  	 $(EXECUTABLE31) $(EXECUTABLE32) $(EXECUTABLE33) $(EXECUTABLE34) $(EXECUTABLE35)
+
+reportfailed :
+	@echo ---------------------------------------
+	@echo Report this bug to inpop.imcce@obspm.fr
+	@echo ---------------------------------------
+	@exit 1
+
+REPORTFAILED= nmake /f Makefile.vc reportfailed
+
+checkc  : 
+	$(EXECUTABLE21) || $(REPORTFAILED) 
+	$(EXECUTABLE1) || $(REPORTFAILED)
+	$(EXECUTABLE2) || $(REPORTFAILED) 
+	$(EXECUTABLE3) || $(REPORTFAILED) 
+	$(EXECUTABLE4) || $(REPORTFAILED) 
+	$(EXECUTABLE5) || $(REPORTFAILED) 
+	$(EXECUTABLE6) || $(REPORTFAILED) 
+	$(EXECUTABLE7) || $(REPORTFAILED) 
+	$(EXECUTABLE8) || $(REPORTFAILED) 
+	$(EXECUTABLE9) || $(REPORTFAILED) 
+	$(EXECUTABLE10) || $(REPORTFAILED) 
+	$(EXECUTABLE11) || $(REPORTFAILED) 
+	$(EXECUTABLE12) || $(REPORTFAILED) 
+	$(EXECUTABLE13) || $(REPORTFAILED) 
+	$(EXECUTABLE14) || $(REPORTFAILED) 
+	$(EXECUTABLE15) || $(REPORTFAILED) 
+	$(EXECUTABLE16) || $(REPORTFAILED) 
+	$(EXECUTABLE17) || $(REPORTFAILED) 
+	$(EXECUTABLE18) || $(REPORTFAILED) 
+	$(EXECUTABLE19) || $(REPORTFAILED) 
+	$(EXECUTABLE20) || $(REPORTFAILED) 
+	$(EXECUTABLE22) || $(REPORTFAILED) 
+	$(EXECUTABLE23) || $(REPORTFAILED) 
+	$(EXECUTABLE24) || $(REPORTFAILED) 
+	$(EXECUTABLE25) || $(REPORTFAILED) 
+	$(EXECUTABLE26) || $(REPORTFAILED) 
+	$(EXECUTABLE27) || $(REPORTFAILED) 
+	$(EXECUTABLE28) || $(REPORTFAILED) 
+	$(EXECUTABLE29) || $(REPORTFAILED) 
+	$(EXECUTABLE30) || $(REPORTFAILED) 
+	$(EXECUTABLE31) || $(REPORTFAILED) 
+	$(EXECUTABLE32) || $(REPORTFAILED) 
+	$(EXECUTABLE33) || $(REPORTFAILED) 
+	$(EXECUTABLE34) || $(REPORTFAILED) 
+	$(EXECUTABLE35) || $(REPORTFAILED) 
+
+f2003exe : fopenfiles.h $(F2003EXECUTABLE1) $(F2003EXECUTABLE2) $(F2003EXECUTABLE3) $(F2003EXECUTABLE4) $(F2003EXECUTABLE5) $(F2003EXECUTABLE6) $(F2003EXECUTABLE7) $(F2003EXECUTABLE8) $(F2003EXECUTABLE9)  \
+ $(F2003EXECUTABLE10)  $(F2003EXECUTABLE11) $(F2003EXECUTABLE12) $(F2003EXECUTABLE13)  $(F2003EXECUTABLE14) $(F2003EXECUTABLE15) $(F2003EXECUTABLE16) \
+  $(F2003EXECUTABLE17) $(F2003EXECUTABLE18)  $(F2003EXECUTABLE19)  $(F2003EXECUTABLE20)  $(F2003EXECUTABLE21) 
+
+f2003check: 
+	$(F2003EXECUTABLE1) || $(REPORTFAILED)
+	$(F2003EXECUTABLE2) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE3) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE4) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE5) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE6) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE7) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE8) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE9) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE10) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE11) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE12) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE13) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE14) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE15) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE16) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE17) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE18) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE19) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE20) || $(REPORTFAILED) 
+	$(F2003EXECUTABLE21) || $(REPORTFAILED) 
+
+
+f77exe : $(F77EXECUTABLE1) $(F77EXECUTABLE2) $(F77EXECUTABLE3) $(F77EXECUTABLE4) $(F77EXECUTABLE5) $(F77EXECUTABLE6) $(F77EXECUTABLE7) $(F77EXECUTABLE8) $(F77EXECUTABLE9) \
+ $(F77EXECUTABLE10)  $(F77EXECUTABLE11)  $(F77EXECUTABLE12)  $(F77EXECUTABLE13)  $(F77EXECUTABLE14)  $(F77EXECUTABLE15)  $(F77EXECUTABLE16) \
+ $(F77EXECUTABLE17) $(F77EXECUTABLE18)  $(F77EXECUTABLE19) $(F77EXECUTABLE20)  $(F77EXECUTABLE21)
+
+f77check: 
+	$(F77EXECUTABLE1) || $(REPORTFAILED)
+	$(F77EXECUTABLE2) || $(REPORTFAILED)
+	$(F77EXECUTABLE3) || $(REPORTFAILED) 
+	$(F77EXECUTABLE4) || $(REPORTFAILED) 
+	$(F77EXECUTABLE5) || $(REPORTFAILED) 
+	$(F77EXECUTABLE6) || $(REPORTFAILED) 
+	$(F77EXECUTABLE7) || $(REPORTFAILED) 
+	$(F77EXECUTABLE8) || $(REPORTFAILED) 
+	$(F77EXECUTABLE9) || $(REPORTFAILED) 
+	$(F77EXECUTABLE10) || $(REPORTFAILED) 
+	$(F77EXECUTABLE11) || $(REPORTFAILED) 
+	$(F77EXECUTABLE12) || $(REPORTFAILED) 
+	$(F77EXECUTABLE13) || $(REPORTFAILED) 
+	$(F77EXECUTABLE14) || $(REPORTFAILED) 
+	$(F77EXECUTABLE15) || $(REPORTFAILED) 
+	$(F77EXECUTABLE16) || $(REPORTFAILED) 
+	$(F77EXECUTABLE17) || $(REPORTFAILED) 
+	$(F77EXECUTABLE18) || $(REPORTFAILED) 
+	$(F77EXECUTABLE19) || $(REPORTFAILED) 
+	$(F77EXECUTABLE20) || $(REPORTFAILED) 
+	$(F77EXECUTABLE21) || $(REPORTFAILED) 
+
+
+fopenfiles.h : fopenfiles.vc
+	copy fopenfiles.vc fopenfiles.h
+
+
+#
+# Clean target: "nmake /f Makefile.vc clean" to remove unwanted 
+#               objects and executables.
+#
+clean:
+	del *.exe *.$(EXTOBJ) *.tlh
+
+#
+# install target: "nmake /f Makefile.vc install DESTDIR=xxx" to perform the installation.
+#
+install: 
+
+

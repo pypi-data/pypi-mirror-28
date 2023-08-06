@@ -1,0 +1,186 @@
+#/*-----------------------------------------------------------------*/
+#/*! 
+#  \file Makefile.vc
+#  \brief Makefile for nmake (windows)
+#  \author  M. Gastineau 
+#           Astronomie et Systemes Dynamiques, IMCCE, CNRS, Observatoire de Paris. 
+#
+#   Copyright, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, CNRS
+#   email of the author : Mickael.Gastineau@obspm.fr
+#  
+#*/
+#/*-----------------------------------------------------------------*/
+#
+#/*-----------------------------------------------------------------*/
+#/* License  of this file :
+#  This file is "triple-licensed", you have to choose one  of the three licenses 
+#  below to apply on this file.
+#  
+#     CeCILL-C
+#     	The CeCILL-C license is close to the GNU LGPL.
+#     	( http://www.cecill.info/licences/Licence_CeCILL-C_V1-en.html )
+#   
+#  or CeCILL-B
+#        The CeCILL-B license is close to the BSD.
+#        (http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt)
+#  
+#  or CeCILL v2.1
+#       The CeCILL license is compatible with the GNU GPL.
+#       ( http://www.cecill.info/licences/Licence_CeCILL_V2.1-en.html )
+#  
+# 
+# This library is governed by the CeCILL-C, CeCILL-B or the CeCILL license under 
+# French law and abiding by the rules of distribution of free software.  
+# You can  use, modify and/ or redistribute the software under the terms 
+# of the CeCILL-C,CeCILL-B or CeCILL license as circulated by CEA, CNRS and INRIA  
+# at the following URL "http://www.cecill.info". 
+#
+# As a counterpart to the access to the source code and  rights to copy,
+# modify and redistribute granted by the license, users are provided only
+# with a limited warranty  and the software's author,  the holder of the
+# economic rights,  and the successive licensors  have only  limited
+# liability. 
+#
+# In this respect, the user's attention is drawn to the risks associated
+# with loading,  using,  modifying and/or developing or reproducing the
+# software by the user in light of its specific status of free software,
+# that may mean  that it is complicated to manipulate,  and  that  also
+# therefore means  that it is reserved for developers  and  experienced
+# professionals having in-depth computer knowledge. Users are therefore
+# encouraged to load and test the software's suitability as regards their
+# requirements in conditions enabling the security of their systems and/or 
+# data to be ensured and,  more generally, to use and operate it in the 
+# same conditions as regards security. 
+#
+# The fact that you are presently reading this means that you have had
+# knowledge of the CeCILL-C,CeCILL-B or CeCILL license and that you accept its terms.
+# */
+# /*-----------------------------------------------------------------*/
+
+#
+#
+CALCEPHLIBS= /LIBPATH:"..\src" libcalceph.lib
+CALCEPHINCLUDE= /I"..\src"
+CALCEPHFLIBS= "..\src\libcalceph.lib"
+CALCEPHFINCLUDE= -I"..\src"
+
+CC=$(CCC)
+CFLAGS = $(CCFLAGS) $(CALCEPHINCLUDE)
+FC=$(FFC)
+FFLAGS=$(FFFLAGS) $(CALCEPHFINCLUDE)
+FLINKFLAGS = $(FFLINKFLAGS) $(CALCEPHFINCLUDE)
+
+!if "$(ENABLEF2003)" == "1" 
+F2003EXAMPLES=f2003examples
+!else
+F2003EXAMPLES=
+!endif
+
+!if "$(ENABLEF77)" == "1" 
+F77EXAMPLES=f77examples
+!else
+F77EXAMPLES=
+!endif
+
+EXTOBJ=obj
+
+all  : cexamples $(F2003EXAMPLES)  $(F77EXAMPLES) 
+
+    
+
+EXECUTABLE1 = csingle.exe
+CPPOBJECTS1 = csingle.$(EXTOBJ)              
+
+EXECUTABLE2 = cmultiple.exe
+CPPOBJECTS2 = cmultiple.$(EXTOBJ)            
+
+EXECUTABLE3 = cscompute.exe
+CPPOBJECTS3 = cscompute.$(EXTOBJ)            
+
+EXECUTABLE4 = cerror.exe
+CPPOBJECTS4 = cerror.$(EXTOBJ)            
+
+EXECUTABLE5 = corder.exe
+CPPOBJECTS5 = corder.$(EXTOBJ)            
+
+EXECUTABLE6 = corient.exe
+CPPOBJECTS6 = corient.$(EXTOBJ)            
+
+F2003EXECUTABLE1 = f2003single.exe
+F2003OBJECTS1 = f2003single.$(EXTOBJ)             
+
+F2003EXECUTABLE2 = f2003multiple.exe
+F2003OBJECTS2 = f2003multiple.$(EXTOBJ)              
+
+F2003EXECUTABLE3 = f2003scompute.exe
+F2003OBJECTS3 = f2003scompute.$(EXTOBJ)              
+
+F2003EXECUTABLE4 = f2003error.exe
+F2003OBJECTS4 = f2003error.$(EXTOBJ)              
+
+F2003EXECUTABLE5 = f2003orient.exe
+F2003OBJECTS5 = f2003orient.$(EXTOBJ)              
+
+
+F77EXECUTABLE1 = f77single.exe
+F77OBJECTS1 = f77single.$(EXTOBJ)              
+
+F77EXECUTABLE2 = f77multiple.exe
+F77OBJECTS2 = f77multiple.$(EXTOBJ)              
+
+F77EXECUTABLE3 = f77error.exe
+F77OBJECTS3 = f77error.$(EXTOBJ)
+
+F77EXECUTABLE4 = f77orient.exe
+F77OBJECTS4 = f77orient.$(EXTOBJ)
+
+#
+# Link target: automatically builds its object dependencies before
+# executing its link command.
+#
+
+$(EXECUTABLE1) : $(CPPOBJECTS1) 
+	link.exe /out:$@ $(CPPOBJECTS1) $(CALCEPHLIBS) 
+
+$(EXECUTABLE2) : $(CPPOBJECTS2) 
+	link.exe /out:$@ $(CPPOBJECTS2) $(CALCEPHLIBS) 
+
+$(EXECUTABLE3) : $(CPPOBJECTS3) 
+	link.exe /out:$@ $(CPPOBJECTS3) $(CALCEPHLIBS) 
+
+$(EXECUTABLE4) : $(CPPOBJECTS4) 
+	link.exe /out:$@ $(CPPOBJECTS4) $(CALCEPHLIBS) 
+
+$(EXECUTABLE5) : $(CPPOBJECTS5) 
+	link.exe /out:$@ $(CPPOBJECTS5) $(CALCEPHLIBS) 
+
+$(EXECUTABLE6) : $(CPPOBJECTS6) 
+	link.exe /out:$@ $(CPPOBJECTS6) $(CALCEPHLIBS) 
+
+
+#
+# Programme pour les tests.
+#
+cexamples  : $(EXECUTABLE1) $(EXECUTABLE2) $(EXECUTABLE3) $(EXECUTABLE4) $(EXECUTABLE5) $(EXECUTABLE6)
+
+
+f2003examples: $(F2003EXECUTABLE1) $(F2003EXECUTABLE2) $(F2003EXECUTABLE3) $(F2003EXECUTABLE4)
+
+f77examples: $(F77EXECUTABLE1) $(F77EXECUTABLE2)  $(F77EXECUTABLE3) $(F77EXECUTABLE4)
+
+#
+# Clean target: "nmake /f Makefile.vc clean" to remove unwanted 
+#               objects and executables.
+#
+
+clean:
+	del *.exe *.obj *.tlh
+
+#
+# predefined rules
+#
+.f.obj :
+	$(FC) $(FFLAGS) $*.f
+
+.f.exe :
+	$(FC) $(FLINKFLAGS) $*.f -o $@ $(CALCEPHFLIBS) 

@@ -1,0 +1,230 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Compilation on a Unix-like system &mdash; CALCEPH  - Python language 3.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="CALCEPH  - Python language 3.0.0 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CALCEPH  - Python language
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="calceph.intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.interface.html">Library interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.multiple.html">Multiple file access functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.error.html">Error functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.misc.html">Miscellaneous functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.naifid.html">NAIF identification numbers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.final.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.reportbugs.html">Reporting bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.copying.html">CALCEPH Library Copying conditions</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CALCEPH  - Python language</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Compilation on a Unix-like system</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <p>All declarations needed to use CALCEPH Library are collected in the module files <code class="file docutils literal"><span class="pre">calceph.mod</span></code>.  The library is designed to work with Fortran compilers compliant with the Fortran 2003 standard. All declarations use the standard <strong>ISO_C_BINDING</strong> module.</p>
+<p>You should include that module in any program using the CALCEPH library:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">use</span> <span class="n">calceph</span>
+</pre></div>
+</div>
+<p>When a fortran string is given as a parameter to a function of this library, you should append this string with <strong>//C_NULL_CHAR</strong> because the C library works only with C string.</p>
+<div class="section" id="compilation-on-a-unix-like-system">
+<h1>Compilation on a Unix-like system<a class="headerlink" href="#compilation-on-a-unix-like-system" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>All programs using  CALCEPH must link against the <code class="file docutils literal"><span class="pre">libcalceph</span></code> library.  On Unix-like system this can be done with <em>-lcalceph</em>, for example</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>gfortran -I/usr/local/include myprogram.f -o myprogram -lcalceph
+</pre></div>
+</div>
+</div></blockquote>
+<p>If  CALCEPH Library has been installed to a non-standard location then it may be necessary to use <em>-I</em> and <em>-L</em> compiler options to point to the right directories, and some sort of run-time path for a shared library.</p>
+</div></blockquote>
+</div>
+<div class="section" id="compilation-on-a-windows-system">
+<h1>Compilation on a Windows system<a class="headerlink" href="#compilation-on-a-windows-system" title="Permalink to this headline">¶</a></h1>
+<blockquote>
+<div><p>All programs using CALCEPH must link against the <code class="file docutils literal"><span class="pre">libcalceph.lib</span></code>.  On Windows system this can be done with <em>libcalceph.lib</em>, for example</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>gfortran.exe /out:myprogram.exe myprogram.f libcalceph.lib
+</pre></div>
+</div>
+</div></blockquote>
+<p>If  CALCEPH Library has been installed to a non-standard location then it may be necessary to use <em>/I</em> and <em>/LIBPATH:</em> compiler options to point to the right directories.</p>
+</div></blockquote>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, CNRS, Observatoire de Paris, Observatoire de la Côte d&#39;Azur.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'3.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

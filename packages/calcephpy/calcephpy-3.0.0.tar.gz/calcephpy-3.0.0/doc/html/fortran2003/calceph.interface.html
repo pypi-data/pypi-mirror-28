@@ -1,0 +1,360 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Library interface &mdash; CALCEPH  - Fortran 2003 language 3.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="CALCEPH  - Fortran 2003 language 3.0.0 documentation" href="index.html"/>
+        <link rel="next" title="Multiple file access functions" href="calceph.multiple.html"/>
+        <link rel="prev" title="Installation" href="calceph.install.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> CALCEPH  - Fortran 2003 language
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="calceph.intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.install.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Library interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#a-simple-example-program">A simple example program</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#menu-headers-and-libraries">Modules and Libraries</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#types">Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#constants">Constants</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.multiple.html">Multiple file access functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="condsingle/calceph.single.html">Single file access functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.error.html">Error functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.misc.html">Miscellaneous functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.naifid.html">NAIF identification numbers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.final.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.reportbugs.html">Reporting bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calceph.copying.html">CALCEPH Library Copying conditions</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">CALCEPH  - Fortran 2003 language</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Library interface</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="library-interface">
+<h1>Library interface<a class="headerlink" href="#library-interface" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="a-simple-example-program">
+<h2>A simple example program<a class="headerlink" href="#a-simple-example-program" title="Permalink to this headline">¶</a></h2>
+<p>The following example program shows the typical usage of the Fortran 2003 interface.</p>
+<p>Other examples using the Fortran 2003 interface can be found in the directory <em>examples</em> of the library sources.</p>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">f2003multiple</span>
+    <span class="k">USE</span><span class="p">,</span> <span class="k">INTRINSIC</span> <span class="kd">::</span> <span class="nb">ISO_C_BINDING</span>
+<span class="nb">    </span><span class="k">use </span><span class="n">calceph</span>
+    <span class="kt">integer </span><span class="n">res</span>
+    <span class="kt">real</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span> <span class="n">AU</span>
+    <span class="k">TYPE</span><span class="p">(</span><span class="kt">C_PTR</span><span class="p">)</span> <span class="kd">::</span> <span class="n">peph</span>
+
+    <span class="n">peph</span> <span class="o">=</span> <span class="n">calceph_open</span><span class="p">(</span><span class="s2">&quot;example1.dat&quot;</span><span class="o">//</span><span class="nb">C_NULL_CHAR</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">C_ASSOCIATED</span><span class="p">(</span><span class="n">peph</span><span class="p">))</span> <span class="k">then</span>
+
+<span class="k">       if</span> <span class="p">(</span><span class="n">calceph_getconstant</span><span class="p">(</span><span class="n">peph</span><span class="p">,</span> <span class="s2">&quot;AU&quot;</span><span class="o">//</span><span class="nb">C_NULL_CHAR</span><span class="p">,</span> <span class="n">AU</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="k">then</span>
+<span class="k">            write</span> <span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span> <span class="s2">&quot;AU=&quot;</span><span class="p">,</span> <span class="n">AU</span>
+       <span class="n">endif</span>
+
+       <span class="k">call </span><span class="n">calceph_close</span><span class="p">(</span><span class="n">peph</span><span class="p">)</span>
+     <span class="n">endif</span>
+<span class="k">stop</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="menu-headers-and-libraries">
+<span id="calcephpy"></span><h2>Modules and Libraries<a class="headerlink" href="#menu-headers-and-libraries" title="Permalink to this headline">¶</a></h2>
+<p>All declarations needed to use CALCEPH Library are collected in the module files <code class="file docutils literal"><span class="pre">calceph.mod</span></code>.  The library is designed to work with Fortran compilers compliant with the Fortran 2003 standard. All declarations use the standard <strong>ISO_C_BINDING</strong> module.</p>
+<p>You should include that module in any program using the CALCEPH library:</p>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="k">use </span><span class="n">calceph</span>
+</pre></div>
+</div>
+<p>When a fortran string is given as a parameter to a function of this library, you should append this string with <strong>//C_NULL_CHAR</strong> because the C library works only with C string.</p>
+<div class="section" id="id1">
+<h3>Compilation on a Unix-like system<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>All programs using  CALCEPH must link against the <code class="file docutils literal"><span class="pre">libcalceph</span></code> library.  On Unix-like system this can be done with <em>-lcalceph</em>, for example</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>gfortran -I/usr/local/include myprogram.f -o myprogram -lcalceph
+</pre></div>
+</div>
+</div></blockquote>
+<p>If  CALCEPH Library has been installed to a non-standard location then it may be necessary to use <em>-I</em> and <em>-L</em> compiler options to point to the right directories, and some sort of run-time path for a shared library.</p>
+</div></blockquote>
+</div>
+<div class="section" id="id2">
+<h3>Compilation on a Windows system<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><p>All programs using CALCEPH must link against the <code class="file docutils literal"><span class="pre">libcalceph.lib</span></code>.  On Windows system this can be done with <em>libcalceph.lib</em>, for example</p>
+<blockquote>
+<div><div class="highlight-bash"><div class="highlight"><pre><span></span>gfortran.exe /out:myprogram.exe myprogram.f libcalceph.lib
+</pre></div>
+</div>
+</div></blockquote>
+<p>If  CALCEPH Library has been installed to a non-standard location then it may be necessary to use <em>/I</em> and <em>/LIBPATH:</em> compiler options to point to the right directories.</p>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="types">
+<span id="naifid"></span><h2>Types<a class="headerlink" href="#types" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="constants">
+<span id="id5"></span><h2>Constants<a class="headerlink" href="#constants" title="Permalink to this headline">¶</a></h2>
+<p>The following constants are defined in the module <code class="file docutils literal"><span class="pre">calceph.mod</span></code>.</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_MAX_CONSTANTNAME">
+<code class="descname">CALCEPH_MAX_CONSTANTNAME</code><em> [</em><em>integer</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_MAX_CONSTANTNAME" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines the maximum number of characters, including the trailing '\0',  that the name of a constant, available from the ephemeris file, could contain.</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_VERSION_MAJOR">
+<code class="descname">CALCEPH_VERSION_MAJOR</code><em> [</em><em>integer</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_VERSION_MAJOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer constant defines the major revision of this library. It can be used to distinguish different releases of this library.</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_VERSION_MINOR">
+<code class="descname">CALCEPH_VERSION_MINOR</code><em> [</em><em>integer</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_VERSION_MINOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer constant defines the minor revision of this library. It can be used to distinguish different releases of this library.</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_VERSION_PATCH">
+<code class="descname">CALCEPH_VERSION_PATCH</code><em> [</em><em>integer</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_VERSION_PATCH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer constant defines the patch level revision of this library. It can be used to distinguish different releases of this library.</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_VERSION_STRING">
+<code class="descname">CALCEPH_VERSION_STRING</code><em> [</em><em>character(len=*)</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_VERSION_STRING" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This string is the version of the library, which can be compared to the result of calceph_getversion to check at run time if the header file and library used match:</p>
+<p>Note: Obtaining different strings is not necessarily an error, as in general, a program compiled with some old CALCEPH version can be dynamically linked with a newer CALCEPH library version (if allowed by the operating system).</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_ASTEROID">
+<code class="descname">CALCEPH_ASTEROID</code><em> [</em><em>integer</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_ASTEROID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines the offset value for the asteroids that must be used as target or center for the computation functions, such as <a class="reference internal" href="calceph.multiple.html#f/_/calceph_compute" title="f/_/calceph_compute"><code class="xref f f-func docutils literal"><span class="pre">calceph_compute()</span></code></a>.</p>
+<p>The following constants specify in which units are expressed the output of the computation functions, such as <a class="reference internal" href="calceph.multiple.html#f/_/calceph_compute_unit" title="f/_/calceph_compute_unit"><code class="xref f f-func docutils literal"><span class="pre">calceph_compute_unit()</span></code></a> :</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_UNIT_AU">
+<code class="descname">CALCEPH_UNIT_AU</code><em> [</em><em>integer</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_UNIT_AU" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the unit of the positions and velocities is expressed in astronomical unit.</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_UNIT_KM">
+<code class="descname">CALCEPH_UNIT_KM</code><em> [</em><em>integer</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_UNIT_KM" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the unit of the positions and velocities is expressed in kilometer.</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_UNIT_DAY">
+<code class="descname">CALCEPH_UNIT_DAY</code><em> [</em><em>integer</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_UNIT_DAY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the unit of the velocities or the quantity TT-TDB or TCG-TCB is expressed in day (one day=86400 seconds).</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_UNIT_SEC">
+<code class="descname">CALCEPH_UNIT_SEC</code><em> [</em><em>integer</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_UNIT_SEC" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the unit of the velocities or the quantity TT-TDB or TCG-TCB is expressed in second.</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_UNIT_RAD">
+<code class="descname">CALCEPH_UNIT_RAD</code><em> [</em><em>integer</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_UNIT_RAD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the unit of the angles is expressed in radian.</p>
+<dl class="variable">
+<dt id="f/_/CALCEPH_USE_NAIFID">
+<code class="descname">CALCEPH_USE_NAIFID</code><em> [</em><em>integer</em><em>]</em><a class="headerlink" href="#f/_/CALCEPH_USE_NAIFID" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This integer defines that the NAIF identification numbers are used as target or center for the computation functions, such as <a class="reference internal" href="calceph.multiple.html#f/_/calceph_compute_unit" title="f/_/calceph_compute_unit"><code class="xref f f-func docutils literal"><span class="pre">calceph_compute_unit()</span></code></a>.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="calceph.multiple.html" class="btn btn-neutral float-right" title="Multiple file access functions" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="calceph.install.html" class="btn btn-neutral" title="Installation" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, CNRS, Observatoire de Paris, Observatoire de la Côte d&#39;Azur.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'3.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

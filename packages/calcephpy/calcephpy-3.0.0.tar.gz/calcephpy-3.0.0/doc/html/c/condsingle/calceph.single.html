@@ -1,0 +1,683 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Single file access functions &mdash; CALCEPH  - C language 3.0.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="CALCEPH  - C language 3.0.0 documentation" href="../index.html"/>
+        <link rel="next" title="Error functions" href="../calceph.error.html"/>
+        <link rel="prev" title="Multiple file access functions" href="../calceph.multiple.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> CALCEPH  - C language
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+    
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../calceph.intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calceph.install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calceph.interface.html">Library interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calceph.multiple.html">Multiple file access functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Single file access functions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#thread-notes">Thread notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#functions">Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#menu-calceph-sopen">calceph_sopen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-calceph-scompute">calceph_scompute</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-calceph-sgetconstant">calceph_sgetconstant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-calceph-sgetconstantcount">calceph_sgetconstantcount</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-calceph-sgetconstantindex">calceph_sgetconstantindex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-calceph-sgettimescale">calceph_sgettimescale</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-calceph-sgettimespan">calceph_sgettimespan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#menu-calceph-sclose">calceph_sclose</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../calceph.error.html">Error functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calceph.misc.html">Miscellaneous functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calceph.naifid.html">NAIF identification numbers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calceph.final.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calceph.reportbugs.html">Reporting bugs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calceph.copying.html">CALCEPH Library Copying conditions</a></li>
+</ul>
+
+            
+          
+    <a href="genindex.html">Index</a>
+  
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">CALCEPH  - C language</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Single file access functions</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="single-file-access-functions">
+<h1>Single file access functions<a class="headerlink" href="#single-file-access-functions" title="Permalink to this headline">¶</a></h1>
+<p>This group of functions works on a single ephemeris file at a given instant.
+They use an internal global variable to store information about the current opened ephemeris file.</p>
+<p>They are provided to have a similar interface of the fortran PLEPH function, supplied with the JPL ephemeris files.
+So the following call to PLEPH</p>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="n">PLEPH</span><span class="p">(</span><span class="mi">46550</span><span class="n">D0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="n">PV</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>could be replaced by</p>
+<div class="highlight-fortran"><div class="highlight"><pre><span></span><span class="n">calceph_sopen</span><span class="p">(</span><span class="s2">&quot;ephemerisfile.dat&quot;</span><span class="p">)</span>
+<span class="n">calceph_scompute</span><span class="p">(</span><span class="mi">46550</span><span class="n">D0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="n">PV</span><span class="p">)</span>
+<span class="n">calceph_sclose</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>While the function PLEPH could access only one file in a program, these functions could access on multiple files in a program but not at same time. To access multiple files at a same time, the functions listed in the section <a class="reference internal" href="../calceph.multiple.html#multiple-file-access-functions"><span class="std std-ref">Multiple file access functions</span></a>  must be used.</p>
+<p>When an error occurs, these functions execute error handlers according to the behavior defined by the function <a class="reference internal" href="../calceph.error.html#c.calceph_seterrorhandler" title="calceph_seterrorhandler"><code class="xref c c-func docutils literal"><span class="pre">calceph_seterrorhandler()</span></code></a>.</p>
+<p>The python interface does not provide these functions, the listed in the section <a class="reference internal" href="../calceph.multiple.html#multiple-file-access-functions"><span class="std std-ref">Multiple file access functions</span></a>  must be used.</p>
+<div class="section" id="thread-notes">
+<h2>Thread notes<a class="headerlink" href="#thread-notes" title="Permalink to this headline">¶</a></h2>
+<p>If the standard I/O functions such as <em>fread</em> are not reentrant
+then the CALCEPH I/O functions using them will not be reentrant either.</p>
+<p>If the library was configured with the option <em>--enable-thread=yes</em>,
+these functions use an internal global variable per thread. Each thread could access to different ephemeris file and compute ephemeris data at same time. But each thread must call the function <a class="reference internal" href="#c.calceph_sopen" title="calceph_sopen"><code class="xref c c-func docutils literal"><span class="pre">calceph_sopen()</span></code></a> to open ephemeris file even if all threads work on the same file.</p>
+<p>If the library was configured with the default option <em>--enable-thread=no</em>,
+these functions use an internal global variable per process and are not thread-safe. If multiple threads are used in the process and call the function <a class="reference internal" href="#c.calceph_scompute" title="calceph_scompute"><code class="xref c c-func docutils literal"><span class="pre">calceph_scompute()</span></code></a> at the same time, the caller thread must surround the call to this function with locking primitives, such as <em>pthread_lock/pthread_unlock</em> if POSIX Pthreads are used.</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The following examples, that can be found in the directory <em>examples</em> of the library sources, show the typical usage of this group of functions.</p>
+<p>The example in C language is <code class="file docutils literal"><span class="pre">csingle.c</span></code>.</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;calceph.h&quot;</span><span class="cp"></span>
+
+<span class="cm">/*-----------------------------------------------------------------*/</span>
+<span class="cm">/* main program */</span>
+<span class="cm">/*-----------------------------------------------------------------*/</span>
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+ <span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+ <span class="kt">double</span> <span class="n">AU</span><span class="p">,</span> <span class="n">EMRAT</span><span class="p">,</span> <span class="n">GM_Mer</span><span class="p">;</span>
+ <span class="kt">double</span> <span class="n">jd0</span><span class="o">=</span><span class="mi">2451624</span><span class="p">;</span>
+ <span class="kt">double</span> <span class="n">dt</span><span class="o">=</span><span class="mf">0.5E0</span><span class="p">;</span>
+ <span class="kt">double</span> <span class="n">PV</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+
+ <span class="cm">/* open the ephemeris file */</span>
+ <span class="n">res</span> <span class="o">=</span> <span class="n">calceph_sopen</span><span class="p">(</span><span class="s">&quot;example1.dat&quot;</span><span class="p">);</span>
+ <span class="k">if</span> <span class="p">(</span><span class="n">res</span><span class="p">)</span>
+ <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&quot;The ephemeris is already opened</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+   <span class="cm">/* print the values of AU, EMRAT and GM_Mer */</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">calceph_sgetconstant</span><span class="p">(</span><span class="s">&quot;AU&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">AU</span><span class="p">))</span>
+       <span class="n">printf</span><span class="p">(</span><span class="s">&quot;AU=%23.16E</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">AU</span><span class="p">);</span>
+
+   <span class="k">if</span> <span class="p">(</span><span class="n">calceph_sgetconstant</span><span class="p">(</span><span class="s">&quot;EMRAT&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">EMRAT</span><span class="p">))</span>
+     <span class="n">printf</span><span class="p">(</span><span class="s">&quot;EMRAT=%23.16E</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">EMRAT</span><span class="p">);</span>
+
+   <span class="k">if</span> <span class="p">(</span><span class="n">calceph_sgetconstant</span><span class="p">(</span><span class="s">&quot;GM_Mer&quot;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">GM_Mer</span><span class="p">))</span>
+     <span class="n">printf</span><span class="p">(</span><span class="s">&quot;GM_Mer=%23.16E</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">GM_Mer</span><span class="p">);</span>
+
+   <span class="cm">/* compute and print the coordinates */</span>
+   <span class="cm">/* the geocentric moon coordinates in AU and AU/day */</span>
+   <span class="n">calceph_scompute</span><span class="p">(</span><span class="n">jd0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">PV</span><span class="p">);</span>
+   <span class="n">printcoord</span><span class="p">(</span><span class="n">PV</span><span class="p">,</span><span class="s">&quot;geocentric coordinates of the Moon in AU and AU/day&quot;</span><span class="p">);</span>
+
+   <span class="cm">/* the value TT-TDB */</span>
+   <span class="n">calceph_scompute</span><span class="p">(</span><span class="n">jd0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">PV</span><span class="p">);</span>
+   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;TT-TDB = %23.16E</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">PV</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+
+   <span class="cm">/* the heliocentric coordinates of Mars */</span>
+   <span class="n">calceph_scompute</span><span class="p">(</span><span class="n">jd0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="n">PV</span><span class="p">);</span>
+   <span class="n">printcoord</span><span class="p">(</span><span class="n">PV</span><span class="p">,</span><span class="s">&quot;heliocentric coordinates of Mars&quot;</span><span class="p">);</span>
+
+   <span class="cm">/* close the ephemeris file */</span>
+   <span class="n">calceph_sclose</span><span class="p">();</span>
+   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;The ephemeris is already closed</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+ <span class="p">}</span>
+ <span class="k">else</span>
+ <span class="p">{</span>
+   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;The ephemeris can&#39;t be opened</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+ <span class="p">}</span>
+ <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="menu-calceph-sopen">
+<h3>calceph_sopen<a class="headerlink" href="#menu-calceph-sopen" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.calceph_sopen">
+int <code class="descname">calceph_sopen</code><span class="sig-paren">(</span>const char<em>&nbsp;*filename</em><span class="sig-paren">)</span><a class="headerlink" href="#c.calceph_sopen" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> -- pathname of the file</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 if an error occurs, otherwise non-zero value.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>This function opens the file whose pathname is the string pointed to by filename, reads the header of this file
+and associates an ephemeris descriptor to an internal variable.
+This file must be an ephemeris file.</p>
+<p>This file must be compliant to the format specified by the  'original JPL binary' , 'INPOP 2.0 binary' or 'SPICE' ephemeris file.
+At the moment, supported SPICE files are the following :</p>
+<blockquote>
+<div><ul class="simple">
+<li>text Planetary Constants Kernel (KPL/PCK) files</li>
+<li>binary PCK  (DAF/PCK) files.</li>
+<li>binary SPK (DAF/SPK) files containing segments of type 1, 2, 3, 12, 13, 20, 102, 103 and 120.</li>
+<li>meta kernel (KPL/MK) files.</li>
+<li>frame kernel (KPL/FK) files. Only a basic support is provided.</li>
+</ul>
+</div></blockquote>
+<p>The function <a class="reference internal" href="#c.calceph_sclose" title="calceph_sclose"><code class="xref c c-func docutils literal"><span class="pre">calceph_sclose()</span></code></a> must be called to free allocated memory by this function.</p>
+<p>The following example opens the ephemeris file example1.dat</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">calceph_sopen</span><span class="p">(</span><span class="s">&quot;example1.dat&quot;</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">res</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="cm">/*</span>
+<span class="cm">    ...  computation ...</span>
+<span class="cm">  */</span>
+  <span class="n">calceph_sclose</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="menu-calceph-scompute">
+<h3>calceph_scompute<a class="headerlink" href="#menu-calceph-scompute" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.calceph_scompute">
+int <code class="descname">calceph_scompute</code><span class="sig-paren">(</span>double<em>&nbsp;JD0</em>, double<em>&nbsp;time</em>, int<em>&nbsp;target</em>, int<em>&nbsp;center</em>, double<em>&nbsp;PV[6]</em><span class="sig-paren">)</span><a class="headerlink" href="#c.calceph_scompute" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>JD0</strong> -- Integer part of the Julian date</li>
+<li><strong>time</strong> -- Fraction part of the Julian date</li>
+<li><strong>target</strong> -- The body or reference point whose coordinates are required (see the list, below).</li>
+<li><strong>center</strong> -- The origin of the coordinate system (see the list, below). If <em>target</em> is 15, 16 or 17 (libration, TT-TDB or TCG-TCB), <em>center</em> must be <em>0</em>.</li>
+<li><strong>PV</strong> -- <div class="line-block">
+<div class="line">An array to receive the cartesian position (x,y,z) and the velocity (xdot, ydot, zdot).</div>
+<div class="line">The position is expressed in Astronomical Unit (au) and the velocity is expressed in Astronomical Unit per day (au/day).</div>
+<div class="line">If the target is <em>TT-TDB</em>, only the first element of this array will get the result. The time scale transformation TT-TDB is expressed in seconds.</div>
+<div class="line">If the target is <em>TCG-TCB</em>, only the first element of this array will get the result. The time scale transformation TCG-TCB is expressed in seconds.</div>
+<div class="line">If the target is <em>Librations</em>, the angles of the librations of the Moon are expressed in radians and their derivatives are expressed in radians per day.</div>
+</div>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 if an error occurs, otherwise non-zero value.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>This function reads, if needed, and interpolates a single object, usually the position and velocity of one body (<em>target</em>) relative to another (<em>center</em>), from the ephemeris file, previously opened with the function <a class="reference internal" href="#c.calceph_sopen" title="calceph_sopen"><code class="xref c c-func docutils literal"><span class="pre">calceph_sopen()</span></code></a>, for the time <em>JD0+time</em> and stores the results to <em>PV</em>.</p>
+<p>To get the best precision for the interpolation, the time is splitted in two floating-point numbers. The argument <em>JD0</em> should be an integer and <em>time</em> should be a fraction of the day. But you may call this function with <em>time=0</em> and <em>JD0</em>, the desired time, if you don't take care about precision.</p>
+<p>The possible values for <em>target</em> and <em>center</em> are  :</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="60%" />
+<col width="40%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">value</th>
+<th class="head">meaning</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>Mercury Barycenter</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>Venus Barycenter</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>Earth</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>Mars Barycenter</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>Jupiter Barycenter</td>
+</tr>
+<tr class="row-odd"><td>6</td>
+<td>Saturn Barycenter</td>
+</tr>
+<tr class="row-even"><td>7</td>
+<td>Uranus Barycenter</td>
+</tr>
+<tr class="row-odd"><td>8</td>
+<td>Neptune Barycenter</td>
+</tr>
+<tr class="row-even"><td>9</td>
+<td>Pluto Barycenter</td>
+</tr>
+<tr class="row-odd"><td>10</td>
+<td>Moon</td>
+</tr>
+<tr class="row-even"><td>11</td>
+<td>Sun</td>
+</tr>
+<tr class="row-odd"><td>12</td>
+<td>Solar Sytem barycenter</td>
+</tr>
+<tr class="row-even"><td>13</td>
+<td>Earth-moon barycenter</td>
+</tr>
+<tr class="row-odd"><td>15</td>
+<td>Librations</td>
+</tr>
+<tr class="row-even"><td>16</td>
+<td>TT-TDB</td>
+</tr>
+<tr class="row-odd"><td>17</td>
+<td>TCG-TCB</td>
+</tr>
+<tr class="row-even"><td>asteroid number + CALCEPH_ASTEROID</td>
+<td>asteroid</td>
+</tr>
+</tbody>
+</table>
+<p>These accepted values by this function are the same as the value for the JPL function <em>PLEPH</em>, except for the values <em>TT-TDB</em>, <em>TCG-TCB</em> and asteroids.</p>
+<p>For example, the value &quot;CALCEPH_ASTEROID+4&quot; for target or center specifies the asteroid Vesta.</p>
+<p>The following example prints the heliocentric coordinates of Mars at time=2451624.5 and at 2451624.9</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">jd0</span><span class="o">=</span><span class="mi">2451624</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">dt1</span><span class="o">=</span><span class="mf">0.5E0</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">dt2</span><span class="o">=</span><span class="mf">0.9E0</span><span class="p">;</span>
+
+<span class="kt">double</span> <span class="n">PV</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
+<span class="cm">/* open the ephemeris file */</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">calceph_sopen</span><span class="p">(</span><span class="s">&quot;example1.dat&quot;</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">res</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="cm">/* the heliocentric coordinates of Mars */</span>
+  <span class="n">calceph_scompute</span><span class="p">(</span><span class="n">jd0</span><span class="p">,</span> <span class="n">dt1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="n">PV</span><span class="p">);</span>
+  <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="mi">6</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%23.16E</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">PV</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+
+  <span class="n">calceph_scompute</span><span class="p">(</span><span class="n">jd0</span><span class="p">,</span> <span class="n">dt2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="n">PV</span><span class="p">);</span>
+  <span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;</span><span class="mi">6</span><span class="p">;</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span> <span class="n">printf</span><span class="p">(</span><span class="s">&quot;%23.16E</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">PV</span><span class="p">[</span><span class="n">j</span><span class="p">]);</span>
+
+  <span class="cm">/* close the ephemeris file */</span>
+  <span class="n">calceph_sclose</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="menu-calceph-sgetconstant">
+<h3>calceph_sgetconstant<a class="headerlink" href="#menu-calceph-sgetconstant" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.calceph_sgetconstant">
+int <code class="descname">calceph_sgetconstant</code><span class="sig-paren">(</span>const char*<em>&nbsp;name</em>, double<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.calceph_sgetconstant" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> -- name of the constant</li>
+<li><strong>value</strong> -- value of the constant</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 if an error occurs, otherwise non-zero value.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>This function returns the value associated to the constant <em>name</em> in the header of the ephemeris file.</p>
+<p>The function <a class="reference internal" href="#c.calceph_sopen" title="calceph_sopen"><code class="xref c c-func docutils literal"><span class="pre">calceph_sopen()</span></code></a> must be previously called  before.</p>
+<p>The following example prints the value of the astronomical unit stored in the ephemeris file</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">UA</span><span class="p">;</span>
+<span class="n">calceph_sopen</span><span class="p">(</span><span class="s">&quot;example1.dat&quot;</span><span class="p">);</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">calceph_sgetconstant</span><span class="p">(</span><span class="s">&quot;UA&quot;</span><span class="p">,</span><span class="o">&amp;</span><span class="n">UA</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">res</span><span class="p">)</span>
+<span class="p">{</span>
+   <span class="n">printf</span><span class="p">(</span><span class="s">&quot;astronomical unit=%23.16E</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">UA</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="menu-calceph-sgetconstantcount">
+<h3>calceph_sgetconstantcount<a class="headerlink" href="#menu-calceph-sgetconstantcount" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.calceph_sgetconstantcount">
+int <code class="descname">calceph_sgetconstantcount</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.calceph_sgetconstantcount" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">0 if an error occurs, otherwise non-zero value.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>This function returns the number of constants available in the header of the ephemeris file.</p>
+<p>The function <a class="reference internal" href="#c.calceph_sopen" title="calceph_sopen"><code class="xref c c-func docutils literal"><span class="pre">calceph_sopen()</span></code></a> must be previously called  before.</p>
+<p>The following example prints the number of available constants stored in the ephemeris file</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">res</span><span class="p">,</span> <span class="n">count</span><span class="p">;</span>
+<span class="n">calceph_sopen</span><span class="p">(</span><span class="s">&quot;example1.dat&quot;</span><span class="p">);</span>
+<span class="n">count</span> <span class="o">=</span> <span class="n">calceph_sgetconstantcount</span><span class="p">();</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;number of constants : %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">count</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="menu-calceph-sgetconstantindex">
+<h3>calceph_sgetconstantindex<a class="headerlink" href="#menu-calceph-sgetconstantindex" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.calceph_sgetconstantindex">
+int <code class="descname">calceph_sgetconstantindex</code><span class="sig-paren">(</span>int<em>&nbsp;index</em>, char<em>&nbsp;name[CALCEPH_MAX_CONSTANTNAME]</em>, double<em>&nbsp;*value</em><span class="sig-paren">)</span><a class="headerlink" href="#c.calceph_sgetconstantindex" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>index</strong> -- index of the constant, between 1 and <a class="reference internal" href="../calceph.multiple.html#c.calceph_getconstantcount" title="calceph_getconstantcount"><code class="xref c c-func docutils literal"><span class="pre">calceph_getconstantcount()</span></code></a></li>
+<li><strong>name</strong> -- name of the constant</li>
+<li><strong>value</strong> -- value of the constant</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 if an error occurs, otherwise non-zero value.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>This function returns the name and its value of the constant available at the specified index in the header of the ephemeris file. The value of <em>index</em> must be between 1 and <a class="reference internal" href="#c.calceph_sgetconstantcount" title="calceph_sgetconstantcount"><code class="xref c c-func docutils literal"><span class="pre">calceph_sgetconstantcount()</span></code></a>.</p>
+<p>The function <a class="reference internal" href="#c.calceph_sopen" title="calceph_sopen"><code class="xref c c-func docutils literal"><span class="pre">calceph_sopen()</span></code></a> must be previously called before.</p>
+<p>The following example displays the name of the constants, stored in the ephemeris file, and their values</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">j</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">nameconstant</span><span class="p">[</span><span class="n">CALCEPH_MAX_CONSTANTNAME</span><span class="p">];</span>
+<span class="kt">double</span> <span class="n">valueconstant</span><span class="p">;</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">calceph_sopen</span><span class="p">(</span><span class="s">&quot;example1.dat&quot;</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">res</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span> <span class="n">j</span><span class="o">&lt;=</span><span class="n">calceph_sgetconstantcount</span><span class="p">();</span> <span class="n">j</span><span class="o">++</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">calceph_sgetconstantindex</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">nameconstant</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">valueconstant</span><span class="p">);</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&quot;&#39;%s&#39;</span><span class="se">\t</span><span class="s">= %23.16E</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">nameconstant</span><span class="p">,</span> <span class="n">valueconstant</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="n">calceph_sclose</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="menu-calceph-sgettimescale">
+<h3>calceph_sgettimescale<a class="headerlink" href="#menu-calceph-sgettimescale" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.calceph_sgettimescale">
+int <code class="descname">calceph_sgettimescale</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.calceph_sgettimescale" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">0 if an error occurs, otherwise non-zero value.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="docutils">
+<dt>This function returns the timescale of the ephemeris file :</dt>
+<dd><ul class="first last simple">
+<li>1 if the quantities of all bodies are expressed in the TDB time scale.</li>
+<li>2 if the quantities of all bodies are expressed in the TCB time scale.</li>
+</ul>
+</dd>
+</dl>
+<p>The function <a class="reference internal" href="#c.calceph_sopen" title="calceph_sopen"><code class="xref c c-func docutils literal"><span class="pre">calceph_sopen()</span></code></a> must be previously called before.</p>
+<p>The following example prints the time scale available in the ephemeris file</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">res</span><span class="p">,</span> <span class="n">timescale</span><span class="p">;</span>
+<span class="n">calceph_sopen</span><span class="p">(</span><span class="s">&quot;example1.dat&quot;</span><span class="p">);</span>
+<span class="n">timescale</span> <span class="o">=</span> <span class="n">calceph_sgettimescale</span><span class="p">();</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;timescale : %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span> <span class="n">timescale</span><span class="o">==</span><span class="mi">1</span><span class="o">?</span><span class="s">&quot;TDB&quot;</span><span class="o">:</span><span class="s">&quot;TCB&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="menu-calceph-sgettimespan">
+<h3>calceph_sgettimespan<a class="headerlink" href="#menu-calceph-sgettimespan" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.calceph_sgettimespan">
+int <code class="descname">calceph_sgettimespan</code><span class="sig-paren">(</span>double*<em>&nbsp;firsttime</em>, double*<em>&nbsp;lasttime</em>, int*<em>&nbsp;continuous</em><span class="sig-paren">)</span><a class="headerlink" href="#c.calceph_sgettimespan" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>firsttime</strong> -- Julian date of the first time</li>
+<li><strong>lasttime</strong> -- Julian date of the last time</li>
+<li><strong>continuous</strong> -- information about the availability of the quantities over the time span</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">0 if an error occurs, otherwise non-zero value.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<p>This function returns the first and last time available in the ephemeris file. The Julian date for the first and last time are expressed in the time scale returned by  <a class="reference internal" href="#c.calceph_sgettimescale" title="calceph_sgettimescale"><code class="xref c c-func docutils literal"><span class="pre">calceph_sgettimescale()</span></code></a>
+.</p>
+<p>It returns the following value in the parameter <em>continuous</em> :</p>
+<blockquote>
+<div><ul class="simple">
+<li>1 if the quantities of all bodies are available for any time between the first and last time.</li>
+<li>2 if the quantities of some bodies are available on discontinuous time intervals between the first and last time.</li>
+<li>3 if the quantities of each body are available on a continuous time interval between the first and last time, but not available for any time between the first and last time.</li>
+</ul>
+</div></blockquote>
+<p>The function <a class="reference internal" href="#c.calceph_sopen" title="calceph_sopen"><code class="xref c c-func docutils literal"><span class="pre">calceph_sopen()</span></code></a> must be previously called before.</p>
+<p>The following example prints the first and last time available in the ephemeris file</p>
+<div class="highlight-C"><div class="highlight"><pre><span></span><span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+<span class="kt">double</span> <span class="n">jdfirst</span><span class="p">,</span> <span class="n">jdlast</span><span class="p">;</span>
+<span class="kt">int</span> <span class="n">cont</span><span class="p">;</span>
+<span class="n">calceph_sopen</span><span class="p">(</span><span class="s">&quot;example1.dat&quot;</span><span class="p">);</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">calceph_sgettimespan</span><span class="p">(</span><span class="o">&amp;</span><span class="n">jdfirst</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">jdlast</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cont</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;data available between [ %f, %f ]. continuous=%d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+       <span class="n">jdfirst</span><span class="p">,</span> <span class="n">jdlast</span><span class="p">,</span> <span class="n">cont</span><span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="menu-calceph-sclose">
+<h3>calceph_sclose<a class="headerlink" href="#menu-calceph-sclose" title="Permalink to this headline">¶</a></h3>
+<dl class="function">
+<dt id="c.calceph_sclose">
+void <code class="descname">calceph_sclose</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#c.calceph_sclose" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>This function closes the ephemeris data file and frees allocated memory by the function <a class="reference internal" href="#c.calceph_sopen" title="calceph_sopen"><code class="xref c c-func docutils literal"><span class="pre">calceph_sopen()</span></code></a>.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../calceph.error.html" class="btn btn-neutral float-right" title="Error functions" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../calceph.multiple.html" class="btn btn-neutral" title="Multiple file access functions" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, CNRS, Observatoire de Paris, Observatoire de la Côte d&#39;Azur.
+
+    </p>
+  </div> 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'3.0.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
