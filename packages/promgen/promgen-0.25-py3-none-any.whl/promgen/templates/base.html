@@ -1,0 +1,151 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Promgen {{ VERSION }}{% endblock %}</title>
+        <link rel="stylesheet" href="{% static "/css/bootstrap.min.css" %}">
+        <link rel="stylesheet" href="{% static "/css/bootstrap-theme.min.css" %}">
+        <link rel="stylesheet" href="{% static "/css/bootstrap-datetimepicker.min.css" %}">
+        <link rel="stylesheet" href="{% static "/css/bootstrap-switch.min.css" %}">
+        <link rel="stylesheet" href="{% static "/css/promgen.css" %}">
+    </head>
+    <body>
+        <header class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <nav class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">Promgen {{ VERSION }}</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                  <ul class="nav navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'service-list' %}">Services</a></li>
+                        <li><a href="{% url 'rules-list' %}">Rules</a></li>
+                        <li><a href="{% url 'url-list' %}">URLs</a></li>
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Misc <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            <li><a href="{% url 'audit-list' %}">Log</a></li>
+                            <li><a href="{% url 'farm-list' %}">Farms</a></li>
+                            <li><a href="{% url 'host-list' %}">Hosts</a></li>
+                            <li><a href="{% url 'shard-list' %}">Shard</a></li>
+                            <li><a href="{% url 'import' %}">Import Config</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{% url 'config-targets' %}">Export Targets</a></li>
+                            <li><a href="{% url 'config-rules' %}">Export Rules</a></li>
+                            <li><a href="{% url 'config-urls' %}">Export URL</a></li>
+                          </ul>
+                        </li>
+                        {% if EXTERNAL_LINKS %}
+                        <li class="dropdown">
+                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Links <span class="caret"></span></a>
+                          <ul class="dropdown-menu">
+                            {% for title, link in EXTERNAL_LINKS.items %}
+                            <li><a href="{{ link }}">{{ title }}</a></li>
+                            {% endfor %}
+                          </ul>
+                        </li>
+                        {% endif %}
+                    </ul>
+                    <form class="navbar-form navbar-left" action="{% url 'search' %}">
+                      <div class="form-group">
+                        <input name="search" type="text" class="form-control" placeholder="Service, Project, etc">
+                      </div>
+                      <button type="submit" class="btn btn-default">Search</button>
+                    </form>
+                    <form style="display:inline;" action="{% url 'commit' %}" method="POST">
+                      <input name="next" type="hidden" value="{{ request.get_full_path }}" />
+                      <button type="submit" class="btn btn-warning">Commit</button>
+                    </form>
+                    <a id="alert-load" class="btn btn-default navbar-btn" role="button" data-toggle="collapse" href="#alert-all" aria-expanded="false" aria-controls="collapseExample">
+                      Alerts
+                    </a>
+                    <span id="silence-load" class="btn btn-default navbar-btn">Silences</span>
+                    <ul class="nav navbar-nav navbar-right">
+                      <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                          {{user.username}} <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a href="{% url 'status' %}">Profile</a></li>
+                          <li><a href="{% url 'logout' %}">Logout</a></li>
+                          {% if user.is_superuser %}
+                          <li role="separator" class="divider"></li>
+                          <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                          {% endif %}
+                        </ul>
+                      </li>
+                    </ul>
+                  {% else %}
+                      {# This looks like a bug, but if we're not logged in, we need to close the list tag #}
+                      <li><a href="{% url 'login' %}">Login</a></li>
+                    </ul>
+                  {% endif %}
+                </div><!-- /.navbar-collapse -->
+            </nav><!-- /.container-fluid -->
+        </header>
+        <div id="vue" class="container">
+          {% if messages %}
+              {% for message in messages %}
+              <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">
+                  <button type="button" class="close" data-dismiss="alert">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+                  {{ message }}
+              </div>
+              {% endfor %}
+          {% endif %}
+            <div>
+{% include 'promgen/silence_form.html' %}
+<div class="panel panel-danger collapse" id="alert-all">
+  <div class="panel-heading">
+    Alerts
+    <button type="button" class="close" data-toggle="collapse" href="#alert-all" aria-expanded="false" aria-controls="collapseExample">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <table class="table table-bordered table-condensed">
+    <template class="alertrow">
+      <tr>
+        <td><a href="#"></a></td>
+        <td>
+          <dl class="dl-horizontal"></dl>
+        </td>
+      </tr>
+    </template>
+    <template class="annotation">
+      <dt>k</dt>
+      <dd>v</dd>
+    </template>
+    <template class="label">
+      <a
+        class="label label-warning promgen-silence"
+        href="#"
+        style="display: inline-block;"
+      >k:v</a>
+    </template>
+  </table>
+</div>
+<div class="panel panel-default" style="display:none" id="silence-all"></div>
+{% block content %}{% endblock %}
+            </div>
+        </div>
+        <script src="{% static "/js/jquery.min.js" %}"></script>
+        <script src="{% static "/js/jquery.selection.js" %}"></script>
+        <script src="{% static "/js/bootstrap.min.js" %}"></script>
+        <script src="{% static "/js/bootstrap3-typeahead.min.js" %}"></script>
+        <script src="{% static "/js/moment.min.js" %}"></script>
+        <script src="{% static "/js/bootstrap-datetimepicker.min.js" %}"></script>
+        <script src="{% static "/js/bootstrap-switch.min.js" %}"></script>
+        <script src="{% static "/js/promgen.js" %}"></script>
+{% block javascript %}{% endblock %}
+    </body>
+</html>

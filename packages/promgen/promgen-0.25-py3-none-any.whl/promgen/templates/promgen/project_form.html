@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if project %}
+  <div class="page-header">
+    <h1>Project: {{ project.name }}</h1>
+  </div>
+
+  {% include 'promgen/breadcrumb.html' with project=project label=view.button_label only %}
+  <div class="alert alert-danger" role="alert">
+      Warning. Renaming or Moving a project will reset all labels in Prometheus
+  </div>
+{% else %}
+  <div class="page-header">
+    <h1>Register new Project</h1>
+  </div>
+  {% include 'promgen/breadcrumb.html' with service=service label=view.button_label only %}
+{% endif %}
+
+<div class="panel panel-default">
+  <div class="panel-body">
+    <form action="" method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <button class="btn btn-primary">{{ view.button_label }}</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
