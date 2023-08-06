@@ -1,0 +1,105 @@
+#! /usr/bin/env python
+# find_libdrmaa -- created 2017-02-28 - Renato Alves
+
+from __future__ import print_function
+import os
+import socket
+import sys
+from subprocess import Popen, PIPE
+
+
+HOSTNAME = socket.gethostname().split('.')[0]
+HOME_DRMAA = os.path.expanduser(os.path.join("~", ".libdrmaa", HOSTNAME))
+LIBDRMAA = "libdrmaa.so"
+EXCLUDES = (
+    "/home/",
+    "/g/",
+    "/{0}/".format(HOSTNAME),
+)
+
+
+def run_cmd(cmd):
+    p = Popen(cmd, stdout=PIPE, stderr=PIPE)
+    out, err = p.communicate()
+
+    return out, err, p.returncode
+
+
+def savematch(match):
+    print("Saving", match, "to", HOME_DRMAA)
+    DRMAA_DIR = os.path.dirname(HOME_DRMAA)
+    if not os.path.isdir(DRMAA_DIR):
+        os.mkdir(DRMAA_DIR)
+
+    with open(HOME_DRMAA, 'wb') as fh:
+        fh.write("export DRMAA_LIBRARY_PATH='{0}'\n".format(match).encode("utf8"))
+
+
+def get_match(*args):
+    def match_stream(s):
+        for line in s.splitlines():
+            line = line.decode("utf8")
+
+            for exclude in EXCLUDES:
+                if line.startswith(exclude):
+                    # Ignore if found in a user's home folder or the /g shares or local disks
+                    print("Breaking")
+                    break
+            else:
+                savematch(line)
+                sys.exit(0)
+
+    for stream in args:
+        match_stream(stream)
+
+
+def find_location(target, warn=None):
+    print("Finding", LIBDRMAA, "on", target)
+
+    cmd = ["find", target, "-name", LIBDRMAA]
+    out, err, exit = run_cmd(cmd)
+
+    # NOTE Ignore find's exit code as permission errors while traversing folders
+    # can cause a non-zero exit despite being successful in finding hits
+    try:
+        get_match(out)
+    except SystemExit as e:
+        if warn:
+            print()
+            print("WARNING: If the current cluster isn't", warn, "the lib we found may not be the correct one")
+            print("         If it's not, contact the cluster admins to know where to find", LIBDRMAA)
+            print("         Once you do, update", HOME_DRMAA, "with the correct path")
+        raise
+
+    print("No luck with find on", target)
+
+
+def locate():
+    print("Locating", LIBDRMAA)
+
+    cmd = ["locate", LIBDRMAA]
+    out, err, exit = run_cmd(cmd)
+
+    if not exit:
+        get_match(out, err)
+
+    print("No luck with locate")
+
+
+locate()
+find_location("/opt")
+find_location("/usr/lib")
+find_location("/usr/lib64")
+find_location("/usr/local/lib")
+find_location("/usr/local/lib64")
+
+print("Not getting anything so far, trying a full /usr scan")
+
+find_location("/usr")
+
+print("No luck so far. Last try /shared/ibm ")
+
+find_location("/shared/ibm", warn="LSF")
+
+print("No luck, giving up")
+sys.exit(1)
