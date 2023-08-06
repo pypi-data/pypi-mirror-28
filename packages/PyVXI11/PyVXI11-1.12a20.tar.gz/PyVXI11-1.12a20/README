@@ -1,0 +1,50 @@
+0.Copyright
+
+cVXI11.pyx, cVXI11.pxd, VXI11.i and setup.py is written by Noboru Yamamoto, KEK, JAPAN.(C) 2009-2013 Noboru Yamamoto
+
+This is a software to control devices using VXI11 protocol form Python. This software based on Cython. There seems exsists softwares with same name in the net.
+If you are looking for the pure-python implementation, please visit python-vxi11 page in PyPI.
+
+
+1. Files
+
+This package contains :
+ README
+ VXI11.rpcl
+ cVXI11.pyx
+ cVXI11.pxd
+ setup.py
+
+ and some helper files.
+
+2. How to build
+ You must have rpcgen command, Cython, and python running on your system.
+(If you also wants to build old VXI11.py and related library, you need swig).
+
+The following sequence of commands will build and install VXI11 module in your python
+interpreter.
+
+%python setup.py build
+%python setup.py install 
+
+or 
+
+%sudo python setup.py install 
+
+Before start building, pleas make sure thata there is none of VXI11.py, VXI11_wrap.c, cVXI11.cpp, cVXI11.h, VXI11.h,VXI11_clnt.c,VXI11_svc.c and VXI11_xdr.c. These files should be generated using the tools mentioned above, ie rpcge, cython ,swig and are platform dependent.
+In other words, these files created on other platforms may not work on your platform.
+
+3. binary tools
+
+run "make all" to create vxi11scan and vxi11_device_clear.
+vxi11scan.py nor pyvxi11scan.pyx are not support on this version.
+
+4. note
+2014.4.1 : SRQ support still is not complete. Sometime it crashes. Please use it at your own risk.
+2014.4.2 : SQR handler on MacOSX respend to SRQ. However, on Linux, it does not get event.
+2014.4.4 : Ubuntu installation may not incude /usr/sbin/rpcinfo command. You need to install it from the package manager.
+2014.4.6 : compilation error. You may have warnings during compilation. It does not affects the operation of the software.
+2016.10.21: add a destroy_link() method to the Vxi11Device class.
+
+
+
