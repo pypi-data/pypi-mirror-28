@@ -1,0 +1,7 @@
+
+
+    @Key([{% for field in fields %}{%if not field == 'id'%}'{{field.name}}'{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}])
+    def {{method_name}}(self, domain):
+        {{class_name_snake}} = {{class_name}}(domain)
+        {{class_name_snake}}.save()
+        return {'payload': {{class_name_snake}}.to_dict()}

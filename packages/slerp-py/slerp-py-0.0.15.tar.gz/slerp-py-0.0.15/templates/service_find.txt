@@ -1,0 +1,19 @@
+
+    {% if filter_by == '' %}
+    @Key(['{{fields[0]}}'])
+    def {{method_name}}_by_{{fields[0]}}(self, domain):
+    {%- elif ',' not in filter_by %}
+    @Key(['{{filter_by}}'])
+    def {{method_name}}_by_{{filter_by}}(self, domain):
+    {%- else %}
+    @Key([{% for field in filter_by_list %}'{{field}}'{% if not loop.last %}, {% endif %}{% endfor %}])
+    def {{method_name}}_by_{{filter_by_list|join('_and_')}}(self, domain):
+    {%- endif %}
+        {%- if filter_by == '' %}
+        {{class_name_snake}} = {{class_name}}.query.get(domain[{{fields[0]}}])
+        {%- elif ',' not in filter_by %}
+        {{class_name_snake}} = {{class_name}}.query.filter_by({{filter_by}}=domain['{{filter_by}}']).first()
+        {%- else %}
+        {{class_name_snake}} = {{class_name}}.query{% for field in filter_by_list %}.filter_by({{field}}=domain['{{field}}']){% endfor %}.first()
+        {%- endif %}
+        return {'payload': {{class_name_snake}}.to_dict()}

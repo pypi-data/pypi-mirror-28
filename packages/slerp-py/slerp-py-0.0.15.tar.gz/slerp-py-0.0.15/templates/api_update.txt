@@ -1,0 +1,21 @@
+
+{% if ',' not in filter_by %}
+@api.route('/{{method_name}}_by_{{filter_by}}', methods=['PUT'])
+def {{method_name}}_by_{{filter_by}}():
+{% else %}
+@api.route('/{{method_name}}_by_{{filter_by_list|join('_and_')}}', methods=['PUT'])
+def {{method_name}}_by_{{filter_by_list|join('_and_')}}():
+{%- endif %}
+    """
+    {
+    {%- for field in fields%}
+    "{{field.name}}": "{{field.type}}"{%-if not loop.last -%}, {%- endif -%}
+    {%- endfor%}
+    }
+    """
+    domain = request.get_json()
+    {%- if ',' not in filter_by %}
+    return {{class_name_snake}}_service.{{method_name}}_by_{{filter_by}}(domain)
+    {%- else %}
+    return {{class_name_snake}}_service.{{method_name}}_by_{{filter_by_list|join('_and_')}}(domain)
+    {%- endif %}
