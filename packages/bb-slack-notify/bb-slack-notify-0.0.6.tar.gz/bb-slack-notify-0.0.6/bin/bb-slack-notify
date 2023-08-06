@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+"""
+Notify a slack channel of new Bitbucket deployments.
+
+Args:
+    -c --channel        Slack Channel to post in (without the #)
+    -t --token          Slack Token used for authentication (Must specify this or webhook, not both)
+    -w --webhook        Use this incoming webhook url instead of an API token.
+"""
+from slackclient import SlackClient
+import json
+import time
+import sys
+import os
+import argparse
+import requests
+
+
+def parse_arguments():
+    PARSER = argparse.ArgumentParser(description='Bitbucket Deployment Slack Notifier')
+    PARSER.add_argument('-c', '--channel', help="Slack Channel to notify", required=True)
+    PARSER.add_argument('-t', '--token', help="Slack API token", default=False)
+    PARSER.add_argument('-w', '--webhook', help="Slack Incoming Webhook URL", default=False)
+    PARSER.add_argument('-e', '--environment', help="Environment the pipeline deployed to", default=False)
+    return PARSER.parse_args()
+
+
+def notify_slack(message):
+    sc.api_call(
+        'chat.postMessage', 
+        channel=slack_channel,
+        text=message,
+        username='Bitbucket-Deployment', 
+        icon_emoji=':robot_face:',
+    )
+
+
+def run():
+    ARGS = parse_arguments()
+
+    if len(sys.argv) > 1:
+        if not os.environ.get('BITBUCKET_COMMIT') or not os.environ.get('BITBUCKET_BUILD_NUMBER'):
+            print('This CLI must be run from within a Bitbucket Pipeline build')
+            sys.exit()
+
+    slack_channel = '#{}'.format(ARGS.channel)
+    token = ARGS.token
+    webhook = ARGS.webhook
+    environment = ARGS.environment
+    sc = SlackClient(token)
+    
+    # Environment variables taken from https://confluence.atlassian.com/bitbucket/environment-variables-794502608.html
+    branch = os.environ.get('BITBUCKET_BRANCH', False)
+    tag = os.environ.get('BITBUCKET_TAG', False)
+    commit = os.environ.get('BITBUCKET_COMMIT', False)[0:6]
+    build_number = os.environ.get('BITBUCKET_BUILD_NUMBER')
+    project_repo = os.environ.get('BITBUCKET_REPO_SLUG')
+
+
+    if not token and not webhook:
+        print('You must specify either token or webhook')
+        sys.exit()
+    if token and webhook:
+        print('You can only specify token OR webhook')
+        sys.exit()
+
+    if tag:
+        message = 'tag: *{}* _commit {}_ of *{}* deployed by Bitbucket pipeline *{}* https://bitbucket.org/{}/addon/pipelines/home#!/results/{}'.format(tag, commit, project_repo, build_number, project_repo, build_number)
+    elif branch:
+        message = 'branch *{}* _commit {}_ of *{}* deployed by Bitbucket pipeline *{}* https://bitbucket.org/{}/addon/pipelines/home#!/results/{}'.format(branch, commit, project_repo, build_number, project_repo, build_number)
+    else:
+        message = 'commit *{}* of *{}* deployed by Bitbucket pipeline *{}* https://bitbucket.org/{}/addon/pipelines/home#!/results/{}'.format(commit, project_repo, build_number, project_repo, build_number)
+
+    if environment:
+        message = '*{} environment*: {}'.format(environment.upper(), message)
+    
+    if token:
+        print('Notifying channel {} using API token').format(slack_channel)
+        notify_slack(message)
+
+    if webhook:
+        print('Notifying channel {} using webhook').format(slack_channel)
+        post_data={}
+        post_data['channel'] = slack_channel
+        post_data['username'] = 'Bitbucket-Deployment'
+        post_data['icon_emoji'] = ':robot_face:'
+        post_data['text'] = message
+        response = requests.post(webhook, data=json.dumps(post_data))
+        if response.status_code == 200:
+            print('Notification successful')
+        else:
+            print('Notification error, response code {}'.format(response.status_code))
+            sys.exit()
+
+run()
