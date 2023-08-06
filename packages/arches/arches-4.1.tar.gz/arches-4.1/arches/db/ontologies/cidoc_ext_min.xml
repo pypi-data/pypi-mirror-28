@@ -1,0 +1,408 @@
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+	xmlns:local="http://archesproject.org/ns/local/" 
+	xml:lang="en" 
+	xml:base="http://www.cidoc-crm.org/cidoc-crm/">
+
+<!-- Fully materialized baseline RDF terms -->
+<rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Resource">
+  <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2000/01/rdf-schema#"/>
+  <rdfs:label>Resource</rdfs:label>
+  <rdfs:comment>The class resource, everything.</rdfs:comment>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Literal">
+  <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2000/01/rdf-schema#"/>
+  <rdfs:label>Literal</rdfs:label>
+  <rdfs:comment>The class of literal values, eg. textual strings and integers.</rdfs:comment>
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Class">
+  <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2000/01/rdf-schema#"/>
+  <rdfs:label>Class</rdfs:label>
+  <rdfs:comment>The class of classes.</rdfs:comment>
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdfs:Class>
+
+<!-- "Woah!" - Neo -->
+<rdfs:Class rdf:about="http://www.w3.org/2000/01/rdf-schema#Datatype">
+  <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2000/01/rdf-schema#"/>
+  <rdfs:label>Datatype</rdfs:label>
+  <rdfs:comment>The class of RDF datatypes.</rdfs:comment>
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+</rdfs:Class>
+
+<rdfs:Datatype rdf:about="http://www.w3.org/2001/XMLSchema#string">
+   <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+   <rdfs:isDefinedBy rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+   <rdfs:label>string</rdfs:label>
+   <rdfs:comment>The datatype of RDF literals storing strings</rdfs:comment>
+</rdfs:Datatype>
+
+<rdfs:Datatype rdf:about="http://www.w3.org/2001/XMLSchema#dateTime">
+   <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+   <rdfs:isDefinedBy rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+   <rdfs:label>datetime</rdfs:label>
+   <rdfs:comment>The datatype of RDF literals storing datetimes</rdfs:comment>
+</rdfs:Datatype>
+
+<rdfs:Datatype rdf:about="http://www.w3.org/2001/XMLSchema#integer">
+   <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+   <rdfs:isDefinedBy rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+   <rdfs:label>integer</rdfs:label>
+   <rdfs:comment>The datatype of RDF literals storing integers</rdfs:comment>
+</rdfs:Datatype>
+
+<rdfs:Datatype rdf:about="http://www.w3.org/2001/XMLSchema#float">
+   <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+   <rdfs:isDefinedBy rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+   <rdfs:label>float</rdfs:label>
+   <rdfs:comment>The datatype of RDF literals storing floats</rdfs:comment>
+</rdfs:Datatype>
+
+
+<!-- Very common predicates from external ontologies -->
+<!-- Allow label, value, description -->
+
+<!-- use rdf:value on BOTH Symbolic Objects and Dimensions -->
+<!-- if multiple domains aren't allowed, then uncomment CRM Entity -->
+<!-- Could be either a string (Symbolic) or a number (Dimension) -->
+<!-- so the range is the top level rdfs:Literal -->
+<rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#value">
+  <rdfs:isDefinedBy rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+  <rdfs:label>value</rdfs:label>
+  <rdfs:comment>Idiomatic property used for structured values.</rdfs:comment>
+  <rdfs:domain rdf:resource="E90_Symbolic_Object"/>
+  <rdfs:domain rdf:resource="E54_Dimension"/>
+	<!--
+  		<rdfs:domain rdf:resource="E1_CRM_Entity"/>
+	-->
+  <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Property>
+
+<!-- Allow rdfs:label on anything, from any ontology -->
+<rdf:Property rdf:about="http://www.w3.org/2000/01/rdf-schema#label">
+  <rdfs:isDefinedBy rdf:resource="http://www.w3.org/2000/01/rdf-schema#"/>
+  <rdfs:label>label</rdfs:label>
+  <rdfs:comment>A human-readable name for the subject.</rdfs:comment>
+  <rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</rdf:Property>
+
+<!-- Allow dc:description on anything, from any ontology -->
+<rdf:Property rdf:about="http://purl.org/dc/elements/1.1/description">
+	<rdfs:label xml:lang="en">Description</rdfs:label>
+	<rdfs:comment xml:lang="en">An account of the resource.</rdfs:comment>
+	<rdfs:isDefinedBy rdf:resource="http://purl.org/dc/elements/1.1/"/>
+	<rdfs:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+</rdf:Property>
+
+<!--
+	*
+	* Now starts CRM stuff
+	*
+-->
+
+<!-- CRM Base Class -->
+
+<rdfs:Class rdf:about="E1_CRM_Entity">
+	<rdfs:label xml:lang="en">CRM Entity</rdfs:label>
+	<rdfs:label xml:lang="de">CRM Entit&#228;t</rdfs:label>
+	<rdfs:label xml:lang="fr">Entit&#233; CRM</rdfs:label>
+	<rdfs:comment>This class comprises all things in the universe of discourse of the CIDOC Conceptual Reference Model.</rdfs:comment>
+	<!-- this is implicit in RDF, but let's make it explicit -->
+	<rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+</rdfs:Class>
+
+<!-- CRM Classes through to new pseudo-class for DestructionActivity -->
+
+<rdfs:Class rdf:about="E2_Temporal_Entity">
+	<rdfs:label xml:lang="fr">Entit&#233; temporelle</rdfs:label>
+	<rdfs:label xml:lang="en">Temporal Entity</rdfs:label>
+	<rdfs:comment>This class comprises all phenomena, ...</rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E1_CRM_Entity"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="E92_Spacetime_Volume">
+	<rdfs:label xml:lang="en">Spacetime Volume</rdfs:label>
+	<rdfs:comment>This class comprises 4 dimensional point sets (volumes) in physical spacetime regardless its true geometric form. They may derive their identity from being ...</rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E1_CRM_Entity"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="E4_Period">
+	<rdfs:label xml:lang="de">Phase</rdfs:label>
+	<rdfs:label xml:lang="en">Period</rdfs:label>
+	<rdfs:comment>This class comprises sets of coherent phenomena or cultural manifestations occurring in time and space.</rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E2_Temporal_Entity"/>
+	<rdfs:subClassOf rdf:resource="E92_Spacetime_Volume"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="E5_Event">
+	<rdfs:label xml:lang="en">Event</rdfs:label>
+
+	<rdfs:comment>This class comprises changes of states in cultural, social or physical systems, </rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E4_Period"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="E6_Destruction">
+	<rdfs:label xml:lang="ru">&#1056;&#1072;&#1079;&#1088;&#1091;&#1096;&#1077;&#1085;&#1080;&#1077;</rdfs:label>
+	<rdfs:label xml:lang="en">Destruction</rdfs:label>
+
+	<rdfs:comment>This class comprises events that destroy one or more instances of E18 Physical Thing such that they lose their identity as the subjects of documentation. </rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E64_End_of_Existence"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="E7_Activity">
+	<rdfs:label xml:lang="en">Activity</rdfs:label>
+	<rdfs:label xml:lang="fr">Activit&#233;</rdfs:label>
+	<rdfs:comment>This class comprises actions intentionally carried out by instances of E39 Actor that result in changes of state in the cultural, social, or physical systems documented. </rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E5_Event"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="http://archesproject.org/ns/local/E6_Destruction_plus_E7_Activity">
+	<rdfs:label xml:lang="en">Destruction Activity</rdfs:label>
+	<rdfs:comment>A pseudo class to be used for Destructions that are carried out by actors, and serialized as both E6 and E7 on the way out of Arches.</rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E6_Destruction"/>
+	<rdfs:subClassOf rdf:resource="E7_Activity"/>
+</rdfs:Class>
+
+
+<!-- CRM Classes:  Through to Symbolic Object -->
+
+<rdfs:Class rdf:about="E77_Persistent_Item">
+	<rdfs:label xml:lang="en">Persistent Item</rdfs:label>
+	<rdfs:comment>This class comprises items that have a persistent identity, sometimes known as &#8220;endurants&#8221; in philosophy.</rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E1_CRM_Entity"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="E70_Thing">
+	<rdfs:label xml:lang="ru"/>    
+   	<rdfs:label xml:lang="fr">Chose</rdfs:label>
+    <rdfs:label xml:lang="en">Thing</rdfs:label>
+	<rdfs:comment>This general class comprises discrete, identifiable, instances </rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E77_Persistent_Item"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="E71_Man-Made_Thing">
+	<rdfs:label xml:lang="de">K&#252;nstliches</rdfs:label>
+    <rdfs:label xml:lang="en">Man-Made Thing</rdfs:label>
+	<rdfs:comment>This class comprises discrete, identifiable man-made items </rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E70_Thing"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="E72_Legal_Object">
+  <rdfs:label xml:lang="fr">Objet juridique</rdfs:label>
+  <rdfs:label xml:lang="en">Legal Object</rdfs:label>
+  <rdfs:comment>This class comprises those material or immaterial items to which instances of E30 Right, such as the right of ownership or use, can be applied. </rdfs:comment>
+  <rdfs:subClassOf rdf:resource="E70_Thing"/>
+</rdfs:Class>
+
+<!-- Physical Thing is here to be Destroyed bwahaha -->
+
+<rdfs:Class rdf:about="E18_Physical_Thing">
+	<rdfs:label xml:lang="de">Materielles</rdfs:label>
+	<rdfs:label xml:lang="en">Physical Thing</rdfs:label>
+	<rdfs:comment>This class comprises all persistent physical items with a relatively stable form, man-made or natural. </rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E72_Legal_Object"/>
+	<rdfs:subClassOf rdf:resource="E92_Spacetime_Volume"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="E28_Conceptual_Object">
+	<rdfs:label xml:lang="fr">Objet conceptuel</rdfs:label>
+    <rdfs:label xml:lang="en">Conceptual Object</rdfs:label>
+	<rdfs:comment>This class comprises non-material products of our minds and other human produced data that...</rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E71_Man-Made_Thing"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="E89_Propositional_Object">
+	<rdfs:label xml:lang="de">Aussagenobjekt</rdfs:label>
+	<rdfs:label xml:lang="en">Propositional Object</rdfs:label>
+	<rdfs:comment>This class comprises immaterial items, ...</rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E28_Conceptual_Object"/>
+</rdfs:Class>
+
+<rdfs:Class rdf:about="E90_Symbolic_Object">
+	<rdfs:label xml:lang="de">Symbolisches Objekt</rdfs:label>
+	<rdfs:label xml:lang="en">Symbolic Object</rdfs:label>
+	<rdfs:comment>This class comprises identifiable symbols and any aggregation of symbols, ...</rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E28_Conceptual_Object"/>
+	<rdfs:subClassOf rdf:resource="E72_Legal_Object"/>
+</rdfs:Class>
+
+
+<!-- Some Relationships to play with -->
+
+<rdf:Property rdf:about="P9_consists_of">
+	<rdfs:label xml:lang="en">consists of</rdfs:label>
+	<rdfs:comment>This property associates an instance of E4 Period with another instance of E4 Period </rdfs:comment>
+	<rdfs:domain rdf:resource="E4_Period"/>
+	<rdfs:range rdf:resource="E4_Period"/>
+	<rdfs:subPropertyOf rdf:resource="P10i_contains"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P9i_forms_part_of"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="P9i_forms_part_of">
+	<rdfs:label xml:lang="de">bildet Teil von</rdfs:label>
+	<rdfs:label xml:lang="fr">fait partie de</rdfs:label>
+	<rdfs:label xml:lang="en">forms part of</rdfs:label>
+	<rdfs:domain rdf:resource="E4_Period"/>
+	<rdfs:range rdf:resource="E4_Period"/>
+	<rdfs:subPropertyOf rdf:resource="P10_falls_within"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P9_consists_of"/>
+</rdf:Property>
+
+
+<rdf:Property rdf:about="P10_falls_within">
+	<rdfs:label xml:lang="en">falls within</rdfs:label>
+    <rdfs:label xml:lang="de">f&#228;llt in</rdfs:label>
+    <rdfs:label xml:lang="pt">est&#225; contido em</rdfs:label>
+	<rdfs:comment>This property associates an instance of E92 Spacetime Volume </rdfs:comment>
+	<rdfs:domain rdf:resource="E92_Spacetime_Volume"/>
+	<rdfs:range rdf:resource="E92_Spacetime_Volume"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P10i_contains"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="P10i_contains">
+	<rdfs:label xml:lang="en">contains</rdfs:label>
+    <rdfs:label xml:lang="fr">contient</rdfs:label>
+	<rdfs:label xml:lang="de">enth&#228;lt</rdfs:label>
+	<rdfs:domain rdf:resource="E92_Spacetime_Volume"/>
+	<rdfs:range rdf:resource="E92_Spacetime_Volume"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P10_falls_within"/>
+</rdf:Property>
+
+
+<rdf:Property rdf:about="P13_destroyed">
+	<rdfs:label xml:lang="de">zerst&#246;rte</rdfs:label>
+    <rdfs:label xml:lang="fr">a d&#233;truit</rdfs:label>
+    <rdfs:label xml:lang="en">destroyed</rdfs:label>
+	<rdfs:comment>This property allows specific instances of E18 Physical Thing that have been destroyed to be related to a destruction event. </rdfs:comment>
+	<rdfs:domain rdf:resource="E6_Destruction"/>
+	<rdfs:range rdf:resource="E18_Physical_Thing"/>
+	<rdfs:subPropertyOf rdf:resource="P93_took_out_of_existence"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P13i_was_destroyed_by"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="P13i_was_destroyed_by">
+	<rdfs:label xml:lang="de">wurde zerst&#246;rt durch</rdfs:label>
+    <rdfs:label xml:lang="en">was destroyed by</rdfs:label>
+	<rdfs:domain rdf:resource="E18_Physical_Thing"/>
+	<rdfs:range rdf:resource="E6_Destruction"/>
+	<rdfs:subPropertyOf rdf:resource="P93i_was_taken_out_of_existence_by"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P13_destroyed"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="P15_was_influenced_by">
+    <rdfs:label xml:lang="en">was influenced by</rdfs:label>
+	<rdfs:label xml:lang="pt">foi influenciado por </rdfs:label>
+	<rdfs:comment>This is a high level property, which captures the relationship between an E7 Activity and anything that may have had some bearing upon it.</rdfs:comment>
+	<rdfs:domain rdf:resource="E7_Activity"/>
+	<rdfs:range rdf:resource="E1_CRM_Entity"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P15i_influenced"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="P15i_influenced">
+    <rdfs:label xml:lang="en">influenced</rdfs:label>
+    <rdfs:label xml:lang="pt">influenciou</rdfs:label>
+	<rdfs:domain rdf:resource="E1_CRM_Entity"/>
+	<rdfs:range rdf:resource="E7_Activity"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P15_was_influenced_by"/>
+</rdf:Property>
+
+
+<rdf:Property rdf:about="P106_is_composed_of">
+    <rdfs:label xml:lang="en">is composed of</rdfs:label>
+    <rdfs:label xml:lang="fr">est compos&#233; de</rdfs:label>
+	<rdfs:comment>This property associates an instance of E90 Symbolic Object with a part of it </rdfs:comment>
+	<rdfs:domain rdf:resource="E90_Symbolic_Object"/>
+	<rdfs:range rdf:resource="E90_Symbolic_Object"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P106i_forms_part_of"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="P106i_forms_part_of">
+   <rdfs:label xml:lang="de">bildet Teil von</rdfs:label>
+    <rdfs:label xml:lang="fr">fait partie de</rdfs:label>
+    <rdfs:label xml:lang="en">forms part of</rdfs:label>
+	<rdfs:domain rdf:resource="E90_Symbolic_Object"/>
+	<rdfs:range rdf:resource="E90_Symbolic_Object"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P106_is_composed_of"/>
+</rdf:Property>
+
+<!-- Time in CRM in RDF -->
+
+<rdfs:Class rdf:about="E52_Time-Span">
+	<rdfs:label xml:lang="fr">Dur&#233;e</rdfs:label>
+    <rdfs:label xml:lang="en">Time-Span</rdfs:label>
+	<rdfs:comment>This class comprises abstract temporal extents, in the sense of Galilean physics, having a beginning, an end and a duration. </rdfs:comment>
+	<rdfs:subClassOf rdf:resource="E1_CRM_Entity"/>
+</rdfs:Class>
+
+<rdf:Property rdf:about="P81_ongoing_throughout">
+	<rdfs:label xml:lang="en">ongoing throughout</rdfs:label>
+	<rdfs:comment>This property describes the minimum period of time covered by an E52 Time-Span.</rdfs:comment>
+	<rdfs:domain rdf:resource="E52_Time-Span"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="P82_at_some_time_within">
+    <rdfs:label xml:lang="fr">couvre au plus</rdfs:label>
+    <rdfs:label xml:lang="en">at some time within</rdfs:label>
+	<rdfs:comment>This property describes the maximum period of time within which an E52 Time-Span falls.</rdfs:comment>
+	<rdfs:domain rdf:resource="E52_Time-Span"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="P4_has_time-span">
+	<rdfs:label xml:lang="fr">a pour dur&#233;e</rdfs:label>
+    <rdfs:label xml:lang="en">has time-span</rdfs:label>
+   	<rdfs:label xml:lang="de">hat Zeitspanne</rdfs:label> 
+	<rdfs:comment>This property describes the temporal confinement of an instance of an E2 Temporal Entity.</rdfs:comment>
+	<rdfs:domain rdf:resource="E2_Temporal_Entity"/>
+	<rdfs:range rdf:resource="E52_Time-Span"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P4i_is_time-span_of"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="P4i_is_time-span_of">
+	<rdfs:label xml:lang="en">is time-span of</rdfs:label>
+	<rdfs:domain rdf:resource="E52_Time-Span"/>
+	<rdfs:range rdf:resource="E2_Temporal_Entity"/>
+    <owl:inverseOf xmlns:owl="http://www.w3.org/2002/07/owl#" rdf:resource="P4_has_time-span"/>
+</rdf:Property>
+
+<rdf:Property rdf:about="P81a_end_of_the_begin">
+	<rdfs:label xml:lang="en">end of the begin</rdfs:label>
+	<rdfs:comment>This is defined as the first boundary of the property P81</rdfs:comment>
+	<rdfs:domain rdf:resource="E52_Time-Span"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+	<rdfs:subPropertyOf rdf:resource="P81_ongoing_throughout"/>	
+</rdf:Property>
+
+<rdf:Property rdf:about="P81b_begin_of_the_end">
+	<rdfs:label xml:lang="en">begin of the end</rdfs:label>
+	<rdfs:comment>This is defined as the second boundary of the property P81</rdfs:comment>
+	<rdfs:domain rdf:resource="E52_Time-Span"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+	<rdfs:subPropertyOf rdf:resource="P81_ongoing_throughout"/>	
+</rdf:Property>
+
+<rdf:Property rdf:about="P82a_begin_of_the_begin">
+	<rdfs:label xml:lang="en">begin of the begin</rdfs:label>
+	<rdfs:comment>This is defined as the first boundary of the property P82</rdfs:comment>
+	<rdfs:domain rdf:resource="E52_Time-Span"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+	<rdfs:subPropertyOf rdf:resource="P82_at_some_time_within"/>	
+</rdf:Property>
+
+<rdf:Property rdf:about="P82b_end_of_the_end">
+	<rdfs:label xml:lang="en">end of the end</rdfs:label>
+	<rdfs:comment>This is defined as the second boundary of the property P82</rdfs:comment>
+	<rdfs:domain rdf:resource="E52_Time-Span"/>
+	<rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#dateTime"/>
+	<rdfs:subPropertyOf rdf:resource="P82_at_some_time_within"/>	
+</rdf:Property>
+
+
+</rdf:RDF>
