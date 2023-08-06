@@ -1,0 +1,48 @@
+
+.. image:: http://pinaxproject.com/pinax-design/patches/pinax-news.svg
+    :target: https://pypi.python.org/pypi/pinax-news/
+
+==========
+Pinax News
+==========
+
+.. image:: https://img.shields.io/pypi/v/pinax-news.svg
+    :target: https://pypi.python.org/pypi/pinax-news/
+
+\ 
+
+.. image:: https://img.shields.io/circleci/project/github/pinax/pinax-news.svg
+    :target: https://circleci.com/gh/pinax/pinax-news
+.. image:: https://img.shields.io/codecov/c/github/pinax/pinax-news.svg
+    :target: https://codecov.io/gh/pinax/pinax-news
+.. image:: https://img.shields.io/github/contributors/pinax/pinax-news.svg
+    :target: https://github.com/pinax/pinax-news/graphs/contributors
+.. image:: https://img.shields.io/github/issues-pr/pinax/pinax-news.svg
+    :target: https://github.com/pinax/pinax-news/pulls
+.. image:: https://img.shields.io/github/issues-pr-closed/pinax/pinax-news.svg
+    :target: https://github.com/pinax/pinax-news/pulls?q=is%3Apr+is%3Aclosed
+
+\ 
+
+.. image:: http://slack.pinaxproject.com/badge.svg
+    :target: http://slack.pinaxproject.com/
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
+    :target: https://pypi.python.org/pypi/pinax-news/
+
+\ 
+
+``pinax-news`` is a simple app for publishing links to news articles on your site.
+
+
+Supported Django and Python Versions
+------------------------------------
+
++-----------------+-----+-----+-----+-----+
+| Django / Python | 2.7 | 3.4 | 3.5 | 3.6 |
++=================+=====+=====+=====+=====+
+| 1.11            |  *  |  *  |  *  |  *  |
++-----------------+-----+-----+-----+-----+
+| 2.0             |     |  *  |  *  |  *  |
++-----------------+-----+-----+-----+-----+
+
+
