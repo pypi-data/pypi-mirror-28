@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+
+        <record model="ir.ui.view" id="bank_view_form">
+            <field name="model">bank</field>
+            <field name="inherit" ref="bank.bank_view_form"/>
+            <field name="name">bank_form</field>
+        </record>
+        <record model="ir.ui.view" id="bank_view_list">
+            <field name="model">bank</field>
+            <field name="inherit" ref="bank.bank_view_list"/>
+            <field name="name">bank_list</field>
+        </record>
+
+        <record model="ir.ui.view" id="bank_account_view_list">
+            <field name="model">bank.account</field>
+            <field name="inherit" ref="bank.bank_account_view_list"/>
+            <field name="name">bank_account_list</field>
+        </record>
+
+        <record model="ir.ui.view" id="bank_account_number_view_form">
+            <field name="model">bank.account.number</field>
+            <field name="inherit" ref="bank.bank_account_number_view_form"/>
+            <field name="name">bank_account_number_form</field>
+        </record>
+        <record model="ir.ui.view" id="bank_account_number_view_list">
+            <field name="model">bank.account.number</field>
+            <field name="inherit" ref="bank.bank_account_number_view_list_sequence"/>
+            <field name="name">bank_account_number_list</field>
+        </record>
+
+        <!-- permissions -->
+        <!-- deny access to login/pin fields -->
+        <record model="ir.model.field.access" id="field_access_bank-anon-fintsblz">
+            <field name="field"
+                search="[('model.model', '=', 'bank'), ('name', '=', 'fintsblz')]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record model="ir.model.field.access" id="field_access_bank-anon-fintsurl">
+            <field name="field"
+                search="[('model.model', '=', 'bank'), ('name', '=', 'fintsurl')]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        
+        <!-- access is granted in role_...xml -->
+        <record model="ir.model.field.access" 
+                id="field_access_bank_account_number-anon-fints_ena">
+            <field name="field"
+                search="[('model.model', '=', 'bank.account.number'), ('name', '=', 'fints_ena')]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record model="ir.model.field.access" 
+                id="field_access_bank_account_number-anon-fints_login">
+            <field name="field"
+                search="[('model.model', '=', 'bank.account.number'), ('name', '=', 'fints_login')]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record model="ir.model.field.access" 
+                id="field_access_bank_account_number-anon-fints_pin">
+            <field name="field"
+                search="[('model.model', '=', 'bank.account.number'), ('name', '=', 'fints_pin')]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record model="ir.model.field.access" 
+                id="field_access_bank_account_number-anon-fints_name">
+            <field name="field"
+                search="[('model.model', '=', 'bank.account.number'), ('name', '=', 'fints_name')]"/>
+            <field name="perm_read" eval="False"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+
+    </data>
+</tryton>
