@@ -1,0 +1,196 @@
+Metadata-Version: 2.0
+Name: dj-arp-storm
+Version: 1.0b7
+Summary: play network traffic as sound
+Home-page: https://gitlab.com/LISTERINE/dj_arp_storm
+Author: LISTERINE
+Author-email: jon@jonathanferretti.com
+License: MIT
+Description-Content-Type: UNKNOWN
+Keywords: dj_arp_storm
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Requires-Dist: pyshark
+Requires-Dist: netifaces
+Requires-Dist: pygame
+Requires-Dist: configparser
+
+DJ ARP Storm
+===============================
+
+.. image:: https://img.shields.io/pypi/v/dj_arp_storm.svg
+        :target: https://pypi.python.org/pypi/dj_arp_storm
+
+
+Play network traffic as sound.
+
+
+Install:
+~~~~~~~~
+.. code-block:: bash
+
+    $ pip install dj-arp-storm
+    $ git clone git@gitlab.com:LISTERINE/dj_as.git ~/.dj_as
+    # Install tshark. For ubuntu install tshark package, for arch, install wireshark-cli
+    $ sudo pacman -S wireshark-cli
+    $ sudo usermod -a -G wireshark <your-user-name>
+    # Log out and log in for group change to take effect
+
+Usage:
+~~~~~~
+.. code-block:: bash
+
+    $ dj_as
+
+Configuration:
+~~~~~~~~~~~~~~
+
+Please note that your callbacks will be imported into DJ ARP Storm, so before running the program, make sure you trust the contents of your ``dj.conf`` and ``callbacks.py`` files.
+
+dj.conf
+^^^^^^^
+``dj.conf`` holds the configuration values read by DJ ARP Storm.
+
+dj.conf Sections
+^^^^^^^^^^^^^^^^
+``[general]``
+""""""""""""""""""
+The general section settings control things like where sound assets are loaded from and how long to run.
+assets; ~/.dj_as/assets
+callbacks; ~/.dj_as/callbacks.py
+default_interface; en3
+timeout; 500
+
+    Options
+
+        :assets: The directory where sound folders are held.
+
+            - Default: ``~/.dj_as/assets``
+
+        :callbacks: The file that holds user created functions for playing sounds.
+
+            - Default: ``~/.dj_as/assets``
+
+        :default_interface: Which network interface to capture on.
+
+            - Default: ``auto`` (automatically select the system default gateway)
+            - ``select`` (prompts user to select from a list of interfaces)
+            - ``<eth0, en0, wlan0, etc...>`` (setting default_interface to the name of an interface like ``eth0`` will connect to that specific interface)
+
+        :timeout: The number of packets to process before quitting.
+
+            - Default: ``500``
+            - ``-1`` (run forever)
+
+``[arrangements]``
+""""""""""""""""""
+The arrangements section holds the names of the functions you want to be active.
+
+callbacks.py
+^^^^^^^^^^^^
+``callbacks.py`` holds a class called ``Callbacks``. This where you can put functions that will react to packets. These callback functions should be instance methods that take a single parameter to pass in the latest packet. The callbacks must also be generators. This allows more complicated callbacks to be stateful. The packet passed in is a pyshark ``Packet`` object. https://github.com/KimiNewt/pyshark
+
+Take this method for example:
+
+.. code-block:: python
+
+    def ssh_drum(self, pkt):
+        while not self.has_port(pkt, 22, ptype="dstport"):
+            pkt = yield
+        pkt = yield self.sounds.delay_play(self.sounds.sounds['drum']['snare-1.ogg'])
+
+This simple method will check the latest packet ``pkt`` for a destination port of 22. Until it see this packet, DJ ARP Storm will yield new packets into it. Once a packet meeting this requirement is seen, it will play a snare sound.
+
+Now look at this more complicated example:
+
+.. code-block:: python
+
+    def handshake_scale(self, pkt):
+        while not self.has_flags(pkt, 2):
+            pkt = yield
+        pkt = yield self.sounds.play(self.sounds.sounds['violin']['b3.ogg'])
+        while not self.has_flags(pkt, 18):
+            pkt = yield
+        pkt = yield self.sounds.delay_play(self.sounds.sounds['violin']['a3.ogg'], 0.2)
+        while not int(pkt.tcp.flags, 16):
+            pkt = yield
+        pkt = yield self.sounds.delay_play(self.sounds.sounds['violin']['c-3.ogg'], 0.2)
+
+By breaking it up into sections you can see it follows the same pattern as the ``ssh_drum`` method above: while not matching packet, get new packet; then play sound. This just has multiple layers in it. Once one layer has ben completed, it will start testing for the next. Just remember it will resume from where it left off the last time, and not start from the top again until it has completed all it's steps.
+
+If you'd like to inspect the packets coming through try adding:
+
+.. code-block:: python
+
+    import pdb; pdb.set_trace()
+
+to your method and interrogate the packet with the python debugger.
+
+Assets:
+^^^^^^^
+Assets are the sound files that DJ ARP Storm will play in your callbacks. All sound files must be in .ogg format. The assets folder should be setup in the following hierarchy:
+
+::
+
+
+    Assets-|
+           |- first_instrument-|
+           |                   |- sound_1.ogg
+           |                   |- another_sound.ogg
+           |                   |...
+           |- instrument_2-|
+           |               |- sound_one.ogg
+           |               |- another_sound.ogg
+           |               |...
+           |...
+
+
+Recommendations:
+^^^^^^^^^^^^^^^^
+place::
+
+    ServerAliveInterval 1
+
+in your ``/etc/ssh/ssh_config`` and open an ssh connection to get consistent traffic for a good tempo.
+
+
+=======
+History
+=======
+
+1.0b1 (2017-07-17)
+------------------
+
+* First release on PyPI.
+
+
+1.0b2 (2017-07-19)
+------------------
+
+* Removed bpf filters because pyshark is blocking
+* Shortened sound file names
+
+1.0b2 (2017-07-19)
+------------------
+
+* Updated license
+* Updated link to source
+
+1.0b3 (2017-07-20)
+------------------
+* Bug fixes
+
+
+1.0b4 (2017-07-21)
+------------------
+* Docs
+* New interface options
+* Suppress annoying output
+
+
