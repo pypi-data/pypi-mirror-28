@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Project: {{ project.name }}</h1>
+</div>
+
+{% include 'promgen/breadcrumb.html' with project=project only %}
+
+{% if project.notifiers.count == 0 and project.service.notifiers.count == 0 %}
+<div class="alert alert-warning" role="alert">
+  <span class="glyphicon glyphicon-alert" aria-hidden="true"></span>
+  <span class="sr-only">Warning:</span>
+  {% trans 'No notifications configured for this project. Please configure some' %}
+</div>
+{% endif %}
+<div style="display:none" data-project="{{project.name}}" class="panel panel-danger promgen-alert">
+  <div class="panel-heading">Alerts</div>
+  <table class="table table-bordered table-condensed"></table>
+</div>
+<div style="display:none" id="silence-project-{{ project.name|slugify }}"></div>
+
+{% if project.description %}
+  <div class="panel panel-default">
+    <div class="panel-body">
+      {{project.description|linebreaksbr|urlize}}
+    </div>
+  </div>
+{% endif %}
+
+{% include "promgen/project_detail_configuration.html" %}
+
+<div class="row">
+  <div class="col-md-6">
+    {% include "promgen/project_detail_exporters.html" %}
+    {% include "promgen/project_detail_hosts.html" %}
+  </div>
+
+  <div class="col-md-6">
+    {% include "promgen/project_detail_urls.html" %}
+    {% include "promgen/project_detail_notifiers.html" %}
+  </div>
+</div>
+
+{% include "promgen/project_detail_rules.html" %}
+
+{% endblock %}

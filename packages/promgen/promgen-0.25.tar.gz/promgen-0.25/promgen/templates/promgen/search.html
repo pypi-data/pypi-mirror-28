@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Hosts</h1>
+</div>
+
+<ol class="breadcrumb">
+  <li><a href="{% url 'service-list' %}">Home</a></li>
+  <li class="active">Search</li>
+</ol>
+
+{% if service_list %}
+<div class="panel panel-default">
+  <div class="panel-heading">Services</div>
+  <table class="table table-bordered table-condensed">
+    <tr>
+      <th>Name</th>
+      <th>Projects</th>
+      <th>Rules</th>
+    </tr>
+    {% for service in service_list %}
+    <tr>
+      <td><a href="{% url 'service-detail' service.id %}">{{ service.name }}</a></td>
+      <td>
+        <ul class="list-unstyled">
+        {% for project in service.project_set.all %}
+          <li><a href="{% url 'project-detail' project.id %}">{{ project.name }}</a></li>
+        {% endfor %}
+        </ul>
+      </td>
+      <td>
+        <ul class="list-unstyled">
+        {% for rule in service.rule_set.all %}
+          <li><a href="{% url 'rule-edit' rule.id %}">{{ rule.name }}</a></li>
+        {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+
+{% if project_list %}
+<div class="panel panel-default">
+  <div class="panel-heading">Projects</div>
+  <table class="table table-bordered table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Exporters</th>
+        <th>Notifications</th>
+      </tr>
+    </thead>
+    {% for project in project_list %}
+    <tr>
+      <td><a href="{% url 'project-detail' project.id %}">{{ project.name }}</a></td>
+      <td>
+        <dl class="dl-horizontal">
+  {% for exporter in project.exporter_set.all %}
+        <dt>{{ exporter.job }}</dt>
+        <dd>{{ exporter.port }}</dd>
+  {% endfor %}
+        </dl>
+      </td>
+      <td>
+        <dl class="dl-horizontal">
+  {% for notifier in project.notifiers.all %}
+          <dt title="Added by: {{notifier.owner}}">{{ notifier.sender }}</dt>
+          <dd>{{ notifier.show_value }}</dd>
+  {% endfor %}
+        </dl>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+  </div>
+</div>
+{% endif %}
+
+{% if farm_list %}
+<div class="panel panel-default">
+  <div class="panel-heading">Farms</div>
+  <table class="table table-bordered table-condensed">
+    <tr>
+      <th>Name</th>
+      <th>Projects</th>
+      <th>Hosts</th>
+    </tr>
+    {% for farm in farm_list %}
+    <tr>
+      <td><a href="{% url 'farm-detail' farm.id %}">{{ farm.name }}</a></td>
+      <td>
+        <ul class="list-unstyled">
+{% for project in farm.project_set.all %}
+          <li><a href="{% url 'project-detail' project.id %}">{{ project.name }}</a></li>
+{% endfor %}
+        </ul>
+      </td>
+      <td>
+        <ul class="list-unstyled">
+{% for host in farm.host_set.all %}
+          <li>
+            <a href="{% url 'host-detail' host.name %}">{{ host.name }}</a>
+            <a
+            class="btn btn-warning btn-xs promgen-silence"
+            data-instance="{{host.name}}:[0-9]*"
+            href="#"
+            style="display: inline-block;"
+          >{% trans "Silence" %}</a></li>
+{% endfor %}
+        </ul>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+
+{% if host_list %}
+<div class="panel panel-default">
+  <div class="panel-heading">Hosts</div>
+  <table class="table">
+    {% for host in host_list %}
+      <tr>
+        <td><a href="{% url 'host-detail' host.name %}">{{ host.name }}</a></td>
+        <td><a
+          class="btn btn-warning btn-xs promgen-silence"
+          data-instance="{{host.name}}:[0-9]*"
+          href="#"
+          style="display: inline-block;"
+        >{% trans "Silence" %}</a></td>
+      </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endif %}
+
+{% if rule_list %}
+<div class="panel panel-default">
+  <div class="panel-heading">Rules</div>
+  {% include "promgen/rule_block.html" %}
+</div>
+{% endif %}
+
+{% endblock %}

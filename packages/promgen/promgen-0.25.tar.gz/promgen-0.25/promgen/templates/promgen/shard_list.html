@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Shards</h1>
+</div>
+
+<div class="row">
+{% for shard in shard_list|dictsortreversed:"service_set.count" %}
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <a href="{% url 'shard-detail' shard.id %}">{{ shard.name }}</a>
+        <span class="pull-right form-inline">
+          <a href="{% url 'service-new' shard.id %}" class="btn btn-primary btn-xs">{% trans "Register Service" %}</a>
+        </span>
+      </div>
+
+{% if shard.service_set.count %}
+      <table class="table">
+        <tr>
+          <th>
+            <span class="badge">{{ shard.service_set.count }}</span>
+            Service
+          </th>
+        </tr>
+{% for service in shard.service_set.all %}
+        <tr>
+          <td>
+{% if service.check_notifiers == False %}
+            <a
+              class="btn btn-xs btn-warning"
+              role="button"
+              tabindex="0"
+              title="{% trans 'Notification setting warning' %}"
+              data-toggle="popover"
+              data-content='{% trans "This service does not have any notifications configured. Please configure notifications to properly route alerts" %}'
+              data-html="true"
+              data-placement="right"
+              data-trigger="focus"
+            ><span class="glyphicon glyphicon-alert" aria-hidden="true"></span></a>
+{% endif %}
+            <a href="{% url 'service-detail' service.id %}">{{ service.name }}</a>
+          </td>
+        </tr>
+{% endfor %}
+    </table>
+{% endif %}
+
+{% if shard.prometheus_set.count %}
+    <table class="table">
+      <tr>
+        <th>
+          <span class="badge">{{ shard.prometheus_set.count }}</span>
+          Servers
+        </th>
+      </tr>
+{% for prometheus in shard.prometheus_set.all %}
+      <tr>
+        <td>{{ prometheus.host }}:{{ prometheus.port }}</td>
+      </tr>
+{% endfor %}
+    </table>
+{% endif %}
+
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}
