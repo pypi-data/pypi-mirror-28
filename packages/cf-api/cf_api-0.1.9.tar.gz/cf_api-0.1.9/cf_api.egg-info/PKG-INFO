@@ -1,0 +1,700 @@
+Metadata-Version: 1.0
+Name: cf-api
+Version: 0.1.9
+Summary: Python Interface for Cloud Foundry APIs
+Home-page: https://github.com/hsdp/python-cf-api
+Author: Adam Jaso
+Author-email: ajaso@hsdp.io
+License: 
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+
+   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION
+
+   1. Definitions.
+
+      "License" shall mean the terms and conditions for use, reproduction,
+      and distribution as defined by Sections 1 through 9 of this document.
+
+      "Licensor" shall mean the copyright owner or entity authorized by
+      the copyright owner that is granting the License.
+
+      "Legal Entity" shall mean the union of the acting entity and all
+      other entities that control, are controlled by, or are under common
+      control with that entity. For the purposes of this definition,
+      "control" means (i) the power, direct or indirect, to cause the
+      direction or management of such entity, whether by contract or
+      otherwise, or (ii) ownership of fifty percent (50%) or more of the
+      outstanding shares, or (iii) beneficial ownership of such entity.
+
+      "You" (or "Your") shall mean an individual or Legal Entity
+      exercising permissions granted by this License.
+
+      "Source" form shall mean the preferred form for making modifications,
+      including but not limited to software source code, documentation
+      source, and configuration files.
+
+      "Object" form shall mean any form resulting from mechanical
+      transformation or translation of a Source form, including but
+      not limited to compiled object code, generated documentation,
+      and conversions to other media types.
+
+      "Work" shall mean the work of authorship, whether in Source or
+      Object form, made available under the License, as indicated by a
+      copyright notice that is included in or attached to the work
+      (an example is provided in the Appendix below).
+
+      "Derivative Works" shall mean any work, whether in Source or Object
+      form, that is based on (or derived from) the Work and for which the
+      editorial revisions, annotations, elaborations, or other modifications
+      represent, as a whole, an original work of authorship. For the purposes
+      of this License, Derivative Works shall not include works that remain
+      separable from, or merely link (or bind by name) to the interfaces of,
+      the Work and Derivative Works thereof.
+
+      "Contribution" shall mean any work of authorship, including
+      the original version of the Work and any modifications or additions
+      to that Work or Derivative Works thereof, that is intentionally
+      submitted to Licensor for inclusion in the Work by the copyright owner
+      or by an individual or Legal Entity authorized to submit on behalf of
+      the copyright owner. For the purposes of this definition, "submitted"
+      means any form of electronic, verbal, or written communication sent
+      to the Licensor or its representatives, including but not limited to
+      communication on electronic mailing lists, source code control systems,
+      and issue tracking systems that are managed by, or on behalf of, the
+      Licensor for the purpose of discussing and improving the Work, but
+      excluding communication that is conspicuously marked or otherwise
+      designated in writing by the copyright owner as "Not a Contribution."
+
+      "Contributor" shall mean Licensor and any individual or Legal Entity
+      on behalf of whom a Contribution has been received by Licensor and
+      subsequently incorporated within the Work.
+
+   2. Grant of Copyright License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      copyright license to reproduce, prepare Derivative Works of,
+      publicly display, publicly perform, sublicense, and distribute the
+      Work and such Derivative Works in Source or Object form.
+
+   3. Grant of Patent License. Subject to the terms and conditions of
+      this License, each Contributor hereby grants to You a perpetual,
+      worldwide, non-exclusive, no-charge, royalty-free, irrevocable
+      (except as stated in this section) patent license to make, have made,
+      use, offer to sell, sell, import, and otherwise transfer the Work,
+      where such license applies only to those patent claims licensable
+      by such Contributor that are necessarily infringed by their
+      Contribution(s) alone or by combination of their Contribution(s)
+      with the Work to which such Contribution(s) was submitted. If You
+      institute patent litigation against any entity (including a
+      cross-claim or counterclaim in a lawsuit) alleging that the Work
+      or a Contribution incorporated within the Work constitutes direct
+      or contributory patent infringement, then any patent licenses
+      granted to You under this License for that Work shall terminate
+      as of the date such litigation is filed.
+
+   4. Redistribution. You may reproduce and distribute copies of the
+      Work or Derivative Works thereof in any medium, with or without
+      modifications, and in Source or Object form, provided that You
+      meet the following conditions:
+
+      (a) You must give any other recipients of the Work or
+          Derivative Works a copy of this License; and
+
+      (b) You must cause any modified files to carry prominent notices
+          stating that You changed the files; and
+
+      (c) You must retain, in the Source form of any Derivative Works
+          that You distribute, all copyright, patent, trademark, and
+          attribution notices from the Source form of the Work,
+          excluding those notices that do not pertain to any part of
+          the Derivative Works; and
+
+      (d) If the Work includes a "NOTICE" text file as part of its
+          distribution, then any Derivative Works that You distribute must
+          include a readable copy of the attribution notices contained
+          within such NOTICE file, excluding those notices that do not
+          pertain to any part of the Derivative Works, in at least one
+          of the following places: within a NOTICE text file distributed
+          as part of the Derivative Works; within the Source form or
+          documentation, if provided along with the Derivative Works; or,
+          within a display generated by the Derivative Works, if and
+          wherever such third-party notices normally appear. The contents
+          of the NOTICE file are for informational purposes only and
+          do not modify the License. You may add Your own attribution
+          notices within Derivative Works that You distribute, alongside
+          or as an addendum to the NOTICE text from the Work, provided
+          that such additional attribution notices cannot be construed
+          as modifying the License.
+
+      You may add Your own copyright statement to Your modifications and
+      may provide additional or different license terms and conditions
+      for use, reproduction, or distribution of Your modifications, or
+      for any such Derivative Works as a whole, provided Your use,
+      reproduction, and distribution of the Work otherwise complies with
+      the conditions stated in this License.
+
+   5. Submission of Contributions. Unless You explicitly state otherwise,
+      any Contribution intentionally submitted for inclusion in the Work
+      by You to the Licensor shall be under the terms and conditions of
+      this License, without any additional terms or conditions.
+      Notwithstanding the above, nothing herein shall supersede or modify
+      the terms of any separate license agreement you may have executed
+      with Licensor regarding such Contributions.
+
+   6. Trademarks. This License does not grant permission to use the trade
+      names, trademarks, service marks, or product names of the Licensor,
+      except as required for reasonable and customary use in describing the
+      origin of the Work and reproducing the content of the NOTICE file.
+
+   7. Disclaimer of Warranty. Unless required by applicable law or
+      agreed to in writing, Licensor provides the Work (and each
+      Contributor provides its Contributions) on an "AS IS" BASIS,
+      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+      implied, including, without limitation, any warranties or conditions
+      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A
+      PARTICULAR PURPOSE. You are solely responsible for determining the
+      appropriateness of using or redistributing the Work and assume any
+      risks associated with Your exercise of permissions under this License.
+
+   8. Limitation of Liability. In no event and under no legal theory,
+      whether in tort (including negligence), contract, or otherwise,
+      unless required by applicable law (such as deliberate and grossly
+      negligent acts) or agreed to in writing, shall any Contributor be
+      liable to You for damages, including any direct, indirect, special,
+      incidental, or consequential damages of any character arising as a
+      result of this License or out of the use or inability to use the
+      Work (including but not limited to damages for loss of goodwill,
+      work stoppage, computer failure or malfunction, or any and all
+      other commercial damages or losses), even if such Contributor
+      has been advised of the possibility of such damages.
+
+   9. Accepting Warranty or Additional Liability. While redistributing
+      the Work or Derivative Works thereof, You may choose to offer,
+      and charge a fee for, acceptance of support, warranty, indemnity,
+      or other liability obligations and/or rights consistent with this
+      License. However, in accepting such obligations, You may act only
+      on Your own behalf and on Your sole responsibility, not on behalf
+      of any other Contributor, and only if You agree to indemnify,
+      defend, and hold each Contributor harmless for any liability
+      incurred by, or claims asserted against, such Contributor by reason
+      of your accepting any such warranty or additional liability.
+
+   END OF TERMS AND CONDITIONS
+
+   APPENDIX: How to apply the Apache License to your work.
+
+      To apply the Apache License to your work, attach the following
+      boilerplate notice, with the fields enclosed by brackets "[]"
+      replaced with your own identifying information. (Don't include
+      the brackets!)  The text should be enclosed in the appropriate
+      comment syntax for the file format. We also recommend that a
+      file or class name and description of purpose be included on the
+      same "printed page" as the copyright notice for easier
+      identification within third-party archives.
+
+   Copyright [yyyy] [name of copyright owner]
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+
+Description-Content-Type: UNKNOWN
+Description: # Python Cloud Foundry API Client
+        
+        This module provides a pure Python interface to the Cloud Foundry APIs.
+        
+        ## Getting Started
+        
+        The following examples should be enough to get you started using this library.
+        
+        ```python
+        # Initializing the Cloud Controller client
+        
+        from getpass import getpass
+        import cf_api
+        import json
+        
+        cloud_controller = 'https://api.yourcloudfoundry.com'
+        deploy_client_id = 'cf'
+        deploy_client_secret = ''
+        verify_ssl = True
+        username = 'youser'
+        password = getpass('Password: ').strip()
+        
+        cc = cf_api.new_cloud_controller(
+            cloud_controller,
+            client_id=deploy_client_id,
+            client_secret=deploy_client_secret,
+            username=username,
+            password=password,
+        ).set_verify_ssl(verify_ssl)
+            
+            
+        # List all organizations
+        req = cc.organizations()
+        res = req.get()
+        orgs = res.resources
+        for r in orgs:
+            print('org', r.guid, r.name)
+            
+            
+        # List all spaces
+        res = cc.spaces().get()
+        spaces = res.resources
+        for r in spaces:
+            print('space', r.guid, r.name)
+        
+        
+        # List all applications
+        
+        res = cc.apps().get()
+        apps = res.resources
+        for r in apps:
+            print('app', r.guid, r.name)
+        
+        
+        # Find an app by it's org/space/name
+        
+        org_name = 'your_org'
+        space_name = 'your_space'
+        app_name = 'your_app'
+        
+        # find your org by name
+        res = cc.organizations().get_by_name(org_name)
+        # you can access the first array resource using the `resource` attribute
+        your_org = res.resource
+        
+        # find your space by name within your org
+        res = cc.request(your_org.spaces_url).get_by_name(space_name)
+        your_space = res.resource
+        
+        # find your app by name within your space
+        res = cc.request(your_space.apps_url).get_by_name(app_name)
+        your_app = res.resource
+        print('your_app', your_app)
+        
+        
+        # Find an app by it's GUID
+        # 
+        # Note that this same pattern applies to all Cloud Controller resources
+        #
+        
+        res = cc.apps(your_app.guid).get()
+        # you can also use the `resource` attribute to access a response with a 
+        # non-array result
+        your_same_app = res.resource
+        print('your_same_app', your_same_app)
+        
+        
+        # Find a stack by name
+        your_stack = 'some_stack'
+        res = cc.stacks().get_by_name(your_stack)
+        stack = res.resource
+        
+        
+        # Create an app
+        your_buildpack = 'some_buildpack'
+        command = 'python server.py'
+        res = cc.apps().set_params(
+            name=app_name,
+            space_guid=your_space.guid,
+            stack_guid=stack.guid,
+            buildpack=your_buildpack,
+            command=command,
+            health_check_type='port',
+            health_check_timeout=60,
+            instances=2,
+            memory=512,
+            disk_quota=512
+        ).post()
+        print('new app', res.data)
+        
+        
+        # Upload the bits for an app
+        my_zipfile = '/tmp/app.zip'
+        with open(my_zipfile, 'r') as f:
+            res = cc.apps(your_app.guid, 'bits')\
+                .set_query(async='true')\
+                .add_field('resources', json.dumps([]))\
+                .add_file('application', 'application.zip', f, 'application/zip')\
+                .put()
+            print(res.data)
+        ```
+        
+        ## Environment Variables
+        
+        The library is also configurable via environment variables.
+        
+        | Variable | Description |
+        | --- | --- |
+        | `PYTHON_CF_URL` | This is the cloud controller base URL. **Do not include a trailing slash on the URL.**
+        | `PYTHON_CF_CLIENT_ID` | This is the UAA client ID the library should use.
+        | `PYTHON_CF_CLIENT_SECRET` | This is the UAA client secret the library should use.
+        | `PYTHON_CF_IGNORE_SSL` | This indicates whether to verify SSL certs. Default is false. Set to `true` to ignore SSL verification.
+        | `CF_DOCKER_PASSWORD` | This variable optionally provides the Docker user's password if a docker image is being used. This variable is not necessarily required to use a docker image.
+        
+        An example library usage with these variables set would look like this:
+        
+        ```python
+        # env vars might be set as follows
+        # PYTHON_CF_URL=https://api.cloudfoundry.com
+        # PYTHON_CF_CLIENT_ID=my_client_id
+        # PYTHON_CF_CLIENT_SECRET=my_client_secret
+        
+        import cf_api
+        
+        # no args are required when the above env vars are detected
+        cc = cf_api.new_cloud_controller()
+        res = cc.apps().get()
+        # ...
+        
+        # the same principle applies to new_uaa()
+        uaa = cf_api.new_uaa()
+        # ...
+        ```
+        
+        ## Log in with Cloud Foundry Authorization Code
+        
+        The following functions may be used to implement login with Cloud Foundry via Authorization Codes.
+        
+        The function `get_openid_connect_url()` shows how to build UAA URL to which the user can be 
+        redirected in order to log in.
+          
+        The function `verify_code()` can be used when the user successfully logs in and UAA redirects back
+        to redirect_uri with the `code` attached. Pass the code and original redirect_uri into this function
+        in order to get the OAuth2 Token and to also verify the signature of the JWT.
+        
+        This particular example applies to OpenID Connect.
+        
+        ```python
+        import cf_api
+        
+        cc = 'https://api.yourcloudfoundry.com'
+        client_id = 'yourclient'
+        client_secret = 'yoursecret'
+        response_type = 'code'
+        
+        def get_openid_connect_url(redirect_uri):
+            return cf_api\
+                .new_uaa(cc=cc, client_id=client_id, client_secret=client_secret, no_auth=True)\
+                .authorization_code_url(response_type, scope='openid', redirect_uri=redirect_uri)
+        
+        
+        def verify_code(code, redirect_uri):
+            uaa = cf_api.new_uaa(cc=cc, client_id=client_id, client_secret=client_secret, no_auth=True)
+            res = uaa.authorization_code(code, response_type, redirect_uri)
+            data = res.data
+            uaa.verify_token(data['id_token'], audience=uaa.client_id)
+            return data
+        ```
+        
+        ## Deploy an Application
+        
+        The `cf_api.deploy_manifest` module may be used to deploy a Cloud Foundry app. The 
+        following snippet demonstrates the usage for deploying an app.
+        
+        ```bash
+        cd path/to/your/project
+        python -m cf_api.deploy_manifest \
+          --cloud-controller https://api.yourcloudfoundry.com \
+          -u youser -o yourg -s yourspace \
+          -m manifest.yml -v -w
+        # For the CLI usage of deploy_manifest, you may also set
+        #   the CF_REFRESH_TOKEN environment variable as a substitute
+        #   for collecting username and password
+        ```
+        
+        This module may also be used programmatically.
+         
+        ```python
+        from __future__ import print_function
+        import cf_api
+        from getpass import getpass
+        from cf_api.deploy_manifest import Deploy
+        
+        cc = cf_api.new_cloud_controller(
+            'https://api.yourcloudfoundry.com',
+            username='youruser',
+            password=getpass().strip(),
+            client_id='cf',
+            client_secret='',
+            verify_ssl=True
+        )
+        
+        manifest_filename = 'path/to/manifest.yml'
+        
+        apps = Deploy.parse_manifest(manifest_filename, cc)
+        
+        for app in apps:
+            app.set_debug(True)
+            app.set_org_and_space('yourorg', 'yourspace')
+            print (app.push()) 
+            # print (app.destroy(destroy_routes=True))
+        ```
+        
+        ## Deploy a Service
+        
+        The `cf_api.deploy_service` module may be used to deploy a Cloud Foundry service to a space. The 
+        following snippet demonstrates the usage for deploying a service.
+        
+        ```bash
+        cd path/to/your/project
+        python -m cf_api.deploy_service \
+          --cloud-controller https://api.yourcloudfoundry.com \
+          -u youser -o yourg -s yourspace \
+          --name your-custom-service-name --service-name cf-service-type \
+          --service-plan cf-service-type-plan -v -w
+        ```
+        
+        This module may also be used programmatically.
+        
+        ```python
+        from __future__ import print_function
+        import cf_api
+        from getpass import getpass
+        from cf_api.deploy_service import DeployService
+        
+        cc = cf_api.new_cloud_controller(
+            'https://api.yourcloudfoundry.com',
+            username='youruser',
+            password=getpass().strip(),
+            client_id='cf',
+            client_secret='',
+            verify_ssl=True
+        )
+        
+        service = DeployService(cc)\
+            .set_debug(True)\
+            .set_org_and_space('yourorg', 'yourspace')
+            
+        result = service.create('my-custom-db', 'database-service', 'small-database-plan')
+        print(result)
+        ```
+        
+        ## Query a Space
+        
+        The `cf_api.deploy_space` module provides a convenience interface for working with Cloud Foundry
+        spaces. The module provides read-only (i.e. GET requests only) support for the Cloud Controller API
+        endpoints scoped to a specific space i.e. /v2/spaces/<space_guid>/(routes|service_instances|apps).
+        The following snippet demonstrates the usage for listing apps for in a space.
+        
+        ```bash
+        cd path/to/your/project
+        python -m cf_api.deploy_space \
+          --cloud-controller https://api.yourcloudfoundry.com \
+          -u youser -o yourg -s yourspace apps
+        ```
+        
+        This module may also be used programmatically.
+        
+        ```python
+        from __future__ import print_function
+        import cf_api
+        from getpass import getpass
+        from cf_api.deploy_space import Space
+        
+        cc = cf_api.new_cloud_controller(
+            'https://api.yourcloudfoundry.com',
+            username='youruser',
+            password=getpass().strip(),
+            client_id='cf',
+            client_secret='',
+            verify_ssl=True
+        )
+        
+        space = Space(cc, org_name='yourorg', space_name='yourspace')
+        
+        # create the space
+        space.create()
+        
+        # destroy the space
+        space.destroy()
+        
+        # make a Cloud Controller request within the space
+        apps_in_the_space = space.request('apps').get()
+        
+        # deploys an application to this space
+        space.deploy_manifest('/path/to/manifest.yml') # push the app
+        space.wait_manifest('/path/to/manifest.yml') # wait for the app to start
+        space.destroy_manifest('/path/to/manifest.yml') # destroy the app
+        
+        app = space.get_app_by_name('yourappname') # find an application by its name within the space
+        
+        # deploy a service in this space
+        space.get_deploy_service().create('my-custom-db', 'database-service', 'small-database-plan')
+        service = space.get_service_instance_by_name('my-custom-db') # find a service by its name within the space
+        ```
+        
+        ## Tail Application Logs
+        
+        The `cf_api.logs_util` module may be used to tail Cloud Foundry application logs. Both
+        `recentlogs` and `stream` modes are supported. The following snippet demonstrates the usage for
+        listing recent logs and tailing app logs simultaneously.
+        
+        ```bash
+        cd path/to/your/project
+        python -m cf_api.logs_util \
+          --cloud-controller https://api.yourcloudfoundry.com \
+          -u youser -o yourg -s yourspace -a yourapp \
+          -r -t
+        ```
+        
+        This module may also be used programmatically.
+        
+        ```python
+        from __future__ import print_function
+        import cf_api
+        from getpass import getpass
+        from cf_api import dropsonde_util
+        
+        cc = cf_api.new_cloud_controller(
+            'https://api.yourcloudfoundry.com',
+            username='youruser',
+            password=getpass().strip(),
+            client_id='cf',
+            client_secret='',
+            verify_ssl=True,
+            init_doppler=True
+        )
+        
+        app_guid = 'your-app-guid'
+        app = cc.apps(app_guid).get().resource
+        
+        # get recent logs
+        logs = cc.doppler.apps(app.guid, 'recentlogs').get().multipart
+        
+        # convert log envelopes from protobuf to dict
+        logs = [dropsonde_util.parse_envelope_protobuf(log) for log in logs]
+        
+        print(logs)
+        
+        # stream logs
+        ws = cc.doppler.ws_request('apps', app.guid, 'stream')
+        try:
+            ws.connect()
+            ws.watch(lambda m: print(dropsonde_util.parse_envelope_protobuf(m)))
+        except Exception as e:
+            print(e)
+        finally:
+            ws.close()
+        ```
+        
+        ## Documentation
+        
+        ### Module
+        
+        | Function | Description |
+        | --- | --- |
+        | decode_jwt() | Decodes a UAA access token (which are in JWT format) |
+        | new_cloud_controller() | Creates a new instance of the `CloudController` class |
+        | new_uaa() | Creates a new instance of the `UAA` class |
+        
+        ### Classes
+        
+        #### CloudController
+        
+        This class provides the primary interface to the Cloud Controller API.
+        See the [Cloud Controller docs](http://apidocs.cloudfoundry.org) for a 
+        complete list of APIs.
+        
+        | Function | Description |
+        | --- | --- |
+        | update_tokens(res) | Updates the bearer token on this instance |
+        | info() | Returns basic Cloud Foundry info |
+        | apps() | Build a request for /apps/... endpoint |
+        | app_usage_events() | Build a request for /app_usage_events/... endpoint |
+        | service_instances() | Build a request for /service_instances/... endpoint |
+        | services() | Build a request for /services/... endpoint |
+        | blobstores() | Build a request for /blobstores/... endpoint |
+        | buildpacks() | Build a request for /buildpacks/... endpoint |
+        | events() | Build a request for /events/... endpoint |
+        | quota_definitions() | Build a request for /quota_definitions/... endpoint |
+        | organizations() | Build a request for /organizations/... endpoint |
+        | routes() | Build a request for /routes/... endpoint |
+        | security_groups() | Build a request for /security_groups/... endpoint |
+        | service_bindings() | Build a request for /service_bindings/... endpoint |
+        | service_brokers() | Build a request for /service_brokers/... endpoint |
+        | service_plan_visibilities() | Build a request for /service_plan_visibilities/... endpoint |
+        | service_plans() | Build a request for /service_plans/... endpoint |
+        | shared_domains() | Build a request for /shared_domains/... endpoint |
+        | space_quota_definitions() | Build a request for /space_quota_definitions/... endpoint |
+        | spaces() | Build a request for /spaces/... endpoint |
+        | stacks() | Build a request for /stacks/... endpoint |
+        | users() | Build a request for /users/... endpoint |
+        | resource_match() | Build a request for /resource_match endpoint |
+        
+        #### UAA
+        
+        This class provides the primary interface to the UAA API. See the
+        [UAA docs](https://docs.cloudfoundry.org/api/uaa/) for a complete list of APIs.
+        
+        | Function | Description |
+        | --- | --- |
+        | set_client_credentials(client_id, client_secret) | Sets the client ID and secret for this instance in order to make future requests |
+        | set_refresh_token(token) | Stores the refresh token in order to be able to easily refresh the access token |
+        | update_tokens(res) | Accepts a `Response` object and checks for errors and if none are found sets the access token and refresh token on this instance |
+        | with_authorization() | Executes /oauth/token with grant type `client_credentials` |
+        | password_grant(username, password) | Executes /oauth/token with grant type `password` |
+        | refresh_token() | Executes /oauth/token with grant type `refresh_token` |
+        
+        #### CloudControllerRequest
+        
+        This class represents a `CloudController` request and is a subclass of `Request`.
+        
+        | Function | Description |
+        | --- | --- |
+        | get_by_name() | Sets the `q` query parameter with the filter `name:value` by default. This is the format expected by most resource list API requests to the Cloud Controller |
+        
+        #### CloudControllerResponse
+        
+        This class represents a `CloudController` response and inherits from `Response`.
+        
+        | Attributes | Description |
+        | --- | --- |
+        | error_message | Gets the error message if there is one |
+        | error_code | Gets the error code if there is one |
+        | resources | Gets the `resources` list of results if there is one |
+        | resource | If the response is a `resources` list, this returns the first resource, else it returns the main body (which in most cases is a resource) |
+        
+        #### Resource
+        
+        This class represents an item returned within the response body of a 
+        `CloudControllerRequest`.
+        
+        | Attributes | Description |
+        | --- | --- |
+        | guid | Gets the resource's GUID |
+        | name | Gets the resource's name (if it has one) |
+        | org_guid | Gets the resource's org GUID (if it has one) |
+        | space_guid | Gets the resource's space GUID (if it has one) |
+        | spaces_url | Gets the resource's spaces URL (if it has one) |
+        | routes_url | Gets the resource's routes URL (if it has one) |
+        | stack_url | Gets the resource's stack URL (if it has one) |
+        | service_bindings_url | Gets the resource's service bindings URL (if it has one) |
+        | apps_url | Gets the resource's apps URL (if it has one) |
+        | service_instances_url | Gets the resource's service instances URL (if it has one) |
+        | organization_url | Gets the resource's organization URL (if it has one) |
+        | apps_url | Gets the resource's apps URL (if it has one) |
+        
+        ## TODO
+        
+        ### v1.x plans
+        
+        - Move core logic out of `__init__.py` and into a `core.py` module so that we can import `cf_api` without triggering `ImportError` due to requirements not being installed yet.
+        - Make `deploy_manifest`, `deploy_service` use `deploy_space` to initialize
+        - Rename `deploy_manifest` to `manifest` and `deploy_manifest.Deploy` to `manifest.Manifest`
+        - Rename `deploy_service` to `service` and `deploy_service.DeployService` to `service.Service`
+        - Rename `deploy_space` to `space`
+        - Simplify `cf_api.new_uaa()` by removing functionality to initialize from Cloud Controller URL as well as UAA URL; consider always requiring a `cc` instance to initialize
+        
+Platform: UNKNOWN
