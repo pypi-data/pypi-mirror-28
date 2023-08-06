@@ -1,0 +1,27 @@
+sudo: false
+language: python
+cache: pip
+python:
+    - 3.6-dev
+    - nightly
+
+env:
+  global:
+    - JAVA_HOME=/usr/lib/jvm/java-8-oracle
+
+matrix:
+  allow_failures:
+    - python: nightly
+
+addons:
+  apt:
+    packages:
+      - oracle-java8-set-default
+
+install:
+    - pip install .
+script:
+    - python -m unittest -v
+
+notifications:
+    email: false
