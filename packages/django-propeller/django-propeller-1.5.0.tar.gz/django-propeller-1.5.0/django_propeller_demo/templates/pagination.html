@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load propeller %}
+
+{% block title %}
+    Pagination
+{% endblock %}
+
+{% block content %}
+
+    <table class="table">
+        {% for line in lines %}
+            <tr>
+                <td>{{ line }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <hr>
+
+    {% propeller_pagination lines url="/pagination?page=1&flop=flip" extra="q=foo" size="small" %}
+
+    {% propeller_pagination lines url="/pagination?page=1" size="large" %}
+
+{% endblock %}
