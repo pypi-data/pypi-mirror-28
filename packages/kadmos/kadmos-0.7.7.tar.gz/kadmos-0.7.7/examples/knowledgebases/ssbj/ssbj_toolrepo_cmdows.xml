@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<cmdows xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://bitbucket.org/imcovangent/cmdows/raw/master/schema/0.7/cmdows.xsd">
+  <header>
+    <creator>Lukas Mueller</creator>
+    <description>RCG CMDOWS file of the super-sonic business jet test case optimization problem</description>
+    <timestamp>2017-12-04T12:06:18.606991</timestamp>
+    <fileVersion>0.1</fileVersion>
+    <cmdowsVersion>0.7</cmdowsVersion>
+    <updates>
+      <update>
+        <modification>KADMOS export of a repository connectivity graph (RCG).</modification>
+        <creator>Lukas Mueller</creator>
+        <timestamp>2017-12-04T12:06:18.606991</timestamp>
+        <fileVersion>0.1</fileVersion>
+        <cmdowsVersion>0.7</cmdowsVersion>
+      </update>
+    </updates>
+    <organization>
+      <contacts>
+        <contact uID="ivangent">
+          <email>i.vangent@tudelft.nl</email>
+          <company>TU Delft</company>
+          <name>Imco van Gent</name>
+        </contact>
+        <contact uID="lmuller">
+          <email>l.muller@student.tudelft.nl</email>
+          <company>TU Delft</company>
+          <name>Lukas Muller</name>
+        </contact>
+        <contact uID="sylvaindubreuil">
+          <name>Sylvain Dubreuil</name>
+          <email>Sylvain.Dubreuil@onera.fr</email>
+          <company>ONERA Toulouse</company>
+          <country>France</country>
+        </contact>
+        <contact uID="remilafage">
+          <name>Remi Lafage</name>
+          <email>Remi.Lafage@onera.fr</email>
+          <company>ONERA Toulouse</company>
+          <country>France</country>
+        </contact>
+      </contacts>
+      <organigram>
+        <integrators>
+          <integrator>
+            <contactUID>lmuller</contactUID>
+          </integrator>
+        </integrators>
+        <architects>
+          <architect>
+            <contactUID>ivangent</contactUID>
+          </architect>
+          <architect>
+            <contactUID>lmuller</contactUID>
+          </architect>
+        </architects>
+        <toolSpecialists>
+          <toolSpecialist>
+            <contactUID>sylvaindubreuil</contactUID>
+          </toolSpecialist>
+          <toolSpecialist>
+            <contactUID>remilafage</contactUID>
+          </toolSpecialist>
+        </toolSpecialists>
+      </organigram>
+    </organization>
+  </header>
+  <executableBlocks>
+    <designCompetences>
+      <designCompetence uID="structure[main][1][1.0]">
+        <ID>structure</ID>
+        <modeID>main</modeID>
+        <instanceID>1</instanceID>
+        <version>1.0</version>
+        <label>structure</label>
+        <metadata>
+          <generalInfo>
+            <description>Weight estimation of different aircraft parts.</description>
+            <owner>
+              <contactUID>remilafage</contactUID>
+            </owner>
+            <creator>
+              <contactUID>sylvaindubreuil</contactUID>
+            </creator>
+          </generalInfo>
+        </metadata>
+      </designCompetence>
+      <designCompetence uID="aerodynamics[main][1][1.0]">
+        <ID>aerodynamics</ID>
+        <modeID>main</modeID>
+        <instanceID>1</instanceID>
+        <version>1.0</version>
+        <label>aerodynamics</label>
+        <metadata>
+          <generalInfo>
+            <description>Estimation of the aircraft lift and drag during cruise.</description>
+            <owner>
+              <contactUID>remilafage</contactUID>
+            </owner>
+            <creator>
+              <contactUID>sylvaindubreuil</contactUID>
+            </creator>
+          </generalInfo>
+        </metadata>
+      </designCompetence>
+      <designCompetence uID="propulsion[main][1][1.0]">
+        <ID>propulsion</ID>
+        <modeID>main</modeID>
+        <instanceID>1</instanceID>
+        <version>1.0</version>
+        <label>propulsion</label>
+        <metadata>
+          <generalInfo>
+            <description>Engine sizing and estimation of the engine thrust.</description>
+            <owner>
+              <contactUID>remilafage</contactUID>
+            </owner>
+            <creator>
+              <contactUID>sylvaindubreuil</contactUID>
+            </creator>
+          </generalInfo>
+        </metadata>
+      </designCompetence>
+      <designCompetence uID="performance[main][1][1.0]">
+        <ID>performance</ID>
+        <modeID>main</modeID>
+        <instanceID>1</instanceID>
+        <version>1.0</version>
+        <label>performance</label>
+        <metadata>
+          <generalInfo>
+            <description>Estimation of the aircraft range.</description>
+            <owner>
+              <contactUID>remilafage</contactUID>
+            </owner>
+            <creator>
+              <contactUID>sylvaindubreuil</contactUID>
+            </creator>
+          </generalInfo>
+        </metadata>
+      </designCompetence>
+    </designCompetences>
+    <mathematicalFunctions>
+      <mathematicalFunction uID="objective">
+        <label>objective</label>
+        <inputs>
+          <input>
+            <parameterUID>/data_schema/aircraft/other/R</parameterUID>
+            <equationLabel>R</equationLabel>
+          </input>
+        </inputs>
+        <outputs>
+          <output>
+            <parameterUID>/data_schema/aircraft/other/objective</parameterUID>
+            <equations uID="objective_equation">
+              <equation language="Python">-R</equation>
+              <equation language="LaTeX">-R</equation>
+            </equations>
+          </output>
+        </outputs>
+      </mathematicalFunction>
+    </mathematicalFunctions>
+  </executableBlocks>
+  <parameters>
+    <parameter uID="/data_schema/aircraft/other/R">
+      <label>R</label>
+    </parameter>
+    <parameter uID="/data_schema/aircraft/other/objective">
+      <label>obj</label>
+    </parameter>
+  </parameters>
+</cmdows>
