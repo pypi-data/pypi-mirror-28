@@ -1,0 +1,408 @@
+<!--
+
+ Connects to the web sockets server (wsserver) and displays environments and
+ agents. Need to use the JavaScript console to send commands to the server.
+
+-->
+
+<html>
+<head>
+  <style>
+    .leftcolumn {
+       float:left;
+       width:48%;
+       margin:1%;
+       overflow-y: scroll;
+       overflow-x: scroll
+    }
+
+    .rightcolumn {
+       float:right;
+       width:48%;
+       margin:1%;
+       height: 75%;
+       font-size: 75%;
+       overflow-y: scroll;
+       overflow-x: scroll
+    }
+
+  </style>
+</head>
+<body>
+
+  <h3>AnimatAI demo</h3>
+
+  <p>The examples of the <a href='http://animatai.org'>AnimatAI</a> python package are hosted here.
+  The source for the examples is available in <a href='https://github.com/animatai/examples'>github</a>
+  and can also be viewed  <a href='https://animatai.github.io/examples/'>here</a>.
+  </p>
+
+  <p><ul>
+    <li>Enter a world to run. Some examples are: blind_dog, grid, random_mom_and_calf</li>
+    <li>Enter the number of steps, for instance 100</li>
+    <li>Enter a seed for the random generator (can be left blank)</li>
+    <li>Change server to World.LOCAL if you are running the server on your local machine (most users won't change this)</li>
+    <li>Click on run</li>
+  </ul></p>
+
+  <input id='world' type='text' placeholder='world'>
+  <input id='steps' type='text' placeholder='steps'>
+  <input id='seed' type='text' placeholder='seed'>
+  <input id='server' type='text' placeholder='server' value='World.SERVER'>
+  <button id='run_world'>run</button>
+
+  <p>It is also possible to run the examples fom the developer console in the browser.
+  This is the recommended approach when developing new AI Worlds.</p>
+
+  <p>Open the developer console in your browser and type World.help() for more information.</p>
+
+  <div class='leftcolumn'>
+    <canvas id='field'></canvas>
+    <br/>
+  </div>
+
+  <div class='rightcolumn'>
+    <div id='status'></div>
+    <br/>
+    <div id='U_and_pi'></div>
+    <br/>
+    <div id='messages'></div>
+  </div>
+
+  <script>
+  ;(function () {
+
+    // Setup logging
+    // =============
+
+    var log = console.log.bind(console, 'LOG:');
+    var debug = console.log.bind(console, 'DEBUG:');
+
+
+    // MAnage UI
+    // =========
+
+    document.addEventListener('DOMContentLoaded', function(event) {
+      log('DOM fully loaded and parsed');
+
+      document.getElementById('run_world').addEventListener('click', function( event ) {
+        var world = document.getElementById('world').value
+        var steps = document.getElementById('steps').value
+        var seed = document.getElementById('seed').value
+        var server = eval(document.getElementById('server').value)
+        log('Run!', world, steps, seed, server);
+
+        World.initWS(server, function(){
+          if (seed !='') {
+            World.send([world, steps, seed]);
+          } else {
+            World.send([world, steps]);
+          }
+        });
+
+      }, false);
+
+    });
+
+
+    // Constants
+    // =========
+
+    // Frames per second
+    var FRAME_RATE = 20
+
+    var TERRAIN_PATH = './images/terrain.png'
+
+    var AUTO_STEP = false;
+    var AGENT_FONT = '32px serif';
+    var TEXTURE_SIZE = [32, 32];
+    var AGENT_FONT_HEIGHT = 32;
+
+    // row, col
+    var TEXTURE_SPRITE = {
+      'G': [0, 0],
+      'a': [0, 0],
+      'D': [2, 0],
+      'W': [14, 13],
+      'b': [14, 13],
+      'F': [13, 1],
+      's': [10, 5],
+      'X': [9, 15],
+      'l': [3, 7]
+    };
+
+
+    // Field class
+    // ============
+
+    // constructor
+    var F = function(){
+
+      // Websockets
+      this._ws = null;
+
+      // graphics attributes
+      this._cfg = null;
+
+      this._fieldSize = null;
+      this._terrain = null;
+      this._terrainSize = null;
+
+      this._texture = null;
+      this._ctx = null;
+
+      this._prevRndTerrainType = null;
+
+      this._queue = [];
+      this._queueCnt = 0;
+    };
+
+
+    // Misc
+    // ----
+
+    F.LOCAL_SERVER = "ws://127.0.0.1:5678/";
+    F.SERVER = "ws://aiws.gizur.com:80/";
+
+    function escape(str) {
+      return str.replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+    }
+
+    F.help = function() {
+      var print = console.log.bind(console);
+      print('Connect to a server with World.initWS(serverPath). For instance: World.initWS(World.SERVER) or World.initWS(World.LOCAL_SERVER). The connection is closed after 30 seconds.');
+      print('Send a message to the server with World.send(world, steps [, seed]). The following worlds exist (you can add you own of course):');
+      print('* World.send([\'blind_dog\', 30])');
+      print('* World.send([\'random_agents\', 30])');
+      print('* World.send([\'random_mom_and_calf\', 50, 1])');
+    };
+
+    F.initWS = function(server, cb) {
+      _ws = new WebSocket(server);
+
+      _ws.onopen = function(msg) {
+        console.log(msg);
+        cb();
+      };
+      _ws.onclose = console.log.bind(this);
+      _ws.onerror = console.log.bind(this);
+
+      _ws.onmessage = function (event) {
+          console.log(event.data);
+          eval(event.data);
+      };
+
+      // close the web socket after 30 seconds
+      window.setTimeout(function(){
+        _ws.close()
+      }, 30000)
+    };
+
+    F.send = function(msg) {
+      _ws.send(JSON.stringify(msg));
+    }
+
+    // Public methods
+    // ---------------
+
+    F.prototype.start = function() {
+      this.timer = window.setInterval(this.step.bind(this), 1000 / FRAME_RATE);
+    }
+
+    F.prototype.stop = function() {
+      window.clearInterval(this.timer)
+    }
+
+    F.prototype.printMessage = function(msg) {
+      this._queue.push(['message', msg, null]);
+    };
+
+    F.prototype.printEscapedText = function(element, msg) {
+      this._queue.push(['printEscapedText', element, msg]);
+    };
+
+    // terrain must be of the same size as before the update
+    F.prototype.setTerrain = function(terrain) {
+      this._terrain = terrain.split('\n');
+    }
+
+    F.prototype.initTerrain = function(cfg) {
+      var self = this;
+      var field = document.getElementById('field');
+
+      self._cfg = cfg;
+
+      if (self._cfg.randomTerrain > 0) {
+        self._cfg.terrain = self._randomTerrain(self._cfg.randomTerrain);
+      }
+
+      self._cfg.squareSize = [TEXTURE_SIZE[0] * self._cfg.numTilesPerSquare[0],
+                              TEXTURE_SIZE[1] * self._cfg.numTilesPerSquare[1]];
+
+      self.setTerrain(cfg.terrain);
+      self._terrainSize = [Math.max.apply(null, self._terrain.map(function(x){return x.length})),
+                           self._terrain.length];
+
+      this._fieldSize = [self._terrainSize[0] * self._cfg.squareSize[0],
+                         self._terrainSize[1] * self._cfg.squareSize[1]];
+
+      field.width = this._fieldSize[0];
+      field.height = this._fieldSize[1];
+
+      self._ctx = field.getContext('2d');
+      self._texture = new Image();
+
+      self._texture.onload = function() {
+        self._draw();
+      };
+      self._texture.src = TERRAIN_PATH;
+    };
+
+    F.prototype.updateTerrain = function(terrain) {
+      this._queue.push(['terrain', terrain, null]);
+      if (AUTO_STEP) this.step();
+    };
+
+    F.prototype.updateAgent = function(agentId, agentCfg) {
+      this._queue.push(['agent', agentId, agentCfg]);
+      if (AUTO_STEP) this.step();
+    };
+
+    F.prototype.step = function() {
+      if (!this._queue.length || this._queueCnt >= this._queue.length) return;
+      [type, p1, p2] = this._queue[this._queueCnt++];
+      if (type === 'agent') {
+        var agentId = p1
+        var agentCfg = p2
+        Object.assign(this._cfg.agents[agentId], agentCfg);
+      }
+      if (type === 'terrain') {
+        var terrain = p1;
+        this.setTerrain(terrain);
+      }
+      if (type === 'message') {
+        document.getElementById('messages').innerHTML = escape(p1) + '<br/>' +
+          document.getElementById('messages').innerHTML;
+      }
+      if (type === 'printEscapedText') {
+        document.getElementById(p1).innerHTML = escape(p2);
+      }
+      this._draw();
+    };
+
+    F.prototype.stepTo = function(idx) {
+      idx = (idx < 0) ? 0 : Math.min(idx, this._queue.length);
+      this._queueCnt = idx;
+      this.step();
+    }
+
+    // Private methods
+    // --------------
+
+    F.prototype._draw = function() {
+      this._ctx.clearRect(0, 0, this._fieldSize[0], this._fieldSize[1]);
+      this._drawBackground();
+      this._drawAgents();
+    };
+
+    F.prototype._drawAgents = function() {
+      var self = this;
+
+      Object.keys(self._cfg.agents).forEach(function(k){
+        self._drawAgent(self._cfg.agents[k])
+      });
+    };
+
+    F.prototype._drawAgent = function(agentCfg) {
+      if (agentCfg.hidden) return;
+
+      this._ctx.font = AGENT_FONT;
+      this._ctx.textBaseline = 'top';
+
+      var coord = this._posToCoord(agentCfg.pos);
+      this._ctx.strokeText(agentCfg.name,
+        coord[0] + (this._cfg.squareSize[0]-this._ctx.measureText(agentCfg.name).width)/2,
+        coord[1] + (this._cfg.squareSize[1]-AGENT_FONT_HEIGHT)/2);
+    };
+
+    F.prototype._drawRect = function(pos, size) {
+      this._ctx.strokeRect(pos[0], pos[1], size[0], size[1]);
+    };
+
+    F.prototype._posToCoord = function(pos) {
+      return [pos[0] * this._cfg.squareSize[0], pos[1] * this._cfg.squareSize[1]]
+    }
+
+    F.prototype._drawSquareBackground = function(pos, terrainType) {
+      var coord = this._posToCoord(pos)
+
+      if (this._cfg.drawGrid)
+        this._drawRect(coord, this._cfg.squareSize);
+
+      for (var xTile = 0; xTile < this._cfg.numTilesPerSquare[0]; xTile++) {
+        for (var yTile = 0; yTile < this._cfg.numTilesPerSquare[1]; yTile++) {
+
+          this._ctx.drawImage(this._texture,
+                         TEXTURE_SPRITE[terrainType][0] * TEXTURE_SIZE[0],
+                         TEXTURE_SPRITE[terrainType][1] * TEXTURE_SIZE[1],
+                         TEXTURE_SIZE[0],
+                         TEXTURE_SIZE[1],
+                         coord[0] + xTile * TEXTURE_SIZE[0],
+                         coord[1] + yTile * TEXTURE_SIZE[1],
+                         TEXTURE_SIZE[0],
+                         TEXTURE_SIZE[1]);
+        }
+      }
+    };
+
+    F.prototype._drawBackground = function() {
+      for (var yPos = 0; yPos < this._terrainSize[1]; yPos++) {
+        for (var xPos = 0; xPos < this._terrain[yPos].length; xPos++) {
+          this._drawSquareBackground([xPos, yPos], this._terrain[yPos][xPos]);
+        }
+      }
+    };
+
+    F.prototype._randomTerrainType = function() {
+      var res;
+      var rnd = Math.floor(Math.random() * (Object.keys(TEXTURE_SPRITE).length + 1));
+      if (rnd === Object.keys(TEXTURE_SPRITE).length) {
+        res = '\n';
+      } else {
+        res = Object.keys(TEXTURE_SPRITE)[rnd];
+      }
+
+      // prevent two \n in a row
+      if (res === '\n' && this._prevRndTerrainType === '\n') {
+        res = this._randomTerrainType()
+      }
+
+      this._prevRndTerrainType = res
+      return res;
+    };
+
+    F.prototype._randomTerrain = function(numSquares) {
+      res = '';
+      i = 0;
+      while (i < numSquares) {
+        var terrainType = randomTerrainType();
+        if (terrainType !== '\n')
+          i++;
+        res += terrainType;
+      }
+      return res;
+    };
+
+
+    // Export
+    // ======
+
+    window['World'] = F;
+
+    debug('World class is loaded.');
+
+  }());
+  </script>
+
+</body>
+</html>
