@@ -1,0 +1,79 @@
+=====
+Quade
+=====
+
+.. image:: https://travis-ci.org/makingspace/quade.svg?branch=master
+    :target: https://travis-ci.org/makingspace/quade
+
+.. image:: https://codecov.io/gh/makingspace/quade/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/makingspace/quade
+
+Meet Quade, the friendly QA tool for Django!
+
+.. image:: https://raw.githubusercontent.com/makingspace/quade/4ae3d090d36e2e8869c0edb50f6bede72446948d/docs/_static/quade_200x200.png
+   :height: 200px
+   :width: 200px
+
+Quade is a Django app that makes quality assurance testing better. It
+handles repeatedly setting up the same data so you don't have to.
+
+Installation
+------------
+
+* Check out the Quickstart_!
+
+.. _Quickstart: https://quade.readthedocs.io/en/stable/quickstart.html
+
+Links
+-----
+
+* `Source on Github`_
+* `Documentation at Read the Docs`_
+
+.. _Source on Github: https://github.com/makingspace/quade
+.. _Documentation at Read the Docs: https://quade.readthedocs.io/
+
+
+History
+-------
+
+0.2.2 (2018-02-02)
+++++++++++++++++++
+
+* Fix dependency problems when installing without Celery (`#29`_).
+* Improve help text when not using Celery (`#22`_).
+* Use transparent logo (`#31`_).
+
+.. _#29: https://github.com/makingspace/quade/pull/29
+.. _#22: https://github.com/makingspace/quade/pull/22
+.. _#31: https://github.com/makingspace/quade/pull/31
+
+
+0.2.1 (2018-01-16)
+++++++++++++++++++
+
+* Coerce fixtures' return value into text (`#14`_).
+
+.. _#14: https://github.com/makingspace/quade/pull/14
+
+
+0.2.0 (2018-01-12)
+++++++++++++++++++
+
+* Moved celery dependency to an extra named ``celery`` (`#13`_).
+
+.. _#13: https://github.com/makingspace/quade/pull/13
+
+
+0.1.1 (2018-01-05)
+++++++++++++++++++
+
+* Release on PyPI!
+
+
+0.1.0 (2018-01-05)
+++++++++++++++++++
+
+* Preparation for release.
+
+
