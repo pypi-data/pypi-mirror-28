@@ -1,0 +1,108 @@
+=============================
+Django GitHub Issues
+=============================
+
+.. image:: https://badge.fury.io/py/django-github-issues.svg
+    :target: https://badge.fury.io/py/django-github-issues
+
+.. image:: https://travis-ci.org/chopdgd/django-github-issues.svg?branch=develop
+    :target: https://travis-ci.org/chopdgd/django-github-issues
+
+.. image:: https://codecov.io/gh/chopdgd/django-github-issues/branch/develop/graph/badge.svg
+    :target: https://codecov.io/gh/chopdgd/django-github-issues
+
+.. image:: https://pyup.io/repos/github/chopdgd/django-github-issues/shield.svg
+     :target: https://pyup.io/repos/github/chopdgd/django-github-issues/
+     :alt: Updates
+
+.. image:: https://pyup.io/repos/github/chopdgd/django-github-issues/python-3-shield.svg
+      :target: https://pyup.io/repos/github/chopdgd/django-github-issues/
+      :alt: Python 3
+
+Django App to sync GitHub issues
+
+Documentation
+-------------
+
+The full documentation is at https://django-github-issues.readthedocs.io.
+
+Quickstart
+----------
+
+Install Django GitHub Issues::
+
+    pip install django-github-issues
+
+Add it to your `INSTALLED_APPS`:
+
+.. code-block:: python
+
+    INSTALLED_APPS = (
+        'rest_framework',
+        'django_filters',
+        'user_activities',
+        ...
+        'github_issues',
+        ...
+    )
+
+Add Django GitHub Issues's URL patterns:
+
+.. code-block:: python
+
+    from github_issues import urls as github_issues_urls
+
+
+    urlpatterns = [
+        ...
+        url(r'^', include(github_issues_urls, namespace='github_issues')),
+        ...
+    ]
+
+Add the following to `settings.py`:
+
+.. code-block:: python
+
+    GITHUB_API_URL=
+    GITHUB_ACCESS_TOKEN=
+
+Features
+--------
+
+* Allows you to sync and track GitHub issues in your project.
+* Allows users who may not have a GitHub user name to post an issue to your project.
+
+Running Tests
+-------------
+
+Does the code actually work?
+
+::
+
+    source <YOURVIRTUALENV>/bin/activate
+    (myenv) $ pip install tox
+    (myenv) $ tox
+
+Credits
+-------
+
+Tools used in rendering this package:
+
+*  Cookiecutter_
+*  `cookiecutter-djangopackage`_
+
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _`cookiecutter-djangopackage`: https://github.com/pydanny/cookiecutter-djangopackage
+
+
+
+
+History
+-------
+
+0.1.0 (2018-01-18)
+++++++++++++++++++
+
+* First release on PyPI.
+
+
