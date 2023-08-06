@@ -1,0 +1,54 @@
+TiMemory
+========
+
+Release: TiMemory 1.1.3
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Author: Jonathan R. Madsen
+- Date:   Mon Jan 29 18:46:09 2018 -0800
+
+    - added `timemory.set_exit_action(...)` capability for defining a function to handle the exit of the application due to a signal being raised (e.g. SIGHUP, SIGINT, SIGABRT)
+
+Release: TiMemory 1.1.2
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Author: Jonathan R. Madsen
+- Date:   Mon Jan 29 16:20:06 2018 -0800
+
+    - removed Python 'cmake' requirement in 'setup.py
+
+Release: TiMemory 1.1.1
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Author: Jonathan R. Madsen
+- Date:   Mon Jan 29 15:00:12 2018 -0800
+
+    - Added 'report_at_exit' parameter to auto_timer decorator
+    - Added added_args flag for auto_timer decorator
+    - Fixed I/O output bug
+    - Added setup.cfg
+    - Fixed auto_timer decorator issue with self.key, self.is_class, and self.add_args
+
+
+Release: TiMemory 1.1b0
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Author: Jonathan R. Madsen
+- Date:   Fri Jan 26 17:24:42 2018 -0800
+    
+    - Updated documentation for TiMemory 1.1b0
+    - added rss_usage decorator
+    - made a base class for the decorators
+    - update the setup.py to 1.1b0
+    - +=, -=, +, -, current, and peak methods to RSS in Python
+    - updated timemory_test.py
+    - restructured submodules: originally all submodules were under util, now only the decorators live there
+    - new submodules are: options, mpi_support, plotting, util, and signals
+    - timemory.options: I/O options, formerly timemory.util.options
+    - timemory.plotting: plotting utilities, formerly timemory.util.plot
+    - timemory.util: decorators, formerly all-encompassing submodule
+    - timemory.signals: signal enumeration, new submodule
+    - timemory.mpi_support: report MPI information, new submodule
+    - added new RSS capability (+=, -= usage)
+    - added Python RSS interface
+    - added signals interface
