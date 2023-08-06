@@ -1,0 +1,880 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>termtools package &#8212; termtools 0.0.5 documentation</title>
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">termtools 0.0.5 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="termtools-package">
+<h1>termtools package<a class="headerlink" href="#termtools-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-termtools.terminal">
+<span id="termtools-terminal-module"></span><h2>termtools.terminal module<a class="headerlink" href="#module-termtools.terminal" title="Permalink to this headline">¶</a></h2>
+<p>This module exposes classes to control displaying text and progress bars at any place of the screen.</p>
+<p>The two main classes are TerminalController and ProgressBarController</p>
+<dl class="class">
+<dt id="termtools.terminal.ProgressBarController">
+<em class="property">class </em><code class="descclassname">termtools.terminal.</code><code class="descname">ProgressBarController</code><span class="sig-paren">(</span><em>barNames=None</em>, <em>barLength=50</em>, <em>align_bars=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A set of progress bars.</p>
+<p>A set of progress bars with custom pre and post text. It is mostly useful when you have several running threads or
+suprocesses and each needs its own bar. It allows prefixes and postfixes that can be changed using the following tags:
+&lt;name&gt; bar name
+&lt;remaining&gt; remaining time to completion estimate
+&lt;activity&gt; An indicator that the process represented by the bar is active</p>
+<dl class="method">
+<dt id="termtools.terminal.ProgressBarController.activate">
+<code class="descname">activate</code><span class="sig-paren">(</span><em>name: str = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController.activate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController.activate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicate that the given bar is active. If name is None, all bars are indicated to be active by progressing</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – bar name. If None is given then all bars are set to be active</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.activityChars">
+<code class="descname">activityChars</code><em class="property"> = ['.   ', ' .  ', '  . ', '   .', '  . ', ' .  ', '.   ']</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.activityChars" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.ProgressBarController.add_bar">
+<code class="descname">add_bar</code><span class="sig-paren">(</span><em>name: str</em>, <em>*</em>, <em>i: float = 0</em>, <em>n: float = 0</em>, <em>start_timing: bool = True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController.add_bar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController.add_bar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a bar</p>
+<p>Can control the name, starting progress (i) and total progress</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – name of bar</td>
+</tr>
+</tbody>
+</table>
+<dl class="docutils">
+<dt>Kwargs:</dt>
+<dd><p class="first">i (int): current progress
+n (int): total progress
+start_timing (bool or None): Starts a timer for this bar, otherwise it uses the begTime member which</p>
+<blockquote class="last">
+<div>is common to all bars</div></blockquote>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+</tbody>
+</table>
+<p>Remarks:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.barNames">
+<code class="descname">barNames</code><em class="property"> = None</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.barNames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.begTime">
+<code class="descname">begTime</code><em class="property"> = None</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.begTime" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.completed_background">
+<code class="descname">completed_background</code><em class="property"> = 'black'</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.completed_background" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.completed_color">
+<code class="descname">completed_color</code><em class="property"> = 'green'</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.completed_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.current">
+<code class="descname">current</code><em class="property"> = None</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.current" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.ProgressBarController.get_remaining_time">
+<code class="descname">get_remaining_time</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController.get_remaining_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController.get_remaining_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the time remaining till the end of execution (only an estimate)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – bar name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">remaining time (ETA)</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.last_i">
+<code class="descname">last_i</code><em class="property"> = None</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.last_i" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.last_n">
+<code class="descname">last_n</code><em class="property"> = None</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.last_n" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.last_name_updated">
+<code class="descname">last_name_updated</code><em class="property"> = None</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.last_name_updated" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.over_complete_background">
+<code class="descname">over_complete_background</code><em class="property"> = 'black'</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.over_complete_background" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.over_complete_color">
+<code class="descname">over_complete_color</code><em class="property"> = 'red'</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.over_complete_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.ProgressBarController.remove_bar">
+<code class="descname">remove_bar</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController.remove_bar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController.remove_bar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a bar given its name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – bar name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.running_background">
+<code class="descname">running_background</code><em class="property"> = 'black'</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.running_background" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.running_color">
+<code class="descname">running_color</code><em class="property"> = 'yellow'</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.running_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.ProgressBarController.set_progress">
+<code class="descname">set_progress</code><span class="sig-paren">(</span><em>name: str</em>, <em>i: int</em>, <em>n: int = None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController.set_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController.set_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets progress for a specific bar, optionally setting its limit as well</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – bar name</li>
+<li><strong>i</strong> (<em>int</em>) – current progress</li>
+<li><strong>n</strong> (<em>int</em><em> or </em><em>None</em>) – Limit (optional)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">self</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.ProgressBarController.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>name=None</em>, <em>prefix='&lt;name&gt;'</em>, <em>suffix='&lt;remaining&gt;'</em>, <em>bar_length=-1</em>, <em>from_line_beginning=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows a specific bar just in the current place on the screen. We should have a new line before it</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">name (str or None): name of the bar
+prefix (str): prefix to write before the bar (see the class doc string for possible tag values)
+suffix (str): postfix (see prefix)
+bar_length (int): Bar length, if less than zero then the current length set during creation of the bar or</p>
+<blockquote>
+<div>latest setting of its progess will be used.</div></blockquote>
+<p class="last">from_line_beginning (bool): If true, a ‘</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>‘ and flushing will be outputed to set the bar to the beginning</dt>
+<dd><blockquote class="first">
+<div>of the line</div></blockquote>
+<dl class="last docutils">
+<dt>Returns:</dt>
+<dd>self</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.ProgressBarController.show_all">
+<code class="descname">show_all</code><span class="sig-paren">(</span><em>barname=None</em>, <em>i=None</em>, <em>n=None</em>, <em>clean_screen=True</em>, <em>prefix='&lt;name&gt;&lt;activity&gt;'</em>, <em>suffix='&lt;remaining&gt;'</em>, <em>bar_length=-1</em>, <em>skip_rows=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController.show_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController.show_all" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Shows a specific bar or all bars, possibly cleaning the screen.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><p class="first">barname (str or None): name of the bar
+i (int or None): optional progress value
+n (int or None): optional maximum value for the bar
+clean_screen (bool): Whether or not to clean the screen before drawing. Default is true
+prefix (str): prefix to write before the bar (see the class doc string for possible tag values)
+suffix (str): postfix (see prefix)
+bar_length (int): Bar length, if less than zero then the current length set during creation of the bar or</p>
+<blockquote>
+<div>latest setting of its progess will be used.</div></blockquote>
+<p class="last">skip_rows (int): the number of lines to skip between bars
+from_line_beginning (bool): If true, a ‘</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="docutils">
+<dt>‘ and flushing will be outputed to set the bar to the beginning</dt>
+<dd><blockquote class="first">
+<div>of the line</div></blockquote>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>self</dd>
+</dl>
+<p class="last">Remarks:</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.ProgressBarController.show_in_position">
+<code class="descname">show_in_position</code><span class="sig-paren">(</span><em>name=None</em>, <em>prefix='&lt;name&gt;&lt;activity&gt;'</em>, <em>suffix='&lt;remaining&gt;'</em>, <em>bar_length=-1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController.show_in_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController.show_in_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows the named bar in its appropriate position without touching anything else in the screen</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – bar name</li>
+<li><strong>clean_screen</strong> (<em>bool</em>) – Whether or not to clean the screen before drawing. Default is true</li>
+<li><strong>prefix</strong> (<em>str</em>) – prefix to write before the bar (see the class doc string for possible tag values)</li>
+<li><strong>suffix</strong> (<em>str</em>) – postfix (see prefix)</li>
+<li><strong>bar_length</strong> (<em>int</em>) – Bar length, if less than zero then the current length set during creation of the bar or
+latest setting of its progress will be used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">self</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.ProgressBarController.start_timing">
+<code class="descname">start_timing</code><span class="sig-paren">(</span><em>forNames=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController.start_timing"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController.start_timing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Starts timing for ETA calculation for the given bar names</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>forNames</strong> (<em>str</em><em> or </em><em>None</em>) – The list of bar names. If None (Default), the beginning time of all bars is set to
+now</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">self</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.ProgressBarController.terminal">
+<code class="descname">terminal</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; termtools.terminal.TerminalController<a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController.terminal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController.terminal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the built-in <cite>TerminalController</cite> object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">TerminalController</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.under_complete_background">
+<code class="descname">under_complete_background</code><em class="property"> = 'black'</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.under_complete_background" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="termtools.terminal.ProgressBarController.under_complete_color">
+<code class="descname">under_complete_color</code><em class="property"> = 'red'</em><a class="headerlink" href="#termtools.terminal.ProgressBarController.under_complete_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.ProgressBarController.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>name: str = None</em>, <em>i: typing.Union[int</em>, <em>NoneType] = None</em>, <em>n: typing.Union[int</em>, <em>NoneType] = None</em>, <em>prefix: str = '&lt;name&gt;&lt;activity&gt;'</em>, <em>suffix: str = '&lt;remaining&gt;'</em>, <em>bar_length: int = -1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#ProgressBarController.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.ProgressBarController.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the progress value of a given bar and shows all the bars in their relative positions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – bar name</li>
+<li><strong>i</strong> (<em>int</em><em> or </em><em>None</em>) – optional progress value</li>
+<li><strong>n</strong> (<em>int</em><em> or </em><em>None</em>) – optional maximum value for the bar</li>
+<li><strong>clean_screen</strong> (<em>bool</em>) – Whether or not to clean the screen before drawing. Default is true</li>
+<li><strong>prefix</strong> (<em>str</em>) – prefix to write before the bar (see the class doc string for possible tag values)</li>
+<li><strong>suffix</strong> (<em>str</em>) – postfix (see prefix)</li>
+<li><strong>bar_length</strong> (<em>int</em>) – Bar length, if less than zero then the current length set during creation of the bar or
+latest setting of its progess will be used.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">self</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="termtools.terminal.TerminalController">
+<em class="property">class </em><code class="descclassname">termtools.terminal.</code><code class="descname">TerminalController</code><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A class for controlling where to print on a screen and the attributes of text to be printed.</p>
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.attrib">
+<code class="descname">attrib</code><span class="sig-paren">(</span><em>attrib='keep'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.attrib"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.attrib" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>sets the text attributes</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attrib</strong> – one of [‘bright’,’dim’,’underscore’,’blink’,’reverse’,’hidden’]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.background">
+<code class="descname">background</code><span class="sig-paren">(</span><em>background='keep'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.background"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.background" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>sets the text background color</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>background</strong> – one of [‘black’,’red’,’green’,’yellow’,’blue’,’magenta’,’cyan’,’white’]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.bookmark">
+<code class="descname">bookmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.bookmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.bookmark" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>saves current cursor position</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.clear">
+<code class="descname">clear</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.clear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.clear" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>clears the screen</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.color">
+<code class="descname">color</code><span class="sig-paren">(</span><em>color='keep'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.color"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.color" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>sets the text foreground color</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>color</strong> – one of [‘black’,’red’,’green’,’yellow’,’blue’,’magenta’,’cyan’,’white’]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.down">
+<code class="descname">down</code><span class="sig-paren">(</span><em>n=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.down"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.down" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>goes down the specified number of rows</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> – The number of rows to go down (a negative number goes up)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.eraseDown">
+<code class="descname">eraseDown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.eraseDown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.eraseDown" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>erases all text from currnt line to the end of the screen</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.eraseLine">
+<code class="descname">eraseLine</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.eraseLine"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.eraseLine" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>erases all text from currnt line</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.eraseToBOL">
+<code class="descname">eraseToBOL</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.eraseToBOL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.eraseToBOL" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>erases all text from currnt location to the beginning of the line</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.eraseToEOL">
+<code class="descname">eraseToEOL</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.eraseToEOL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.eraseToEOL" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>erases all text from currnt location to the end of the line</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.eraseUp">
+<code class="descname">eraseUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.eraseUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.eraseUp" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>erases all text from currnt line to the beginning of the screen</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.goto">
+<code class="descname">goto</code><span class="sig-paren">(</span><em>x=0</em>, <em>y=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.goto"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.goto" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>goes to the specified x-y coordingates on the screen</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – x coordinate from the left to right</li>
+<li><strong>y</strong> – y coordinate from the top to bottom</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.goto_bookmark">
+<code class="descname">goto_bookmark</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.goto_bookmark"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.goto_bookmark" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>goes to current bookmarked position (must use bookmark() before it)</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.home">
+<code class="descname">home</code><span class="sig-paren">(</span><em>erase_screen=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.home"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.home" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>gets the cursor to the top of the screen</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.left">
+<code class="descname">left</code><span class="sig-paren">(</span><em>n=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.left"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.left" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>goes left the specified number of rows</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> – The number of rows to go up (a negative number goes right)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.print">
+<code class="descname">print</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.print"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.print" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.printat">
+<code class="descname">printat</code><span class="sig-paren">(</span><em>txt</em>, <em>x=0</em>, <em>y=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.printat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.printat" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>goes to the specified x-y coordingates on the screen and prints the text.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x</strong> – x coordinate from the left to right</li>
+<li><strong>y</strong> – y coordinate from the top to bottom</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.reset_attributes">
+<code class="descname">reset_attributes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.reset_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.reset_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>resets all text attributes to their defaults</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.right">
+<code class="descname">right</code><span class="sig-paren">(</span><em>n=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.right"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.right" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>goes right the specified number of rows</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> – The number of rows to go up (a negative number goes left)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.set_attribute">
+<code class="descname">set_attribute</code><span class="sig-paren">(</span><em>attrib='keep'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.set_attribute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.set_attribute" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>sets the text attributes</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attrib</strong> – one of [‘bright’,’dim’,’underscore’,’blink’,’reverse’,’hidden’]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.set_attributes">
+<code class="descname">set_attributes</code><span class="sig-paren">(</span><em>color='keep'</em>, <em>background='keep'</em>, <em>attrib='keep'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.set_attributes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.set_attributes" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>sets the text attributes to be used by new prints. a value of “keep” keeps the current set</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>color</strong> – one of [‘black’,’red’,’green’,’yellow’,’blue’,’magenta’,’cyan’,’white’]</li>
+<li><strong>background</strong> – one of [‘black’,’red’,’green’,’yellow’,’blue’,’magenta’,’cyan’,’white’]</li>
+<li><strong>attrib</strong> – one of [‘bright’,’dim’,’underscore’,’blink’,’reverse’,’hidden’]</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.set_background">
+<code class="descname">set_background</code><span class="sig-paren">(</span><em>background='keep'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.set_background"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.set_background" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>sets the text background color</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>background</strong> – one of [‘black’,’red’,’green’,’yellow’,’blue’,’magenta’,’cyan’,’white’]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.set_foreground">
+<code class="descname">set_foreground</code><span class="sig-paren">(</span><em>color='keep'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.set_foreground"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.set_foreground" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets the text foreground color</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>color</strong> – one of [‘black’,’red’,’green’,’yellow’,’blue’,’magenta’,’cyan’,’white’]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="termtools.terminal.TerminalController.up">
+<code class="descname">up</code><span class="sig-paren">(</span><em>n=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#TerminalController.up"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.TerminalController.up" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div>goes up the specified number of rows</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> – The number of rows to go up (a negative number goes down)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#termtools.terminal.TerminalController" title="termtools.terminal.TerminalController">TerminalController</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="termtools.terminal.humanize_time">
+<code class="descclassname">termtools.terminal.</code><code class="descname">humanize_time</code><span class="sig-paren">(</span><em>secs</em>, <em>align=False</em>, <em>always_show_all_units=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#humanize_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.humanize_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints time that is given as seconds in human readable form. Useful only for times &gt;=1sec.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>float</strong> (<em>secs</em>) – number of seconds</li>
+<li><strong>bool</strong><strong>, </strong><strong>optional</strong> (<em>always_show_all_units</em>) – whether to align outputs so that they all take the same size (not implemented)</li>
+<li><strong>bool</strong><strong>, </strong><strong>optional</strong> – Whether to always show days, hours, and minutes even when they
+are zeros. default False</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">str formated string with the humanized form</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="termtools.terminal.print_progress">
+<code class="descclassname">termtools.terminal.</code><code class="descname">print_progress</code><span class="sig-paren">(</span><em>iteration</em>, <em>total</em>, <em>prefix=''</em>, <em>suffix=''</em>, <em>decimals=2</em>, <em>barLength=50</em>, <em>limit_range=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/termtools/terminal.html#print_progress"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#termtools.terminal.print_progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>Call in a loop to create terminal progress bar</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>int</strong> (<em>barLength</em>) – current iteration</li>
+<li><strong>int</strong> – total iterations</li>
+<li><strong>str</strong> (<em>suffix</em>) – prefix string</li>
+<li><strong>str</strong> – suffix string</li>
+<li><strong>int</strong> – positive number of decimals in percent complete</li>
+<li><strong>int</strong> – character length of bar</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-termtools">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-termtools" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">termtools 0.0.5 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Yasser Mohammad.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>
