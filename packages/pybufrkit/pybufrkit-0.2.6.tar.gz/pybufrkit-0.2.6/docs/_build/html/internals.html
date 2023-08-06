@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>How It Works &mdash; PyBufrKit 0.2.5 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyBufrKit 0.2.5 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyBufrKit 0.2.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="how-it-works">
+<h1>How It Works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="bufr-message-configuration-files">
+<h2>BUFR Message Configuration files<a class="headerlink" href="#bufr-message-configuration-files" title="Permalink to this headline">¶</a></h2>
+<p>The configurations describe how a BUFR message is composed of sections and how each
+section is organised. They are used to provide the overall structure definition
+of a BUFR message. The purpose of using configurations is to allow greater
+flexibility so that changes of BUFR Spec do NOT (to a certain extent) require
+program changes.</p>
+<p>The builtin Configuration JSON files are located in the
+<a class="reference external" href="https://github.com/ywangd/pybufrkit/tree/master/pybufrkit/definitions">definitions</a>
+directory inside the package. It can also be configured to load from an user
+provided directory. The naming convention of the files is as the follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sectionX</span><span class="p">[</span><span class="o">-</span><span class="n">Y</span><span class="p">]</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>where X is the section index, Y is the edition number and optional.</p>
+<p>Each section is configured with some metadata and a list of parameters.
+It takes the following general format:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;index&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>  <span class="c1"># zero-based section index</span>
+
+  <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Indicator section&quot;</span><span class="p">,</span>
+
+  <span class="s2">&quot;default&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>  <span class="c1"># use this config if an edition-specific one is not available</span>
+
+  <span class="s2">&quot;optional&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span> <span class="c1"># whether this section is optional</span>
+
+  <span class="s2">&quot;end_of_message&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span> <span class="c1"># whether this is the last section</span>
+
+  <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">[</span>  <span class="c1"># a list of parameter configs</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;start_signature&quot;</span><span class="p">,</span>  <span class="c1"># parameter name</span>
+
+      <span class="s2">&quot;nbits&quot;</span><span class="p">:</span> <span class="mi">32</span><span class="p">,</span>  <span class="c1"># number of bits</span>
+
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;bytes&quot;</span><span class="p">,</span>  <span class="c1"># parameter type determines how the value can be processed from the input bits</span>
+
+      <span class="s2">&quot;expected&quot;</span><span class="p">:</span> <span class="s2">&quot;BUFR&quot;</span><span class="p">,</span>  <span class="c1"># expected value for this parameter (will be validated if not None)</span>
+
+      <span class="s2">&quot;as_property&quot;</span><span class="p">:</span> <span class="n">false</span>  <span class="c1"># whether this parameter can be accessed from the parent message object</span>
+    <span class="p">},</span>
+    <span class="o">...</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A few more notes about the configuration:</p>
+<ul>
+<li><p class="first">Some section, e.g. Section 1, has edition-specific configuration, e.g. <code class="docutils literal"><span class="pre">section1-1.json</span></code>.
+However, most sections have a single configuration for all editions. The <code class="docutils literal"><span class="pre">default</span></code> field
+is used to indicate that the configuration is a catch-all for any editions that does not
+have its own specific config.</p>
+</li>
+<li><p class="first">Number of bits can be set to <code class="docutils literal"><span class="pre">0</span></code>, which means value of the corresponding parameter takes
+all the bits left for the section.</p>
+</li>
+<li><dl class="first docutils">
+<dt>There are generally two categories of parameter types, simple and complex.</dt>
+<dd><ul class="first last simple">
+<li>Simple types are <code class="docutils literal"><span class="pre">uint</span></code> (unsigned integer), <code class="docutils literal"><span class="pre">int</span></code> (signed integer), <code class="docutils literal"><span class="pre">bool</span></code>,
+<code class="docutils literal"><span class="pre">bin</span></code> (binary bits) and <code class="docutils literal"><span class="pre">bytes</span></code> (string).</li>
+<li>Complex types include <code class="docutils literal"><span class="pre">unexpanded_descriptors</span></code> and <code class="docutils literal"><span class="pre">template_data</span></code>. How they are
+processed is taken care of by a processor, e.g. Decoder. The configuration file does
+not concern how they are interpreted.</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p class="first">The <code class="docutils literal"><span class="pre">expected</span></code> value will be validated against the actual value processed from the input.
+Currently, it is only used to ensure the start and stop signatures of a BUFR message.</p>
+</li>
+<li><p class="first">To allow loose coupling between sections, the parent message object can be configured to
+proxy some fields from a section. This is what the <code class="docutils literal"><span class="pre">as_property</span></code> field is
+for. For an example, the <code class="docutils literal"><span class="pre">edition</span></code> field from section 0 is needed for other
+sections to determine their structures. Therefore the <code class="docutils literal"><span class="pre">edition</span></code> field is
+proxyed by the parent message object so that it can be accessed by other
+sections without worrying about exactly which section provides this
+information.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="decoder-and-encoder">
+<h2>Decoder and Encoder<a class="headerlink" href="#decoder-and-encoder" title="Permalink to this headline">¶</a></h2>
+<p>These components process the input as prescribed by the configurations.
+Each sections are processed in order of the section index. The components
+also provide specialised methods to process parameters of complex types.
+The processing of <code class="docutils literal"><span class="pre">template_data</span></code> is where most of the program logic goes.</p>
+<p>The <code class="docutils literal"><span class="pre">Decoder</span></code> and <code class="docutils literal"><span class="pre">Encoder</span></code> are sub-classes of the same abstract <code class="docutils literal"><span class="pre">Coder</span></code> class.
+They are implemented using the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Template_method_pattern">Template Method Pattern</a>.
+The <code class="docutils literal"><span class="pre">Coder</span></code> base class provides bootstrapping and common functions needed by all
+of the sub-classes and leaves spaces for sub-classes to fill in the actual
+processing of the parameters.</p>
+<p>For an example, the base class knows how to process an Element Descriptor.
+It prepares all necessary information about the descriptor, including its
+type, number of bits, units, scale, reference, etc. Depending on its type,
+the base class then invoke a method provided by the subclass to handle the
+actual processing, which can be either decoding or encoding.</p>
+</div>
+<div class="section" id="bufr-template-compilation">
+<h2>BUFR Template Compilation<a class="headerlink" href="#bufr-template-compilation" title="Permalink to this headline">¶</a></h2>
+<p>The main purpose of Template Compilation is performance. However since bit
+operations are the most time consuming part in the overall processing. The
+performance gain somewhat is limited. Depending on the total number of
+descriptors to be processed for a message, template compilation provides 10 -
+30% performance boost. Larger number of descriptors, i.e. longer message,
+generally lead to less performance gain.</p>
+<p>The implementation of <code class="docutils literal"><span class="pre">TemplateCompiler</span></code> is similar to the Decoder/Encoder.
+It is also a subclass of the abstract <code class="docutils literal"><span class="pre">Coder</span></code> class. It uses introspection
+to record method calls dispatched by the base class. The recorded calls
+can then be executed more efficiently because they bypass most of the
+BUFR template processing, such as checking descriptor type, expand sequence
+descriptors, etc.</p>
+</div>
+<div class="section" id="template-data-wiring">
+<h2>Template Data Wiring<a class="headerlink" href="#template-data-wiring" title="Permalink to this headline">¶</a></h2>
+<p>A BUFR Template is by nature hierarchical. For an example, a sequence descriptor
+has all of its child descriptors nested under it. When data associated to the
+template is decoded, they can also be organised in a hierarchical format. This
+is especially necessary when some operator descriptors, such as 204YYY
+(associated field) and bitmap related operators (222, 223, 224, 225, 232, 235,
+236, 237), make some values as attributes to other values. The wiring process
+associates attributes to their owners so that their meanings are explicit.</p>
+<div class="section" id="descriptors-and-their-ids">
+<h3>Descriptors and Their IDs<a class="headerlink" href="#descriptors-and-their-ids" title="Permalink to this headline">¶</a></h3>
+<p>In addition to the four canonical types of Descriptor defined by the BUFR Spec,
+this toolkit defines a few more Descriptors to help organise the decoded data.
+These new Descriptors are listed as follows:</p>
+<ul class="simple">
+<li><strong>Associated Descriptor</strong> - This descriptor is created for the associated field
+that a Element Descriptor may have. Its 6-character ID is almost the same as
+the Element Descriptor except starting with a letter <strong>A</strong>. For an example,
+the ID of Associated Descriptor for Element Descriptor <code class="docutils literal"><span class="pre">015037</span></code> is <code class="docutils literal"><span class="pre">A15037</span></code>.</li>
+<li><strong>Skipped Local Descriptor</strong> - This descriptor is used in place of any skipped
+local descriptors. This descriptor&#8217;s ID begins with a letter <strong>S</strong> and the other
+5 digits are the same of the descriptor that is skipped.</li>
+<li><strong>Marker Descriptors</strong> - This is a group of Descriptors that are used in place
+of marker values such as substitution, first order stats etc. Their ID begins
+with <strong>T</strong>, <strong>F</strong>, <strong>D</strong>, and <strong>R</strong> for Substitution, First Order Stats,
+Difference Stats and Replacement/Retain, respectively. The other 5 digits are
+the same as the Element Descriptor they are associated via Bitmap.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="query-bufr-messages">
+<h2>Query BUFR Messages<a class="headerlink" href="#query-bufr-messages" title="Permalink to this headline">¶</a></h2>
+<p>Queries can be performed against either the metadata sections (section 0, 1, 2,
+3) or the data section (the Template data). Though they are implemented
+separately in the backend, they share the same command line interface. This is
+made possible by requiring metadata query expression to always start with a
+percentage sign (%).</p>
+<div class="section" id="query-the-metadata-section">
+<h3>Query the Metadata Section<a class="headerlink" href="#query-the-metadata-section" title="Permalink to this headline">¶</a></h3>
+<p>The following is the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">EBNF</a>
+form of query expressions for metadata sections:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">query_expr</span><span class="o">&gt;</span> <span class="o">=</span> <span class="s1">&#39;%&#39;</span><span class="p">[</span><span class="o">&lt;</span><span class="n">section_index</span><span class="o">&gt;.</span><span class="p">]</span><span class="o">&lt;</span><span class="n">parameter_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>where the <code class="docutils literal"><span class="pre">parameter_name</span></code> are those defined in the configuration files,
+e.g. <code class="docutils literal"><span class="pre">n_subsets</span></code>, <code class="docutils literal"><span class="pre">edition</span></code>, etc.</p>
+<p>The metadata query always return a scalar value. For parameters that are common
+across multiple sections, e.g. <code class="docutils literal"><span class="pre">section_length</span></code>, the first entry will be
+returned by default. For an example, the parameter <code class="docutils literal"><span class="pre">section_length</span></code> appears in
+Secton 1, 2, 3, and 4. By default, the entry of Section 1 is queried and its
+value is returned. To explicitly specify a Section, a <code class="docutils literal"><span class="pre">section_index</span></code> can be
+added in between the percentage sign and the <code class="docutils literal"><span class="pre">parameter_name</span></code>, e.g.
+<code class="docutils literal"><span class="pre">%2.section_length</span></code> returns the parameter value from Section 2 instead of 1.</p>
+</div>
+<div class="section" id="query-the-template-data">
+<h3>Query the Template Data<a class="headerlink" href="#query-the-template-data" title="Permalink to this headline">¶</a></h3>
+<p>The following is the
+<a class="reference external" href="https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form">EBNF</a>
+form of query expressions for template data:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">&lt;</span><span class="n">query_expr</span><span class="o">&gt;</span> <span class="o">=</span> <span class="p">[</span><span class="o">&lt;</span><span class="n">subset_spec</span><span class="o">&gt;</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">path_spec</span><span class="o">&gt;+</span>
+<span class="o">&lt;</span><span class="n">subset_spec</span><span class="o">&gt;</span> <span class="o">=</span> <span class="s1">&#39;@&#39;</span><span class="o">&lt;</span><span class="nb">slice</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">path_spec</span><span class="o">&gt;</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">separator</span><span class="o">&gt;</span> <span class="o">&lt;</span><span class="n">descriptor_id</span><span class="o">&gt;</span> <span class="p">[</span><span class="o">&lt;</span><span class="nb">slice</span><span class="o">&gt;</span><span class="p">]</span>
+<span class="o">&lt;</span><span class="n">separator</span><span class="o">&gt;</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span> <span class="o">|</span> <span class="s1">&#39;.&#39;</span> <span class="o">|</span> <span class="s1">&#39;&gt;&#39;</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>The <code class="docutils literal"><span class="pre">&lt;slice&gt;</span></code> takes the same syntax as how Python list can be sliced,
+e.g. <code class="docutils literal"><span class="pre">[1]</span></code>, <code class="docutils literal"><span class="pre">[-1]</span></code>, <code class="docutils literal"><span class="pre">[:]</span></code>, <code class="docutils literal"><span class="pre">[::10]</span></code>.</li>
+<li>The <code class="docutils literal"><span class="pre">&lt;descriptor_id&gt;</span></code> is the 6-letter/digit (leading zeros are required) descriptor ID,
+e.g. <code class="docutils literal"><span class="pre">001001</span></code>, <code class="docutils literal"><span class="pre">301001</span></code>, <code class="docutils literal"><span class="pre">A21062</span></code>.</li>
+<li>The <code class="docutils literal"><span class="pre">&lt;separator&gt;</span></code> can be omitted and defaults to <code class="docutils literal"><span class="pre">&gt;</span></code> if a query string begins
+with a <code class="docutils literal"><span class="pre">&lt;path_spec&gt;</span></code>.</li>
+<li>Whitespaces are ignored.</li>
+</ul>
+<p>The followings list a few examples of valid query expressions:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">008042</span></code> - All instances of descriptor <code class="docutils literal"><span class="pre">008042</span></code> regardless of where it appears.
+This form is equivalent to <code class="docutils literal"><span class="pre">&gt;</span> <span class="pre">008042</span></code>.</li>
+<li><code class="docutils literal"><span class="pre">&#64;[0]</span> <span class="pre">&gt;</span> <span class="pre">008042</span></code> - Similar to the above query but only against the first subset.</li>
+<li><code class="docutils literal"><span class="pre">/008042</span></code> - Only those that are root element of a BUFR Template</li>
+<li><code class="docutils literal"><span class="pre">/008042[0]</span></code> - Similar to the above query but retrieve only the first instance.
+Note that the index does not account for the repetition of a descriptor in replication
+blocks, i.e. the descriptor will only be counted once.</li>
+<li><code class="docutils literal"><span class="pre">303051/008042</span></code> - Only those that are direct children of <code class="docutils literal"><span class="pre">303051</span></code></li>
+<li><code class="docutils literal"><span class="pre">103000.031001</span></code> - The delayed replication factor value of replication <code class="docutils literal"><span class="pre">103000</span></code>.
+Note the separator between a delayed replication and its factor is a Dot.</li>
+<li><code class="docutils literal"><span class="pre">021062.A21062</span></code> - The associated field of descriptor <code class="docutils literal"><span class="pre">021062</span></code>.</li>
+</ul>
+<p>The query is performed against the wired hierarchical Template Data, which is
+<em>expanded</em>, <em>enhanced</em> and <em>populated</em>. These are explained as the follows:</p>
+<ul class="simple">
+<li><em>Expanded</em> - The unexpanded descriptors are fully expanded. For an example, the
+sequence descriptor <code class="docutils literal"><span class="pre">301001</span></code> is expanded to contain two child descriptors,
+<code class="docutils literal"><span class="pre">001001</span></code> and <code class="docutils literal"><span class="pre">001002</span></code>. The hierarchical structure is also kept so that
+the child descriptor can be accurately specified using the Slash (<code class="docutils literal"><span class="pre">/</span></code>) separator.</li>
+<li><em>Enhanced</em> - Associated fields, first order stats, bitmapped descriptors are
+wired as attributes to their owner descriptors. The attributes relationship
+can be queried using the Dot (<code class="docutils literal"><span class="pre">.</span></code>) separator.</li>
+<li><em>Populated</em> - The Template is populated with actual data from the Data section.
+If a descriptor is not populated, for an example, a delayed replication block
+may have Zero replication, an empty list will be returned when any of its
+children is queried.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="script-support">
+<h2>Script Support<a class="headerlink" href="#script-support" title="Permalink to this headline">¶</a></h2>
+<p>Built upon the query feature, the script feature enables more flexible usage of
+the toolkit. The feature leverages full power of Python by embedding query
+expressions and injecting additional variables into normal Python code. For
+example, the following script filters for files that uses BUFR Template 309052:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>if 309052 in ${%unexpanded_descriptors}: print(PBK_FILENAME)
+</pre></div>
+</div>
+<p>Note that the query expressions are embedded into the code by enclosing them
+inside <code class="docutils literal"><span class="pre">${...}</span></code>. Also <code class="docutils literal"><span class="pre">PBK_FILENAME</span></code> is an extra variable injected by the
+toolkit to hold the name of current file being processed.
+Note you must use the function version of <code class="docutils literal"><span class="pre">print</span></code>. This is due to the use of
+<code class="docutils literal"><span class="pre">__future__</span></code> import in the code. But otherwise no Python 3 syntax is enforced.</p>
+<p>You can also embed data queries like the follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>print(${005001}, ${006001})
+</pre></div>
+</div>
+<p>The above script prints latitude and longitude values from given BUFR files.
+One thing to note about data values is that they are by nature hierarchical.
+A file could contain multiple subsets, each subset could have replications.
+So the raw form of data values are nested list. However nested lists are
+rather difficult to work with and sometimes unnecessary. So it is possible
+to specify the nesting level of data values so they are easier to work with.
+By default, all values are turned into a simple list without any nesting.
+For an example, if each subset has one value for the given query, a list
+of N scalar values will be return with N equals to the number of subsets.
+This is referred as nesting level One as there is only one level of parenthesis
+for the returned value. All available nesting levels are:</p>
+<ul class="simple">
+<li>0 - No parenthesis, only the first value will be returned as a scalar
+(all other values, if any, are simply dropped)</li>
+<li>1 - One level of parenthesis (default). Values from all subsets are simply
+flattened into one simple list.</li>
+<li>2 - Two level of parenthesis. Values from each subset are flatten into
+its own list, which is itself an element of the final return value.</li>
+<li>4 - Fully hierarchical. No flatten at all. Each subset or replication have
+its own parenthesis grouping.</li>
+</ul>
+<p>The above settings can be controlled via the command line option, <code class="docutils literal"><span class="pre">-n</span></code> or
+<code class="docutils literal"><span class="pre">--data-values-nest-level</span></code>. Alternatively it can also be specified with
+the script itself using following magic comment at the beginning:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1">#$ data_values_nest_level = 0</span>
+</pre></div>
+</div>
+<p>Note the magic comment line starts with <code class="docutils literal"><span class="pre">#$</span></code> and must appears before any
+other lines. The option passed from command line takes precedence over
+the option from the script itself.</p>
+</div>
+<div class="section" id="renderer">
+<h2>Renderer<a class="headerlink" href="#renderer" title="Permalink to this headline">¶</a></h2>
+<p>This component is responsible for rendering the processed BUFR message object
+in different formats, e.g. plain text, JSON.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">How It Works</a><ul>
+<li><a class="reference internal" href="#bufr-message-configuration-files">BUFR Message Configuration files</a></li>
+<li><a class="reference internal" href="#decoder-and-encoder">Decoder and Encoder</a></li>
+<li><a class="reference internal" href="#bufr-template-compilation">BUFR Template Compilation</a></li>
+<li><a class="reference internal" href="#template-data-wiring">Template Data Wiring</a><ul>
+<li><a class="reference internal" href="#descriptors-and-their-ids">Descriptors and Their IDs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#query-bufr-messages">Query BUFR Messages</a><ul>
+<li><a class="reference internal" href="#query-the-metadata-section">Query the Metadata Section</a></li>
+<li><a class="reference internal" href="#query-the-template-data">Query the Template Data</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#script-support">Script Support</a></li>
+<li><a class="reference internal" href="#renderer">Renderer</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/internals.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyBufrKit 0.2.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2017, Yang Wang.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
+    </div>
+  </body>
+</html>

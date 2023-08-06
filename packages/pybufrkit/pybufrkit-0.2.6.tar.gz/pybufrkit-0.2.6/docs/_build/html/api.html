@@ -1,0 +1,2240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API reference &mdash; PyBufrKit 0.2.5 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="PyBufrKit 0.2.5 documentation" href="index.html" />
+    <link rel="prev" title="Python Toolkit for WMO BUFR Messages" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Python Toolkit for WMO BUFR Messages"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyBufrKit 0.2.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pybufrkit">
+<span id="api-reference"></span><span id="api"></span><h1>API reference<a class="headerlink" href="#module-pybufrkit" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="pybufrkit">
+<h2>pybufrkit<a class="headerlink" href="#pybufrkit" title="Permalink to this headline">¶</a></h2>
+<p>Work with WMO BUFR messages with Pure Python.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">APIs of version 0.2.0 are breaking changes from those of version 0.1.x
+and it is always recommended to upgrade to the latest version.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">github:</th><td class="field-body"><a class="reference external" href="https://github.com/ywangd/pybufrkit">https://github.com/ywangd/pybufrkit</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">docs:</th><td class="field-body"><a class="reference external" href="http://pybufrkit.readthedocs.io/">http://pybufrkit.readthedocs.io/</a></td>
+</tr>
+<tr class="field-odd field"><th class="field-name">author:</th><td class="field-body">Yang Wang (<a class="reference external" href="mailto:ywangd&#37;&#52;&#48;gmail&#46;com">ywangd<span>&#64;</span>gmail<span>&#46;</span>com</a>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pybufrkit.bufr"></span><div class="section" id="pybufrkit-bufr">
+<h2>pybufrkit.bufr<a class="headerlink" href="#pybufrkit-bufr" title="Permalink to this headline">¶</a></h2>
+<p>Classes for representing a BUFR message and its components.</p>
+<dl class="class">
+<dt id="pybufrkit.bufr.BufrMessage">
+<em class="property">class </em><code class="descclassname">pybufrkit.bufr.</code><code class="descname">BufrMessage</code><span class="sig-paren">(</span><em>filename=''</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.BufrMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents a single BUFR message that is comprised of different
+sections. Note this is different from BufrTemplateData which is only part of
+the overall message and dedicates to data associated to the Template.</p>
+<p>Properties of this class are proxies to actual fields of its sections. They
+are set by the sections when they are processed. The proxy approach allows
+these properties to be referenced in a consistent way no matter where they
+actually come from. This makes sections loosely coupled, i.e. one section
+does not need to know about other sections, and free to change if needed.</p>
+<dl class="method">
+<dt id="pybufrkit.bufr.BufrMessage.add_section">
+<code class="descname">add_section</code><span class="sig-paren">(</span><em>section</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.BufrMessage.add_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a section to the message</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>section</strong> (<a class="reference internal" href="#pybufrkit.bufr.BufrSection" title="pybufrkit.bufr.BufrSection"><em>BufrSection</em></a>) &#8211; The Bufr Section to add</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.bufr.BufrMessage.build_template">
+<code class="descname">build_template</code><span class="sig-paren">(</span><em>tables_root_dir</em>, <em>normalize=1</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.BufrMessage.build_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the BufrTemplate object using the list of unexpanded descriptors
+and corresponding table group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tables_root_dir</strong> &#8211; The root directory to find BUFR tables</li>
+<li><strong>normalize</strong> &#8211; Whether to use some default table group if the specific
+one is not available.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A tuple of BufrTemplate and the associated TableGroup</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.bufr.BufrMessage.wire">
+<code class="descname">wire</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.BufrMessage.wire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wire the flat list of descriptors and values to a full hierarchical
+structure. Also allocate all attributes to their corresponding
+descriptors.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.bufr.BufrSection">
+<em class="property">class </em><code class="descclassname">pybufrkit.bufr.</code><code class="descname">BufrSection</code><a class="headerlink" href="#pybufrkit.bufr.BufrSection" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents a Section in a Bufr Message.</p>
+<dl class="method">
+<dt id="pybufrkit.bufr.BufrSection.add_parameter">
+<code class="descname">add_parameter</code><span class="sig-paren">(</span><em>parameter</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.BufrSection.add_parameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a parameter to the section object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>parameter</strong> (<a class="reference internal" href="#pybufrkit.bufr.SectionParameter" title="pybufrkit.bufr.SectionParameter"><em>SectionParameter</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.bufr.BufrSection.get_metadata">
+<code class="descname">get_metadata</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.BufrSection.get_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get value for metadata of the given name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>k</strong> (<em>str</em>) &#8211; Name of the metadata.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Value of the metadata</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.bufr.BufrSection.get_parameter_offset">
+<code class="descname">get_parameter_offset</code><span class="sig-paren">(</span><em>parameter_name</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.BufrSection.get_parameter_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the bit offset from the beginning of the section for parameter of
+the given name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The bit offset.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.bufr.BufrSection.set_metadata">
+<code class="descname">set_metadata</code><span class="sig-paren">(</span><em>k</em>, <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.BufrSection.set_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set value to a metadata of the given key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>k</strong> (<em>str</em>) &#8211; Name of the metadata</li>
+<li><strong>v</strong> (<em>object</em>) &#8211; Value of the metadata</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.bufr.SectionConfigurer">
+<em class="property">class </em><code class="descclassname">pybufrkit.bufr.</code><code class="descname">SectionConfigurer</code><span class="sig-paren">(</span><em>definitions_dir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.SectionConfigurer" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is responsible for loading the section config JSON files. It also
+initialise and configure a requested Section.</p>
+<dl class="method">
+<dt id="pybufrkit.bufr.SectionConfigurer.configure_section">
+<code class="descname">configure_section</code><span class="sig-paren">(</span><em>bufr_message</em>, <em>section_index</em>, <em>configuration_transformers=()</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.SectionConfigurer.configure_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise and Configure a section for the give section index and
+version.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bufr_message</strong> (<a class="reference internal" href="#pybufrkit.bufr.BufrMessage" title="pybufrkit.bufr.BufrMessage"><em>BufrMessage</em></a>) &#8211; The Bufr Message object to configure</li>
+<li><strong>section_index</strong> (<em>int</em>) &#8211; (Zero-based) index of the section</li>
+<li><strong>configuration_transformers</strong> (<em>collection</em>) &#8211; A collection of configuration
+transformation functions. These functions make it possible to use
+the same set of JSON files while still dynamically providing
+different coder behaviours.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The configured section or <code class="docutils literal"><span class="pre">None</span></code> if not present</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.bufr.SectionConfigurer.configure_section_with_values">
+<code class="descname">configure_section_with_values</code><span class="sig-paren">(</span><em>bufr_message</em>, <em>section_index</em>, <em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.SectionConfigurer.configure_section_with_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise and Configure a section for the give section index and version
+and also populate the value of each section parameter with the given list
+of values. Used by the encoder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bufr_message</strong> (<a class="reference internal" href="#pybufrkit.bufr.BufrMessage" title="pybufrkit.bufr.BufrMessage"><em>BufrMessage</em></a>) &#8211; The BUFR message object to configure</li>
+<li><strong>section_index</strong> (<em>int</em>) &#8211; The zero-based section index</li>
+<li><strong>values</strong> (<em>list</em>) &#8211; A list of values for the parameters.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The configured section or <code class="docutils literal"><span class="pre">None</span></code> if the section is not present</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pybufrkit.bufr.SectionConfigurer.get_section_index_and_edition">
+<em class="property">static </em><code class="descname">get_section_index_and_edition</code><span class="sig-paren">(</span><em>fname</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.SectionConfigurer.get_section_index_and_edition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Section Index and version from file name of a configuration file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fname</strong> (<em>str</em>) &#8211; The base file name</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The index and edition numbers.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pybufrkit.bufr.SectionConfigurer.ignore_value_expectation">
+<em class="property">static </em><code class="descname">ignore_value_expectation</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.SectionConfigurer.ignore_value_expectation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove any expectation value check.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) &#8211; The config JSON object loaded from a configuration file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pybufrkit.bufr.SectionConfigurer.info_configuration">
+<em class="property">static </em><code class="descname">info_configuration</code><span class="sig-paren">(</span><em>config</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.SectionConfigurer.info_configuration" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a configuration transformation function to make the decoder work
+only for the part of message before the template data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<em>dict</em>) &#8211; The config JSON object loaded from a configuration file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.bufr.SectionNamespace">
+<em class="property">class </em><code class="descclassname">pybufrkit.bufr.</code><code class="descname">SectionNamespace</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwds</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.SectionNamespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>A Section Namespace is an ordered dictionary that store the decoded
+parameters with their names as the keys.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.bufr.SectionParameter">
+<em class="property">class </em><code class="descclassname">pybufrkit.bufr.</code><code class="descname">SectionParameter</code><span class="sig-paren">(</span><em>name</em>, <em>nbits</em>, <em>data_type</em>, <em>expected</em>, <em>as_property</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bufr.SectionParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents a Parameter of a Bufr Section.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.descriptors"></span><div class="section" id="pybufrkit-descriptors">
+<h2>pybufrkit.descriptors<a class="headerlink" href="#pybufrkit-descriptors" title="Permalink to this headline">¶</a></h2>
+<p>The Descriptors should always be instantiated by Tables. Because the Tables
+provide caching and other wiring work. Do NOT instantiated the Descriptors
+directly!!</p>
+<p>This module contains many Descriptor classes, covering not only the canonical
+descriptor types of the BUFR spec, but also Conceptual Descriptors that help the
+processing. For an example, an AssociatedDescriptor class is needed to represent
+associated values signified by operator descriptor 204YYY.</p>
+<dl class="class">
+<dt id="pybufrkit.descriptors.AssociatedDescriptor">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">AssociatedDescriptor</code><span class="sig-paren">(</span><em>id_</em>, <em>nbits</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.AssociatedDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Associated field for element descriptor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nbits</strong> (<em>int</em>) &#8211; Number of bits used by this descriptor.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.descriptors.BufrTemplate">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">BufrTemplate</code><span class="sig-paren">(</span><em>id_=999999</em>, <em>name=''</em>, <em>members=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.BufrTemplate" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents a BUFR Template. A Template is composed of one or more
+BUFR Descriptors. It is used in a BUFR message to describe the data section.</p>
+<dl class="attribute">
+<dt id="pybufrkit.descriptors.BufrTemplate.original_descriptor_ids">
+<code class="descname">original_descriptor_ids</code><a class="headerlink" href="#pybufrkit.descriptors.BufrTemplate.original_descriptor_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of descriptor IDs that can be used to instantiate the Template.</p>
+<p>:rtype [int]</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.descriptors.DelayedReplicationDescriptor">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">DelayedReplicationDescriptor</code><span class="sig-paren">(</span><em>id_</em>, <em>members=None</em>, <em>factor=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.DelayedReplicationDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delayed replication Descriptor 1XX000</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.descriptors.Descriptor">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">Descriptor</code><span class="sig-paren">(</span><em>id_</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.Descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is the base class of all BUFR descriptors. It provides common
+machinery for Descriptors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>id</strong> (<em>int</em>) &#8211; The descriptor ID.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="pybufrkit.descriptors.Descriptor.F">
+<code class="descname">F</code><a class="headerlink" href="#pybufrkit.descriptors.Descriptor.F" title="Permalink to this definition">¶</a></dt>
+<dd><p>The F value of the descriptor.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pybufrkit.descriptors.Descriptor.X">
+<code class="descname">X</code><a class="headerlink" href="#pybufrkit.descriptors.Descriptor.X" title="Permalink to this definition">¶</a></dt>
+<dd><p>The X value of the descriptor.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pybufrkit.descriptors.Descriptor.Y">
+<code class="descname">Y</code><a class="headerlink" href="#pybufrkit.descriptors.Descriptor.Y" title="Permalink to this definition">¶</a></dt>
+<dd><p>THe Y value of the descriptor.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.descriptors.ElementDescriptor">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">ElementDescriptor</code><span class="sig-paren">(</span><em>id_</em>, <em>name</em>, <em>unit</em>, <em>scale</em>, <em>refval</em>, <em>nbits</em>, <em>crex_unit</em>, <em>crex_scale</em>, <em>crex_nchars</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.ElementDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Element Descriptor 0XXYYY</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>id</strong> (<em>int</em>) &#8211; The descriptor ID</li>
+<li><strong>name</strong> (<em>str</em>) &#8211; Name of the descriptor</li>
+<li><strong>unit</strong> (<em>str</em>) &#8211; Units of the descriptor</li>
+<li><strong>scale</strong> (<em>int</em>) &#8211; Scale factor of the descriptor value</li>
+<li><strong>refval</strong> (<em>int</em>) &#8211; Reference value of the descriptor value</li>
+<li><strong>nbits</strong> (<em>int</em>) &#8211; The number of bits used by the descriptor</li>
+<li><strong>crex_unit</strong> (<em>str</em>) &#8211; Units of the descriptor for CREX spec</li>
+<li><strong>crex_scale</strong> (<em>int</em>) &#8211; Scale factor of the descriptor value for CREX Spec</li>
+<li><strong>crex_nchars</strong> (<em>int</em>) &#8211; Number of characters used by the descriptor for CREX Spec</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.descriptors.FixedReplicationDescriptor">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">FixedReplicationDescriptor</code><span class="sig-paren">(</span><em>id_</em>, <em>members=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.FixedReplicationDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fixed replication Descriptor 1XXYYY</p>
+<dl class="attribute">
+<dt id="pybufrkit.descriptors.FixedReplicationDescriptor.n_repeats">
+<code class="descname">n_repeats</code><a class="headerlink" href="#pybufrkit.descriptors.FixedReplicationDescriptor.n_repeats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of times to perform the replication. This value is decoded
+directly from the descriptor ID.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.descriptors.MarkerDescriptor">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">MarkerDescriptor</code><span class="sig-paren">(</span><em>id_</em>, <em>name</em>, <em>unit</em>, <em>scale</em>, <em>refval</em>, <em>nbits</em>, <em>crex_unit</em>, <em>crex_scale</em>, <em>crex_nchars</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.MarkerDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>A marker descriptor is useful in the case when marker operator descriptors
+are used to signify a statistical value of an element descriptor. For an
+example, 224255 and 225255.</p>
+<dl class="staticmethod">
+<dt id="pybufrkit.descriptors.MarkerDescriptor.from_element_descriptor">
+<em class="property">static </em><code class="descname">from_element_descriptor</code><span class="sig-paren">(</span><em>ed</em>, <em>marker_id</em>, <em>scale=None</em>, <em>refval=None</em>, <em>nbits=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.MarkerDescriptor.from_element_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create from a given element descriptor with the option to override its
+scale, refval and nbits.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ed</strong> (<a class="reference internal" href="#pybufrkit.descriptors.ElementDescriptor" title="pybufrkit.descriptors.ElementDescriptor"><em>ElementDescriptor</em></a>) &#8211; The element descriptor</li>
+<li><strong>marker_id</strong> (<em>int</em>) &#8211; The marker operator ID</li>
+<li><strong>scale</strong> (<em>int</em>) &#8211; Overridden value for scale.</li>
+<li><strong>refval</strong> (<em>int</em>) &#8211; Overridden value for reference.</li>
+<li><strong>nbits</strong> (<em>int</em>) &#8211; Overridden value for number of bits.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#pybufrkit.descriptors.MarkerDescriptor" title="pybufrkit.descriptors.MarkerDescriptor">MarkerDescriptor</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.descriptors.OperatorDescriptor">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">OperatorDescriptor</code><span class="sig-paren">(</span><em>id_</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.OperatorDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Operator Descriptor 2XXYYY</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.descriptors.ReplicationDescriptor">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">ReplicationDescriptor</code><span class="sig-paren">(</span><em>id_</em>, <em>members=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.ReplicationDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The replication factor member stores only the replication factor descriptor
+NOT the actual value. So it is OK as it should be reusable for the same
+sequence descriptor. That is to say, when a Sequence Descriptor, e.g.
+309052, is reused, the Replication Descriptor inside it should always have
+the same replication factor descriptor. Although these replication factor
+descriptor can have different values in different reuses of 309052, it does
+not matter as it does not store the actual values.</p>
+<p>When the replication descriptor is reused as naked descriptor, i.e. not part
+of a Sequence Descriptor but directly under a Template, the associated
+replication factor descriptor could be different. But since the replication
+descriptor is NOT cached when used as naked. Every time a new Replication
+Descriptor is spawn thus there is no risk on the associated replication
+factor descriptor gets mixed up.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>members</strong> (<em>[Descriptor]</em>) &#8211; The group of descriptors to be replicated</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="pybufrkit.descriptors.ReplicationDescriptor.n_items">
+<code class="descname">n_items</code><a class="headerlink" href="#pybufrkit.descriptors.ReplicationDescriptor.n_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of descriptors to be replicated. This value is decoded from the
+ID of the descriptor.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pybufrkit.descriptors.ReplicationDescriptor.n_members">
+<code class="descname">n_members</code><a class="headerlink" href="#pybufrkit.descriptors.ReplicationDescriptor.n_members" title="Permalink to this definition">¶</a></dt>
+<dd><p>Due to the hierarchical structure of the BUFR Template, The number of
+members is not always equal to number of items. For an example, the
+delayed replication factor counts towards number of items to be repeated
+for its outer replication (if nested). However, it will never be counted
+towards number of members. Other potential difference comes from Virtual
+descriptors, where virtual sequences and fixed replications are
+inserted/removed without fixing the enclosing replication descriptors.
+So in summary, the number of members is a more accurate count of the
+members to be replicated by the replication descriptor.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.descriptors.SequenceDescriptor">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">SequenceDescriptor</code><span class="sig-paren">(</span><em>id_</em>, <em>name</em>, <em>members=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.SequenceDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sequence Descriptor 3XXYYY</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.descriptors.SkippedLocalDescriptor">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">SkippedLocalDescriptor</code><span class="sig-paren">(</span><em>id_</em>, <em>nbits</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.SkippedLocalDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The skipped local descriptor is a placeholder for any descriptors followed by
+operator descriptor 206YYY.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.descriptors.UndefinedDescriptor">
+<em class="property">class </em><code class="descclassname">pybufrkit.descriptors.</code><code class="descname">UndefinedDescriptor</code><span class="sig-paren">(</span><em>id_</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.UndefinedDescriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Undefined Descriptors are only useful when loading BUFR tables that are NOT
+completely defined. For an example, an element descriptor is used by one of
+the sequence descriptor but the element descriptor itself is not defined in
+Table B. In this case, an Undefined descriptor is created in place of the
+actual element descriptor to allow tables to be loaded normally. As long as
+the Undefined descriptor is not used in the actual decoding (the Template of
+a BUFR message may not contain the descriptor at all), it is harmless to
+stay in the loaded Table Group.</p>
+<p>Ideally this is not necessary if all tables are well defined. However, in
+practice, this is needed so some not-well-defined local tables can be used.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.descriptors.flat_member_ids">
+<code class="descclassname">pybufrkit.descriptors.</code><code class="descname">flat_member_ids</code><span class="sig-paren">(</span><em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.descriptors.flat_member_ids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a flat list of expanded numeric IDs for the given descriptor. The
+list is generated by recursively flatten all its child members.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>descriptor</strong> (<a class="reference internal" href="#pybufrkit.descriptors.Descriptor" title="pybufrkit.descriptors.Descriptor"><em>Descriptor</em></a>) &#8211; A BUFR descriptor</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">[int]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.tables"></span><div class="section" id="pybufrkit-tables">
+<h2>pybufrkit.tables<a class="headerlink" href="#pybufrkit-tables" title="Permalink to this headline">¶</a></h2>
+<p>The Table Cache makes sure tables of the same version only get loaded from
+disk once. When the get_table_group method is called, it returned a
+group of table either from the cache or loaded from disk if they are not
+available in the cache yet (and save them to the cache for future use).</p>
+<ul class="simple">
+<li>A Table Group contains a set of tables, e.g. A, B, C, D, that belong to the
+same table group key.</li>
+<li>A Table instance, e.g. B, D, maintains a cache of its descriptors so that
+only a single instance is created for an unique descriptor.</li>
+<li>The Pseudo Replication Descriptor table is created to make the API for all
+tables look alike.</li>
+<li>TableCache &#8211;creates&#8211;&gt; TableGroup &#8211;lookup&#8211;&gt; Descriptors/Template</li>
+</ul>
+<p>Template are then processed by Coder in conjunction with a bit operator to
+create a BufrMessage object.</p>
+<dl class="class">
+<dt id="pybufrkit.tables.TableGroupKey">
+<em class="property">class </em><code class="descclassname">pybufrkit.tables.</code><code class="descname">TableGroupKey</code><span class="sig-paren">(</span><em>tables_root_dir</em>, <em>wmo_tables_sn</em>, <em>local_tables_sn</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.tables.TableGroupKey" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="pybufrkit.tables.TableGroupKey.local_tables_sn">
+<code class="descname">local_tables_sn</code><a class="headerlink" href="#pybufrkit.tables.TableGroupKey.local_tables_sn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pybufrkit.tables.TableGroupKey.tables_root_dir">
+<code class="descname">tables_root_dir</code><a class="headerlink" href="#pybufrkit.tables.TableGroupKey.tables_root_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pybufrkit.tables.TableGroupKey.wmo_tables_sn">
+<code class="descname">wmo_tables_sn</code><a class="headerlink" href="#pybufrkit.tables.TableGroupKey.wmo_tables_sn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.tables.get_table_group">
+<code class="descclassname">pybufrkit.tables.</code><code class="descname">get_table_group</code><span class="sig-paren">(</span><em>tables_root_dir=None</em>, <em>master_table_number=None</em>, <em>originating_centre=None</em>, <em>originating_subcentre=None</em>, <em>master_table_version=None</em>, <em>local_table_version=None</em>, <em>normalize=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.tables.get_table_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a Table Group using given information that can be converted
+to a Table Group Key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>master_table_number</strong> &#8211; </li>
+<li><strong>originating_centre</strong> &#8211; </li>
+<li><strong>originating_subcentre</strong> &#8211; </li>
+<li><strong>master_table_version</strong> &#8211; </li>
+<li><strong>local_table_version</strong> &#8211; </li>
+<li><strong>tables_root_dir</strong> (<em>str</em>) &#8211; Root directory to read the BUFR tables</li>
+<li><strong>normalize</strong> (<em>int|bool</em>) &#8211; Whether the program tries to fix non-exist tables SN by
+using default values. This is generally useful for
+decoding. But could be misleading when encoding.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">BufrTableGroup</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.tables.get_table_group_by_key">
+<code class="descclassname">pybufrkit.tables.</code><code class="descname">get_table_group_by_key</code><span class="sig-paren">(</span><em>table_group_key</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.tables.get_table_group_by_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a Table Group with the given key.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>table_group_key</strong> (<a class="reference internal" href="#pybufrkit.tables.TableGroupKey" title="pybufrkit.tables.TableGroupKey"><em>TableGroupKey</em></a>) &#8211; The key for a table group.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">BufrTableGroup</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.coder"></span><div class="section" id="pybufrkit-coder">
+<h2>pybufrkit.coder<a class="headerlink" href="#pybufrkit-coder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybufrkit.coder.AuditedList">
+<em class="property">class </em><code class="descclassname">pybufrkit.coder.</code><code class="descname">AuditedList</code><a class="headerlink" href="#pybufrkit.coder.AuditedList" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides wrappers for some list methods, e.g. append, so that
+it is possible to execute additional code when the method is invoked.
+It is used mainly for debug purpose.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.coder.BSRModifier">
+<em class="property">class </em><code class="descclassname">pybufrkit.coder.</code><code class="descname">BSRModifier</code><span class="sig-paren">(</span><em>nbits_increment</em>, <em>scale_increment</em>, <em>refval_factor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.BSRModifier" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="pybufrkit.coder.BSRModifier.nbits_increment">
+<code class="descname">nbits_increment</code><a class="headerlink" href="#pybufrkit.coder.BSRModifier.nbits_increment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pybufrkit.coder.BSRModifier.refval_factor">
+<code class="descname">refval_factor</code><a class="headerlink" href="#pybufrkit.coder.BSRModifier.refval_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pybufrkit.coder.BSRModifier.scale_increment">
+<code class="descname">scale_increment</code><a class="headerlink" href="#pybufrkit.coder.BSRModifier.scale_increment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.coder.Coder">
+<em class="property">class </em><code class="descclassname">pybufrkit.coder.</code><code class="descname">Coder</code><span class="sig-paren">(</span><em>definitions_dir=None</em>, <em>tables_root_dir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is an abstract superclass for Decoder and Encoder. By itself it
+cannot do anything. But it provides common operations for subclasses.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>definitions_dir</strong> &#8211; Where to find the BPCL definition files.</li>
+<li><strong>tables_root_dir</strong> &#8211; Where to find the BUFR table files.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.define_bitmap">
+<code class="descname">define_bitmap</code><span class="sig-paren">(</span><em>state</em>, <em>reuse</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.define_bitmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define a bit map.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; </li>
+<li><strong>reuse</strong> &#8211; Is this bitmap for reuse?</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.get_value_for_delayed_replication_factor">
+<code class="descname">get_value_for_delayed_replication_factor</code><span class="sig-paren">(</span><em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.get_value_for_delayed_replication_factor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get value of the latest delayed replication factor. This is called when
+processing through the Template. But the actual implementation will be
+provided by sub-classes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The value for the latest processed delayed replication factor</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process">
+<code class="descname">process</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point of the class</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_associated_field">
+<code class="descname">process_associated_field</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_associated_field" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>bit_operator</strong> &#8211; </li>
+<li><strong>descriptor</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_bitmap_definition">
+<code class="descname">process_bitmap_definition</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_bitmap_definition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process bitmap definition. This is basically done as a state machine
+for processing all the bits associated to the bitmap.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>bit_operator</strong> &#8211; </li>
+<li><strong>descriptor</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_bitmapped_descriptor">
+<code class="descname">process_bitmapped_descriptor</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_bitmapped_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>A generic method for processing bitmapped descriptors. It is wrapped by
+providing different funcs to handle encoding and decoding for
+uncompressed and compressed data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_codeflag">
+<code class="descname">process_codeflag</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em>, <em>nbits</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_codeflag" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a descriptor that has code/flag value. A code/flag value
+does not need to scale and refval.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>descriptor</strong> &#8211; The BUFR descriptor</li>
+<li><strong>nbits</strong> &#8211; Number of bits to process for the descriptor.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_constant">
+<code class="descname">process_constant</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_constant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a constant, with no bit operations, for the given descriptor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>descriptor</strong> &#8211; The BUFR descriptor.</li>
+<li><strong>value</strong> &#8211; The constant value.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_define_new_refval">
+<code class="descname">process_define_new_refval</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_define_new_refval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process defining a new reference value for the given descriptor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; </li>
+<li><strong>bit_operator</strong> &#8211; </li>
+<li><strong>descriptor</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_delayed_replication_descriptor">
+<code class="descname">process_delayed_replication_descriptor</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_delayed_replication_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the delayed replication factor descriptor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; </li>
+<li><strong>bit_operator</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_element_descriptor">
+<code class="descname">process_element_descriptor</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_element_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process an ElementDescriptor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_fixed_replication_descriptor">
+<code class="descname">process_fixed_replication_descriptor</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_fixed_replication_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a fixed replication descriptor including all members belong to this
+replication structure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; </li>
+<li><strong>bit_operator</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_marker_operator_descriptor">
+<code class="descname">process_marker_operator_descriptor</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_marker_operator_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>bit_operator</strong> &#8211; </li>
+<li><strong>descriptor</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_members">
+<code class="descname">process_members</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>members</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_members" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a list of descriptors that are members of a composite descriptor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; The state of the processing.</li>
+<li><strong>bit_operator</strong> &#8211; The bit operator for read/write bits.</li>
+<li><strong>members</strong> &#8211; A list of descriptors.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_new_refval">
+<code class="descname">process_new_refval</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em>, <em>nbits</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_new_refval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the new reference value for the given descriptor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>descriptor</strong> &#8211; The BUFR descriptor.</li>
+<li><strong>nbits</strong> &#8211; Number of bits to process.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_numeric">
+<code class="descname">process_numeric</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em>, <em>nbits</em>, <em>scale_powered</em>, <em>refval</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_numeric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a descriptor that has numeric value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>descriptor</strong> &#8211; A BUFR descriptor that has numeric value</li>
+<li><strong>nbits</strong> &#8211; Number of bits to process for the descriptor.</li>
+<li><strong>scale_powered</strong> &#8211; 10 to the scale factor power, i.e. 10 ** scale</li>
+<li><strong>refval</strong> &#8211; The reference value</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_numeric_of_new_refval">
+<code class="descname">process_numeric_of_new_refval</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em>, <em>nbits</em>, <em>scale_powered</em>, <em>refval_factor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_numeric_of_new_refval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a descriptor that has numeric value with new reference value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>descriptor</strong> &#8211; The BUFR descriptor.</li>
+<li><strong>nbits</strong> &#8211; Number of bits to process for the descriptor.</li>
+<li><strong>scale_powered</strong> &#8211; 10 to the scale factor power, i.e. 10 ** scale</li>
+<li><strong>refval_factor</strong> &#8211; The factor to be applied to the new refval.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_operator_descriptor">
+<code class="descname">process_operator_descriptor</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_operator_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process Operator Descriptor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; </li>
+<li><strong>bit_operator</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_section">
+<code class="descname">process_section</code><span class="sig-paren">(</span><em>bufr_message</em>, <em>bit_operator</em>, <em>section</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the given section of a BUFR message</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>bufr_message</strong> &#8211; The BufrMessage object to process</li>
+<li><strong>bit_operator</strong> &#8211; The bit operator (reader or writer)</li>
+<li><strong>section</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_skipped_local_descriptor">
+<code class="descname">process_skipped_local_descriptor</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_skipped_local_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Skip number of bits defined for the local descriptor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; </li>
+<li><strong>bit_operator</strong> &#8211; </li>
+<li><strong>descriptor</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_string">
+<code class="descname">process_string</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>descriptor</em>, <em>nbytes</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process a descriptor that has string value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>descriptor</strong> &#8211; The BUFR descriptor</li>
+<li><strong>nbytes</strong> &#8211; Number of BYTES to process for the descriptor.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.Coder.process_template">
+<code class="descname">process_template</code><span class="sig-paren">(</span><em>state</em>, <em>bit_operator</em>, <em>template</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.Coder.process_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process the top level BUFR Template</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>state</strong> &#8211; The state of the processing.</li>
+<li><strong>bit_operator</strong> &#8211; The bit operator for read/write bits.</li>
+<li><strong>template</strong> &#8211; The BUFR Template of the message.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.coder.CoderState">
+<em class="property">class </em><code class="descclassname">pybufrkit.coder.</code><code class="descname">CoderState</code><span class="sig-paren">(</span><em>is_compressed</em>, <em>n_subsets</em>, <em>decoded_values_all_subsets=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.CoderState" title="Permalink to this definition">¶</a></dt>
+<dd><p>The state of Coder for keeping track of variables when a Coder is working. The use
+of a new state for each run makes it possible to use a single Coder to run
+multiple decoding/encoding tasks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>decoded_values_all_subsets</strong> &#8211; This is only for Encoder use.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pybufrkit.coder.CoderState.add_bitmap_link">
+<code class="descname">add_bitmap_link</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.CoderState.add_bitmap_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Must be called before the descriptor is processed</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.CoderState.build_bitmapped_descriptors">
+<code class="descname">build_bitmapped_descriptors</code><span class="sig-paren">(</span><em>bitmap</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.CoderState.build_bitmapped_descriptors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Build the bitmapped descriptors based on the given bitmap. Also build
+the back referenced descriptors if it is not already defined.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="pybufrkit.coder.CoderState.minmax">
+<em class="property">static </em><code class="descname">minmax</code><span class="sig-paren">(</span><em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.CoderState.minmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Give a list of values, find out the minimum and maximum, ignore any Nones.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.coder.CoderState.switch_subset_context">
+<code class="descname">switch_subset_context</code><span class="sig-paren">(</span><em>idx_subset</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.coder.CoderState.switch_subset_context" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is only useful for uncompressed data.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.decoder"></span><div class="section" id="pybufrkit-decoder">
+<h2>pybufrkit.decoder<a class="headerlink" href="#pybufrkit-decoder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybufrkit.decoder.Decoder">
+<em class="property">class </em><code class="descclassname">pybufrkit.decoder.</code><code class="descname">Decoder</code><span class="sig-paren">(</span><em>definitions_dir=None</em>, <em>tables_root_dir=None</em>, <em>compiled_template_cache_max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.decoder.Decoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>The decoder takes a bytes type string and decode it to a BUFR Message object.</p>
+<dl class="method">
+<dt id="pybufrkit.decoder.Decoder.define_bitmap">
+<code class="descname">define_bitmap</code><span class="sig-paren">(</span><em>state</em>, <em>reuse</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.decoder.Decoder.define_bitmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>For compressed data, bitmap and back referenced descriptors must be
+identical Otherwise it makes no sense in compressing different bitmapped
+descriptors into one slot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>state</strong> &#8211; </li>
+<li><strong>reuse</strong> &#8211; Is this bitmap for reuse?</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The bitmap as a list of 0 and 1.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.decoder.Decoder.process">
+<code class="descname">process</code><span class="sig-paren">(</span><em>s</em>, <em>file_path='&lt;string&gt;'</em>, <em>start_signature='BUFR'</em>, <em>info_only=False</em>, <em>ignore_value_expectation=False</em>, <em>wire_template_data=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.decoder.Decoder.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decoding the given message string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>s</strong> &#8211; Message string that contains the BUFR Message</li>
+<li><strong>file_path</strong> &#8211; The file where this string is read from.</li>
+<li><strong>start_signature</strong> &#8211; Locate the starting position of the message
+string with the given signature.</li>
+<li><strong>info_only</strong> &#8211; Only show information up to template data (exclusive)</li>
+<li><strong>ignore_value_expectation</strong> &#8211; Do not validate the expected value</li>
+<li><strong>wire_template_data</strong> &#8211; Whether to wire the template data to construct
+a fully hierarchical structure from the flat lists. Only takes effect
+when it is NOT info_only.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A BufrMessage object that contains the decoded information.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.decoder.Decoder.process_section">
+<code class="descname">process_section</code><span class="sig-paren">(</span><em>bufr_message</em>, <em>bit_reader</em>, <em>section</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.decoder.Decoder.process_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode the given configured Section.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bufr_message</strong> &#8211; The BUFR message object.</li>
+<li><strong>section</strong> &#8211; The BUFR section object.</li>
+<li><strong>bit_reader</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Number of bits decoded for this section.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.decoder.Decoder.process_template_data">
+<code class="descname">process_template_data</code><span class="sig-paren">(</span><em>bufr_message</em>, <em>bit_reader</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.decoder.Decoder.process_template_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode data described by the template.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bufr_message</strong> &#8211; The BUFR message object.</li>
+<li><strong>bit_reader</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">TemplateData decoded from the bit stream.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.decoder.Decoder.process_unexpanded_descriptors">
+<code class="descname">process_unexpanded_descriptors</code><span class="sig-paren">(</span><em>bit_reader</em>, <em>section</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.decoder.Decoder.process_unexpanded_descriptors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode for the list of unexpanded descriptors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>section</strong> &#8211; The BUFR section object.</li>
+<li><strong>bit_reader</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The unexpanded descriptors as a list.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.encoder"></span><div class="section" id="pybufrkit-encoder">
+<h2>pybufrkit.encoder<a class="headerlink" href="#pybufrkit-encoder" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybufrkit.encoder.Encoder">
+<em class="property">class </em><code class="descclassname">pybufrkit.encoder.</code><code class="descname">Encoder</code><span class="sig-paren">(</span><em>definitions_dir=None</em>, <em>tables_root_dir=None</em>, <em>ignore_declared_length=True</em>, <em>compiled_template_cache_max=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.encoder.Encoder" title="Permalink to this definition">¶</a></dt>
+<dd><p>The encoder takes a JSON object or string and encoded it to a BUFR message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ignore_declared_length</strong> &#8211; If set, ignore the section_length declared
+in the input JSON message and always calculated it.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pybufrkit.encoder.Encoder.define_bitmap">
+<code class="descname">define_bitmap</code><span class="sig-paren">(</span><em>state</em>, <em>reuse</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.encoder.Encoder.define_bitmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>For compressed data, bitmap and back referenced descriptors must be
+identical Otherwise it makes no sense in compressing different bitmapped
+descriptors into one slot.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>reuse</strong> &#8211; Is this bitmap for reuse?</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.encoder.Encoder.process">
+<code class="descname">process</code><span class="sig-paren">(</span><em>s</em>, <em>file_path='&lt;string&gt;'</em>, <em>wire_template_data=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.encoder.Encoder.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point for the encoding process. The process encodes a JSON format
+message to BUFR message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>s</strong> &#8211; A JSON or its string serialized form</li>
+<li><strong>file_path</strong> &#8211; The file path to the JSON file.</li>
+<li><strong>wire_template_data</strong> &#8211; Whether to wire the template data to construct
+a fully hierarchical structure from the flat lists.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A bitstring object of the encoded message.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.encoder.Encoder.process_codeflag_uncompressed">
+<code class="descname">process_codeflag_uncompressed</code><span class="sig-paren">(</span><em>state</em>, <em>bit_writer</em>, <em>descriptor</em>, <em>nbits</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.encoder.Encoder.process_codeflag_uncompressed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a descriptor of code or flag value. A code or flag value does not
+need to scale and refval.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.encoder.Encoder.process_constant_compressed">
+<code class="descname">process_constant_compressed</code><span class="sig-paren">(</span><em>state</em>, <em>bit_writer</em>, <em>descriptor</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.encoder.Encoder.process_constant_compressed" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is used for pop out value 0 for 222000, etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.encoder.Encoder.process_constant_uncompressed">
+<code class="descname">process_constant_uncompressed</code><span class="sig-paren">(</span><em>state</em>, <em>bit_writer</em>, <em>descriptor</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.encoder.Encoder.process_constant_uncompressed" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is in fact skip the value for encoding. Useful for operator
+descriptor 222000 etc.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.encoder.Encoder.process_numeric_with_new_refval">
+<code class="descname">process_numeric_with_new_refval</code><span class="sig-paren">(</span><em>state</em>, <em>bit_writer</em>, <em>descriptor</em>, <em>nbits</em>, <em>scale_powered</em>, <em>refval_factor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.encoder.Encoder.process_numeric_with_new_refval" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode a descriptor of numeric value that has a new reference value set
+by 203 YYY. This new reference value must be retrieved at runtime as it
+is defined in the data section.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>refval_factor</strong> (<em>int</em>) &#8211; The refval factor set as part of 207 YYY</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.encoder.Encoder.process_string_uncompressed">
+<code class="descname">process_string_uncompressed</code><span class="sig-paren">(</span><em>state</em>, <em>bit_writer</em>, <em>descriptor</em>, <em>nbytes</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.encoder.Encoder.process_string_uncompressed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decode a string value of the given number of bytes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>descriptor</strong> &#8211; </li>
+<li><strong>nbytes</strong> &#8211; Number of bytes to read for the string.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.encoder.Encoder.process_template_data">
+<code class="descname">process_template_data</code><span class="sig-paren">(</span><em>bufr_message</em>, <em>bit_writer</em>, <em>section_parameter</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.encoder.Encoder.process_template_data" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bit_writer</strong> &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.encoder.Encoder.process_unexpanded_descriptors">
+<code class="descname">process_unexpanded_descriptors</code><span class="sig-paren">(</span><em>bit_writer</em>, <em>section_parameter</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.encoder.Encoder.process_unexpanded_descriptors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Encode the list of unexpanded descriptors.
+:type bit_writer: bitops.BitWriter
+:type section_parameter: bufr.SectionParameter</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.templatecompiler"></span><div class="section" id="pybufrkit-templatecompiler">
+<h2>pybufrkit.templatecompiler<a class="headerlink" href="#pybufrkit-templatecompiler" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pybufrkit.templatecompiler.loads_compiled_template">
+<code class="descclassname">pybufrkit.templatecompiler.</code><code class="descname">loads_compiled_template</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatecompiler.loads_compiled_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a compiled template object from its JSON string representation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> &#8211; A JSON string represents the compiled template.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The compiled template</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.templatecompiler.TemplateCompiler">
+<em class="property">class </em><code class="descclassname">pybufrkit.templatecompiler.</code><code class="descname">TemplateCompiler</code><a class="headerlink" href="#pybufrkit.templatecompiler.TemplateCompiler" title="Permalink to this definition">¶</a></dt>
+<dd><p>The compiler for the BUFR Template. This class does its job by recording
+calls from the generic Coder.</p>
+<dl class="method">
+<dt id="pybufrkit.templatecompiler.TemplateCompiler.process">
+<code class="descname">process</code><span class="sig-paren">(</span><em>template</em>, <em>table_group</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatecompiler.TemplateCompiler.process" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry point of the Compiler.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>template</strong> (<a class="reference internal" href="#pybufrkit.descriptors.BufrTemplate" title="pybufrkit.descriptors.BufrTemplate"><em>descriptors.BufrTemplate</em></a>) &#8211; The BUFR template to compile</li>
+<li><strong>table_group</strong> (<em>tables.TableGroup</em>) &#8211; The Table Group used to instantiate the Template.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">CompiledTemplate</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.templatecompiler.CompiledTemplateManager">
+<em class="property">class </em><code class="descclassname">pybufrkit.templatecompiler.</code><code class="descname">CompiledTemplateManager</code><span class="sig-paren">(</span><em>cache_max</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatecompiler.CompiledTemplateManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>A management class for compiled templates that handles caching and lookup.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cache_max</strong> &#8211; The maximum number of compiled templates to cache.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pybufrkit.templatecompiler.CompiledTemplateManager.get_or_compile">
+<code class="descname">get_or_compile</code><span class="sig-paren">(</span><em>template</em>, <em>table_group</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatecompiler.CompiledTemplateManager.get_or_compile" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>template</strong> (<a class="reference internal" href="#pybufrkit.descriptors.BufrTemplate" title="pybufrkit.descriptors.BufrTemplate"><em>descriptors.BufrTemplate</em></a>) &#8211; The BUFR template to compile</li>
+<li><strong>table_group</strong> (<em>tables.TableGroup</em>) &#8211; The Table Group used to instantiate the Template.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.templatecompiler.process_compiled_template">
+<code class="descclassname">pybufrkit.templatecompiler.</code><code class="descname">process_compiled_template</code><span class="sig-paren">(</span><em>coder</em>, <em>state</em>, <em>bit_operator</em>, <em>compiled_template</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatecompiler.process_compiled_template" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function runs the compiled code from the TemplateCompiler</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>coder</strong> (<a class="reference internal" href="#pybufrkit.coder.Coder" title="pybufrkit.coder.Coder"><em>Coder</em></a>) &#8211; </li>
+<li><strong>state</strong> (<em>VmState</em>) &#8211; </li>
+<li><strong>bit_operator</strong> &#8211; </li>
+<li><strong>compiled_template</strong> (<em>Block</em>) &#8211; </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.templatedata"></span><div class="section" id="pybufrkit-templatedata">
+<h2>pybufrkit.templatedata<a class="headerlink" href="#pybufrkit-templatedata" title="Permalink to this headline">¶</a></h2>
+<p>The TemplateData object is dedicated to the data decoded for the template of a
+BUFR message, while Bufr object is for the entire BUFR message. The object
+provides a fully hierarchical view of the data with attributes properly
+allocated to their corresponding values.</p>
+<dl class="class">
+<dt id="pybufrkit.templatedata.DataNode">
+<em class="property">class </em><code class="descclassname">pybufrkit.templatedata.</code><code class="descname">DataNode</code><span class="sig-paren">(</span><em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatedata.DataNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A node is composed of a descriptor and its value (if exists) and any
+possible child or attribute nodes.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.templatedata.NoValueDataNode">
+<em class="property">class </em><code class="descclassname">pybufrkit.templatedata.</code><code class="descname">NoValueDataNode</code><span class="sig-paren">(</span><em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatedata.NoValueDataNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A no value node is for any descriptors that cannot have a value, e.g.
+replication descriptors, sequence descriptors and some operator descriptors,
+e.g. 201YYY.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.templatedata.TemplateData">
+<em class="property">class </em><code class="descclassname">pybufrkit.templatedata.</code><code class="descname">TemplateData</code><span class="sig-paren">(</span><em>template</em>, <em>is_compressed</em>, <em>decoded_descriptors_all_subsets</em>, <em>decoded_values_all_subsets</em>, <em>bitmap_links_all_subsets</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatedata.TemplateData" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is dedicated to the data section of a BUFR message and produces a
+fully hierarchical structure for the otherwise flat list of decoded
+descriptors and values. Attributes like associated fields and statistical
+values are properly allocated to their corresponding referred elements.</p>
+<dl class="method">
+<dt id="pybufrkit.templatedata.TemplateData.wire">
+<code class="descname">wire</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatedata.TemplateData.wire" title="Permalink to this definition">¶</a></dt>
+<dd><p>From the flat list of descriptors and values, construct a fully
+hierarchical structure of data including sequence descriptors and
+correctly set bitmapped values to their corresponding node as
+attributes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.templatedata.TemplateData.wire_delayed_replication_descriptor">
+<code class="descname">wire_delayed_replication_descriptor</code><span class="sig-paren">(</span><em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatedata.TemplateData.wire_delayed_replication_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>descriptor</strong> (<a class="reference internal" href="#pybufrkit.descriptors.DelayedReplicationDescriptor" title="pybufrkit.descriptors.DelayedReplicationDescriptor"><em>DelayedReplicationDescriptor</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.templatedata.TemplateData.wire_fixed_replication_descriptor">
+<code class="descname">wire_fixed_replication_descriptor</code><span class="sig-paren">(</span><em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatedata.TemplateData.wire_fixed_replication_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>descriptor</strong> (<a class="reference internal" href="#pybufrkit.descriptors.FixedReplicationDescriptor" title="pybufrkit.descriptors.FixedReplicationDescriptor"><em>FixedReplicationDescriptor</em></a>) &#8211; </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.templatedata.TemplateData.wire_operator_descriptor">
+<code class="descname">wire_operator_descriptor</code><span class="sig-paren">(</span><em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatedata.TemplateData.wire_operator_descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>descriptor</strong> (<a class="reference internal" href="#pybufrkit.descriptors.OperatorDescriptor" title="pybufrkit.descriptors.OperatorDescriptor"><em>OperatorDescriptor</em></a>) &#8211; </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.templatedata.ValueDataNode">
+<em class="property">class </em><code class="descclassname">pybufrkit.templatedata.</code><code class="descname">ValueDataNode</code><span class="sig-paren">(</span><em>descriptor</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.templatedata.ValueDataNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>A value node is for any descriptors that can have a value attached to it.
+This includes all Element descriptor, Associated descriptor, Skipped local
+descriptor, some operator descriptors, e.g. 205YYY, 223255, etc.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>int</em>) &#8211; The index to the descriptors and values array for getting the
+descriptor and its associated value.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.dataquery"></span><div class="section" id="pybufrkit-dataquery">
+<h2>pybufrkit.dataquery<a class="headerlink" href="#pybufrkit-dataquery" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybufrkit.dataquery.NodePathParser">
+<em class="property">class </em><code class="descclassname">pybufrkit.dataquery.</code><code class="descname">NodePathParser</code><span class="sig-paren">(</span><em>bare_id_matches_all=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.NodePathParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides a parser for parsing path query string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bare_id_matches_all</strong> (<em>bool</em>) &#8211; By default, a path component with
+bare ID, i.e. with no slicing part, means match all occurrences,
+i.e. [::]. If set to False, it only matches the first occurence.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.dataquery.DataQuerent">
+<em class="property">class </em><code class="descclassname">pybufrkit.dataquery.</code><code class="descname">DataQuerent</code><span class="sig-paren">(</span><em>path_parser</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.DataQuerent" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class provides interface to query the BUFR Data section.</p>
+<dl class="method">
+<dt id="pybufrkit.dataquery.DataQuerent.create_values_from_nodes">
+<code class="descname">create_values_from_nodes</code><span class="sig-paren">(</span><em>nodes</em>, <em>decoded_values</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.DataQuerent.create_values_from_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process through the nested matching node list and create an values list of
+identical structure. This method is recursive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nodes</strong> &#8211; A nested list of matching nodes.</li>
+<li><strong>decoded_values</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A nested values list corresponding to the given nodes.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.dataquery.DataQuerent.descend_and_proceed">
+<code class="descname">descend_and_proceed</code><span class="sig-paren">(</span><em>nodes</em>, <em>path_components</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.DataQuerent.descend_and_proceed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processing through the given list of nodes, for any nodes that are not a direct
+match of the path component, descent to its sub-nodes for further matching. Once
+a match is found, it then proceed through the path component till all the component
+is matched or zero match is encountered.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nodes</strong> &#8211; A list of nodes to descend into its sub-nodes</li>
+<li><strong>path_components</strong> &#8211; The path components used for matching.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.dataquery.DataQuerent.filter_for_attribute_sub_nodes">
+<code class="descname">filter_for_attribute_sub_nodes</code><span class="sig-paren">(</span><em>node</em>, <em>path_components</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.DataQuerent.filter_for_attribute_sub_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is a specific version of the filter_for_sub_nodes method. It
+first filters through the attribute nodes of the given node and then goes
+depth first till all the path components are matched or zero match is
+found.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.dataquery.DataQuerent.filter_for_child_sub_nodes">
+<code class="descname">filter_for_child_sub_nodes</code><span class="sig-paren">(</span><em>node</em>, <em>path_components</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.DataQuerent.filter_for_child_sub_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is a specific version of the filter_for_sub_nodes method. It
+first filters through the child nodes of the given node and then goes
+depth first till all the path components are matched or zero match is
+found.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.dataquery.DataQuerent.filter_for_descendant_sub_nodes">
+<code class="descname">filter_for_descendant_sub_nodes</code><span class="sig-paren">(</span><em>node</em>, <em>path_components</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.DataQuerent.filter_for_descendant_sub_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is a specific version of the filter_for_sub_nodes method. It
+filter through all descendant nodes in a depth first fashion of the
+given node. A descendant node could be either a child, attribute or
+factor node all the way to the leaf node. It then process through path
+components till every component is matched or zero match is encountered.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.dataquery.DataQuerent.filter_for_nodes">
+<code class="descname">filter_for_nodes</code><span class="sig-paren">(</span><em>nodes</em>, <em>path_component</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.DataQuerent.filter_for_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter the given list of nodes using the path component. Note this method is
+different from the filter_for_sub_nodes method in that it filters the given
+nodes themselves, NOT their sub-nodes. The return value will be a selection
+of the given nodes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nodes</strong> &#8211; A list of nodes to be filtered</li>
+<li><strong>path_component</strong> &#8211; The path component used for the filtering.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of nodes that qualified by the path component.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.dataquery.DataQuerent.filter_for_sub_nodes">
+<code class="descname">filter_for_sub_nodes</code><span class="sig-paren">(</span><em>node</em>, <em>path_components</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.DataQuerent.filter_for_sub_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>For the given node, filter through its sub-nodes, which could be child,
+attribute, factor or descendant nodes depending on the separator value
+of the first member of path components. Note that the filtering will
+be performed in a depth first fashion, i.e. the filtering is continued
+with the direct sub-nodes down to the leaves of the node tree or the end
+of path components, whichever encounters first.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>node</strong> &#8211; The node for which the sub-nodes will be filtered</li>
+<li><strong>path_components</strong> &#8211; A list of path components used to filter the nodes.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of qualified nodes matching through the entire path components.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.dataquery.DataQuerent.node_matches">
+<code class="descname">node_matches</code><span class="sig-paren">(</span><em>node</em>, <em>path_component</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.DataQuerent.node_matches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the given node is qualified with the path component. If the path
+component&#8217;s separator is descendant, any sub-nodes containing node is qualified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>node</strong> &#8211; </li>
+<li><strong>path_component</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">True or False</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.dataquery.DataQuerent.proceed_next_path_component">
+<code class="descname">proceed_next_path_component</code><span class="sig-paren">(</span><em>nodes</em>, <em>path_components</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.DataQuerent.proceed_next_path_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proceed further down the path components.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>nodes</strong> &#8211; </li>
+<li><strong>path_components</strong> &#8211; </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pybufrkit.dataquery.DataQuerent.query">
+<code class="descname">query</code><span class="sig-paren">(</span><em>bufr_message</em>, <em>path_expr</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.DataQuerent.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Entry method of the class. Query the data section of the given BUFR message
+with the query string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>bufr_message</strong> &#8211; A BufrMessage object with wired nodes</li>
+<li><strong>path_expr</strong> &#8211; A query string for data.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A QueryResult object</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.dataquery.QueryResult">
+<em class="property">class </em><code class="descclassname">pybufrkit.dataquery.</code><code class="descname">QueryResult</code><span class="sig-paren">(</span><em>path_expr=''</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.QueryResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents the query result.</p>
+<dl class="method">
+<dt id="pybufrkit.dataquery.QueryResult.flatten_values">
+<code class="descname">flatten_values</code><span class="sig-paren">(</span><em>values</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.dataquery.QueryResult.flatten_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flatten values as a list with no nesting.
+:param values:
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.mdquery"></span><div class="section" id="pybufrkit-mdquery">
+<h2>pybufrkit.mdquery<a class="headerlink" href="#pybufrkit-mdquery" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybufrkit.mdquery.MetadataQuerent">
+<em class="property">class </em><code class="descclassname">pybufrkit.mdquery.</code><code class="descname">MetadataQuerent</code><span class="sig-paren">(</span><em>metadata_expr_parser</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.mdquery.MetadataQuerent" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>metadata_expr_parser</strong> (<em>MetadataExprParser</em>) &#8211; Parser for metadata expression</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.query"></span><div class="section" id="pybufrkit-query">
+<h2>pybufrkit.query<a class="headerlink" href="#pybufrkit-query" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybufrkit.query.BufrMessageQuerent">
+<em class="property">class </em><code class="descclassname">pybufrkit.query.</code><code class="descname">BufrMessageQuerent</code><a class="headerlink" href="#pybufrkit.query.BufrMessageQuerent" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a convenient class for querents of metadata and data sections.
+It provides an uniform interface for querying the BufrMessage object.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.script"></span><div class="section" id="pybufrkit-script">
+<h2>pybufrkit.script<a class="headerlink" href="#pybufrkit-script" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pybufrkit.script.process_embedded_query_expr">
+<code class="descclassname">pybufrkit.script.</code><code class="descname">process_embedded_query_expr</code><span class="sig-paren">(</span><em>input_string</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.script.process_embedded_query_expr" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function scans through the given script and identify any path/metadata
+expressions. For each expression found, an unique python variable name will
+be generated. The expression is then substituted by the variable name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>input_string</strong> (<em>str</em>) &#8211; The input script</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A 2-element tuple of the substituted string and a dict of substitutions</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(str, dict)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.script.ScriptRunner">
+<em class="property">class </em><code class="descclassname">pybufrkit.script.</code><code class="descname">ScriptRunner</code><span class="sig-paren">(</span><em>input_string</em>, <em>data_values_nest_level=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.script.ScriptRunner" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is responsible for running the given script against BufrMessage
+object.</p>
+<dl class="attribute">
+<dt id="pybufrkit.script.ScriptRunner.code_string">
+<code class="descname">code_string</code><a class="headerlink" href="#pybufrkit.script.ScriptRunner.code_string" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">The processed/substituted source code.</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pybufrkit.script.ScriptRunner.code_object">
+<code class="descname">code_object</code><a class="headerlink" href="#pybufrkit.script.ScriptRunner.code_object" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">The compiled code object from the code string.</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pybufrkit.script.ScriptRunner.pragma">
+<code class="descname">pragma</code><a class="headerlink" href="#pybufrkit.script.ScriptRunner.pragma" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">Extra processing directives</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pybufrkit.script.ScriptRunner.metadata_only">
+<code class="descname">metadata_only</code><a class="headerlink" href="#pybufrkit.script.ScriptRunner.metadata_only" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">Whether the script requires only metadata part of the BUFR message to work.</code></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="pybufrkit.script.ScriptRunner.querent">
+<code class="descname">querent</code><a class="headerlink" href="#pybufrkit.script.ScriptRunner.querent" title="Permalink to this definition">¶</a></dt>
+<dt>
+<code class="descname">The BufrMessageQuerent object for performing the values query.</code></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.renderer"></span><div class="section" id="pybufrkit-renderer">
+<h2>pybufrkit.renderer<a class="headerlink" href="#pybufrkit-renderer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybufrkit.renderer.FlatJsonRenderer">
+<em class="property">class </em><code class="descclassname">pybufrkit.renderer.</code><code class="descname">FlatJsonRenderer</code><a class="headerlink" href="#pybufrkit.renderer.FlatJsonRenderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>This renderer converts the given object to a JSON string by flatten its
+internal structure.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.renderer.FlatTextRenderer">
+<em class="property">class </em><code class="descclassname">pybufrkit.renderer.</code><code class="descname">FlatTextRenderer</code><a class="headerlink" href="#pybufrkit.renderer.FlatTextRenderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>This renderer converts the given object by flatten all its sub-structures.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.renderer.NestedJsonRenderer">
+<em class="property">class </em><code class="descclassname">pybufrkit.renderer.</code><code class="descname">NestedJsonRenderer</code><a class="headerlink" href="#pybufrkit.renderer.NestedJsonRenderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>The counterpart to NestedTextRenderer but with JSON as output</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.renderer.NestedTextRenderer">
+<em class="property">class </em><code class="descclassname">pybufrkit.renderer.</code><code class="descname">NestedTextRenderer</code><a class="headerlink" href="#pybufrkit.renderer.NestedTextRenderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>This renderer converts the given object to a text string by honoring all its
+nested sub-structures.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.renderer.Renderer">
+<em class="property">class </em><code class="descclassname">pybufrkit.renderer.</code><code class="descname">Renderer</code><a class="headerlink" href="#pybufrkit.renderer.Renderer" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is the abstract base Renderer. A renderer provides the contract
+to take in an object and convert it into a string representation.</p>
+<dl class="method">
+<dt id="pybufrkit.renderer.Renderer.render">
+<code class="descname">render</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.renderer.Renderer.render" title="Permalink to this definition">¶</a></dt>
+<dd><p>Render the given object as string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> (<em>object</em>) &#8211; The object to render</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A string representation of the given object.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.bitops"></span><div class="section" id="pybufrkit-bitops">
+<h2>pybufrkit.bitops<a class="headerlink" href="#pybufrkit-bitops" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pybufrkit.bitops.BitStringBitReader">
+<em class="property">class </em><code class="descclassname">pybufrkit.bitops.</code><code class="descname">BitStringBitReader</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bitops.BitStringBitReader" title="Permalink to this definition">¶</a></dt>
+<dd><p>A BitReader implementation using the bitstring module.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bitstring.BitStream</strong> (<em>bit_stream</em>) &#8211; Bit stream created from the input string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pybufrkit.bitops.BitStringBitWriter">
+<em class="property">class </em><code class="descclassname">pybufrkit.bitops.</code><code class="descname">BitStringBitWriter</code><a class="headerlink" href="#pybufrkit.bitops.BitStringBitWriter" title="Permalink to this definition">¶</a></dt>
+<dd><p>A BitWriter implementation using the bitstring module.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.bitops.get_bit_reader">
+<code class="descclassname">pybufrkit.bitops.</code><code class="descname">get_bit_reader</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bitops.get_bit_reader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise and return a BitReader the given string. This function is
+intended to shield the actual implementation of BitReader away from
+the caller.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> &#8211; The byte string to read from.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">BitReader</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.bitops.get_bit_writer">
+<code class="descclassname">pybufrkit.bitops.</code><code class="descname">get_bit_writer</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.bitops.get_bit_writer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise and return a BitWriter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">BitWriter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.commands"></span><div class="section" id="pybufrkit-commands">
+<h2>pybufrkit.commands<a class="headerlink" href="#pybufrkit-commands" title="Permalink to this headline">¶</a></h2>
+<p>This file gathers all the functions that support the command line usages.</p>
+<dl class="function">
+<dt id="pybufrkit.commands.command_decode">
+<code class="descclassname">pybufrkit.commands.</code><code class="descname">command_decode</code><span class="sig-paren">(</span><em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.commands.command_decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command to decode given files from command line.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.commands.command_info">
+<code class="descclassname">pybufrkit.commands.</code><code class="descname">command_info</code><span class="sig-paren">(</span><em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.commands.command_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command to show metadata information of given files from command line.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.commands.command_encode">
+<code class="descclassname">pybufrkit.commands.</code><code class="descname">command_encode</code><span class="sig-paren">(</span><em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.commands.command_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command to encode given JSON file from command line into BUFR file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.commands.command_lookup">
+<code class="descclassname">pybufrkit.commands.</code><code class="descname">command_lookup</code><span class="sig-paren">(</span><em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.commands.command_lookup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command to lookup the given descriptors from command line</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.commands.command_compile">
+<code class="descclassname">pybufrkit.commands.</code><code class="descname">command_compile</code><span class="sig-paren">(</span><em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.commands.command_compile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command to compile the given descriptors.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.commands.command_subset">
+<code class="descclassname">pybufrkit.commands.</code><code class="descname">command_subset</code><span class="sig-paren">(</span><em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.commands.command_subset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command to subset and save the given BUFR file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.commands.command_query">
+<code class="descclassname">pybufrkit.commands.</code><code class="descname">command_query</code><span class="sig-paren">(</span><em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.commands.command_query" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command to query given BUFR files.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.commands.command_script">
+<code class="descclassname">pybufrkit.commands.</code><code class="descname">command_script</code><span class="sig-paren">(</span><em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.commands.command_script" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command to execute script against given BUFR files.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.commands.command_split">
+<code class="descclassname">pybufrkit.commands.</code><code class="descname">command_split</code><span class="sig-paren">(</span><em>ns</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.commands.command_split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Command to split given files from command line into one file per
+BufrMessage.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.utils"></span><div class="section" id="pybufrkit-utils">
+<h2>pybufrkit.utils<a class="headerlink" href="#pybufrkit-utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pybufrkit.utils.fixed_width_repr_of_int">
+<code class="descclassname">pybufrkit.utils.</code><code class="descname">fixed_width_repr_of_int</code><span class="sig-paren">(</span><em>value</em>, <em>width</em>, <em>pad_left=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.utils.fixed_width_repr_of_int" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format the given integer and ensure the result string is of the given
+width. The string will be padded space on the left if the number is 
+small or replaced as a string of asterisks if the number is too big.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>value</strong> (<em>int</em>) &#8211; An integer number to format</li>
+<li><strong>width</strong> (<em>int</em>) &#8211; The result string must have the exact width</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A string representation of the given integer.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.utils.flat_text_to_flat_json">
+<code class="descclassname">pybufrkit.utils.</code><code class="descname">flat_text_to_flat_json</code><span class="sig-paren">(</span><em>flat_text</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.utils.flat_text_to_flat_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the flat Text output to the flat JSON output format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>flat_text</strong> (<em>str</em>) &#8211; The flat text output</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.utils.nested_json_to_flat_json">
+<code class="descclassname">pybufrkit.utils.</code><code class="descname">nested_json_to_flat_json</code><span class="sig-paren">(</span><em>nested_json_data</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.utils.nested_json_to_flat_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converted the nested JSON output to the flat JSON output. This is
+useful as Encoder only works with flat JSON.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nested_json_data</strong> &#8211; The nested JSON object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Flat JSON object.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.utils.nested_text_to_flat_json">
+<code class="descclassname">pybufrkit.utils.</code><code class="descname">nested_text_to_flat_json</code><span class="sig-paren">(</span><em>nested_text</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.utils.nested_text_to_flat_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert string in nested text format to a flat JSON object.
+:param str nested_text: The nested text output 
+:return: A flat JSON object</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.utils.section_text_to_flat_json">
+<code class="descclassname">pybufrkit.utils.</code><code class="descname">section_text_to_flat_json</code><span class="sig-paren">(</span><em>lines</em>, <em>idxline</em>, <em>func_subsets_text_to_flat_json</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.utils.section_text_to_flat_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a section from text output to a section of flat JSON.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.utils.subsets_flat_text_to_flat_json">
+<code class="descclassname">pybufrkit.utils.</code><code class="descname">subsets_flat_text_to_flat_json</code><span class="sig-paren">(</span><em>lines</em>, <em>idxline</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.utils.subsets_flat_text_to_flat_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert all subsets data from flat text output to all subsets data of flat JSON.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.utils.subsets_nested_text_to_flat_json">
+<code class="descclassname">pybufrkit.utils.</code><code class="descname">subsets_nested_text_to_flat_json</code><span class="sig-paren">(</span><em>lines</em>, <em>idxline</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.utils.subsets_nested_text_to_flat_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert all subsets data from nested text format to flat JSON format.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pybufrkit.utils.template_data_nested_json_to_flat_json">
+<code class="descclassname">pybufrkit.utils.</code><code class="descname">template_data_nested_json_to_flat_json</code><span class="sig-paren">(</span><em>template_data_value</em><span class="sig-paren">)</span><a class="headerlink" href="#pybufrkit.utils.template_data_nested_json_to_flat_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to convert nested JSON of template data to flat JSON.</p>
+</dd></dl>
+
+</div>
+<span class="target" id="module-pybufrkit.constants"></span><div class="section" id="pybufrkit-constants">
+<h2>pybufrkit.constants<a class="headerlink" href="#pybufrkit-constants" title="Permalink to this headline">¶</a></h2>
+<p>Various constants used in the module.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API reference</a><ul>
+<li><a class="reference internal" href="#pybufrkit">pybufrkit</a></li>
+<li><a class="reference internal" href="#pybufrkit-bufr">pybufrkit.bufr</a></li>
+<li><a class="reference internal" href="#pybufrkit-descriptors">pybufrkit.descriptors</a></li>
+<li><a class="reference internal" href="#pybufrkit-tables">pybufrkit.tables</a></li>
+<li><a class="reference internal" href="#pybufrkit-coder">pybufrkit.coder</a></li>
+<li><a class="reference internal" href="#pybufrkit-decoder">pybufrkit.decoder</a></li>
+<li><a class="reference internal" href="#pybufrkit-encoder">pybufrkit.encoder</a></li>
+<li><a class="reference internal" href="#pybufrkit-templatecompiler">pybufrkit.templatecompiler</a></li>
+<li><a class="reference internal" href="#pybufrkit-templatedata">pybufrkit.templatedata</a></li>
+<li><a class="reference internal" href="#pybufrkit-dataquery">pybufrkit.dataquery</a></li>
+<li><a class="reference internal" href="#pybufrkit-mdquery">pybufrkit.mdquery</a></li>
+<li><a class="reference internal" href="#pybufrkit-query">pybufrkit.query</a></li>
+<li><a class="reference internal" href="#pybufrkit-script">pybufrkit.script</a></li>
+<li><a class="reference internal" href="#pybufrkit-renderer">pybufrkit.renderer</a></li>
+<li><a class="reference internal" href="#pybufrkit-bitops">pybufrkit.bitops</a></li>
+<li><a class="reference internal" href="#pybufrkit-commands">pybufrkit.commands</a></li>
+<li><a class="reference internal" href="#pybufrkit-utils">pybufrkit.utils</a></li>
+<li><a class="reference internal" href="#pybufrkit-constants">pybufrkit.constants</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Python Toolkit for WMO BUFR Messages</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/api.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Python Toolkit for WMO BUFR Messages"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyBufrKit 0.2.5 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2017, Yang Wang.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.1.
+    </div>
+  </body>
+</html>
