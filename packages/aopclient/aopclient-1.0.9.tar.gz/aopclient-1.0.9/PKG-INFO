@@ -1,0 +1,37 @@
+Metadata-Version: 1.0
+Name: aopclient
+Version: 1.0.9
+Summary: A client for interacting with the AOL Platform.
+Home-page: http://pypi.python.org/pypi/aopclient/
+Author: Jim Barcelona, Arun Suresh
+Author-email: barce@me.com, arunvsuresh@gmail.com, matt@imagndesign.com
+License: LICENSE
+Description: # aopclient
+        Client for the AOP
+        
+        # To run tests:
+        Clone this repository, and then:
+        cd aopclient
+        pip install pytest
+        pytest
+        
+        Sample code:
+        
+        
+        from aopclient import AOLClient
+        client = AOLClient()
+        client.show_config()
+        client.connect()
+        client.get_organizations()
+        client.get_campaigns(org_id)
+        client.get_campaigns_by_advertiser(org_id, ad_id)
+        client.get_campaigns_by_advertiser_by_campaign(org_id, ad_id, campaign_id)
+        tactics = client.get_tactics_by_campaign(org_id, ad_id, campaign_id)
+        creatives = client.get_creative_assignments(org_id, ad_id, campaign_id, tactic_id)
+        private_deal_assignments = client.get_deal_assignments(org_id, ad_id, campaign_id, tactic_id)
+        flights = client.get_flights_by_tactic_id(7000038774, 7000052577, 5969, 355426) # (org_id, ad_id, campaign_id, tactic_id)
+        
+        
+        advertiser = client.get_advertiser(7000095690, 7000092141) # (org_id, ad_id)
+        
+Platform: UNKNOWN
