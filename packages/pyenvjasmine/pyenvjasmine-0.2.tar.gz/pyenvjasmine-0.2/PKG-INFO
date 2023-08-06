@@ -1,0 +1,94 @@
+Metadata-Version: 1.1
+Name: pyenvjasmine
+Version: 0.2
+Summary: A Python wrapper for envjasmine
+Home-page: https://bitbucket.org/codigo23/pyenvjasmine
+Author: Francisco de Borja Lopez Rio
+Author-email: borja@codigo23.net
+License: BSD licence, see LICENSE
+Download-URL: http://pypi.python.org/pypi/pyenvjasmine#downloads
+Description: Python envjasmine wrapper
+        =========================
+        
+        This is a thin python wrapper around the envjasmine_ JavaScript
+        testing framework.
+        
+        
+        .. contents::
+        
+        
+        Installation
+        ------------
+        
+        You can install pyenvjasmine using pip_::
+        
+          pip install pyenvjasmine
+        
+        Or you can grab the latest sources and install it from there::
+        
+          python setup.py install
+        
+        Also, you can use it directly from the sources directory, in *development mode*
+        (useful if you want to contribute to the project)::
+        
+          pip install -e .
+        
+        .. note::
+        
+           More about the *development mode* here:
+        
+           https://packaging.python.org/en/latest/distributing.html#working-in-development-mode
+        
+        
+        Running pyenvjasmine tests
+        --------------------------
+        
+        To run the tests on this code here (as opposed to *your* JavaScript code you
+        want to test), install pyenvjasmine and then run::
+        
+          py.test
+        
+        
+        Run your own tests
+        ------------------
+        
+        The easiest way is to put your "specs" (JavaScript tests) into some directory
+        in your code, then in your python tests, add a new TestCase with just one test
+        that runs all your JavaScript tests.
+        
+        The simplest solution is to set capture_output to False, so you see the output
+        from the js tests on the console. Something like this::
+        
+            import pytest
+            from pyenvjasmine.runner import Runner
+        
+            class TestJavaScript(object):
+                def test_my_javascript(self):
+                    runner = Runner(
+                        testdir='/path/to/my/testdir',
+                        configfile='relative/path/to/configfile')
+                    success, stdout = runner.run()
+                    # assert on success, will be true if tests passed, False if any
+                    # test failed
+                    assert success
+                    # you can inspect stdout if you want to get more info, but it
+                    # will be printed to the console stdout anyway
+                    assert b'Total: 120' in stdout
+        
+        
+        .. _envjasmine : https://github.com/trevmex/EnvJasmine
+        .. _pip: http://www.pip-installer.org/en/latest/index.html
+        .. _easy_install: http://peak.telecommunity.com/DevCenter/EasyInstall
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: JavaScript
+Classifier: Topic :: Software Development
+Classifier: Topic :: Software Development :: Testing
