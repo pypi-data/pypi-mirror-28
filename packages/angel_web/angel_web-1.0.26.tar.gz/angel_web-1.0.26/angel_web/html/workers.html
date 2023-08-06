@@ -1,0 +1,55 @@
+<script type="text/javascript">
+$('#w_datagrid').datagrid({
+    height: '100%',
+    gridTitle : 'Worker Information',
+    showToolbar: true,
+    toolbarItem: 'all',
+    local: 'local',
+    delPK: 'id',
+    dataUrl: '/data/all_workers',
+    editUrl: '/data/update_workers',
+    delUrl: '/data/delete_workers',
+	columns:[
+		{
+			name:"id",
+			label:"ID",
+			align:"center",
+            add:false,
+            edit:false,
+			width:70
+		},
+		{
+			name:"group_id",
+			label:"Group ID",
+			align:"center",
+			width:70
+		},
+		{
+			name:"login_time",
+			label:"Last Lonin Time",
+			align:"center",
+			width:70,
+			render:timestamp2str
+		},
+		{
+			name:"desc",
+			label:"Description",
+			align:"center",
+			width:70
+		}
+	],
+    paging: {pageSize:20, pageCurrent:1},
+    linenumberAll: true,
+    tableWidth:'100%',
+    noremove: false
+})
+</script>
+<div class="bjui-pageHeader" style="background-color:#fff; border-bottom:none;">
+    <div class="bs-callout bs-callout-warning">
+        <h4>All workers are list as follows</h4>
+		<p>You can add, delete, update, query workers here</p>
+    </div>
+</div>
+<div class="bjui-pageContent">
+	<table id="w_datagrid" class="table table-bordered"></table>
+</div>
