@@ -1,0 +1,68 @@
+<configure
+    i18n_domain="plone.app.jsonfield"
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    xmlns:zcml="http://namespaces.zope.org/zcml">
+    <include file="meta.zcml" package="z3c.form" />
+    <include package="z3c.form" />
+    <!--
+      register data converter for JSONWidget
+    -->
+    <adapter
+        factory=".widget.JSONConverter"
+        for=".interfaces.IJSON
+             .widget.IJSONWidget"
+    />
+    <!--
+      also register a data converter for the basic z3c.form ITextAreaWidget,
+      so it can be used without json editor.
+     -->
+    <adapter
+        factory=".widget.JSONAreaConverter"
+        for=".interfaces.IJSON
+             z3c.form.interfaces.ITextAreaWidget"
+    />
+    <!--
+        register new widget
+    -->
+  <class class=".widget.JSONWidget">
+    <require
+        interface=".widget.IJSONWidget"
+        permission="zope.Public"
+    />
+  </class>
+
+  <z3c:widgetTemplate
+      layer="z3c.form.interfaces.IFormLayer"
+      mode="display"
+      template="templates/widget/display.pt"
+      widget=".widget.IJSONWidget"
+  />
+  <z3c:widgetTemplate
+      layer="z3c.form.interfaces.IFormLayer"
+      mode="input"
+      template="templates/widget/input.pt"
+      widget=".widget.IJSONWidget"
+  />
+  <z3c:widgetTemplate
+      layer="z3c.form.interfaces.IFormLayer"
+      mode="hidden"
+      template="templates/widget/hidden.pt"
+      widget=".widget.IJSONWidget"
+  />
+  <adapter factory=".widget.JSONFieldWidget" />
+  <!--
+    register alternative template for ITextAreaWidget display in order to
+    render JSONValue as json string
+  -->
+  <!--
+  <z3c:widgetTemplate
+      layer="plone.app.z3cform.interfaces.IPloneFormLayer"
+      mode="display"
+      template="templates/widget/textarea_display.pt"
+      widget="z3c.form.interfaces.ITextAreaWidget"
+      zcml:condition="installed plone.app.z3cform"
+  />
+  -->
+</configure>
