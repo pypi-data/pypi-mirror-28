@@ -1,0 +1,40 @@
+
+
+{% if ',' not in filter_by %}
+@api.route('/{{method_name}}_by_{{filter_by}}', methods=['GET'])
+def {{method_name}}_by_{{filter_by}}():
+{% else %}
+@api.route('/{{method_name}}_by_{{filter_by_list|join('_and_')}}', methods=['GET'])
+def {{method_name}}_by_{{filter_by_list|join('_and_')}}():
+{%- endif %}
+    {%- if ',' not in filter_by %}
+    """
+    {
+        "page": "Long",
+        "size": "Long",
+    {%-for field in fields %}
+        {%-if filter_by == field.name %}
+        "{{filter_by}}": "{{field.type}}"
+        {%- endif %}
+    {%- endfor %}
+    }
+    """
+    {%- else %}
+    """
+    {
+    {%-for filter_by in filter_by_list%}
+    {%-for field in fields %}
+        {%-if filter_by == field.name %}
+        "{{filter_by}}": "{{field.type}}",
+        {%- endif %}
+    {%- endfor %}
+    {%- endfor %}
+    }
+    """
+    {%- endif %}
+    domain = request.args.to_dict()
+    {%- if ',' not in filter_by %}
+    return {{class_name_snake}}_service.{{method_name}}_by_{{filter_by}}(domain)
+    {%- else %}
+    return {{class_name_snake}}_service.{{method_name}}_by_{{filter_by_list|join('_and_')}}(domain)
+    {%- endif %}
