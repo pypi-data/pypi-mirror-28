@@ -1,0 +1,89 @@
+"""This is the HelloWorld challenge to teach the usage of the library by a
+minimal example.
+
+This challenge takes a number and a word and composes a new word based
+on the input.
+
+The class fully focuses on the "business logic" by overwriting just two
+methods of parent class <challenge.challenge.Challenge>:
+
+    * <build>: This sets up the data model from the given input lines.
+    * <calc>: This is the core algorithm of the challenge.
+
+This design pattern is called the "Template Method Pattern". While the parent
+class handles the common parts of the challenge flow, the child class just
+encapsulates what is special.
+
+The two methods above is just the bare minimum to implement. For more complex
+challenges you will overwrite or extend other parts of the parent class.
+
+Have a look into the parent class, especially into the <main> function, that
+controls the execution of the challenge. Also have a look into the parents
+<__init__> method to see what instance attributes are already prepared to serve
+the communication of the methods.
+
+By the class attribute <sample> a small example of the possible input is
+given. This is recommended for every challenge. It is useful as input of
+unit tests or for the smoke tests with the -k option. For more extended
+input, in example from the given data files, this class attribute will be
+overwritten by injection of an instance attribute of the same name.
+
+The optional class attribute <expect> the expected output for the given
+<sample> sets the expected output. This is typically used by unit tests.
+
+Together <sample> and <expect> serve as documantation of the intention of
+the challenge.
+"""
+
+from challenges import Challenge
+
+
+class HelloWorldChallenge(Challenge):
+    """This is the HelloWorld Challenge class.
+
+    This challenge takes a word as input and a number at which position
+    to split the word. It returns a new word composed of the switched parts
+    with a blank in between and the total length of the new string.
+    """
+
+    sample = '''
+        5
+        WorldHello
+    '''
+
+    """This is a small exsample of the input. It can be overwritten by 
+    injection.
+        
+        It is used by the --klass option of the challenge runner.
+        It is also used by unit tests.
+        
+        prompt> challenge HelloWorld/ --klass
+        Hello World
+    """
+
+    expect = '''
+        Hello World
+        11
+    '''
+
+    """This is the expected output for the given sample. 
+    
+        It is used by unit tests, especially by the full integration test.
+    """
+
+    def build(self):
+        """Parse the input lines and set up the model."""
+        self.model.split_at = self.line_to_integers(0)[0]
+        self.model.word = self.line(1)
+
+    def calc(self):
+        """Swap head and tail of the model and store to result."""
+        first = self.model.word[self.model.split_at:]
+        second = self.model.word[:self.model.split_at]
+        word = first + ' ' + second
+        self.result.word = word
+        self.result.length = len(word)
+
+    def format(self):
+        self.output = '{}\n{}'.format(self.result.word, self.result.length)
+
