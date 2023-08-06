@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -eux
+
+if ! getent group libvirtd; then
+    groupadd libvirtd
+fi
+
+usermod -a -G libvirtd nova
