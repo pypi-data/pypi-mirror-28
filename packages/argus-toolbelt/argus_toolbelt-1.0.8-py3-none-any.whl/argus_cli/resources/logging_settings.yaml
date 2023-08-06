@@ -1,0 +1,83 @@
+# For more logging settings, see the logging howto in the python docs
+logging:
+    version: 1
+    disable_existing_loggers: false
+    formatters:
+        simple:
+            format: "[%(time_log_color)s%(asctime)s.%(msecs)03d%(reset)s][%(log_color)s%(levelname)s%(reset)s][%(file_log_color)s%(name)s%(reset)s]: %(message_log_color)s%(message)s"
+            '()': colorlog.ColoredFormatter
+            datefmt: '%H:%M:%S'
+            '()': colorlog.ColoredFormatter
+            log_colors:
+                CRITICAL: 'bold_white,bg_red'
+                DEBUG: 'bold_blue'
+                ERROR: 'bold_red'
+                INFO: 'bold_green'
+                WARNING: 'bold_yellow'
+            secondary_log_colors:
+                message:
+                    CRITICAL: 'bold_white,bg_reg'
+                    DEBUG: 'white'
+                    ERROR: 'red'
+                    INFO: 'white'
+                    WARNING: 'yellow'
+                file:
+                    ERROR: green
+                    WARNING: green
+                    INFO: green
+                    CRITICAL: green
+                    DEBUG: green
+                time:
+                    ERROR: yellow
+                    WARNING: yellow
+                    INFO: yellow
+                    CRITICAL: yellow
+                    DEBUG: yellow
+        verbose:
+            format: "[%(time_log_color)s%(asctime)s.%(msecs)03d%(reset)s][%(log_color)s%(levelname)s%(reset)s][%(file_log_color)s%(name)s/%(filename)s:%(lineno)s%(reset)s]: %(message_log_color)s%(message)s"
+            datefmt: '%H:%M:%S'
+            '()': colorlog.ColoredFormatter
+            log_colors:
+                CRITICAL: 'bold_white,bg_red'
+                DEBUG: 'bold_blue'
+                ERROR: 'bold_red'
+                INFO: 'bold_green'
+                WARNING: 'bold_yellow'
+                PLUGIN: 'purple'
+            secondary_log_colors:
+                message:
+                    CRITICAL: 'bold_white,bg_reg'
+                    DEBUG: 'white'
+                    ERROR: 'red'
+                    INFO: 'white'
+                    WARNING: 'yellow'
+                    PLUGIN: yellow
+                file:
+                    PLUGIN: green
+                    ERROR: green
+                    WARNING: green
+                    INFO: green
+                    CRITICAL: green
+                    DEBUG: green
+                time:
+                    PLUGIN: yellow
+                    ERROR: yellow
+                    WARNING: yellow
+                    INFO: yellow
+                    CRITICAL: yellow
+                    DEBUG: yellow
+    handlers:
+        console:
+            level: PLUGIN
+            class: logging.StreamHandler
+            formatter: verbose
+    loggers:
+        argus_cli:
+            handlers: [console]
+            propagate: False
+            level: DEBUG
+            handlers: [console]
+        argus_api:
+            handlers: [console]
+            propagate: False
+            level: DEBUG
