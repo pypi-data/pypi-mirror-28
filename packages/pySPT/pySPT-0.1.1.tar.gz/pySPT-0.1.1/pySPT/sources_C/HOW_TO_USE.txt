@@ -1,0 +1,39 @@
+###############################################################################
+### How to compile the C source files to be used with spicy.integrate.nquad ###
+###############################################################################
+
+References
+----------
+http://docs.scipy.org/doc/scipy/reference/tutorial/integrate.html
+
+Dependencies
+------------
+A few C shared libraries require the GNU Scientific Library (gsl) to compile. 
+If you do not have this library installed on your machine, an easy way to 
+obtain it is to run (in a terminal):
+
+>>> brew install gsl
+
+General informations about gsl is given here: https://www.gnu.org/software/gsl/
+Installation information is given here: http://www2.lawrence.edu/fast/GREGGJ/CMSC210/gsl/gsl.html
+
+
+Compile a *.c file
+------------------
+1) Open a terminal and go in the folder ~/pySPT/sources_C
+2) Run the command
+
+$ gcc -shared -o osx/test.so -fPIC -lm -lgsl sources/test.c
+
+where test is the filename of a C source file, e.g. IntegrandAlphaTilde_NISG_IS1.
+Note that osx has to be changed depending on your platform: `osx` for Max OS X and 
+`linux` for a Linux distribution. Windows is not yet supported.
+
+
+Compile all *.c file
+--------------------
+1) Open a terminal and go in the folder ~/pySPT/sources_C/
+2) Run the script `compile_shared_libraries.sh`
+
+$ bash compile_shared_libraries.sh
+
