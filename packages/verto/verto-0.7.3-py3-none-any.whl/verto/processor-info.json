@@ -1,0 +1,426 @@
+{
+    "boxed-text": {
+        "class": "generic_container",
+        "arguments": {
+          "indented": {
+            "required": false,
+            "dependencies": [],
+            "values": ["yes", "no"]
+          }
+        },
+        "template_name": "boxed-text",
+        "template_parameters": {
+          "indented": {
+            "argument": "indented",
+            "transform": "str.lower"
+          },
+          "text": {
+            "argument": "content",
+            "transform": null
+          }
+        }
+    },
+    "button-link": {
+        "class": "generic_tag",
+        "arguments": {
+          "link": {
+            "required": true,
+            "dependencies": []
+          },
+          "text": {
+            "required": true,
+            "dependencies": []
+          },
+          "file": {
+            "required": false,
+            "dependencies": [],
+            "values": ["yes", "no"]
+          }
+        },
+        "template_parameters": {
+          "file": {
+            "argument": "file",
+            "transform": "str.lower",
+            "default": "no"
+          },
+          "link": {
+            "argument": "link",
+            "transform": "relative_file_link",
+            "transform_condition": "lambda context: context['file'] == 'yes'"
+          },
+          "text": {
+            "argument": "text",
+            "transform": null
+          }
+        }
+    },
+    "comment": {
+        "class": "custom",
+        "pattern": "(^|\\n) *\\{comment [^\\}]+\\} *(\\n|$)",
+        "arguments": {},
+        "template_parameters": {}
+    },
+    "conditional": {
+        "class": "custom",
+        "pattern": "(^|\\n) *\\{conditional ?(?P<args>[^\\}]*)\\} *(\\n|$)",
+        "arguments": {
+          "condition": {
+            "required": false,
+            "dependencies": []
+          },
+          "if": {
+            "required": false,
+            "dependencies": ["condition"]
+          },
+          "elif": {
+            "required": false,
+            "dependencies": ["condition"]
+          },
+          "else": {
+            "required": false,
+            "dependencies": []
+          },
+          "end": {
+            "required": false,
+            "dependencies": []
+          }
+        }
+    },
+    "glossary-link": {
+        "class": "custom",
+        "pattern": "\\{glossary-link ?(?P<args>[^\\}]*)\\}?(?P<text>.*?)\\{glossary-link end\\}",
+        "arguments": {
+          "term": {
+            "required": true,
+            "dependencies": []
+          },
+          "reference-text": {
+            "required": false,
+            "dependencies": []
+          }
+        }
+    },
+    "heading": {
+        "class": "custom",
+        "pattern": "(^|\\n)(?P<level>#{1,6})(?!#+)\\s?(?P<header>.*?)\\s?#*(\\n|$)"
+    },
+    "iframe": {
+        "class": "generic_tag",
+        "arguments": {
+          "link": {
+            "required": true,
+            "dependencies": []
+          }
+        },
+        "template_name": "iframe",
+        "template_parameters": {
+          "link": {
+            "argument": "link",
+            "transform": null
+          }
+        }
+    },
+    "image-tag": {
+        "class": "custom",
+        "pattern": "(^|\\n) *\\{image (?P<args>[^\\}]*)?(?P<caption>caption=\"true\")(?P<arg>[^\\}]*)?\\} *(\\n|$)",
+        "tag_argument": "image",
+        "template_name": "image",
+        "arguments": {
+          "file-path": {
+            "required": true,
+            "dependencies": []
+          },
+          "alt": {
+            "required": false,
+            "dependencies": []
+          },
+          "caption": {
+            "required": false,
+            "dependencies": [],
+            "values": ["true", "false"]
+          },
+          "caption-link": {
+            "required": false,
+            "dependencies": ["caption"]
+          },
+          "source": {
+            "required": false,
+            "dependencies": []
+          },
+          "alignment": {
+            "required": false,
+            "dependencies": [],
+            "values": ["left", "center", "right"]
+          },
+          "hover-text": {
+            "required": false,
+            "dependencies": []
+          }
+        },
+        "template_parameters": {
+          "full_file_path": {
+            "argument": "full_file_path"
+          },
+          "file_path": {
+            "argument": "file_path"
+          },
+          "file_width_value": {
+            "argument": "file_width_value"
+          },
+          "file_width_unit": {
+            "argument": "file_width_unit"
+          },
+          "file_extension": {
+            "argument": "file_extension"
+          },
+          "file_relative": {
+            "argument": "file_relative"
+          },
+          "alt": {
+            "argument": "alt"
+          },
+          "caption": {
+            "argument": "caption"
+          },
+          "caption_link": {
+            "argument": "caption-link"
+          },
+          "source_link": {
+            "argument": "source"
+          },
+          "alignment": {
+            "argument": "alignment"
+          },
+          "hover_text": {
+            "argument": "hover-text"
+          }
+        }
+    },
+    "image-container": {
+        "class": "custom",
+        "pattern": "(^|\\n) *\\{image (?P<args>[^\\}]*)?(?P<caption>caption=\"true\")(?P<arg>[^\\}]*)?\\} *(\\n|$)",
+        "tag_argument": "image",
+        "template_name": "image",
+        "arguments": {
+          "file-path": {
+            "required": true,
+            "dependencies": []
+          },
+          "alt": {
+            "required": false,
+            "dependencies": []
+          },
+          "caption": {
+            "required": false,
+            "dependencies": [],
+            "values": ["true", "false"]
+          },
+          "caption-link": {
+            "required": false,
+            "dependencies": ["caption"]
+          },
+          "source": {
+            "required": false,
+            "dependencies": []
+          },
+          "alignment": {
+            "required": false,
+            "dependencies": [],
+            "values": ["left", "center", "right"]
+          },
+          "hover-text": {
+            "required": false,
+            "dependencies": []
+          }
+        },
+        "template_parameters": {
+          "full_file_path": {
+            "argument": "full_file_path"
+          },
+          "file_path": {
+            "argument": "file_path"
+          },
+          "file_width_value": {
+            "argument": "file_width_value"
+          },
+          "file_width_unit": {
+            "argument": "file_width_unit"
+          },
+          "file_extension": {
+            "argument": "file_extension"
+          },
+          "file_relative": {
+            "argument": "file_relative"
+          },
+          "alt": {
+            "argument": "alt"
+          },
+          "caption": {
+            "argument": "caption"
+          },
+          "caption_link": {
+            "argument": "caption-link"
+          },
+          "source_link": {
+            "argument": "source"
+          },
+          "alignment": {
+            "argument": "alignment"
+          },
+          "hover_text": {
+            "argument": "hover-text"
+          }
+        }
+    },
+    "image-inline": {
+        "class": "custom",
+        "pattern": "\\{image-inline (?P<args>[^\\}]*)\\}",
+        "arguments": {
+          "file-path": {
+            "required": true,
+            "dependencies": []
+          },
+          "alt": {
+            "required": false,
+            "dependencies": []
+          },
+          "caption": {
+            "required": false,
+            "dependencies": []
+          },
+          "caption-link": {
+            "required": false,
+            "dependencies": ["caption"]
+          },
+          "source": {
+            "required": false,
+            "dependencies": []
+          },
+          "hover-text": {
+            "required": false,
+            "dependencies": []
+          }
+        }
+    },
+    "interactive": {
+        "class": "custom",
+        "arguments": {
+          "name": {
+            "required": true,
+            "dependencies": []
+          },
+          "type": {
+            "required": true,
+            "dependencies": [],
+            "values": ["in-page", "whole-page", "iframe"]
+          },
+          "text": {
+            "required": false,
+            "dependencies": []
+          },
+          "parameters": {
+            "required": false,
+            "dependencies": []
+          },
+          "thumbnail": {
+            "required": false,
+            "dependencies": []
+          }
+        },
+        "template_parameters": {
+          "type": {
+            "argument": "type"
+          },
+          "name": {
+            "argument": "name"
+          },
+          "text": {
+            "argument": "text"
+          },
+          "parameters": {
+            "argument": "parameters"
+          },
+          "thumbnail_file_path": {
+            "argument": "thumbnail_file_path"
+          },
+          "thumbnail_file_relative": {
+            "argument": "thumbnail_file_relative"
+          }
+        }
+    },
+    "panel": {
+        "class": "custom",
+        "arguments": {
+          "type": {
+            "required": true
+          },
+          "subtitle": {
+            "required": false,
+            "values": ["true", "false"]
+          },
+          "expanded": {
+            "required": false,
+            "values": ["true", "always", "false"]
+          }
+        },
+        "template_parameters": {
+          "type": {
+            "argument": "type"
+          },
+          "title": {
+            "argument": "title"
+          },
+          "subtitle": {
+            "argument": "subtitle"
+          },
+          "expanded": {
+            "argument": "expanded"
+          },
+          "content": {
+            "argument": "content"
+          }
+        }
+    },
+    "table-of-contents": {
+        "class": "generic_tag",
+        "arguments": {},
+        "template_parameters": {}
+    },
+    "relative-link": {
+        "class": "custom",
+        "pattern": "\\[(?P<link_text>[^\\]]+)\\]\\((?!(https?|ftps?|mailto|news):)(?P<link_url>[^\\?\\)]+)(?P<link_query>\\?[^\\)]*)?\\)"
+    },
+    "scratch": {
+        "class": "custom",
+        "pattern": "^scratch(?P<options>(:[^:\\n$]+)*) *($|\\n)",
+        "scratch-compatibility": {
+          "pattern": "(?P<fence>^(?:~{3,}|`{3,}))[ ]*scratch(?P<options>(:[^:\\n$]+)*)[ ]*(hl_lines=(?P<quot>\"|')(?P<hl_lines>.*?)(?P=quot))?[ ]*}?[ ]*\n(?P<code>.*?)(?<=\n)(?P=fence)[ ]*$"
+        }
+    },
+    "scratch-inline": {
+        "class": "custom",
+        "pattern": "^scratch:"
+    },
+    "style": {
+      "class": "custom",
+      "block_pattern": "\\{{{block}( ([^\\}}]*))?\\}}",
+      "inline_pattern": "\\{{{inline}( ([^\\}}]*))?\\}}",
+      "strings": {
+        "inline": ["glossary-link", "image-inline"],
+        "block": ["boxed-text", "button-link", "comment", "conditional", "iframe", "image", "interactive", "panel", "table-of-contents", "video"]
+      }
+    },
+    "title": {
+        "class": "custom",
+        "pattern": "^#+ ?(.*)"
+    },
+    "video": {
+        "class": "custom",
+        "pattern": "(^|\\n) *\\{video (?P<args>[^\\}]*)\\} *(\\n|$)",
+        "arguments": {
+          "url": {
+            "required": true
+          }
+        }
+    }
+}
