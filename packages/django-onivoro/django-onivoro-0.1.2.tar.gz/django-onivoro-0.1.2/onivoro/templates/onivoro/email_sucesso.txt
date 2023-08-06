@@ -1,0 +1,15 @@
+Fonte externa sincronizada com sucesso!
+
+Data/Hora: {{ data }}
+
+Fonte Externa: {{ fonte_externa.nome }}
+URL: {{ fonte_externa.url_sincronia }}
+Tipo Fonte: {{ fonte_externa.tipo }}
+
+Número de Registros atual: {{ registros_atual|default:"0" }}
+Número de Registros anterior: {{ registros_anterior|default:"0" }}
+
+{% if registros_atual < registros_anterior %}
+**Atenção: O número de registros atual é menor do que o número de registros anterior. Verifique que a fonte externa
+está com os dados corretos.**
+{% endif %}

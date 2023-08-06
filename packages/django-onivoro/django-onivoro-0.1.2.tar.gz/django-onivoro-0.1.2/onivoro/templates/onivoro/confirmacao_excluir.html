@@ -1,0 +1,13 @@
+{% load i18n %}
+{% extends "base.html" %}
+{% block content %}
+    <h2>{% trans 'Excluir Fonte externa?' %}</h2>
+
+    <p>{% trans 'Você tem certeza que deseja excluir a área de interesse' %} {{ instancia.nome }}?</p>
+    <p>{% trans 'Esta operação não pode ser desfeita.' %}</p>
+
+    <form method="post" action="{% url excluir_fonte_externa area.pk %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">{% trans 'Excluir' %}</button>
+    </form>
+{% endblock %}
