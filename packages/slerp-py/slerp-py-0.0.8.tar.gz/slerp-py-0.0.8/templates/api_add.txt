@@ -1,0 +1,14 @@
+
+
+
+@api.route('/{{method_name}}', methods=['POST'])
+def {{method_name}}():
+    """
+    {
+    {%-for field in fields%}
+    "{{field}}": "?"  {% if not loop.last %}, {% endif %}
+    {%-endfor%}
+    }
+    """
+    domain = request.get_json()
+    return {{class_name_snake}}_service.{{method_name}}(domain)

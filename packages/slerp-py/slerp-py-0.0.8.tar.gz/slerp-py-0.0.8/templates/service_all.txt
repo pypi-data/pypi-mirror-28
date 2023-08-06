@@ -1,0 +1,15 @@
+
+    {% if ',' not in filter_by %}
+    @Blank(['{{filter_by}}'])    
+    def {{method_name}}_by_{{filter_by}}(self, domain):
+    {% else %}
+    @Blank([{% for field in filter_by_list %}'{{field}}'{% if not loop.last %}, {% endif %}{% endfor %}])    
+    def {{method_name}}_by_{{filter_by_list|join('_and_')}}(self, domain):
+    {%- endif %}        
+        {%- if ',' not in filter_by %}
+        {{class_name_snake}}_q = {{class_name}}.query.filter_by({{filter_by}}=domain['{{filter_by}}']).order_by({{class_name}}.{{order_by}}.{{order_type}}).all()
+        {%- else %}
+        {{class_name_snake}}_q = {{class_name}}.query{% for field in filter_by_list %}.filter_by({{field}}=domain['{{field}}']){% endfor %}.order_by({{class_name}}.{{order_by}}.{{order_type}}).all()
+        {%- endif %}
+        {{class_name_snake}}_list = list(map(lambda x: x.to_dict(), {{class_name_snake}}_q))
+        return {'payload': {{class_name_snake}}_list}
