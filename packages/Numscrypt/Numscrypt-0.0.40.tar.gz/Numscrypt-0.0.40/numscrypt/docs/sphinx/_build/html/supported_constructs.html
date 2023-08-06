@@ -1,0 +1,813 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>3. Currently available features &#8212; Numscrypt 0.0.40 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.40',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="2. Getting started" href="installation_use.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="installation_use.html" title="2. Getting started"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numscrypt 0.0.40 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="currently-available-features">
+<h1>3. Currently available features<a class="headerlink" href="#currently-available-features" title="Permalink to this headline">¶</a></h1>
+<p>Numscrypt currently supports:</p>
+<ul class="simple">
+<li><dl class="first docutils">
+<dt>ndarray with</dt>
+<dd><ul class="first last">
+<li>one or two dimensions</li>
+<li>dtype int32, float32, float64, complex32 and complex64</li>
+<li>indexing</li>
+<li>simple and extended slicing</li>
+<li>astype</li>
+<li>tolist</li>
+<li>real</li>
+<li>imag</li>
+<li>__repr__ and __str__</li>
+<li>transpose</li>
+<li>overloaded operators: * / + - &#64;, mixing of ndarray and scalar expressions</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>empty, array, copy</li>
+<li>hsplit, vsplit</li>
+<li>hstack, vstack</li>
+<li>zeros, ones, identity</li>
+<li><dl class="first docutils">
+<dt>linalg with</dt>
+<dd><ul class="first last">
+<li>matrix inversion</li>
+<li>eigenvalue / eigenvector decomposition</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>FFT with</dt>
+<dd><ul class="first last">
+<li>FFT for 2^n complex samples</li>
+<li>IFFT for 2^n complex samples</li>
+<li>FFT2 for 2^n x 2^n complex samples</li>
+<li>IFFT2 for 2^n x 2^n complex samples</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="systematic-code-examples-a-guided-tour-of-numscrypt">
+<h1>4. Systematic code examples: a guided tour of Numscrypt<a class="headerlink" href="#systematic-code-examples-a-guided-tour-of-numscrypt" title="Permalink to this headline">¶</a></h1>
+<p>One ready-to-run code example is worth more than ten lengthy descriptions. The <em>autotest and demo suite</em>, that is part of the distribution, is a collection of sourcecode fragments called <em>testlets</em>. These testlets are used for automated regression testing of Numscrypt against NumPy.
+Since they systematically cover all the library constructs, they are also very effective as a learning tool. The testlets are arranged alphabetically by subject.</p>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Autotest: Numscrypt autotest demo suite</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">org.transcrypt.autotester</span>
+
+<span class="kn">import</span> <span class="nn">basics</span>
+<span class="kn">import</span> <span class="nn">module_linalg</span>
+<span class="kn">import</span> <span class="nn">module_fft</span>
+
+<span class="n">autoTester</span> <span class="o">=</span> <span class="n">org</span><span class="o">.</span><span class="n">transcrypt</span><span class="o">.</span><span class="n">autotester</span><span class="o">.</span><span class="n">AutoTester</span> <span class="p">()</span>
+
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">basics</span><span class="p">,</span> <span class="s1">&#39;basics&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">module_linalg</span><span class="p">,</span> <span class="s1">&#39;module_linalg&#39;</span><span class="p">)</span>
+<span class="n">autoTester</span><span class="o">.</span><span class="n">run</span> <span class="p">(</span><span class="n">module_fft</span><span class="p">,</span> <span class="s1">&#39;module_fft&#39;</span><span class="p">)</span>
+
+<span class="n">autoTester</span><span class="o">.</span><span class="n">done</span> <span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="basics-creating-and-using-arrays">
+<h2>4.1. Basics: creating and using arrays<a class="headerlink" href="#basics-creating-and-using-arrays" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id2">
+<div class="code-block-caption"><span class="caption-text">Testlet: basics</span><a class="headerlink" href="#id2" title="Permalink to this code">¶</a></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="k">import</span> <span class="n">__main__</span><span class="p">,</span> <span class="n">__envir__</span><span class="p">,</span> <span class="n">__pragma__</span>
+
+<span class="c1"># Imports for Transcrypt, skipped runtime by CPython</span>
+<span class="k">if</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">executor_name</span> <span class="o">==</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">transpiler_name</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numscrypt</span> <span class="k">as</span> <span class="nn">num</span>
+
+<span class="c1"># Imports for CPython, skipped compile time by Transcrypt</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;skip&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">num</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noskip&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">zeros</span> <span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Zeros&#39;</span><span class="p">,</span> <span class="n">z</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">o</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">ones</span> <span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Ones&#39;</span><span class="p">,</span> <span class="n">o</span><span class="o">.</span><span class="n">astype</span> <span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">())</span>
+    
+    <span class="n">i</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">identity</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Identity&#39;</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">a</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">]</span>
+    <span class="p">])</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix a&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Transpose of a&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">transpose</span> <span class="p">()</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">b</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+        <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">24</span><span class="p">]</span>
+    <span class="p">])</span>
+    
+    <span class="n">bp</span> <span class="o">=</span>  <span class="n">b</span><span class="o">.</span><span class="n">transpose</span> <span class="p">()</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix b&#39;</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Permutation of b&#39;</span><span class="p">,</span> <span class="n">bp</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+        
+    <span class="n">c</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+    <span class="p">],</span> <span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Shape c&#39;</span><span class="p">,</span> <span class="nb">tuple</span> <span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix c&#39;</span><span class="p">,</span> <span class="n">c</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">transpose</span> <span class="p">()</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Shape ct&#39;</span><span class="p">,</span> <span class="nb">tuple</span> <span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Transpose of c&#39;</span><span class="p">,</span> <span class="n">ct</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+
+    <span class="n">cs0</span><span class="p">,</span> <span class="n">cs1</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">hsplit</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix cs0&#39;</span><span class="p">,</span> <span class="n">cs0</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix cs1&#39;</span><span class="p">,</span> <span class="n">cs1</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+
+    <span class="n">ci</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">hstack</span> <span class="p">((</span><span class="n">cs1</span><span class="p">,</span> <span class="n">cs0</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix ci&#39;</span><span class="p">,</span> <span class="n">ci</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">cts0</span><span class="p">,</span> <span class="n">cts1</span><span class="p">,</span> <span class="n">cts2</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">hsplit</span> <span class="p">(</span><span class="n">ct</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix cts0&#39;</span><span class="p">,</span> <span class="n">cts0</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix cts1&#39;</span><span class="p">,</span> <span class="n">cts1</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix cts2&#39;</span><span class="p">,</span> <span class="n">cts2</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+
+    <span class="n">cti</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">hstack</span> <span class="p">((</span><span class="n">cts2</span><span class="p">,</span> <span class="n">cts1</span><span class="p">,</span> <span class="n">cts0</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix ci&#39;</span><span class="p">,</span> <span class="n">cti</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">d</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+        <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">17</span><span class="p">,</span> <span class="mi">18</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">19</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>
+    <span class="p">],</span> <span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix d&#39;</span><span class="p">,</span> <span class="n">d</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">transpose</span> <span class="p">()</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Permutation of d&#39;</span><span class="p">,</span> <span class="n">dt</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">ds0</span><span class="p">,</span> <span class="n">ds1</span><span class="p">,</span> <span class="n">ds2</span><span class="p">,</span> <span class="n">ds3</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">vsplit</span> <span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix ds0&#39;</span><span class="p">,</span> <span class="n">ds0</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix ds1&#39;</span><span class="p">,</span> <span class="n">ds1</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix ds2&#39;</span><span class="p">,</span> <span class="n">ds2</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix ds3&#39;</span><span class="p">,</span> <span class="n">ds3</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+
+    <span class="n">di</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">vstack</span> <span class="p">((</span><span class="n">ds3</span><span class="p">,</span> <span class="n">ds2</span><span class="p">,</span> <span class="n">ds1</span><span class="p">,</span> <span class="n">ds0</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix di&#39;</span><span class="p">,</span> <span class="n">di</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">dts0</span><span class="p">,</span> <span class="n">dts1</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">vsplit</span> <span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix dts0&#39;</span><span class="p">,</span> <span class="n">dts0</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix dts1&#39;</span><span class="p">,</span> <span class="n">dts1</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+
+    <span class="n">dti</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">vstack</span> <span class="p">((</span><span class="n">dts1</span><span class="p">,</span> <span class="n">dts0</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix dti&#39;</span><span class="p">,</span> <span class="n">dti</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">v0</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">(</span><span class="nb">range</span> <span class="p">(</span><span class="mi">10</span><span class="p">))</span> 
+    <span class="n">v1</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+    
+    <span class="n">a</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">177</span>
+    <span class="n">el</span> <span class="o">=</span> <span class="n">b</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    
+    <span class="n">bsl0</span> <span class="o">=</span> <span class="n">b</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">bsl1</span> <span class="o">=</span> <span class="n">b</span> <span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">bsl2</span> <span class="o">=</span> <span class="n">b</span> <span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">bsl3</span> <span class="o">=</span> <span class="n">b</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">bsl4</span> <span class="o">=</span> <span class="n">b</span> <span class="p">[</span> <span class="p">:</span> <span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">bsl5</span> <span class="o">=</span> <span class="n">b</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">bsl6</span> <span class="o">=</span> <span class="n">b</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">bsl7</span> <span class="o">=</span> <span class="n">b</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+
+    <span class="n">bpsl0</span> <span class="o">=</span> <span class="n">bp</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">bpsl1</span> <span class="o">=</span> <span class="n">bp</span> <span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">bpsl2</span> <span class="o">=</span> <span class="n">bp</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span> <span class="p">:</span> <span class="p">]</span>
+    <span class="n">bpsl3</span> <span class="o">=</span> <span class="n">bp</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">bpsl4</span> <span class="o">=</span> <span class="n">bp</span> <span class="p">[</span> <span class="p">:</span> <span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">bpsl5</span> <span class="o">=</span> <span class="n">bp</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">bpsl6</span> <span class="o">=</span> <span class="n">bp</span> <span class="p">[</span><span class="mi">2</span> <span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+    <span class="n">bpsl7</span> <span class="o">=</span> <span class="n">bp</span> <span class="p">[</span><span class="mi">2</span> <span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span> <span class="p">:</span> <span class="mi">3</span><span class="p">]</span>
+    
+    <span class="nb">sum</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+    <span class="n">dif</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span>
+    <span class="n">prod</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span>
+    <span class="n">quot</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span>
+    <span class="n">dot</span> <span class="o">=</span> <span class="n">c</span> <span class="o">@</span> <span class="n">d</span>
+    <span class="n">vsum</span> <span class="o">=</span> <span class="n">v0</span> <span class="o">+</span> <span class="n">v1</span>
+    <span class="n">vel</span> <span class="o">=</span> <span class="n">vsum</span> <span class="p">[</span><span class="mi">6</span><span class="p">]</span>
+    <span class="n">vsum</span> <span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="mi">70</span>
+    
+    <span class="n">mul_a3</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="mi">3</span>
+    <span class="n">mul_3a</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">a</span>
+    <span class="n">div_a3</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="mf">3.1234567</span>
+    <span class="n">div_3a</span> <span class="o">=</span> <span class="mf">3.1234567</span> <span class="o">/</span> <span class="n">a</span>
+    <span class="n">add_a3</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="mi">3</span>
+    <span class="n">add_3a</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">+</span> <span class="n">a</span>
+    <span class="n">sub_a3</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="mi">3</span>
+    <span class="n">sub_3a</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">a</span>
+    <span class="n">neg_a</span> <span class="o">=</span> <span class="o">-</span><span class="n">a</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;El a [1, 2, 3] alt&#39;</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;El b [1, 2, 3]&#39;</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl b0&#39;</span><span class="p">,</span> <span class="n">bsl0</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl b1&#39;</span><span class="p">,</span> <span class="n">bsl1</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl b2&#39;</span><span class="p">,</span> <span class="n">bsl2</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl b3&#39;</span><span class="p">,</span> <span class="n">bsl3</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl b4&#39;</span><span class="p">,</span> <span class="n">bsl4</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl b5&#39;</span><span class="p">,</span> <span class="n">bsl5</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl b6&#39;</span><span class="p">,</span> <span class="n">bsl6</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl b7&#39;</span><span class="p">,</span> <span class="n">bsl7</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl bp0&#39;</span><span class="p">,</span> <span class="n">bpsl0</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl bp1&#39;</span><span class="p">,</span> <span class="n">bpsl1</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl bp2&#39;</span><span class="p">,</span> <span class="n">bpsl2</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl bp3&#39;</span><span class="p">,</span> <span class="n">bpsl3</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl bp4&#39;</span><span class="p">,</span> <span class="n">bpsl4</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl bp5&#39;</span><span class="p">,</span> <span class="n">bpsl5</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl bp6&#39;</span><span class="p">,</span> <span class="n">bpsl6</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Sl bp7&#39;</span><span class="p">,</span> <span class="n">bpsl7</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix sum&#39;</span><span class="p">,</span> <span class="nb">sum</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix difference&#39;</span><span class="p">,</span> <span class="n">dif</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix product&#39;</span><span class="p">,</span> <span class="n">prod</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix quotient&#39;</span><span class="p">,</span> <span class="n">quot</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix dotproduct&#39;</span><span class="p">,</span> <span class="n">dot</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Vector&#39;</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Vector&#39;</span><span class="p">,</span> <span class="n">v1</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;El sum old&#39;</span><span class="p">,</span> <span class="n">vel</span><span class="p">,</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Vector sum new&#39;</span><span class="p">,</span> <span class="n">vsum</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;mul_a3&#39;</span><span class="p">,</span> <span class="n">mul_a3</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;mul_3a&#39;</span><span class="p">,</span> <span class="n">mul_3a</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;div_a3&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">div_a3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;div_3a&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">div_3a</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;add_a3&#39;</span><span class="p">,</span> <span class="n">add_a3</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;add_3a&#39;</span><span class="p">,</span> <span class="n">add_3a</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;sub_a3&#39;</span><span class="p">,</span> <span class="n">sub_a3</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;sub_3a&#39;</span><span class="p">,</span> <span class="n">sub_3a</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;neg_a&#39;</span><span class="p">,</span> <span class="n">neg_a</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+    <span class="n">comp_a</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="n">j</span><span class="p">,</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span> <span class="o">+</span> <span class="mi">3</span><span class="n">j</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+    <span class="p">],</span> <span class="s1">&#39;complex128&#39;</span><span class="p">)</span>    
+    <span class="n">comp_b</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+        <span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="mi">8</span> <span class="o">-</span> <span class="mi">1</span><span class="n">j</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">9</span> <span class="o">+</span> <span class="mi">3</span><span class="n">j</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">11</span><span class="p">,</span> <span class="mi">12</span> <span class="o">-</span> <span class="mi">6</span><span class="n">j</span><span class="p">]</span>
+    <span class="p">],</span> <span class="s1">&#39;complex128&#39;</span><span class="p">)</span>
+    <span class="n">comp_c</span> <span class="o">=</span> <span class="n">comp_a</span> <span class="o">@</span> <span class="n">comp_b</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;comp_a&#39;</span><span class="p">,</span> <span class="n">comp_a</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;comp_b&#39;</span><span class="p">,</span> <span class="n">comp_b</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;comp_c&#39;</span><span class="p">,</span> <span class="n">comp_c</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+    
+    <span class="n">comp_a_square</span> <span class="o">=</span> <span class="n">comp_a</span> <span class="p">[</span> <span class="p">:</span> <span class="p">,</span> <span class="p">:</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">comp_b_square</span> <span class="o">=</span> <span class="n">comp_b</span> <span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="p">,</span> <span class="p">:</span> <span class="p">]</span>
+    
+    <span class="n">comp_c_square</span> <span class="o">=</span> <span class="n">comp_a_square</span> <span class="o">*</span> <span class="n">comp_b_square</span>
+    <span class="n">comp_d_square</span> <span class="o">=</span> <span class="n">comp_a_square</span> <span class="o">/</span> <span class="n">comp_b_square</span>
+    <span class="n">comp_e_square</span> <span class="o">=</span> <span class="n">comp_a_square</span> <span class="o">+</span> <span class="n">comp_b_square</span>
+    <span class="n">comp_f_square</span> <span class="o">=</span> <span class="n">comp_a_square</span> <span class="o">-</span> <span class="n">comp_b_square</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;comp_a_square&#39;</span><span class="p">,</span> <span class="n">comp_a_square</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;comp_b_square&#39;</span><span class="p">,</span> <span class="n">comp_b_square</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;comp_c_square&#39;</span><span class="p">,</span> <span class="n">comp_c_square</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;comp_d_square&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">comp_d_square</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;comp_e_square&#39;</span><span class="p">,</span> <span class="n">comp_e_square</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;comp_f_square&#39;</span><span class="p">,</span> <span class="n">comp_f_square</span><span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+    <span class="n">sliceable_a</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+        <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">9</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span>
+        <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">16</span><span class="p">]</span>
+    <span class="p">])</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;sliceable_a&#39;</span><span class="p">,</span> <span class="n">sliceable_a</span><span class="o">.</span><span class="n">tolist</span> <span class="p">())</span>
+
+    <span class="n">slice_a</span> <span class="o">=</span> <span class="n">sliceable_a</span> <span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="p">,</span> <span class="mi">1</span> <span class="p">:</span> <span class="p">]</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;slice_a&#39;</span><span class="p">)</span>
+    
+    <span class="n">sliceable_at</span> <span class="o">=</span> <span class="n">sliceable_a</span><span class="o">.</span><span class="n">transpose</span> <span class="p">()</span>
+    <span class="n">slice_at</span> <span class="o">=</span> <span class="n">sliceable_at</span> <span class="p">[</span><span class="mi">1</span> <span class="p">:</span> <span class="p">]</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="linalg-matrix-inversion-and-eigen-decomposition">
+<h2>4.2. Linalg: matrix inversion and eigen decomposition<a class="headerlink" href="#linalg-matrix-inversion-and-eigen-decomposition" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id3">
+<div class="code-block-caption"><span class="caption-text">Testlet: module_linalg</span><a class="headerlink" href="#id3" title="Permalink to this code">¶</a></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="k">import</span> <span class="n">__main__</span><span class="p">,</span> <span class="n">__envir__</span><span class="p">,</span> <span class="n">__pragma__</span>
+
+<span class="c1"># Imports for Transcrypt, skipped run time by CPython</span>
+<span class="k">if</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">executor_name</span> <span class="o">==</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">transpiler_name</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numscrypt</span> <span class="k">as</span> <span class="nn">num</span>
+    <span class="kn">import</span> <span class="nn">numscrypt.linalg</span> <span class="k">as</span> <span class="nn">linalg</span>
+
+<span class="c1"># Imports for CPython, skipped compile time by Transcrypt</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;skip&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">num</span>
+<span class="kn">import</span> <span class="nn">numpy.linalg</span> <span class="k">as</span> <span class="nn">linalg</span>
+<span class="n">num</span><span class="o">.</span><span class="n">set_printoptions</span> <span class="p">(</span><span class="n">linewidth</span> <span class="o">=</span> <span class="mi">240</span><span class="p">)</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noskip&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;====== inverse ======&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Real</span>
+
+    <span class="n">r</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+        <span class="p">[</span><span class="mf">2.12</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.11</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.23</span><span class="p">],</span> 
+        <span class="p">[</span><span class="mf">2.31</span><span class="p">,</span> <span class="mf">1.14</span><span class="p">,</span> <span class="mf">3.15</span><span class="p">],</span> 
+        <span class="p">[</span><span class="mf">1.13</span><span class="p">,</span> <span class="mf">1.98</span><span class="p">,</span> <span class="mf">2.81</span><span class="p">]</span>
+    <span class="p">])</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix r&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">ri</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">inv</span> <span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix ri&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">ri</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+    <span class="n">rid</span> <span class="o">=</span> <span class="n">r</span> <span class="o">@</span> <span class="n">ri</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;r @ ri&#39;</span><span class="p">,</span> <span class="p">[[</span><span class="nb">int</span> <span class="p">(</span><span class="nb">round</span> <span class="p">(</span><span class="n">elem</span><span class="p">))</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rid</span><span class="o">.</span><span class="n">tolist</span> <span class="p">()],</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="mf">0.001</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;r * r&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="n">r</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;r / r&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">r</span> <span class="o">/</span> <span class="n">r</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;r + r&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">r</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;r - r&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">r</span> <span class="o">-</span> <span class="n">r</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Complex</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+        <span class="p">[</span><span class="mf">2.12</span> <span class="o">-</span> <span class="mf">3.15</span><span class="n">j</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.11</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.23</span><span class="p">],</span> 
+        <span class="p">[</span><span class="mf">2.31</span><span class="p">,</span> <span class="mf">1.14</span><span class="p">,</span> <span class="mf">3.15</span> <span class="o">+</span> <span class="mf">2.75</span><span class="n">j</span><span class="p">],</span> 
+        <span class="p">[</span><span class="mf">1.13</span><span class="p">,</span> <span class="mf">1.98</span> <span class="o">-</span> <span class="mf">4.33</span><span class="n">j</span><span class="p">,</span> <span class="mf">2.81</span><span class="p">]</span>
+    <span class="p">],</span> <span class="s1">&#39;complex128&#39;</span><span class="p">)</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix c&#39;</span><span class="p">,</span>  <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">ci</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">inv</span> <span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Matrix ci&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">ci</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+    <span class="n">cid</span> <span class="o">=</span> <span class="n">c</span> <span class="o">@</span> <span class="n">ci</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># autoTester.check (&#39;c @ ci&#39;, [[&#39;{} + j{}&#39;.format (int (round (elem.real)), int (round (elem.imag))) for elem in row] for row in cid.tolist ()], &#39;&lt;br&gt;&#39;)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">+</span> <span class="mf">0.001</span><span class="n">j</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;c * c&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="n">c</span> <span class="o">+</span> <span class="n">delta</span> <span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;c / c&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">c</span> <span class="o">/</span> <span class="n">c</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;c + c&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">c</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;c - c&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">c</span> <span class="o">-</span> <span class="n">c</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;====== eigen ======&#39;</span><span class="p">)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">(</span>   
+        <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="n">j</span><span class="p">],</span>
+            <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="n">j</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="p">],</span> <span class="s1">&#39;complex128&#39;</span><span class="p">),</span>
+        <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+            <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="p">],</span> <span class="s1">&#39;complex128&#39;</span><span class="p">),</span>
+    <span class="p">):</span>
+        <span class="n">eVals</span><span class="p">,</span> <span class="n">eVecs</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eig</span> <span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        
+        <span class="n">enumSorted</span> <span class="o">=</span> <span class="nb">sorted</span> <span class="p">(</span>
+            <span class="nb">enumerate</span> <span class="p">(</span><span class="n">eVals</span><span class="o">.</span><span class="n">tolist</span> <span class="p">()),</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">elem</span><span class="p">:</span> <span class="o">-</span><span class="p">(</span><span class="n">elem</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">real</span> <span class="o">+</span> <span class="n">elem</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">imag</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># Order on primarily on real, secundarily on imag, note conjugate vals</span>
+        <span class="p">)</span>
+        
+        <span class="n">indicesSorted</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">enumSorted</span><span class="p">]</span>
+        <span class="n">eValsSorted</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">enumSorted</span><span class="p">]</span>
+        
+        <span class="n">eValsMat</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">empty</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">iRow</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span> <span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">iCol</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span> <span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">eValsMat</span> <span class="p">[</span><span class="n">iRow</span><span class="p">,</span> <span class="n">iCol</span><span class="p">]</span> <span class="o">=</span> <span class="n">eVals</span> <span class="p">[</span><span class="n">iCol</span><span class="p">]</span>
+         
+        <span class="n">eVecsNorms</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">empty</span> <span class="p">((</span><span class="n">eVecs</span><span class="o">.</span><span class="n">shape</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">),</span> <span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">iNorm</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">eVecsNorms</span><span class="o">.</span><span class="n">shape</span> <span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">eVecsNorms</span> <span class="p">[</span><span class="n">iNorm</span><span class="p">]</span> <span class="o">=</span> <span class="nb">complex</span> <span class="p">(</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span> <span class="p">(</span><span class="n">eVecs</span> <span class="p">[:,</span> <span class="n">iNorm</span><span class="p">]))</span>
+            
+        <span class="n">eVecsCanon</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">empty</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">iRow</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span> <span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">iCol</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span> <span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">eVecsCanon</span> <span class="p">[</span><span class="n">iRow</span><span class="p">,</span> <span class="n">iCol</span><span class="p">]</span> <span class="o">=</span> <span class="n">eVecs</span> <span class="p">[</span><span class="n">iRow</span><span class="p">,</span> <span class="n">iCol</span><span class="p">]</span> <span class="o">/</span> <span class="n">eVecs</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">iCol</span><span class="p">]</span> 
+            
+        <span class="n">eVecsSorted</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">empty</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">iRow</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span> <span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">iCol</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span> <span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+                <span class="n">eVecsSorted</span> <span class="p">[</span><span class="n">iRow</span><span class="p">,</span> <span class="n">iCol</span><span class="p">]</span> <span class="o">=</span> <span class="n">eVecsCanon</span> <span class="p">[</span><span class="n">iRow</span><span class="p">,</span> <span class="n">indicesSorted</span> <span class="p">[</span><span class="n">iCol</span><span class="p">]]</span>
+            
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        autoTester.check (&#39;\n---------------- a ----------------------&#39;)</span>
+<span class="sd">        autoTester.check (a)</span>
+<span class="sd">        autoTester.check (&#39;\n---------------- eigVals ----------------&#39;)</span>
+<span class="sd">        autoTester.check (eVals)</span>
+<span class="sd">        autoTester.check (&#39;\n---------------- eigValsMat--------------&#39;)</span>
+<span class="sd">        autoTester.check (eValsMat)</span>
+<span class="sd">        autoTester.check (&#39;\n---------------- eigVecs ----------------&#39;)</span>
+<span class="sd">        autoTester.check (eVecs)</span>
+<span class="sd">        autoTester.check (&#39;\n---------------- eigValsMat @ eigVecs ---&#39;)</span>
+<span class="sd">        autoTester.check (eValsMat * eVecs)</span>
+<span class="sd">        autoTester.check (&#39;\n---------------- a @ eigVecs-------------&#39;)</span>
+<span class="sd">        autoTester.check (a @ eVecs)</span>
+<span class="sd">        autoTester.check (&#39;\n---------------- eigVecsNorms -----------&#39;)</span>
+<span class="sd">        autoTester.check (eVecsNorms)</span>
+<span class="sd">        autoTester.check (&#39;\n---------------- eigVecsCanon -----------&#39;)</span>
+<span class="sd">        autoTester.check (eVecsCanon)</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">---------------- eigVecsSorted ----------&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">([[(</span><span class="nb">round</span> <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">real</span> <span class="o">+</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">imag</span> <span class="o">+</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">row</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">eVecsSorted</span><span class="o">.</span><span class="n">tolist</span> <span class="p">()])</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">---------------- eigValsSorted ----------&#39;</span><span class="p">)</span>
+        <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">([(</span><span class="nb">round</span> <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">real</span> <span class="o">+</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="nb">round</span> <span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">imag</span> <span class="o">+</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">eValsSorted</span><span class="p">],</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="fourier-transform-fft-2-and-ifft-2-for-2-n-x-2-n-samples-using-complex-arrays">
+<h2>4.3. Fourier transform: FFT(2) and IFFT(2) for 2^n (x 2^n) samples, using complex arrays<a class="headerlink" href="#fourier-transform-fft-2-and-ifft-2-for-2-n-x-2-n-samples-using-complex-arrays" title="Permalink to this headline">¶</a></h2>
+<div class="literal-block-wrapper docutils container" id="id4">
+<div class="code-block-caption"><span class="caption-text">Testlet: module_fft</span><a class="headerlink" href="#id4" title="Permalink to this code">¶</a></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="k">import</span> <span class="n">__main__</span><span class="p">,</span> <span class="n">__envir__</span><span class="p">,</span> <span class="n">__pragma__</span>
+
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">pi</span>
+
+<span class="n">transpiled</span> <span class="o">=</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">executor_name</span> <span class="o">==</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">transpiler_name</span>
+
+<span class="c1"># Imports for Transcrypt, skipped run time by CPython</span>
+<span class="k">if</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">executor_name</span> <span class="o">==</span> <span class="n">__envir__</span><span class="o">.</span><span class="n">transpiler_name</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numscrypt</span> <span class="k">as</span> <span class="nn">num</span>
+    <span class="kn">import</span> <span class="nn">numscrypt.fft</span> <span class="k">as</span> <span class="nn">fft</span>
+
+<span class="c1"># Imports for CPython, skipped compile time by Transcrypt</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;skip&#39;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">num</span>
+<span class="kn">import</span> <span class="nn">numpy.fft</span> <span class="k">as</span> <span class="nn">fft</span>
+<span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noskip&#39;</span><span class="p">)</span>
+
+<span class="n">fSample</span> <span class="o">=</span> <span class="mi">4096</span>
+<span class="n">tTotal</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">fSin</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">fCos</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="k">def</span> <span class="nf">getNow</span> <span class="p">():</span>  <span class="c1"># Avoid operator overloading, which would result in the dysfunctional: __new__ __call__ (Date)</span>
+    <span class="k">return</span> <span class="fm">__new__</span> <span class="p">(</span><span class="n">Date</span> <span class="p">())</span>
+
+<span class="k">def</span> <span class="nf">tCurrent</span> <span class="p">(</span><span class="n">iCurrent</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">iCurrent</span> <span class="o">/</span> <span class="n">fSample</span>
+
+<span class="k">def</span> <span class="nf">run</span> <span class="p">(</span><span class="n">autoTester</span><span class="p">):</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="mf">0.001</span> <span class="o">+</span> <span class="mf">0.001</span><span class="n">j</span>
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;&lt;br&gt;------ 1D ------&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">cut</span> <span class="o">=</span> <span class="mi">102</span>
+
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Samples computed: </span><span class="si">{}</span><span class="s1">&lt;br&gt;&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">tTotal</span>  <span class="o">*</span> <span class="n">fSample</span><span class="p">))</span>
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Samples shown: </span><span class="si">{}</span><span class="s1">&lt;br&gt;&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">cut</span><span class="p">))</span>
+
+    <span class="n">orig</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+        <span class="nb">complex</span> <span class="p">(</span><span class="mf">0.3</span> <span class="o">+</span> <span class="n">sin</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">fSin</span> <span class="o">*</span> <span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">cos</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">pi</span> <span class="o">*</span> <span class="n">fCos</span> <span class="o">*</span> <span class="n">t</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">iSample</span> <span class="o">/</span> <span class="n">fSample</span>
+            <span class="k">for</span> <span class="n">iSample</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="n">tTotal</span> <span class="o">*</span> <span class="n">fSample</span><span class="p">)</span>
+        <span class="p">]</span>
+    <span class="p">],</span> <span class="s1">&#39;complex128&#39;</span><span class="p">)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Original samples&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">orig</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">()[</span> <span class="p">:</span> <span class="n">cut</span><span class="p">],</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">transpiled</span><span class="p">:</span>
+        <span class="n">timeStartFft</span> <span class="o">=</span> <span class="n">getNow</span> <span class="p">()</span>
+    <span class="n">freqs</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">fft</span> <span class="p">(</span><span class="n">orig</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">transpiled</span><span class="p">:</span>
+        <span class="n">timeStopFft</span> <span class="o">=</span> <span class="n">getNow</span> <span class="p">()</span> 
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Frequencies&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">freqs</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">()[</span> <span class="p">:</span> <span class="n">cut</span><span class="p">],</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">transpiled</span><span class="p">:</span>
+        <span class="n">timeStartIfft</span> <span class="o">=</span> <span class="n">getNow</span> <span class="p">()</span>   
+    <span class="n">reconstr</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">ifft</span> <span class="p">(</span><span class="n">freqs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">transpiled</span><span class="p">:</span>
+        <span class="n">timeStopIfft</span> <span class="o">=</span> <span class="n">getNow</span> <span class="p">()</span>    
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Reconstructed samples&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">reconstr</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">()[</span> <span class="p">:</span> <span class="n">cut</span><span class="p">],</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">transpiled</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;FFT for </span><span class="si">{}</span><span class="s1"> samples took </span><span class="si">{}</span><span class="s1"> ms&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">tTotal</span> <span class="o">*</span> <span class="n">fSample</span><span class="p">,</span> <span class="n">timeStopFft</span> <span class="o">-</span> <span class="n">timeStartFft</span><span class="p">))</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;IFFT for </span><span class="si">{}</span><span class="s1"> samples took </span><span class="si">{}</span><span class="s1"> ms&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">tTotal</span> <span class="o">*</span> <span class="n">fSample</span><span class="p">,</span> <span class="n">timeStopIfft</span> <span class="o">-</span> <span class="n">timeStartIfft</span><span class="p">))</span>
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;&lt;br&gt;------ 2D ------&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+
+    <span class="n">orig2</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">zeros</span> <span class="p">((</span><span class="mi">128</span><span class="p">,</span> <span class="mi">128</span><span class="p">),</span> <span class="s1">&#39;complex128&#39;</span><span class="p">)</span>
+    <span class="n">orig2</span> <span class="p">[</span><span class="mi">32</span> <span class="p">:</span> <span class="mi">96</span><span class="p">,</span> <span class="mi">32</span> <span class="p">:</span> <span class="mi">96</span><span class="p">]</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">ones</span> <span class="p">((</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="s1">&#39;complex128&#39;</span><span class="p">)</span>
+    
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Original samples&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">orig2</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="p">[</span><span class="mi">64</span> <span class="p">:</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">16</span> <span class="p">:</span> <span class="mi">112</span><span class="p">]</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">transpiled</span><span class="p">:</span>
+        <span class="n">timeStartFft</span> <span class="o">=</span> <span class="n">getNow</span> <span class="p">()</span>
+        
+    <span class="n">freqs2</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">fft2</span> <span class="p">(</span><span class="n">orig2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">transpiled</span><span class="p">:</span>
+        <span class="n">timeStopFft</span> <span class="o">=</span> <span class="n">getNow</span> <span class="p">()</span> 
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Frequencies&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">freqs2</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="p">[</span><span class="mi">64</span> <span class="p">:</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">16</span> <span class="p">:</span> <span class="mi">112</span><span class="p">]</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">transpiled</span><span class="p">:</span>
+        <span class="n">timeStartIfft</span> <span class="o">=</span> <span class="n">getNow</span> <span class="p">()</span>
+    <span class="n">reconstr2</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">ifft2</span> <span class="p">(</span><span class="n">freqs2</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">transpiled</span><span class="p">:</span>
+        <span class="n">timeStopIfft</span> <span class="o">=</span> <span class="n">getNow</span> <span class="p">()</span>    
+    
+    <span class="k">if</span> <span class="n">transpiled</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;FFT2 for </span><span class="si">{}</span><span class="s1"> samples took </span><span class="si">{}</span><span class="s1"> ms&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">orig2</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">timeStopFft</span> <span class="o">-</span> <span class="n">timeStartFft</span><span class="p">))</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;IFFT2 for </span><span class="si">{}</span><span class="s1"> samples took </span><span class="si">{}</span><span class="s1"> ms&#39;</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span><span class="n">orig2</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">timeStopIfft</span> <span class="o">-</span> <span class="n">timeStartIfft</span><span class="p">))</span>
+        
+    <span class="n">autoTester</span><span class="o">.</span><span class="n">check</span> <span class="p">(</span><span class="s1">&#39;Reconstructed samples&#39;</span><span class="p">,</span> <span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="n">reconstr2</span> <span class="o">+</span> <span class="n">delta</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>  <span class="p">[</span><span class="mi">64</span> <span class="p">:</span> <span class="mi">68</span><span class="p">,</span> <span class="mi">16</span> <span class="p">:</span> <span class="mi">112</span><span class="p">]</span> <span class="o">.</span><span class="n">tolist</span> <span class="p">(),</span> <span class="s1">&#39;&lt;br&gt;&#39;</span><span class="p">)</span>
+    
+    <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+    
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="some-more-examples-interactive-tests">
+<h1>5. Some more examples: interactive tests<a class="headerlink" href="#some-more-examples-interactive-tests" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="benchmark">
+<h2>5.1. Benchmark<a class="headerlink" href="#benchmark" title="Permalink to this headline">¶</a></h2>
+<p>Performance of operations like <em>&#64;</em> and <em>inv</em></p>
+<div class="literal-block-wrapper docutils container" id="id5">
+<div class="code-block-caption"><span class="caption-text">Benchmark: slicing_optimization</span><a class="headerlink" href="#id5" title="Permalink to this code">¶</a></div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="k">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">org.transcrypt.stubs.browser</span> <span class="k">import</span> <span class="n">__pragma__</span>
+
+<span class="kn">import</span> <span class="nn">numscrypt</span> <span class="k">as</span> <span class="nn">num</span>
+<span class="kn">import</span> <span class="nn">numscrypt.random</span> <span class="k">as</span> <span class="nn">num_rand</span>
+<span class="kn">import</span> <span class="nn">numscrypt.linalg</span> <span class="k">as</span> <span class="nn">linalg</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+<span class="k">for</span> <span class="n">useComplex</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">transpose</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">useComplex</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">num</span><span class="o">.</span><span class="n">array</span> <span class="p">([</span>
+                <span class="p">[</span><span class="nb">complex</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">random</span> <span class="p">(),</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span> <span class="p">())</span> <span class="k">for</span> <span class="n">iCol</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">30</span><span class="p">)]</span>
+                <span class="k">for</span> <span class="n">iRow</span> <span class="ow">in</span> <span class="nb">range</span> <span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+            <span class="p">],</span> <span class="s1">&#39;complex128&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">num_rand</span><span class="o">.</span><span class="n">rand</span> <span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        
+        <span class="n">timeStartTranspose</span> <span class="o">=</span> <span class="fm">__new__</span> <span class="p">(</span><span class="n">Date</span> <span class="p">())</span>
+        <span class="k">if</span> <span class="n">transpose</span><span class="p">:</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">transpose</span> <span class="p">()</span>
+
+        <span class="n">timeStartInv</span> <span class="o">=</span> <span class="fm">__new__</span> <span class="p">(</span><span class="n">Date</span> <span class="p">())</span>
+        <span class="n">ai</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">inv</span> <span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        
+        <span class="n">timeStartMul</span> <span class="o">=</span> <span class="fm">__new__</span> <span class="p">(</span><span class="n">Date</span> <span class="p">())</span> 
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+        <span class="nb">id</span> <span class="o">=</span> <span class="n">a</span> <span class="o">@</span> <span class="n">ai</span>
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+        
+        <span class="n">timeStartScalp</span> <span class="o">=</span> <span class="fm">__new__</span> <span class="p">(</span><span class="n">Date</span> <span class="p">())</span> 
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">a</span>
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+        
+        <span class="n">timeStartDiv</span> <span class="o">=</span> <span class="fm">__new__</span> <span class="p">(</span><span class="n">Date</span> <span class="p">())</span> 
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">a</span>
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+        
+        <span class="n">timeStartAdd</span> <span class="o">=</span> <span class="fm">__new__</span> <span class="p">(</span><span class="n">Date</span> <span class="p">())</span> 
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">a</span>
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+        
+        <span class="n">timeStartSub</span> <span class="o">=</span> <span class="fm">__new__</span> <span class="p">(</span><span class="n">Date</span> <span class="p">())</span> 
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;opov&#39;</span><span class="p">)</span>
+        <span class="n">sp</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">a</span>
+        <span class="n">__pragma__</span> <span class="p">(</span><span class="s1">&#39;noopov&#39;</span><span class="p">)</span>
+        
+        <span class="n">timeStartEig</span> <span class="o">=</span> <span class="fm">__new__</span> <span class="p">(</span><span class="n">Date</span> <span class="p">())</span>
+        <span class="k">if</span> <span class="n">useComplex</span><span class="p">:</span>
+            <span class="n">evals</span><span class="p">,</span> <span class="n">evecs</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eig</span> <span class="p">(</span><span class="n">a</span> <span class="p">[:</span><span class="mi">10</span><span class="p">,</span> <span class="p">:</span><span class="mi">10</span><span class="p">])</span>            
+        
+        <span class="n">timeEnd</span> <span class="o">=</span> <span class="fm">__new__</span> <span class="p">(</span><span class="n">Date</span> <span class="p">())</span>
+        
+        <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">&lt;pre&gt;</span>
+<span class="sd">a @ ai [0:5, 0:5] =</span>
+
+<span class="sd">{}</span>
+<span class="sd">&#39;&#39;&#39;</span> 
+        <span class="p">)</span> <span class="o">.</span><span class="n">format</span> <span class="p">(</span>
+            <span class="nb">str</span> <span class="p">(</span><span class="n">num</span><span class="o">.</span><span class="n">round</span> <span class="p">(</span><span class="nb">id</span> <span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span> <span class="mi">2</span><span class="p">))</span> <span class="o">.</span><span class="n">replace</span> <span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">),</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">transpose</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Transpose took: {} ms&#39;&#39;&#39;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span> <span class="p">(</span>
+                <span class="n">timeStartInv</span> <span class="o">-</span> <span class="n">timeStartTranspose</span>
+            <span class="p">)</span>
+            
+        <span class="n">result</span> <span class="o">+=</span> <span class="p">(</span>
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">Inverse took: {} ms</span>
+<span class="sd">Matrix product (@) took: {} ms</span>
+<span class="sd">Elementwise product (*) took: {} ms</span>
+<span class="sd">Division took: {} ms</span>
+<span class="sd">Addition took: {} ms</span>
+<span class="sd">Subtraction took: {} ms</span>
+<span class="sd">Eigenvals/vecs took: {} ms</span>
+<span class="sd">&lt;/pre&gt;</span>
+<span class="sd">&#39;&#39;&#39;</span>
+        <span class="p">)</span> <span class="o">.</span><span class="n">format</span> <span class="p">(</span>
+            <span class="n">timeStartMul</span> <span class="o">-</span> <span class="n">timeStartInv</span><span class="p">,</span>
+            <span class="n">timeStartScalp</span> <span class="o">-</span> <span class="n">timeStartMul</span><span class="p">,</span>
+            <span class="n">timeStartDiv</span> <span class="o">-</span> <span class="n">timeStartScalp</span><span class="p">,</span>
+            <span class="n">timeStartAdd</span> <span class="o">-</span> <span class="n">timeStartDiv</span><span class="p">,</span>
+            <span class="n">timeStartSub</span> <span class="o">-</span> <span class="n">timeStartAdd</span><span class="p">,</span>
+            <span class="n">timeStartEig</span> <span class="o">-</span> <span class="n">timeStartSub</span><span class="p">,</span>
+            <span class="n">timeEnd</span> <span class="o">-</span> <span class="n">timeStartEig</span> <span class="k">if</span> <span class="n">useComplex</span> <span class="k">else</span> <span class="s1">&#39;N.A.&#39;</span>
+        <span class="p">)</span>
+            
+<span class="n">document</span><span class="o">.</span><span class="n">getElementById</span> <span class="p">(</span><span class="s1">&#39;result&#39;</span><span class="p">)</span> <span class="o">.</span><span class="n">innerHTML</span> <span class="o">=</span> <span class="n">result</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/numscrypt_logo_sphinx.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Subjects</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. Currently available features</a></li>
+<li><a class="reference internal" href="#systematic-code-examples-a-guided-tour-of-numscrypt">4. Systematic code examples: a guided tour of Numscrypt</a><ul>
+<li><a class="reference internal" href="#basics-creating-and-using-arrays">4.1. Basics: creating and using arrays</a></li>
+<li><a class="reference internal" href="#linalg-matrix-inversion-and-eigen-decomposition">4.2. Linalg: matrix inversion and eigen decomposition</a></li>
+<li><a class="reference internal" href="#fourier-transform-fft-2-and-ifft-2-for-2-n-x-2-n-samples-using-complex-arrays">4.3. Fourier transform: FFT(2) and IFFT(2) for 2^n (x 2^n) samples, using complex arrays</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#some-more-examples-interactive-tests">5. Some more examples: interactive tests</a><ul>
+<li><a class="reference internal" href="#benchmark">5.1. Benchmark</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="installation_use.html"
+                        title="previous chapter">2. Getting started</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/supported_constructs.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="installation_use.html" title="2. Getting started"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Numscrypt 0.0.40 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2016, Jacques de Hooge.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.2.
+    </div>
+  </body>
+</html>
