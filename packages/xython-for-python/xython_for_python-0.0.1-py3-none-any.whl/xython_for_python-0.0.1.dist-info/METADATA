@@ -1,0 +1,45 @@
+Metadata-Version: 2.0
+Name: xython-for-python
+Version: 0.0.1
+Summary: python functional utilities
+Home-page: https://github.com/Xython/xython
+Author: thautwarm
+Author-email: twshere@outlook.com
+License: MIT
+Description-Content-Type: UNKNOWN
+Keywords: functional,function composition,readability
+Platform: any
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: Implementation :: CPython
+
+Xython
+-------------------------
+
+
+.. code :: python
+
+    import xython as xy
+    _ = xy._
+
+    xy.and_then(
+            sum | xy.partial([]),
+            sum,
+            print
+            )([[1, 2, 3], [2, 3, 4]])
+    # => print(sum(sum([[1, 2, 3], [2, 3, 4]], [])))
+
+    _*2    | xy.before_with(_ + 10) | xy.call(2)  # => (2 + 10) * 2
+
+    _ + 10 | xy.next_by(_ * 5)     | xy.call(2)   # => (2 + 10) * 5
+
+    (lambda x, y: x+y) | xy.to_curry | xy.call(1, 2)  # => 1 + 2
+
+    (lambda x, y: x+y) | xy.to_curry | xy.call(1) | xy.call(2)  # => 1 + 2
+
+
+Not only the syntax sugar, `JIT` and `AOT` could be expected.
+
