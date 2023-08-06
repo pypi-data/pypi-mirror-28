@@ -1,0 +1,12 @@
+{
+  binary: "nologin",
+  args: {},
+  flag_string: std.join(
+      " ", 
+      ["%s%s %s" % [
+          if std.length(key) == 1 then "-" else "--", key, self.args[key]]
+          for key in std.filter(
+              function(x) self.args[x] != null,
+              std.objectFields(self.args))]),
+  cmd: "%s %s" % [self.binary,  self.flag_string]
+}
