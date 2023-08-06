@@ -1,0 +1,30 @@
+{% extends './i18n_main_template.jinja2' %}
+
+{% block content %}
+    {% for css in select_domain_form.get_widget_resources()['css'] %}
+        <link rel="stylesheet" href="{{ request.static_url(css) }}" type="text/css"/>
+    {% endfor %}
+
+
+    {% for js in select_domain_form.get_widget_resources()['js'] %}
+        <script type="text/javascript" src="{{ request.static_url(js) }}"></script>
+    {% endfor %}
+
+
+    <div class="row">
+
+        <div class="col col-sm-6">
+            {{ select_domain_form.render() | safe }}
+        </div>
+        <div class="col col-sm-6">
+            {{ new_domain_form.render() | safe }}
+        </div>
+    </div>
+    
+    <script type="text/javascript">
+        deform.load()
+    </script>
+{% endblock content %}
+{% block title %}
+    {{ _('i18n_domain_page_title', domain='i18n_helper') }}
+{% endblock %}

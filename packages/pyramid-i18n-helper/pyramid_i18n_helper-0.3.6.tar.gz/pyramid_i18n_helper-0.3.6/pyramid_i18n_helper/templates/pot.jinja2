@@ -1,0 +1,53 @@
+{% extends './i18n_main_template.jinja2' %}
+
+{% block content %}
+    {% for css in msg_form.get_widget_resources()['css'] %}
+        <link rel="stylesheet" href="{{ request.static_url(css) }}" type="text/css"/>
+    {% endfor %}
+
+
+    {% for js in msg_form.get_widget_resources()['js'] %}
+        <script type="text/javascript" src="{{ request.static_url(js) }}"></script>
+    {% endfor %}
+
+
+    {% for css in select_lang_form.get_widget_resources()['css'] %}
+        <link rel="stylesheet" href="{{ request.static_url(css) }}" type="text/css"/>
+    {% endfor %}
+
+
+    {% for js in select_lang_form.get_widget_resources()['js'] %}
+        <script type="text/javascript" src="{{ request.static_url(js) }}"></script>
+    {% endfor %}
+
+
+    {% for css in new_lang_form.get_widget_resources()['css'] %}
+        <link rel="stylesheet" href="{{ request.static_url(css) }}" type="text/css"/>
+    {% endfor %}
+
+
+    {% for js in new_lang_form.get_widget_resources()['js'] %}
+        <script type="text/javascript" src="{{ request.static_url(js) }}"></script>
+    {% endfor %}
+
+
+    <div class="row">
+        <div class="col col-sm-6">
+            {{ new_lang_form.render() | safe }}
+        </div>
+        <div class="col col-sm-6">
+            {{ select_lang_form.render() | safe }}
+        </div>
+    </div>
+    {{ msg_form.render(msg_form_data) | safe }}
+    {#    suggestion: [package]_[module]_[section]_[action]_[result]#}
+    {#    suggestion: [i18n]_[new_lang]_[creation]_[success]#}
+
+    <script type="text/javascript">
+        deform.load()
+    </script>
+
+{% endblock content %}
+{% block title %}
+    {{ _('i18n_pot_page_title_for_domain ${domain}',mapping={'domain': request.matchdict['domain'] }, domain='i18n_helper') }}
+{% endblock %}
