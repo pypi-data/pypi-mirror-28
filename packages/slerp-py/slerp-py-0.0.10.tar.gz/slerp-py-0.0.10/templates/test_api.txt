@@ -1,0 +1,18 @@
+
+
+	def test_{{name}}(self):
+		#TODO : Replace All Input {{http}}
+		result = requests.{{http.lower()}}(self.BASE_URL + '{{name}}',
+		{%- if http.lower() != 'get' %} json={
+		{%- for key, value in docstring.items() %}
+		    "{{key}}": "{{value}}"{%-if not loop.last -%}, {%- endif -%}
+		{%- endfor %}
+		}
+		{%- else %} params={
+		{%- for key, value in docstring.items() %}
+		    '{{key}}': '{{value}}'{%-if not loop.last -%}, {%- endif -%}
+		{%- endfor %}
+		}
+		{%- endif %})
+		self.assertIs(result.status_code, 200)
+		self.assertEqual(result.json()['status'], 'OK')
