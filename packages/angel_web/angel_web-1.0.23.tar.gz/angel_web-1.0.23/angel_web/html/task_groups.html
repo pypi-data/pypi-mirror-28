@@ -1,0 +1,82 @@
+<script type="text/javascript">
+$('#tg_datagrid').datagrid({
+    height: '100%',
+    gridTitle : 'Task Group Information',
+    showToolbar: true,
+    toolbarItem: 'all',
+    local: 'local',
+    delPK: 'id',
+    dataUrl: '/data/all_tgs',
+    delUrl: '/data/delete_tgs',
+	columns:[
+		{
+			name:"id",
+			label:"ID",
+			align:"center",
+            add:false,
+            edit:false,
+			width:70
+		},
+		{
+			name:"group_id",
+			label:"Group Id",
+			align:"center",
+			width:70
+		},
+		{
+			name:"runtime",
+			label:"Runtime",
+			align:"center",
+			width:70,
+			render:timestamp2str
+		},
+		{
+			name:"done_time",
+			label:"Done Time",
+			align:"center",
+			width:70,
+			render:timestamp2str
+		},
+		{
+			name:"state",
+			label:"State",
+			align:"center",
+			width:70,
+			render:function(value){
+				if(value == 100){
+					return "Init";
+				} else if(value == 101){
+					return "<font color='blue'>Timing</font>";
+				} else if(value == 102){
+					return "<font color='blue'>Running</font>";
+				} else if(value == 103){
+					return "<font color='red'>Scheduler Timeout</font>";
+				} else if(value == 104){
+					return "<font color='red'>Running Timeout</font>";
+				} else if(value == 105){
+					return "<font color='red'>Script Error</font>";
+				} else if(value == 1){
+					return "<font color='red'>Runtime Error</font>";
+				} else if(value == 0){
+					return "<font color='green'>Success</font>";
+				} else {
+					return value;
+				}
+			}
+		}
+	],
+    paging: {pageSize:20, pageCurrent:1},
+    linenumberAll: true,
+    tableWidth:'100%',
+    noremove: false
+})
+</script>
+<div class="bjui-pageHeader" style="background-color:#fff; border-bottom:none;">
+    <div class="bs-callout bs-callout-warning">
+        <h4>All task groups are list as follows</h4>
+		<p>You can add, delete, update, query groups here</p>
+    </div>
+</div>
+<div class="bjui-pageContent">
+	<table id="tg_datagrid" class="table table-bordered"></table>
+</div>
