@@ -1,0 +1,130 @@
+Metadata-Version: 1.1
+Name: sneakysnek
+Version: 0.0.2
+Summary: Dead simple cross-platform keyboard & mouse global input capture solution for Python 3.6+
+Home-page: https://github.com/SerpentAI/sneakysnek
+Author: Nicholas Brochu
+Author-email: nicholas@serpent.ai
+License: MIT
+Description: sneakysnek
+        ==========
+        
+        ``sneakysnek`` is a minimalistic, cross-platform global input capture
+        solution for Python 3.6+. While there are certainly already offerings in
+        terms of input libraries, they generally focus more on sending input,
+        with capturing only being an afterthought. ``sneakysnek`` is dead simple
+        in both its design and how you end up using it. You will be up and
+        running in less than 5 lines of code and will start receiving lean &
+        universal events on all 3 supported platforms (Linux, Windows, macOS).
+        
+        This library was built with the goal of powering the Gameplay Recording
+        feature in the `Serpent.AI
+        Framework <https://github.com/SerpentAI/SerpentAI>`__ where keyboard &
+        mouse inputs are collected alongside frame sequences to build machine
+        learning datasets.
+        
+        Feel free to study the code to learn more about input capturing and use
+        it responsibly!
+        
+        |image0|
+        
+        Installation
+        ------------
+        
+        ::
+        
+            pip install sneakysnek
+        
+        Zero dependencies on Windows. Will install ``pyobjc-framework-Quartz``
+        on macOS and ``python-xlib`` on Linux.
+        
+        Demo
+        ----
+        
+        Once installed in your Python environment, you can take it for a quick
+        spin to test it on your platform.
+        
+        ::
+        
+            python -m sneakysnek.recorder
+        
+        Usage
+        -----
+        
+        Using ``sneakysnek`` is ridiculously simple:
+        
+        .. code:: python
+        
+            from sneakysnek.recorder import Recorder
+        
+            recorder = Recorder.record(print)  # Replace print with any callback that accepts an 'event' arg
+            # Some blocking code in your main thread...
+        
+        ``sneakysnek`` runs its capturing and callbacks in separate threads. It
+        should not leave anything behind in most cases. For optimal cleanliness,
+        run ``recorder.stop()`` from your main thread when you are done
+        recording.
+        
+        Events
+        ------
+        
+        The callback you provide your recorder with will receive one of the
+        following 2 event objects:
+        
+        KeyboardEvent
+        ~~~~~~~~~~~~~
+        
+        Represents an event captured from the keyboard.
+        
+        **Attributes**
+        
+        -  *event*: One of ``KeyboardEvents.DOWN``, ``KeyboardEvents.UP``
+        -  *keyboard_key*: One entry from the `KeyboardKey
+           enumeration <https://github.com/SerpentAI/sneakysnek/blob/master/sneakysnek/keyboard_keys.py>`__
+        -  *timestamp*: A ``time.time()`` timestamp
+        
+        MouseEvent
+        ~~~~~~~~~~
+        
+        Represents an event captured from the mouse.
+        
+        **Attributes**
+        
+        -  *event*: One of ``MouseEvents.CLICK``. ``MouseEvents.SCROLL``,
+           ``MouseEvents.MOVE``
+        -  *button*: One entry from the `MouseButton
+           enumeration <https://github.com/SerpentAI/sneakysnek/blob/master/sneakysnek/mouse_buttons.py>`__
+        -  *direction*: One of ``"DOWN"``, ``"UP"``
+        -  *velocity*: An integer representing the velocity of scroll events
+           (only >1 on macOS)
+        -  *x*: An integer representing the x coordinate of the mouse position
+        -  *y*: An integer representing the y coordinate of the mouse position
+        -  *timestamp*: A ``time.time()`` timestamp
+        
+        Enjoying this?
+        ==============
+        
+        Awesome! For more content, feel free to:
+        
+        -  Learn more about the Serpent.AI Python Framework -
+           `Website <http://serpent.ai>`__ - `Blog <http://blog.serpent.ai>`__ -
+           `Repo <https://github.com/SerpentAI/SerpentAI>`__
+        -  Watch some Python development on
+           `Twitch <https://www.twitch.tv/serpent_ai>`__ &
+           `YouTube <https://www.youtube.com/c/SerpentAI>`__
+        -  Follow Serpent.AI on `Twitter <https://twitter.com/Serpent_AI>`__
+        
+        <3
+        ~~
+        
+        .. |image0| image:: https://s3.ca-central-1.amazonaws.com/serpent-ai-assets/sneakysnek.gif
+        
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Natural Language :: English
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.6
