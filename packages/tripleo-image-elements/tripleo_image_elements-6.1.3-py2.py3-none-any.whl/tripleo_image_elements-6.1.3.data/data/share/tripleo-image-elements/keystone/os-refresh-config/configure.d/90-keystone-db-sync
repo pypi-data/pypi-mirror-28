@@ -1,0 +1,7 @@
+#!/bin/bash
+set -eux
+set -o pipefail
+
+if os-is-bootstrap-host ; then
+    su -s /bin/bash -c 'keystone-manage db_sync' keystone
+fi
