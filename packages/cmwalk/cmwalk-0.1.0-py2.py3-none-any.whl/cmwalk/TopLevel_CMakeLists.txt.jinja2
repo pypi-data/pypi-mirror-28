@@ -1,0 +1,61 @@
+cmake_minimum_required(VERSION 3.9)
+
+{% if cfg.cmakeToolchainFile %}
+# set the toolchain file.
+# toolchain file should be set before "project" command.
+# the toolchain file can also be set via "cmake -DCMAKE_TOOLCHAIN_FILE=path/to/file".
+set(CMAKE_TOOLCHAIN_FILE gcc_arm_none_eabi_toolchain.cmake)
+
+{% endif %}
+project({{ project_name }})
+enable_language(C CXX ASM)
+
+{% if cfg.cmakeCompilerOptionsFile %}
+# load and run the CMake code from the given file to specify project specific options.
+include({{ cfg.cmakeCompilerOptionsFile }})
+
+{% endif %}
+
+# export the executable target through a variable to CMakeLists.txt files in subdirectories.
+# update the dependent sources.
+add_executable(${PROJECT_NAME}
+{%  if files|length > 0 %}
+{% for fname in files %}
+    {{ fname }}
+{% endfor %}
+{% else %}
+    ""
+{% endif %}
+)
+
+if (LINKER_SCRIPT)
+	# if linker script is defined, make the target to depends on it,
+	# so the target will be rebuilt when linker script was changed.
+    set_target_properties(${PROJECT_NAME} PROPERTIES LINK_DEPENDS ${LINKER_SCRIPT})
+endif()
+
+
+{% if subdirs|length > 0 %}
+# export the name of executable target via a variable to CMakeLists.txt files in subdirectories.
+set(CURRENT_EXE_NAME ${PROJECT_NAME})
+# load and run the CMake code from subdirectories for current target.
+{% for subdir in subdirs %}
+include({{ subdir }}/CMakeLists.txt)
+{% endfor %}
+{% endif %}
+
+
+# if compiler is GNU gcc/g++, then generate *.bin & *.hex files.
+if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+    # generate the hex file from the built target.
+    set(HEX_FILE ${PROJECT_NAME}.hex)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_OBJCOPY} -O ihex $<TARGET_FILE:${PROJECT_NAME}> ${HEX_FILE}
+        COMMENT "Building ${HEX_FILE}...")
+
+    # generate the bin file from the built target.
+    set(BIN_FILE ${PROJECT_NAME}.bin)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_OBJCOPY} -O binary $<TARGET_FILE:${PROJECT_NAME}> ${BIN_FILE}
+        COMMENT "Building ${BIN_FILE}...")
+endif()
