@@ -1,0 +1,83 @@
+{% extends "pretixpresale/event/checkout_base.html" %} {% load i18n %} {% load bootstrap3 %} {% block inner %}
+
+<link rel="stylesheet" href="/static/pretix_mabel/style.css" type="text/css" />
+
+<p>
+    {% trans message %}
+</p>
+{% if not logged_in %}
+
+<form class="form-horizontal" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="panel-group" id="auth_group">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a class="collapsed" data-toggle="collapse" href="#contact">
+                        <strong>{% trans "Log in" %}</strong>
+                        <i class="fa fa-angle-down collapse-indicator"></i>
+                    </a>
+                </h4>
+            </div>
+            <div id="contact" class="panel-collapse collapse collapsed in">
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3">
+                            <a class="btn btn-block btn-primary btn-lg" href="{{ raven_url }}">
+                                {% trans "Log in with Raven" %} {% comment %}
+                                <img src="/static/pretix_mabel/raven_icon.png" /> {% endcomment %}
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="divider">
+                        <span>OR</span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3">
+                            {% bootstrap_form login_form layout="horizontal" %}
+                            <div class="col-md-6 col-md-offset-6">
+                                <button class="btn btn-block btn-default" type="submit">
+                                    {% trans "Log in with Password" %}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% else %}
+<p>
+    You have successfully logged in.
+</p>
+{% endif %}
+<div class="row checkout-button-row">
+    <div class="col-md-3">
+        <a class="btn btn-block btn-default btn-lg" href="{{ prev_url }}">
+            {% trans "Go back" %}
+        </a>
+    </div>
+
+    {% if logged_in %}
+    <div class="col-md-2 col-md-offset-4">
+        <a class="btn btn-block btn-default btn-lg" href="{{ step_url }}?logout">
+            {% trans "Log out" %}
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="col-md-3 
+        {% if not logged_in %}col-md-offset-6{%endif%}">
+        <a class="btn btn-block btn-lg {% if continue %}btn-primary{% else %}btn-default disabled{% endif %}" href="{{ next_url }}">
+            {% trans "Continue" %}
+        </a>
+    </div>
+
+    <div class="clearfix"></div>
+</div>
+{% endblock %}
