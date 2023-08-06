@@ -1,0 +1,76 @@
+#!python
+
+from gopher_robot_version import sys_packages
+from gopher_robot_version import ros_packages
+from gopher_robot_version import writer
+import argparse
+
+
+class bcolors:
+    OKGREEN = '\033[92m'
+    ENDC = '\033[0m'
+
+def pars_args():
+    parser = argparse.ArgumentParser(description="Create a file containing the name and version of various ROS and "
+                                                 "system packages", prog='gopher_version', version='0.1')
+    parser.add_argument( "--verbose", action="store_true", default=False, help="Show what is actually written to file")
+
+    parser.add_argument("-o", "--output", action="store", default=None, help="Allows to specify an output filepath for "
+                                                                            "the data")
+
+    return parser.parse_args()
+
+
+def prepare_string():
+    ros_dict_stable = {}
+    ros_dict_devel = {}
+    ros_dict_base = {}
+    result = ""
+
+    system_dict = sys_packages.get_system_packages()
+    try:
+        ros_dict_devel = ros_packages.get_ros_packages("/opt/yujin/amd64/indigo-devel")
+    except OSError:
+        pass
+
+    try:
+        ros_dict_stable = ros_packages.get_ros_packages("/opt/yujin/amd64/indigo-stable")
+    except OSError:
+        pass
+
+    try:
+        ros_dict_base = ros_packages.get_ros_packages("/opt/ros")
+    except OSError:
+        pass
+
+    result += writer.dict_to_str(system_dict, "SYSTEM PACAKGES")
+    result += writer.dict_to_str(ros_dict_devel, "YUJIN_DEVEL")
+    result += writer.dict_to_str(ros_dict_stable, "YUJIN STABLE")
+    result += writer.dict_to_str(ros_dict_base, "ROS INTERNAL")
+    return result
+
+
+def main():
+    default_filename = "gopher_version_file"
+    parsed_args = pars_args()
+    try: #There should be a better way #FIXME
+        if (parsed_args.help or parsed_args.version):
+            return 0
+    except AttributeError:
+        pass
+
+    print (bcolors.OKGREEN + "Processing..." + bcolors.ENDC)
+    data = prepare_string()
+    if (parsed_args.verbose == True):
+        print data
+    if (parsed_args.output is not None):
+        filename = parsed_args.output
+    else:
+        filename = default_filename
+
+    writer.write_to_file(filename, data)
+    print(bcolors.OKGREEN + "Data successfully written to " + filename + bcolors.ENDC)
+    return 0
+
+
+main()
