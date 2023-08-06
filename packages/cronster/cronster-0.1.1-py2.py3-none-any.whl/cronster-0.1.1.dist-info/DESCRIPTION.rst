@@ -1,0 +1,111 @@
+cronster
+========
+
+.. image:: https://img.shields.io/pypi/l/cronster.svg
+    :target: https://pypi.python.org/pypi/cronster
+.. image:: https://img.shields.io/pypi/pyversions/cronster.svg
+    :target: https://pypi.python.org/pypi/cronster
+.. image:: https://img.shields.io/pypi/v/cronster.svg
+    :target: https://pypi.python.org/pypi/cronster
+.. image:: https://img.shields.io/pypi/wheel/cronster.svg
+    :target: https://pypi.python.org/pypi/cronster
+.. image:: https://readthedocs.org/projects/cronster/badge/?version=latest
+    :target: https://readthedocs.org/projects/cronster/?badge=latest
+.. image:: https://travis-ci.org/florianeinfalt/cronster.svg?branch=master
+    :target: https://travis-ci.org/florianeinfalt/cronster
+
+`Full Documentation`_
+
+Installation
+============
+
+To install ``cronster``, type:
+
+.. code-block:: bash
+
+    $ pip install cronster
+
+Getting Started
+===============
+
+Install Redis
+-------------
+
+To get started with ``cronster``, install ``Redis`` on your computer
+(macOS & Homebrew in this example):
+
+.. code-block:: bash
+
+    $ brew install redis
+    $ brew services start redis
+
+`Digital Ocean <https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04>`_ has a great tutorial on
+how install Redis on Ubuntu.
+
+Run the crawler
+---------------
+
+Assuming ``Redis`` is running on your machine in default configuration
+and you want to crawl from ``~/projects``, run the following command:
+
+.. code-block:: bash
+
+    $ cronster_crawler -r ~/projects
+
+The full help output explains the other options of the CLI application.
+It is possible to change certain parameters should ``Redis`` on a different
+host/port or should you want to adjust the interval between crawls:
+
+.. code-block:: bash
+
+    Usage: cronster_crawler [OPTIONS]
+
+    Options:
+      -r, --root TEXT           Crawling root, default: the current working directory
+      -h, --cache-host TEXT     Cache host, default: localhost
+      -p, --cache-port INTEGER  Cache port, default: 6379 (Redis default)
+      -i, --interval INTEGER    Crawling interval, default: 2 seconds
+      --help                    Show this message and exit.
+
+
+Run the scheduler
+-----------------
+
+Assuming ``Redis`` is running on your machine in default configuration,
+run the following command:
+
+.. code-block:: bash
+
+    $ cronster_scheduler
+
+The full help output explains the other options of the CLI application.
+It is possible to change ``Redis``-related parameters should ``Redis`` on a
+different host or port:
+
+.. code-block:: bash
+
+    Usage: cronster_scheduler [OPTIONS]
+
+    Options:
+      -h, --cache-host TEXT     Cache host, default: localhost
+      -p, --cache-port INTEGER  Cache port, default: 6379 (Redis default)
+      --help                    Show this message and exit.
+
+Write a ``crontab`` file
+------------------------
+
+Write the following ``YAML`` file to ``~/projects/crontab`` (or any other location
+anywhere in the hierarchy under your ``root`` location):
+
+.. code-block:: yaml
+
+    test_job:
+        cmd: echo "Hello, World!"
+        schedule: "*/5 * * * *"
+
+You should see the job being picked up by the crawler on the next crawl and
+should see the scheduler run the job every five minutes.
+
+.. _Full Documentation: http://cronster.readthedocs.io/en/latest/
+
+
