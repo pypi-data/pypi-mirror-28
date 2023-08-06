@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="gitfat.css">
+    <style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+table {
+    width:100%;
+    margin:5px;
+    margin-bottom:14px;
+}
+th {
+    background-color: #99ffff;
+}
+body {
+   margin: 0px;
+}
+
+#footer-style {
+   position:fixed;
+   bottom:0;
+   width:100%;
+   height:18px;
+   background:#7b7d7f;
+}
+#red-tr {
+    background-color:#ff9999
+}
+#yellow-tr {
+    background-color:#ffffb3
+}
+#green-tr {
+    background-color:#e6ffe6
+}
+</style>
+    <meta charset="UTF-8">
+    <title>Large Files in Git Repo</title>
+</head>
+<body>
+    <table>
+        <caption>Large Files as on $(TODAY_DATE)</caption><tr>
+        <th>Author</th>
+        <th>File Size(MB)</th>
+        <th>File Name</th>
+        <th>branch</th>
+        <th>Email</th>
+    </tr>
+       #for $entry in $LIST_OF_BIGFILES
+            #if $entry.size_in_mb > 2
+                <tr id="red-tr">
+            #else
+                <tr id="yellow-tr">
+            #end if
+                <td>$entry.author_name</td>
+                <td>$entry.size_in_mb</td>
+                <td>$entry.file_name</td>
+                <td>$entry.branch_name</td>
+                <td>$entry.author_email</td>
+        </tr>
+        #end for
+    </table>
+
+
+</body>
+<footer>
+    <div id="footer-style" align="center">
+        In case of issues with the content, contact: <a
+            href="mailto:vmanoharan@guidewire.com">vmanoharan@guidewire.com</a>
+    </div></footer>
+</html>
