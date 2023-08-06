@@ -1,0 +1,495 @@
+request_id:
+  type: UUID
+  in: header
+  required: true
+  description: |
+    A unique ID for tracking service request. The request ID associated
+    with the request by default appears in the service logs.
+container_ident:
+  description: |
+    The UUID or name of container in Zun.
+  in: path
+  required: true
+  type: string
+host_ident:
+  description: |
+    The UUID or name of host in Zun.
+  in: path
+  required: true
+  type: string
+destination_path:
+  description: |
+    The destination path in a container when putting archive to a container.
+  in: query
+  required: true
+  type: string
+exec_command:
+  description: |
+    The command to execute in a container.
+  in: query
+  required: true
+  type: string
+exec_interactive:
+  description: |
+    Keep STDIN open even if not attached, allocate a pseudo-TTY.
+  in: query
+  required: false
+  type: boolean
+exec_resize_id:
+  description: |
+    The ID of the exec instance.
+  in: query
+  required: true
+  type: string
+exec_run:
+  description: |
+    Whether to run the command or not. If this parameter is set to true,
+    Zun will run the command right away. If this parameter is set to false,
+    Zun won't run the command but return the necessary information (i.e. the
+    URL and execution id) for users to trigger the execution of the command.
+  in: query
+  required: false
+  type: boolean
+force:
+  description: |
+    Specify to delete container forcefully.
+  in: query
+  required: true
+  type: string
+height:
+  description: |
+    The tty height of a container.
+  in: query
+  required: true
+  type: string
+network:
+  description: |
+    Network to be detached of the container.
+  in: query
+  required: true
+  type: string
+new_name:
+  description: |
+    The new name for the container.
+  in: query
+  required: true
+  type: string
+ps_args:
+  description: |
+    The arguments of ps command.
+  in: query
+  required: false
+  type: string
+repository:
+  description: |
+    The reposiroty of the container image.
+  in: query
+  required: true
+  type: string
+run:
+  description: |
+    Set false if enabled interactive.
+  in: query
+  required: false
+  type: boolean
+security_group_query:
+  description: |
+    Security groups to be added to the container.
+  in: query
+  required: true
+  type: string
+signal:
+  description: |
+    The signal to kill a container.
+  in: query
+  required: false
+  type: string
+since:
+  description: |
+    Show logs since a given datetime or integer epoch (in seconds).
+  in: query
+  required: false
+  type: string
+source_path:
+  description: |
+    The file path in a container when getting archive from a container.
+  in: query
+  required: true
+  type: string
+stderr:
+  description: |
+    Get standard error if True.
+  in: query
+  required: false
+  type: boolean
+stdout:
+  description: |
+    Get standard output if True.
+  in: query
+  required: false
+  type: boolean
+stop:
+  description: |
+    Whether or not stop a container firstly before deleting it.
+  in: query
+  required: false
+  type: string
+tag:
+  description: |
+    The tag of the container image.
+  in: query
+  required: true
+  type: string
+tail:
+  description: |
+    Number of lines to show from the end of the logs, default is get all logs.
+  in: query
+  required: false
+  type: string
+timeout:
+  description: |
+    Seconds to wait before operating on container.
+  in: query
+  required: true
+  type: string
+timestamps:
+  description: |
+    Whether to show timestamps in the logs of container.
+  in: query
+  required: false
+  type: boolean
+width:
+  description: |
+    The tty width of a container.
+  in: query
+  required: true
+  type: string
+addresses:
+  type: string
+  description: |
+    IP address of the container. This includes both ipv4 and/or ipv6 addresses.
+  in: body
+  required: true
+auto_remove:
+  description: |
+    enable auto-removal of the container on daemon side
+    when the container's process exits.
+  in: body
+  type: boolean
+binary:
+  in: body
+  type: string
+  required: true
+  description: |
+    The name of the binary form of the Zun service.
+command:
+  description: |
+    Send command to the container.
+  in: body
+  type: string
+container_list:
+  type: array
+  in: body
+  required: true
+  description: |
+    The list of all containers in Zun.
+cpu:
+  description: |
+    The number of virtual cpus.
+  in: body
+  type: float
+created_at:
+  description: |
+    The date and time when the resource was created.
+
+    The date and time stamp format is `ISO 8601
+    <https://en.wikipedia.org/wiki/ISO_8601>`_:
+
+    ::
+
+       CCYY-MM-DDThh:mm:ss±hh:mm
+
+    For example, ``2015-08-27T09:49:58-05:00``.
+
+    The ``±hh:mm`` value, if included, is the time zone as an offset
+    from UTC.
+  in: body
+  required: true
+  type: string
+data:
+  description: |
+    The content of the tar file which is got from a container or put to a container.
+  in: body
+  required: true
+  type: string
+disabled:
+  description: |
+     Whether or not this service is disabled or not.
+  in: body
+  required: true
+  type: boolean
+disabled_reason:
+  description: |
+    The disable reason of the service, ``null`` if the service is enabled or
+    disabled without reason provided.
+  in: body
+  required: true
+  type: string
+environment:
+  description: |
+    The environment variables.
+  in: body
+  type: array
+exec_exit_code:
+  description: |
+    The exit code of the command executed in a container.
+  in: body
+  type: dict
+exec_id:
+  description: |
+    The ID of the exec instance.
+  in: body
+  type: dict
+exec_output:
+  description: |
+    The output of the command executed in a container.
+  in: body
+  type: dict
+exec_resize_output:
+  description: |
+    The output of exec_resize, including exec_id and websocket url.
+  in: body
+  type: array
+exec_url:
+  description: |
+    The URL to start an exec instance.
+  in: body
+  type: dict
+forced_down:
+  description: |
+    Whether or not this service was forced down manually by an
+    administrator. This value is useful to know that some 3rd party has
+    verified the service should be marked down.
+  in: body
+  required: true
+  type: boolean
+host:
+  description: |
+    The host for the service.
+  in: body
+  required: true
+  type: string
+host_list:
+  description: |
+    The host information list, including hostname, uuid, links, labels,
+    cpus, mem_total and os.
+  in: body
+  required: true
+  type: array
+hostname:
+  description: |
+    The hostname of container.
+  in: body
+  type: string
+id_s:
+  description: |
+    The ID of the Zun service.
+  in: body
+  required: true
+  type: string
+image:
+  description: |
+    The name or ID of the image.
+  in: body
+  required: true
+  type: string
+image_driver:
+  description: |
+    The image driver to use to pull container image. Allowed values are
+    ``docker`` to pull the image from Docker Hub and ``glance`` to pull
+    the image from Glance.
+  in: body
+  type: string
+image_pull_policy:
+  description: |
+    The policy which determines if the image should be pulled prior to starting
+    the container. Allowed values are ``ifnotpresent`` that means pull the
+    image if it does not already exist on the node, ``always`` means always
+    pull the image from repository and ``never`` mean never pull the image.
+  in: body
+  type: string
+interactive:
+  description: |
+    Keep STDIN open even if not attached, allocate a pseudo-TTY.
+  in: body
+  type: boolean
+labels:
+  description: |
+    Adds a map of labels to a container.
+  in: body
+  type: array
+links:
+  description: |
+    A list of relative links. Includes the self and
+    bookmark links.
+  in: body
+  required: true
+  type: array
+memory:
+  description: |
+    The container memory size in MiB.
+  in: body
+  type: integer
+name:
+  description: |
+    The name of the container.
+  in: body
+  required: true
+  type: string
+nets:
+  description: |
+    A list of networks for the container. When you do not specify the nets
+    parameter, the container attaches to the only network created for the
+    current tenant. To provision the container with a NIC for a network,
+    specify the UUID or name of the network in the ``network`` attribute.
+    To provision the container with a NIC for an already existing port,
+    specify the port id or name in the ``port`` attribute.
+
+    If multiple networks are defined, the order in which they appear in the
+    container will not necessarily reflect the order in which they are given
+    in the request. Users should therefore not depend on device order
+    to deduce any information about their network devices.
+
+    The special values *auto* and can be specified for networks. *auto* tells
+    the Containers service to use a network that is available to the project,
+    if one exists. If one does not exist, the Containers service will attempt
+    to automatically allocate a network for the project (if possible). *none*
+    tells the Containers service to not allocate a network for the instance.
+    The *auto* and *none* values cannot be used with any other network values,
+    including other network uuids, ports, fixed IPs or device tags. These are
+    requested as strings for the networks value, not in a list.
+  in: body
+  type: object
+ports:
+  description: |
+    The ports exposed on the container.
+  in: body
+  required: true
+  type: string
+ps_output:
+  description: |
+    The output of zun top.
+  in: body
+  required: true
+  type: dict
+report_count:
+  description: |
+    The total number of report.
+  in: body
+  required: true
+  type: integer
+restart_policy:
+  description: |
+    Restart policy to apply when a container exits. Allowed values are
+    no, on-failure[:max-retry], always, unless-stopped.
+  in: body
+  type: string
+runtime:
+  description: |
+    The container runtime tool to create container with. You can use
+    the default runtime that is `runc` or any other runtime configured
+    to use with Docker.
+  in: body
+  type: string
+security_groups:
+  description: |
+    Security groups to be added to the container.
+  in: body
+  type: string
+service:
+  description: |
+    A Zun service.
+  in: body
+  required: true
+  type: dict
+services:
+  description: |
+    A list of Zun services.
+  in: body
+  required: true
+  type: array
+stat:
+  description: |
+    The stat information when doing get_archive.
+  in: body
+  required: true
+  type: string
+state:
+  description: |
+    The current state of Zun services.
+  in: body
+  required: true
+  type: string
+stats_info:
+  description: |
+    The stats information of a container,
+    including cpu, memory, blk io and net io.
+  in: body
+  required: true
+  type: dict
+status:
+  description: |
+    The current state of the container.
+  in: body
+  required: true
+  type: string
+status_detail:
+  description: |
+    The status detail of the container.
+  in: body
+  required: true
+  type: string
+status_reason:
+  description: |
+    The reason of container current status.
+  in: body
+  required: true
+  type: string
+task_state:
+  description: |
+    The current task of the container.
+  in: body
+  required: true
+  type: string
+updated_at:
+  description: |
+    The date and time when the resource was updated.
+
+    The date and time stamp format is `ISO 8601
+    <https://en.wikipedia.org/wiki/ISO_8601>`_:
+
+    ::
+
+       CCYY-MM-DDThh:mm:ss±hh:mm
+
+    For example, ``2015-08-27T09:49:58-05:00``.
+
+    The ``±hh:mm`` value, if included, is the time zone as an offset
+    from UTC. In the previous example, the offset value is ``-05:00``.
+
+    If the ``updated_at`` date and time stamp is not set, its value is
+    ``null``.
+  in: body
+  required: true
+  type: string
+uuid:
+  description: |
+    UUID of the resource.
+  in: body
+  required: true
+  type: UUID
+workdir:
+  description: |
+    The working directory for commands to run in.
+  in: body
+  type: string
