@@ -1,0 +1,217 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Key features &#8212; fit_classification 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting started" href="getting_started.html" />
+    <link rel="prev" title="About this project" href="about_project.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="key-features">
+<span id="id1"></span><h1>Key features<a class="headerlink" href="#key-features" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="access-token-management">
+<h2>Access token management<a class="headerlink" href="#access-token-management" title="Permalink to this headline">¶</a></h2>
+<p>Acquiring an access token can be somewhat complicated. In our project,
+it is semi-automatized: it will open a webpage with a login form for you.
+Once you put in your credentials and log in, it will capture a callback GET
+with authorization code and make another HTTP request to get the real
+access token. Once received, the token will be stored locally
+in the library configuration folder <a class="footnote-reference" href="#id4" id="id2">[1]</a>. If the token is expired,
+the library will automatically get a new one with the help of the refresh
+token, which is also sent by the server on login and stored in the same file.</p>
+<p>If you want to login again with other credentials, you should either
+delete the file
+where the token is stored or use <code class="docutils literal"><span class="pre">force_new_token</span></code> boolean parameter
+in the constructor of <a class="reference internal" href="api_doc.html#classification.classification.Classification" title="classification.classification.Classification"><code class="xref py py-class docutils literal"><span class="pre">Classification</span></code></a>
+class.
+If you do not want to create another client instance, simply call the method
+<a class="reference internal" href="api_doc.html#classification.classification.Classification.reinit_session" title="classification.classification.Classification.reinit_session"><code class="xref py py-meth docutils literal"><span class="pre">reinit_session()</span></code></a>
+with the same parameter specified to <code class="docutils literal"><span class="pre">True</span></code>.</p>
+<p>If you would like to know more about the login process, pelase refer
+<a class="reference external" href="https://rozvoj.fit.cvut.cz/Main/oauth2">here</a>.</p>
+</div>
+<div class="section" id="memorizing-some-ubiquitous-parameters">
+<h2>Memorizing some ubiquitous parameters<a class="headerlink" href="#memorizing-some-ubiquitous-parameters" title="Permalink to this headline">¶</a></h2>
+<p>Looking at the API documentation, you may notice that some parameters
+repeat over and over again through different requests. Luckily, you do not
+need to provide them with every method call.</p>
+<p>Together with the main client,
+<a class="reference internal" href="api_doc.html#classification.classification.Classification" title="classification.classification.Classification"><code class="xref py py-class docutils literal"><span class="pre">Classification</span></code></a>,
+this library offers its proxy version,
+<a class="reference internal" href="api_doc.html#classification.classificationproxy.ClassificationParamsProxy" title="classification.classificationproxy.ClassificationParamsProxy"><code class="xref py py-class docutils literal"><span class="pre">ClassificationParamsProxy</span></code></a>.
+It is capable of memorizing some parameters and automatically use them
+if you do not provide them again explicitly. Click on this proxy object above
+to jump straight to its documentation and see, what parameters you can save
+and reuse. You can supply them either through the constructor or set manually
+as class attributes later.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>In order to save some parameters and not supply them later
+as arguments, each of them was set as <code class="docutils literal"><span class="pre">None</span></code> by default
+in the proxy client. Please, keep in mind that:</p>
+<ul class="last simple">
+<li>Firstly, the order of arguments in methods of the plain client
+and its proxy version can be different. If you prefer to do without
+named arguments in Python, be sure to double check what you are
+passing to a method.</li>
+<li>Secondly, if a required parameter is neither saved in proxy
+nor passed to a method explicitly,
+a <a class="reference internal" href="api_doc.html#classification.exceptions.MissingParameterError" title="classification.exceptions.MissingParameterError"><code class="xref py py-exc docutils literal"><span class="pre">MissingParameterError</span></code></a>
+will be raised.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="python-objects-to-simplify-request-body-generation">
+<h2>Python objects to simplify request body generation<a class="headerlink" href="#python-objects-to-simplify-request-body-generation" title="Permalink to this headline">¶</a></h2>
+<p>In some methods, you will need to supply a request body. You can pass either
+a Python dictionary or use our predefined objects (which will be converted
+to dictionaries automatically right before an HTTP request). These objects are:</p>
+<ul class="simple">
+<li><a class="reference internal" href="api_doc.html#classification.entities.ClassificationTextDto" title="classification.entities.ClassificationTextDto"><code class="xref py py-class docutils literal"><span class="pre">ClassificationTextDto</span></code></a></li>
+<li><a class="reference internal" href="api_doc.html#classification.entities.ClassificationDto" title="classification.entities.ClassificationDto"><code class="xref py py-class docutils literal"><span class="pre">ClassificationDto</span></code></a></li>
+<li><a class="reference internal" href="api_doc.html#classification.entities.ExpressionParseAllRequestDto" title="classification.entities.ExpressionParseAllRequestDto"><code class="xref py py-class docutils literal"><span class="pre">ExpressionParseAllRequestDto</span></code></a></li>
+<li><a class="reference internal" href="api_doc.html#classification.entities.ExpressionParseRequestDto" title="classification.entities.ExpressionParseRequestDto"><code class="xref py py-class docutils literal"><span class="pre">ExpressionParseRequestDto</span></code></a></li>
+<li><a class="reference internal" href="api_doc.html#classification.entities.UserSettingsDto" title="classification.entities.UserSettingsDto"><code class="xref py py-class docutils literal"><span class="pre">UserSettingsDto</span></code></a></li>
+<li><a class="reference internal" href="api_doc.html#classification.entities.UserCourseSettingsDto" title="classification.entities.UserCourseSettingsDto"><code class="xref py py-class docutils literal"><span class="pre">UserCourseSettingsDto</span></code></a></li>
+<li><a class="reference internal" href="api_doc.html#classification.entities.StudentClassificationPreviewDto" title="classification.entities.StudentClassificationPreviewDto"><code class="xref py py-class docutils literal"><span class="pre">StudentClassificationPreviewDto</span></code></a></li>
+</ul>
+<p>The main advantage of using them is that your IDE should provide hints
+of parameters that should be provided and their data types. Once used
+in a request, the object can be modified in any way and used again.</p>
+</div>
+<div class="section" id="simplified-operations">
+<span id="id3"></span><h2>Simplified operations<a class="headerlink" href="#simplified-operations" title="Permalink to this headline">¶</a></h2>
+<p>Even with the help of objects from the section above, building some very common
+request bodies can be tedious. Take a look at the following methods:</p>
+<ul class="simple">
+<li><a class="reference internal" href="api_doc.html#classification.classification.Classification.save_student_classifications_simple_s2t" title="classification.classification.Classification.save_student_classifications_simple_s2t"><code class="xref py py-meth docutils literal"><span class="pre">save_student_classifications_simple_s2t()</span></code></a></li>
+<li><a class="reference internal" href="api_doc.html#classification.classification.Classification.save_student_classifications_simple_t2s" title="classification.classification.Classification.save_student_classifications_simple_t2s"><code class="xref py py-meth docutils literal"><span class="pre">save_student_classifications_simple_t2s()</span></code></a></li>
+<li><a class="reference internal" href="api_doc.html#classification.classification.Classification.find_student_group_classifications_simple_s2t" title="classification.classification.Classification.find_student_group_classifications_simple_s2t"><code class="xref py py-meth docutils literal"><span class="pre">find_student_group_classifications_simple_s2t()</span></code></a></li>
+<li><a class="reference internal" href="api_doc.html#classification.classification.Classification.find_student_group_classifications_simple_t2s" title="classification.classification.Classification.find_student_group_classifications_simple_t2s"><code class="xref py py-meth docutils literal"><span class="pre">find_student_group_classifications_simple_t2s()</span></code></a></li>
+</ul>
+<p>They help get/save students’ classifications in a simplified manner.
+<code class="docutils literal"><span class="pre">s2t</span></code> stands for the <em>student to tasks</em> format:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>{
+ &#39;student 1 username&#39;: {&#39;task 1&#39;: &#39;grade&#39;,
+                        &#39;task 2&#39;: &#39;grade&#39;},
+ &#39;student 2 username&#39;: {&#39;task 1&#39;: &#39;grade&#39;,
+                        &#39;task 4&#39;: &#39;grade&#39;},
+}
+</pre></div>
+</div>
+<p>while <code class="docutils literal"><span class="pre">t2s</span></code> corresponds to the <em>task to students</em> format:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>{
+ &#39;task 1&#39;: {&#39;student 1 username&#39;: &#39;grade&#39;,
+            &#39;student 2 username&#39;: &#39;grade&#39;},
+ &#39;task 2&#39;: {&#39;student 5 username&#39;: &#39;grade&#39;,
+            &#39;student 6 username&#39;: &#39;grade&#39;},
+}
+</pre></div>
+</div>
+<p>Instead of building complex objects according to the API JSON schema,
+you can use the above methods with dictionaries of these formats.</p>
+<p class="rubric">Footnotes</p>
+<table class="docutils footnote" frame="void" id="id4" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id2">[1]</a></td><td>This directory varies on different platforms. We use <a class="reference external" href="https://pypi.python.org/pypi/appdirs/1.4.3">appdirs</a>
+library to get and create the correct location. On Windows, for instance,
+it could look like this: <code class="docutils literal"><span class="pre">C:\Users\&lt;User&gt;\AppData\Local\fit_classification\fit_classification\saved_token</span></code>.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><p>
+    <h1 class='logo'>
+        <a href="index.html">Home</a>
+    </h1>
+</p><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="about_project.html" title="previous chapter">About this project</a></li>
+      <li>Next: <a href="getting_started.html" title="next chapter">Getting started</a></li>
+  </ul></li>
+</ul>
+</div>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Key features</a><ul>
+<li><a class="reference internal" href="#access-token-management">Access token management</a></li>
+<li><a class="reference internal" href="#memorizing-some-ubiquitous-parameters">Memorizing some ubiquitous parameters</a></li>
+<li><a class="reference internal" href="#python-objects-to-simplify-request-body-generation">Python objects to simplify request body generation</a></li>
+<li><a class="reference internal" href="#simplified-operations">Simplified operations</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Boris Laskov.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/key_features.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

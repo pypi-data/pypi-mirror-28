@@ -1,0 +1,1409 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>API documentation &#8212; fit_classification 0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Getting started" href="getting_started.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="api-documentation">
+<h1>API documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-classification.classification">
+<span id="classification-the-main-part"></span><h2>Classification: The main part<a class="headerlink" href="#module-classification.classification" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="classification.classification.Classification">
+<em class="property">class </em><code class="descclassname">classification.classification.</code><code class="descname">Classification</code><span class="sig-paren">(</span><em>client_id: str</em>, <em>client_secret: str</em>, <em>callback_host: str = 'localhost'</em>, <em>callback_port: int = 8080</em>, <em>force_new_token: bool = False</em>, <em>session: requests_oauthlib.oauth2_session.OAuth2Session = None</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.classification.Classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main class for working with Classification API.</p>
+<p>This class has a method for every URL listed in API
+documentation of Classification portal. It also
+manages acquiring and refreshing of the access token.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference internal" href="#classification.classificationproxy.ClassificationParamsProxy" title="classification.classificationproxy.ClassificationParamsProxy"><code class="xref py py-class docutils literal"><span class="pre">ClassificationParamsProxy</span></code></a>
+is a proxy for this class that takes care of saving
+some frequently used parameters.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">In order to use this class, you will need to get
+a client ID and Secret codes. You will receive them once
+you register a new application in the
+<a class="reference external" href="https://auth.fit.cvut.cz/manager/">AppsManager</a>.
+Create a new web application there. As the callback URL,
+please put the URL of your local server to catch
+the authorization callback (it is localhost:8080 by default).</p>
+</div>
+<dl class="attribute">
+<dt id="classification.classification.Classification.AUTHORIZE_URL">
+<code class="descname">AUTHORIZE_URL</code><a class="headerlink" href="#classification.classification.Classification.AUTHORIZE_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – Used to build a login URL to be opened
+in browser.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="classification.classification.Classification.TOKEN_URL">
+<code class="descname">TOKEN_URL</code><a class="headerlink" href="#classification.classification.Classification.TOKEN_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – This endpoint is used to ask the server
+to give and refresh the access token.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="classification.classification.Classification.API_URL">
+<code class="descname">API_URL</code><a class="headerlink" href="#classification.classification.Classification.API_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – The base part of the API URL (used in
+every method/API call).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="classification.classification.Classification.session">
+<code class="descname">session</code><a class="headerlink" href="#classification.classification.Classification.session" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>requests_oauthlib.OAuth2Session</em> – This session
+is used to acquire/refresh token and to make API calls.
+Can be passed through the constructor, but it was
+made possible for the purpose of testing; do not pass
+it in for the regular usage.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="classification.classification.Classification.client_id">
+<code class="descname">client_id</code><a class="headerlink" href="#classification.classification.Classification.client_id" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – A special ID you get when you register
+your application in the
+<a class="reference external" href="https://auth.fit.cvut.cz/manager/">AppsManager</a>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="classification.classification.Classification.client_secret">
+<code class="descname">client_secret</code><a class="headerlink" href="#classification.classification.Classification.client_secret" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – A special secret code you get
+when you register your application in the
+<a class="reference external" href="https://auth.fit.cvut.cz/manager/">AppsManager</a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>client_id: str</em>, <em>client_secret: str</em>, <em>callback_host: str = 'localhost'</em>, <em>callback_port: int = 8080</em>, <em>force_new_token: bool = False</em>, <em>session: requests_oauthlib.oauth2_session.OAuth2Session = None</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.classification.Classification.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new instance of the library with a new session.</p>
+<p>Initially needed to create a new session, client ID
+and Secret values are stored inside to refresh
+expired access token later.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>client_id</strong> – A special ID you get when you register
+your application in the
+<a class="reference external" href="https://auth.fit.cvut.cz/manager/">AppsManager</a>.</li>
+<li><strong>client_secret</strong> – A special secret code you get
+when you register your application in the
+<a class="reference external" href="https://auth.fit.cvut.cz/manager/">AppsManager</a>.</li>
+<li><strong>callback_host</strong> – The host which should
+receive the authorization callback. Used to
+temporarily create a web server in this app
+to get callback with authorization code.
+Defaults to ‘localhost’.</li>
+<li><strong>callback_port</strong> – The port used together
+with the host described above. Defaults to 8080.</li>
+<li><strong>force_new_token</strong> – If True, the login
+process will be initiated again, even if we have
+token saved. Defaults to False.</li>
+<li><strong>session</strong> – This session
+is used to acquire/refresh token and to make API calls.
+Can be passed through the constructor, but it was
+made possible for the purpose of testing; do not pass
+it in for the regular usage.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.add_editor">
+<code class="descname">add_editor</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>username: str</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.add_editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new editor.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>username</strong> – Username of the editor.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">put()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.change_order_of_classifications">
+<code class="descname">change_order_of_classifications</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>indexes: dict</em>, <em>semester: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.change_order_of_classifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Changes the order of classifications.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>indexes</strong> – The body for the request. Should be
+a plain Python dictionary.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">put()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code> and <code class="docutils literal"><span class="pre">json</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.clone_classification_definitions">
+<code class="descname">clone_classification_definitions</code><span class="sig-paren">(</span><em>target_semester: str</em>, <em>target_course_code: str</em>, <em>source_semester: str</em>, <em>source_course_code: str</em>, <em>remove_existing: bool</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.clone_classification_definitions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clones the definitions of the classification.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>target_semester</strong> – Target semester code.</li>
+<li><strong>target_course_code</strong> – Target course code.</li>
+<li><strong>source_semester</strong> – Source semester code.</li>
+<li><strong>source_course_code</strong> – Source course code.</li>
+<li><strong>remove_existing</strong> – Remove existing definitions.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">put()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.delete_classification">
+<code class="descname">delete_classification</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>classification_id: str</em>, <em>semester: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.delete_classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes classification.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>classification_id</strong> – Classification identifier.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">delete()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.delete_editor">
+<code class="descname">delete_editor</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>username: str</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.delete_editor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete given editor.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>username</strong> – Username of the editor.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">delete()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.drop_session">
+<code class="descname">drop_session</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#classification.classification.Classification.drop_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes and deletes internal OAuth2 session.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.evaluate_all">
+<code class="descname">evaluate_all</code><span class="sig-paren">(</span><em>expressions_dto: typing.Union[classification.entities.ExpressionParseAllRequestDto</em>, <em>typing.Dict[str</em>, <em>typing.Any]] = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.evaluate_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate all expressions.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>expressions_dto</strong> – The body for the request. Can be
+a plain Python dictionary or a
+<a class="reference internal" href="#classification.entities.ExpressionParseAllRequestDto" title="classification.entities.ExpressionParseAllRequestDto"><code class="xref py py-class docutils literal"><span class="pre">ExpressionParseAllRequestDto</span></code></a>.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">post()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">json</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.find_classification">
+<code class="descname">find_classification</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>identifier: str</em>, <em>semester: str = None</em>, <em>lang: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.find_classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds classification by identifier.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>identifier</strong> – Classification identifier.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>lang</strong> – Language tag.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.find_classifications_for_course">
+<code class="descname">find_classifications_for_course</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>semester: str = None</em>, <em>lang: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.find_classifications_for_course" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds classification for the given course.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>lang</strong> – Language tag.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.find_student_classification">
+<code class="descname">find_student_classification</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>student_username: str</em>, <em>semester: str = None</em>, <em>lang: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.find_student_classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find student classifications.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>student_username</strong> – The username of the student.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>lang</strong> – Language tag.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.find_student_classifications_for_definitions">
+<code class="descname">find_student_classifications_for_definitions</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>identifier: str</em>, <em>group_code: str = 'ALL'</em>, <em>semester: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.find_student_classifications_for_definitions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find student classification for definitions.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>identifier</strong> – Classification identifier.</li>
+<li><strong>group_code</strong> – The code og the group.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.find_student_group_classifications">
+<code class="descname">find_student_group_classifications</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>group_code: str = 'ALL'</em>, <em>semester: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.find_student_group_classifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find student group classifications.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>group_code</strong> – The code of the group.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.find_student_group_classifications_simple_s2t">
+<code class="descname">find_student_group_classifications_simple_s2t</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>group_code: str = 'ALL'</em>, <em>semester: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.find_student_group_classifications_simple_s2t" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find student group classifications with a simplified response.</p>
+<p>See <a class="reference internal" href="key_features.html#simplified-operations"><span class="std std-ref">Simplified operations</span></a> section as well as
+<a class="reference internal" href="#classification.classification.Classification.find_student_group_classifications" title="classification.classification.Classification.find_student_group_classifications"><code class="xref py py-meth docutils literal"><span class="pre">find_student_group_classifications()</span></code></a> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>group_code</strong> – The code of the group.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the simplified response body
+or <code class="docutils literal"><span class="pre">None</span></code>, if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.find_student_group_classifications_simple_t2s">
+<code class="descname">find_student_group_classifications_simple_t2s</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>group_code: str = 'ALL'</em>, <em>semester: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.find_student_group_classifications_simple_t2s" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find student group classifications with a simplified response.</p>
+<p>See <a class="reference internal" href="key_features.html#simplified-operations"><span class="std std-ref">Simplified operations</span></a> section as well as
+<a class="reference internal" href="#classification.classification.Classification.find_student_group_classifications" title="classification.classification.Classification.find_student_group_classifications"><code class="xref py py-meth docutils literal"><span class="pre">find_student_group_classifications()</span></code></a> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>group_code</strong> – The code of the group.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the simplified response body
+or <code class="docutils literal"><span class="pre">None</span></code>, if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.get_all_notifications">
+<code class="descname">get_all_notifications</code><span class="sig-paren">(</span><em>username: str</em>, <em>count: int = None</em>, <em>page: int = None</em>, <em>lang: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.get_all_notifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all notifications.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> – The name of the user.</li>
+<li><strong>count</strong> – Count.</li>
+<li><strong>page</strong> – Page.</li>
+<li><strong>lang</strong> – Language tag.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.get_course_groups">
+<code class="descname">get_course_groups</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>semester: str = None</em>, <em>lang: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.get_course_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get course groups.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>lang</strong> – Language tag.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.get_editors">
+<code class="descname">get_editors</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.get_editors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get editors.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.get_functions">
+<code class="descname">get_functions</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.get_functions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all functions.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.get_settings">
+<code class="descname">get_settings</code><span class="sig-paren">(</span><em>semester: str = None</em>, <em>lang: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.get_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get settings.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>lang</strong> – Language tag.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.get_unread_notifications">
+<code class="descname">get_unread_notifications</code><span class="sig-paren">(</span><em>username: str</em>, <em>count: int = None</em>, <em>page: int = None</em>, <em>lang: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.get_unread_notifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all unread notifications.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> – The name of the user.</li>
+<li><strong>count</strong> – Count.</li>
+<li><strong>page</strong> – Page.</li>
+<li><strong>lang</strong> – Language tag.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">get()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.read_all_notifications">
+<code class="descname">read_all_notifications</code><span class="sig-paren">(</span><em>username: str</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.read_all_notifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark all notifications read.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> – The name of the user.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">put()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.read_notification">
+<code class="descname">read_notification</code><span class="sig-paren">(</span><em>username: str</em>, <em>id: int</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.read_notification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark a single notification as read.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> – The name of the user.</li>
+<li><strong>id</strong> – The identifier of the notification.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">put()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.refresh_token">
+<code class="descname">refresh_token</code><span class="sig-paren">(</span><em>fun</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.classification.Classification.refresh_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>A decorator used internally to refresh token.</p>
+<p>It is used with functions that make API calls.
+If it captures an error showing that token has
+expired, it tries to refresh it and then
+calls the function that caused it again.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.reinit_session">
+<code class="descname">reinit_session</code><span class="sig-paren">(</span><em>callback_host: str = 'localhost'</em>, <em>callback_port: int = 8080</em>, <em>force_new_token: bool = False</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#classification.classification.Classification.reinit_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Establishes a new session.</p>
+<p>Called by the constructor internally. Use it, for example,
+when you need to log in with different credentials
+(name and password).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>callback_host</strong> – See
+<a class="reference internal" href="#classification.classification.Classification.__init__" title="classification.classification.Classification.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a>.</li>
+<li><strong>callback_port</strong> – See
+<a class="reference internal" href="#classification.classification.Classification.__init__" title="classification.classification.Classification.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a>.</li>
+<li><strong>force_new_token</strong> – See
+<a class="reference internal" href="#classification.classification.Classification.__init__" title="classification.classification.Classification.__init__"><code class="xref py py-meth docutils literal"><span class="pre">__init__()</span></code></a>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.save_classification">
+<code class="descname">save_classification</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>classification_dto: typing.Union[classification.entities.ClassificationDto</em>, <em>typing.Dict[str</em>, <em>typing.Any]] = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.save_classification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves classification for the given course.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>classification_dto</strong> – The body for the request. Can be
+a plain Python dictionary or a
+<a class="reference internal" href="#classification.entities.ClassificationDto" title="classification.entities.ClassificationDto"><code class="xref py py-class docutils literal"><span class="pre">ClassificationDto</span></code></a>.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">post()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">json</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.save_my_settings">
+<code class="descname">save_my_settings</code><span class="sig-paren">(</span><em>user_settings_dto: typing.Union[classification.entities.UserSettingsDto</em>, <em>typing.Dict[str</em>, <em>bool]] = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.save_my_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save my settings.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_settings_dto</strong> – The body of the request. Can be
+a plain Python dictionary or a
+<a class="reference internal" href="#classification.entities.UserSettingsDto" title="classification.entities.UserSettingsDto"><code class="xref py py-class docutils literal"><span class="pre">UserSettingsDto</span></code></a>.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">put()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">json</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.save_student_classifications">
+<code class="descname">save_student_classifications</code><span class="sig-paren">(</span><em>course_code: str, student_classifications: typing.Union[typing.List[classification.entities.StudentClassificationPreviewDto], typing.List[typing.Dict[str, typing.Any]]] = None, semester: str = None, **kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.save_student_classifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save student classifications.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>student_classifications</strong> – The body of the request. Can be
+a list of plain Python dictionaries or of
+<a class="reference internal" href="#classification.entities.StudentClassificationPreviewDto" title="classification.entities.StudentClassificationPreviewDto"><code class="xref py py-class docutils literal"><span class="pre">StudentClassificationPreviewDto</span></code></a>.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">put()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code> and <code class="docutils literal"><span class="pre">json</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.save_student_classifications_simple_s2t">
+<code class="descname">save_student_classifications_simple_s2t</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>student_to_tasks: typing.Dict[str</em>, <em>typing.Dict[str</em>, <em>typing.Any]] = None</em>, <em>semester: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.save_student_classifications_simple_s2t" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simplified solution to save students’ classifications.</p>
+<p>See <a class="reference internal" href="key_features.html#simplified-operations"><span class="std std-ref">Simplified operations</span></a> section as well as
+<a class="reference internal" href="#classification.classification.Classification.save_student_classifications" title="classification.classification.Classification.save_student_classifications"><code class="xref py py-meth docutils literal"><span class="pre">save_student_classifications()</span></code></a> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>student_to_tasks</strong> – The body of the request.
+See <a class="reference internal" href="key_features.html#simplified-operations"><span class="std std-ref">Simplified operations</span></a> section
+for the format.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">put()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code> and <code class="docutils literal"><span class="pre">json</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.save_student_classifications_simple_t2s">
+<code class="descname">save_student_classifications_simple_t2s</code><span class="sig-paren">(</span><em>course_code: str</em>, <em>task_to_students: typing.Dict[str</em>, <em>typing.Dict[str</em>, <em>typing.Any]] = None</em>, <em>semester: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.save_student_classifications_simple_t2s" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simplified solution to save students’ classifications.</p>
+<p>See <a class="reference internal" href="key_features.html#simplified-operations"><span class="std std-ref">Simplified operations</span></a> section as well as
+<a class="reference internal" href="#classification.classification.Classification.save_student_classifications" title="classification.classification.Classification.save_student_classifications"><code class="xref py py-meth docutils literal"><span class="pre">save_student_classifications()</span></code></a> method.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>course_code</strong> – The code of the course.</li>
+<li><strong>task_to_students</strong> – The body of the request.
+See <a class="reference internal" href="key_features.html#simplified-operations"><span class="std std-ref">Simplified operations</span></a> section
+for the format.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">put()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code> and <code class="docutils literal"><span class="pre">json</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.save_student_course_settings">
+<code class="descname">save_student_course_settings</code><span class="sig-paren">(</span><em>user_course_settings_dto: typing.Union[classification.entities.UserCourseSettingsDto</em>, <em>typing.Dict[str</em>, <em>typing.Any]] = None</em>, <em>semester: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.save_student_course_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save student course settings.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_course_settings_dto</strong> – The body of the request. Can be
+a plain Python dictionary or a
+<a class="reference internal" href="#classification.entities.UserCourseSettingsDto" title="classification.entities.UserCourseSettingsDto"><code class="xref py py-class docutils literal"><span class="pre">UserCourseSettingsDto</span></code></a>.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">put()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code> and <code class="docutils literal"><span class="pre">json</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.save_teacher_course_settings">
+<code class="descname">save_teacher_course_settings</code><span class="sig-paren">(</span><em>user_course_settings_dto: typing.Union[classification.entities.UserCourseSettingsDto</em>, <em>typing.Dict[str</em>, <em>typing.Any]] = None</em>, <em>semester: str = None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.classification.Classification.save_teacher_course_settings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save teacher course settings.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_course_settings_dto</strong> – The body of the request. Can be
+a plain Python dictionary or a
+<a class="reference internal" href="#classification.entities.UserCourseSettingsDto" title="classification.entities.UserCourseSettingsDto"><code class="xref py py-class docutils literal"><span class="pre">UserCourseSettingsDto</span></code></a>.</li>
+<li><strong>semester</strong> – Semester identifier.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">put()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">params</span></code> and <code class="docutils literal"><span class="pre">json</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.try_validity">
+<code class="descname">try_validity</code><span class="sig-paren">(</span><em>expression_dto: typing.Union[classification.entities.ExpressionParseRequestDto</em>, <em>typing.Dict[str</em>, <em>typing.Any]] = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.try_validity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Try validity of an expression.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>expression_dto</strong> – The body for the request. Can be
+a plain Python dictionary or a
+<a class="reference internal" href="#classification.entities.ExpressionParseRequestDto" title="classification.entities.ExpressionParseRequestDto"><code class="xref py py-class docutils literal"><span class="pre">ExpressionParseRequestDto</span></code></a>.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">post()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take except for <code class="docutils literal"><span class="pre">json</span></code>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.unread_all_notifications">
+<code class="descname">unread_all_notifications</code><span class="sig-paren">(</span><em>username: str</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.unread_all_notifications" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark all notifications unread.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> – The name of the user.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">delete()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="classification.classification.Classification.unread_notification">
+<code class="descname">unread_notification</code><span class="sig-paren">(</span><em>username: str</em>, <em>id: int</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; typing.Union[typing.Dict[str, typing.Any], NoneType]<a class="headerlink" href="#classification.classification.Classification.unread_notification" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mark a single notification as unread.</p>
+<p>See <a class="reference external" href="https://rozvoj.fit.cvut.cz/evolution-dev/classification/api/v1/private/documentation">Classification portal API documentation</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>username</strong> – The name of the user.</li>
+<li><strong>id</strong> – The identifier of the notification.</li>
+<li><strong>**kwargs</strong> – Anything that <code class="xref py py-func docutils literal"><span class="pre">delete()</span></code> function
+from <a class="reference external" href="http://docs.python-requests.org/en/master/">Requests</a>
+library can take.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">On success, it returns the response body or <code class="docutils literal"><span class="pre">None</span></code>,
+if the body is empty.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">On failure, this method raises standard <a class="reference external" href="http://docs.python-requests.org/en/master/_modules/requests/exceptions/">Requests errors</a>.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-classification.classificationproxy">
+<span id="classification-proxy"></span><h2>Classification Proxy<a class="headerlink" href="#module-classification.classificationproxy" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="classification.classificationproxy.ClassificationParamsProxy">
+<em class="property">class </em><code class="descclassname">classification.classificationproxy.</code><code class="descname">ClassificationParamsProxy</code><span class="sig-paren">(</span><em>client_id</em>, <em>client_secret</em>, <em>callback_host='localhost'</em>, <em>callback_port=8080</em>, <em>force_new_token=False</em>, <em>session=None</em>, <em>course_code=None</em>, <em>semester=None</em>, <em>group_code=None</em>, <em>lang=None</em><span class="sig-paren">)</span><a class="headerlink" href="#classification.classificationproxy.ClassificationParamsProxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>This proxy class can store some parameters for API calls.</p>
+<p>You can pass parameters listed below either during the creation
+of this object or later via directly setting its attributes.
+Later you can omit them in methods calls. Or supply them anyway
+to override saved defaults.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This proxy can do everything that
+<a class="reference internal" href="#classification.classification.Classification" title="classification.classification.Classification"><code class="xref py py-class docutils literal"><span class="pre">Classification</span></code></a> class can.
+See its documentation for all the parameters. Here we describe
+only attributes not present in the default implementation.</p>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>Please note, that due to the fact that some parameters
+can be stored internally, they default to <code class="docutils literal"><span class="pre">None</span></code> now.
+However, they can still be needed to make API calls.
+are not compulsory in method calls. Keep in mind that:</p>
+<ul class="last simple">
+<li>If a required parameter is neither saved in proxy
+nor passed to a method explicitly,
+a <a class="reference internal" href="#classification.exceptions.MissingParameterError" title="classification.exceptions.MissingParameterError"><code class="xref py py-exc docutils literal"><span class="pre">MissingParameterError</span></code></a>
+will be raised.</li>
+<li>The order of arguments in methods of the plain client
+and its proxy version can be different.
+If you prefer to do without named arguments in Python,
+be sure to double check what you are
+passing to a method.</li>
+</ul>
+</div>
+<dl class="attribute">
+<dt id="classification.classificationproxy.ClassificationParamsProxy.classification">
+<code class="descname">classification</code><a class="headerlink" href="#classification.classificationproxy.ClassificationParamsProxy.classification" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – The implementation of the real library,
+created automatically.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="classification.classificationproxy.ClassificationParamsProxy.course_code">
+<code class="descname">course_code</code><a class="headerlink" href="#classification.classificationproxy.ClassificationParamsProxy.course_code" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – Stores the code of the course.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="classification.classificationproxy.ClassificationParamsProxy.semester">
+<code class="descname">semester</code><a class="headerlink" href="#classification.classificationproxy.ClassificationParamsProxy.semester" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – Stores the semester identifier.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="classification.classificationproxy.ClassificationParamsProxy.group_code">
+<code class="descname">group_code</code><a class="headerlink" href="#classification.classificationproxy.ClassificationParamsProxy.group_code" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – Stores the code of the group.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="classification.classificationproxy.ClassificationParamsProxy.lang">
+<code class="descname">lang</code><a class="headerlink" href="#classification.classificationproxy.ClassificationParamsProxy.lang" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – Stores the language tag.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-classification.entities">
+<span id="helper-classes-request-body-generation"></span><h2>Helper classes (request body generation)<a class="headerlink" href="#module-classification.entities" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="classification.entities.ClassificationDto">
+<em class="property">class </em><code class="descclassname">classification.entities.</code><code class="descname">ClassificationDto</code><span class="sig-paren">(</span><em>calculated: bool = None</em>, <em>classification_text_dtos: typing.List[ClassificationTextDtoType] = None</em>, <em>classification_type: str = None</em>, <em>course_code: str = None</em>, <em>expression: str = None</em>, <em>hidden: bool = None</em>, <em>id: int = None</em>, <em>identifier: str = None</em>, <em>index: int = None</em>, <em>lowercase_identifier: str = None</em>, <em>mandatory: bool = None</em>, <em>maximum_value: float = None</em>, <em>minimum_required_value: float = None</em>, <em>semester_code: str = None</em>, <em>value_type: str = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#classification.entities.ClassificationDto" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for making a request body.</p>
+<dl class="method">
+<dt id="classification.entities.ClassificationDto.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#classification.entities.ClassificationDto.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called internally to generate a dict body for request.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="classification.entities.ClassificationTextDto">
+<em class="property">class </em><code class="descclassname">classification.entities.</code><code class="descname">ClassificationTextDto</code><span class="sig-paren">(</span><em>identifier: str = None</em>, <em>name: str = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#classification.entities.ClassificationTextDto" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for making a request body.</p>
+<dl class="method">
+<dt id="classification.entities.ClassificationTextDto.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#classification.entities.ClassificationTextDto.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called internally to generate a dict body for request.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="classification.entities.ExpressionParseAllRequestDto">
+<em class="property">class </em><code class="descclassname">classification.entities.</code><code class="descname">ExpressionParseAllRequestDto</code><span class="sig-paren">(</span><em>expressions: typing.Any = None</em>, <em>variable_value_types: typing.Any = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#classification.entities.ExpressionParseAllRequestDto" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for making a request body.</p>
+<dl class="method">
+<dt id="classification.entities.ExpressionParseAllRequestDto.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#classification.entities.ExpressionParseAllRequestDto.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called internally to generate a dict body for request.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="classification.entities.ExpressionParseRequestDto">
+<em class="property">class </em><code class="descclassname">classification.entities.</code><code class="descname">ExpressionParseRequestDto</code><span class="sig-paren">(</span><em>expected_result_type: str = None</em>, <em>expression: str = None</em>, <em>variable_value_types: str = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#classification.entities.ExpressionParseRequestDto" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for making a request body.</p>
+<dl class="method">
+<dt id="classification.entities.ExpressionParseRequestDto.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#classification.entities.ExpressionParseRequestDto.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called internally to generate a dict body for request.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="classification.entities.StudentClassificationPreviewDto">
+<em class="property">class </em><code class="descclassname">classification.entities.</code><code class="descname">StudentClassificationPreviewDto</code><span class="sig-paren">(</span><em>classification_identifier: str = None</em>, <em>id: int = None</em>, <em>note: str = None</em>, <em>student_username: str = None</em>, <em>value: typing.Any = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#classification.entities.StudentClassificationPreviewDto" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for making a request body.</p>
+<dl class="method">
+<dt id="classification.entities.StudentClassificationPreviewDto.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#classification.entities.StudentClassificationPreviewDto.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called internally to generate a dict body for request.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="classification.entities.UserCourseSettingsDto">
+<em class="property">class </em><code class="descclassname">classification.entities.</code><code class="descname">UserCourseSettingsDto</code><span class="sig-paren">(</span><em>course_code: str = None</em>, <em>hidden: bool = None</em>, <em>silenced_notifications: bool = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#classification.entities.UserCourseSettingsDto" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for making a request body.</p>
+<dl class="method">
+<dt id="classification.entities.UserCourseSettingsDto.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#classification.entities.UserCourseSettingsDto.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called internally to generate a dict body for request.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="classification.entities.UserSettingsDto">
+<em class="property">class </em><code class="descclassname">classification.entities.</code><code class="descname">UserSettingsDto</code><span class="sig-paren">(</span><em>unsubscribe_emails: bool = None</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#classification.entities.UserSettingsDto" title="Permalink to this definition">¶</a></dt>
+<dd><p>A helper class for making a request body.</p>
+<dl class="method">
+<dt id="classification.entities.UserSettingsDto.to_dict">
+<code class="descname">to_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#classification.entities.UserSettingsDto.to_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called internally to generate a dict body for request.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-classification.exceptions">
+<span id="exceptions"></span><h2>Exceptions<a class="headerlink" href="#module-classification.exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="classification.exceptions.SavedTokenError">
+<em class="property">exception </em><code class="descclassname">classification.exceptions.</code><code class="descname">SavedTokenError</code><a class="headerlink" href="#classification.exceptions.SavedTokenError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error related to manipulations with the saved token.</p>
+<p>Raised when the file with token cannot be read
+or when it lacks some essential parts
+(like “access_token” and/or “refresh_token” fields).</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="classification.exceptions.AuthError">
+<em class="property">exception </em><code class="descclassname">classification.exceptions.</code><code class="descname">AuthError</code><a class="headerlink" href="#classification.exceptions.AuthError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error related to authorization process.</p>
+<p>Raised when, for example, the “code” field
+is missing from the GET callback during login.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="classification.exceptions.MissingParameterError">
+<em class="property">exception </em><code class="descclassname">classification.exceptions.</code><code class="descname">MissingParameterError</code><a class="headerlink" href="#classification.exceptions.MissingParameterError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error related to proxy.</p>
+<p>Raised when some compulsory parameter is missing
+from both its attribute and argument set
+of the method invocation.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><p>
+    <h1 class='logo'>
+        <a href="index.html">Home</a>
+    </h1>
+</p><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="getting_started.html" title="previous chapter">Getting started</a></li>
+  </ul></li>
+</ul>
+</div>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API documentation</a><ul>
+<li><a class="reference internal" href="#module-classification.classification">Classification: The main part</a></li>
+<li><a class="reference internal" href="#module-classification.classificationproxy">Classification Proxy</a></li>
+<li><a class="reference internal" href="#module-classification.entities">Helper classes (request body generation)</a></li>
+<li><a class="reference internal" href="#module-classification.exceptions">Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Boris Laskov.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.7</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/api_doc.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
