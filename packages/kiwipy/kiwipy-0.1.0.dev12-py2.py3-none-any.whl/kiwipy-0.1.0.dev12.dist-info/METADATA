@@ -1,0 +1,61 @@
+Metadata-Version: 2.0
+Name: kiwipy
+Version: 0.1.0.dev12
+Summary: A python remote communications library
+Home-page: https://github.com/muhrin/kiwipy.git
+Author: Martin Uhrin
+Author-email: martin.uhrin@gmail.com
+License: GPLv3 and MIT, see LICENSE file
+Description-Content-Type: UNKNOWN
+Keywords: communication messaging rpc broadcast
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: MIT License
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Dist: tornado
+Requires-Dist: future
+Requires-Dist: backports.tempfile; python_version<"3.2"
+Requires-Dist: enum34; python_version<"3.4"
+Requires-Dist: typing; python_version<"3.5"
+Provides-Extra: rmq
+Requires-Dist: pika; extra == 'rmq'
+Requires-Dist: tornado; extra == 'rmq'
+Requires-Dist: pyyaml; extra == 'rmq'
+Provides-Extra: testing
+Requires-Dist: pytest; extra == 'testing'
+Requires-Dist: ipython; extra == 'testing'
+
+# kiwipy
+
+
+kiwipy is a library that makes remote messaging EASY.  So far, there is support for:
+
+* RPC
+* Broadcast
+* Task queue messages
+
+Let's dive in.
+
+## RPC
+
+
+```python
+from kiwipy.rmq import *
+communicator = RmqCommunicator(RmqConnector('amqp://localhost'))
+
+def square(x):
+    return x * x
+
+# Register an RPC subscriber with the name square
+communicator.add_rpc_subscriber(square, 'square')
+
+# Send an RPC message
+communicator.rpc_send_and_wait('square', 10)
+>>> 100
+```
+
+
