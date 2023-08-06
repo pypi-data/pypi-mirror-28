@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/bundle.js"></script>
+  <title>WSPR</title>
+ </head>
+ <body>
+  <div id="loading-banner">
+   <div class="jumbotron jumbotron-fluid col-9">
+    <h1 class="display-3">Getting WSPR ready...</h1>
+    <p class="lead">We're loading all the data we need to work.</p>
+   </div>
+  </div>
+  <div id="upgrade-dialog" class="modal fade" tabindex="-1">
+   <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h4>Upgrade in progress...</h4>
+     </div>
+     <div class="modal-body">
+      <pre id="upgrade-log"></pre>
+     </div>
+    </div>
+   </div>
+  </div>
+  <div id="lost-contact" class="modal fade" tabindex="-1">
+   <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h4>Lost contact with hardware.</h4>
+     </div>
+     <div class="modal-body">
+      <p>The hardware attached to this server is not sending heartbeat messages. This usually indicates that it is powered off or otherwise non-functional. Refresh your browser once you believe the problem is solved.
+     </div>
+    </div>
+   </div>
+  </div>
+  <div id="callsign-extra-dialog" class="modal fade" tabindex="-1">
+   <div class="modal-dialog">
+    <div class="modal-content">
+     <div class="modal-header">
+      <h4>Spot Query Settings</h4>
+     </div>
+     <div class="modal-body">
+      <form id="callsign-extra-form">
+       <div class="form-group">
+        <label for="callsign-extra-band">Band</label>
+        <select name="band" id="callsign-extra-band" class="form-control">
+         <option value="All">All Bands</option>
+         <option value="-1">LF</option>
+         <option value="0">MF</option>
+         <option value="1">160m</option>
+         <option value="3">80m</option>
+         <option value="5">60m</option>
+         <option value="7">40m</option>
+         <option value="10">30m</option>
+         <option value="14">20m</option>
+         <option value="18">17m</option>
+         <option value="21">15m</option>
+         <option value="24">12m</option>
+         <option value="28">10m</option>
+         <option value="50">6m</option>
+         <option value="70">4m</option>
+         <option value="144">2m</option>
+         <option value="432">70cm</option>
+         <option value="1296">23cm</option>
+        </select>
+       </div>
+       <div class="form-group">
+	<label for="callsign-extra-timelimit">Time Limit</label>
+	<select name="timelimit" id="callsign-extra-timelimit" class="form-control">
+	 <option value="1209600">2 Weeks</option>
+	 <option value="604800">1 Week</option>
+	 <option value="86400">24 Hours</option>
+	 <option value="43200">12 Hours</option>
+	 <option value="3600">1 Hour</option>
+	</select>
+       </div>
+       <div class="form-group">
+	<label for="callsign-extra-sortby">Sort Entries By</label>
+	<select name="sortby" id="callsign-extra-sortby" class="form-control">
+	 <option value="date">Timestamp</option>
+	 <option value="distance">Distance</option>
+	</select>
+       </div>
+       <div class="form-group">
+        <label for="callsign-extra-sortrev">Reverse Order</label>
+	<div class="checkbox" id="callsign-extra-sortrev">
+ 	 <label>
+	  <input name="sortrev" type="checkbox" checked="checked">
+          Reverse ordering of results.
+	 </label>
+        </div>
+       </div>
+       <div class="form-group">
+        <label for="callsign-extra-unique">Unique</label>
+	<div class="checkbox" id="callsign-extra-unique">
+ 	 <label>
+	  <input name="unique" type="checkbox">
+          Only report unique callsign/reporter combinations.
+	 </label>
+        </div>
+       </div>
+       <button type="submit" class="btn btn-primary">OK</button>
+      </form>
+     </div>
+    </div>
+   </div>
+  </div>
+  <nav class="navbar navbar-default">
+   <div class="navbar-brand">WSPR</div>
+   <ul class="nav navbar-nav">
+    <li><a href="#/table"><span class="glyphicon glyphicon-list"></span> Spot Table</a>
+    <li><a href="#/spot-map"><span class="glyphicon glyphicon-globe"></span> Great Circle Map</a>
+    <li><a href="#/qth-map"><span class="glyphicon glyphicon-map-marker"></span> Map</a>
+    <li><a href="#/config"><span class="glyphicon glyphicon-check"></span> Configuration</a>
+   </ul>
+   <form
+    id="callsigns-form"
+    class="navbar-form"
+    role="search"
+    onsubmit="event.preventDefault();"
+   >
+    <input
+     id="callsign-input1"
+     type="text"
+     style="text-transform:uppercase"
+     class="form-control"
+     placeholder="Callsign #1"
+    >
+    <span id="nickname"></span>
+    <input
+     id="callsign-input2"
+     type="text"
+     style="text-transform:uppercase"
+     class="form-control"
+     placeholder="Callsign #2"
+    >
+    <button type="button" id="callsign-extra-button" class="btn btn-default">
+     <span class="glyphicon glyphicon-cog"></span>
+    </button>
+    <button
+     id="callsign-submit"
+     type="submit"
+     class="btn btn-primary"
+    ><span class="glyphicon glyphicon-search"></span> Search</button>
+   </form>
+  </nav>
+  <div id="spot-table-page" class="page">
+   <table class="table table-striped">
+    <thead>
+     <tr>
+      <th>UTC</th>
+      <th>Call</th>
+      <th>Frequency (MHz)</th>
+      <th>SNR</th>
+      <th>Drift</th>
+      <th>Grid</th>
+      <th>Power (W)</th>
+      <th>Reporter</th>
+      <th>Reporter Grid</th>
+      <th>Distance (km)</th>
+     </tr>
+    </thead>
+    <tbody id="spot-table">
+    </tbody>
+   </table>
+  </div>
+  <div id="spot-map-page" class="page">
+   <svg id="spot-map"></svg>
+  </div>
+  <div id="qth-map-page" class="page">
+   <div id="qth-map"></div>
+  </div>
+  <div id="config-page" class="page"><div class="container">
+   <h1>Configuration</h1>
+   <div class="col-lg-3">
+    <h2>Details</h2>
+    <form id="config-form" autocomplete="off">
+     <div class="form-group">
+      <label for="config-callsign">Callsign</label>
+      <input required data-callsign name="callsign" type="text" id="config-callsign" class="form-control" style="text-transform: uppercase">
+      <div class="help-block with-errors"></div>
+     </div>
+     <div class="form-group">
+      <label for="config-locator">
+       Locator (Use GPS: <input name="gps" data-validate="false" type="checkbox">)
+      </label>
+      <input required data-locator name="locator" type="text" id="config-locator" class="form-control">
+      <div class="help-block with-errors"></div>
+     </div>
+     <div class="form-group">
+      <label for="config-power">Power (dBm)</label>
+      <select id="config-power" name="power" class="form-control">
+       <option value="0">0 (1mW)</option>
+       <option value="3">3 (2mW)</option>
+       <option value="7">7 (5mW)</option>
+       <option value="10">10 (10mW)</option>
+       <option value="13">13 (20mW)</option>
+       <option value="17">17 (50mW)</option>
+       <option value="20">20 (100mW)</option>
+       <option value="23">23 (200mW)</option>
+       <option value="27">27 (500mW)</option>
+       <option value="30">30 (1W)</option>
+       <option value="33">33 (2W)</option>
+       <option value="37">37 (5W)</option>
+       <option value="40">40 (10W)</option>
+       <option value="43">43 (20W)</option>
+       <option value="47">47 (50W)</option>
+       <option value="50">50 (100W)</option>
+       <option value="53">53 (200W)</option>
+       <option value="57">57 (500W)</option>
+       <option value="60">60 (1kW)</option>
+      </select>
+     </div>
+     <div class="form-group">
+      <label for="config-tx_percentage">TX ratio (%)</label>
+      <select id="config-tx_percentage" name="tx_percentage" class="form-control">
+       <option>0</option>
+       <option>10</option>
+       <option>20</option>
+       <option>30</option>
+       <option>40</option>
+       <option>50</option>
+       <option>60</option>
+       <option>70</option>
+       <option>80</option>
+       <option>90</option>
+       <option>100</option>
+      </select>
+     </div>
+     <input
+      name="bandhop"
+      id="config-bandhop"
+      type="hidden"
+      value="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0"
+     />
+     <input
+      name="tx_disable"
+      id="config-tx_disable"
+      type="hidden"
+      value="0,0,0,0,0,0,0,0,0,0,0,0"
+     />
+     <button id="config-submit" type="submit" class="btn btn-success"><span class="glyphicon glyphicon-saved"></span> Save Configuration</button>
+    </form>
+    </div>
+    <div class="col-lg-6">
+     <h2>Bandhop</h2>
+     <div id="bandhopper"></div>
+     <p>
+Use this to configure which band is active at a given time of day.
+The "TX" button may be toggled to disable transmission on that band.
+     </p>
+    </div>
+    <div class="col-lg-3">
+    <h2>Status</h2>
+    <table class="table">
+     <tbody>
+      <tr>
+       <th scope="row">Software Version</th>
+       <td class="text-right"><code id="config-software-version"></code></td>
+      </tr>
+      <tr>
+       <th scope="row">Firmware Version</th>
+       <td class="text-right"><code id="config-firmware-version"></code></td>
+      </tr>
+      <tr>
+       <th scope="row">Hardware Status</th>
+       <td class="text-right"><code id="config-status"></code></td>
+      </tr>
+      <tr>
+       <th scope="row">Hostname</th>
+       <td class="text-right"><code id="config-hostname"></code></td>
+      </tr>
+      <tr>
+       <th scope="row">IP Address</th>
+       <td class="text-right"><code id="config-ip"></code></td>
+      </tr>
+      <tr>
+       <th scope="row">GPS Locator</th>
+       <td class="text-right"><code id="config-gps"></code></td>
+      </tr>
+     </tbody>
+    </table> 
+    <h2>Upgrades</h2>
+    <div class="btn-group btn-group-vertical">
+     <div class="btn-group">
+      <button id="upgrade-software" class="btn btn-danger">
+       <span class="glyphicon glyphicon-circle-arrow-up"></span> Upgrade Software
+      </button>
+     </div>
+     <div class="btn-group">
+      <button id="upgrade-firmware" class="btn btn-danger">
+       <span class="glyphicon glyphicon-circle-arrow-up"></span> Upgrade Firmware
+      </button>
+    </div>
+   </div>
+  </div></div>
+ </body>
+</html>
