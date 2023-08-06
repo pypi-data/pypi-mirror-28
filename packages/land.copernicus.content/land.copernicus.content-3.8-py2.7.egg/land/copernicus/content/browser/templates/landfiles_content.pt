@@ -1,0 +1,60 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US"
+      lang="en-US"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+
+<body>
+  <metal:description fill-slot="content-description" />
+
+  <metal:content-core fill-slot="content-core">
+    <metal:main_macro define-macro="content-core">
+      <h2 i18n:translate="">Land files listing</h2>
+      <p>Use the table below to manage individual land files.</p>
+      <p>
+        <a class="btn btn-default" style="color: white" href="${python:context.absolute_url()}/add-landfile">Add landfile</a>
+      </p>
+      <table class="listing">
+        <thead>
+          <tr>
+            <th>Shortname</th>
+            <th>Title</th>
+            <th>Size</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tal:landfile repeat="landfile python:view.landfiles">
+            <tr>
+              <td>${python:landfile.shortname}</td>
+              <td>${python:landfile.title}</td>
+              <td>${python:landfile.fileSize}</td>
+              <td>
+                <a href="${python:context.absolute_url()}/edit-landfile?form.widgets.shortname=${python:landfile.shortname}">edit</a>
+                <a href="${python:context.absolute_url()}/delete-landfile?form.widgets.shortname=${python:landfile.shortname}">delete</a>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <dl>
+                  <dt>Description</dt>
+                  <dd>${python:landfile.description}</dd>
+                  <dt>URL</dt>
+                  <dd><a href="${python:landfile.remoteUrl}">${python:view.relative_url(landfile.remoteUrl)}</a></dd>
+                </dl>
+              </td>
+              <td colspan="2" tal:define="categories python:landfile.fileCategories">
+                <dl tal:condition="categories">
+                  <tal:categ tal:repeat="categ categories">
+                    <dt>${python:categ[0]}</dt>
+                    <dd>${python:categ[1]}</dd>
+                  </tal:categ>
+                </dl>
+              </td>
+            </tr>
+          </tal:landfile>
+        </tbody>
+      </table>
+    </metal:main_macro>
+  </metal:content-core>
+</body>
+</html>
