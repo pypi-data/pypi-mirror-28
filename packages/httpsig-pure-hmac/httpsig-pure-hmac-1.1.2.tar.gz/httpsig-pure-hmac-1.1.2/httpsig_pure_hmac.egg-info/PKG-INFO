@@ -1,0 +1,144 @@
+Metadata-Version: 1.1
+Name: httpsig-pure-hmac
+Version: 1.1.2
+Summary: Fork of httpsig. HMAC only, no RSA, no PyCrypto, pure Python.
+Home-page: https://github.com/alexanderlukanin13/httpsig-pure-hmac
+Author: Alexander Lukanin
+Author-email: alexander.lukanin.13@gmail.com
+License: MIT
+Description-Content-Type: UNKNOWN
+Description: httpsig-pure-hmac
+        =================
+        
+        .. image:: https://travis-ci.org/alexanderlukanin13/httpsig-pure-hmac.svg?branch=master
+            :target: https://travis-ci.org/alexanderlukanin13/httpsig-pure-hmac
+        
+        Fork of Adam Knight's httpsig_, providing the same functionality, except that:
+        
+        * RSA is not supported.
+        
+        * PyCrypto is not required.
+        
+        This package is intended as a lightweight option for HMAC-only clients.
+        
+        .. _httpsig: https://pypi.python.org/pypi/httpsig
+        
+        Requirements
+        ------------
+        
+        * Python 2.7, 3.3+
+        
+        * six
+        
+        Usage
+        -----
+        
+        .. code:: python
+        
+            import httpsig_pure_python as httpsig
+        
+        See `original package`_ for more info.
+        
+        .. _`original package`: https://pypi.python.org/pypi/httpsig
+        
+        
+        httpsig Changes
+        ---------------
+        
+        1.1.2 (2015-Feb-11)
+        -------------------
+        
+        * HMAC verification is now constant-time.
+        
+        1.1.1 (2015-Feb-11)
+        -------------------
+        
+        * (pulled)
+        
+        1.1.0 (2014-Jul-24)
+        -------------------
+        
+        * Changed "(request-line)" to "(request-target)" to comply with Draft 3.
+        
+        1.0.3 (2014-Jul-09)
+        -------------------
+        
+        * Unified the default signing algo under one setting. Setting httpsig.sign.DEFAULT_SIGN_ALGORITHM changes it for all future instances.
+        * Handle invalid params a little better.
+        
+        1.0.2 (2014-Jul-02)
+        -------------------
+        
+        * Ensure we treat headers as ASCII strings.
+        * Handle a case in the authorization header where there's garbage (non-keypairs) after the method name.
+        
+        1.0.1 (2014-Jul-02)
+        ~~~~~~~~~~~~~~~~~~~
+        
+        * Python 3 support (2.7 + 3.2-3.4)
+        * Updated tox and Travis CI configs to test the supported Python versions.
+        * Updated README.
+        
+        1.0.0 (2014-Jul-01)
+        ~~~~~~~~~~~~~~~~~~~
+        * Written against http://tools.ietf.org/html/draft-cavage-http-signatures-02
+        * Added "setup.py test" and tox support.
+        * Added sign/verify unit tests for all currently-supported algorithms.
+        * HeaderSigner and HeaderVerifier now share the same message-building logic.
+        * The HTTP method in the message is now properly lower-case.
+        * Resolved unit test failures.
+        * Updated Verifier and HeaderVerifier to handle verifying both RSA and HMAC sigs.
+        * Updated versioneer.
+        * Updated contact/author info.
+        * Removed stray keypair in test dir.
+        * Removed SSH agent support.
+        * Removed suport for reading keyfiles from disk as this is a huge security hole if this is used in a server framework like drf-httpsig.
+        
+        1.0b1 (2014-Jun-23)
+        ~~~~~~~~~~~~~~~~~~~~~~
+        * Removed HTTP version from request-line, per spec (breaks backwards compatability).
+        * Removed auto-generation of missing Date header (ensures client compatability).
+        
+        
+        http-signature (previous)
+        -------------------------
+        
+        0.2.0 (unreleased)
+        ~~~~~~~~~~~~~~~~~~
+        
+        * Update to newer spec (incompatible with prior version).
+        * Handle `request-line` meta-header.
+        * Allow secret to be a PEM encoded string.
+        * Add test cases from spec.
+        
+        0.1.4 (2012-10-03)
+        ~~~~~~~~~~~~~~~~~~
+        
+        * Account for ssh now being re-merged into paramiko: either package is acceptable (but paramiko should ideally be >= 1.8.0)
+        
+        0.1.3 (2012-10-02)
+        ~~~~~~~~~~~~~~~~~~
+        
+        * Stop enabling `allow_agent` by default
+        * Stop requiring `ssh` package by default -- it is imported only when `allow_agent=True`
+        * Changed logic around ssh-agent: if one key is available, don't bother with any other authentication method
+        * Changed logic around key file usage: if decryption fails, prompt for password
+        * Bug fix: ssh-agent resulted in a nonsensical error if it found no correct keys (thanks, petervolpe)
+        * Introduce versioneer.py
+        
+Keywords: http,authorization,api,web
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
