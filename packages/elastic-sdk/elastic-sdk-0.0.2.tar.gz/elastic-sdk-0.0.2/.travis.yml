@@ -1,0 +1,21 @@
+language: python
+python:
+  - '3.5'
+  - '3.6'
+
+services:
+  - elasticsearch
+
+install:
+  - pip install tox tox-travis
+
+before_script:
+  - sleep 5
+
+script:
+  - curl 127.0.0.1:9200
+  - tox
+
+after_success:
+  - pip install codecov
+  - codecov
