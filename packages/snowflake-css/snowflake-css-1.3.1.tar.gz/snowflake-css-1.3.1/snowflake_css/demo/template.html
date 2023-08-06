@@ -1,0 +1,97 @@
+{# Copyright (c) 2016 Pietro Albini <pietro@pietroalbini.org>
+ #
+ # Permission is hereby granted, free of charge, to any person obtaining a copy
+ # of this software and associated documentation files (the "Software"), to
+ # deal in the Software without restriction, including without limitation the
+ # rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+ # sell copies of the Software, and to permit persons to whom the Software is
+ # furnished to do so, subject to the following conditions:
+ #
+ # The above copyright notice and this permission notice shall be included in
+ # all copies or substantial portions of the Software.
+ #
+ # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ # AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+ # IN THE SOFTWARE.
+ #}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Snowflake demo</title>
+        <style>{{ css }}</style>
+        <style>{{ css_demo }}</style>
+    </head>
+    <body>
+        <header class="navbar sticky">
+            <ul class="left">
+                <li>Snowflake CSS</li>
+                <li><a href="#" class="active">Demo</a></li>
+                <li><a href="https://github.com/pietroalbini/snowflake-css">
+                    Source code
+                </a></li>
+            </ul>
+            <ul class="right">
+                <li><a href="https://www.pietroalbini.org">Author</a></li>
+            </ul>
+        </header>
+        <div class="sidebar-container">
+            <label for="toggle-sidebar">Contents</label>
+            <input type="checkbox" id="toggle-sidebar">
+
+            <div class="sidebar">
+                <ul class="nav">
+                    <li><a href="#">Go to the top</a></li>
+                    <li class="section">Components</li>
+                    {% for demo in demos %}
+                    <li>
+                        <a href="#{{ demo.name }}">
+                            {{ demo.name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="content">
+                <div class="wrapper">
+                    <h1>Snowflake demo</h1>
+                    <p>
+                        This page contains an example of the various Snowflake
+                        components.
+                    </p>
+                    {% for demo in demos %}
+                        <a name="{{ demo.name }}"></a>
+                        <h2 class="demo-title">
+                            Component "{{ demo.name }}"
+                        </h2>
+                        <div>
+                            {{ demo.src }}
+                        </div>
+                    {% endfor %}
+
+                    <footer class="footer">
+                        <ul class="inline-list">
+                            <li>
+                                Demo for Snowflake by
+                                <a href="https://www.pietroalbini.org">
+                                    Pietro Albini
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://github.com/pietroalbini/snowflake-css">
+                                    Source code
+                                </a>
+                            </li>
+                        </ul>
+                    </footer>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
