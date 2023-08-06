@@ -1,0 +1,97 @@
+Metadata-Version: 2.0
+Name: wagtailemoji
+Version: 1.0.2
+Summary: Add emoji to StreamField.
+Home-page: https://github.com/alexgleason/wagtailemoji
+Author: Alex Gleason
+Author-email: alex@alexgleason.me
+License: MIT
+Keywords: development
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Requires-Dist: Django (>=1.7.1)
+Requires-Dist: wagtail (>=1.4.0)
+
+Wagtail Emoji :tada:
+====================
+:clap: Add [NotoEmoji](https://github.com/googlei18n/noto-emoji) icons to StreamField. :bomb: :gun: :smoking: :knife:
+
+![Screenshot](screenshot.png)
+
+:warning: **IMPORTANT: JUST BECAUSE YOU CAN DOESN'T MEAN YOU SHOULD.**
+
+Install
+-------
+
+    pip install wagtailemoji
+
+Then add `wagtailemoji` to your installed apps.
+
+Usage
+-----
+### StreamField
+Add emoji to StreamField [the regular way](http://docs.wagtail.io/en/latest/topics/streamfield.html#basic-block-types), just set `icon="emoji-something"`. Reference [the full list](https://github.com/alexgleason/wagtailemoji/blob/master/wagtailemoji/static_src/wagtailemoji/scss/wagtailemoji.scss).
+
+### wagtailmodeladmin
+[wagtailmodeladmin](https://github.com/rkhleics/wagtailmodeladmin) is supported if you're using Wagtail 1.4 or above. Similar to StreamField, just set `icon="emoji-something"` on your menu item.
+
+### Hallo plugins
+You can use emoji on custom Hallo buttons by setting the `icon` option to `icon icon-emoji-something`.
+
+```javascript
+button.hallobutton({
+  label: "Skull",
+  icon: 'icon icon-emoji-skull',
+});
+```
+
+### Other parts of the admin
+You can include icons anywhere in the admin with:
+
+```html
+<i class="icon icon-emoji-something"></i>
+```
+
+In Wagtail 1.3.x and below you can only use icons on the page editor screen.
+
+### On the front-end
+You can also import this on the front-end, if you want.
+
+```html
+{% load staticfiles %}
+
+<link rel="stylesheet" href="{% static 'wagtailemoji/css/wagtailemoji.css' %}">
+```
+
+Then include icons anywhere on the front-end with:
+
+```html
+<i class="icon icon-emoji-something"></i>
+```
+
+### Using wagtailemoji as an optional dependency
+If you want to distribute a Wagtail plugin with emoji, you can use this package as an optional dependency by checking if it's installed in Django, and falling back otherwise.
+
+```python
+from django.conf import settings
+from wagtail.wagtailcore.blocks import StructBlock
+
+
+class BlockquoteBlock(StructBlock):
+    quote = TextBlock()
+    author = TextBlock()
+
+    class Meta:
+        if 'wagtailemoji' in settings.INSTALLED_APPS:
+            icon = 'emoji-skull'
+```
+
+(in this case, the fallback is to do nothing)
+
+
