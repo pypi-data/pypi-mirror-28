@@ -1,0 +1,22 @@
+<configure xmlns="http://namespaces.zope.org/zope"
+           xmlns:monkey="http://namespaces.plone.org/monkey"
+           xmlns:zcml="http://namespaces.zope.org/zcml">
+
+    <include package="Products.CMFPlone" file="meta.zcml"
+             zcml:condition="installed Products.CMFPlone"/>
+
+    <include package="collective.monkeypatcher" />
+    <monkey:patch
+        description="No events fired by VHM so we have to monkeypatch"
+        class="Products.SiteAccess.VirtualHostMonster.VirtualHostMonster"
+        original="set_map"
+        replacement=".vhm.set_map"
+        preserveOriginal="True"
+        />
+
+    <subscriber
+        for="zope.processlifetime.IDatabaseOpenedWithRoot"
+        handler=".startup.notifyStartup"
+        />
+
+</configure>
