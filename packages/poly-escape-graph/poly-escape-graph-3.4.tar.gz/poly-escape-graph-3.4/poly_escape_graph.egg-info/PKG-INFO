@@ -1,0 +1,37 @@
+Metadata-Version: 1.2
+Name: poly-escape-graph
+Version: 3.4
+Summary: Python graph oriented micro services network in order to implement a scalable plugins architecture
+Home-page: https://mjollnir.unice.fr/bitbucket/scm/pee/private.git
+Author: PEE
+Author-email: UNKNOWN
+License: Unlicense
+Description-Content-Type: UNKNOWN
+Description: ============
+        Poly Graph
+        ============
+        
+        Quickstart
+        ----------
+        
+        Install poly-escape-graph::
+        
+            pip install poly-escape-graph
+        
+        
+        Then use it in a project::
+        
+            from poly_escape_graph import Node
+            from flask import request, jsonify
+        
+            class MyNode(Node):
+                def listen(self):
+                    data: dict = request.json
+                    # process data
+                    return jsonify(status=OK)
+        
+            MyNode().run(5001)
+        
+        
+Platform: UNKNOWN
+Requires-Python: >=3.6, <4
