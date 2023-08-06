@@ -1,0 +1,32 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      tal:omit-tag=""
+      tal:define="items view/items">
+  <div class="portletCarousel">
+
+
+    <dl class="portlet">
+      <dt class="portletHeader" tal:condition="not:view/omit_border">
+        <span class="portletTopLeft"></span>
+        <span class="tile" tal:content="view/title" />
+        <span class="portletTopRight"></span>
+      </dt>
+      <dt tal:condition="view/omit_border"></dt>
+
+      <tal:block repeat="item items">
+         <metal:block use-macro="item/@@carousel-renderer/macros/carouselItem"/>
+      </tal:block>
+    </dl>
+    <ul>
+      <tal:block repeat="item items">
+         <metal:block use-macro="item/@@carousel-renderer/macros/carouselTitle"/>
+      </tal:block>
+    </ul>
+
+    <script type="text/javascript" tal:content="view/script" />
+
+    <span class="showPrevious">
+    </span>
+  </div>
+</html>
