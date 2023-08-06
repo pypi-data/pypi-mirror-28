@@ -1,0 +1,84 @@
+@mixin heading-cell() {
+  border-bottom: 1px solid $color-primary;
+  font-weight: bold;
+}
+
+@mixin dragging-cell() {
+  @include auto-text-color();
+  background-color: $color-primary;
+  a {
+    @include auto-link-color();
+  }
+}
+
+table {
+  width: 100%;
+  margin-bottom: $margin-vertical;
+  border-radius: $border-radius-primary;
+}
+
+caption {
+  background-color: $color-gray-light;
+  padding: $padding-vertical $padding-horizontal;
+  font-weight: bold;
+}
+
+tr {
+  td {
+    border-bottom: 1px solid $color-gray-dark;
+  }
+}
+
+td, th {
+  text-align: left;
+  padding: $padding-vertical $padding-horizontal $padding-vertical $padding-horizontal;
+  vertical-align: top;
+
+  &:last-child {
+    padding-right: 0;
+  }
+}
+
+tbody tr {
+  th {
+    text-align: right;
+    border-right: 1px solid $color-primary;
+  }
+}
+
+thead tr, .mceItemTable thead tr {
+  th, td {
+    @include heading-cell();
+  }
+}
+
+tfoot tr {
+  th, td {
+    @include heading-cell();
+  }
+}
+
+table.listing tbody {
+  td {
+    border-color: $color-gray-light;
+  }
+  tr {
+    &.dragindicator td {
+      @include dragging-cell();
+    }
+    &:nth-child(even) {
+      &.dragindicator td {
+        @include dragging-cell();
+      }
+      td {
+        background-color: $color-gray-light;
+      }
+    }
+  }
+}
+
+table.invisible tbody {
+  td {
+    border: 0;
+  }
+}

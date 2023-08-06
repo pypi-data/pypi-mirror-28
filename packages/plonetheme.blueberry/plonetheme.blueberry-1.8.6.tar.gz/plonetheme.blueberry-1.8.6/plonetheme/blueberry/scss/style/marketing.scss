@@ -1,0 +1,134 @@
+$color-header: $color-gray-light !default;
+$color-top-section: $color-primary !default;
+
+@include declare-variables(
+  $color-header,
+  $color-top-section);
+
+.blueberry-marketing {
+
+  #service-navigation {
+    @include cell();
+    @include gridposition(4);
+    @include gridwidth(12);
+
+    > ul {
+      @include list-horizontal($direction: rtl);
+
+      > li > a {
+        @include auto-link-color($color-top-section);
+      }
+    }
+  }
+
+  #anon-personalbar > a {
+    @include auto-link-color($color-header)
+  }
+
+  #offcanvas-content {
+    @include screen-large() {
+      float: none;
+    }
+    float: left;
+  }
+
+  .masthead {
+    @include screen-large() {
+      background-color: $color-header;
+    }
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: $zindex-dropdown + $zindex-header;
+    box-shadow: $box-shadow-secondary;
+  }
+
+  .documentFirstHeading {
+    display: none;
+  }
+
+  #header {
+    @include screen-large() {
+      @include row();
+      display: block;
+    }
+    padding-top: $padding-vertical;
+    display: none;
+  }
+
+  .dachmarke {
+    @include cell();
+    @include gridposition(0);
+    @include gridwidth(4);
+  }
+
+  #portal-searchbox {
+    display: none;
+  }
+
+  #columns {
+    margin-top: 0;
+    padding: 0;
+  }
+
+  .logo {
+    @include cell();
+    @include gridposition(0);
+    @include gridwidth(16);
+  }
+
+  .navigation {
+    margin: 0;
+    border: 0;
+    @include cell();
+    @include screen-small() {
+      @include gridposition(6);
+      @include gridwidth(10);
+    }
+  }
+
+  #portal-logo {
+    position: static;
+    float: none;
+    left: auto;
+    margin-left: 0;
+    width: auto;
+  }
+
+  #portal-globalnav {
+    float: right;
+
+    > li {
+
+      &.selected > a {
+        color: $color-primary;
+      }
+
+      > a {
+        border: 0;
+        font-size: $font-size-medium;
+        &:hover {
+          color: $color-primary;
+        }
+      }
+    }
+  }
+
+  #container {
+    margin-top: $margin-vertical;
+  }
+
+  #footer {
+    margin-top: 0;
+    padding-top: $margin-vertical;
+  }
+
+  #ftw-footer {
+    padding-top: 0;
+  }
+
+  #portal-top .actionMenuHeader > a {
+    @include auto-link-color($color-header);
+  }
+
+}

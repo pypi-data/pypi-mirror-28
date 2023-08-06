@@ -1,0 +1,75 @@
+$mark-broken-links: true !default;
+
+@include declare-variables(
+  text-color-light,
+  mark-broken-links);
+
+ul.listTypePlain {
+  @include list();
+}
+
+.discreet {
+  color: $color-text-light;
+  font-size: $font-size-small;
+}
+
+.hiddenStructure {
+  @include hidden-structure();
+}
+
+dl.collapsible {
+  dt {
+    cursor: pointer;
+  }
+  dd {
+    display: none;
+  }
+  &.expandedBlockCollapsible dd {
+    display: block;
+  }
+}
+
+.documentByLine {
+  color: $color-text-light;
+  margin-bottom: $margin-vertical;
+}
+
+#viewlet-below-content {
+  margin-top: $margin-vertical;
+}
+
+#category.documentByLine {
+  .separator {
+    display: none;
+  }
+  a {
+    @include label($color-primary);
+  }
+}
+
+
+@if $mark-broken-links {
+  a.broken-link {
+    outline: 2px dotted $color-danger;
+    @extend .fa-icon;
+    @extend .fa-exclamation-triangle;
+    &:before {
+      color: $color-danger;
+    }
+  }
+}
+
+iframe {
+  border: none;
+}
+
+#folderlisting-main-table #listing-table .draggable.draggingHook {
+  @extend .fa-icon;
+  @extend .fa-bars;
+  font-size: 0;
+  vertical-align: middle;
+  &:before {
+    vertical-align: middle;
+    font-size: $font-size-medium;
+  }
+}

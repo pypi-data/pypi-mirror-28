@@ -1,0 +1,57 @@
+#portal-personaltools-wrapper .actionMenu {
+  // We need to handle the personaltools menu diffrent becuase its always above the searchbar.
+  z-index: $zindex-dropdown + 10;
+
+  a:before {
+    height: 0;
+  }
+}
+
+.actionMenu {
+  margin: 0;
+  position: relative;
+
+  /* Because the gridsystem uses relative position we have to set a fixed z-index for the actionMenu */
+  z-index: $zindex-dropdown;
+
+  &.activated {
+    .actionMenuContent {
+      display: block;
+    }
+  }
+}
+.actionMenuHeader {
+  a {
+    @include no-link();
+    display: block;
+    padding: $padding-vertical $padding-horizontal;
+  }
+  .noMenuAction {
+    @include auto-text-color($color-edit);
+    display: block;
+    padding: $padding-vertical $padding-horizontal;
+  }
+}
+.actionMenuContent {
+  margin: 0;
+  display: none;
+  position: absolute;
+  right: 0;
+  box-shadow: $box-shadow-secondary;
+  > ul {
+    @include list-group-interactive();
+  }
+}
+.actionSeparator > div {
+  padding: $padding-vertical / 2 $padding-horizontal / 2;
+  background-color: $color-content-background;
+  font-weight: bold;
+}
+
+
+#column-content section.actionMenu header,
+#column-content dl.actionMenu dt,
+dl.actionMenu dt,
+section.actionMenu header {
+  font-weight: normal;
+}

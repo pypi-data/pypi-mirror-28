@@ -1,0 +1,150 @@
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+input[type="url"],
+select {
+  @include input();
+}
+
+// http://stackoverflow.com/questions/3773430/remove-outline-from-select-box-in-ff
+select:-moz-focusring {
+  color:transparent;
+  text-shadow:0 0 0 $color-text;
+}
+
+// http://stackoverflow.com/questions/20163079/remove-select-arrow-on-ie
+select::-ms-expand {
+  display: none;
+}
+
+select {
+  @include appearance();
+  min-width: 0;
+  padding: $padding-vertical $padding-horizontal / 2;
+  padding-right: $padding-horizontal * 1.5;
+  &:not([multiple]) {
+    background-image: embed-resource("../../resources/fonts/chevron-down.svg", $fill-css:('.icon', $color-text));
+    background-position: right $padding-horizontal / 2 center;
+    background-size: $font-size-small;
+    background-repeat: no-repeat;
+  }
+  &[multiple="multiple"] {
+    width: 100%;
+    overflow: auto;
+    min-height: 300px;
+    padding: 0;
+    option {
+      @include list-group-item();
+      padding: $padding-vertical $padding-horizontal;
+    }
+  }
+}
+
+textarea {
+  @include textarea();
+}
+
+input[type="checkbox"], input[type="radio"] {
+  vertical-align: baseline;
+
+  &~label, ~.label {
+    display: inline-block;
+  }
+}
+
+fieldset {
+  margin: 0;
+  margin-bottom: $margin-vertical;
+  padding: 0;
+  border: 0;
+}
+
+// Form: Image widget.
+// On some images the width calculation fails -> -1 appears.
+#form-widgets-image > span > img:first-child {
+  width: 128px;
+}
+
+.formTabs {
+  margin-bottom: $margin-vertical;
+}
+
+.field {
+  @include clearfix();
+  margin-bottom: $margin-vertical;
+
+  &.error {
+    input[type="text"] {
+      @include input-error();
+    }
+    .fieldErrorBox {
+      display: block;
+    }
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  span.required {
+    @extend .fa-icon;
+    @extend .fa-asterisk;
+    vertical-align: baseline;
+    color: $color-danger;
+    font-size: $font-size-small;
+    &:before {
+      min-width: 0 !important;
+    }
+  }
+
+}
+
+.fieldErrorBox {
+  display: none;
+  color: $color-danger;
+  font-weight: bold;
+  padding-bottom: $padding-vertical / 2;
+}
+
+.formHelp {
+  color: $color-text-light;
+  font-weight: normal;
+  display: block;
+  padding-top: $padding-vertical / 2;
+  &:empty {
+    display: none;
+  }
+}
+
+label, .label {
+  display: block;
+  padding-bottom: $padding-vertical / 2;
+  font-weight: bold;
+}
+
+.editionComment {
+  .formHelp {
+    padding-top: 0;
+    padding-bottom: $padding-vertical / 2;
+  }
+}
+
+#column-navigation, #column-sidebar {
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="tel"] {
+    @include screen-medium() {
+      min-width: 0;
+      width: 100%;
+    }
+  }
+}
+
+input[placeholder] { text-overflow: ellipsis; }
+::-webkit-input-placeholder
+:-ms-input-placeholder
+::-ms-input-placeholder {
+  text-overflow: ellipsis;
+}

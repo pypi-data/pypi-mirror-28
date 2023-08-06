@@ -1,0 +1,128 @@
+.mceContentBody {
+  padding: $padding-vertical $padding-horizontal;
+}
+
+table.mceLayout {
+  td.mceIframeContainer {
+    @include input();
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  tr.mceLast {
+    td.mceStatusbar {
+      border: 1px solid $color-gray-dark;
+      border-top: 0;
+    }
+  }
+}
+
+.ploneSkin .mceStatusbar a[id="form.widgets.text_resize"].mceResize {
+  border-top: 1px solid $color-gray-light;
+  border-left: 1px solid $color-gray-light;
+  background-position-y: -2px;
+  background-position-x: -806px;
+  width: 15px;
+}
+
+.ploneSkin {
+  [id="form.widgets.text_path_row"] {
+    display: none;
+  }
+}
+
+/* TinyMCE dialog styles */
+
+#table .dialog-wrapper,
+.dialog-wrapper {
+  &#content {
+    font-size: inherit;
+  }
+
+  .formTabs {
+    @include tab-list;
+    height: 2.12em;
+    > li {
+
+      &:first-child > span > a {
+        padding-left: $padding-horizontal;
+      }
+
+      &:last-child > span > a {
+        padding-right: $padding-horizontal;
+      }
+
+      & {
+        > span > a.selected {
+          @include tab-select($color-tab-select);
+        }
+      }
+      > span > a {
+        @include tab($color-tab);
+      }
+    }
+
+  }
+
+  .panel_wrapper div.current {
+    height: auto;
+  }
+
+  .mceActionPanel {
+    // Abord button
+    input[type="button"]#cancel {
+      @include button-danger;
+    }
+
+    input[type="submit"]#insert {
+      @include button-success;
+    }
+    select {
+      margin: $margin-vertical $margin-horizontal;
+    }
+  }
+
+  // Table row Panel
+  #styleSelectRow {
+    display: none; // Broken by default
+  }
+
+  // Table cell Panel
+  .hiddenset {
+    display: none;
+  }
+
+}
+
+
+/* TinyMCE styles */
+
+ul {
+  &.listTypeDisc {
+    list-style-type: disc;
+  }
+  &.listTypeSquare {
+    list-style-type: square;
+  }
+  &.listTypeCircle {
+    list-style-type: circle;
+  }
+}
+
+ol {
+  &.listTypeDecimal {
+    list-style-type: decimal;
+  }
+  &.listTypeLowerAlpha {
+    list-style-type: lower-alpha;
+  }
+  &.listTypeUpperAlpha {
+    list-style-type: upper-alpha;
+  }
+  &.listTypeLowerRoman {
+    list-style-type: lower-roman;
+  }
+  &.listTypeUpperRoman {
+    list-style-type: upper-roman;
+  }
+}

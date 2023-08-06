@@ -1,0 +1,92 @@
+
+.searchSection {
+  display: none;
+}
+
+#portal-searchbox {
+  input[type=text] {
+    min-width: 0;
+    width: 100%;
+    float: right;
+  }
+}
+
+#livesearchLegend {
+  @include hidden-structure();
+}
+
+#LSNothingFound, .advancedsearchlink {
+  padding: $padding-vertical $padding-horizontal;
+  display: block;
+}
+
+.LSBox {
+  @extend .fa-icon-right;
+  @include clearfix();
+  position: relative;
+  &:after {
+    content: "\f002";
+    position: absolute;
+    visibility: visible;
+    top: $padding-vertical;
+    right: $padding-vertical;
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+  input[type="text"] {
+    padding-right: 2 * $padding-vertical + 1em;
+  }
+
+  .searchButton {
+    @include hidden-structure();
+  }
+}
+
+.LSResult {
+  left: 0;
+  right: 0;
+  position: absolute;
+  top: $line-height-base + 2 * $padding-vertical;
+  z-index: $zindex-header + $zindex-dropdown;
+  box-shadow: $box-shadow-secondary;
+  background-color: $color-content-background;
+
+  @include screen-medium() {
+    left: auto;
+    right: auto;
+  }
+}
+
+.LSTable {
+  @include list();
+
+  > li {
+    @include list-group-item();
+
+    &:hover {
+      @include list-group-item-select();
+
+      > a {
+        @include auto-link-color($color-primary);
+      }
+    }
+
+    > a {
+      padding: 0;
+    }
+  }
+}
+
+.LSDescr {
+  white-space: normal;
+  font-size: $font-size-small;
+}
+
+.advancedsearchlink.advanced-search {
+  font-weight: bold;
+}
+
+.highlightedSearchTerm {
+  background-color: transparentize($color-primary, 85%);
+  padding: 2px;
+}
