@@ -1,0 +1,17 @@
+<script type="text/javascript" charset="utf-8">
+    var socket{{ tid }} = null
+    $(document).ready(function() {
+		var url = location.protocol+"//"+document.domain+":"+location.port+"/log?tid={{ tid }}";
+        socket{{ tid }} = io.connect(url);
+        socket{{ tid }}.on('connect', function() {
+			// do sth
+        });
+        socket{{ tid }}.on('log', function(msg) {
+            $('#log{{ tid }}').append(msg.data.replace('\n', '<br/>'));
+        });
+    });
+	function logClose{{ tid }}(){
+        socket{{ tid }}.emit("close_req")
+	}
+</script>
+<div id="log{{ tid }}"></div>
