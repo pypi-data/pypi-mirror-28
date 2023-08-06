@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+
+WORKSPACE_PATH=$(dirname $PWD)
+REPO_NAME=${PWD##*/}
+
+XDOT_NAME="XDOT"
+MDOT_NAME="MULTITECH"
+DEVICE_NAME="$XDOT_NAME"
+
+XDOT_TARGET="xdot_l151cc"
+MDOT_TARGET="mts_mdot_f411re"
+DEVICE_TARGET="${XDOT_TARGET}"
+
+USE_PREVIOUS_BUILD=false
+COMPILE_ONLY=false
+
+function show_help() {
+    echo "Compile and flash the firmware for Multitech xdot or mdot."
+    echo ""
+    echo "flashit"
+    echo "    -h --help"
+    echo "    -t --target=[xdot|mdot]   Choose your target xdot or mdot."
+    echo "    -p --previous             Use previous build for current target."
+    echo "    -c --compile              Build only without flashing."
+    echo ""
+    echo "Examples:"
+    echo "Compile and flash an xdot"
+    echo "flashit -t=xdot"
+    echo ""
+    echo "Flash previous build, already compiled for an mdot"
+    echo "flashit -t=mdot -p"
+}
+
+function parse_options() {
+    while [ "$1" != "" ]; do
+        PARAM=`echo $1 | awk -F= '{print $1}'`
+        VALUE=`echo $1 | awk -F= '{print $2}'`
+        case ${PARAM} in
+            -h | --help)
+                show_help
+                exit
+                ;;
+            -t | --target)
+                if [ "${VALUE}" == "mdot" ]; then
+                    DEVICE_NAME="${MDOT_NAME}"
+                    DEVICE_TARGET="${MDOT_TARGET}"
+                fi
+                ;;
+            -p | --previous)
+                USE_PREVIOUS_BUILD=true
+                ;;
+            -c | --compile)
+                COMPILE_ONLY=true
+                ;;
+            *)
+                echo "[ERROR] Unknown parameter \"${PARAM}\""
+                show_help
+                exit 1
+                ;;
+        esac
+        shift
+    done
+}
+
+function activate_mbed_virtualenv() {
+    source ${WORKSPACE_PATH}/virtualenv/bin/activate
+}
+
+function deploy_mbed_project() {
+    if [ ! -f ".mbed" ]; then
+        echo "[INFO] Mbed deploy"
+        mbed-cli deploy
+    fi
+}
+
+function install_mbed_toolchain_within_virtualenv() {
+    if [ ! -d "${WORKSPACE_PATH}/virtualenv" ]; then
+        echo "[INFO] Install Mbed toolchain"
+        virtualenv ${WORKSPACE_PATH}/virtualenv
+        activate_mbed_virtualenv
+
+        pip install mbed-cli
+
+        deploy_mbed_project
+
+        if [ -f "mbed-os/requirements.txt" ]; then
+            pip install -r mbed-os/requirements.txt
+        else
+            echo "[ERROR] No requirements.txt available. Maybe mbed-os is not deployed."
+            exit 3
+        fi
+    fi
+}
+
+function compile() {
+    if [ "${USE_PREVIOUS_BUILD}" == false ]; then
+        echo "[INFO] Device name: ${DEVICE_NAME}"
+        echo "[INFO] Building for target: ${DEVICE_TARGET}";
+
+        # Remove the previous builds if any.
+        if [ -d "./BUILD" ]; then
+            rm -r ./BUILD/*
+            echo "[INFO] Removed the previous builds."
+        fi
+
+        # Compile it for the specific target with ARM GCC.
+        mbed compile -m ${DEVICE_TARGET} -t GCC_ARM
+    else
+        echo "[INFO] Using the previous build for ${DEVICE_NAME}"
+    fi
+}
+
+function ensure_compiled_binary() {
+    if [ ! -f ./BUILD/${DEVICE_TARGET}/GCC_ARM/${REPO_NAME}.bin ]; then
+        echo "[ERROR] No binary file to flash. Are there any compiling errors?"
+        exit 1
+    fi
+}
+
+
+function ensure_device_volume_mounted() {
+    if [ ! -d /Volumes/${DEVICE_NAME} ]; then
+        echo "[ERROR] The ${DEVICE_NAME} device is not connected."
+        exit 2
+    fi
+}
+
+function flash() {
+    if [ "${COMPILE_ONLY}" == false ]; then
+        # Flash it on your connected device.
+        echo "[INFO] Flashing ${DEVICE_NAME} device for ${DEVICE_TARGET} target ..."
+        echo "[INFO] Check the blinking led on the device, when it's finished press the reset button."
+        cp ./BUILD/${DEVICE_TARGET}/GCC_ARM/${REPO_NAME}.bin /Volumes/${DEVICE_NAME}
+    fi
+}
+
+parse_options $*
+install_mbed_toolchain_within_virtualenv
+activate_mbed_virtualenv
+deploy_mbed_project
+compile
+ensure_compiled_binary
+ensure_device_volume_mounted
+flash
+
+exit 0
