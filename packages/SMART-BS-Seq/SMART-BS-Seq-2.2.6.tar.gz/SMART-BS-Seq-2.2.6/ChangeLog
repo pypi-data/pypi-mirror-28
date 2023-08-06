@@ -1,0 +1,98 @@
+2018-01-31
+	Version 2.2.6
+	Add a new function for Case-Control DMR calling which enables the identification of DMRs between two groups (case, control) from regions of segmented by SMART or those inputed by users.
+
+2018-01-24
+	Version 2.2.5
+	Repaired the errors in output file "3_MergedSegment_Methylation.txt" in which the group methylation values were not completed.
+	Repaired the missing of regions in the predefined regions in the module of DMROI.
+
+2017-11-06
+	Version 2.2.4
+	Remove the Extremep_DMR which introduces some errors for DMR identification in the function of "DeNovoDMR". Please noted that this is a very important improvement of SMART. If you are using any previous version of SMART, please update to the latest version (2.2.4). 
+	Added new function "Segment" for de novo segmentation of genome based on DNA methylation profiles. In this function, SimilarityEntropy, Euclid distance, and the distance between CpG sites are used to combine adjacent CpG sites into primary regions which are further merged to methylation elements. 
+	Repaired the grouping error introduced by multiple "_" in the sample names.
+	Expanded the range (0 ~ 1) of p values used for identification of differentially methylated regions and group-specific methylation mark.
+	Changed the version limit of pandas (v0.19.2) as newly released pandas package does not support numpy.core.multiarray which is needed by SMART. If the error like "ImportError: C extension: numpy.core.multiarray failed to import not built." comes out when you run SMART, please try "pip install pandas==0.19.2" and rerun SMART. We have tested pandas (v0.19.2) and confirmed this version of pandas works well for SMART. pandas (v0.19.2)
+
+2017-07-09
+	Version 2.2.1
+	Repaired the errors (like: IOError: CRC check failed 0x2aa21e3c != 0x7839530eL) introduced by gzip in some MAC system.
+	To make the arguments more clear to the users, renamed the some of optional arguments including '-g' to '-r', '-SC' to '-CN', '-pD' to '-PD' and '-pM' to '-PM' and related description. 
+	To make the results more clear to the users, renamed the file names in the results folder and added necessary description in the first line of each file.
+	To speed the computation, removed the One way ANOVA analysis for DMC calling in modules DeNovoDMR and DMROI.
+	Repaired some errors in missing value replacement.
+	Added the output of the methylation levels for each sample.
+	Added a separated output file for DMRs
+	
+2017-07-05
+	Version 2.2.0
+	Add One way ANOVA analysis to the DMC identification. Now a DMC is identified when both methylation specificity and ANOVA p value pass the threshold given by user.
+	
+2017-06-16
+	Version 2.1.9
+	Modify the errors induced by the disagreement of the chromosome sets between DNA methylation data and regions of interested.
+	Add information about the range of DNA methylation value.
+	Remove the improper characters in code for entropy calculation.
+	Repair the bug in reading genome regions.
+	Repair the bug in counting the number of final results.
+	Add the data check for DNA methylation values.
+	Add the counting of replacement of missing values.
+
+2017-04-25
+	Version 2.1.5
+	
+	* More functions
+	More functions were added to this software including: identification of differentially
+	methylated regions of interest, or differentially methylated CpG sites.
+	
+	* Differentially methylated regions (DMR)
+	The segments with high specificity (HighSpe) or low specificity (LowSpe) are combined
+	into differentially methylated regions (DMR).
+	
+	* Statistical method for DMR identification
+	One way ANOVA analysis was applied to identify the DMRs which is more reliable.
+	
+	* Support any species
+	We re-designed the work flow of the algorithm no longer needing CpG location file,
+	which makes SMART2 is available for any species.
+	
+	* Support more bisulfite sequencing platforms
+	Due to algorithm optimization, SMART2 now can be used to analyze any DNA methylation
+	data produced by bisulfite sequencing platforms including WGBS, RRBS, and targeting
+	bisulfite sequencing techniques including TruSeqEPIC, SureSelect and CpGiant.
+	
+	* Support replicates for the same group
+	SMARTs supports replicates for the same group. Users can assign the group for each sample.
+	And the software will combine all the data of replicates from the same group together and
+	identify the DMCs or DMRs.
+	
+	* Support replacement of missing value
+	SMARTs supports replacement of missing value via the median methylation value of other
+	available samples from the same	group. By this way, SMARTs maximize the usage of CpG sites 
+	those have missing value in only minority of samples.
+	
+	* High analysis speed
+	Multiple processing technology was used to speed up for genome segmentation and other 
+	functions. The current time consumption of the program is one tenth of the original version.
+	
+	
+2015-03-29
+	Version 1.4.0
+	
+	* SegmentationNormal.py ...
+	Revise the bugs of calculating mean methylation levels
+	in merging CpGs into small segment.
+
+
+
+2014-08-01
+	Version 1.0.0
+	
+	* SMART.py, SegmentationNormal.py ...
+	The main program of SMART are initially completed. 
+
+	* setup.py
+	Bug fixed to let SMART tolerate some cases while there 
+	are wrong setting in the input.
+
