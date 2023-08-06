@@ -1,0 +1,106 @@
+{% import 'appbuilder/general/lib.html' as lib %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+        function submitV(){
+            var values = [];
+
+            $("#table1").find('input[type="checkbox"]:checked').each(function () {
+                    values.push({"access_token" : this.id});
+            });
+
+            $.ajax({ url :'/users/add',
+                    type : 'POST',
+                    datatype : 'json',
+                    data : {alpha : values},
+                    success: function(data){
+                        alert("Message");
+                         alert(data[message]);
+                    },
+                    error: function(data){
+                            if(data.message == null){
+                                alert("Success");
+                            }
+                            else{
+                                   alert("Error");
+                                }
+                    }
+                    });
+         }
+
+</script>
+
+{% set begin_sep_label = '<td class="col-lg-2">' %}
+{% set end_sep_label = '</td>' %}
+{% set begin_sep_field = '<td>' %}
+{% set end_sep_field = '</td>' %}
+
+    {% block begin_content scoped %}
+        <div class="table-responsive">
+        <table class="table table-bordered table-hover" id = "table1">
+    {% endblock %}
+
+
+     {% block begin_loop_header scoped %}
+        <thead>
+        <tr>
+        {% for item in include_columns %}
+                <th>{{ item }}</th>
+        {% endfor %}
+        </tr>
+        </thead>
+     {% endblock %}
+
+    {% block begin_loop_values %}
+        {% for item in value_columns %}
+            {% set pk = pks[loop.index-1] %}
+            <tr>
+                {% for value in include_columns %}
+                        {% if value == '' %}
+                            {% if item['email'] in already_present %}
+                                <td><input disabled= "disabled" name="rowid" type="checkbox"></td>
+                            {% else %}
+                                <td><input id="{{pk}}" class="action_check" name="rowid" value="{{pk}}" type="checkbox"></td>
+                            {% endif %}
+                        {% else %}
+                            <td>{{ item[value]|safe }}</td>
+                        {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    {% endblock %}
+
+    <div class="well well-sm">
+    {% block list_header scoped %}
+        {{ lib.render_list_header(can_add, page, page_size, count, filters, actions, modelview_name) }}
+    {% endblock %}
+    </div>
+
+    <form id="model_form" enctype="multipart/form-data" onsubmit="submitV()">
+
+    {{form.hidden_tag()}}
+
+     <div class="table-responsive">
+            <table class="table table-bordered">
+                {% for col in add_cols %}
+                    {% set field = form[col] %}
+                        <tr>
+                            {{ lib.render_field(field, begin_sep_label, end_sep_label, begin_sep_field, end_sep_field) }}
+                        </tr>
+                {% endfor %}
+            </table>
+     </div>
+
+    {{ lib.render_form_controls() }}
+
+</form>
+
+
+
+    {% block end_content scoped %}
+        </table>
+        </div>
+    {% endblock %}
+
+
+
