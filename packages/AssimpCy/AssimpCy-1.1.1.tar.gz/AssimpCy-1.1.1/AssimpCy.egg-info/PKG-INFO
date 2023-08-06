@@ -1,0 +1,97 @@
+Metadata-Version: 1.1
+Name: AssimpCy
+Version: 1.1.1
+Summary: Faster Python bindings for Assimp.
+Home-page: https://github.com/jr-garcia/AssimpCy
+Author: Javier R. García
+Author-email: UNKNOWN
+License: BSD3
+Description-Content-Type: UNKNOWN
+Description: AssimpCy
+        ========
+        
+        |PyPI version| |Build Status| |Documentation Status|
+        
+        Faster (than PyAssimp) Python bindings for
+        `Assimp <http://assimp.org/>`__, Cython-based, BSD3 license.
+        
+        It uses the same naming as the original library, so examples from the
+        official docs can be used directly (minus C sintaxis).
+        
+        --------------
+        
+        Example usage:
+        ^^^^^^^^^^^^^^
+        
+        .. code:: python
+        
+            from assimpcy import aiImportFile, aiPostProcessSteps as pp 
+            flags = pp.aiProcess_JoinIdenticalVertices | pp.aiProcess_Triangulate 
+            scene = aiImportFile('mymodel.3ds', flags)
+            print('Vertex {} = {}'.format(v, scene.mMeshes[0].mVertices[0]))
+        
+        Matrices, quaternions and vectors are returned as Numpy arrays.
+        
+        It has been tested with: \* Python 2.7 \* Python 3.4 +
+        
+        --------------
+        
+        Requirements:
+        ^^^^^^^^^^^^^
+        
+        -  Assimp >= 3.1.1
+        -  Numpy >= 1.9.2
+        
+        --------------
+        
+        Installation:
+        ^^^^^^^^^^^^^
+        
+        The easiest way is:
+        
+        .. code:: sh
+        
+            pip install assimpcy
+        
+        If that does not work for you, please check
+        `Installation <http://assimpcy.readthedocs.io/en/latest/install.html>`__
+        for instructions.
+        
+        Missing:
+        ^^^^^^^^
+        
+        -  Cameras
+        -  Lights
+        -  Export functionality
+        
+        Those might be added in the future.
+        
+        Documentation
+        ^^^^^^^^^^^^^
+        
+        `Read The Docs <http://assimpcy.readthedocs.io/>`__
+        
+        --------------
+        
+        And what about the name? Well,
+        `cyassimp <https://github.com/menpo/cyassimp>`__ was already taken
+        :smirk:.
+        
+        .. |PyPI version| image:: https://badge.fury.io/py/AssimpCy.svg
+           :target: https://badge.fury.io/py/AssimpCy
+        .. |Build Status| image:: https://travis-ci.org/jr-garcia/AssimpCy.svg?branch=master
+           :target: https://travis-ci.org/jr-garcia/AssimpCy
+        .. |Documentation Status| image:: https://readthedocs.org/projects/assimpcy/badge/?version=latest
+           :target: http://assimpcy.readthedocs.io/en/latest/?badge=latest
+        
+Keywords: load 3d model geometry assimp
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Multimedia :: Graphics :: 3D Rendering
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires: numpy
