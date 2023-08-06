@@ -1,0 +1,18 @@
+description: |
+  "This is a example for an experiment definition in scotty
+  The sections are
+    - description
+    - resources
+    - workloads"
+resources:
+  - name: demo_resource
+    generator: file:resource/demo
+workloads:
+  - name: demo_workload
+    generator: file:workload/demo
+    resources:
+      demo_res: demo_resource
+    params:
+      greeting: <%= ENV['WL_NAME'] %>
+      sleep: 1
+      iterations: 2
