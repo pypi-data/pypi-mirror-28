@@ -1,0 +1,81 @@
+Metadata-Version: 2.0
+Name: dnsdb-python-sdk
+Version: 0.1.2b2
+Summary: DnsDB Python SDK
+Home-page: http://pysdk.dnsdb.io
+Author: DnsDB Team
+Author-email: team@dnsdb.io
+License: BSD License
+Description-Content-Type: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: Chinese (Simplified)
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Python: >=2.7, !=3.0.*, !=3.1.*, !=3.2.*, <4
+Requires-Dist: requests[socks]
+
+=================
+DnsDB Python SDK
+=================
+
+.. image:: https://img.shields.io/travis/dnsdb-team/dnsdb-python-sdk/master.svg
+    :target: https://travis-ci.org/dnsdb-team/dnsdb-python-sdk
+.. image:: https://coveralls.io/repos/github/dnsdb-team/dnsdb-python-sdk/badge.svg?branch=master
+    :target: https://coveralls.io/github/dnsdb-team/dnsdb-python-sdk?branch=master
+.. image:: https://img.shields.io/pypi/v/dnsdb-python-sdk.svg
+    :target: https://pypi.python.org/pypi/dnsdb-python-sdk
+.. image:: https://img.shields.io/pypi/pyversions/dnsdb-python-sdk.svg
+    :target: https://pypi.python.org/pypi/dnsdb-python-sdk
+.. image:: https://img.shields.io/pypi/l/dnsdb-python-sdk.svg
+    :target: https://pypi.python.org/pypi/dnsdb-python-sdk
+
+**dnsdb-python-sdk** 是 DNSDB_ 为开发者提供的python SDK。使用该SDK，您可以方便的将DNSDB的查询服务集成到您的python应用中，您也可以利用它来导出查询结果。查看教程_。
+
+
+Install
+========
+
+::
+
+    pip install --upgrade dnsdb-python-sdk
+
+
+How to use
+==========
+
+::
+
+    from dnsdb_sdk.api import APIClient
+
+    api_id = "your API ID"
+    api_key = "your API key"
+    client = APIClient(api_id, api_key)
+    result = client.search_dns(domain='github.com')
+    for record in result:
+        print(record)
+
+更多使用方法请 查看教程_
+
+
+Links
+========
+
+* `DNSDB网站 <https://dnsdb.io>`_
+* `DNSDB API服务介绍 <https://dnsdb.io/apiservice>`_
+* `DNSDB Web API <https://apidoc.dnsdb.io>`_
+* `GetDNS - 基于dnsdb-python-sdk开发的命令行工具 <https://getdns.dnsdb.io>`_
+
+.. _DNSDB: https://dnsdb.io
+.. _查看教程: https://github.com/dnsdb-team/dnsdb-python-sdk/wiki/Tutorials
+
+
+
