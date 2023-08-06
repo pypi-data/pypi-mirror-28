@@ -1,0 +1,102 @@
+
++++++++++++++++
+About tamcolors
++++++++++++++++
+
+tamcolors lets you change terminal colors for Mac, Linux and Windows.
+
+Color Table:
+
+    +-------------+------+---------------+
+    |Colors       | Way1 |Way2           |
+    +=============+======+===============+
+    |Default      | -1   |None           |
+    +-------------+------+---------------+
+    |Black        | 0    |"Black"        |
+    +-------------+------+---------------+
+    |Blue         | 1    |"Blue"         |
+    +-------------+------+---------------+
+    |Green        | 2    |"Green"        |
+    +-------------+------+---------------+
+    |Aqua         | 3    |"Aqua"         |
+    +-------------+------+---------------+
+    |Red          | 4    |"Red"          |
+    +-------------+------+---------------+
+    |Purple       | 5    |"Purple"       |
+    +-------------+------+---------------+
+    |Yellow       | 6    |"Yellow"       |
+    +-------------+------+---------------+
+    |White        | 7    |"White"        |
+    +-------------+------+---------------+
+    |Gray         | 8    |"Gray"         |
+    +-------------+------+---------------+
+    |Light Blue   | 9    |"Light Blue"   |
+    +-------------+------+---------------+
+    |Light Green  | 10   |"Light Green"  |
+    +-------------+------+---------------+
+    |Light Aqua   | 11   |"Light Aqua"   |
+    +-------------+------+---------------+
+    |Light Red    | 12   |"Light Red"    |
+    +-------------+------+---------------+
+    |Light Purple | 13   |"Light Purple" |
+    +-------------+------+---------------+
+    |Light Yellow | 14   |"Light Yellow" |
+    +-------------+------+---------------+
+    |Bright White | 15   |"Bright White" |
+    +-------------+------+---------------+
+
+++++++
+printc
+++++++
+
+.. code:: python
+
+    from tamcolors import*
+
+    #printc(*value, sameColor = False, sep = ' ', end = '\n', bypassCTT = False)
+
+    printc("I'm Thinking 101", (11, -1))
+    printc("French Bread 404", (4, None), "Sing", ("Light Aqua", "red"))
+    printc("C","H","4","4","D",(11,15), sameColor = True)
+
+++++++
+inputc
+++++++
+
+.. code:: python
+
+    from tamcolors import*
+
+    #inputc(value, color, bypassCTT = False)
+
+    inputc(">>> ", (3, 8))
+
+++++++++++
+textBuffer
+++++++++++
+
+.. code:: python
+
+    from tamcolors import*
+
+    title = textBuffer('#', (4, 7), 110, 28)
+    title.place(1, 1, 'tamcolors', background = 9)        
+    title.printt()
+
+    #textBuffer(self, value, color, w, h)
+    #new(self, value, color, w, h)
+    #fill(self, value = "NC", foreground = "NC", background = "NC")
+    #place(self, x, y, value = "NC", foreground = "NC", background = "NC")
+    #printt(self)
+    #drawOn(self, buffer2, x, y)
+
+
+
+
+
+
+
+
+
+
+
