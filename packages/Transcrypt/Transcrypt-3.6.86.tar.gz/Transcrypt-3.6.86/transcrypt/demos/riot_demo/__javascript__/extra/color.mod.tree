@@ -1,0 +1,708 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = msgs
+					ctx: Store 
+			value: List 
+				elts: list 
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = styles
+					ctx: Store 
+			value: List 
+				elts: list 
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = debug
+					ctx: Store 
+			value: Num 
+				n: int = 0
+		element: FunctionDef 
+			name: str = _recurse
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = col
+						annotation: NoneType = None
+					element: arg 
+						arg: str = g
+						annotation: NoneType = None
+				vararg: arg 
+					arg: str = s
+					annotation: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Tuple 
+							elts: list 
+								element: Name 
+									id: str = msgs
+									ctx: Store 
+								element: Name 
+									id: str = styles
+									ctx: Store 
+								element: Name 
+									id: str = hsl
+									ctx: Store 
+							ctx: Store 
+					value: Name 
+						id: str = g
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = lu
+							ctx: Store 
+					value: Tuple 
+						elts: list 
+							element: Tuple 
+								elts: list 
+									element: Str 
+										s: str = color
+									element: Num 
+										n: int = 0
+								ctx: Load 
+							element: Tuple 
+								elts: list 
+									element: Str 
+										s: str = background-color
+									element: Num 
+										n: int = 1
+								ctx: Load 
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = hsl
+							ctx: Store 
+					value: Subscript 
+						value: Name 
+							id: str = hsl
+							ctx: Load 
+						slice: Index 
+							value: Name 
+								id: str = col
+								ctx: Load 
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = hsl
+							ctx: Store 
+					value: List 
+						elts: list 
+							element: Subscript 
+								value: Name 
+									id: str = hsl
+									ctx: Load 
+								slice: Slice 
+									lower: NoneType = None
+									upper: Num 
+										n: int = 3
+									step: NoneType = None
+								ctx: Load 
+							element: List 
+								elts: list 
+									element: Subscript 
+										value: Name 
+											id: str = hsl
+											ctx: Load 
+										slice: Index 
+											value: Num 
+												n: int = 0
+										ctx: Load 
+									element: Subscript 
+										value: Name 
+											id: str = hsl
+											ctx: Load 
+										slice: Index 
+											value: Num 
+												n: int = 1
+										ctx: Load 
+									element: Subscript 
+										value: Name 
+											id: str = hsl
+											ctx: Load 
+										slice: Index 
+											value: Num 
+												n: int = 3
+										ctx: Load 
+								ctx: Load 
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = css
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Str 
+								s: str = ;
+							attr: str = join
+							ctx: Load 
+						args: list 
+							element: ListComp 
+								elt: BinOp 
+									left: Call 
+										func: Name 
+											id: str = str
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = i
+												ctx: Load 
+										keywords: list 
+									op: Add 
+									right: Call 
+										func: Attribute 
+											value: Str 
+												s: str = : hsl({}, {}%, {}%)
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Starred 
+												value: Subscript 
+													value: Name 
+														id: str = hsl
+														ctx: Load 
+													slice: Index 
+														value: Name 
+															id: str = j
+															ctx: Load 
+													ctx: Load 
+												ctx: Load 
+										keywords: list 
+								generators: list 
+									element: comprehension 
+										target: Tuple 
+											elts: list 
+												element: Name 
+													id: str = i
+													ctx: Store 
+												element: Name 
+													id: str = j
+													ctx: Store 
+											ctx: Store 
+										iter: Name 
+											id: str = lu
+											ctx: Load 
+										ifs: list 
+										is_async: int = 0
+						keywords: list 
+				element: For 
+					target: Name 
+						id: str = i
+						ctx: Store 
+					iter: Name 
+						id: str = s
+						ctx: Load 
+					body: list 
+						element: If 
+							test: Name 
+								id: str = debug
+								ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = styles
+												ctx: Load 
+											attr: str = append
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = col
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = styles
+												ctx: Load 
+											attr: str = append
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = css
+												ctx: Load 
+										keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = msgs
+										ctx: Load 
+									attr: str = append
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = %c
+								keywords: list 
+						element: Try 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = i
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = g
+												ctx: Load 
+										keywords: list 
+							handlers: list 
+								element: ExceptHandler 
+									type: NoneType = None
+									name: NoneType = None
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = msgs
+														ctx: Load 
+													attr: str = pop
+													ctx: Load 
+												args: list 
+												keywords: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = msgs
+														ctx: Load 
+													attr: str = append
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = %c{}
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = i
+																ctx: Load 
+														keywords: list 
+												keywords: list 
+							orelse: list 
+							finalbody: list 
+					orelse: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = hsl
+					ctx: Store 
+			value: Dict 
+				keys: list 
+					element: Str 
+						s: str = red
+					element: Str 
+						s: str = orange
+					element: Str 
+						s: str = yellow
+					element: Str 
+						s: str = green
+					element: Str 
+						s: str = blue
+					element: Str 
+						s: str = purple
+					element: Str 
+						s: str = black
+					element: Str 
+						s: str = gray
+				values: list 
+					element: List 
+						elts: list 
+							element: Num 
+								n: int = 0
+							element: Num 
+								n: int = 100
+							element: Num 
+								n: int = 90
+							element: Num 
+								n: int = 50
+						ctx: Load 
+					element: List 
+						elts: list 
+							element: Num 
+								n: int = 39
+							element: Num 
+								n: int = 100
+							element: Num 
+								n: int = 85
+							element: Num 
+								n: int = 50
+						ctx: Load 
+					element: List 
+						elts: list 
+							element: Num 
+								n: int = 60
+							element: Num 
+								n: int = 100
+							element: Num 
+								n: int = 35
+							element: Num 
+								n: int = 50
+						ctx: Load 
+					element: List 
+						elts: list 
+							element: Num 
+								n: int = 120
+							element: Num 
+								n: int = 100
+							element: Num 
+								n: int = 60
+							element: Num 
+								n: int = 25
+						ctx: Load 
+					element: List 
+						elts: list 
+							element: Num 
+								n: int = 240
+							element: Num 
+								n: int = 100
+							element: Num 
+								n: int = 90
+							element: Num 
+								n: int = 50
+						ctx: Load 
+					element: List 
+						elts: list 
+							element: Num 
+								n: int = 300
+							element: Num 
+								n: int = 100
+							element: Num 
+								n: int = 85
+							element: Num 
+								n: int = 25
+						ctx: Load 
+					element: List 
+						elts: list 
+							element: Num 
+								n: int = 0
+							element: Num 
+								n: int = 0
+							element: Num 
+								n: int = 80
+							element: Num 
+								n: int = 0
+						ctx: Load 
+					element: List 
+						elts: list 
+							element: Num 
+								n: int = 237
+							element: Num 
+								n: int = 8
+							element: Num 
+								n: int = 80
+							element: Num 
+								n: int = 50
+						ctx: Load 
+		element: FunctionDef 
+			name: str = _col
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = col
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Return 
+					value: Lambda 
+						args: arguments 
+							args: list 
+							vararg: arg 
+								arg: str = parts
+								annotation: NoneType = None
+							kwonlyargs: list 
+							kw_defaults: list 
+							kwarg: NoneType = None
+							defaults: list 
+						body: Lambda 
+							args: arguments 
+								args: list 
+									element: arg 
+										arg: str = g
+										annotation: NoneType = None
+								vararg: NoneType = None
+								kwonlyargs: list 
+								kw_defaults: list 
+								kwarg: NoneType = None
+								defaults: list 
+							body: Call 
+								func: Name 
+									id: str = _recurse
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = col
+										ctx: Load 
+									element: Name 
+										id: str = g
+										ctx: Load 
+									element: Starred 
+										value: Name 
+											id: str = parts
+											ctx: Load 
+										ctx: Load 
+								keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = colors
+					ctx: Store 
+			value: Dict 
+				keys: list 
+				values: list 
+		element: For 
+			target: Name 
+				id: str = col
+				ctx: Store 
+			iter: Call 
+				func: Attribute 
+					value: Name 
+						id: str = hsl
+						ctx: Load 
+					attr: str = keys
+					ctx: Load 
+				args: list 
+				keywords: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Subscript 
+							value: Name 
+								id: str = colors
+								ctx: Load 
+							slice: Index 
+								value: Name 
+									id: str = col
+									ctx: Load 
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = _col
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = col
+								ctx: Load 
+						keywords: list 
+			orelse: list 
+		element: FunctionDef 
+			name: str = cprint
+			args: arguments 
+				args: list 
+				vararg: arg 
+					arg: str = s
+					annotation: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Tuple 
+							elts: list 
+								element: Name 
+									id: str = msgs
+									ctx: Store 
+								element: Name 
+									id: str = styles
+									ctx: Store 
+							ctx: Store 
+					value: Tuple 
+						elts: list 
+							element: List 
+								elts: list 
+								ctx: Load 
+							element: List 
+								elts: list 
+								ctx: Load 
+						ctx: Load 
+				element: For 
+					target: Name 
+						id: str = i
+						ctx: Store 
+					iter: Name 
+						id: str = s
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = i
+									ctx: Load 
+								args: list 
+									element: Tuple 
+										elts: list 
+											element: Name 
+												id: str = msgs
+												ctx: Load 
+											element: Name 
+												id: str = styles
+												ctx: Load 
+											element: Name 
+												id: str = hsl
+												ctx: Load 
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: If 
+					test: Name 
+						id: str = debug
+						ctx: Load 
+					body: list 
+						element: For 
+							target: Name 
+								id: str = i
+								ctx: Store 
+							iter: Call 
+								func: Name 
+									id: str = range
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = len
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = msgs
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = print
+											ctx: Load 
+										args: list 
+											element: Subscript 
+												value: Name 
+													id: str = msgs
+													ctx: Load 
+												slice: Index 
+													value: Name 
+														id: str = i
+														ctx: Load 
+												ctx: Load 
+											element: Str 
+												s: str = -> 
+											element: Subscript 
+												value: Name 
+													id: str = styles
+													ctx: Load 
+												slice: Index 
+													value: Name 
+														id: str = i
+														ctx: Load 
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+					orelse: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = msg
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Str 
+										s: str = 
+									attr: str = join
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = msgs
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = st
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Str 
+										s: str = ", "
+									attr: str = join
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = styles
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = st
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Str 
+										s: str = 
+									attr: str = join
+									ctx: Load 
+								args: list 
+									element: Tuple 
+										elts: list 
+											element: Str 
+												s: str = console.log("
+											element: Name 
+												id: str = msg
+												ctx: Load 
+											element: BinOp 
+												left: BinOp 
+													left: Str 
+														s: str = ", "
+													op: Add 
+													right: Name 
+														id: str = st
+														ctx: Load 
+												op: Add 
+												right: Str 
+													s: str = ")
+										ctx: Load 
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = __pragma__
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = js
+									element: Str 
+										s: str = {}
+									element: Str 
+										s: str = eval(st)
+								keywords: list 
+			decorator_list: list 
+			returns: NoneType = None

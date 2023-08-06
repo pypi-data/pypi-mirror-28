@@ -1,0 +1,3087 @@
+file: Module 
+	body: list 
+		element: Import 
+			names: list 
+				element: alias 
+					name: str = re
+					asname: NoneType = None
+		element: ClassDef 
+			name: str = Actions
+			bases: list 
+			keywords: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = error
+							ctx: Store 
+					value: Str 
+						s: str = error
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = ignore
+							ctx: Store 
+					value: Str 
+						s: str = ignore
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = always
+							ctx: Store 
+					value: Str 
+						s: str = always
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = defaultact
+							ctx: Store 
+					value: Str 
+						s: str = default
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = module
+							ctx: Store 
+					value: Str 
+						s: str = module
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = once
+							ctx: Store 
+					value: Str 
+						s: str = once
+			decorator_list: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = ActionSet
+					ctx: Store 
+			value: Call 
+				func: Name 
+					id: str = set
+					ctx: Load 
+				args: list 
+					element: ListComp 
+						elt: Name 
+							id: str = x
+							ctx: Load 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = x
+									ctx: Store 
+								iter: Call 
+									func: Name 
+										id: str = dir
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = Actions
+											ctx: Load 
+									keywords: list 
+								ifs: list 
+									element: UnaryOp 
+										op: Not 
+										operand: Call 
+											func: Attribute 
+												value: Name 
+													id: str = x
+													ctx: Load 
+												attr: str = startswith
+												ctx: Load 
+											args: list 
+												element: Str 
+													s: str = _
+											keywords: list 
+								is_async: int = 0
+				keywords: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = CategoryMap
+					ctx: Store 
+			value: Dict 
+				keys: list 
+					element: Str 
+						s: str = UserWarning
+					element: Str 
+						s: str = DeprecationWarning
+					element: Str 
+						s: str = RuntimeWarning
+				values: list 
+					element: Name 
+						id: str = UserWarning
+						ctx: Load 
+					element: Name 
+						id: str = DeprecationWarning
+						ctx: Load 
+					element: Name 
+						id: str = RuntimeWarning
+						ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = _warnings_defaults
+					ctx: Store 
+			value: NameConstant 
+				value: bool = False
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = filters
+					ctx: Store 
+			value: List 
+				elts: list 
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = defaultaction
+					ctx: Store 
+			value: Attribute 
+				value: Name 
+					id: str = Actions
+					ctx: Load 
+				attr: str = defaultact
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = onceregistry
+					ctx: Store 
+			value: Dict 
+				keys: list 
+				values: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = _filters_version
+					ctx: Store 
+			value: Num 
+				n: int = 1
+		element: FunctionDef 
+			name: str = _filters_mutated
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Global 
+					names: list 
+						element: str = _filters_version
+				element: AugAssign 
+					target: Name 
+						id: str = _filters_version
+						ctx: Store 
+					op: Add 
+					value: Num 
+						n: int = 1
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = showwarning
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = message
+						annotation: NoneType = None
+					element: arg 
+						arg: str = category
+						annotation: NoneType = None
+					element: arg 
+						arg: str = filename
+						annotation: NoneType = None
+					element: arg 
+						arg: str = lineno
+						annotation: NoneType = None
+					element: arg 
+						arg: str = file
+						annotation: NoneType = None
+					element: arg 
+						arg: str = line
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+					element: NameConstant 
+						value: NoneType = None
+					element: NameConstant 
+						value: NoneType = None
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = Hook to write a warning to a file; replace if you like.
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = msg
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = WarningMessage
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = message
+								ctx: Load 
+							element: Name 
+								id: str = category
+								ctx: Load 
+							element: Name 
+								id: str = filename
+								ctx: Load 
+							element: Name 
+								id: str = lineno
+								ctx: Load 
+							element: Name 
+								id: str = file
+								ctx: Load 
+							element: Name 
+								id: str = line
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = _showwarnmsg_impl
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = msg
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = formatwarning
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = message
+						annotation: NoneType = None
+					element: arg 
+						arg: str = category
+						annotation: NoneType = None
+					element: arg 
+						arg: str = filename
+						annotation: NoneType = None
+					element: arg 
+						arg: str = lineno
+						annotation: NoneType = None
+					element: arg 
+						arg: str = line
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+					element: NameConstant 
+						value: NoneType = None
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = Function to format a warning the standard way.
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = msg
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = WarningMessage
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = message
+								ctx: Load 
+							element: Name 
+								id: str = category
+								ctx: Load 
+							element: Name 
+								id: str = filename
+								ctx: Load 
+							element: Name 
+								id: str = lineno
+								ctx: Load 
+							element: NameConstant 
+								value: NoneType = None
+							element: Name 
+								id: str = line
+								ctx: Load 
+						keywords: list 
+				element: Return 
+					value: Call 
+						func: Name 
+							id: str = _formatwarnmsg_impl
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = msg
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = _showwarnmsg_impl
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = msg
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str =  Default Show Message Implementation
+    
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = f
+							ctx: Store 
+					value: Attribute 
+						value: Name 
+							id: str = msg
+							ctx: Load 
+						attr: str = file
+						ctx: Load 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = text
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = _formatwarnmsg
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = msg
+								ctx: Load 
+						keywords: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = f
+							ctx: Load 
+						ops: list 
+							element: Is 
+						comparators: list 
+							element: NameConstant 
+								value: NoneType = None
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = text
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = text
+										ctx: Load 
+									attr: str = rstrip
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = 
+
+								keywords: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = console
+										ctx: Load 
+									attr: str = log
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = text
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+						element: Try 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = f
+												ctx: Load 
+											attr: str = write
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = text
+												ctx: Load 
+										keywords: list 
+							handlers: list 
+								element: ExceptHandler 
+									type: Name 
+										id: str = Exception
+										ctx: Load 
+									name: str = exc
+									body: list 
+										element: Pass 
+							orelse: list 
+							finalbody: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = _formatwarnmsg_impl
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = msg
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str =  @note - we've removed the msg.source handling and the associated
+    tracemalloc code as this isn't available in the js runtime.
+    
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = s
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Str 
+								s: str = {}:{}: {}: {}
+
+							attr: str = format
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = msg
+									ctx: Load 
+								attr: str = filename
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = msg
+									ctx: Load 
+								attr: str = lineno
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = msg
+									ctx: Load 
+								attr: str = category
+								ctx: Load 
+							element: Call 
+								func: Name 
+									id: str = str
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = msg
+											ctx: Load 
+										attr: str = message
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+				element: If 
+					test: Attribute 
+						value: Name 
+							id: str = msg
+							ctx: Load 
+						attr: str = line
+						ctx: Load 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = line
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Name 
+											id: str = msg
+											ctx: Load 
+										attr: str = line
+										ctx: Load 
+									attr: str = strip
+									ctx: Load 
+								args: list 
+								keywords: list 
+						element: AugAssign 
+							target: Name 
+								id: str = s
+								ctx: Store 
+							op: Add 
+							value: Call 
+								func: Attribute 
+									value: Str 
+										s: str =   {}
+
+									attr: str = format
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = line
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+				element: Return 
+					value: Name 
+						id: str = s
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = _showwarning
+					ctx: Store 
+			value: Name 
+				id: str = showwarning
+				ctx: Load 
+		element: FunctionDef 
+			name: str = setShowWarning
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = func
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = 
+    
+				element: If 
+					test: UnaryOp 
+						op: Not 
+						operand: Call 
+							func: Name 
+								id: str = callable
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = func
+									ctx: Load 
+							keywords: list 
+					body: list 
+						element: Raise 
+							exc: Call 
+								func: Name 
+									id: str = TypeError
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = showwarning method must be callable
+								keywords: list 
+							cause: NoneType = None
+					orelse: list 
+				element: Global 
+					names: list 
+						element: str = showwarning
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = showwarning
+							ctx: Store 
+					value: Name 
+						id: str = func
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = _showwarnmsg
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = msg
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = Hook to write a warning to a file; replace if you like.
+				element: If 
+					test: UnaryOp 
+						op: Not 
+						operand: Call 
+							func: Name 
+								id: str = callable
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = showwarning
+									ctx: Load 
+							keywords: list 
+					body: list 
+						element: Raise 
+							exc: Call 
+								func: Name 
+									id: str = TypeError
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = warnings.showwarning() must be set to a function or method
+								keywords: list 
+							cause: NoneType = None
+					orelse: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = showwarning
+							ctx: Load 
+						args: list 
+							element: Attribute 
+								value: Name 
+									id: str = msg
+									ctx: Load 
+								attr: str = message
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = msg
+									ctx: Load 
+								attr: str = category
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = msg
+									ctx: Load 
+								attr: str = filename
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = msg
+									ctx: Load 
+								attr: str = lineno
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = msg
+									ctx: Load 
+								attr: str = file
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = msg
+									ctx: Load 
+								attr: str = line
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = _formatwarning
+					ctx: Store 
+			value: Name 
+				id: str = formatwarning
+				ctx: Load 
+		element: FunctionDef 
+			name: str = _formatwarnmsg
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = msg
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = Function to format a warning the standard way.
+				element: Global 
+					names: list 
+						element: str = formatwarning
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = formatwarning
+							ctx: Load 
+						ops: list 
+							element: IsNot 
+						comparators: list 
+							element: Name 
+								id: str = _formatwarning
+								ctx: Load 
+					body: list 
+						element: Return 
+							value: Call 
+								func: Name 
+									id: str = formatwarning
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = msg
+											ctx: Load 
+										attr: str = message
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = msg
+											ctx: Load 
+										attr: str = category
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = msg
+											ctx: Load 
+										attr: str = filename
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = msg
+											ctx: Load 
+										attr: str = lineno
+										ctx: Load 
+								keywords: list 
+									element: keyword 
+										arg: str = line
+										value: Attribute 
+											value: Name 
+												id: str = msg
+												ctx: Load 
+											attr: str = line
+											ctx: Load 
+					orelse: list 
+				element: Return 
+					value: Call 
+						func: Name 
+							id: str = _formatwarnmsg_impl
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = msg
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = addWarningCategory
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = cat
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str =  This method allows the user to add a new warning
+    category at runtime from their library set. This is necessary to
+    get around limitations in the transcrypt runtime's lack of
+    import and eval.
+    
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = name
+							ctx: Store 
+					value: Attribute 
+						value: Name 
+							id: str = cat
+							ctx: Load 
+						attr: str = __name__
+						ctx: Load 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = name
+							ctx: Load 
+						ops: list 
+							element: NotIn 
+						comparators: list 
+							element: Name 
+								id: str = CategoryMap
+								ctx: Load 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Subscript 
+									value: Name 
+										id: str = CategoryMap
+										ctx: Load 
+									slice: Index 
+										value: Name 
+											id: str = name
+											ctx: Load 
+									ctx: Store 
+							value: Name 
+								id: str = cat
+								ctx: Load 
+					orelse: list 
+						element: Raise 
+							exc: Call 
+								func: Name 
+									id: str = Exception
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = Warning Category {} already exists
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = name
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+							cause: NoneType = None
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = kwargs
+				keywords: list 
+		element: FunctionDef 
+			name: str = filterwarnings
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = action
+						annotation: NoneType = None
+					element: arg 
+						arg: str = message
+						annotation: NoneType = None
+					element: arg 
+						arg: str = category
+						annotation: NoneType = None
+					element: arg 
+						arg: str = module
+						annotation: NoneType = None
+					element: arg 
+						arg: str = lineno
+						annotation: NoneType = None
+					element: arg 
+						arg: str = append
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+					element: Str 
+						s: str = 
+					element: Name 
+						id: str = Warning
+						ctx: Load 
+					element: Str 
+						s: str = 
+					element: Num 
+						n: int = 0
+					element: NameConstant 
+						value: bool = False
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = Insert an entry into the list of warnings filters (at the front).
+
+    'action' -- one of "error", "ignore", "always", "default", "module",
+                or "once"
+    'message' -- a regex that the warning message must match
+    'category' -- a class that the warning must be a subclass of
+    'module' -- a regex that the module name must match
+    'lineno' -- an integer line number, 0 matches all warnings
+    'append' -- if true, append to the list of filters
+    
+				element: Assert 
+					test: Compare 
+						left: Name 
+							id: str = action
+							ctx: Load 
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = ActionSet
+								ctx: Load 
+					msg: Call 
+						func: Attribute 
+							value: Str 
+								s: str = invalid action: {}
+							attr: str = format
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = action
+								ctx: Load 
+						keywords: list 
+				element: Assert 
+					test: Call 
+						func: Name 
+							id: str = isinstance
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = message
+								ctx: Load 
+							element: Name 
+								id: str = str
+								ctx: Load 
+						keywords: list 
+					msg: Str 
+						s: str = message must be a string
+				element: Assert 
+					test: Call 
+						func: Name 
+							id: str = isinstance
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = module
+								ctx: Load 
+							element: Name 
+								id: str = str
+								ctx: Load 
+						keywords: list 
+					msg: Str 
+						s: str = module must be a string
+				element: Assert 
+					test: BoolOp 
+						op: And 
+						values: list 
+							element: Call 
+								func: Name 
+									id: str = isinstance
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = lineno
+										ctx: Load 
+									element: Name 
+										id: str = int
+										ctx: Load 
+								keywords: list 
+							element: Compare 
+								left: Name 
+									id: str = lineno
+									ctx: Load 
+								ops: list 
+									element: GtE 
+								comparators: list 
+									element: Num 
+										n: int = 0
+					msg: Str 
+						s: str = lineno must be an int >= 0
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = _add_filter
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = action
+								ctx: Load 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = re
+										ctx: Load 
+									attr: str = compile
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = message
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = re
+											ctx: Load 
+										attr: str = I
+										ctx: Load 
+								keywords: list 
+							element: Name 
+								id: str = category
+								ctx: Load 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = re
+										ctx: Load 
+									attr: str = compile
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = module
+										ctx: Load 
+								keywords: list 
+							element: Name 
+								id: str = lineno
+								ctx: Load 
+						keywords: list 
+							element: keyword 
+								arg: str = append
+								value: Name 
+									id: str = append
+									ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = simplefilter
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = action
+						annotation: NoneType = None
+					element: arg 
+						arg: str = category
+						annotation: NoneType = None
+					element: arg 
+						arg: str = lineno
+						annotation: NoneType = None
+					element: arg 
+						arg: str = append
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+					element: Name 
+						id: str = Warning
+						ctx: Load 
+					element: Num 
+						n: int = 0
+					element: NameConstant 
+						value: bool = False
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = Insert a simple entry into the list of warnings filters (at the front).
+
+    A simple filter matches all modules and messages.
+    'action' -- one of "error", "ignore", "always", "default", "module",
+                or "once"
+    'category' -- a class that the warning must be a subclass of
+    'lineno' -- an integer line number, 0 matches all warnings
+    'append' -- if true, append to the list of filters
+    
+				element: Assert 
+					test: Compare 
+						left: Name 
+							id: str = action
+							ctx: Load 
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = ActionSet
+								ctx: Load 
+					msg: Call 
+						func: Attribute 
+							value: Str 
+								s: str = invalid action: {}
+							attr: str = format
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = action
+								ctx: Load 
+						keywords: list 
+				element: Assert 
+					test: BoolOp 
+						op: And 
+						values: list 
+							element: Call 
+								func: Name 
+									id: str = isinstance
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = lineno
+										ctx: Load 
+									element: Name 
+										id: str = int
+										ctx: Load 
+								keywords: list 
+							element: Compare 
+								left: Name 
+									id: str = lineno
+									ctx: Load 
+								ops: list 
+									element: GtE 
+								comparators: list 
+									element: Num 
+										n: int = 0
+					msg: Str 
+						s: str = lineno must be an int >= 0
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = _add_filter
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = action
+								ctx: Load 
+							element: NameConstant 
+								value: NoneType = None
+							element: Name 
+								id: str = category
+								ctx: Load 
+							element: NameConstant 
+								value: NoneType = None
+							element: Name 
+								id: str = lineno
+								ctx: Load 
+						keywords: list 
+							element: keyword 
+								arg: str = append
+								value: Name 
+									id: str = append
+									ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = _add_filter
+			args: arguments 
+				args: list 
+				vararg: arg 
+					arg: str = item
+					annotation: NoneType = None
+				kwonlyargs: list 
+					element: arg 
+						arg: str = append
+						annotation: NoneType = None
+				kw_defaults: list 
+					element: NoneType = None
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: If 
+					test: UnaryOp 
+						op: Not 
+						operand: Name 
+							id: str = append
+							ctx: Load 
+					body: list 
+						element: Try 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = filters
+												ctx: Load 
+											attr: str = remove
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = item
+												ctx: Load 
+										keywords: list 
+							handlers: list 
+								element: ExceptHandler 
+									type: Name 
+										id: str = Exception
+										ctx: Load 
+									name: NoneType = None
+									body: list 
+										element: Pass 
+							orelse: list 
+							finalbody: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = filters
+										ctx: Load 
+									attr: str = insert
+									ctx: Load 
+								args: list 
+									element: Num 
+										n: int = 0
+									element: Name 
+										id: str = item
+										ctx: Load 
+								keywords: list 
+					orelse: list 
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = item
+									ctx: Load 
+								ops: list 
+									element: NotIn 
+								comparators: list 
+									element: Name 
+										id: str = filters
+										ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = filters
+												ctx: Load 
+											attr: str = append
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = item
+												ctx: Load 
+										keywords: list 
+							orelse: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = _filters_mutated
+							ctx: Load 
+						args: list 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Expr 
+			value: Call 
+				func: Name 
+					id: str = __pragma__
+					ctx: Load 
+				args: list 
+					element: Str 
+						s: str = nokwargs
+				keywords: list 
+		element: FunctionDef 
+			name: str = resetwarnings
+			args: arguments 
+				args: list 
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = Clear the list of warning filters, so that no filters are active.
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = filters
+							ctx: Store 
+					value: List 
+						elts: list 
+						ctx: Load 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = _filters_mutated
+							ctx: Load 
+						args: list 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = __warningregistry__
+					ctx: Store 
+			value: Dict 
+				keys: list 
+				values: list 
+		element: FunctionDef 
+			name: str = _checkCatMatch
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = msgCat
+						annotation: NoneType = None
+					element: arg 
+						arg: str = filtCat
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = 
+    
+				element: Return 
+					value: Compare 
+						left: Attribute 
+							value: Name 
+								id: str = msgCat
+								ctx: Load 
+							attr: str = __name__
+							ctx: Load 
+						ops: list 
+							element: Eq 
+						comparators: list 
+							element: Attribute 
+								value: Name 
+									id: str = filtCat
+									ctx: Load 
+								attr: str = __name__
+								ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = warn_explicit
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = message
+						annotation: NoneType = None
+					element: arg 
+						arg: str = category
+						annotation: NoneType = None
+					element: arg 
+						arg: str = filename
+						annotation: NoneType = None
+					element: arg 
+						arg: str = lineno
+						annotation: NoneType = None
+					element: arg 
+						arg: str = module
+						annotation: NoneType = None
+					element: arg 
+						arg: str = registry
+						annotation: NoneType = None
+					element: arg 
+						arg: str = module_globals
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+					element: NameConstant 
+						value: NoneType = None
+					element: NameConstant 
+						value: NoneType = None
+					element: NameConstant 
+						value: NoneType = None
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str =  Explicitly set the message and origin information for a warning.
+    This is the preferred method to use in transcrypt.
+    @param message message for the warning that will be created.
+    @param category object that subclasses `Warning` and indicates the
+       type of warning being created. @see addWarningCategory for
+       extensibility
+    @param filename name of the file from which this warning is originating.
+       @note use the __file__ and __filename__ macro definitions for this.
+       In general, this should refer to the python source file or if that
+       does not exist a pure js file.
+    @param lineno The line number in the associated source file that this
+       warning is being generated at. @note use the __line__ macro.
+    @param module name of the module that is generating this warning.
+       @note use the __name__ macro as a mechanism for creating this
+       string.
+    @param registry This parameter is used to reference the data storage
+       location which houses the state of warnings that have been
+       generated. In most applications, you should leave this value as
+       None. If this value is None, then the internal `warnings` module
+       registry will be used by default. @note this is a deviation from
+       the python standard API.
+    @param module_globals This parameter is carry over from the python
+       implementation and provided to keep the API the same. This
+       parameter is currently not used.
+    
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = lineno
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = int
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = lineno
+								ctx: Load 
+						keywords: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = module
+							ctx: Load 
+						ops: list 
+							element: Is 
+						comparators: list 
+							element: NameConstant 
+								value: NoneType = None
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = module
+									ctx: Store 
+							value: BoolOp 
+								op: Or 
+								values: list 
+									element: Name 
+										id: str = filename
+										ctx: Load 
+									element: Str 
+										s: str = <unknown>
+						element: If 
+							test: Compare 
+								left: Call 
+									func: Attribute 
+										value: Subscript 
+											value: Name 
+												id: str = module
+												ctx: Load 
+											slice: Slice 
+												lower: UnaryOp 
+													op: USub 
+													operand: Num 
+														n: int = 3
+												upper: NoneType = None
+												step: NoneType = None
+											ctx: Load 
+										attr: str = lower
+										ctx: Load 
+									args: list 
+									keywords: list 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Str 
+										s: str = .py
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = module
+											ctx: Store 
+									value: Subscript 
+										value: Name 
+											id: str = module
+											ctx: Load 
+										slice: Slice 
+											lower: NoneType = None
+											upper: UnaryOp 
+												op: USub 
+												operand: Num 
+													n: int = 3
+											step: NoneType = None
+										ctx: Load 
+							orelse: list 
+					orelse: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = registry
+							ctx: Load 
+						ops: list 
+							element: Is 
+						comparators: list 
+							element: NameConstant 
+								value: NoneType = None
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = registry
+									ctx: Store 
+							value: Name 
+								id: str = __warningregistry__
+								ctx: Load 
+					orelse: list 
+				element: Try 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = currVersion
+									ctx: Store 
+							value: Subscript 
+								value: Name 
+									id: str = registry
+									ctx: Load 
+								slice: Index 
+									value: Str 
+										s: str = version
+								ctx: Load 
+					handlers: list 
+						element: ExceptHandler 
+							type: Name 
+								id: str = KeyError
+								ctx: Load 
+							name: NoneType = None
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = currVersion
+											ctx: Store 
+									value: Num 
+										n: int = 0
+					orelse: list 
+					finalbody: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = currVersion
+							ctx: Load 
+						ops: list 
+							element: NotEq 
+						comparators: list 
+							element: Name 
+								id: str = _filters_version
+								ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = registry
+										ctx: Load 
+									attr: str = clear
+									ctx: Load 
+								args: list 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Subscript 
+									value: Name 
+										id: str = registry
+										ctx: Load 
+									slice: Index 
+										value: Str 
+											s: str = version
+									ctx: Store 
+							value: Name 
+								id: str = _filters_version
+								ctx: Load 
+					orelse: list 
+				element: If 
+					test: Call 
+						func: Name 
+							id: str = isinstance
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = message
+								ctx: Load 
+							element: Name 
+								id: str = Warning
+								ctx: Load 
+						keywords: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = text
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = str
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = message
+										ctx: Load 
+								keywords: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = category
+									ctx: Store 
+							value: Attribute 
+								value: Name 
+									id: str = message
+									ctx: Load 
+								attr: str = __class__
+								ctx: Load 
+					orelse: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = text
+									ctx: Store 
+							value: Name 
+								id: str = message
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = message
+									ctx: Store 
+							value: Call 
+								func: Name 
+									id: str = category
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = message
+										ctx: Load 
+								keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = key
+							ctx: Store 
+					value: Tuple 
+						elts: list 
+							element: Name 
+								id: str = text
+								ctx: Load 
+							element: Name 
+								id: str = category
+								ctx: Load 
+							element: Name 
+								id: str = lineno
+								ctx: Load 
+						ctx: Load 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = key
+							ctx: Load 
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Name 
+								id: str = registry
+								ctx: Load 
+					body: list 
+						element: Return 
+							value: NoneType = None
+					orelse: list 
+				element: For 
+					target: Name 
+						id: str = item
+						ctx: Store 
+					iter: Name 
+						id: str = filters
+						ctx: Load 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Tuple 
+									elts: list 
+										element: Name 
+											id: str = action
+											ctx: Store 
+										element: Name 
+											id: str = msg
+											ctx: Store 
+										element: Name 
+											id: str = cat
+											ctx: Store 
+										element: Name 
+											id: str = mod
+											ctx: Store 
+										element: Name 
+											id: str = ln
+											ctx: Store 
+									ctx: Store 
+							value: Name 
+								id: str = item
+								ctx: Load 
+						element: If 
+							test: BoolOp 
+								op: And 
+								values: list 
+									element: BoolOp 
+										op: Or 
+										values: list 
+											element: Compare 
+												left: Name 
+													id: str = msg
+													ctx: Load 
+												ops: list 
+													element: Is 
+												comparators: list 
+													element: NameConstant 
+														value: NoneType = None
+											element: Call 
+												func: Attribute 
+													value: Name 
+														id: str = msg
+														ctx: Load 
+													attr: str = match
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = text
+														ctx: Load 
+												keywords: list 
+									element: Call 
+										func: Name 
+											id: str = _checkCatMatch
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = category
+												ctx: Load 
+											element: Name 
+												id: str = cat
+												ctx: Load 
+										keywords: list 
+									element: BoolOp 
+										op: Or 
+										values: list 
+											element: Compare 
+												left: Name 
+													id: str = mod
+													ctx: Load 
+												ops: list 
+													element: Is 
+												comparators: list 
+													element: NameConstant 
+														value: NoneType = None
+											element: Call 
+												func: Attribute 
+													value: Name 
+														id: str = mod
+														ctx: Load 
+													attr: str = match
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = module
+														ctx: Load 
+												keywords: list 
+									element: BoolOp 
+										op: Or 
+										values: list 
+											element: Compare 
+												left: Name 
+													id: str = ln
+													ctx: Load 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Num 
+														n: int = 0
+											element: Compare 
+												left: Name 
+													id: str = lineno
+													ctx: Load 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Name 
+														id: str = ln
+														ctx: Load 
+							body: list 
+								element: Break 
+							orelse: list 
+					orelse: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = action
+									ctx: Store 
+							value: Name 
+								id: str = defaultaction
+								ctx: Load 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = action
+							ctx: Load 
+						ops: list 
+							element: Eq 
+						comparators: list 
+							element: Attribute 
+								value: Name 
+									id: str = Actions
+									ctx: Load 
+								attr: str = ignore
+								ctx: Load 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Subscript 
+									value: Name 
+										id: str = registry
+										ctx: Load 
+									slice: Index 
+										value: Name 
+											id: str = key
+											ctx: Load 
+									ctx: Store 
+							value: Num 
+								n: int = 1
+						element: Return 
+							value: NoneType = None
+					orelse: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = action
+							ctx: Load 
+						ops: list 
+							element: Eq 
+						comparators: list 
+							element: Attribute 
+								value: Name 
+									id: str = Actions
+									ctx: Load 
+								attr: str = error
+								ctx: Load 
+					body: list 
+						element: Raise 
+							exc: Name 
+								id: str = message
+								ctx: Load 
+							cause: NoneType = None
+					orelse: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = action
+							ctx: Load 
+						ops: list 
+							element: Eq 
+						comparators: list 
+							element: Attribute 
+								value: Name 
+									id: str = Actions
+									ctx: Load 
+								attr: str = once
+								ctx: Load 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Subscript 
+									value: Name 
+										id: str = registry
+										ctx: Load 
+									slice: Index 
+										value: Name 
+											id: str = key
+											ctx: Load 
+									ctx: Store 
+							value: Num 
+								n: int = 1
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = oncekey
+									ctx: Store 
+							value: Tuple 
+								elts: list 
+									element: Name 
+										id: str = text
+										ctx: Load 
+									element: Name 
+										id: str = category
+										ctx: Load 
+								ctx: Load 
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = oncekey
+									ctx: Load 
+								ops: list 
+									element: In 
+								comparators: list 
+									element: Name 
+										id: str = onceregistry
+										ctx: Load 
+							body: list 
+								element: Return 
+									value: NoneType = None
+							orelse: list 
+						element: Assign 
+							targets: list 
+								element: Subscript 
+									value: Name 
+										id: str = onceregistry
+										ctx: Load 
+									slice: Index 
+										value: Name 
+											id: str = oncekey
+											ctx: Load 
+									ctx: Store 
+							value: Num 
+								n: int = 1
+					orelse: list 
+						element: If 
+							test: Compare 
+								left: Name 
+									id: str = action
+									ctx: Load 
+								ops: list 
+									element: Eq 
+								comparators: list 
+									element: Attribute 
+										value: Name 
+											id: str = Actions
+											ctx: Load 
+										attr: str = always
+										ctx: Load 
+							body: list 
+								element: Pass 
+							orelse: list 
+								element: If 
+									test: Compare 
+										left: Name 
+											id: str = action
+											ctx: Load 
+										ops: list 
+											element: Eq 
+										comparators: list 
+											element: Attribute 
+												value: Name 
+													id: str = Actions
+													ctx: Load 
+												attr: str = module
+												ctx: Load 
+									body: list 
+										element: Assign 
+											targets: list 
+												element: Subscript 
+													value: Name 
+														id: str = registry
+														ctx: Load 
+													slice: Index 
+														value: Name 
+															id: str = key
+															ctx: Load 
+													ctx: Store 
+											value: Num 
+												n: int = 1
+										element: Assign 
+											targets: list 
+												element: Name 
+													id: str = altkey
+													ctx: Store 
+											value: Tuple 
+												elts: list 
+													element: Name 
+														id: str = text
+														ctx: Load 
+													element: Name 
+														id: str = category
+														ctx: Load 
+													element: Num 
+														n: int = 0
+												ctx: Load 
+										element: If 
+											test: Compare 
+												left: Name 
+													id: str = altkey
+													ctx: Load 
+												ops: list 
+													element: In 
+												comparators: list 
+													element: Name 
+														id: str = registry
+														ctx: Load 
+											body: list 
+												element: Return 
+													value: NoneType = None
+											orelse: list 
+										element: Assign 
+											targets: list 
+												element: Subscript 
+													value: Name 
+														id: str = registry
+														ctx: Load 
+													slice: Index 
+														value: Name 
+															id: str = altkey
+															ctx: Load 
+													ctx: Store 
+											value: Num 
+												n: int = 1
+									orelse: list 
+										element: If 
+											test: Compare 
+												left: Name 
+													id: str = action
+													ctx: Load 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Attribute 
+														value: Name 
+															id: str = Actions
+															ctx: Load 
+														attr: str = defaultact
+														ctx: Load 
+											body: list 
+												element: Assign 
+													targets: list 
+														element: Subscript 
+															value: Name 
+																id: str = registry
+																ctx: Load 
+															slice: Index 
+																value: Name 
+																	id: str = key
+																	ctx: Load 
+															ctx: Store 
+													value: Num 
+														n: int = 1
+											orelse: list 
+												element: Raise 
+													exc: Call 
+														func: Name 
+															id: str = RuntimeError
+															ctx: Load 
+														args: list 
+															element: Call 
+																func: Attribute 
+																	value: Str 
+																		s: str = Unrecognized action ({}) in warnings.filters:
+ {}
+																	attr: str = format
+																	ctx: Load 
+																args: list 
+																	element: Name 
+																		id: str = action
+																		ctx: Load 
+																	element: Name 
+																		id: str = item
+																		ctx: Load 
+																keywords: list 
+														keywords: list 
+													cause: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = msg
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = WarningMessage
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = message
+								ctx: Load 
+							element: Attribute 
+								value: Name 
+									id: str = category
+									ctx: Load 
+								attr: str = __name__
+								ctx: Load 
+							element: Name 
+								id: str = filename
+								ctx: Load 
+							element: Name 
+								id: str = lineno
+								ctx: Load 
+						keywords: list 
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = _showwarnmsg
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = msg
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: ClassDef 
+			name: str = WarningMessage
+			bases: list 
+				element: Name 
+					id: str = object
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = message
+								annotation: NoneType = None
+							element: arg 
+								arg: str = category
+								annotation: NoneType = None
+							element: arg 
+								arg: str = filename
+								annotation: NoneType = None
+							element: arg 
+								arg: str = lineno
+								annotation: NoneType = None
+							element: arg 
+								arg: str = file
+								annotation: NoneType = None
+							element: arg 
+								arg: str = line
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+							element: NameConstant 
+								value: NoneType = None
+							element: NameConstant 
+								value: NoneType = None
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = message
+									ctx: Store 
+							value: Name 
+								id: str = message
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = category
+									ctx: Store 
+							value: Name 
+								id: str = category
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = filename
+									ctx: Store 
+							value: Name 
+								id: str = filename
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = lineno
+									ctx: Store 
+							value: Name 
+								id: str = lineno
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = file
+									ctx: Store 
+							value: Name 
+								id: str = file
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = line
+									ctx: Store 
+							value: Name 
+								id: str = line
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _category_name
+									ctx: Store 
+							value: IfExp 
+								test: Name 
+									id: str = category
+									ctx: Load 
+								body: Attribute 
+									value: Name 
+										id: str = category
+										ctx: Load 
+									attr: str = __name__
+									ctx: Load 
+								orelse: NameConstant 
+									value: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = __str__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Return 
+							value: Call 
+								func: Attribute 
+									value: Str 
+										s: str = {{message : {}, category : {}, filename : {}, lineno : {}, line : {} }}
+									attr: str = format
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = message
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = _category_name
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = filename
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = lineno
+										ctx: Load 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = line
+										ctx: Load 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: ClassDef 
+			name: str = catch_warnings
+			bases: list 
+				element: Name 
+					id: str = object
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = A context manager that copies and restores the warnings filter upon
+    exiting the context.
+
+    The 'record' argument specifies whether warnings should be captured by a
+    custom implementation of warnings.showwarning() and be appended to a list
+    returned by the context manager. Otherwise None is returned by the context
+    manager. The objects appended to the list are arguments whose attributes
+    mirror the arguments to showwarning().
+
+    The 'module' argument is to specify an alternative module to the module
+    named 'warnings' and imported under that name. This argument is only useful
+    when testing the warnings module itself.
+
+    
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+							element: arg 
+								arg: str = record
+								annotation: NoneType = None
+							element: arg 
+								arg: str = module
+								annotation: NoneType = None
+						kw_defaults: list 
+							element: NameConstant 
+								value: bool = False
+							element: NameConstant 
+								value: NoneType = None
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Str 
+								s: str = Specify whether to record warnings and if an alternative module
+        should be used other than sys.modules['warnings'].
+
+        For compatibility with Python 3.0, please consider all arguments to be
+        keyword-only.
+
+        
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _record
+									ctx: Store 
+							value: Name 
+								id: str = record
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _entered
+									ctx: Store 
+							value: NameConstant 
+								value: bool = False
+						element: Raise 
+							exc: Call 
+								func: Name 
+									id: str = NotImplementedError
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = with/as not well supported in transcrypt
+								keywords: list 
+							cause: NoneType = None
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 
+		element: FunctionDef 
+			name: str = setWarningOptions
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = opts
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str =  This method can be used to configured the filters for the
+    warning module.
+    @param opts List of strings in the form
+      "action:message:category:module:line"
+      where action is string in the set `warnings.ActionSet`
+      @see the python documentation for more info.
+    
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = _processoptions
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = opts
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: ClassDef 
+			name: str = _OptionError
+			bases: list 
+				element: Name 
+					id: str = Exception
+					ctx: Load 
+			keywords: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = Exception used by option processing helpers.
+				element: Pass 
+			decorator_list: list 
+		element: FunctionDef 
+			name: str = _processoptions
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = args
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: For 
+					target: Name 
+						id: str = arg
+						ctx: Store 
+					iter: Name 
+						id: str = args
+						ctx: Load 
+					body: list 
+						element: Try 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = _setoption
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = arg
+												ctx: Load 
+										keywords: list 
+							handlers: list 
+								element: ExceptHandler 
+									type: Name 
+										id: str = _OptionError
+										ctx: Load 
+									name: str = msg
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = console
+														ctx: Load 
+													attr: str = log
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = WARNING: Invalid -W option ignored: {}
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = msg
+																ctx: Load 
+														keywords: list 
+												keywords: list 
+							orelse: list 
+							finalbody: list 
+					orelse: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = _setoption
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = arg
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = parts
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = arg
+								ctx: Load 
+							attr: str = split
+							ctx: Load 
+						args: list 
+							element: Str 
+								s: str = :
+						keywords: list 
+				element: If 
+					test: Compare 
+						left: Call 
+							func: Name 
+								id: str = len
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = parts
+									ctx: Load 
+							keywords: list 
+						ops: list 
+							element: Gt 
+						comparators: list 
+							element: Num 
+								n: int = 5
+					body: list 
+						element: Raise 
+							exc: Call 
+								func: Name 
+									id: str = _OptionError
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = too many fields (max 5): {}
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = arg
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+							cause: NoneType = None
+					orelse: list 
+				element: While 
+					test: Compare 
+						left: Call 
+							func: Name 
+								id: str = len
+								ctx: Load 
+							args: list 
+								element: Name 
+									id: str = parts
+									ctx: Load 
+							keywords: list 
+						ops: list 
+							element: Lt 
+						comparators: list 
+							element: Num 
+								n: int = 5
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = parts
+										ctx: Load 
+									attr: str = append
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = 
+								keywords: list 
+					orelse: list 
+				element: Assign 
+					targets: list 
+						element: Tuple 
+							elts: list 
+								element: Name 
+									id: str = action
+									ctx: Store 
+								element: Name 
+									id: str = message
+									ctx: Store 
+								element: Name 
+									id: str = category
+									ctx: Store 
+								element: Name 
+									id: str = module
+									ctx: Store 
+								element: Name 
+									id: str = lineno
+									ctx: Store 
+							ctx: Store 
+					value: ListComp 
+						elt: Call 
+							func: Attribute 
+								value: Name 
+									id: str = s
+									ctx: Load 
+								attr: str = strip
+								ctx: Load 
+							args: list 
+							keywords: list 
+						generators: list 
+							element: comprehension 
+								target: Name 
+									id: str = s
+									ctx: Store 
+								iter: Name 
+									id: str = parts
+									ctx: Load 
+								ifs: list 
+								is_async: int = 0
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = action
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = _getaction
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = action
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = message
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = re
+								ctx: Load 
+							attr: str = escape
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = message
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = category
+							ctx: Store 
+					value: Call 
+						func: Name 
+							id: str = _getcategory
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = category
+								ctx: Load 
+						keywords: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = module
+							ctx: Store 
+					value: Call 
+						func: Attribute 
+							value: Name 
+								id: str = re
+								ctx: Load 
+							attr: str = escape
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = module
+								ctx: Load 
+						keywords: list 
+				element: If 
+					test: Name 
+						id: str = module
+						ctx: Load 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = module
+									ctx: Store 
+							value: BinOp 
+								left: Name 
+									id: str = module
+									ctx: Load 
+								op: Add 
+								right: Str 
+									s: str = $
+					orelse: list 
+				element: If 
+					test: Name 
+						id: str = lineno
+						ctx: Load 
+					body: list 
+						element: Try 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = lineno
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = int
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = lineno
+												ctx: Load 
+										keywords: list 
+								element: If 
+									test: Compare 
+										left: Name 
+											id: str = lineno
+											ctx: Load 
+										ops: list 
+											element: Lt 
+										comparators: list 
+											element: Num 
+												n: int = 0
+									body: list 
+										element: Raise 
+											exc: Name 
+												id: str = ValueError
+												ctx: Load 
+											cause: NoneType = None
+									orelse: list 
+							handlers: list 
+								element: ExceptHandler 
+									type: Tuple 
+										elts: list 
+											element: Name 
+												id: str = ValueError
+												ctx: Load 
+											element: Name 
+												id: str = OverflowError
+												ctx: Load 
+										ctx: Load 
+									name: NoneType = None
+									body: list 
+										element: Raise 
+											exc: Call 
+												func: Name 
+													id: str = _OptionError
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = invalid lineno {}
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = lineno
+																ctx: Load 
+														keywords: list 
+												keywords: list 
+											cause: NoneType = None
+							orelse: list 
+							finalbody: list 
+					orelse: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = lineno
+									ctx: Store 
+							value: Num 
+								n: int = 0
+				element: Expr 
+					value: Call 
+						func: Name 
+							id: str = filterwarnings
+							ctx: Load 
+						args: list 
+							element: Name 
+								id: str = action
+								ctx: Load 
+							element: Name 
+								id: str = message
+								ctx: Load 
+							element: Name 
+								id: str = category
+								ctx: Load 
+							element: Name 
+								id: str = module
+								ctx: Load 
+							element: Name 
+								id: str = lineno
+								ctx: Load 
+						keywords: list 
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = _getaction
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = action
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: If 
+					test: UnaryOp 
+						op: Not 
+						operand: Name 
+							id: str = action
+							ctx: Load 
+					body: list 
+						element: Return 
+							value: Attribute 
+								value: Name 
+									id: str = Actions
+									ctx: Load 
+								attr: str = defaultact
+								ctx: Load 
+					orelse: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = action
+							ctx: Load 
+						ops: list 
+							element: Eq 
+						comparators: list 
+							element: Str 
+								s: str = all
+					body: list 
+						element: Return 
+							value: Attribute 
+								value: Name 
+									id: str = Action
+									ctx: Load 
+								attr: str = always
+								ctx: Load 
+					orelse: list 
+				element: For 
+					target: Name 
+						id: str = a
+						ctx: Store 
+					iter: Name 
+						id: str = ActionSet
+						ctx: Load 
+					body: list 
+						element: If 
+							test: Call 
+								func: Attribute 
+									value: Name 
+										id: str = a
+										ctx: Load 
+									attr: str = startswith
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = action
+										ctx: Load 
+								keywords: list 
+							body: list 
+								element: Return 
+									value: Name 
+										id: str = a
+										ctx: Load 
+							orelse: list 
+					orelse: list 
+				element: Raise 
+					exc: Call 
+						func: Name 
+							id: str = _OptionError
+							ctx: Load 
+						args: list 
+							element: Call 
+								func: Attribute 
+									value: Str 
+										s: str = invalid action: {}
+									attr: str = format
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = action
+										ctx: Load 
+								keywords: list 
+						keywords: list 
+					cause: NoneType = None
+			decorator_list: list 
+			returns: NoneType = None
+		element: FunctionDef 
+			name: str = _getcategory
+			args: arguments 
+				args: list 
+					element: arg 
+						arg: str = category
+						annotation: NoneType = None
+				vararg: NoneType = None
+				kwonlyargs: list 
+				kw_defaults: list 
+				kwarg: NoneType = None
+				defaults: list 
+			body: list 
+				element: If 
+					test: UnaryOp 
+						op: Not 
+						operand: Name 
+							id: str = category
+							ctx: Load 
+					body: list 
+						element: Return 
+							value: Name 
+								id: str = Warning
+								ctx: Load 
+					orelse: list 
+				element: If 
+					test: Compare 
+						left: Name 
+							id: str = category
+							ctx: Load 
+						ops: list 
+							element: In 
+						comparators: list 
+							element: Call 
+								func: Attribute 
+									value: Name 
+										id: str = CategoryMap
+										ctx: Load 
+									attr: str = keys
+									ctx: Load 
+								args: list 
+								keywords: list 
+					body: list 
+						element: Try 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = cat
+											ctx: Store 
+									value: Subscript 
+										value: Name 
+											id: str = CategoryMap
+											ctx: Load 
+										slice: Index 
+											value: Name 
+												id: str = category
+												ctx: Load 
+										ctx: Load 
+							handlers: list 
+								element: ExceptHandler 
+									type: Name 
+										id: str = NameError
+										ctx: Load 
+									name: NoneType = None
+									body: list 
+										element: Raise 
+											exc: Call 
+												func: Name 
+													id: str = _OptionError
+													ctx: Load 
+												args: list 
+													element: Call 
+														func: Attribute 
+															value: Str 
+																s: str = unknown warning category: {}
+															attr: str = format
+															ctx: Load 
+														args: list 
+															element: Name 
+																id: str = category
+																ctx: Load 
+														keywords: list 
+												keywords: list 
+											cause: NoneType = None
+							orelse: list 
+							finalbody: list 
+					orelse: list 
+						element: Raise 
+							exc: Call 
+								func: Name 
+									id: str = Exception
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Attribute 
+											value: Str 
+												s: str = Unable to import category: {}, use `addWarningCategory`
+											attr: str = format
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = category
+												ctx: Load 
+										keywords: list 
+								keywords: list 
+							cause: NoneType = None
+				element: Return 
+					value: Name 
+						id: str = cat
+						ctx: Load 
+			decorator_list: list 
+			returns: NoneType = None
+		element: If 
+			test: UnaryOp 
+				op: Not 
+				operand: Name 
+					id: str = _warnings_defaults
+					ctx: Load 
+			body: list 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = silence
+							ctx: Store 
+					value: List 
+						elts: list 
+							element: Name 
+								id: str = DeprecationWarning
+								ctx: Load 
+						ctx: Load 
+				element: For 
+					target: Name 
+						id: str = cls
+						ctx: Store 
+					iter: Name 
+						id: str = silence
+						ctx: Load 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = simplefilter
+									ctx: Load 
+								args: list 
+									element: Attribute 
+										value: Name 
+											id: str = Actions
+											ctx: Load 
+										attr: str = ignore
+										ctx: Load 
+								keywords: list 
+									element: keyword 
+										arg: str = category
+										value: Name 
+											id: str = cls
+											ctx: Load 
+					orelse: list 
+			orelse: list 

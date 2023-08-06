@@ -1,0 +1,810 @@
+file: Module 
+	body: list 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = __author__
+					ctx: Store 
+			value: Str 
+				s: str = Gunther Klessinger, gk@axiros.com, Germany
+		element: ImportFrom 
+			module: str = color
+			names: list 
+				element: alias 
+					name: str = colors
+					asname: NoneType = None
+				element: alias 
+					name: str = cprint
+					asname: str = col_print
+			level: int = 0
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = c
+					ctx: Store 
+			value: Name 
+				id: str = colors
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Tuple 
+					elts: list 
+						element: Name 
+							id: str = M
+							ctx: Store 
+						element: Name 
+							id: str = I
+							ctx: Store 
+						element: Name 
+							id: str = L
+							ctx: Store 
+						element: Name 
+							id: str = R
+							ctx: Store 
+						element: Name 
+							id: str = B
+							ctx: Store 
+					ctx: Store 
+			value: Tuple 
+				elts: list 
+					element: Subscript 
+						value: Name 
+							id: str = c
+							ctx: Load 
+						slice: Index 
+							value: Str 
+								s: str = purple
+						ctx: Load 
+					element: Subscript 
+						value: Name 
+							id: str = c
+							ctx: Load 
+						slice: Index 
+							value: Str 
+								s: str = orange
+						ctx: Load 
+					element: Subscript 
+						value: Name 
+							id: str = c
+							ctx: Load 
+						slice: Index 
+							value: Str 
+								s: str = gray
+						ctx: Load 
+					element: Subscript 
+						value: Name 
+							id: str = c
+							ctx: Load 
+						slice: Index 
+							value: Str 
+								s: str = red
+						ctx: Load 
+					element: Subscript 
+						value: Name 
+							id: str = c
+							ctx: Load 
+						slice: Index 
+							value: Str 
+								s: str = black
+						ctx: Load 
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = lifecycle_ev
+					ctx: Store 
+			value: List 
+				elts: list 
+					element: Str 
+						s: str = before-mount
+					element: Str 
+						s: str = mount
+					element: Str 
+						s: str = update
+					element: Str 
+						s: str = unmount
+				ctx: Load 
+		element: Assign 
+			targets: list 
+				element: Name 
+					id: str = cur_tag_col
+					ctx: Store 
+			value: Num 
+				n: int = 0
+		element: ClassDef 
+			name: str = RiotTag
+			bases: list 
+			keywords: list 
+			body: list 
+				element: Expr 
+					value: Str 
+						s: str = 
+    taking care for extending the riot tag obj with
+    functions and immutable(!) properties of derivations of us
+    See counter.
+    
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = debug
+							ctx: Store 
+					value: NameConstant 
+						value: NoneType = None
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = template
+							ctx: Store 
+					value: Str 
+						s: str = <h1>it worx</h1>
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = style
+							ctx: Store 
+					value: Str 
+						s: str = 
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = node_name
+							ctx: Store 
+					value: Str 
+						s: str = unmounted
+				element: Assign 
+					targets: list 
+						element: Name 
+							id: str = opts
+							ctx: Store 
+					value: NameConstant 
+						value: NoneType = None
+				element: FunctionDef 
+					name: str = __init__
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = tag
+								annotation: NoneType = None
+							element: arg 
+								arg: str = opts
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = opts
+									ctx: Store 
+							value: Name 
+								id: str = opts
+								ctx: Load 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _setup_tag
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = tag
+										ctx: Load 
+								keywords: list 
+						element: Global 
+							names: list 
+								element: str = cur_tag_col
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = cur_tag_col
+									ctx: Store 
+							value: BinOp 
+								left: BinOp 
+									left: Name 
+										id: str = cur_tag_col
+										ctx: Load 
+									op: Add 
+									right: Num 
+										n: int = 1
+								op: Mod 
+								right: Call 
+									func: Name 
+										id: str = len
+										ctx: Load 
+									args: list 
+										element: Name 
+											id: str = colors
+											ctx: Load 
+									keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = my_col
+									ctx: Store 
+							value: Subscript 
+								value: Subscript 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = colors
+												ctx: Load 
+											attr: str = items
+											ctx: Load 
+										args: list 
+										keywords: list 
+									slice: Index 
+										value: Name 
+											id: str = cur_tag_col
+											ctx: Load 
+									ctx: Load 
+								slice: Index 
+									value: Num 
+										n: int = 1
+								ctx: Load 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = _setup_tag
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = tag
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = tag
+										ctx: Load 
+									attr: str = py_obj
+									ctx: Store 
+							value: Name 
+								id: str = self
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = riot_tag
+									ctx: Store 
+							value: Name 
+								id: str = tag
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = handlers
+									ctx: Store 
+							value: Dict 
+								keys: list 
+								values: list 
+						element: For 
+							target: Name 
+								id: str = ev
+								ctx: Store 
+							iter: Name 
+								id: str = lifecycle_ev
+								ctx: Load 
+							body: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = f
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = getattr
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = self
+												ctx: Load 
+											element: Call 
+												func: Attribute 
+													value: Name 
+														id: str = ev
+														ctx: Load 
+													attr: str = replace
+													ctx: Load 
+												args: list 
+													element: Str 
+														s: str = -
+													element: Str 
+														s: str = _
+												keywords: list 
+										keywords: list 
+								element: If 
+									test: Name 
+										id: str = f
+										ctx: Load 
+									body: list 
+										element: Expr 
+											value: Call 
+												func: Attribute 
+													value: Name 
+														id: str = tag
+														ctx: Load 
+													attr: str = on
+													ctx: Load 
+												args: list 
+													element: Name 
+														id: str = ev
+														ctx: Load 
+													element: Name 
+														id: str = f
+														ctx: Load 
+												keywords: list 
+									orelse: list 
+							orelse: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = pp
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: arg 
+							arg: str = msg
+							annotation: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = col_print
+									ctx: Load 
+								args: list 
+									element: Call 
+										func: Name 
+											id: str = L
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = <
+											element: Call 
+												func: Attribute 
+													value: Name 
+														id: str = self
+														ctx: Load 
+													attr: str = my_col
+													ctx: Load 
+												args: list 
+													element: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = node_name
+														ctx: Load 
+													element: Attribute 
+														value: Name 
+															id: str = self
+															ctx: Load 
+														attr: str = my_col
+														ctx: Load 
+												keywords: list 
+											element: Str 
+												s: str = /> 
+										keywords: list 
+									element: Call 
+										func: Name 
+											id: str = M
+											ctx: Load 
+										args: list 
+											element: Call 
+												func: Attribute 
+													value: Str 
+														s: str =  
+													attr: str = join
+													ctx: Load 
+												args: list 
+													element: ListComp 
+														elt: Name 
+															id: str = s
+															ctx: Load 
+														generators: list 
+															element: comprehension 
+																target: Name 
+																	id: str = s
+																	ctx: Store 
+																iter: Name 
+																	id: str = msg
+																	ctx: Load 
+																ifs: list 
+																is_async: int = 0
+												keywords: list 
+										keywords: list 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = _lifecycle_ev
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+							element: arg 
+								arg: str = mode
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: If 
+							test: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = debug
+								ctx: Load 
+							body: list 
+								element: Expr 
+									value: Call 
+										func: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = pp
+											ctx: Load 
+										args: list 
+											element: BinOp 
+												left: Name 
+													id: str = mode
+													ctx: Load 
+												op: Add 
+												right: Str 
+													s: str = ing
+										keywords: list 
+							orelse: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = update
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _lifecycle_ev
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = update
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = mount
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _lifecycle_ev
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = mount
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = unmount
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _lifecycle_ev
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = unmount
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = before_mount
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Expr 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = _lifecycle_ev
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = before-mount
+								keywords: list 
+						element: Return 
+							value: Call 
+								func: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = bind_vars
+									ctx: Load 
+								args: list 
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+				element: FunctionDef 
+					name: str = bind_vars
+					args: arguments 
+						args: list 
+							element: arg 
+								arg: str = self
+								annotation: NoneType = None
+						vararg: NoneType = None
+						kwonlyargs: list 
+						kw_defaults: list 
+						kwarg: NoneType = None
+						defaults: list 
+					body: list 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = tag
+									ctx: Store 
+							value: Attribute 
+								value: Name 
+									id: str = self
+									ctx: Load 
+								attr: str = riot_tag
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = self
+										ctx: Load 
+									attr: str = node_name
+									ctx: Store 
+							value: Call 
+								func: Attribute 
+									value: Attribute 
+										value: Attribute 
+											value: Name 
+												id: str = tag
+												ctx: Load 
+											attr: str = root
+											ctx: Load 
+										attr: str = nodeName
+										ctx: Load 
+									attr: str = lower
+									ctx: Load 
+								args: list 
+								keywords: list 
+						element: Expr 
+							value: BoolOp 
+								op: And 
+								values: list 
+									element: Attribute 
+										value: Name 
+											id: str = self
+											ctx: Load 
+										attr: str = debug
+										ctx: Load 
+									element: Call 
+										func: Attribute 
+											value: Name 
+												id: str = self
+												ctx: Load 
+											attr: str = pp
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = binding vars
+										keywords: list 
+						element: Assign 
+							targets: list 
+								element: Attribute 
+									value: Name 
+										id: str = tag
+										ctx: Load 
+									attr: str = _immutables
+									ctx: Store 
+								element: Name 
+									id: str = im
+									ctx: Store 
+							value: List 
+								elts: list 
+								ctx: Load 
+						element: Assign 
+							targets: list 
+								element: Name 
+									id: str = lc
+									ctx: Store 
+							value: Name 
+								id: str = lifecycle_ev
+								ctx: Load 
+						element: For 
+							target: Name 
+								id: str = k
+								ctx: Store 
+							iter: Call 
+								func: Name 
+									id: str = dir
+									ctx: Load 
+								args: list 
+									element: Name 
+										id: str = self
+										ctx: Load 
+								keywords: list 
+							body: list 
+								element: If 
+									test: BoolOp 
+										op: Or 
+										values: list 
+											element: Compare 
+												left: Subscript 
+													value: Name 
+														id: str = k
+														ctx: Load 
+													slice: Index 
+														value: Num 
+															n: int = 0
+													ctx: Load 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Str 
+														s: str = _
+											element: Compare 
+												left: Name 
+													id: str = k
+													ctx: Load 
+												ops: list 
+													element: In 
+												comparators: list 
+													element: Name 
+														id: str = lifecycle_ev
+														ctx: Load 
+											element: Compare 
+												left: Name 
+													id: str = k
+													ctx: Load 
+												ops: list 
+													element: Eq 
+												comparators: list 
+													element: Str 
+														s: str = before_mount
+									body: list 
+										element: Continue 
+									orelse: list 
+								element: Assign 
+									targets: list 
+										element: Name 
+											id: str = v
+											ctx: Store 
+									value: Call 
+										func: Name 
+											id: str = getattr
+											ctx: Load 
+										args: list 
+											element: Name 
+												id: str = self
+												ctx: Load 
+											element: Name 
+												id: str = k
+												ctx: Load 
+										keywords: list 
+								element: Expr 
+									value: Call 
+										func: Name 
+											id: str = __pragma__
+											ctx: Load 
+										args: list 
+											element: Str 
+												s: str = js
+											element: Str 
+												s: str = {}
+											element: Str 
+												s: str = 
+                  typeof v === "function" || typeof v === "object" ?
+                  tag[k] = self[k] : tag._immutables.push(k)
+										keywords: list 
+							orelse: list 
+						element: Expr 
+							value: Call 
+								func: Name 
+									id: str = __pragma__
+									ctx: Load 
+								args: list 
+									element: Str 
+										s: str = js
+									element: Str 
+										s: str = {}
+									element: Str 
+										s: str = 
+        var i = tag._immutables, py = self
+        i.forEach(function(k, j, i) {
+            Object.defineProperty(tag, k, {
+                get: function()  { return self[k]},
+                set: function(v) { self[k] = v }
+            })
+        })
+								keywords: list 
+					decorator_list: list 
+					returns: NoneType = None
+			decorator_list: list 

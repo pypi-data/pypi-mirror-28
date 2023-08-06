@@ -1,0 +1,11 @@
+{
+	"version": 3,
+	"file": "D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/riot_demo/__javascript__/riot_demo.mod.js",
+	"sources": [
+		"D:/activ_tosh/geatec/transcrypt/qquick/Transcrypt/transcrypt/demos/riot_demo/riot_demo.py"
+	],
+	"sourcesContent": [
+		"# an example user tag, using RiotTag\n\nfrom riot_tag import RiotTag\n\nclass P(RiotTag):\n    debug = 1\n    # never do mutables on class level. this is just to check if transpiler\n    # creates the same behaviour - and it does, a second tag instance gets\n    # the same lv object:\n    lv = [{'name': 'n0'}]\n    # immuatble on class level. does a second instance start at 1?\n    # answer: yes, perfect:\n    counter = 1\n\n    template = ''' <div><h1>Riot Transcrypt Tag Instance {label}</h1>\n                         <div>INNER</div></div> '''\n    def count_up(self):\n        self.counter = self.counter + 1\n        self.pp('counter:', self.counter, 'len lv:', len(self.lv), 'adding one lv' )\n        self.lv.append({'name': 'n' + self.counter})\n        return self.counter\n\n# try some inheritance...\nclass Sample2(P):\n    # ... and change the state at every update, just for fun:\n    template = P.template.replace('INNER', '''\n    <div>\n    <h5 each=\"{lv}\">name: {name} - counter: {count_up()}</h5>\n    </div>\n    ''')\n\n    # no scoped styles currently\n    style = '''sample2 h5 {color: green}'''\n\n\n    def __init__(self, tag, opts):\n        self.label = opts.label.capitalize()  # this rocks so much.\n        # alternative to super:\n        RiotTag.__init__(self, tag, opts)\n        # uncomment next line and chrome will stop:\n        # debugger\n        self.pp('tag init', 'adding 2 lv')\n        # mutating the lv object:\n        self.lv.extend([{'name': 'n1'}, {'name': 'n2'}])\n\n\n    def update(self):\n        self.pp('update handler in the custom tag, calling super')\n        RiotTag.update(self)\n\n"
+	],
+	"mappings": "AAAA;AAAA;AAEA;AAEA;AAAA;AACA;AAIA;AAGA;AAEA;AAEA;AACA;AACA;AACA;AACA;AAAA;AAAA;AAGA;AAAA;AAEA;AAOA;AAGA;AACA;AAEA;AAGA;AAEA;AAAA;AAGA;AACA;AACA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA"
+}
