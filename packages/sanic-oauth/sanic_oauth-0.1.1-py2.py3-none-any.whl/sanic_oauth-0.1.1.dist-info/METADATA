@@ -1,0 +1,165 @@
+Metadata-Version: 2.0
+Name: sanic-oauth
+Version: 0.1.1
+Summary: UNKNOWN
+Home-page: https://gitlab.com/SirEdvin/sanic-oauth
+Author: Gladyshev Bogdan
+Author-email: siredvin.dark@gmail.com
+License: MIT
+Description-Content-Type: UNKNOWN
+Keywords: asyncio,http,oauth,sanic
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Natural Language :: English
+Classifier: Natural Language :: Russian
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Software Development :: Testing
+Classifier: Topic :: Utilities
+Requires-Dist: yarl (>=1.1.0)
+Requires-Dist: aiohttp (>=2.3.9)
+
+Sanic OAuth
+-----------
+
+
+Simple OAuth library to work with sanic. Basically, just rewrited version of aioauth_client_ with async/await syntax and some optimization. Can be used only with python 3.5/3.6.
+
+Available providers:
+
+- Google
+- GitLab
+- BitBucket
+- BitBucket v2
+- Flickr
+- Meetup
+- Plurk
+- Twitter
+- Tumblr
+- Vimeo
+- Yahoo
+- Amazon
+- Eventbrite
+- Facebook
+- Foursquare
+- Github
+- vk.com
+- ok.ru
+- Yandex
+- LinkedIn
+- Pinterest
+
+
+Requirements
+============
+
+* python >= 3.6
+
+
+Installation
+============
+
+Just install via pip:
+
+.. code:: 
+
+    pip install sanic_oauth
+
+
+Usage
+=====
+
+.. code:: python
+
+    # OAuth1
+    import aiohttp
+    from sanic_oauth import TwitterClient
+
+    session = aiohttp.ClientSession()
+    twitter = TwitterClient(
+        session
+        consumer_key='J8MoJG4bQ9gcmGh8H7XhMg',
+        consumer_secret='7WAscbSy65GmiVOvMU5EBYn5z80fhQkcFWSLMJJu4',
+    )
+
+    request_token, request_token_secret, _ = await twitter.get_request_token()
+
+    authorize_url = twitter.get_authorize_url(request_token)
+    print("Open",authorize_url,"in a browser")
+    # ...
+    # Reload client to authorize_url and get oauth_verifier
+    # ...
+    print("PIN code:")
+    oauth_verifier = input()
+    oauth_token, oauth_token_secret, _ = await twitter.get_access_token(oauth_verifier)
+
+    # Save the tokens for later use
+
+    # ...
+
+    twitter = TwitterClient(
+        session,
+        consumer_key='J8MoJG4bQ9gcmGh8H7XhMg',
+        consumer_secret='7WAscbSy65GmiVOvMU5EBYn5z80fhQkcFWSLMJJu4',
+        oauth_token=oauth_token,
+        oauth_token_secret=oauth_token_secret,
+    )
+
+    timeline = await twitter.request('GET', 'statuses/home_timeline.json')
+    content = await timeline.read()
+    print(content)
+    session.close()
+
+
+.. code:: python
+
+    # OAuth2
+    import aiohttp
+    from aioauth_client import GithubClient
+
+    session = aiohttp.ClientSession()
+    github = GithubClient(
+        session,
+        client_id='b6281b6fe88fa4c313e6',
+        client_secret='21ff23d9f1cad775daee6a38d230e1ee05b04f7c',
+    )
+
+    authorize_url = github.get_authorize_url(scope="user:email")
+
+    # ...
+    # Reload client to authorize_url and get code
+    # ...
+
+    otoken, _ = await github.get_access_token(code)
+
+    # Save the token for later use
+
+    # ...
+
+    github = GithubClient(
+        session,
+        client_id='b6281b6fe88fa4c313e6',
+        client_secret='21ff23d9f1cad775daee6a38d230e1ee05b04f7c',
+        access_token=otoken,
+    )
+
+    response = await github.request('GET', 'user')
+    user_info = await response.json()
+    session.close()
+
+
+
+Example
+=======
+
+You can see example_ with sanic_session usage. Google credentials are wrong, so to run it you will need own.
+
+
+
+.. _example: ./example.py
+.. _aioauth_client: https://github.com/klen/aioauth-client
+
