@@ -1,0 +1,21 @@
+# Python MANIFEST.in is used as a reference:
+# https://docs.python.org/3.6/distutils/sourcedist.html
+#
+- include:
+    files: ['LICENSE', 'README.md']
+- exclude:
+    files: ['*.orig']
+- recursive-include:
+    directory:  'include'
+    files: ['*.h', '*.c']
+- recursive-exclude:
+    directory: 'temp'
+    files: ['*']
+- global-include:
+    files: ['Makefile']
+- global-exclude:
+    files: ['*.txt', '*.tmp', 'test']
+- prune:
+    directory: 'bin'
+- graft:
+    directory: 'src'
