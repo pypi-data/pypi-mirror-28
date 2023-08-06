@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<p class="indent">
+  Добро пожаловать {{ user }}!
+</p>
+{% else %}
+<p class="indent error">
+  Ошибка входа, возможно ссылка устарела. <a href="{% url 'emailuser:login' %}">Попробуйте еще раз</a>.
+</p>
+{% endif %}
+
+{% endblock %}
