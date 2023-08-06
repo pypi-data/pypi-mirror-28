@@ -1,0 +1,658 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Schema name="JingDongAnasys" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="mondrian.xsd">
+
+	<!-- Start : Shared Dimension -->
+
+	<!-- 维度：时间 -->
+	<Dimension name="时间" type="TimeDimension">
+		<Hierarchy hasAll="true" primaryKey="code" name="按年月" allMemberName="所有时间">
+			<Table schema="jd_biz" name="dim_datetimes"></Table>
+			<Level name="年" column="the_year" type="Numeric"
+				uniqueMembers="true" levelType="TimeYears"></Level>
+			<Level name="季" column="the_quarter_enname" type="String"
+				uniqueMembers="false" levelType="TimeQuarters"></Level>
+			<Level name="月" column="the_month" type="Numeric"
+				uniqueMembers="false" levelType="TimeMonths" captionColumn="the_month_formatted"></Level>
+			<Level name="日" column="the_day_of_month" type="Numeric"
+				uniqueMembers="false" levelType="TimeDays" captionColumn="the_day_of_month_formatted"></Level>
+		</Hierarchy>
+		<Hierarchy hasAll="true" primaryKey="code" name="按周" allMemberName="所有时间">
+			<Table schema="jd_biz" name="dim_datetimes"></Table>
+			<Level name="年" column="the_year" type="Numeric"
+				uniqueMembers="true" levelType="TimeYears"></Level>
+			<Level name="周" column="the_week_of_year" type="Numeric"
+				uniqueMembers="false" levelType="TimeWeeks" captionColumn="the_week_of_year_formatted"></Level>
+			<Level name="日" column="the_day_of_week_cnname" type="String"
+				uniqueMembers="false" levelType="TimeDays"></Level>
+		</Hierarchy>
+		<Hierarchy hasAll="true" primaryKey="code" name="按日" allMemberName="所有时间">
+			<Table schema="jd_biz" name="dim_datetimes"></Table>
+			<!--<Level name="日" column="the_date" type="Date"
+				uniqueMembers="true" levelType="TimeDays" formatter="com.ilanever.geilivor.olap.DateMemberFormatter"></Level>-->
+      <Level name="日" column="the_date" type="Date"
+				uniqueMembers="true" levelType="TimeDays"></Level>
+		</Hierarchy>
+	</Dimension>
+
+ 	<!-- 维度：业务主体 -->
+<!-- 	<Dimension name="业务主体"> -->
+<!-- 		<Hierarchy name="业务主体层次" allMemberName="所有业务主体" -->
+<!-- 			hasAll="true" primaryKey="code"> -->
+<!-- 			<Table schema="jd_biz" name="dim_businessunits"></Table> -->
+<!-- 			<Level name="业务主体" column="name" type="String" uniqueMembers="true" ordinalColumn="code"></Level> -->
+<!-- 		</Hierarchy> -->
+<!-- 	</Dimension> -->
+	
+	<!-- 维度：业务类型 -->
+<!-- 	<Dimension name="业务类型"> -->
+<!-- 		<Hierarchy name="业务类型层次" allMemberName="所有业务类型" -->
+<!-- 			hasAll="true" primaryKey="code"> -->
+<!-- 			<Table schema="jd_biz" name="dim_biztypes"></Table> -->
+<!-- 			<Level name="一级类型" column="level_1_name" type="String" ordinalColumn="level_1_code"></Level> -->
+<!-- 			<Level name="二级类型" column="level_2_name" type="String" ordinalColumn="level_2_code"></Level> -->
+<!-- 			<Level name="三级类型" column="level_3_name" type="String" ordinalColumn="level_3_code"></Level> -->
+<!-- 			<Level name="四级类型" column="level_4_name" type="String" ordinalColumn="level_4_code"></Level> -->
+<!-- 		</Hierarchy> -->
+<!-- 	</Dimension> -->
+	
+	<!-- 维度：支付业务 -->
+	<Dimension name="支付业务">
+		<Hierarchy name="支付业务层次" allMemberName="所有支付业务"
+			hasAll="true" primaryKey="code">
+			<Table schema="jd_biz" name="dim_paybizes"></Table>
+			<Level name="一级类型" column="level_1st_name" type="String" ordinalColumn="level_1st_code" captionColumn="display_name"></Level>
+			<Level name="二级类型" column="level_2nd_name" type="String" ordinalColumn="level_2nd_code" captionColumn="display_name"></Level>
+		</Hierarchy>
+	</Dimension>
+	
+	<!-- 维度：支付工具 -->
+<!-- 	<Dimension name="支付工具"> -->
+<!-- 		<Hierarchy name="支付工具层次" allMemberName="所有支付工具" -->
+<!-- 			hasAll="true" primaryKey="code"> -->
+<!-- 			<Table schema="jd_biz" name="dim_paymenttools"></Table> -->
+<!-- 			<Level name="支付工具" column="level_3_name" type="String" uniqueMembers="true" ordinalColumn="level_3_code"></Level> -->
+<!-- 		</Hierarchy> -->
+<!-- 	</Dimension> -->
+	
+	<!-- 维度：商户类型 -->
+<!-- 	<Dimension name="商户类型"> -->
+<!-- 		<Hierarchy name="商户类型层次" allMemberName="所有商户类型" -->
+<!-- 			hasAll="true" primaryKey="code"> -->
+<!-- 			<Table schema="jd_biz" name="dim_merchanttypes"></Table> -->
+<!-- 			<Level name="一级类型" column="level_1_name" type="String" ordinalColumn="level_1_code"></Level> -->
+<!-- 			<Level name="二级类型" column="level_2_name" type="String" ordinalColumn="level_2_code"></Level> -->
+<!-- 			<Level name="三级类型" column="level_3_name" type="String" ordinalColumn="level_3_code"></Level> -->
+<!-- 			<Level name="四级类型" column="level_4_name" type="String" ordinalColumn="level_4_code"></Level> -->
+<!-- 		</Hierarchy> -->
+<!-- 	</Dimension> -->
+	
+	<!-- 维度：商户 -->
+	<Dimension name="商户">
+		<Hierarchy name="商户" allMemberName="所有商户"
+			hasAll="true" primaryKey="merchant_id">
+			<Table schema="jd_biz" name="dim_merchants"></Table>
+			<Level name="一级类型" column="level_1st_name" type="String"></Level>
+			<Level name="二级类型" column="level_2nd_name" type="String"></Level>
+			<Level name="三级类型" column="level_3rd_name" type="String"></Level>
+			<Level name="商户ID" column="merchant_id" type="String"></Level>
+		</Hierarchy>
+	</Dimension>
+	       
+	<!-- 维度：银行 -->
+	<Dimension name="银行">
+		<Hierarchy name="银行" allMemberName="所有银行"
+			hasAll="true" primaryKey="code">
+			<Table schema="jd_biz" name="dim_banks"></Table>
+<!-- 			<Level name="类型" column="banktype_name" type="String" ordinalColumn="banktype_code"></Level> -->
+			<Level name="总行" column="bank_abbr_cnname" type="String" ordinalColumn="code" captionColumn="bank_abbr_cnname"></Level>
+		</Hierarchy>
+	</Dimension>
+	
+	<!-- 维度：银行卡类型 -->
+	<Dimension name="卡类型">
+		<Hierarchy name="卡类型" allMemberName="所有卡类型"
+			hasAll="true" primaryKey="code">
+			<Table schema="jd_biz" name="dim_cardtypes"></Table>
+			<Level name="卡类型" column="name" type="String" uniqueMembers="true" ordinalColumn="code"></Level>
+		</Hierarchy>
+	</Dimension>
+	
+	<!-- 维度：POS交易类型 -->
+<!-- 	<Dimension name="POS交易类型"> -->
+<!-- 		<Hierarchy name="POS交易类型" allMemberName="所有POS交易类型" -->
+<!-- 			hasAll="true" primaryKey="code"> -->
+<!-- 			<Table schema="jd_biz" name="dim_postradetypes"></Table> -->
+<!-- 			<Level name="POS交易类型" column="name" type="String" uniqueMembers="true" ordinalColumn="code"></Level> -->
+<!-- 		</Hierarchy> -->
+<!-- 	</Dimension> -->
+	
+	<!-- 维度：POS商户类型 -->
+<!-- 	<Dimension name="POS商户类型"> -->
+<!-- 		<Hierarchy name="POS商户类型" allMemberName="所有POS商户类型" -->
+<!-- 			hasAll="true" primaryKey="code"> -->
+<!-- 			<Table schema="jd_biz" name="dim_posmerchanttypes"></Table> -->
+<!-- 			<Level name="POS商户类型" column="name" type="String" uniqueMembers="true" ordinalColumn="code"></Level> -->
+<!-- 		</Hierarchy> -->
+<!-- 	</Dimension> -->
+	
+	<!-- 维度：支付通道类型 -->
+	<Dimension name="通道类型">
+		<Hierarchy name="通道类型" allMemberName="所有通道类型"
+			hasAll="true" primaryKey="code">
+			<Table schema="jd_biz" name="dim_channeltypes"></Table>
+			<Level name="一级类型" column="level_1st_name" type="String" ordinalColumn="level_1st_code"></Level>
+			<Level name="二级类型" column="level_2nd_name" type="String" ordinalColumn="level_2nd_code"></Level>
+			<Level name="三级类型" column="level_3rd_name" type="String" ordinalColumn="level_3rd_code"></Level>
+<!-- 			<Level name="四级类型" column="level_4_name" type="String" ordinalColumn="level_4_code"></Level> -->
+		</Hierarchy>
+	</Dimension>
+	
+	<!-- 维度：失败原因类型 -->
+<!-- 	<Dimension name="失败原因类型"> -->
+<!-- 		<Hierarchy name="失败原因类型" allMemberName="所有失败原因类型" -->
+<!-- 			hasAll="true" primaryKey="code"> -->
+<!-- 			<Table schema="jd_biz" name="dim_failurereasons"></Table> -->
+<!-- 			<Level name="大类型" column="family_name" type="String" uniqueMembers="true" ordinalColumn="family_code"></Level> -->
+<!-- 			<Level name="小类型" column="name" type="String" uniqueMembers="false" ordinalColumn="code"></Level> -->
+<!-- 		</Hierarchy> -->
+<!-- 	</Dimension> -->
+
+	<!-- End : Shared Dimension -->
+	
+		<!-- 事实表：网银在线交易数据正单A1 -->
+	<Cube name="网银在线交易数据正单A1" defaultMeasure="成功金额">
+		<Table schema="jd_biz" name="fact_wangyin_tradedata_zhengdan_a1" />
+		
+		<DimensionUsage name="时间" source="时间" foreignKey="datetime_code"></DimensionUsage>
+		<DimensionUsage name="会计时间" source="时间" foreignKey="fiscal_datetime_code"></DimensionUsage>
+		
+		<DimensionUsage name="支付业务" source="支付业务" foreignKey="paybiz_code"></DimensionUsage>
+		<DimensionUsage name="通道类型" source="通道类型" foreignKey="channeltype_code"></DimensionUsage>
+		<DimensionUsage name="银行" source="银行" foreignKey="bank_code"></DimensionUsage>
+		<DimensionUsage name="卡类型" source="卡类型" foreignKey="cardtype_code"></DimensionUsage>
+		<DimensionUsage name="商户" source="商户" foreignKey="merchant_id"></DimensionUsage>
+		
+<!-- 		<DimensionUsage name="支付工具" source="支付工具" foreignKey="tool_code"></DimensionUsage> -->
+<!-- 		<DimensionUsage name="商户类型" source="商户类型" foreignKey="merchanttype_code"></DimensionUsage> -->
+<!-- 		<DimensionUsage name="业务类型" source="业务类型" foreignKey="biztype_code"></DimensionUsage> -->
+<!-- 		<DimensionUsage name="POS交易类型" source="POS交易类型" foreignKey="postradetype_code"></DimensionUsage> -->
+		
+		<Dimension name="商户号" >
+			<Hierarchy hasAll="true" allMemberName="所有商户号" >
+				<Level name="商户号" column="merchant_id" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="商户类型" >
+			<Hierarchy hasAll="true" allMemberName="所有商户类型" >
+				<Level name="一级类型" column="bizunit_name" type="String"></Level>
+				<Level name="二级类型" column="bizlevel_1st" type="String"></Level>
+				<Level name="三级类型" column="bizlevel_2nd" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="银行商户号" >
+			<Hierarchy hasAll="true" allMemberName="所有银行商户号" >
+				<Level name="银行商户号" column="bankaccount_num" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="名义费率">
+			<Hierarchy hasAll="true" allMemberName="所有名义费率">
+				<!--<Level name="名义费率" column="nominal_rate" type="String" formatter="com.ilanever.geilivor.olap.NominalRateFormatter"></Level>-->
+        <Level name="名义费率" column="nominal_rate" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="原始发卡行" >
+			<Hierarchy hasAll="true" allMemberName="所有原始发卡行" >
+				<Level name="原始发卡行" column="ori_issuing_bank" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="原始卡类型" >
+			<Hierarchy hasAll="true" allMemberName="所有原始卡类型" >
+				<Level name="原始卡类型" column="ori_bankcardtype" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Measure name="名义成本" aggregator="sum" column="nominal_cost" formatString="￥#,##0"></Measure>
+		<Measure name="成功金额" aggregator="sum" column="money_success" formatString="￥#,##0"></Measure>
+		<Measure name="成功笔数" aggregator="sum" column="qty_success" formatString="Standard"></Measure>
+		<CalculatedMember name="笔均价" dimension="Measures" formatString="￥#,##0">
+			<Formula>
+				IIF(
+					IsEmpty([Measures].[成功笔数]) 
+					OR [Measures].[成功笔数] = 0 
+					OR IsEmpty([Measures].[成功金额]) 
+					OR [Measures].[成功金额] = 0
+					, NULL
+					, ([Measures].[成功金额] / [Measures].[成功笔数])
+				)
+			</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="名义费率" dimension="Measures" formatString="#0.00%">
+			<Formula>
+				IIF(
+					IsEmpty([Measures].[名义成本]) 
+					OR [Measures].[名义成本] = 0 
+					OR IsEmpty([Measures].[成功金额]) 
+					OR [Measures].[成功金额] = 0
+					, NULL
+					, ([Measures].[名义成本] / [Measures].[成功金额])
+				)
+			</Formula>
+		</CalculatedMember>
+		
+		<Dimension name="批次号">
+			<Hierarchy hasAll="true" allMemberName="所有批次号">
+				<Level name="批次号" column="batch_code" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		
+	</Cube>
+	
+		<!-- 事实表：网银在线交易数据 -->
+	<Cube name="网银在线交易数据钱包A1" defaultMeasure="成功金额">
+		<Table schema="jd_biz" name="fact_wangyin_tradedata_qianbao_a1" />
+		
+		<DimensionUsage name="时间" source="时间" foreignKey="datetime_code"></DimensionUsage>
+		<DimensionUsage name="会计时间" source="时间" foreignKey="fiscal_datetime_code"></DimensionUsage>
+		
+		<DimensionUsage name="支付业务" source="支付业务" foreignKey="paybiz_code"></DimensionUsage>
+		<DimensionUsage name="通道类型" source="通道类型" foreignKey="channeltype_code"></DimensionUsage>
+		<DimensionUsage name="银行" source="银行" foreignKey="bank_code"></DimensionUsage>
+		<DimensionUsage name="卡类型" source="卡类型" foreignKey="cardtype_code"></DimensionUsage>
+		<DimensionUsage name="商户" source="商户" foreignKey="merchant_id"></DimensionUsage>
+		
+<!-- 		<DimensionUsage name="支付工具" source="支付工具" foreignKey="tool_code"></DimensionUsage> -->
+<!-- 		<DimensionUsage name="商户类型" source="商户类型" foreignKey="merchanttype_code"></DimensionUsage> -->
+<!-- 		<DimensionUsage name="业务类型" source="业务类型" foreignKey="biztype_code"></DimensionUsage> -->
+<!-- 		<DimensionUsage name="POS交易类型" source="POS交易类型" foreignKey="postradetype_code"></DimensionUsage> -->
+		
+		<Dimension name="商户号" >
+			<Hierarchy hasAll="true" allMemberName="所有商户号" >
+				<Level name="商户号" column="merchant_id" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="银行商户号" >
+			<Hierarchy hasAll="true" allMemberName="所有银行商户号" >
+				<Level name="银行商户号" column="bankaccount_num" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="名义费率">
+			<Hierarchy hasAll="true" allMemberName="所有名义费率">
+				<!--<Level name="名义费率" column="nominal_rate" type="String" formatter="com.ilanever.geilivor.olap.NominalRateFormatter"></Level>-->
+        <Level name="名义费率" column="nominal_rate" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Measure name="名义成本" aggregator="sum" column="nominal_cost" formatString="￥#,##0"></Measure>
+		<Measure name="成功金额" aggregator="sum" column="money_success" formatString="￥#,##0"></Measure>
+		<Measure name="成功笔数" aggregator="sum" column="qty_success" formatString="Standard"></Measure>
+		<CalculatedMember name="客单价" dimension="Measures" formatString="￥#,##0">
+			<Formula>
+				IIF(
+					IsEmpty([Measures].[成功笔数]) 
+					OR [Measures].[成功笔数] = 0 
+					OR IsEmpty([Measures].[成功金额]) 
+					OR [Measures].[成功金额] = 0
+					, NULL
+					, ([Measures].[成功金额] / [Measures].[成功笔数])
+				)
+			</Formula>
+		</CalculatedMember>
+		
+		<Dimension name="批次号">
+			<Hierarchy hasAll="true" allMemberName="所有批次号">
+				<Level name="批次号" column="batch_code" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+	</Cube>
+	
+	<!-- 事实表：网银在线交易数据 -->
+	<Cube name="网银在线交易数据" defaultMeasure="成功金额">
+		<Table schema="jd_biz" name="fact_wangyin_tradedata_a1" />
+		
+		<DimensionUsage name="时间" source="时间" foreignKey="datetime_code"></DimensionUsage>
+		<DimensionUsage name="会计时间" source="时间" foreignKey="fiscal_datetime_code"></DimensionUsage>
+		
+		<DimensionUsage name="支付业务" source="支付业务" foreignKey="paybiz_code"></DimensionUsage>
+		<DimensionUsage name="通道类型" source="通道类型" foreignKey="channeltype_code"></DimensionUsage>
+		<DimensionUsage name="银行" source="银行" foreignKey="bank_code"></DimensionUsage>
+		<DimensionUsage name="卡类型" source="卡类型" foreignKey="cardtype_code"></DimensionUsage>
+		<DimensionUsage name="商户" source="商户" foreignKey="merchant_id"></DimensionUsage>
+		
+<!-- 		<DimensionUsage name="支付工具" source="支付工具" foreignKey="tool_code"></DimensionUsage> -->
+<!-- 		<DimensionUsage name="商户类型" source="商户类型" foreignKey="merchanttype_code"></DimensionUsage> -->
+<!-- 		<DimensionUsage name="业务类型" source="业务类型" foreignKey="biztype_code"></DimensionUsage> -->
+<!-- 		<DimensionUsage name="POS交易类型" source="POS交易类型" foreignKey="postradetype_code"></DimensionUsage> -->
+		
+		<Dimension name="商户号" >
+			<Hierarchy hasAll="true" allMemberName="所有商户号" >
+				<Level name="商户号" column="merchant_id" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="银行商户号" >
+			<Hierarchy hasAll="true" allMemberName="所有银行商户号" >
+				<Level name="银行商户号" column="bankaccount_num" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="名义费率">
+			<Hierarchy hasAll="true" allMemberName="所有名义费率">
+				<!--<Level name="名义费率" column="nominal_rate" type="String" formatter="com.ilanever.geilivor.olap.NominalRateFormatter"></Level>-->
+        <Level name="名义费率" column="nominal_rate" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Measure name="名义成本" aggregator="sum" column="nominal_cost" formatString="￥#,##0"></Measure>
+		<Measure name="成功金额" aggregator="sum" column="money_success" formatString="￥#,##0"></Measure>
+		<Measure name="成功笔数" aggregator="sum" column="qty_success" formatString="Standard"></Measure>
+		
+		<Dimension name="批次号">
+			<Hierarchy hasAll="true" allMemberName="所有批次号">
+				<Level name="批次号" column="batch_code" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<CalculatedMember name="客单价" dimension="Measures" formatString="￥#,##0">
+			<Formula>
+				IIF(
+					IsEmpty([Measures].[成功笔数]) 
+					OR [Measures].[成功笔数] = 0 
+					OR IsEmpty([Measures].[成功金额]) 
+					OR [Measures].[成功金额] = 0
+					, NULL
+					, ([Measures].[成功金额] / [Measures].[成功笔数])
+				)
+			</Formula>
+		</CalculatedMember>
+	</Cube>
+	
+	<!-- 事实表：网银在线交易数据快捷明细 -->
+	<Cube name="网银在线快捷交易数据A1" defaultMeasure="成功金额">
+		<Table schema="jd_biz" name="fact_wangyin_quickpay_tradedata_a1" />
+		
+		<DimensionUsage name="时间" source="时间" foreignKey="datetime_code"></DimensionUsage>
+		
+		<DimensionUsage name="支付业务" source="支付业务" foreignKey="interface_code"></DimensionUsage>
+		<DimensionUsage name="通道类型" source="通道类型" foreignKey="channeltype_code"></DimensionUsage>
+		<DimensionUsage name="银行" source="银行" foreignKey="bank_code"></DimensionUsage>
+		<DimensionUsage name="卡类型" source="卡类型" foreignKey="bankcardtype_code"></DimensionUsage>
+		
+		<Dimension name="批次号">
+			<Hierarchy hasAll="true" allMemberName="所有批次号">
+				<Level name="批次号" column="batch_code" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Measure name="成功笔数" aggregator="sum" column="qty_success" formatString="Standard"></Measure>
+		<Measure name="失败笔数" aggregator="sum" column="qty_fail" formatString="Standard"></Measure>
+		<Measure name="掉单笔数" aggregator="sum" column="qty_lose" formatString="Standard"></Measure>
+		<Measure name="补单笔数" aggregator="sum" column="qty_resubmit" formatString="Standard"></Measure>
+		<Measure name="总笔数" aggregator="sum" column="qty_total" formatString="Standard"></Measure>
+		<Measure name="成功金额" aggregator="sum" column="money_success" formatString="￥#,##0.00"></Measure>
+		<Measure name="总金额" aggregator="sum" column="money_total" formatString="￥#,##0.00"></Measure>
+		<CalculatedMember name="成功笔数占比" dimension="Measures" formatString="#0.00%">
+			<Formula>
+				IIF(IsEmpty([Measures].[总笔数]) 
+					OR IsEmpty([Measures].[成功笔数])
+					OR [Measures].[总笔数] = 0 
+					, NULL 
+					, ([Measures].[成功笔数]) / ([Measures].[总笔数]))
+			</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="成功金额占比" dimension="Measures" formatString="#0.00%">
+			<Formula>
+				IIF(IsEmpty([Measures].[总金额]) 
+					OR IsEmpty([Measures].[成功金额])
+					OR [Measures].[总金额] = 0 
+					, NULL 
+					, ([Measures].[成功金额]) / ([Measures].[总金额]))
+			</Formula>
+		</CalculatedMember>
+	</Cube>
+	
+	<!-- 事实表：网银在线签约数据A1 -->
+	<Cube name="网银在线快捷签约数据A1" defaultMeasure="全平台总笔数">
+		<Table schema="jd_biz" name="fact_wangyin_quickpay_signupdata_a1" />
+		
+		<DimensionUsage name="时间" source="时间" foreignKey="datetime_code"></DimensionUsage>
+		
+		<DimensionUsage name="支付业务" source="支付业务" foreignKey="interface_code"></DimensionUsage>
+		<DimensionUsage name="通道类型" source="通道类型" foreignKey="channeltype_code"></DimensionUsage>
+		<DimensionUsage name="银行" source="银行" foreignKey="bank_code"></DimensionUsage>
+		<DimensionUsage name="卡类型" source="卡类型" foreignKey="bankcardtype_code"></DimensionUsage>
+		
+		<Dimension name="批次号">
+			<Hierarchy hasAll="true" allMemberName="所有批次号">
+				<Level name="批次号" column="batch_code" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Measure name="新平台成功笔数" aggregator="sum" column="qty_newplatform_success" formatString="Standard"></Measure>
+		<Measure name="新平台失败笔数" aggregator="sum" column="qty_newplatform_fail" formatString="Standard"></Measure>
+		<Measure name="新平台掉单笔数" aggregator="sum" column="qty_newplatform_lose" formatString="Standard"></Measure>
+		<Measure name="新平台总笔数" aggregator="sum" column="qty_newplatform_total" formatString="Standard"></Measure>
+		<Measure name="新平台解约成功笔数" aggregator="sum" column="qty_newplatform_break_success" formatString="Standard"></Measure>
+		<Measure name="老平台成功笔数" aggregator="sum" column="qty_oldplatform_success" formatString="Standard"></Measure>
+		<Measure name="老平台失败笔数" aggregator="sum" column="qty_oldplatform_fail" formatString="Standard"></Measure>
+		<Measure name="老平台掉单笔数" aggregator="sum" column="qty_oldplatform_lose" formatString="Standard"></Measure>
+		<Measure name="老平台总笔数" aggregator="sum" column="qty_oldplatform_total" formatString="Standard"></Measure>
+		<Measure name="全平台成功笔数" aggregator="sum" column="qty_allplatform_success" formatString="Standard"></Measure>
+		<Measure name="全平台总笔数" aggregator="sum" column="qty_allplatform_total" formatString="Standard"></Measure>
+		<Measure name="银行成功笔数" aggregator="sum" column="qty_bank_success" formatString="Standard"></Measure>
+		
+	</Cube>
+	
+	<!-- 事实表：网银在线绑卡数据A1 -->
+	<Cube name="CardBindings" defaultMeasure="卡数">
+		<Table schema="jd_biz" name="fact_wangyin_quickpay_cardbindingdata_a1" />
+		
+		<DimensionUsage name="时间" source="时间" foreignKey="datetime_code"></DimensionUsage>
+
+		<DimensionUsage name="银行" source="银行" foreignKey="bank_code"></DimensionUsage>
+		<DimensionUsage name="卡类型" source="卡类型" foreignKey="bankcardtype_code"></DimensionUsage>
+		
+		<Dimension name="类型">
+			<Hierarchy hasAll="true" allMemberName="所有类型">
+				<Level name="类型" column="bindingtype" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="批次号">
+			<Hierarchy hasAll="true" allMemberName="所有批次号">
+				<Level name="批次号" column="batch_code" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Measure name="日累计用户数" aggregator="sum" column="user_count" formatString="Standard"></Measure>
+		<Measure name="日累计卡数" aggregator="sum" column="card_count" formatString="Standard"></Measure>
+		<CalculatedMember name="月累计用户数" dimension="Measures">
+			<Formula>
+				IIF(
+					NOT ([时间.按年月].CurrentMember.Level IS [时间.按年月].[月])
+					, NULL
+					, ([Measures].[日累计用户数], [时间.按年月].[月].CurrentMember.LastChild)
+				)
+			</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="月累计卡数" dimension="Measures">
+			<Formula>
+				IIF(
+					NOT ([时间.按年月].CurrentMember.Level IS [时间.按年月].[月])
+					, NULL
+					, ([Measures].[日累计卡数], [时间.按年月].[月].CurrentMember.LastChild)
+				)
+			</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="日净增长用户数" dimension="Measures">
+			<Formula>
+				IIF(
+					NOT ([时间.按年月].CurrentMember.Level IS [时间.按年月].[日]) 
+					OR IsEmpty(([Measures].[日累计用户数], [时间.按年月].[日].CurrentMember.PrevMember)) 
+					OR ([Measures].[日累计用户数], [时间.按年月].[日].CurrentMember.PrevMember) = 0 
+					OR IsEmpty(([Measures].[日累计用户数], [时间.按年月].[日].CurrentMember))
+					OR ([Measures].[日累计用户数], [时间.按年月].[日].CurrentMember) = 0
+					, NULL 
+					, ([Measures].[日累计用户数], [时间.按年月].[日].CurrentMember) - ([Measures].[日累计用户数], [时间.按年月].[日].CurrentMember.PrevMember)	
+				)
+			</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="日净增长卡数" dimension="Measures">
+			<Formula>
+				IIF(
+					NOT ([时间.按年月].CurrentMember.Level IS [时间.按年月].[日]) 
+					OR IsEmpty(([Measures].[日累计卡数], [时间.按年月].[日].CurrentMember.PrevMember)) 
+					OR ([Measures].[日累计卡数], [时间.按年月].[日].CurrentMember.PrevMember) = 0 
+					OR IsEmpty(([Measures].[日累计卡数], [时间.按年月].[日].CurrentMember))
+					OR ([Measures].[日累计卡数], [时间.按年月].[日].CurrentMember) = 0
+					, NULL 
+					, ([Measures].[日累计卡数], [时间.按年月].[日].CurrentMember) - ([Measures].[日累计卡数], [时间.按年月].[日].CurrentMember.PrevMember)	
+				)
+			</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="月净增长卡数" dimension="Measures">
+			<Formula>
+				IIF(
+					NOT ([时间.按年月].CurrentMember.Level IS [时间.按年月].[月]) 
+					OR IsEmpty(([Measures].[日累计卡数], [时间.按年月].[月].CurrentMember.PrevMember.LastChild)) 
+					OR ([Measures].[日累计卡数], [时间.按年月].[月].CurrentMember.PrevMember.LastChild) = 0 
+					OR IsEmpty(([Measures].[日累计卡数], [时间.按年月].[月].CurrentMember.LastChild))
+					OR ([Measures].[日累计卡数], [时间.按年月].[月].CurrentMember.LastChild) = 0
+					, NULL 
+					, ([Measures].[日累计卡数], [时间.按年月].[月].CurrentMember.LastChild) - ([Measures].[日累计卡数], [时间.按年月].[月].CurrentMember.PrevMember.LastChild)	
+				)
+			</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="月净增长用户数" dimension="Measures">
+			<Formula>
+				IIF(
+					NOT ([时间.按年月].CurrentMember.Level IS [时间.按年月].[月]) 
+					OR IsEmpty(([Measures].[日累计用户数], [时间.按年月].[月].CurrentMember.PrevMember.LastChild)) 
+					OR ([Measures].[日累计用户数], [时间.按年月].[月].CurrentMember.PrevMember.LastChild) = 0 
+					OR IsEmpty(([Measures].[日累计用户数], [时间.按年月].[月].CurrentMember.LastChild))
+					OR ([Measures].[日累计用户数], [时间.按年月].[月].CurrentMember.LastChild) = 0
+					, NULL 
+					, ([Measures].[日累计用户数], [时间.按年月].[月].CurrentMember.LastChild) - ([Measures].[日累计用户数], [时间.按年月].[月].CurrentMember.PrevMember.LastChild)	
+				)
+			</Formula>
+		</CalculatedMember>
+	</Cube>
+	
+	<!-- 事实表：网银在线网关交易数据A1 -->
+	<Cube name="网银在线网关交易数据A1" defaultMeasure="成功金额">
+		<Table schema="jd_biz" name="fact_wangyin_gateway_tradedata_a1" />
+		
+		<DimensionUsage name="时间" source="时间" foreignKey="datetime_code"></DimensionUsage>
+		
+		<DimensionUsage name="支付业务" source="支付业务" foreignKey="interface_code"></DimensionUsage>
+		<DimensionUsage name="银行" source="银行" foreignKey="bank_code"></DimensionUsage>
+		<DimensionUsage name="卡类型" source="卡类型" foreignKey="bankcardtype_code"></DimensionUsage>
+		<DimensionUsage name="通道类型" source="通道类型" foreignKey="channeltype_code"></DimensionUsage>
+		
+		<Measure name="成功笔数" aggregator="sum" column="qty_success" formatString="Standard"></Measure>
+		<Measure name="处理中笔数" aggregator="sum" column="qty_process" formatString="Standard"></Measure>
+		<Measure name="补单笔数" aggregator="sum" column="qty_resubmit" formatString="Standard"></Measure>
+		<Measure name="总笔数" aggregator="sum" column="qty_total" formatString="Standard"></Measure>
+		<Measure name="成功金额" aggregator="sum" column="money_success" formatString="￥#,##0.00"></Measure>
+		<Measure name="总金额" aggregator="sum" column="money_total" formatString="￥#,##0.00"></Measure>
+		<CalculatedMember name="成功笔数占比" dimension="Measures" formatString="#0.00%">
+			<Formula>
+				IIF(IsEmpty([Measures].[总笔数]) 
+					OR IsEmpty([Measures].[成功笔数])
+					OR [Measures].[总笔数] = 0 
+					, NULL 
+					, ([Measures].[成功笔数]) / ([Measures].[总笔数]))
+			</Formula>
+		</CalculatedMember>
+		<CalculatedMember name="成功金额占比" dimension="Measures" formatString="#0.00%">
+			<Formula>
+				IIF(IsEmpty([Measures].[总金额]) 
+					OR IsEmpty([Measures].[成功金额])
+					OR [Measures].[总金额] = 0 
+					, NULL 
+					, ([Measures].[成功金额]) / ([Measures].[总金额]))
+			</Formula>
+		</CalculatedMember>
+		
+	</Cube>
+	
+	<!-- 事实表：网银在线网关交易数据A1 -->
+	<Cube name="网银在线快捷支付失败明细数据A1" defaultMeasure="失败金额">
+		<Table schema="jd_biz" name="fact_wangyin_quickpay_tradedata_fail_detail_a1" />
+		
+		<DimensionUsage name="时间" source="时间" foreignKey="datetime_code"></DimensionUsage>
+		
+		<Dimension name="支付接口ID">
+			<Hierarchy hasAll="true" allMemberName="所有支付接口ID">
+				<Level name="支付接口ID" column="interface_id" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="支付通道ID">
+			<Hierarchy hasAll="true" allMemberName="所有支付通道ID">
+				<Level name="支付通道ID" column="channel_id" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="卡类型">
+			<Hierarchy hasAll="true" allMemberName="所有卡类型">
+				<Level name="卡类型" column="cardtype" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="银行错误码">
+			<Hierarchy hasAll="true" allMemberName="所有银行错误码">
+				<Level name="银行错误码" column="bank_error_code" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="银行错误描述">
+			<Hierarchy hasAll="true" allMemberName="所有银行错误描述">
+				<Level name="银行错误描述" column="bank_error_desc" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="统一错误码">
+			<Hierarchy hasAll="true" allMemberName="所有统一错误码">
+				<Level name="统一错误码" column="unified_error_code" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="统一错误描述">
+			<Hierarchy hasAll="true" allMemberName="所有统一错误码">
+				<Level name="统一错误描述" column="unified_error_desc" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="商户号">
+			<Hierarchy hasAll="true" allMemberName="所有商户号">
+				<Level name="商户号" column="merchant_num" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="银行商户号">
+			<Hierarchy hasAll="true" allMemberName="所有银行商户号">
+				<Level name="银行商户号" column="bankaccount_num" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Dimension name="金额分层">
+			<Hierarchy hasAll="true" allMemberName="所有金额分层">
+				<Level name="金额分层" column="money_section" type="String"></Level>
+			</Hierarchy>
+		</Dimension>
+		
+		<Measure name="失败金额" aggregator="sum" column="money_fail" formatString="￥#,##0.00"></Measure>
+		<Measure name="失败笔数" aggregator="count" column="money_fail" formatString="Standard"></Measure>
+	</Cube>
+	
+</Schema>
