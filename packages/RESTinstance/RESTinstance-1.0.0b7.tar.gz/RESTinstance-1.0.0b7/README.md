@@ -1,0 +1,144 @@
+
+    ██████╗ ███████╗███████╗████████╗
+    ██╔══██╗██╔════╝██╔════╝╚══██╔══╝
+    ██████╔╝█████╗  ███████╗   ██║
+    ██╔══██╗██╔══╝  ╚════██║   ██║
+    ██║  ██║███████╗███████║   ██║
+    ╚═╝  ╚═╝╚══════╝╚══════╝   ╚═╝
+
+    ██╗███╗   ██╗███████╗████████╗ █████╗ ███╗   ██╗ ██████╗███████╗
+    ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗████╗  ██║██╔════╝██╔════╝
+    ██║██╔██╗ ██║███████╗   ██║   ███████║██╔██╗ ██║██║     █████╗
+    ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║╚██╗██║██║     ██╔══╝
+    ██║██║ ╚████║███████║   ██║   ██║  ██║██║ ╚████║╚██████╗███████╗
+    ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═══╝ ╚═════╝╚══════╝
+
+[Robot Framework](http://robotframework.org/) test library for (RESTful) JSON APIs
+
+
+## Why?
+
+1. The library advances from the Robot Framework's natural language, and
+(programming) language-agnostic syntax, building on the well-established,
+long-term technologies (HTTP, JSON, JSON Schema, OpenAPI), and the extensive
+Robot Framework community.
+
+2. It implements contract-based API testing via allowing to test both requests and
+responses against a JSON Schema and/or Swagger 2.0 specifications. It can (and will)
+automatically generate this JSON Schema for request and response bodies,
+which are then further enhanced automatically by your tests. Similarly, the
+support for generating a Swagger/OpenAPI specification will likely be supported
+in the future as well.
+
+3. It uses JSON as well for the representation of its internal model
+(called "instances", hence the library name), which are created for each
+request and response pair. This allows the library's outputs to be further
+processed programmatically, e.g. by the library itself, for data analysis purposes.
+
+
+## Usage
+
+The library is targeted for (at least) three kind of API tests, which are
+briefly demonstrated below. See keyword documentation for all the of keywords.
+
+
+1. Testing for specific JSON values returned by an API:
+
+
+The full example.
+
+
+2. Testing requests and/or responses against a JSON Schema (draft-04):
+
+
+The full example.
+
+
+3. Testing requests and responses against a Swagger 2.0 specification:
+
+
+The full example.
+
+
+
+## Installation
+
+Both Python package and the Docker image are available. The latter installation
+method is preferred if having Docker available.
+
+### As a Python package
+
+The library works on Python 3 only:
+
+    pip install --upgrade RESTinstance
+
+### As a Docker image
+
+    docker pull
+
+The docker image builds on rfdocker, which is Robot Framework distributed in
+a lightweight Alpine Linux based Docker container, and intented as a drop-in
+replacement for Robot Framework and related Python packages.
+
+
+## Development
+
+The library uses docker for its development environment, and mounterest
+for its own tests. Installing Docker is enough.
+
+### Testing
+
+Having Docker installed, run the library's own tests:
+
+    ./test
+
+In the scope of library's own tests, mounterest acts as a proxy to the data
+hosted at [Typicode's live JSON server](jsonplaceholder.typicode.com).
+
+As a proxy, and with some additional mocking, it allows testing non-safe
+methods (POST, PUT, PATCH, DELETE), that would otherwise change nothing,
+as the server is indeed read-only.
+
+You can use the implementation yourself, for testing against live production
+environments in case you are lacking their test environments, but that is
+outside the scope of this library. See mounterest in GitHub for
+the implementation details.
+
+### Contributing
+
+The issues and improvements and tracked in GitHub issue tracker.
+
+I do kindly take pull requests.
+
+
+## Credits
+
+RESTinstance was originally written by Anssi Syrjäsalo.
+
+RESTinstance is licensed under Apache License 2.0.
+
+RESTinstance was initially released at [RoboCon 2018](https://robocon.io/),
+2018-01-18, at Helsinki, Finland. The presentation is available in GitHub.
+
+
+### Contributors
+
+* All the contributors
+* will be listed here
+* ...
+
+The library development is supported by Siili.
+
+
+### Dependencies
+
+In addition to Robot Framework, RESTinstance primarily uses the following
+Python libraries (and tools) under the hood:
+
+- GenSON, for JSON Schema generation
+- Flex (swagger-flex), for Swagger 2.0 validation
+- jsonschema, for JSON Schema draft-04 validation
+- requests, for HTTP requests
+- Pygments, for JSON syntax highlighting
+
+See requirements.txt for all the Python packages used.
