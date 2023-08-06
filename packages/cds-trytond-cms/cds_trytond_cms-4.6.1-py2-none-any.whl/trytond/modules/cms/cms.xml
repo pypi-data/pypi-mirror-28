@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+
+        <!-- CMS User Groups -->
+        <record model="res.group" id="group_cms_admin">
+            <field name="name">CMS Administration</field>
+        </record>
+        <record model="res.user-res.group"
+            id="user_admin_group_cms_admin">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_cms_admin"/>
+        </record>
+        <record model="res.user-res.group"
+            id="user_trigger_group_cms_admin">
+            <field name="user" ref="res.user_trigger"/>
+            <field name="group" ref="group_cms_admin"/>
+        </record>
+ 
+        <!-- CMS Views -->
+        <record model="ir.ui.view" id="cms_article_view_tree">
+            <field name="model">cms.article</field>
+            <field name="type">tree</field>
+            <field name="name">cms_article_tree</field>
+        </record>
+        <record model="ir.ui.view" id="cms_article_view_form">
+            <field name="model">cms.article</field>
+            <field name="type">form</field>
+            <field name="name">cms_article_form</field>
+        </record>
+
+        <!-- CMS Actions -->
+        <record model="ir.action.act_window" id="act_cms_article_form">
+            <field name="name">Articles</field>
+            <field name="res_model">cms.article</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_cms_article_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="cms_article_view_tree"/>
+            <field name="act_window" ref="act_cms_article_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_cms_article_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="cms_article_view_form"/>
+            <field name="act_window" ref="act_cms_article_form"/>
+        </record>
+
+        <!-- CMS Menus -->
+        <menuitem name="CMS" id="menu_cms" />
+
+        <!-- CMS Menu Items-->
+        <menuitem id="menu_cms_article_form" parent="menu_cms" sequence="0" action="act_cms_article_form" />
+
+        <!-- CMS Access Control -->
+        <record model="ir.model.access" id="access_cms_article">
+            <field name="model" search="[('model', '=', 'cms.article')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+        <record model="ir.model.access" id="access_cms_article_admin">
+            <field name="model" search="[('model', '=', 'cms.article')]"/>
+            <field name="group" ref="group_cms_admin"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="True"/>
+        </record>
+
+    </data>
+</tryton>
+
