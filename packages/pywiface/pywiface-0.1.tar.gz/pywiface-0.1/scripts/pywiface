@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+import os
+import sys
+from argparse import ArgumentParser
+
+from termcolor import cprint
+
+
+def main():
+    if os.getuid() != 0:
+        cprint('Error: Must be run as root!', 'red')
+        raise SystemExit
+
+    from pywiface.interface import WirelessInterface, MonitorInterface
+
+    parser = ArgumentParser(description="Manage wireless interfaces")
+    parser.add_argument('command', choices=('mon', 'chan',),help='Valid commands: mon chan')
+    parser.add_argument('interface', help='The interface to operate on')
+    parser.add_argument('option', help='Command specific options')
+
+    args = parser.parse_args()
+
+    if args.command == 'mon':
+        if args.option in ['start', 'on']:
+            interface = MonitorInterface(name=args.interface)
+            print("Enabled monitor mode on", interface.name)
+        elif args.option in ['stop', 'off']:
+            interface = WirelessInterface(name=args.interface)
+            interface.set_managed_mode()
+            print("Disabled monitor mode on", interface.name)
+        else:
+            print("Valid options: {start|on,stop|off}")
+    elif args.command == 'chan':
+        if 0 < int(args.option) <= 14:
+            interface = WirelessInterface(name=args.interface)
+            interface.channel == int(args.option)
+            print("Channel set to", args.option, "on", interface.name)
+        else:
+            print("Invalid channel")
+
+
+if __name__ == "__main__":
+    main()
