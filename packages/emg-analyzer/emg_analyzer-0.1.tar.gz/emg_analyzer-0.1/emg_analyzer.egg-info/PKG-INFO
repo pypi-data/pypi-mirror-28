@@ -1,0 +1,147 @@
+Metadata-Version: 1.2
+Name: emg-analyzer
+Version: 0.1
+Summary: parse emg recording and normalize the voltage
+Home-page: UNKNOWN
+Author: Bertrand Neron
+Author-email: freeh4cker@gmail.com
+License: BSD3
+Description: EMG Analyzer
+        ============
+        
+        |Build Status| |Coverage Status|
+        
+        Is a tool set to help to analyze ElectroMyoGraphy recorded via smart
+        analyzer. For now it is able to normalize The voltage from an
+        Electromyography recorded file (.emt file) and produce a new .emt file
+        with the normalized voltage, this new file can be open in smart
+        analyzer. The second script allow to generate new emt grouped by tracks.
+        
+        Installation
+        ------------
+        
+        *emg\_analyzer* is not yet registered on PyPI so you need to install it
+        from github. It need at least python 3.6.
+        
+        For users
+        ~~~~~~~~~
+        
+        ::
+        
+            python3.6 -m pip install --user git+https://github.com/freeh4cker/emg_analyzer.git#egg=emg_analyzer
+        
+        For developers
+        ~~~~~~~~~~~~~~
+        
+        It's recommended to install *emg\_analyzer* in a virtualenv
+        
+        ::
+        
+            python3.6 -m venv emg_env
+            source emg_env/bin/activate
+        
+        Then install the project in editable mode
+        
+        ::
+        
+            pip install -e git+https://github.com/freeh4cker/emg_analyzer.git#egg=emg_analyzer
+        
+        quick start
+        -----------
+        
+        :construction:
+        
+        emg\_norm
+        ~~~~~~~~~
+        
+        To normalize tracks in emt file. There is to way to normalize tracks.
+        
+        -  all tracks are considered together to normalize (default)
+        -  normalize tracks by tracks
+        
+        ::
+        
+            emg_norm -v foo.emt
+        
+            emg_norm -v --by-track foo.emt
+        
+        emg\_group\_tracks
+        ~~~~~~~~~~~~~~~~~~
+        
+        emg\_group\_tracks take several emt files as input and groups tracks
+        base on their names. Creates one .emt file by tracks. for instance:
+        
+        ::
+        
+            emg_group_tracks exp{1,2,3}.emt 
+        
+        with inputs
+        ^^^^^^^^^^^
+        
+        ::
+        
+            exp1.emt
+              track_A track_B track_C track_D
+        
+            exp2.emt
+              track_B track_A track_D track_D
+        
+            exp3.emt
+              track_D track_C track_D track_C
+        
+        create outputs
+        ^^^^^^^^^^^^^^
+        
+        ::
+        
+            track_A.emt
+                exp1 exp2 exp3
+        
+            track_B.emt
+                exp1 exp2 exp3
+        
+            track_C.emt
+                exp1 exp2 exp3
+        
+            track_D.emt
+                exp1 exp2 exp3
+        
+            **Note:** you can pipe the 2 methods
+        
+            ::
+        
+                emg_group_tracks exp{1,2,3}.emt | emg_norm -v
+        
+            create outputs:
+        
+            track\_A.emt , track\_B.emt, track\_C.emt, track\_D.emt,
+            track\_A\_norm.emt , track\_B\_norm.emt, track\_C\_norm.emt,
+            track\_D\_norm.emt
+        
+        Contributing
+        ------------
+        
+        We encourage contributions, bug report, enhancement ...
+        
+        But before to do that we encourage to read `the contributing
+        guide <CONTRIBUTING.md>`__.
+        
+        .. |Build Status| image:: https://travis-ci.org/freeh4cker/emg_analyzer.svg?branch=master
+           :target: https://travis-ci.org/freeh4cker/emg_analyzer
+        .. |Coverage Status| image:: https://coveralls.io/repos/github/freeh4cker/emg_analyzer/badge.svg?branch=master
+           :target: https://coveralls.io/github/freeh4cker/emg_analyzer?branch=master
+        
+Keywords: EMG,data science,data normalization
+Platform: Unix
+Platform: Linux
+Platform: MacOsX
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers 
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Environment :: Console
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Requires-Python: >=3.6
