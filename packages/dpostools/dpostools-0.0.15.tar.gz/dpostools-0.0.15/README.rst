@@ -1,0 +1,1 @@
+Random assorted functions for interacting with ark-like blockchains
