@@ -1,0 +1,25 @@
+#!python
+
+# Author: YankunLi
+# Date  : 20180123
+
+import os
+import sys
+
+try:
+    from setproctitle import setproctitle
+except ImportError:
+    setproctitle = None
+
+for path in [
+        os.path.abspath(os.path.join(os.path.dirname(__file__), "src"))
+        ]:
+    sys.path.insert(0, path)
+
+from probe import probe_entry
+
+if __name__ == "__main__":
+    if setproctitle:
+        # setproctitle(os.path.basename(__file__))
+        setproctitle("probe")
+    sys.exit(probe_entry.main())
