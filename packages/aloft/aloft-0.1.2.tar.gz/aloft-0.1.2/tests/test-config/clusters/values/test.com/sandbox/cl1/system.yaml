@@ -1,0 +1,17 @@
+cluster-autoscaler:
+  awsRegion: us-west-2
+  autoscalingGroups:
+    - name: nodes.cl1.test.com
+      minSize: 1
+      maxSize: 4
+
+nginx-ingress:
+  controller:
+    service:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-west-2:606333827620:certificate/b18e7320-4fab-42ed-8484-5f438d0fb2b7
+
+kubernetes-dashboard:
+  ingress:
+    hosts:
+    - "dashboard.cl1.test.com"
