@@ -1,0 +1,40 @@
+{% extends 'infra_optim/base.html' %}
+{% load i18n %}
+{% block title %}{% trans 'Audits: ' %}{{ audit.uuid }}{% endblock %}
+
+{% block page_header %}
+  {% include 'horizon/common/_page_header.html' with title=_('Audits: ')|add:audit.uuid %}
+{% endblock page_header %}
+
+{% block main %}
+<div class="row">
+  <div class="detail col-md-6">
+    <h4>{% trans "Audit Info" %}</h4>
+    <dl class="dl-horizontal">
+        <dt>{% trans "UUID" %}</dt>
+        <dd>{{ audit.uuid|default:_("-") }}</dd>
+        <dt>{% trans "Goal" %}</dt>
+        <dd>{{ audit.goal_name|default:_("-") }}</dd>
+        <dt>{% trans "Strategy" %}</dt>
+        <dd>{{ audit.strategy_name|default:_("-") }}</dd>
+        <dt>{% trans "Type" %}</dt>
+        <dd>{{ audit.audit_type|default:_("-") }}</dd>
+        <dt>{% trans "Auto Trigger" %}</dt>
+        <dd>{{ audit.auto_trigger }}</dd>
+        {% url 'horizon:admin:audit_templates:detail' audit.audit_template_uuid as audit_template_url %}
+        <dt>{% trans "State" %}</dt>
+        <dd>{{ audit.state|default:_("-") }}</dd>
+        <dt>{% trans "Created At" %}</dt>
+        <dd>{{ audit.created_at|parse_isotime|default:_("-") }}</dd>
+        <dt>{% trans "Update At" %}</dt>
+        <dd>{{ audit.updated_at|parse_isotime|default:_("-") }}</dd>
+    </dl>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    {{ related_action_plans_table.render }}
+  </div>
+</div>
+
+{% endblock %}
