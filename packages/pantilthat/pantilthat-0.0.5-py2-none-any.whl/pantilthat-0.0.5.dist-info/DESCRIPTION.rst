@@ -1,0 +1,34 @@
+Learn more: https://shop.pimoroni.com/products/pan-tilt-hat
+
+0.0.5
+-----
+
+* Bugfix: fix to set_pixel_rgbw
+* Bugfix: fix so that get_servo_two returns correct value
+* Bugfix: deferred setup to prevent side-effects upon import
+
+0.0.4
+-----
+
+* New: get_pan and get_tilt methods to read back servo position
+* Bugfix: Brightness does not set value unless light_mode == PWM
+* Bugfix: Idle timeout Timer() daemonized to prevent blocking on exit
+
+0.0.3
+-----
+
+* Added idle_timeout functionality to prevent idle servo jitter
+* Added options for RGB, GRB, RGBW and GRBW pixel types - RGBW and GRBW support up to 18 pixels
+
+0.0.2
+-----
+
+* Corrected package dependencies
+
+0.0.1
+-----
+
+* Initial Release
+
+
+
