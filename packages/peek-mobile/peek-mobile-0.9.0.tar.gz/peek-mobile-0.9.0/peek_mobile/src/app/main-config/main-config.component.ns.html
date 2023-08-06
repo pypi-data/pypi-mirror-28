@@ -1,0 +1,28 @@
+<StackLayout class="peek-config-screen-background">
+    <Label class="config-screen-message h1"
+           text="Peek Native Mobile App v0.9.0">
+
+    </Label>
+     <Label class="config-screen-message"
+           *ngIf="!appDetails.length"
+           text="No Plugin Configs Availible">
+
+    </Label>   <ListView class="peek-config-screen" [items]="appDetails">
+        <ng-template let-item="item">
+            <GridLayout class="btn"
+                        rows="auto"
+                        columns="auto, *"
+                        [nsRouterLink]="[item.resourcePath]">
+                <Image class="config-screen-image"
+                       row="0"
+                       col="0"
+                       src="~{{item.pluginIconPath}}"></Image>
+                <Label class="config-screen-title"
+                       row="0"
+                       col="1"
+                       setEllipsize(android.text.TextUtils.TruncateAt.END)
+                       [text]="item.title"></Label>
+            </GridLayout>
+        </ng-template>
+    </ListView>
+</StackLayout>
