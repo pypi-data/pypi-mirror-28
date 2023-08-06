@@ -1,0 +1,15 @@
+---
+- include: port_checks.yml
+  when:
+    - inventory_hostname in groups['control'] or
+      inventory_hostname in groups['network'] or
+      inventory_hostname in groups['compute'] or
+      inventory_hostname in groups['monitoring']
+
+- include: service_checks.yml
+
+- include: package_checks.yml
+
+- include: user_checks.yml
+
+- include: database_checks.yml
