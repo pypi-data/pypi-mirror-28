@@ -1,0 +1,51 @@
+Metadata-Version: 1.0
+Name: stream_monitor
+Version: 2018.2.2.1637
+Summary: monitoring and alerting program for data streams such as recording files that update regularly
+Home-page: https://github.com/wdbm/stream_monitor
+Author: Will Breaden Madden
+Author-email: wbm@protonmail.ch
+License: GPLv3
+Description-Content-Type: UNKNOWN
+Description: stream\_monitor
+        ===============
+        
+        This program monitors a specified set of data streams (files) for
+        changes. If a file is not changed in a specified time, an alert is sent
+        using Pushbullet.
+        
+        setup
+        =====
+        
+        .. code:: bash
+        
+            pip install stream_monitor
+        
+        Set up a Pushbullet account, create an access token and store a
+        Pushbullet token in the file ``~/.pushbullet``. Install Pushbullet on a
+        mobile device.
+        
+        -  `Pushbullet
+           settings <https://www.pushbullet.com/#settings/account>`__
+        -  `Pushbullet
+           Android <https://play.google.com/store/apps/details?id=com.pushbullet.android>`__
+        
+        configuration and usage
+        =======================
+        
+        The file ``stream_monitor_configuration.py`` is imported as a module
+        from the working directory. It contains a dictionary of the following
+        form:
+        
+        .. code:: python
+        
+            streams = {
+                "./recording.csv": {"update_time": 30}
+            }
+        
+        When the script ``stream_monitor.py`` is executed, it imports the
+        configuration and runs in a continuous loop, sending a Pushbullet alert
+        whenever it detects that a stream is not being updated in its expected
+        update time. The script has options for alarms and verbosity.
+        
+Platform: UNKNOWN
