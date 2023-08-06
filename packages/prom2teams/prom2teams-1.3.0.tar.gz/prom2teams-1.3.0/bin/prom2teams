@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import argparse
+
+try:
+    from prom2teams.server import run
+except ImportError:
+    sys.path.append(os.path.abspath('./'))
+    from prom2teams.server import run
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Receives alert notifications '
+                                     'from Prometheus Alertmanager '
+                                     '(https://github.com/prometheus/alertmanager) '
+                                     'and sends it to Microsoft Teams using configured connectors ')
+
+    parser.add_argument('-c', '--configpath', help='config INI file path', required=True)
+    parser.add_argument('-l', '--logfilepath', help='log file path', required=False)
+    parser.add_argument('-v', '--loglevel', help='log level', required=False, default='INFO')
+    parser.add_argument('-t', '--templatepath', help='Jinja2 template file path', required=False)
+
+    args = parser.parse_args()
+
+    run(args.configpath, args.templatepath, args.logfilepath, args.loglevel)
