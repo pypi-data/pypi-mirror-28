@@ -1,0 +1,61 @@
+{% extends 'djangofloor/dev/doc/source/installation.rst_tpl' %}
+
+{% block post_dependencies %},
+  * elasticsearch >= 2.0.0 (optional; not installable via `"pip"`),
+  * requests,
+  * markdown.{% endblock %}
+
+{% block webserver_ssl_extra %}            <Location /updoc/show_alt/>
+            # this extra configuration is to display docs without being
+            # authenticated.
+                Order deny,allow
+                Allow from all
+                Satisfy any
+            </Location>
+{% endblock %}
+
+{% block post_application %}    {{ control_command }} createsuperuser
+    # initialize the ElasticSearch index
+    {{ control_command }} init_es
+{% endblock %}
+
+{% block other_application %}Elasticsearch
+=============
+
+UpDoc knows how to use ElasticSearch for indexing documents.
+If you have a recent Debian/Ubuntu distribution, you can directly install ElasticSearch.
+
+.. code-block:: bash
+
+    sudo apt-get install elasticsearch
+
+Otherwise, you should install a more recent version from their official repository:
+
+.. code-block:: bash
+
+    wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+    echo "deb http://packages.elastic.co/elasticsearch/1.7/debian stable main" | sudo tee /etc/apt/sources.list.d/elasticsearch.list
+    sudo apt-get update
+    sudo apt-get install openjdk-7-jre-headless elasticsearch
+    sudo /bin/systemctl daemon-reload
+    sudo /bin/systemctl enable elasticsearch.service
+    sudo service elasticsearch start
+
+
+On Debian 7, you probably should use something like:
+
+.. code-block:: bash
+
+    sudo update-rc.d elasticsearch defaults 95 10
+    sudo /etc/init.d/elasticsearch start
+
+Once ElasticSearch is installed, you need to configure your Updoc installation and change the `elasticsearch` section. The `hosts` value should be a list of at least one server (like `"db-es01.example.org:9200,db-es02.example.org:9200,db-es03.example.org:9200`).
+The ElasticSearch index must be initialized (and existing documents indexed if you already added some documents).
+ElasticSearch can be added at any time and allows to search words through all documents (instead of only looking to documents and keywords).
+
+.. code-block:: bash
+
+    {{ control_command }} init_es
+
+
+{% endblock %}
