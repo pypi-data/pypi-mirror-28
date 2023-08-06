@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ object.headline|striptags|safe }}</title>
+        <meta name="description" content="{{ object.description|striptags|safe }}">
+    </head>
+    <body>
+        {% if STAGING or DEVELOPMENT %}
+            {% if BIGBUILD_BIGBAR %}
+                {% if not ARCHIVAL %}
+                    {% include "bigbuild/pages/bigbar.html" %}
+                {% endif %}
+            {% endif %}
+        {% endif %}
+
+        {% block container %}
+        {% endblock %}
+    </body>
+</html>
