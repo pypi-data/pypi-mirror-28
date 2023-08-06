@@ -1,0 +1,55 @@
+Metadata-Version: 1.0
+Name: analytracks
+Version: 0.2.1.7
+Summary: This python package contains tools to handle sport gps tracks (tcx, gpx, ...)
+Home-page: http://github.com/ddolbecke/analytracks
+Author: Dimitri de Smet
+Author-email: dimitri.desmet@uclouvain.be
+License: MIT
+Description-Content-Type: UNKNOWN
+Description: # analytracks
+        Workout tracks analytics
+        
+        
+        ## Installation 
+        pip install -e .
+        
+        ## Parsing
+        ```python
+        run1 = atrk.tracks.Track('LLN_10miles.tcx') # should also work with gpx
+        run1.points # track points
+        run1.data # track data
+        run1.rideRun # should be either 'ride' or 'run'
+        ```
+        
+        ## Pre-processing
+        ```python
+        run1.add_google_elevation() # assuming you have an api key 
+                                   # otherwise use ele_name='ele' 
+                                   # it will use elevations from the track file
+        run1.add_slope(sf=0.05,ele_name='googleElevation',plot=True) # or ele_name='ele'
+        run1.add_speed(sf=0.05,plot=True)
+        ```
+        
+        ## Heart Rate parameters fitting
+        
+        ### initial parameters
+        ```python
+        x0 = {'delay': 0, # delay between hr and power output [s]
+         'hr_max': 185, 
+         'hr_rest': 135.46978177728184,
+         'hr_slope': 2.9580335634755954, # bpm/watt if power expressed in Watt
+         'k_e': 1e-05, # sensitivity to fatigue
+         'k_f': 0.04, # 1/t_f : falling time constant
+         'k_r': 0.04, # 1/t_r : raising time constant
+         'slope_sf': 0.1, # slope smoothing factor
+         'speed_sf': 0.1} # speed smoothing factor
+        ```
+        ### parameters fitting
+        ```python
+        run1.hr_fit(x0=x0,to_tune=['hr_rest','hr_slope','k_f','k_r'])
+        run1.hr_sim(ele_name='googleElevation')  # simulation
+        run1.hr_plot() # plot of the results
+        ```
+        
+Platform: UNKNOWN
