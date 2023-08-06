@@ -1,0 +1,204 @@
+NewRelic Synthetics (unofficial) CLI (NeReS)
+============================================
+
+|image0| |image1| |image2|
+
+NeReS is a cli tool to manage `NewRelic Synthetics
+<https://synthetics.newrelic.com/>`__ monitors with a Synthetics Lite account
+(Pro should work too). The tool emulates the actions of a user in the browser
+and doesn't use the Synthetics API since that's only available to the Pro
+accounts.
+
+With this tool you can:
+
+-  List all your monitors, including their success rate, locations,
+   notifications etc.
+-  Create, update and delete monitors
+-  List available locations for monitor installation and
+-  everything else available though the Web console.
+
+|image3|
+
+
+Installation
+------------
+
+.. code:: shell
+
+   $ pip install neres
+
+
+
+Configuration
+-------------
+
+1. You will need a newrelic account
+2. Start by using the `login` command
+3. Read the docs or run `--help`
+
+
+Use
+---
+
+Login to NewRelic
+~~~~~~~~~~~~~~~~~~
+
+Login to NewRelic with the `login` command:
+
+.. code:: shell
+
+   $ neres login
+
+If you have multiple NewRelic accounts you can have different environments:
+
+.. code:: shell
+
+   $ neres --environment work login
+
+.. note::
+
+  Default environment is named `newrelic`. Remember to always pass `--environment`
+  to all neres commands to execute them in the correct environment. Alternatively
+  you can add `NERES_ENVIRONMENT` to your environment variables list.
+
+
+List Accounts
+~~~~~~~~~~~~~
+
+You can list all the accounts connected to the email you used to connect using:
+
+.. code:: shell
+
+   $ neres list-accounts
+
+By default neres will act on the first account listed. This command will help
+you select a different account by using the `ID` of the account in combination
+with the `--account` option or by setting `NERES_ACCOUNT` in your environment.
+
+List Locations
+~~~~~~~~~~~~~~
+
+Lists available monitor locations:
+
+.. code:: shell
+
+   $ neres list-locations
+
+List Monitors
+~~~~~~~~~~~~~
+
+Lists available monitors:
+
+.. code:: shell
+
+   $ neres list-monitors
+
+You can only list IDs of the monitors:
+
+.. code:: shell
+
+   $ neres list-monitors --ids-only
+
+Or get the raw JSON output from NewRelic:
+
+.. code:: shell
+
+   $ neres list-monitors --raw
+
+Add Monitor
+~~~~~~~~~~~
+
+Adds a Synthetics monitor:
+
+.. code:: shell
+
+   $ neres add-monitor monitorName http://example.com
+
+Use `--help` to get a full list of supported options for the command. All
+options are optional.
+
+
+Get Monitor
+~~~~~~~~~~~
+
+Get details on a monitor
+
+.. code:: shell
+
+   $ neres get-monitor de310b69-3195-435e-b1ef-3a0af67499de
+
+
+.. note::
+
+   You can use `list-monitors` to get a list of available monitors.
+
+Update Monitor
+~~~~~~~~~~~~~~
+
+Update an existing monitor
+
+.. code:: shell
+
+   $ neres update-monitor de310b69-3195-435e-b1ef-3a0af67499de --name "Foobar"
+
+Use `--help` to get a full list of supported options for the command. All
+options are optional.
+
+
+Open Monitor
+~~~~~~~~~~~~
+
+Open monitor in the browser
+
+.. code:: shell
+
+   $ neres open de310b69-3195-435e-b1ef-3a0af67499de
+
+
+Get state of all monitors of account
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Export the state of all monitors of account in YAML format with
+
+.. code:: shell
+
+   $ neres get-state
+
+
+Save the output into a file, edit and use in combination with the
+`update-from-statefile` command to update multiple monitors at once.
+
+.. code:: shell
+
+   $ neres get-state > state.yaml
+
+
+Update monitors from statefile
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Update monitors from statefile with
+
+.. code:: shell
+
+   $ neres update-from-statefile state.yaml
+
+
+.. note::
+
+   This command will only update existing monitors. It will not create new or
+   delete existing ones.
+
+
+Credits
+-------
+
+This package was created with
+`Cookiecutter <https://github.com/audreyr/cookiecutter>`__ and the
+`audreyr/cookiecutter-pypackage <https://github.com/audreyr/cookiecutter-pypackage>`__
+project template.
+
+.. |image0| image:: https://img.shields.io/pypi/v/neres.svg
+.. |image1| image:: https://travis-ci.org/glogiotatidis/neres.svg?branch=master
+.. |image2| image:: https://pyup.io/repos/github/glogiotatidis/neres/shield.svg
+.. |image3| image:: https://asciinema.org/a/145685.png
+              :target: https://asciinema.org/a/145685
