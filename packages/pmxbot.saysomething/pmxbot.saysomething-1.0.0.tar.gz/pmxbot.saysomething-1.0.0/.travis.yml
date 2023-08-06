@@ -1,0 +1,34 @@
+dist: trusty
+sudo: false
+language: python
+
+python:
+- 3.4
+- &latest_py3 3.6
+
+jobs:
+  fast_finish: true
+  include:
+  - stage: deploy
+    if: tag IS present
+    python: *latest_py3
+    install: skip
+    script: skip
+    deploy:
+      provider: pypi
+      on:
+        tags: true
+        all_branches: true
+      user: jaraco
+      password:
+        secure: W6+W1raCD+dXgQKs1PTvLaPj7OU5i5cym6HeUZoMEiUBFIVwY9mqV/0zTMDiYCcd+aor3e5ydNnpe97wecrDQUR4dP2REaDngxmAYunQ17ESLr+YJBeKxnnHIzwsRDgyuigabebKJ9COkFwYXD44CHi5bS3ehmddjN6ypAQ2Zd43BdHZrYLLPl80Pd2KuxIwnmfFpizFjaPohNHRD8ngHPwSg7SViWn7KQjOtxRHYq9wnsn8ZOzHAtb9oVlJG6ituo9a9NfnyeC8GifNW+TOpb1V1vQNp6OGj03JZpEsiHmpmxrXyOgxVuyPOx1V66fvr52fp5Od79cNObyR+Xn+m2MbUde/CqJnTsorMWhU2YSjg8bNEcfTy3guEGSav4fymxq9DW+hb8SYP34xyKbSYpt9uwOE9oLmX1F2v922qL81s2Ektgk7e9Sq5SsqzRe/FeXkqebhukSLU+7IAH11l4dxQ0lYNQ9QY9apF5C6MhM+mrX9jawpnoKqLGNBEfXg6wfOzPtVOj2AQ7oKcPENT1EZGDK4sSc6UMAseHYeGMYhA7VpXpBy5pWEyAmya75QhqbghjxAe1koUisoA0n3gJWTVWiWUkaEMMhIQeOm8Jl1QYfeZw1Y8pYMUwk6jP+OKk1sZcSGBUD8gbbtbZke+8GuK9krsJCs5h3AOQyI3Fk=
+      distributions: dists
+      skip_cleanup: true
+      skip_upload_docs: true
+
+cache: pip
+
+install:
+- pip install tox tox-venv
+
+script: tox
