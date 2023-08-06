@@ -1,0 +1,33 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    i18n_domain="plone.formwidget.relateditems">
+
+  <!-- Include package dependencies. -->
+  <include file="profiles.zcml" />
+
+  <browser:resourceDirectory
+      directory="static"
+      layer=".interfaces.IPloneFormwidgetRelateditemsLayer"
+      name="plone.formwidget.relateditems"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      field="z3c.relationfield.interfaces.IRelationChoice"
+      widget=".widget.IRelatedItemsWidget"
+      layer=".interfaces.IPloneFormwidgetRelateditemsLayer"
+      template="widget_display.pt"
+      />
+
+  <z3c:widgetTemplate
+      mode="display"
+      field="z3c.relationfield.interfaces.IRelationList"
+      widget=".widget.IRelatedItemsWidget"
+      layer=".interfaces.IPloneFormwidgetRelateditemsLayer"
+      template="widget_display.pt"
+      />
+
+</configure>
