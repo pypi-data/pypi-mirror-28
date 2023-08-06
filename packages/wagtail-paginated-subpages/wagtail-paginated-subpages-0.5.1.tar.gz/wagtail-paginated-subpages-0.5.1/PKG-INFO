@@ -1,0 +1,63 @@
+Metadata-Version: 1.1
+Name: wagtail-paginated-subpages
+Version: 0.5.1
+Summary: A pagination plugin app for django wagtail CMS
+Home-page: https://github.com/Designer023/Wagtail-Paginated-Subpages
+Author: Carl Topham
+Author-email: carl@carl-topham.com
+License: MIT License
+Description-Content-Type: UNKNOWN
+Description: ==========================
+        Wagtail Paginated Subpages
+        ==========================
+        
+        A simple Django Wagtail app to add paginated pages under a root page using
+        a mixin /template tag approach.
+        
+        Quick start
+        -----------
+        
+        
+        1. Add "wagtail_paginated_subpages" to your INSTALLED_APPS setting like this::
+        
+            INSTALLED_APPS = [
+                ...
+                'wagtail_paginated_subpages',
+            ]
+        
+        2. import the mixin and include it before the Page (or other) classes::
+        
+            from wagtail_paginated_subpages.mixins.pagination import PaginatedMixin
+        
+        
+            class ContentPage(PaginatedMixin, BaseCMSPage):
+        
+                pass
+        
+        3. Use the paginated content in a paginated page template::
+        
+            {% for page in paginated_objects %}
+                    <h2>{{ page.title }}</h2>
+                {% endfor %}
+            </ul>
+        
+        4. Use the pagination template tag to add pagination::
+        
+            {% load wagtail_paginated_tags %}
+            {% render_pagination page=page paginated_objects=paginated_objects %}
+        
+        5. Navigate to page with child pages and list of child pages should be present
+        
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 1.11
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
