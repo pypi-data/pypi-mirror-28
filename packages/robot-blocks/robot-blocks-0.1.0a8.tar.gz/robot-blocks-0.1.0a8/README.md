@@ -1,0 +1,80 @@
+[![Coverage Status](https://coveralls.io/repos/github/chris104957/robot-blocks/badge.svg?branch=master)](https://coveralls.io/github/chris104957/robot-blocks?branch=master)
+[![Build Status](https://travis-ci.org/chris104957/robot-blocks.svg?branch=master)](https://travis-ci.org/chris104957/robot-blocks)
+[![Maintainability](https://api.codeclimate.com/v1/badges/cd78e641eb83dc3506ae/maintainability)](https://codeclimate.com/github/chris104957/robot-blocks/maintainability)
+
+*This project is still under construction*
+
+# introduction
+
+about the project
+---
+This project is intended to provide a simple framework for quickly building source code for robotics projects:
+- allows rapid development with minimal writing of code (refer to below basic example)
+- multithreaded processsing based on hooks/callbacks - removes need for writing multiple loops yourself and facilitates management of robot components 
+- comprehensive library of classes for handing interactions with common robot components (motors, servos, ultrasounds, etc.)
+- provides built-in support for multiple control methods (e.g. autonomous obstacle avoidance, remote control, etc.)
+
+# getting started
+
+installation
+---
+install with pip
+```bash
+pip install robot-blocks
+```
+
+basic example
+---
+
+this library is meant to allow you to create software for your robot with as few lines of code as possible. Here is a minimal example for creating an obstacle avoidance robot with 2 motors and an ultrasound sensor
+
+```python
+# imports
+from robotblocks import Robot
+
+# configure robot
+my_robot = Robot()
+
+my_robot.add_motor(position='LEFT', forward_pin=9, backward_pin=10)
+my_robot.add_motor(position='RIGHT', forward_pin=8, backward_pin=7)
+
+my_robot.add_sensor('UltrasoundSensor', position='FRONT', input_pin=17, output_pin=18)
+  
+# start movement
+my_robot.start()
+  
+```
+
+callbacks and hooks 
+---
+
+this library provides a full set of hooks that you can use to trigger certain events when your robot is doing certain things. For example:
+
+```python
+def turn_lights_on():
+  """
+  Turns on the robot's lights
+  """
+  ...
+  
+def turn_lights_off():
+  """
+  turns off the robot's lights
+  """
+
+my_robot.add_callback('ON_MOVE_FORWARDS_START', turn_lights_on)
+my_robot.add_callback('ON_BRAKE', turn_lights_off)
+  
+  
+```
+
+# misc
+
+licence
+---
+The project is licensed under the Apache license.
+
+support
+---
+for help on this project, please raise an [issue](https://github.com/chris104957/robot-blocks/issues)
+
