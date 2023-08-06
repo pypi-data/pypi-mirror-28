@@ -1,0 +1,46 @@
+language: python
+
+jobs:
+  include:
+    - python: 3.6
+      env: TOXENV=py,codecov
+    - python: 3.5
+      env: TOXENV=py,codecov
+    - python: 3.4
+      env: TOXENV=py,codecov
+    - python: 2.7
+      env: TOXENV=py,codecov
+    - python: pypy
+      env: TOXENV=py,codecov
+    - python: nightly
+      env: TOXENV=py
+
+    - stage: deploy
+      python: 3.6
+      script: skip
+      install: skip
+      deploy:
+        distributions: sdist bdist_wheel
+        provider: pypi
+        user: pypibot98b19
+        on:
+          tags: true
+          all_branches: true
+        password:
+          secure: Jcqh6o/ZjhtotmNk7LkhOwEdFcxR6GI3Rr6nJbEujsty7RB6qmaGeMoIF4WsKRnkB9v3nKcwmukUuqYI38+NCQewkuIh3YV3YbXhtWbnO+I2FaZW5SGalTEN5gMGAhEf+hCaM4VbRRwDsaRUIsBFFERaPx15iVq6xoJd297YPBeZuBO8ePssd3yUR4ympTf0A3h8AY2jzzj689KGaDrXfp30IlobtpgjRSXsomKdIU14RA+T8uw4F1VB8M2r13k8kkgV6D+xDRUQ/C6gxQcIRBra7AWvnZ6n2RmiV5nHlK5BaJYga4JbGf8EOdyIEQl050vpjmc7s9EAgoShITR9bT6/PKlIbp1LQgTan2yGsEkFS6MqjtsMSDgAvDP2MSY9tM2dVswJDXxP1/2KcVYd/C8Ia/L7yBCeNCV28U6KjySajGaHu/zG31NQIwrrsK5cyRhf6HmLeNgl45gVNXzzUYrbO/q6AFAkFrD9WLCiIKFR+rayLKTOILtK4wHJwjBwJUk1Boy+t5JXEF1tk2Kzbf3bC2je1QVKIY5ALAmhd15Bp4YhwX6JOA1c1Aiha4bbIFw3I9sp0Zv1YaUfZvEiMlI8k5bf5aeAMESclz3DplX7k16uXEa0P/fcZP/6C60n+swLVaU7CBozhQNojoqAu+0QItUbut6V6SYaGx5pdf8=
+  allow_failures:
+    - python: nightly
+
+stages:
+  - test
+  - name: deploy
+    if: tag IS present
+
+install:
+  - pip install tox
+
+script:
+  - tox
+
+cache:
+  - pip
