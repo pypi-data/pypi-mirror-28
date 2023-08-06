@@ -1,0 +1,69 @@
+
+<tal:widget tal:define="id string:${view/id}">
+<div class="previewbuttons">
+  <p class="button-field context fa fa-eye-slash disabled" id="hidepreview"></p>
+  <p class="button-field context fa fa-arrows disabled" id="previewv"></p>
+  <p class="button-field context fa fa-eye" id="mdpreview"> Update Preview</p>
+</div>
+<div class="flexbox">
+<textarea  class="markdown-textarea"
+           type="textarea"
+           role="markdown"
+           tal:attributes="id id;
+           name view/name;
+           value view/value;
+           disabled view/disabled;
+           alt view/alt;
+           accesskey view/accesskey;
+           onselect view/onselect;"
+           tal:content="view/value"/>
+<div id="result" class="fullwidth"> </div>
+</div>
+
+<link rel="stylesheet" href="http://ace.jeka.by/assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+<link rel="stylesheet" href="++resource++medialog.markdown/markdown.css" />
+
+<script src="++resource++medialog.markdown/jquery.selection.js"> </script>
+<script tal:replace="structure view/make_buttons"></script>
+<script>
+$( "#mdpreview" ).click(function() {
+  var md = $('#${id}').selection();
+  len = md.length;
+  if (len < 3)  {
+    var md = $('#${id}').val();
+    var caretPos = $('#${id}')[0].selectionStart;
+    var md = md.slice(0, caretPos) + '<a id="you_are_here" name="you_are_here"><p class="cursor_postion">> -------------------------------------------- </p></a>' + md.slice(caretPos);
+  }
+  $.post("render_from_markdown", { markdown: md}, function( data ) {
+    $('#result').show();
+    $( "#result" ).html( data );
+    $('#hidepreview,  #previewv').removeClass('disabled');
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub,"result"]);
+  });
+});
+$( "#hidepreview" ).click(function() {
+  $('#result').hide();
+  $('#result, .md-textarea, #${id}').removeClass( 'halfwidth' );
+  $('#result, .md-textarea, #${id}').addClass( 'fullwidth' );
+  $('#hidepreview,  #previewv').addClass('disabled');
+});
+$( "#previewv" ).click(function() {
+  $('#result, .md-textarea, #${id}').toggleClass( 'halfwidth' );
+  $('#result, .md-textarea, #${id}').toggleClass( 'fullwidth' );
+});
+</script>
+<script tal:condition="view/live_preview">
+$(document).on('keypress', '#${id}', function(e) {
+        if ( e.keyCode == 13 ) {  // detect the enter key
+            if ( $("#result").css('display') !== 'none') {
+            	$('#mdpreview').click(); // fire a sample click,  you can do anything
+              $('#you_are_here').focus();  // or maybe  $('#result').scrollTop( $("#you_are_here").offset().top );
+        	}
+    	}
+});
+
+</script>
+<style>
+.cursor_postion { color: red}
+</style>
+</tal:widget>

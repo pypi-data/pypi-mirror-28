@@ -1,0 +1,34 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+	i18n_domain="medialog.markdown">
+	
+
+  <class class=".widget.MarkdownWidget">
+    <require
+        permission="zope.Public"
+        interface="medialog.markdown.widgets.widget.IMarkdownWidget"
+        />
+  </class>
+
+  <!--  Display widget  -->
+  <z3c:widgetTemplate
+      mode="display"
+      widget="medialog.markdown.widgets.widget.IMarkdownWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="markdown_display.pt" />
+
+  <!--  Input (edit) widget  -->
+  <z3c:widgetTemplate
+      mode="input"
+      widget="medialog.markdown.widgets.widget.IMarkdownWidget"
+      layer="z3c.form.interfaces.IFormLayer"
+      template="markdown_input.pt" />
+      
+ 
+ 
+      
+</configure>
+
+
+

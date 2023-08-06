@@ -1,0 +1,27 @@
+<configure
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="medialog.markdown">
+
+  <!-- Include our dependencies -->
+  <include package="plone.tiles" file="meta.zcml" />
+  <include package="zope.component" file="meta.zcml" />
+  <include package="zope.app.publisher" file="meta.zcml" />
+
+   <include package="plone.tiles" />
+
+   <plone:tile
+       name="medialog.markdown.markdowntile"
+       title="Markdown tile"
+       description="Markdown Tile"
+       for="*"
+       schema=".tile.IMarkdownTile"
+       class=".tile.MarkdownTile"
+       template="markdowntile.pt"
+       permission="zope2.View"
+       add_permission="cmf.ModifyPortalContent"
+       />
+
+</configure>
