@@ -1,0 +1,70 @@
+Metadata-Version: 1.1
+Name: django-closure-tree
+Version: 0.2.2
+Summary: A Closure based Tree model for Django.
+Home-page: https://github.com/funkybob/closure_tree
+Author: Curtis Maloney
+Author-email: curtis@tinbrain.net
+License: MIT
+Description: 
+        Django closure tree model.
+        ==========================
+        
+        
+        Abstract base model for creating a Closure Tree using a recursive Postgres view.
+        
+        http://schinckel.net/2016/01/27/django-trees-via-closure-view/
+        
+        Usage
+        =====
+        
+        Inherit from the Node model:
+        
+        .. code-block:: python
+        
+           from closure_tree.models import Node
+        
+        
+           class MyNode(Node):
+               name = models.CharField(max_length=30)
+        
+        
+        Create migrations:
+        
+        .. code-block:: sh
+        
+           $ ./manage.py makemigrations
+        
+        
+        Add the CreateTreeClosure migration step:
+        
+        .. code-block:: sh
+        
+           $ ./manage.py makemigrations --empty myapp
+        
+        
+        .. code-block:: python
+        
+           from closure_tree.migrations import CreateTreeClosure
+        
+           class Migration(migrations.Migration):
+        
+               dependencies = [
+                   ('dummy', '0001_initial'),
+               ]
+        
+               operations = [
+                   CreateTreeClosure('MyNode'),
+               ]
+        
+        
+Platform: UNKNOWN
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: Implementation :: PyPy
