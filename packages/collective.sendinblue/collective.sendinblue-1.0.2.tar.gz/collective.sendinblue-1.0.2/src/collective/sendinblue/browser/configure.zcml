@@ -1,0 +1,46 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    i18n_domain="collective.sendinblue">
+
+  <!-- Control panel -->
+  <include package="plone.app.registry" />
+  <browser:page
+    name="sendinblue-settings"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class=".controlpanel.SendinblueSettingsControlPanel"
+    permission="cmf.ManagePortal"
+    />
+
+  <!-- Portlet -->
+  <include package="plone.app.portlets" />
+  <plone:portlet
+    name="portlet.Sendinblue"
+    interface=".portlet.ISendinbluePortlet"
+    assignment=".portlet.Assignment"
+    renderer=".portlet.Renderer"
+    addview=".portlet.AddForm"
+    editview=".portlet.EditForm"
+    />
+
+  <adapter
+      for="Products.CMFPlone.interfaces.siteroot.IPloneSiteRoot"
+      provides="..interfaces.INewsletterSubscribe"
+      factory=".portlet.Captcha" />
+
+  <!-- Resource directory for images -->
+  <browser:resourceDirectory
+    name="collective.sendinblue.images"
+    directory="images"
+    layer="..interfaces.ICollectiveSendinblueLayer"
+    />
+
+  <!-- Resource directory for stylesheets -->
+  <browser:resourceDirectory
+    name="collective.sendinblue.stylesheets"
+    directory="stylesheets"
+    layer="..interfaces.ICollectiveSendinblueLayer"
+    />
+
+</configure>

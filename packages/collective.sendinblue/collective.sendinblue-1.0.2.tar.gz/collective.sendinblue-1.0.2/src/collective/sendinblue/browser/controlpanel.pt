@@ -1,0 +1,144 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="here/prefs_main_template/macros/master"
+      i18n:domain="collective.sendinblue">
+
+<body>
+
+  <div id="content"
+     metal:fill-slot="prefs_configlet_content">
+
+    <div metal:use-macro="context/global_statusmessage/macros/portal_message">
+      Portal status message
+    </div>
+
+    <a href=""
+       id="setup-link"
+       tal:attributes="href string:$portal_url/plone_control_panel"
+       i18n:translate="">
+        Site Setup
+    </a> &rsaquo;
+
+    <h1 class="documentFirstHeading" tal:content="view/label">View Title</h1>
+
+    <div id="layout-contents"
+         class="enableUnloadProtection enableAutoFocus enableFormTabbing enableUnlockProtection"
+         tal:define="accounts view/sendinblue_accounts|nothing;
+                     empty string:-">
+      <fieldset id="fieldset-send">
+        <legend id="fieldsetlegend-send" i18n:translate="">Standard</legend>
+        <div id="sendinblue-no-valid-account" class="warning" tal:condition="not:accounts"
+             i18n:translate="msg_sendinblue_no_account">
+          You have no valid account linked to the site yet.
+        </div>
+        <span tal:replace="structure view/contents" />
+      </fieldset>
+      <fieldset id="fieldset-account" tal:condition="accounts">
+        <legend id="fieldsetlegend-account" i18n:translate="">Sendinblue Account(s)</legend>
+        <tal:bcl tal:repeat="key accounts">
+          <table class="listing" tal:define="account python: accounts[key]">
+            <thead>
+              <tr>
+                <th i18n:translate="">Key</th>
+                <th i18n:translate="">Value</th>
+              </tr>
+            </thead>
+            <tbody tal:define="mail_plan python: account[0];
+                               sms_plan python: account[1];
+                               account_details python: account[2]">
+              <tr>
+                 <td i18n:translate="">Account key:</td>
+                 <td tal:content="key|empty"/>
+              </tr>
+              <tr>
+                 <td i18n:translate="">Mail plan:</td>
+                 <td>
+                     <span tal:replace="mail_plan/plan_type|empty"/> &mdash; 
+                     credits : <span tal:replace="mail_plan/credits|empty"/> (<span tal:replace="mail_plan/credit_type|empty"/>)
+                 </td>
+              </tr>
+              <tr>
+                 <td i18n:translate="">SMS plan:</td>
+                 <td>
+                     <span tal:replace="sms_plan/plan_type|empty"/> &mdash; 
+                     credits : <span tal:replace="sms_plan/credits|empty"/> (<span tal:replace="sms_plan/credit_type|empty"/>)
+                 </td>
+              </tr>
+              <tr>
+                 <td i18n:translate="">Email:</td>
+                 <td tal:content="account_details/email|empty"/>
+              </tr>
+              <tr>
+                 <td i18n:translate="">First name:</td>
+                 <td tal:content="account_details/first_name|empty"/>
+              </tr>
+              <tr>
+                 <td i18n:translate="">Last name:</td>
+                 <td tal:content="account_details/last_name|empty"/>
+              </tr>
+              <tr>
+                <td i18n:translate="">Company: </td>
+                <td tal:content="account_details/company|empty"/>
+              </tr>
+              <tr>
+                <td i18n:translate="">Address: </td>
+                <td tal:content="account_details/address|empty"/>
+              </tr>
+              <tr>
+                <td i18n:translate="">Zip: </td>
+                <td tal:content="account_details/zip_code|empty"/>
+              </tr>
+              <tr>
+                 <td i18n:translate="">City: </td>
+                <td tal:content="account_details/city|empty"/>
+              </tr>
+              <tr>
+                <td i18n:translate="">Country: </td>
+                <td tal:content="account_details/country|empty"/>
+              </tr>
+             </tbody>
+          </table>
+        </tal:bcl>
+
+      </fieldset>
+      <fieldset id="fieldset-lists" tal:condition="accounts">
+        <legend id="fieldsetlegend-preview" i18n:translate="">Sendinblue Lists</legend>
+        <table class="listing"
+               tal:define="lists python:view.sendinblue_lists()">
+          <thead>
+            <tr>
+              <th i18n:translate="">Account</th>
+              <th i18n:translate="">ID</th>
+              <th i18n:translate="">Name</th>
+              <th i18n:translate="">Total subscribers</th>
+              <th i18n:translate="">Date created</th>
+            </tr>
+          </thead>
+          <tal:bcl tal:repeat="key lists">
+            <tbody tal:define="list python: lists[key]">
+              <tr>
+                <td tal:content="key|empty"></td>
+                <td tal:content="list/id|empty"></td>
+                <td tal:content="list/name|empty"></td>
+                <td tal:content="list/total_subscribers|empty"></td>
+                <td tal:content="list/entered|empty"></td>
+              </tr>
+            </tbody>
+          </tal:bcl>
+        </table>
+
+      </fieldset>
+    </div>
+
+    <script type="text/javascript">
+// Disable inline validation.  It may change the cache based on a new
+// api key that the user has not yet saved.
+$('.z3cformInlineValidation').removeClass('z3cformInlineValidation');
+    </script>
+
+  </div>
+</body>
+</html>

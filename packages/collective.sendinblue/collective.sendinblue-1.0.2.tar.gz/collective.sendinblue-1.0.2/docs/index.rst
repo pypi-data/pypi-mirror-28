@@ -1,0 +1,5 @@
+====================
+collective.sendinblue
+====================
+
+User documentation

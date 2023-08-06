@@ -1,0 +1,40 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="collective.sendinblue">
+
+  <i18n:registerTranslations directory="locales" />
+
+  <includeDependencies package="." />
+
+  <include package=".browser" />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="collective.sendinblue"
+      directory="profiles/default"
+      description="Sendinblue integration for Plone."
+      i18n:attributes="title; description"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+  <genericsetup:upgradeStep
+      source="1000"
+      destination="1001"
+      title="Installs plone.formwidget.recaptcha dependency"
+      description=""
+      profile="collective.sendinblue:default"
+      handler=".upgrades.install_recaptcha"
+      />
+
+  <utility
+      provides="collective.sendinblue.interfaces.ISendinblueAPI"
+      factory=".sendinblue.SendinblueAPI" />
+
+  <utility
+      component=".vocabularies.available_lists"
+      name="collective.sendinblue.vocabularies.AvailableLists"
+      provides="zope.schema.interfaces.IVocabularyFactory" />
+
+</configure>
