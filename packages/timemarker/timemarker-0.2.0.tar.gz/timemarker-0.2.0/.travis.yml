@@ -1,0 +1,25 @@
+language: python
+
+sudo: false
+
+python:
+- '3.6'
+
+install:
+  - pip install -Ue .[test,build]
+
+script: coverage run --source timemarker -m py.test
+
+after_success:
+  - coveralls
+
+deploy:
+  provider: pypi
+  user: davidressman
+  password:
+    secure: LJmbyYaE29BENWUL2ci6VtfyNyu8zU2MWBO8Y0wixj4ZGt/Dz86WG0gV/fmA94AXzEBmqLc7f16Cj2WQhv1LbF75M9w3VMwenYzqCph3MBZ3tY1Lfqk11NMvDpwhLRdr7+YewVJk0nXFwnIzTOQL+7lFVGBATFyKHP0Ct8Ak995Jgw4vSLktiaVbaTLiC3NCVS8ewX07Hz9f5maxcEQLBXb4b8/iliHYX6wlZJkHBCZijGXjasRObW043GDuFkUD5akSwHo39oHK9qIi1Nlj1Tn6MgWGGEyVWcvj5CAgAiI/A8X5Hln/yVT0S0U/FqZMQ11OYk1wPuOmSWvu1jcjr1HWH6v5SE7liAG4RJ/UWvG8SIvOO9KYB5PKKNOVY85DlkjW5SWoYE/Cja8kVc3HWdrmKTvl08QAudzB0wGOMKMi697x8ad/eE/Z/NVyN8dMphEDBHpEsfWMXIR+QyTtstdqJ87pkafo9faend6gpBuxYQ6bHsVX4f11BClDJoFv9aY9tphNvrS7L5YcV6OSVq+JrbZIRyLmfxvodmuEIllxJKJPJfIZ/m5xW/KDi7wp0PS3MAiunk4aQ9rlQpPTEWWKs2gwfrcYfsq4Xin4LRi3QfLRwY+qIzAvWxpDnQG+UuUtmcJ00TPlfKPHzd4hCienvrmEZGhAtdL1KL5nyNI=
+  on:
+    tags: true
+    repo: davidr/python-timemarker
+    python: "3.6"
+  distributions: "sdist bdist_wheel"
