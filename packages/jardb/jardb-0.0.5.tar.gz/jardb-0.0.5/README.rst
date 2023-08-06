@@ -1,0 +1,229 @@
+=======
+Jardb
+=======
+
+.. image:: https://img.shields.io/badge/pypi-v0.0.5-green.svg
+    :target: https://pypi.python.org/pypi/jardb
+
+.. image:: https://img.shields.io/badge/License-MIT-blue.svg
+    :target: https://pypi.python.org/pypi/jardb
+    :alt: License
+
+.. image:: https://travis-ci.org/andytt/jardb.svg?branch=master
+    :target: https://travis-ci.org/andytt/jardb
+
+.. image:: https://coveralls.io/repos/github/andytt/jardb/badge.svg?branch=master
+    :target: https://coveralls.io/github/andytt/jardb?branch=master
+
+**Jardb** is a small document oriented database, which is Nosql,easy to use 
+and tiny.
+
+It is suitable for local applications to save data and configurations.
+
+Jardb use no more than Python Standard Library.
+
+Information
+#############
+
+:Author: Lutong Chen
+:Vision: 0.0.5
+:License: MIT
+:mail: lutong98@mail.ustc.edu.cn
+
+Features
+#############
+
+1. Fast: 10 millions insert in minutes.
+#. Easy: API is easy to learn and use.
+#. Tiny: One file based database.
+#. Automatic: Auto save from memery to disk.
+#. Logs: Write log into file
+#. Test: More Than 90% unit test coverage.
+
+Install
+#############
+
+pip is available new.python 2.7 and 3.3+ is required.
+
+>>> pip install jardb
+
+or 
+
+>>> pip3  install jardb
+
+Usage
+#############
+
+Storage
++++++++++
+
+There are three ways to Storage:Json, Binary File and Memery. 
+
++ "json://": A json file would be create, all information can be seen.
++ "file://": A binary file created by pickle.dump
++ "memery://": All data will not be saved as a file and would disappear after jardb quits.
+
+Open a **jardb** database should be a url-like string start with "json://","file://" or "memery://":
+
+>>> from jardb import jardb
+
+>>> db = jardb("json://database.db")
+
+other parameters:
+-------------------
+
+:param autosave: boolean, use autosave or not.
+
+:param debug: print logs in the terminal.
+
+:param log: A log file path.If defined,logs will be written into it.
+
+Read, Initialize, Save and Close
+++++++++++++++++++++++++++++++++++
+
+Create a new database like:
+
+>>> db.create()
+
+Open from a existed file like:
+
+>>> db.open()
+
+Save to disk:
+
+>>> db.save()
+
+"Save AS" another file:
+
+>>> db.backup("file_path")
+
+You should understand that if you turn it on, it may cause performance 
+loss(though a little).If you turn it off,you should save your database 
+from time to time, because it will only write datas into file only once 
+before it quits.
+
+Close a database like:
+
+>>> db.close()
+
+jardb.close() will call jardb.save().
+Also, before jardb exits, jardb will automatical be called.
+
+Create Dbtable and DbConfig
+++++++++++++++++++++++++++++++++++
+
+There are two kinds of elements that can be directly inserted into database:
+DbConfig and DbTable.
+
++ DbConfig is like a python dictionary or a '.plist','.ini' or '.conf' file.
++ DbTable is the common Table in Database.
+
+Create a new DbConfig:
+-----------------------
+
+>>> db.create_config(config_name,{'AppName':'jardb','Version':'0.0.3'})
+
+:param config_name: name.
+:param config_dict: a python dictionary.
+
+config_name will not check uniqueness. Please be careful with it.
+
+
+Create a new Table:
+----------------------
+
+>>> create_table('Users',{}):
+
+:param table_name: You know what it means.
+:param table_attr: properties for fields in this table.
+
+It is expected as a dictionary.Dictionary Key should be field name,such as
+'Users','email'. Dictionary Value should be a list contains its properties,
+such as ["AutoIncrease","Unique","NotNull"]
+
+:"Unique": jardb will check the Uniqueness of certain field.
+:"NotNull": jardb will check before insert.
+:"AutoIncrease": If the field is not be specified,jardb will automatical appoint one.
+
+You don't have to all fields.You can ignore one if it doesn't contain such 
+properties.
+        
+example:    
+    {'id':['AutoIncrease','Unique'],'data':['NotNull','Unique']}
+
+table_name will not check uniqueness. Please be careful with it.
+
+Remove a DbConfig or DbTable
+------------------------------
+
+>>> db.remove('Users')
+
+
+Query and Operations
+++++++++++++++++++++++
+
+You need to get a query object before you operate a DbConfig or DbTable
+
+>>> q1 = db.get_config('Config')
+>>> q2 = db.get_table('Users')
+
+Here are some examples:
+
+>>> q1.add({'user':1,'secure':2})   # Insert value
+>>> q1.add({'user':5,'data':123})   # Insert and change value
+>>> q1.remove('secure')             # Remove 
+>>> print(q1.has('secure'))         # Has key
+False
+>>> print(q1.has('user'))
+True
+>>> print(q1.get('secure'))         # Get value
+None
+>>> print(q1.get('user'))
+5
+>>> print(q1.value())               # Show raw data
+{'user': 5, 'data': 123}
+
+Another example:
+
+Get a query object.
+
+>>> q2 = db.get_table('Users')  
+
++ *Filter* can select records using a python-like language.
++ *Remove* can delete records.
+
+>>> q2.filter("$id %3 == 0 and is_admin == True").remove()  
+
++ *Update* can change the value of selected records.
+
+>>> q2.update({'is_admin':False})
+
++ *Find* is another way to select records.
++ *Sort* to sort records by a certain field.
++ *Get* can get 'top k' records.
++ *Value* is used to show raw data
+
+>>> q2.find({'is_admin':False}).sort('id').get(5).value()
+
++ *Map* : Given a field name, and return all values of this field.
+
+>>> print(col.filter("$User_id % 4 == 0").map('id'))
+
+With all those function you can use *jardb* easily.
+
+You can also use jardb.compose to operate database.More details in source code。
+
+log
+++++++
+
+You can write logs into a file like:
+
+>>> db = jardb.jardb('json://database.db',log = 'database.log')
+
+Also let it print in the terminal:
+
+>>> db = jardb.jardb('json://database.db',debug = True)
+
+Notice that if log parameter is specified, log will be find in the file no matter 'debug' is True or False.
+
+

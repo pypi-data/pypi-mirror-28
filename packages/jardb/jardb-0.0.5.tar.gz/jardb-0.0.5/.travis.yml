@@ -1,0 +1,27 @@
+language: python
+sudo: required
+
+python:
+  - "2.7"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+
+install:
+  - pip install coveralls
+  - pip install coverage
+
+script:
+  - cd test
+  - python -m coverage run -a test-autosave.py
+  - python -m coverage run -a test-compose.py
+  - python -m coverage run -a test-query.py
+  - python -m coverage run -a test-errors.py
+  - python -m coverage run -a test-jardb.py
+  - python -m coverage run -a test-storage.py
+  - python -m coverage run -a test-util.py
+  - python -m coverage report 2>&1  
+
+after_success:
+  coveralls
