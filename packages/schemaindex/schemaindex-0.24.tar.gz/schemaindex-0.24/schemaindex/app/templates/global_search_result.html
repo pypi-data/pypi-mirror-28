@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+
+{% block main_body_right %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+
+<div class="row search">
+  <div class="col-sm-8 col-sm-offset-2">
+    <form action="/global_search" role="form" method="post" >
+            <div class="input-group">
+              <input id="q_search"  type="text" name="q" class="form-control" placeholder="Search..." value="{{q}}">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit"><span class="fa fa-search"></span></button>
+              </span>
+            </div>
+    </form>
+  </div>
+</div>
+
+<script>
+            $(function() {
+                function displayResult(item) {
+                    $('.alert').show().html('You selected <strong>' + item.value + '</strong>: <strong>' + item.text + '</strong>');
+                }
+                $('#q_search').typeahead({
+                    ajax: {
+                        url: '/search_suggestion_json',
+                        method: 'get',
+                        triggerLength: 1
+                    },
+                    onSelect: displayResult
+                });
+
+            });
+</script>
+
+    </section>
+
+    <!-- Main content -->
+
+    <!-- /.content -->
+
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- Info boxes -->
+
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+          <!-- MAP & BOX PANE -->
+
+
+  {% if len(search_result) > 0   %}
+
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">List of Tables</h3>
+
+
+            </div>
+
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  <tr>
+                    <th>Data Source Name</th>
+                    <th>Entity</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+
+  {% for tab in search_result   %}
+
+
+                  <tr>
+                    <td>{{ tab['ds_name']  }} </td>
+                    <td>{{ tab['table_info'] }}</td>
+                    <td><a href="/view_table_in_notebook?ds_name={{ tab['ds_name'] }}&table_id={{ tab['table_id'] }}">
+                        Create Notebook</a>
+
+                    </td>
+                  </tr>
+  {% end %}
+
+
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+  {% else %}
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">No data is found!</h3>
+
+            </div>
+
+  {% end %}
+
+            <!-- /.box-body -->
+            <div class="box-footer text-center">
+
+            </div>
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+{% end %}
