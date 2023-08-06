@@ -1,0 +1,115 @@
+#!/bin/env python3
+import argparse
+import json
+import netifaces as ni
+from gimmethat import app, USER_CREDS
+from gimmethat.config import DEBUG, UPLOAD_DIR
+import os
+
+
+def save_creds(creds=None):
+    if not creds:
+        creds = []
+    with open(USER_CREDS, 'w') as f:
+        json.dump(creds, f, indent=4)
+
+
+def load_creds():
+    try:
+        with open(USER_CREDS) as f:
+            creds = json.load(f)
+        return creds
+    except:
+        save_creds()
+    return []
+
+
+def get_ips():
+    interfaces = ni.interfaces()
+    ips = []
+    for interface in interfaces:
+        try:
+            if 'broadcast' in ni.ifaddresses(interface)[ni.AF_INET][0]:
+                ips.append(ni.ifaddresses(interface)[ni.AF_INET][0]['addr'])
+        except KeyError:
+            pass
+    return ips
+
+
+main_parser = argparse.ArgumentParser(description='Upload server tool')
+subparsers = main_parser.add_subparsers(help='What to do?', dest='branch')
+
+run_parser = subparsers.add_parser('run', help='Runs server')
+run_parser.add_argument('--port', '-p', type=int,
+                        help='Server port', default=5000)
+run_parser.add_argument('--title', '-t', type=str,
+                        help='Upload page\'s title', default='')
+run_parser.add_argument('--directory', '-d', type=str,
+                        help='Upload directory',
+                        default=UPLOAD_DIR)
+
+add_user_parser = subparsers.add_parser('add', help='Add a user')
+add_user_parser.add_argument('username', type=str, help='User\'s name')
+add_user_parser.add_argument('password', type=str, help='User\'s password')
+
+remove_user_parser = subparsers.add_parser('remove', help='Remove a user')
+remove_user_parser.add_argument('username', type=str, help='User\'s name')
+
+change_user_parser = subparsers.add_parser(
+    'change', help='Change a user\'s password')
+change_user_parser.add_argument('username', type=str, help='User\'s name')
+change_user_parser.add_argument('password', type=str, help='User\'s password')
+
+show_users_parser = subparsers.add_parser('show', help='Show all users')
+
+args = main_parser.parse_args()
+
+if args.branch == 'run':
+    import logging
+    log = logging.getLogger(name='werkzeug')
+    log.setLevel(logging.INFO)
+
+    if not os.path.exists(os.path.expanduser(args.directory)):
+        print('Creating upload directory: {}'.format(
+            os.path.expanduser(args.directory)))
+        os.mkdir(os.path.expanduser(args.directory))
+
+    if not os.path.exists(USER_CREDS):
+        print('Creating credential list : {}'.format(USER_CREDS))
+        save_creds()
+
+    print('You can use the addresses below')
+    for ip in get_ips():
+        print('http://{}:{}'.format(ip, args.port))
+
+    app.config['TITLE'] = args.title
+    app.config['UPLOAD_DIR'] = os.path.expanduser(args.directory)
+    app.run(host="0.0.0.0", port=args.port, debug=DEBUG, threaded=True)
+
+elif args.branch == 'add':
+    creds = load_creds()
+    if args.username not in [u['username'] for u in creds]:
+        creds.append({'username': args.username,
+                      'password': args.password})
+        save_creds(creds)
+    else:
+        print('User already exists.')
+
+elif args.branch == 'remove':
+    creds = load_creds()
+    creds = [u for u in creds if u['username'] != args.username]
+    save_creds(creds)
+
+elif args.branch == 'show':
+    creds = load_creds()
+    for u in creds:
+        print('Username: "{}", Password: "{}"'.format(
+            u['username'], u['password']))
+
+elif args.branch == 'change':
+    creds = load_creds()
+    for u in creds:
+        print('>', u['username'])
+        if u['username'] == args.username:
+            u['password'] = args.password
+    save_creds(creds)
