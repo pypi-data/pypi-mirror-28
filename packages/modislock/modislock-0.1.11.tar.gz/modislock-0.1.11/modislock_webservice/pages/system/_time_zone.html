@@ -1,0 +1,54 @@
+{# Modal Windows #}
+<div class="modal inmodal" id="time_modal" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y:visible;">
+    <div class="modal-dialog">
+        <div class="modal-content animated">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <img src="{{ url_for('static', filename='img/tz_map2.png') }}" height="75%" width="75%">
+                <h4 class="modal-title">System Time</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" method="POST" action="{{ url_for('system.system') }}">
+                    {{ time_zone_settings.csrf_token }}
+                    <div class="form-group row">
+                        {{ time_zone_settings.sys_time.label(class_="col-sm-3 col-form-label") }}
+                        <div class='col-sm-5'>
+                            <div class="form-group">
+                                <div class="input-group date" id="datetimepicker1">
+                                    {{ time_zone_settings.sys_time(class_="form-control text-center") }}
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="checkbox checkbox-primary">
+                                {{ time_zone_settings.auto_time }}
+                                {{ time_zone_settings.auto_time.label }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        {{ time_zone_settings.tz_zone.label(class_='col-sm-3 col-form-label') }}
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                {{ time_zone_settings.tz_zone(class_='select2-selection--single text-center') }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            {{ time_zone_settings.submit_btn(class_=('btn btn-sm btn-primary')) }}
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <span class="pull-right">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
