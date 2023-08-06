@@ -1,0 +1,49 @@
+{% load i18n %}
+{% extends "base.html" %}
+
+{% block content %}
+    {% trans 'código jinja removido' %}
+    {% trans 'todo: refatorar' %}
+    {% comment %}
+        remover código jinja
+        {% from "dge/macros.jinja" import grid_processo_fonte_externa,detalhe_fonte_externa %}
+        {{ detalhe_fonte_externa(fonte,dados_importados,contador_importacao) }}
+    {% endcomment %}
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="http://openlayers.org/api/OpenLayers.js"></script>
+    <script type="text/javascript">
+
+        var map, base, camada, renderer;
+        renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
+
+
+        $().ready(function () {
+
+            map = new OpenLayers.Map("mapa");
+            base = new OpenLayers.Layer.OSM();
+
+            var urlCamada = "/carto/geojson/" + "{{ camada.slug_camada }}" + "/";
+            var camada = new OpenLayers.Layer.Vector("{{ camada.slug_camada }}", {
+                strategies: [new OpenLayers.Strategy.Fixed()],
+                protocol: new OpenLayers.Protocol.HTTP({
+                    url: urlCamada,
+                    format: new OpenLayers.Format.GeoJSON()
+                }),
+                renderers: renderer
+            });
+
+            map.addLayer(base);
+            map.addLayer(camada);
+            var extensaoCamada = camada.getDataExtent();
+            map.zoomToExtent(extensaoCamada);
+
+            $("a.zoom-feicao").bind("click", function (event) {
+                var featureId = event.target.id.split("-")[1];
+                // dar zoom na feição
+            });
+        });
+    </script>
+{% endblock %}

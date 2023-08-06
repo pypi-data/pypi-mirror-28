@@ -1,0 +1,26 @@
+{% load i18n %}
+<h3>{{ fonte.nome }}</h3>
+{# por algum motivo o filtro date não está funcionando! #}
+<h4>{% trans 'Última sincronização: ' %}{{ fonte.ultima_sincronizacao }}</h4>
+<p>{% trans 'Todas as feições sincronizadas.' %}</p>
+<h4>{% trans 'Descrição' %}</h4>
+<p>{{ fonte.descricao }}</p>
+<p>{% trans 'criado por: ' %} <a href="{{ fonte.criado_por.username }}">{{ fonte.criado_por }}</a> {% trans 'em:' %}' {{ fonte.criado_em }}</p>
+<h4>{% trans 'Relatórios' %} {{ fonte.nome }}</h4>
+
+<p>
+    {% trans 'Aqui você pode acessar a lista de relatórios para cada processo de sincronização para a fonte' %} {{ fonte.nome }}.
+</p>
+
+{% comment %}
+    refatorar para remover o código jinja
+    <a href="{{ fonte.processos.all()[0].get_absolute_url }}">
+        Último processo <img src="{{ STATIC_URL }}imagens/icones/accept.png" />
+    </a> |
+    <a href="{{ fonte.processos.all()[1].get_absolute_url }}">
+        Penúltimo processo <img src="{{ STATIC_URL }}imagens/icones/exclamation_octagon_fram.png" />
+    </a> |
+    <a href="#">
+        Outros processos
+    </a>
+{% endcomment %}
