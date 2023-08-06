@@ -1,0 +1,45 @@
+diff --git a/pytest_dependency.py b/pytest_dependency.py
+index a1355c3..60c7037 100644
+--- a/pytest_dependency.py
++++ b/pytest_dependency.py
+@@ -30,7 +30,7 @@ class DependencyItemStatus(object):
+     Phases = ('setup', 'call', 'teardown')
+ 
+     def __init__(self):
+-        self.results = { w:None for w in self.Phases }
++        self.results = dict([ (w,None) for w in self.Phases ])
+ 
+     def __str__(self):
+         l = ["%s: %s" % (w, self.results[w]) for w in self.Phases]
+diff --git a/setup.py b/setup.py
+index 8829fa9..46b98c9 100755
+--- a/setup.py
++++ b/setup.py
+@@ -21,12 +21,13 @@ def _filter_file(src, dest, subst):
+     substre = re.compile(r'\$(%s)' % '|'.join(subst.keys()))
+     def repl(m):
+         return subst[m.group(1)]
+-    with open(src, "rt") as sf, open(dest, "wt") as df:
+-        while True:
+-            l = sf.readline()
+-            if not l:
+-                break
+-            df.write(re.sub(substre, repl, l))
++    with open(src, "rt") as sf:
++        with open(dest, "wt") as df:
++            while True:
++                l = sf.readline()
++                if not l:
++                    break
++                df.write(re.sub(substre, repl, l))
+ 
+ class sdist(st_sdist.sdist):
+     def make_release_tree(self, base_dir, files):
+@@ -68,6 +69,7 @@ setup(
+         'Topic :: Software Development :: Testing',
+         'Programming Language :: Python',
+         'Programming Language :: Python :: 2',
++        'Programming Language :: Python :: 2.6',
+         'Programming Language :: Python :: 2.7',
+         'Programming Language :: Python :: 3',
+         'Programming Language :: Python :: 3.2',
