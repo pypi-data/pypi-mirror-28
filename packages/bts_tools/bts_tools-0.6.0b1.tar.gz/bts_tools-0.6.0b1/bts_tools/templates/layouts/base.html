@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>{% block title %}BTS Client{% endblock %}</title>
+
+    <link rel="stylesheet" href="/static/css/bootstrap.3.1.1.min.css">
+    <link rel="stylesheet" href="/static/css/jquery.dataTables.1.10RC1.css">
+    <link rel="stylesheet" href="/static/css/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/static/css/famfamfam-flags.css">
+    <link rel="stylesheet" href="/static/css/application.css">
+    {% block stylesheet %}{% endblock %}
+</head>
+
+
+{% macro blue(text) -%}
+    <div class="btn btn-xs btn-info">{{ text }}</div>
+{%- endmacro %}
+
+{% macro green(text) -%}
+    <div class="btn btn-xs btn-success">{{ text }}</div>
+{%- endmacro %}
+
+{% macro orange(text) -%}
+    <div class="btn btn-xs btn-warning">{{ text }}</div>
+{%- endmacro %}
+
+{% macro red(text) -%}
+    <div class="btn btn-xs btn-danger">{{ text }}</div>
+{%- endmacro %}
+
+{% macro green_if_true(cond) -%}
+    {% if cond %}
+        <div class="btn btn-xs btn-success">{{ cond }}</div>
+    {% else %}
+        <div class="btn btn-xs btn-danger">{{ cond }}</div>
+    {% endif %}
+{%- endmacro %}
+
+<body>
+
+<div id="wrap">
+    {% include 'layouts/header.html' %}
+    <div class="container">
+
+        <div class="well well-sm" style="padding: 3px;">
+            <table class="table table-hover" style="margin-top: 0 !important; margin-bottom: 0 !important;">
+            <thead><tr>
+                <th>Type</th>
+                <th>RPC Host</th>
+                <th>IP</th>
+                <th>p2p port</th>
+                <th>Hosted nodes</th>
+                <th>Status</th>
+                <th>Head block</th>
+                <th>Wallet open</th>
+                <th>Wallet unlocked</th>
+                <th>Signing key active</th>
+            </tr></thead>
+            <tbody>
+            {% for host, node_names, node in rpc.client_instances() %}
+                <tr>
+                    <td>
+                    {% set node_type = node.type() %}
+                    {% if node_type %}
+                        {% if node.is_online() %}
+                            <div class="btn btn-xs btn-success">
+                        {% else %}
+                            <div class="btn btn-xs btn-danger">
+                        {% endif %}
+                                {{ node.type() }}
+                            </div>
+                    {% endif %}
+                    </td>
+                    <td>{{ host }}</td>
+                    <td>{{ (network_utils.get_ip_nofail() if node.is_localhost() and node.is_online() else '') | add_ip_flag | safe }}</td>
+                    <td>{{ backbone.get_p2p_port(node) if node.is_online() else '' }}</td>
+                    <td>{{ node_names|join(', ') }}</td>
+                    {% if node.is_online() %}
+                        <td>
+                            <div class="btn btn-xs btn-success">online</div>
+                        </td>
+                        <td>
+                        {% if node.is_synced() %}
+                            {{ green(node.get_head_block_num()) }}
+                        {% else %}
+                            {{ blue(node.get_head_block_num()) }}
+                        {% endif %}
+                        </td>
+
+                        <td>{{ green_if_true(not node.is_new()) }}</td>
+                        <td>{{ green_if_true(not node.is_locked()) }}</td>
+                        <td>
+                            {% if node.is_witness() %}
+                                {% set is_active = node.is_signing_key_active() %}
+                                {% if is_active == 'not synced' -%}
+                                    {{ orange('waiting for sync') }}
+                                {%- elif is_active == 'unknown' -%}
+                                    {{ blue('unknown') }}
+                                {%- else -%}
+                                    {{ green_if_true(is_active) }}
+                                {%- endif %}
+                            {% endif %}
+                        </td>
+                    {% else %}
+                        <td><div class="btn btn-xs btn-danger">{{ node.status() }}</div></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody></table>
+        </div>
+
+        {% block content %}
+        {% endblock %}
+    </div>
+    <div id="push"></div>
+</div>
+
+{% include 'layouts/footer.html' %}
+
+<!-- NOTE: most (all) JS should go at the end of the document for better page loading performance -->
+
+<!-- NOTE: we may need to move this higher up (in the <head> section) if needed -->
+<script src="/static/js/jquery.1.10.2.min.js"></script>
+<script src="/static/js/bootstrap.3.1.1.min.js"></script>
+<script src="/static/js/underscore.js"></script>
+
+<script src="/static/js/jquery.dataTables.1.10RC1.js"></script>
+<script src="/static/js/dataTables.bootstrap.js"></script>
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>
