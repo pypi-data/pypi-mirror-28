@@ -1,0 +1,243 @@
+{
+  "id": "18e63b10-c5b7-34bc-a670-f2c831d6b4bf",
+  "name": "corextext.corex_text.CorexText",
+  "common_name": "DSBox Corex Text",
+  "description": "Learns latent factors / topics which explain the most multivariate information in bag of words representations of documents. Returns learned topic scores for each document. Also supports hierarchical models and 'anchoring' to encourage topics to concentrate around desired words.",
+  "languages": [
+    "python2.7", "python3.5", "python3.6"
+  ],
+  "library": "corextext",
+  "version": "0.1.10",
+  "source_code": "https://github.com/brekelma/corextext.git",
+  "is_class": true,
+  "attributes": [
+    {
+      "shape": "n_documents, n_topics",
+      "type": "array",
+      "name": "latent_factors",
+      "description": "Topic activations for each document."
+    },
+    {
+      "type": "corextext.corextext.corex_topic.Corex",
+      "name": "model",
+      "description": "Corex topic model (see https://github.com/gregversteeg/corex_topic)."
+    },
+    {
+      "type": "sklearn.feature_extraction.text.TfidfVectorizer",
+      "name": "bow",
+      "description": "Fitted object transforming raw text to bag of words representation."
+    }, 
+    {
+      "type": "bool",
+      "name": "fitted",
+      "description": "Whether model has been fit."
+    }
+  ],
+  "parameters": [
+    {
+      "type": "int",
+      "name": "n_hidden",
+      "description": "Number of topics or latent factors to use.",
+      "is_hyperparameter": true,
+      "default": "10",
+      "range": [0, 1000],
+      "kind": "uniform"
+    },
+    {
+      "type": "float",
+      "name": "max_df",
+      "description": "For TFIDF Vectorizer, filter out terms which appear in > max_df % of documents.  Integer can also be passed to indicate count of documents.",
+      "is_hyperparameter": true,
+      "default": ".9",
+      "range": [0, 1],
+      "kind": "uniform"
+    },
+    {
+      "type": "int",
+      "name": "min_df",
+      "description": "For TFIDF Vectorizer, filter out terms which appear in < min_df count of documents.  Float may also be specified to indicate % of documents.",
+      "is_hyperparameter": true,
+      "default": "1",
+      "range": [0, 100],
+      "kind": "uniform"
+    },
+    {
+      "type": "int",
+      "name": "max_features",
+      "description": "Use only max_features number of terms in analysis, with choice made by top tfidf score.",
+      "is_hyperparameter": true,
+      "default": "None",
+      "range": [10, 100000],
+      "kind": "log"
+    },
+    {
+      "type": "bool",
+      "name": "get_text",
+      "description": "Whether to read raw data from text files.  Default False, meaning dataframe contains text rather than filename.",
+      "is_hyperparameter": false
+    },
+    {
+      "type": "str",
+      "name": "data_path",
+      "description": "Path appended to file name contained in data column to point to raw data folder.  Ignored if get_text = False.",
+      "is_hyperparameter": false
+    },
+    {
+      "type": "int",
+      "name": "max_iter",
+      "description": "Maximum number of iterations taken for the solvers to converge. ",
+      "is_hyperparameter": false
+    },
+     {
+      "type": "str",
+      "name": "count",
+      "description": "Specify one of {'binarize', 'fraction'}.  Binary bag of words (default) or fractional count in [0,1] w.r.t. most common term.",
+      "is_hyperparameter": false
+    },
+    {
+      "type": "int",
+      "name": "seed",
+      "description": "The seed of the pseudo random number generator to use. ",
+      "is_hyperparameter": false
+    },
+    {
+      "type": "int",
+      "name": "verbose",
+      "description": "Set true for verbose output or >1 to get even more verbosity.",
+      "is_hyperparameter": false
+    },
+    {
+      "type": "dict",
+      "name": "**kwargs",
+      "description": "Can be used to pass additional parameters to Tfidf Vectorizer (see sklearn documentation).",
+      "is_hyperparameter": false
+    }
+  ],
+  "methods_available": [
+    {
+      "name": "fit",
+      "id": "corextext.corex_text.CorexText.fit",
+      "description": "'Fit the model according to the given training data.\n",
+      "returns": {
+        "type": "object",
+        "name": "self",
+        "description": "Returns self. '"
+        },
+      "parameters": [
+        {
+          "shape": "n_documents, ",
+          "type": "array-like, sparse matrix",
+          "name": "inputs",
+          "description": "Training vector of raw text.  Method automatically includes sklearn Tfidf preprocessing into bag of words.",
+          "is_hyperparameter": false
+        }
+        ]
+    },
+    {
+      "name": "produce",
+      "id": "corextext.corex_text.CorexText.produce",
+      "description": "'Transform data according to learned model.\n",
+      "returns": {
+        "type": "array-like",
+        "shape": "n_documents, n_topics",
+        "name": "latent_factors",
+        "description": "Returns topic activations for each document. '"
+      },
+      "parameters": [
+        {
+          "shape": "n_documents, n_terms",
+          "type": "array-like, sparse matrix",
+          "name": "inputs",
+          "description": "Training vector, where n_documents is the number of documents and n_terms is the vocabulary size.  Matrix entries should be preprocessed to bag of word counts or tfidf score.",
+          "is_hyperparameter": false
+        }
+        ]
+      },
+      {
+      "name": "set_training_data",
+      "id": "corextext.corex_text.CorexText.set_training_data",
+      "description": "Add training data.\n",
+      "returns": {
+        "type": "object",
+        "name": "self",
+        "description": "Returns self. '"
+        },
+      "parameters": [
+        {
+          "shape": "n_documents, ",
+          "type": "array-like, sparse matrix",
+          "name": "inputs",
+          "description": "Training vector of raw text.  Method automatically includes sklearn Tfidf preprocessing into bag of words.",
+          "is_hyperparameter": false
+        }
+        ]
+      },
+      {
+      "name": "set_params",
+      "id": "corextext.corex_text.CorexText.set_params",
+      "description": "Set latent factors.\n",
+      "returns": {
+        "type": "object",
+        "name": "self",
+        "description": "Returns self. '"
+        },
+      "parameters": [
+        {
+          "type": "NamedTuple",
+          "name": "params",
+          "description": "Params object with 'latent_factors' : np.ndarray = (n_documents, n_hidden) setting the latent representation.",
+          "is_hyperparameter": false
+        }
+        ]
+      },
+      {
+      "name": "get_params",
+      "id": "corextext.corex_text.CorexText.get_params",
+      "description": "Get latent factors.\n",
+      "returns": {
+        "type": "Params",
+        "name": "params",
+        "description": "Params NamedTuple with 'latent_factors' : np.ndarray = (n_documents, n_hidden) setting the latent representation."
+        },
+      "parameters": []
+      }
+    ],
+  "algorithm_type": ["Dimensionality Reduction"],
+  "learning_type": ["Unsupervised learning"],
+  "task_type": ["Feature extraction"],
+  "tags": [
+    "factor analysis"
+  ],
+  "is_deterministic": false,
+  "handles_classification": false,
+  "handles_regression": false,
+  "handles_multiclass": false,
+  "handles_multilabel": false,
+  "input_type": [
+    "DENSE",
+    "SPARSE",
+    "TEXT"
+  ],
+  "output_type": [
+    "FEATURES"
+  ],
+  "team": "ISI",
+  "schema_version": 1.0,
+  "build": [{
+    "type": "pip",
+    "package": "corextext"
+  }],
+  "compute_resources": {
+    "sample_size": [0.000912, 1.869],
+    "sample_unit": ["MB", "MB"],
+    "num_nodes": [1, 1],
+    "cores_per_node": [4, 4],
+    "gpus_per_node": [0, 0],
+    "mem_per_node": [1, 1],
+    "disk_per_node": [1, 1],
+    "mem_per_gpu": [0, 0],
+    "expected_running_time": [14, 52]
+  },
+  "interfaces": ["unsupervised_learning.UnsupervisedLearnerPrimitiveBase"],
+  "interfaces_version": "2017.9.22rc0"
+}
