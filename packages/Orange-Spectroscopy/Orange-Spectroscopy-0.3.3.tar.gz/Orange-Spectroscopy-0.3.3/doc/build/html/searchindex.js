@@ -1,0 +1,1 @@
+Search.setIndex({envversion:50,filenames:["index","widgets/curves"],objects:{},objnames:{},objtypes:{},terms:{also:1,content:0,data:1,index:0,modul:0,none:[],output:1,page:0,search:0,select:1,show:1,spectra:1,subset:1,work:1},titles:["Infrared Orange documentation","Curves"],titleterms:{curv:1,descript:1,document:0,indice:0,infrare:0,orang:0,signal:1,tabl:0,widget:0}})
