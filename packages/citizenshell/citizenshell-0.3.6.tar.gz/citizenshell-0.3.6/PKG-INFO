@@ -1,0 +1,125 @@
+Metadata-Version: 1.1
+Name: citizenshell
+Version: 0.3.6
+Summary: Interact with shell locally or over different connection types (telnet, ssh, serial, adb)
+Home-page: https://github.com/meuter/citizenshell
+Author: Cedric Meuter
+Author-email: cedric.meuter@gmail.com
+License: MIT
+Download-URL: https://github.com/meuter/citizenshell/archive/0.3.6.tar.gz
+Description: citizenshell |Build Status|
+        ===========================
+        
+        **citizenshell** is (or rather will be) a python library allowing to
+        execute shell commands either locally or remotely over several protocols
+        (telnet, ssh, serial or adb) using a consistent and uniform API. This
+        library is compatible with both python 2 (2.7) and 3 (>=3.4) as well as
+        with `PyPy <https://pypy.org/>`__. For now, it focuses on POSIX
+        platforms like Linux and MacOS, but may be extended to work to Windows
+        based platform in the future. It is distributed under
+        `MIT <https://opensource.org/licenses/MIT>`__ license.
+        
+        Roadmap
+        -------
+        
+        Version 1.0
+        ^^^^^^^^^^^
+        
+        -  [x] local shell
+        -  [x] shell over ssh using `paramiko <http://www.paramiko.org/>`__
+        -  [x] shell over telnet using telnetlib
+        -  [ ] shell over
+           `adb <https://developer.android.com/studio/command-line/adb.html>`__
+        -  [ ] shell over serial using
+           `pyserial <https://github.com/pyserial/pyserial>`__
+        -  [x] support for logging with colored formatter
+        -  [ ] available from PIP repository
+        
+        Examples
+        --------
+        
+        LocalShell
+        ^^^^^^^^^^
+        
+        you can use the built-in ``sh`` command for simple commands:
+        
+        .. code:: python
+        
+            from citizenshell import sh
+        
+            assert sh("echo Hello World") == "Hello World"
+        
+        you can instanciate a ``LocalShell`` for more complex cases:
+        
+        .. code:: python
+        
+            from citizenshell import LocalShell
+        
+            shell = LocalShell(GREET="Hello")
+            assert shell("echo $GREET $WHO", WHO="Citizen") == "Hello Citizen"
+        
+        you can also iterate over stdout:
+        
+        .. code:: python
+        
+            from citizenshell import LocalShell
+        
+            shell = LocalShell()
+            result = [int(x) for x in shell("""
+                for i in 1 2 3 4; do
+                    echo $i;
+                done
+            """)]
+            assert result == [1, 2, 3, 4]
+        
+        or you can extract stdout, stderr and exit code seperately:
+        
+        .. code:: python
+        
+            from citizenshell import LocalShell
+        
+            shell = LocalShell()
+            result = shell(">&2 echo error && echo output && exit 13")
+            assert result.out == ["output"]
+            assert result.err == ["error"]
+            assert result.xc == 13
+        
+        TelnetShell
+        ~~~~~~~~~~~
+        
+        you can instanciate the ``TelnetShell`` for shell over telnet:
+        
+        .. code:: python
+        
+            from citizenshell import TelnetShell
+        
+            shell = TelnetShell(hostname="acme.org", username="john", password="secretpassword")
+            assert shell("echo Hello World") == "Hello World"
+        
+        you can then do eveything you can do with a ``LocalShell``.
+        
+        SecureShell
+        ~~~~~~~~~~~
+        
+        you can instanciate the ``SecureShell`` for shell over SSH:
+        
+        .. code:: python
+        
+            from citizenshell import SecureShell
+        
+            shell = SecureShell(hostname="acme.org", username="john", password="secretpassword")
+            assert shell("echo Hello World") == "Hello World"
+        
+        you can then do eveything you can do with a ``LocalShell``. Beware that
+        some SSH servers refuse to set environment variable (see documentation
+        of AcceptEnv of
+        `sshd_config <https://linux.die.net/man/5/sshd_config>`__ and
+        documentation of ``update_environment`` of `paramiko’s ``Channel``
+        class <http://docs.paramiko.org/en/2.4/api/channel.html>`__) and that
+        will fail silently.
+        
+        .. |Build Status| image:: https://travis-ci.org/meuter/citizenshell.svg?branch=master
+           :target: https://travis-ci.org/meuter/citizenshell
+        
+Keywords: shell,telnet,adb,ssh,serial
+Platform: UNKNOWN
