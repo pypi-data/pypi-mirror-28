@@ -1,0 +1,71 @@
+Metadata-Version: 2.0
+Name: serialized-redis-interface
+Version: 0.1.0
+Summary: Redis python interface that serializes all values using json, pickle, msgpack or a custom serializer.
+Home-page: https://github.com/michael-mri/serialized-redis
+Author: Michael Rigoni
+Author-email: michael.rigon@igmail.com
+License: MIT
+Description-Content-Type: UNKNOWN
+Keywords: Redis,key-value store,json,pickle,msgpack
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Python: >=3
+Requires-Dist: redis
+Provides-Extra: msgpack
+Requires-Dist: msgpack; extra == 'msgpack'
+
+serialized-redis
+========
+
+Redis python interface that serializes all values using json, pickle, msgpack or a custom serializer.
+
+Getting Started
+---------------
+
+.. code-block:: pycon
+
+    >>> import serialized_redis
+    >>> r = serialized_redis.JSONSerializedRedis(host='localhost', port=6379, db=0)
+    >>> r.set('foo', { 'test': 'dict' })
+    True
+    >>> r.get('foo')
+    {'test': 'dict'}
+
+    >>> r = serialized_redis.PickleSerializedRedis(host='localhost', port=6379, db=0)
+    >>> r.set('foo', { 'test': 'dict' })
+    True
+    >>> r.get('foo')
+    {'test': 'dict'}
+
+    >>> r = serialized_redis.MsgpackSerializedRedis(host='localhost', port=6379, db=0)
+    >>> r.set('foo', { 'test': 'dict' })
+    True
+    >>> r.get('foo')
+    {'test': 'dict'}
+
+serialized-redis extends `redis-py <https://github.com/andymccurdy/redis-py>`_ and uses the same interface.
+
+Limitations
+-----------
+
+As values are serialized, Redis operations that manipulate or extract data from values are not supported.
+
+* SORT commands may not return correct order depending on the serializer used.
+* ZSCAN and SSCAN MATCH option will only work for exact match.
+* all lexicographical commands like ZLEXCOUNT, ZREMRANGEBYLEX and ZREVRANGEBYLEX are not supported
+* INCR is only supported with JSON serializer
+
+
+
+
