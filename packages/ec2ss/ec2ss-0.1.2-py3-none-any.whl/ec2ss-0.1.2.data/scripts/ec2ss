@@ -1,0 +1,86 @@
+#!python
+
+import boto3
+import sys
+
+
+def input_number(msg, min, max):
+    chosen = 0
+    while True:
+        try:
+            chosen = int(input(msg))
+            if chosen > max or chosen < min:
+                print('Please choose a number between %d and %d' % (min, max))
+                continue
+            else:
+                break
+        except ValueError:
+            print('Please choose a number')
+            continue
+    return chosen
+
+ec2 = boto3.client('ec2')
+
+regions = ec2.describe_regions()['Regions']
+print('## Region List ##')
+for idx, region in enumerate(regions):
+    print('%d. %s' % (idx+1, region['RegionName']))
+
+selected_num = input_number('Which region do you want? (1-%d) ' % len(regions), 1, len(regions))
+selected_region = regions[selected_num-1]['RegionName']
+print("You've selected a region number %d means %s" % (selected_num, selected_region))
+
+ec2 = boto3.client('ec2', region_name=selected_region)
+instances = list()
+for reservation in ec2.describe_instances()['Reservations']:
+    for instance in reservation['Instances']:
+        name = ''
+        for tag in instance['Tags']:
+            if tag['Key'] == 'Name':
+                name = tag['Value']
+                break
+
+        instances.append({
+            'id': instance['InstanceId'],
+            'type': instance['InstanceType'],
+            'public_ip': instance['PublicIpAddress'],
+            'private_ip': instance['PrivateIpAddress'],
+            'state': instance['State']['Name'],
+            'name': name
+        })
+
+print('## Instance List ##')
+for idx, instance in enumerate(instances):
+    print('%d. State: %s\tName: %s\tId: %s\tPublic IP: %s\tPrivate IP: %s' %
+          (idx+1, instance['state'], instance['name'], instance['id'], instance['public_ip'], instance['private_ip']))
+
+selected_num = input_number('Which instance do you want to start or stop? (1-%d) ' % len(instances), 1, len(instances))
+selected_instance = instances[selected_num-1]
+print("You've selected a instance number %d named %s and id %s" %
+      (selected_num, selected_instance['name'], selected_instance['id']))
+
+current_state = selected_instance['state']
+if current_state != 'running' and current_state != 'stopped':
+    print('The state of selected instance is neither "running" nor "stopped". Please retry few minutes after.')
+    sys.exit()
+
+to_be = 'start' if current_state == 'stopped' else 'stop'
+
+while True:
+    selected_control = input(('The state of this instance is "%s". ' % selected_instance['state']) +
+                             'Do you want to %s? (y/n) ' % to_be).lower()
+    if selected_control != 'y' and selected_control != 'n':
+        print('Invalid input! Please re-type "y" or "n"')
+        continue
+    else:
+        break
+
+if selected_control == 'y':
+    if to_be == 'start':
+        print('Starting...')
+        ec2.start_instances(InstanceIds=[selected_instance['id']])
+    else:
+        print('Stopping...')
+        ec2.stop_instances(InstanceIds=[selected_instance['id']])
+else:
+    print('Bye!')
