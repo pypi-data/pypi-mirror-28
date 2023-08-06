@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+import os
+import argparse
+import subprocess
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--dotfiles', '-d', action='store_true')
+args = parser.parse_args()
+
+if args.dotfiles:
+    home_path = os.path.expanduser('~')
+    repo_path = os.path.join(home_path, 'dotfiles')
+
+    clone_url = 'https://github.com/tafarelyan/dotfiles.git'
+    subprocess.run(['git', 'clone', clone_url, repo_path])
+
+    for f in os.listdir(repo_path):
+        if f not in ['README.md', '.git']:
+            input_ = os.path.join(repo_path, f)
+            output_ = os.path.join(home_path, '.' + f)
+            subprocess.run(['cp', input_, output_])
+
+    subprocess.run(['rm', '-rf', repo_path])
+    print('\nConfig files updated')
