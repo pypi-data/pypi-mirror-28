@@ -1,0 +1,15 @@
+environment:
+  matrix:
+    # For Python versions available on Appveyor, see
+    # http://www.appveyor.com/docs/installed-software#python
+    - PYTHON: "C:\\Python35-x64"
+    - PYTHON: "C:\\Python36"
+
+install:
+  - cinst nsis
+  - "%PYTHON%\\python.exe -m pip install requests requests_download jinja2 yarg nose win_cli_launchers testpath"
+
+build: off
+
+test_script:
+  - "%PYTHON%\\python.exe -m nose"
