@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>xlsx &mdash; jsonica 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="jsonica 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> jsonica
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">jsonica</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>xlsx</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for xlsx</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># this made for python3</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">csv</span><span class="o">,</span> <span class="nn">openpyxl</span>
+<span class="kn">from</span> <span class="nn">jsonica</span> <span class="k">import</span> <span class="n">Jsonica</span><span class="p">,</span> <span class="n">errorout</span><span class="p">,</span> <span class="n">PROGNAME</span>
+<span class="kn">from</span> <span class="nn">schema_helper</span> <span class="k">import</span> <span class="n">Schema</span><span class="p">,</span> <span class="n">TypeSign</span><span class="p">,</span> <span class="n">Validator</span>
+<span class="kn">from</span> <span class="nn">sub_command_core.generate</span> <span class="k">import</span> <span class="n">output_formats</span><span class="p">,</span> <span class="n">output_delimiters</span>
+<span class="kn">from</span> <span class="nn">util</span> <span class="k">import</span> <span class="n">Util</span>
+
+<div class="viewcode-block" id="XLSX"><a class="viewcode-back" href="../xlsx.html#xlsx.XLSX">[docs]</a><span class="k">class</span> <span class="nc">XLSX</span><span class="p">:</span>
+  <span class="sd">&quot;&quot;&quot; xlsx 具象操作クラス &quot;&quot;&quot;</span>
+  <span class="c1"># childへのリンクを示す接頭辞</span>
+  <span class="n">sheet_link_sign</span> <span class="o">=</span> <span class="s1">&#39;sheet://&#39;</span>
+
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">enc</span><span class="p">,</span> <span class="n">forms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">file</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">forms</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="n">forms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">format_delimiter</span> <span class="o">=</span> <span class="n">forms</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">format_output</span> <span class="o">=</span> <span class="n">forms</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">char_encode</span> <span class="o">=</span> <span class="n">enc</span>
+    <span class="k">if</span> <span class="n">forms</span><span class="p">:</span> <span class="c1"># generate</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">book</span> <span class="o">=</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">load_workbook</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="n">keep_vba</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">data_only</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span> <span class="c1"># init</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">book</span> <span class="o">=</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">Workbook</span><span class="p">()</span>
+    <span class="k">pass</span>
+
+<div class="viewcode-block" id="XLSX.generateJSON"><a class="viewcode-back" href="../xlsx.html#xlsx.XLSX.generateJSON">[docs]</a>  <span class="k">def</span> <span class="nf">generateJSON</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sheet_name</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="p">[]):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    sheet_nameが指すsheetのJSONをaccに追加する</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">sheets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__nameToSheets</span><span class="p">()</span>
+    <span class="c1"># pyxl...Workbookで[sheet名]を持っているが、あまり高速処理向けではないため</span>
+    <span class="n">sheet_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">sheets</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__print</span><span class="p">(</span><span class="s1">&#39;in process </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">sheet_name</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">sheet_name</span> <span class="ow">in</span> <span class="n">sheet_names</span><span class="p">,</span> <span class="s1">&#39;&quot;</span><span class="si">%s</span><span class="s1">&quot; not found in </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">sheet_name</span> <span class="p">,</span><span class="n">sheet_names</span><span class="p">)</span>
+    <span class="n">root_sheet</span> <span class="o">=</span> <span class="n">sheets</span><span class="p">[</span><span class="n">sheet_name</span><span class="p">]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">checkCharEncode</span><span class="p">(</span><span class="n">root_sheet</span><span class="p">)</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__print</span><span class="p">(</span><span class="s1">&#39;I</span><span class="se">\&#39;</span><span class="s1">ll update </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">acc</span><span class="p">))</span>
+    <span class="c1"># COMBAK: 処理速度に問題が出るようであれば分散処理検討</span>
+    <span class="c1"># A1, B1...で場所を特定するか、indexで回すか</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">root_sheet</span><span class="o">.</span><span class="n">iter_rows</span><span class="p">()):</span>
+      <span class="n">subacc</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__outputCSV</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format_output</span><span class="p">,</span> <span class="n">root_sheet</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">char_encode</span><span class="p">)</span>
+        <span class="k">pass</span>
+      <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">cell</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="n">cell</span><span class="o">.</span><span class="n">value</span> <span class="c1"># off-by-oneを気にしないといけなくなるので、col_idxではなくenumerate使う</span>
+        <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span> <span class="k">continue</span> <span class="c1"># cell check</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="c1"># 初行 column check</span>
+          <span class="c1"># cell.commentは必ずつくが、中身がない場合はNone</span>
+          <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cell</span><span class="p">,</span> <span class="s2">&quot;comment&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">cell</span><span class="o">.</span><span class="n">comment</span><span class="p">:</span>
+            <span class="c1"># column 準備 / schemaは遅延せずこの時点で辞書として成立している事を保証</span>
+            <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">v</span><span class="p">,</span> <span class="n">Util</span><span class="o">.</span><span class="n">runtimeDictionary</span><span class="p">(</span><span class="n">cell</span><span class="o">.</span><span class="n">comment</span><span class="o">.</span><span class="n">text</span><span class="p">)))</span>
+          <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">errorout</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;sheet = </span><span class="si">{}</span><span class="s1">, col = </span><span class="si">{}</span><span class="s1">, row = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sheet_name</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="c1"># TODO: 関数へ置き換え type = array, objectのケース をカバー</span>
+          <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">XLSX</span><span class="o">.</span><span class="n">sheet_link_sign</span><span class="p">):</span>
+            <span class="c1"># COMBAK: sheetであることがarray, objectの必要条件になってしまっている</span>
+            <span class="c1"># primitive配列をどう表現するかによって改修が必要 __storeに包含させる？</span>
+            <span class="n">link</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">XLSX</span><span class="o">.</span><span class="n">sheet_link_sign</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">link</span> <span class="ow">in</span> <span class="n">sheet_names</span><span class="p">:</span>
+              <span class="n">col_name</span> <span class="o">=</span> <span class="n">columns</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">__print</span><span class="p">(</span><span class="s1">&#39;process </span><span class="si">%s</span><span class="s1"> -&gt; </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">col_name</span><span class="p">,</span> <span class="n">link</span><span class="p">))</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">__print</span><span class="p">(</span><span class="s1">&#39;current acc = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">acc</span><span class="p">)</span>
+              <span class="n">new_acc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__brandnewAccForType</span><span class="p">(</span><span class="n">columns</span><span class="p">[</span><span class="n">j</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">__store</span><span class="p">({</span><span class="n">col_name</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">generateJSON</span><span class="p">(</span><span class="n">sheet_name</span><span class="o">=</span><span class="n">link</span><span class="p">,</span> <span class="n">acc</span><span class="o">=</span><span class="n">new_acc</span><span class="p">)},</span> <span class="n">subacc</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+              <span class="bp">self</span><span class="o">.</span><span class="n">errorout</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;sheet = from </span><span class="si">%s</span><span class="s1"> to </span><span class="si">%s</span><span class="s1">, col = </span><span class="si">%d</span><span class="s1">, row = </span><span class="si">%d</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">sheet_name</span><span class="p">,</span> <span class="n">link</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
+              <span class="k">pass</span>
+          <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__store</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">typeValidator</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">columns</span><span class="p">[</span><span class="n">j</span><span class="p">]),</span> <span class="n">accumulator</span><span class="o">=</span><span class="n">subacc</span><span class="p">)</span>
+        <span class="k">pass</span> <span class="c1"># pass columns</span>
+      <span class="n">Util</span><span class="o">.</span><span class="n">checkEmptyOr</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">__store</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">acc</span><span class="p">),</span> <span class="n">subacc</span><span class="p">)</span>
+      <span class="k">pass</span> <span class="c1"># pass a row</span>
+    <span class="k">return</span> <span class="n">acc</span></div>
+
+  <span class="k">def</span> <span class="nf">__getType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="s1">&#39;type&#39;</span> <span class="ow">in</span> <span class="n">schema</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">schema</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+
+  <span class="k">def</span> <span class="nf">__brandnewAccForType</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+    <span class="n">_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getType</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">_type</span> <span class="o">==</span> <span class="n">TypeSign</span><span class="o">.</span><span class="n">ARRAY</span><span class="p">:</span>
+      <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">elif</span> <span class="n">_type</span> <span class="o">==</span> <span class="n">TypeSign</span><span class="o">.</span><span class="n">OBJ</span><span class="p">:</span>
+      <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">errorout</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">_type</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">__store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">accumulator</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">accumulator</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+      <span class="n">accumulator</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">accumulator</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+      <span class="n">accumulator</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">errorout</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">accumulator</span>
+
+  <span class="k">def</span> <span class="nf">__outputCSV</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_path</span><span class="p">,</span> <span class="n">sheet</span><span class="p">,</span> <span class="n">enc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    CSV, TSV出力</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">:</span> <span class="k">return</span>
+    <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="ow">in</span> <span class="n">output_formats</span>
+    <span class="n">xdest</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">xdest</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">xdest_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">xdest</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">sheet</span><span class="o">.</span><span class="n">title</span> <span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__print</span><span class="p">(</span><span class="s1">&#39; &gt; </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">xdest_path</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">xdest_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">enc</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+      <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">format_delimiter</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">cols</span> <span class="ow">in</span> <span class="n">sheet</span><span class="o">.</span><span class="n">rows</span><span class="p">:</span>
+        <span class="n">writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">col</span><span class="o">.</span><span class="n">value</span> <span class="ow">or</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">])</span>
+
+  <span class="k">def</span> <span class="nf">__nameToSheets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    sheetを{sheet名:sheet}形式にして返す</span>
+<span class="sd">    instance 生成後、実行中のExcel更新は考えない</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># TODO: pyxl.get_sheet_names(), get_sheet_by_name()で代用できるか検討</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;__sheets_cache&#39;</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">__sheets_cache</span> <span class="o">=</span> <span class="p">{</span><span class="n">s</span><span class="o">.</span><span class="n">title</span><span class="p">:</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">book</span><span class="o">.</span><span class="n">worksheets</span><span class="p">}</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__sheets_cache</span>
+
+<div class="viewcode-block" id="XLSX.checkCharEncode"><a class="viewcode-back" href="../xlsx.html#xlsx.XLSX.checkCharEncode">[docs]</a>  <span class="k">def</span> <span class="nf">checkCharEncode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">valid_enc</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">workbook</span><span class="o">.</span><span class="n">workbook</span><span class="o">.</span><span class="n">Workbook</span><span class="p">)</span> <span class="ow">or</span> \
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">worksheet</span><span class="o">.</span><span class="n">Worksheet</span><span class="p">)</span> <span class="ow">or</span> \
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">cell</span><span class="o">.</span><span class="n">Cell</span><span class="p">)</span>
+    <span class="n">enc</span> <span class="o">=</span> <span class="n">valid_enc</span> <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">valid_enc</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">char_encode</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__print</span><span class="p">(</span><span class="n">enc</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">encoding</span> <span class="o">==</span> <span class="n">enc</span><span class="p">):</span>
+      <span class="c1"># TODO: sheet, cellごとにエラーを上げる場合の処理</span>
+      <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">workbook</span><span class="o">.</span><span class="n">workbook</span><span class="o">.</span><span class="n">Workbook</span><span class="p">):</span>
+        <span class="n">add</span> <span class="o">=</span> <span class="s1">&#39;sheet_names = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">item</span><span class="o">.</span><span class="n">sheet_names</span>
+      <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">openpyxl</span><span class="o">.</span><span class="n">worksheet</span><span class="o">.</span><span class="n">Worksheet</span><span class="p">):</span>
+        <span class="n">add</span> <span class="o">=</span> <span class="s1">&#39;sheet_name = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">item</span><span class="o">.</span><span class="n">title</span>
+      <span class="k">else</span><span class="p">:</span> <span class="c1"># Cell</span>
+        <span class="n">add</span> <span class="o">=</span> <span class="s1">&#39;parent = </span><span class="si">{}</span><span class="s1"> index = </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">parent</span> <span class="p">,</span><span class="n">item</span><span class="o">.</span><span class="n">cordinate</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="n">add</span><span class="p">)</span>
+      <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
+      <span class="c1"># TODO: excel rw 状態チェック</span>
+      <span class="n">item</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">enc</span>
+      <span class="k">pass</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="XLSX.typeValidator"><a class="viewcode-back" href="../xlsx.html#xlsx.XLSX.typeValidator">[docs]</a>  <span class="k">def</span> <span class="nf">typeValidator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">type_desc</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">Validator</span><span class="o">.</span><span class="n">jsonschema</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; Validator switch &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;__schema&#39;</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">__schema</span> <span class="o">=</span> <span class="n">Schema</span><span class="p">(</span><span class="n">validator</span><span class="p">)</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">Util</span><span class="o">.</span><span class="n">convEscapedKV</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__getType</span><span class="p">(</span><span class="n">type_desc</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">type_desc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">value</span><span class="p">)</span>
+    <span class="n">instance</span> <span class="o">=</span> <span class="n">Util</span><span class="o">.</span><span class="n">runtimeDictionary</span><span class="p">(</span><span class="s1">&#39;{</span><span class="si">%s</span><span class="s1">}&#39;</span><span class="o">%</span><span class="n">raw</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__schema</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">type_desc</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">instance</span></div>
+
+<div class="viewcode-block" id="XLSX.generateSheet"><a class="viewcode-back" href="../xlsx.html#xlsx.XLSX.generateSheet">[docs]</a>  <span class="k">def</span> <span class="nf">generateSheet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">book</span><span class="o">.</span><span class="n">create_sheet</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="XLSX.putCommentToCell"><a class="viewcode-back" href="../xlsx.html#xlsx.XLSX.putCommentToCell">[docs]</a>  <span class="k">def</span> <span class="nf">putCommentToCell</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cell</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">author</span><span class="o">=</span><span class="n">PROGNAME</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">openpyxl.comments</span> <span class="k">import</span> <span class="n">Comment</span>
+    <span class="n">cell</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">Comment</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">author</span><span class="p">)</span></div>
+
+  <span class="c1"># SP_FILE 注意</span>
+  <span class="k">def</span> <span class="nf">__print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+      <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">pass</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, setminami.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

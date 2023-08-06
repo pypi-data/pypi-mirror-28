@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>schema_helper &mdash; jsonica 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="jsonica 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> jsonica
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">jsonica</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>schema_helper</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for schema_helper</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">enum</span>
+
+
+<div class="viewcode-block" id="Validator"><a class="viewcode-back" href="../schema_helper.html#schema_helper.Validator">[docs]</a><span class="k">class</span> <span class="nc">Validator</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot; 対応validator &quot;&quot;&quot;</span>
+  <span class="n">jsonschema</span> <span class="o">=</span> <span class="s1">&#39;jsonschema&#39;</span></div>
+
+<div class="viewcode-block" id="TypeSign"><a class="viewcode-back" href="../schema_helper.html#schema_helper.TypeSign">[docs]</a><span class="k">class</span> <span class="nc">TypeSign</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot; Type adhoc &quot;&quot;&quot;</span>
+  <span class="c1"># https://tools.ietf.org/html/draft-zyp-json-schema-04</span>
+  <span class="c1"># RFC 4627#2.1 https://tools.ietf.org/html/rfc4627</span>
+  <span class="n">OBJ</span> <span class="o">=</span> <span class="s1">&#39;object&#39;</span>
+  <span class="n">ARRAY</span> <span class="o">=</span> <span class="s1">&#39;array&#39;</span>
+
+  <span class="n">STRING</span> <span class="o">=</span> <span class="s1">&#39;string&#39;</span>
+  <span class="n">NUM</span> <span class="o">=</span> <span class="s1">&#39;number&#39;</span>
+
+  <span class="n">FALSE</span> <span class="o">=</span> <span class="s1">&#39;false&#39;</span>
+  <span class="n">TRUE</span> <span class="o">=</span> <span class="s1">&#39;true&#39;</span>
+
+  <span class="n">JSON_NULL</span> <span class="o">=</span> <span class="s1">&#39;null&#39;</span></div>
+
+<div class="viewcode-block" id="Schema"><a class="viewcode-back" href="../schema_helper.html#schema_helper.Schema">[docs]</a><span class="k">class</span> <span class="nc">Schema</span><span class="p">:</span>
+  <span class="sd">&quot;&quot;&quot; abstract &quot;&quot;&quot;</span>
+  <span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>
+<div class="viewcode-block" id="Schema.JsonSchema"><a class="viewcode-back" href="../schema_helper.html#schema_helper.Schema.JsonSchema">[docs]</a>  <span class="k">class</span> <span class="nc">JsonSchema</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; concrete 1 as jsonschema style &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">__schemas</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_makeSchema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_desc</span><span class="p">):</span>
+      <span class="n">schema</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="s1">&#39;object&#39;</span><span class="p">}</span>
+      <span class="k">if</span> <span class="s1">&#39;required&#39;</span> <span class="ow">in</span> <span class="n">type_desc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">schema</span><span class="p">[</span><span class="s1">&#39;required&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">type_desc</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+      <span class="n">schema</span><span class="p">[</span><span class="s1">&#39;properties&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">type_desc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="p">{</span><span class="s1">&#39;type&#39;</span><span class="p">:</span><span class="n">type_desc</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;type&#39;</span><span class="p">]}}</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">__schemas</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">schema</span>
+
+    <span class="k">def</span> <span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evl</span><span class="p">,</span> <span class="n">schema</span><span class="p">):</span>
+      <span class="kn">from</span> <span class="nn">jsonschema</span> <span class="k">import</span> <span class="n">validate</span><span class="p">,</span> <span class="n">ValidationError</span><span class="p">,</span> <span class="n">SchemaError</span>
+      <span class="c1"># jsonschema による型チェック</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="n">validate</span><span class="p">(</span><span class="n">evl</span><span class="p">,</span> <span class="n">schema</span><span class="p">)</span>
+      <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">ve</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__print</span><span class="p">(</span><span class="s1">&#39;Validation Error has found.</span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">ve</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+      <span class="k">except</span> <span class="n">SchemaError</span> <span class="k">as</span> <span class="n">se</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__print</span><span class="p">(</span><span class="s1">&#39;Schema Error has found.</span><span class="se">\n</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">se</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+      <span class="k">pass</span></div>
+
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">validator</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">schema_name</span> <span class="o">=</span> <span class="n">validator</span>
+    <span class="c1"># TEMP: type switch</span>
+    <span class="k">if</span> <span class="n">validator</span> <span class="o">==</span> <span class="n">Validator</span><span class="o">.</span><span class="n">jsonschema</span><span class="p">:</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">schema</span> <span class="o">=</span> <span class="n">Schema</span><span class="o">.</span><span class="n">JsonSchema</span><span class="p">()</span>
+    <span class="k">pass</span>
+
+<div class="viewcode-block" id="Schema.makeSchema"><a class="viewcode-back" href="../schema_helper.html#schema_helper.Schema.makeSchema">[docs]</a>  <span class="k">def</span> <span class="nf">makeSchema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">desc</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; 一項目ずつの定義であることに留意 &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">desc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">desc</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nb">dict</span><span class="p">)</span>
+    <span class="c1"># HACK: failfastとして小粒度で都度Errorを上げるか、reduceしたあと最後にvalidationをかけるか</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">_makeSchema</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Schema.validate"><a class="viewcode-back" href="../schema_helper.html#schema_helper.Schema.validate">[docs]</a>  <span class="k">def</span> <span class="nf">validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evl</span><span class="p">,</span> <span class="n">desc</span><span class="p">):</span>
+    <span class="n">sc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">makeSchema</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">evl</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">evl</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">schema</span><span class="o">.</span><span class="n">_validate</span><span class="p">(</span><span class="n">evl</span><span class="p">,</span> <span class="n">sc</span><span class="p">)</span>
+    <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">__print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+      <span class="k">pass</span></div></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, setminami.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

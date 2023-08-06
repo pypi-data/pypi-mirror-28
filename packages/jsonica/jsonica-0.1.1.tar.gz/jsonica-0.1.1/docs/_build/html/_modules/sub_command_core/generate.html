@@ -1,0 +1,355 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>sub_command_core.generate &mdash; jsonica 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="jsonica 0.1.0 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> jsonica
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">jsonica</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>sub_command_core.generate</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for sub_command_core.generate</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="k">import</span> <span class="n">SubCommands</span>
+<span class="kn">from</span> <span class="nn">jsonica</span> <span class="k">import</span> <span class="n">errorout</span><span class="p">,</span> <span class="n">refactorCheck</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">json</span><span class="o">,</span> <span class="nn">argparse</span><span class="o">,</span> <span class="nn">contextlib</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">reduce</span>
+
+<span class="n">output_formats</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;csv&#39;</span><span class="p">,</span> <span class="s1">&#39;tsv&#39;</span><span class="p">]</span>
+<span class="n">output_delimiters</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">]</span>
+
+<span class="n">SP_FILE</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span>
+
+<div class="viewcode-block" id="Generate"><a class="viewcode-back" href="../../sub_command_core.generate.html#sub_command_core.generate.Generate">[docs]</a><span class="k">class</span> <span class="nc">Generate</span><span class="p">(</span><span class="n">SubCommands</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot; generate command &quot;&quot;&quot;</span>
+  <span class="n">VERSION</span> <span class="o">=</span> <span class="s1">&#39;0.0.9&#39;</span>
+
+  <span class="n">__aliases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gen&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">]</span>
+  <span class="n">__help</span> <span class="o">=</span> <span class="s1">&#39;generate analyzed files as TEXT from META descritor file. (e.g., Excel)&#39;</span>
+
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+    <span class="k">pass</span>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">command_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">command_name</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">aliases</span>
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">aliases</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__aliases</span>
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">help</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__help</span>
+
+  <span class="k">def</span> <span class="nf">__run__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;args&#39;</span><span class="p">]</span>
+    <span class="c1"># default option 対策 seelaso AnalyzeXSeparatedOutPath</span>
+    <span class="c1"># https://github.com/setminami/Jsonica/issues/47</span>
+    <span class="n">refactorCheck</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;Namespace&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">output_format</span><span class="p">:</span>
+      <span class="n">args</span><span class="o">.</span><span class="n">output_format</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;tsv&#39;</span><span class="p">,</span> <span class="n">output_delimiters</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;./output/&#39;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="n">fileloc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">input</span><span class="p">))</span>
+    <span class="n">workpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__treatFileTypes</span><span class="p">(</span><span class="n">fileloc</span><span class="p">)</span>
+    <span class="kn">from</span> <span class="nn">xlsx</span> <span class="k">import</span> <span class="n">XLSX</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__print</span><span class="p">(</span><span class="s1">&#39;Analyzing... </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">fileloc</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">XLSX</span><span class="p">(</span><span class="n">workpath</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">output_format</span><span class="p">)</span>
+    <span class="c1"># sys.setrecursionlimit(1024 * 8)</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">generateJSON</span><span class="p">(</span><span class="n">sheet_name</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">root_sheet</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">wild_open</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+      <span class="k">try</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">human_readable</span><span class="p">)</span> \
+                    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">human_readable</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">j</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">f</span><span class="p">)</span>
+      <span class="k">except</span><span class="p">:</span>
+        <span class="n">errorout</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__print</span><span class="p">(</span><span class="s1">&#39;Output json Success ➡️  </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">args</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
+    <span class="k">pass</span>
+
+<div class="viewcode-block" id="Generate.makeArgparse"><a class="viewcode-back" href="../../sub_command_core.generate.html#sub_command_core.generate.Generate.makeArgparse">[docs]</a>  <span class="k">def</span> <span class="nf">makeArgparse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subparser</span><span class="p">):</span>
+    <span class="n">myparser</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">makeArgparse</span><span class="p">(</span><span class="n">subparser</span><span class="p">)</span>
+    <span class="n">outs</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> | </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l</span><span class="p">,</span> <span class="n">r</span><span class="p">),</span> <span class="n">output_formats</span><span class="p">)</span>
+    <span class="n">myparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="s1">&#39;--input&#39;</span><span class="p">,</span>
+                            <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;./Samples/cheatsheet.xlsx&#39;</span><span class="p">,</span>
+                            <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;path/to/inputfile&#39;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Set path/to/input xlsx filename.&#39;</span><span class="p">)</span>
+    <span class="n">myparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-hr&#39;</span><span class="p">,</span> <span class="s1">&#39;--human_readable&#39;</span><span class="p">,</span>
+                            <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;tabsize&#39;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;set indent size by numeric value, Output humanreadable json files.&#39;</span><span class="p">)</span>
+    <span class="n">myparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-r&#39;</span><span class="p">,</span> <span class="s1">&#39;--root_sheet&#39;</span><span class="p">,</span>
+                            <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">,</span> <span class="c1"># Default root sheet name</span>
+                            <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;sheetname&#39;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;set a sheetname in xlsx book have. </span><span class="se">\n</span><span class="s1">construct json tree from the sheet as root item. &quot;root&quot; is Default root sheet name.&#39;</span><span class="p">)</span>
+    <span class="n">myparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="s1">&#39;--output&#39;</span><span class="p">,</span>
+                            <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="n">AnalyzeJSONOutPath</span><span class="p">,</span>
+                            <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;path/to/outputfile(.json)&#39;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Output interpreted json. If this set which endswith &quot;.json&quot; as set full filename, output jsonfile treated as the name. But when not set &quot;.json&quot;, adopt original xlsx filename, like path/to/outputfile/[source_METAFile_name].json</span><span class="se">\</span>
+<span class="s1">                            (-o has special filename &quot;</span><span class="si">{0}</span><span class="s1">&quot; as STDOUT, and when set like &quot;-o </span><span class="si">{0}</span><span class="s1">&quot;, all other stdout messages were masked.)&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">SP_FILE</span><span class="p">))</span>
+    <span class="n">myparser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-of&#39;</span><span class="p">,</span> <span class="s1">&#39;--output_format&#39;</span><span class="p">,</span>
+                            <span class="n">nargs</span><span class="o">=</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="n">AnalyzeXSeparatedOutPath</span><span class="p">,</span> <span class="c1"># (xsv, path)になるので注意</span>
+                            <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;(</span><span class="si">%s</span><span class="s1">):path/to/outputdir&#39;</span><span class="o">%</span><span class="n">outs</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;&#39;&#39;Output with the format, If you set this, output formfiles to path/to/[source_METAFile_name].xlsx/[sheetname.?sv]s It</span><span class="se">\&#39;</span><span class="s1">ll be recommended,</span>
+<span class="s1">                            if you want to have communication with non Tech team without any gitconfiging.&#39;&#39;&#39;</span><span class="p">)</span>
+    <span class="k">pass</span></div>
+
+  <span class="k">def</span> <span class="nf">__treatFileTypes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.xlsx&#39;</span><span class="p">):</span>
+      <span class="k">return</span> <span class="n">file</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">errorout</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> format is not supported yet.&#39;</span><span class="o">%</span><span class="n">file</span><span class="p">)</span>
+
+  <span class="k">def</span> <span class="nf">__print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">output</span> <span class="o">==</span> <span class="n">SP_FILE</span><span class="p">):</span>
+      <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<span class="c1"># argparse actions</span>
+<div class="viewcode-block" id="AnalyzeJSONOutPath"><a class="viewcode-back" href="../../sub_command_core.generate.html#sub_command_core.generate.AnalyzeJSONOutPath">[docs]</a><span class="k">class</span> <span class="nc">AnalyzeJSONOutPath</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Action</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot; 正当な出力json名を推測する &quot;&quot;&quot;</span>
+  <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">option_string</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">path</span><span class="p">,</span> <span class="n">fileloc</span> <span class="o">=</span> <span class="n">values</span><span class="p">,</span> <span class="n">namespace</span><span class="o">.</span><span class="n">input</span>
+    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.json&#39;</span><span class="p">):</span>
+      <span class="c1"># 指定されたファイル名まま</span>
+      <span class="n">jsonfilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">path</span> <span class="o">==</span> <span class="n">SP_FILE</span><span class="p">:</span>
+      <span class="n">jsonfilename</span> <span class="o">=</span> <span class="n">path</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">p</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+      <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+      <span class="c1"># Excelと同名</span>
+      <span class="n">fname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fileloc</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="n">jsonfilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.json&#39;</span><span class="o">%</span><span class="n">fname</span><span class="p">)</span>
+    <span class="n">namespace</span><span class="o">.</span><span class="n">output</span> <span class="o">=</span> <span class="n">jsonfilename</span></div>
+
+<div class="viewcode-block" id="AnalyzeXSeparatedOutPath"><a class="viewcode-back" href="../../sub_command_core.generate.html#sub_command_core.generate.AnalyzeXSeparatedOutPath">[docs]</a><span class="k">class</span> <span class="nc">AnalyzeXSeparatedOutPath</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="n">Action</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot; sv出力先と形式を解析する &quot;&quot;&quot;</span>
+  <span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">False</span>
+  <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parser</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">option_string</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1"> called: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">values</span><span class="p">))</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentTypeError</span><span class="p">(</span><span class="s1">&#39;&#39;&#39;</span><span class="si">{}</span><span class="s1"> </span><span class="si">{}</span><span class="s1"> have to separate ?sv and outputpath with &quot;:&quot;</span>
+<span class="s1">                                            e.g., tsv:path/to/output&#39;&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">option_string</span> <span class="p">,</span><span class="n">values</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">output_formats</span><span class="p">):</span>
+      <span class="k">raise</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentTypeError</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> have to be picked from </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">option_string</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">output_formats</span><span class="p">))</span>
+    <span class="n">o</span> <span class="o">=</span> <span class="n">output_formats</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">namespace</span><span class="o">.</span><span class="n">output_format</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">output_delimiters</span><span class="p">[</span><span class="n">o</span><span class="p">],</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="wild_open"><a class="viewcode-back" href="../../sub_command_core.generate.html#sub_command_core.generate.wild_open">[docs]</a><span class="nd">@contextlib</span><span class="o">.</span><span class="n">contextmanager</span>
+<span class="k">def</span> <span class="nf">wild_open</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">):</span>
+  <span class="k">if</span> <span class="n">filename</span> <span class="ow">and</span> <span class="n">filename</span> <span class="o">!=</span> <span class="n">SP_FILE</span><span class="p">:</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+  <span class="k">else</span><span class="p">:</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+  <span class="k">try</span><span class="p">:</span>
+    <span class="k">yield</span> <span class="n">fh</span>
+  <span class="k">finally</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">fh</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">:</span>
+      <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, setminami.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

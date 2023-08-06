@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>jsonica &mdash; jsonica 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="jsonica 0.1.0 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> jsonica
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.9
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">jsonica</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">Module code</a> &raquo;</li>
+        
+      <li>jsonica</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for jsonica</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">json</span><span class="o">,</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">reduce</span>
+
+<span class="c1"># global settings.</span>
+<span class="n">VERSION</span> <span class="o">=</span> <span class="s1">&#39;0.0.9&#39;</span>
+<span class="n">PROGNAME</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+
+<span class="n">codec_help_url</span> <span class="o">=</span> <span class="s1">&#39;https://docs.python.org/3.6/library/codecs.html#standard-encodings&#39;</span>
+
+<div class="viewcode-block" id="Jsonica"><a class="viewcode-back" href="../jsonica.html#jsonica.Jsonica">[docs]</a><span class="k">class</span> <span class="nc">Jsonica</span><span class="p">:</span>
+  <span class="sd">&quot;&quot;&quot; 具象操作に流すための、utility的位置づけ&quot;&quot;&quot;</span>
+  <span class="n">DEBUG</span> <span class="o">=</span> <span class="kc">True</span>
+  <span class="c1"># DEBUG出力用 jsonは別扱い</span>
+  <span class="c1"># 簡単なので、仮実装　vs. 素直にargparse actionに直接__run__()を割り当てるか、その場合前処理をどうするか。</span>
+  <span class="n">sub_commands</span> <span class="o">=</span> <span class="p">{}</span>
+
+  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<div class="viewcode-block" id="Jsonica.regist_subcommand"><a class="viewcode-back" href="../jsonica.html#jsonica.Jsonica.regist_subcommand">[docs]</a>  <span class="k">def</span> <span class="nf">regist_subcommand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    sub_commandsの型に依存させないためのIF</span>
+<span class="sd">    型変更の必要がでたら、局所的に操作を書き換える</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">sub_command_core.sub_command</span> <span class="k">import</span> <span class="n">SubCommands</span>
+    <span class="k">assert</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">command</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">SubCommands</span><span class="p">)</span>
+    <span class="c1"># 衝突注意</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">command</span><span class="o">.</span><span class="n">command_names</span><span class="p">:</span>
+      <span class="k">assert</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_commands</span><span class="o">.</span><span class="n">keys</span><span class="p">()),</span>\
+                <span class="s1">&#39;&quot;</span><span class="si">{}</span><span class="s1">&quot; collision were detected in </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_commands</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+      <span class="c1"># NOTE: commandは参照であること。tupleへのrefactoring注意</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">sub_commands</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">name</span><span class="p">:</span> <span class="n">command</span><span class="p">})</span></div>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span> <span class="nf">sub_command_names</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_commands</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+
+<div class="viewcode-block" id="Jsonica.test"><a class="viewcode-back" href="../jsonica.html#jsonica.Jsonica.test">[docs]</a>  <span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ARGS</span>
+    <span class="n">enc</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">encoding</span>
+    <span class="n">subcommand</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_commands</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">subcmd_name</span><span class="p">]</span>
+    <span class="n">subcommand</span><span class="o">.</span><span class="n">__run__</span><span class="p">(</span><span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Jsonica.prepareArgParser"><a class="viewcode-back" href="../jsonica.html#jsonica.Jsonica.prepareArgParser">[docs]</a>  <span class="k">def</span> <span class="nf">prepareArgParser</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">argParser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">prog</span><span class="o">=</span><span class="n">PROGNAME</span><span class="p">,</span>
+                                        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;generate complex JSON structure with analyzing META descripted file like xlsx.&#39;</span><span class="p">)</span>
+    <span class="c1"># Version desctiprtion</span>
+    <span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-v&#39;</span><span class="p">,</span> <span class="s1">&#39;--version&#39;</span><span class="p">,</span>
+                        <span class="n">action</span><span class="o">=</span><span class="s1">&#39;version&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">PROGNAME</span><span class="p">,</span> <span class="n">VERSION</span><span class="p">))</span>
+
+    <span class="c1"># see. https://docs.python.org/3/library/argparse.html</span>
+    <span class="n">subParsers</span> <span class="o">=</span> <span class="n">argParser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">dest</span><span class="o">=</span><span class="s1">&#39;subcmd_name&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;sub-commands&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">command</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sub_commands</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+      <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">command</span><span class="o">.</span><span class="n">command_name</span><span class="p">:</span>
+        <span class="n">subparser</span> <span class="o">=</span> <span class="n">command</span><span class="o">.</span><span class="n">makeArgparse</span><span class="p">(</span><span class="n">subParsers</span><span class="p">)</span>
+    <span class="n">argParser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;-e&#39;</span><span class="p">,</span> <span class="s1">&#39;--encoding&#39;</span><span class="p">,</span>
+                            <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">metavar</span><span class="o">=</span><span class="s1">&#39;{python built-in codec}&#39;</span><span class="p">,</span>
+                            <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Set default charactor encode. When not set this, it is treated as &quot;utf-8&quot;.</span><span class="se">\</span>
+<span class="s1">                            see also. </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">codec_help_url</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">ARGS</span> <span class="o">=</span> <span class="n">argParser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="errorout"><a class="viewcode-back" href="../jsonica.html#jsonica.errorout">[docs]</a><span class="k">def</span> <span class="nf">errorout</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">additonal</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot; 強制的に止める sys.stderr へ出力 &quot;&quot;&quot;</span>
+  <span class="n">errors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;OK&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;sheets link not found.&#39;</span><span class="p">,</span> <span class="s1">&#39;schema not found.&#39;</span><span class="p">,</span> <span class="c1"># 1, 2</span>
+            <span class="s1">&#39;root sheet not found.&#39;</span><span class="p">,</span> <span class="s1">&#39;Unrecognized item type were found.&#39;</span><span class="p">,</span> <span class="c1"># 3, 4</span>
+            <span class="s1">&#39;Unknown accumulator!&#39;</span><span class="p">,</span> <span class="s1">&#39;Output json has failed.&#39;</span><span class="p">,</span> <span class="c1"># 5, 6</span>
+            <span class="s1">&#39;Unsupported table filetype found.&#39;</span><span class="p">,</span> <span class="s1">&#39;setting yaml file not found&#39;</span><span class="p">]</span>
+  <span class="k">assert</span> <span class="n">e</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span> <span class="ow">and</span> <span class="n">e</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+  <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> : </span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="p">(</span><span class="n">errors</span><span class="p">[</span><span class="n">e</span><span class="p">],</span> <span class="n">additonal</span><span class="p">),</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+  <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="refactorCheck"><a class="viewcode-back" href="../jsonica.html#jsonica.refactorCheck">[docs]</a><span class="k">def</span> <span class="nf">refactorCheck</span><span class="p">(</span><span class="n">validation</span><span class="p">):</span> <span class="k">assert</span> <span class="n">validation</span><span class="p">,</span> <span class="s1">&#39;Have you made refactor??&#39;</span></div>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+  <span class="n">ins</span> <span class="o">=</span> <span class="n">Jsonica</span><span class="p">()</span>
+  <span class="c1"># NOTE: subcommand 設定 https://github.com/setminami/Jsonica/issues/31</span>
+  <span class="kn">from</span> <span class="nn">sub_command_core</span> <span class="k">import</span> <span class="p">(</span><span class="n">Initialize</span><span class="p">,</span> <span class="n">Generate</span><span class="p">)</span>
+  <span class="c1"># FIXME: とりあえず仮実装 Plugin実装する際に再考</span>
+  <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Initialize</span><span class="p">(),</span> <span class="n">Generate</span><span class="p">()]:</span>
+    <span class="n">ins</span><span class="o">.</span><span class="n">regist_subcommand</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">ins</span><span class="o">.</span><span class="n">prepareArgParser</span><span class="p">()</span>
+  <span class="n">ins</span><span class="o">.</span><span class="n">test</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, setminami.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
