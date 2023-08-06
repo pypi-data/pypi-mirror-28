@@ -1,0 +1,46 @@
+Metadata-Version: 2.0
+Name: fastly-client
+Version: 0.1.6
+Summary: Fastly API client that supports billing and stats.
+Home-page: https://github.com/aryzhov/fastly-client
+Author: Alexander Ryzhov
+Author-email: aryzhov07@gmail.com
+License: MIT
+Keywords: fastly api billing stats client
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Requires-Dist: marshmallow (>=3.0.0b6)
+Requires-Dist: requests (>=2.18.4)
+
+======================================
+Fastly Python Billing and Stats Client
+======================================
+
+The Fastly API client (api.fastly.com) that supports billing and stats.
+
+Developed using marshmallow (for serialization) and requests (for REST API calls).
+
+Example
+=======
+
+::
+
+    import fastly_client
+
+    client = fastly_client.Client('your-api-token')
+    period = fastly_client.period(2017, 12, months=1)
+
+    try:
+        bill = client.bill(period)
+        regions = client.regions(period)
+        services = client.services()
+        stats = client.service_stats(period, services[0].id, regions[0])
+    except fastly_client.FastlyException:
+        print("An error occurred")
+        raise
+
+
