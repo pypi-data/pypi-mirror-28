@@ -1,0 +1,42 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{ app.name }}"
+spec:
+  revisionHistoryLimit: 2
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: "{{ app.name }}"
+    spec:
+      volumes:
+      - name: "{{ app.name }}-secrets"
+        secret:
+          secretName: "{{ app.name }}"
+      containers:
+      - name: "{{ app.name }}"
+        image: "{{ app.image }}"
+        imagePullPolicy: Always
+        terminationMessagePath: /dev/termination-log
+        livenessProbe:
+          httpGet:
+            path: /status
+            port: {{ app.port }}
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+          failureThreshold: 5
+          periodSeconds: 10  # app has 5 + 5*10 = 55 seconds to start up
+        readinessProbe:
+          httpGet:
+            path: /status
+            port: {{ app.port }}
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+        ports:
+        - containerPort: {{ app.port }}
+        volumeMounts:
+        - name: "{{ app.name }}-secrets"
+          mountPath: /secrets
