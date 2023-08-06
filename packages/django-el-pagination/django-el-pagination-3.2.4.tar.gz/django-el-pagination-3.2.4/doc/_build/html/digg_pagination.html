@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Digg-style pagination &#8212; Django EL(Endless) Pagination 3.0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Multiple paginations in the same page" href="multiple_pagination.html" />
+    <link rel="prev" title="Twitter-style Pagination" href="twitter_pagination.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="multiple_pagination.html" title="Multiple paginations in the same page"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="twitter_pagination.html" title="Twitter-style Pagination"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="digg-style-pagination">
+<h1>Digg-style pagination<a class="headerlink" href="#digg-style-pagination" title="Permalink to this headline">¶</a></h1>
+<p>Digg-style pagination of queryset objects is really easy to implement. If Ajax
+pagination is not needed, all you have to do is modifying the template, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">load</span> <span class="nv">el_pagination_tags</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">paginate</span> <span class="nv">entries</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">entry</span> <span class="k">in</span> <span class="nv">entries</span> <span class="cp">%}</span>
+    <span class="c">{# your code to show the entry #}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">show_pages</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>That&#8217;s it! As seen, the <a class="reference internal" href="templatetags_reference.html#templatetags-paginate"><span class="std std-ref">paginate</span></a> template tag takes care of
+customizing the given queryset and the current template context. The
+<a class="reference internal" href="templatetags_reference.html#templatetags-show-pages"><span class="std std-ref">show_pages</span></a> one displays the page links allowing for
+navigation to other pages.</p>
+<div class="section" id="page-by-page">
+<h2>Page by page<a class="headerlink" href="#page-by-page" title="Permalink to this headline">¶</a></h2>
+<p>If you only want to display previous and next links (in a page-by-page
+pagination) you have to use the lower level <a class="reference internal" href="templatetags_reference.html#templatetags-get-pages"><span class="std std-ref">get_pages</span></a>
+template tag, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">load</span> <span class="nv">el_pagination_tags</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">paginate</span> <span class="nv">entries</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">entry</span> <span class="k">in</span> <span class="nv">entries</span> <span class="cp">%}</span>
+    <span class="c">{# your code to show the entry #}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">get_pages</span> <span class="cp">%}</span>
+<span class="cp">{{</span> <span class="nv">pages.previous</span> <span class="cp">}}</span> <span class="cp">{{</span> <span class="nv">pages.next</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="customization.html"><span class="doc">Customization</span></a> explains how to customize the arrows that go to previous
+and next pages.</p>
+</div>
+<div class="section" id="showing-indexes">
+<h2>Showing indexes<a class="headerlink" href="#showing-indexes" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="templatetags_reference.html#templatetags-get-pages"><span class="std std-ref">get_pages</span></a> template tag adds to the current template
+context a <code class="docutils literal"><span class="pre">pages</span></code> variable containing several methods that can be used to
+fully customize how the page links are displayed. For example, assume you want
+to show the indexes of the entries in the current page, followed by the total
+number of entries:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">load</span> <span class="nv">el_pagination_tags</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">paginate</span> <span class="nv">entries</span> <span class="cp">%}{%</span> <span class="k">get_pages</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">entry</span> <span class="k">in</span> <span class="nv">entries</span> <span class="cp">%}</span>
+    <span class="c">{# your code to show the entry #}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+
+Showing entries
+<span class="cp">{{</span> <span class="nv">pages.current_start_index</span> <span class="cp">}}</span>-<span class="cp">{{</span> <span class="nv">pages.current_end_index</span> <span class="cp">}}</span> of
+<span class="cp">{{</span> <span class="nv">pages.total_count</span> <span class="cp">}}</span>.
+<span class="c">{# Just print pages to render the Digg-style pagination. #}</span>
+<span class="cp">{{</span> <span class="nv">pages.get_rendered</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="number-of-pages">
+<h2>Number of pages<a class="headerlink" href="#number-of-pages" title="Permalink to this headline">¶</a></h2>
+<p>You can use <code class="docutils literal"><span class="pre">{{</span> <span class="pre">pages|length</span> <span class="pre">}}</span></code> to retrieve and display the pages count.
+A common use case is to change the layout or display additional info based
+on whether the page list contains more than one page. This can be achieved
+checking <code class="docutils literal"><span class="pre">{%</span> <span class="pre">if</span> <span class="pre">pages|length</span> <span class="pre">&gt;</span> <span class="pre">1</span> <span class="pre">%}</span></code>, or, in a more convenient way, using
+<code class="docutils literal"><span class="pre">{{</span> <span class="pre">pages.paginated</span> <span class="pre">}}</span></code>. For example, assume you want to change the layout,
+or display some info, only if the page list contains more than one page, i.e.
+the results are actually paginated:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">load</span> <span class="nv">el_pagination_tags</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">paginate</span> <span class="nv">entries</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">entry</span> <span class="k">in</span> <span class="nv">entries</span> <span class="cp">%}</span>
+    <span class="c">{# your code to show the entry #}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">get_pages</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">if</span> <span class="nv">pages.paginated</span> <span class="cp">%}</span>
+    Some info/layout to display only if the available
+    objects span multiple pages...
+    <span class="cp">{{</span> <span class="nv">pages.get_rendered</span> <span class="cp">}}</span>
+<span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>Again, for a full overview of the <a class="reference internal" href="templatetags_reference.html#templatetags-get-pages"><span class="std std-ref">get_pages</span></a> and all the
+other template tags, see the <a class="reference internal" href="templatetags_reference.html"><span class="doc">Templatetags reference</span></a>.</p>
+</div>
+<div class="section" id="adding-ajax">
+<span id="digg-ajax"></span><h2>Adding Ajax<a class="headerlink" href="#adding-ajax" title="Permalink to this headline">¶</a></h2>
+<p>The view is exactly the same as the one used in
+<a class="reference internal" href="twitter_pagination.html#twitter-page-template"><span class="std std-ref">Twitter-style Pagination</span></a>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">el_pagination.decorators</span> <span class="k">import</span> <span class="n">page_template</span>
+
+<span class="nd">@page_template</span><span class="p">(</span><span class="s1">&#39;myapp/entry_index_page.html&#39;</span><span class="p">)</span>  <span class="c1"># just add this decorator</span>
+<span class="k">def</span> <span class="nf">entry_index</span><span class="p">(</span>
+        <span class="n">request</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="s1">&#39;myapp/entry_index.html&#39;</span><span class="p">,</span> <span class="n">extra_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;entries&#39;</span><span class="p">:</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">extra_context</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extra_context</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>As seen before in <a class="reference internal" href="twitter_pagination.html"><span class="doc">Twitter-style Pagination</span></a>, you have to
+<a class="reference internal" href="twitter_pagination.html#twitter-split-template"><span class="std std-ref">split the templates</span></a>, separating the main one from
+the fragment representing the single page. However, this time a container for
+the page template is also required and, by default, must be an element having a
+class named <em>endless_page_template</em>.</p>
+<p><em>myapp/entry_index.html</em> becomes:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">();&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p><em>myapp/entry_index_page.html</em> becomes:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">load</span> <span class="nv">el_pagination_tags</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">paginate</span> <span class="nv">entries</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">entry</span> <span class="k">in</span> <span class="nv">entries</span> <span class="cp">%}</span>
+    <span class="c">{# your code to show the entry #}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">show_pages</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>Done.</p>
+<p>It is possible to manually
+<a class="reference internal" href="javascript.html#javascript-selectors"><span class="std std-ref">override the container selector</span></a> used by
+<em>$.endlessPaginate()</em> to update the page contents. This can be easily achieved
+by customizing the <em>pageSelector</em> option of <em>$.endlessPaginate()</em>, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;entries&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span><span class="nx">pageSelector</span><span class="o">:</span> <span class="s1">&#39;div#entries&#39;</span><span class="p">});&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>See the <a class="reference internal" href="javascript.html"><span class="doc">JavaScript reference</span></a> for a detailed explanation of how to integrate
+JavaScript and Ajax features in Django Endless Pagination.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Digg-style pagination</a><ul>
+<li><a class="reference internal" href="#page-by-page">Page by page</a></li>
+<li><a class="reference internal" href="#showing-indexes">Showing indexes</a></li>
+<li><a class="reference internal" href="#number-of-pages">Number of pages</a></li>
+<li><a class="reference internal" href="#adding-ajax">Adding Ajax</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="twitter_pagination.html"
+                        title="previous chapter">Twitter-style Pagination</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="multiple_pagination.html"
+                        title="next chapter">Multiple paginations in the same page</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/digg_pagination.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="multiple_pagination.html" title="Multiple paginations in the same page"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="twitter_pagination.html" title="Twitter-style Pagination"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2009-2017, Oleksandr Shtalinberg and Francesco Banconi.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+    </div>
+  </body>
+</html>

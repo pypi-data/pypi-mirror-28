@@ -1,0 +1,440 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Changelog &#8212; Django EL(Endless) Pagination 3.0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting started" href="start.html" />
+    <link rel="prev" title="Django EL(Endless) Pagination" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="start.html" title="Getting started"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Django EL(Endless) Pagination"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="version-3-2-0">
+<h2>Version 3.2.0<a class="headerlink" href="#version-3-2-0" title="Permalink to this headline">¶</a></h2>
+<p><strong>New feature</strong>: Django 2.0.x support.
+Django EL(Endless) Pagination now supports Django from 1.8.x to 2.0.x</p>
+<p><strong>New feature</strong>: settings.USE_NEXT_PREVIOUS_LINKS: default=False
+if True
+Add <cite>is_previous</cite> &amp; <cite>is_next</cite> flags for <cite>previous</cite> and <cite>next</cite> pages
+Add <cite>next_link.html</cite> &amp; <cite>previous_link.html</cite> templates</p>
+<p><strong>New feature</strong>:  <cite>__unicode__</cite> is removed from class ELPage
+It&#8217;s Fix Causes Fatal Python error with django-debug-toolbar
+In templates:
+- {{ page }} now use as {{ page.render_link }}
+- {{ pages }} now use as {{ pages.get_rendered }}</p>
+<p><strong>Template changes</strong>:
+show_pages.html:
+<cite>page|default_if_none</cite> replaced <cite>page.render_link|default</cite></p>
+<hr class="docutils" />
+<p><strong>Cleanup</strong>:
+utils.UnicodeMixin
+utils.text</p>
+</div>
+<div class="section" id="version-3-1-0">
+<h2>Version 3.1.0<a class="headerlink" href="#version-3-1-0" title="Permalink to this headline">¶</a></h2>
+<dl class="docutils">
+<dt><strong>Template changes</strong>:</dt>
+<dd>link attribute rel=&#8221;{{ querystring_key }}&#8221;  replaced by data-el-querystring-key=&#8221;{{ querystring_key }}&#8221;</dd>
+</dl>
+<p><strong>New feature</strong>: Django 1.11 support.</p>
+<dl class="docutils">
+<dt><strong>New feature</strong>:</dt>
+<dd>added view for maintaining original functionality on page index out of range, but setting response code to 404
+<code class="docutils literal"><span class="pre">PAGE_OUT_OF_RANGE_404</span></code> default <em>False</em> If True on page out of range, throw a 404 exception, otherwise display the first page</dd>
+<dt><strong>Documentation</strong>: render_to_response deprecated in django 1.10</dt>
+<dd>replaced to <code class="docutils literal"><span class="pre">return</span> <span class="pre">render(request,</span> <span class="pre">template,</span> <span class="pre">context)</span></code></dd>
+</dl>
+</div>
+<div class="section" id="version-3-0-0">
+<h2>Version 3.0.0<a class="headerlink" href="#version-3-0-0" title="Permalink to this headline">¶</a></h2>
+<p><strong>New feature</strong>: Django 1.10 support.
+New app Django EL(Endless) Pagination now supports Django from 1.8.x to 1.10</p>
+<hr class="docutils" />
+<p><strong>New feature</strong>: Travic CI support
+add tox and Travic CI config</p>
+<hr class="docutils" />
+<p><strong>Documentation</strong>: general clean up.</p>
+</div>
+<div class="section" id="version-2-1-1">
+<h2>Version 2.1.1<a class="headerlink" href="#version-2-1-1" title="Permalink to this headline">¶</a></h2>
+<p>Bug-fix release</p>
+<p><strong>Fix</strong>: page_template decorator doesn&#8217;t change template of ajax call</p>
+<hr class="docutils" />
+<p><strong>Fix</strong>: Fix syntax error in declaring variable in javascript</p>
+</div>
+<div class="section" id="version-2-1-0">
+<h2>Version 2.1.0<a class="headerlink" href="#version-2-1-0" title="Permalink to this headline">¶</a></h2>
+<p>New name app: django-el-pagination</p>
+<p><strong>New feature</strong>: Django 1.8 and 1.9 support.
+New app Django EL(Endless) Pagination now supports Django from 1.4.x to 1.9</p>
+<p>new jQuery plugin that can be found in
+<code class="docutils literal"><span class="pre">static/el-pagination/js/el-pagination.js</span></code>.</p>
+<p>Support get the numbers of objects are normally display in per page</p>
+<p>Usage:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{{</span> <span class="nv">pages.per_page_number</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+<p>add a class on chunk complete</p>
+<p>Each time a chunk size is complete, the class <code class="docutils literal"><span class="pre">endless_chunk_complete</span></code> is added to the <em>show more</em> link,</p>
+</div>
+<div class="section" id="version-2-0">
+<h2>Version 2.0<a class="headerlink" href="#version-2-0" title="Permalink to this headline">¶</a></h2>
+<p><strong>New feature</strong>: Python 3 support.</p>
+<p>Django Endless Pagination now supports both Python 2 and <strong>Python 3</strong>. Dropped
+support for Python 2.5. See <a class="reference internal" href="start.html"><span class="doc">Getting started</span></a> for the new list of requirements.</p>
+<hr class="docutils" />
+<p><strong>New feature</strong>: the <strong>JavaScript refactoring</strong>.</p>
+<p>This version introduces a re-designed Ajax support for pagination. Ajax can
+now be enabled using a brand new jQuery plugin that can be found in
+<code class="docutils literal"><span class="pre">static/el-pagination/js/el-pagination.js</span></code>.</p>
+<p>Usage:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">();&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>The last line in the block above enables Ajax requests to retrieve new
+pages for each pagination in the page. That&#8217;s basically the same as the old
+approach of loading the file <code class="docutils literal"><span class="pre">endless.js</span></code>. The new approach, however,
+is more jQuery-idiomatic, increases the flexibility of how objects can be
+paginated, implements some <a class="reference internal" href="javascript.html"><span class="doc">new features</span></a> and also contains
+some bug fixes.</p>
+<p>For backward compatibility, the application still includes the two JavaScript
+<code class="docutils literal"><span class="pre">endless.js</span></code> and <code class="docutils literal"><span class="pre">endless_on_scroll.js</span></code> files. However, please consider
+<a class="reference internal" href="javascript.html#javascript-migrate"><span class="std std-ref">migrating</span></a> as soon as possible: the old JavaScript
+files are deprecated, are no longer maintained, and don&#8217;t provide the new
+JavaScript features. Also note that the old Javascript files will not work if
+jQuery &gt;= 1.9 is used.</p>
+<p>New features include ability to <strong>paginate different objects with different
+options</strong>, precisely <strong>selecting what to bind</strong>, ability to <strong>register
+callbacks</strong>, support for <strong>pagination in chunks</strong> and much more.</p>
+<p>Please refer to the <a class="reference internal" href="javascript.html"><span class="doc">JavaScript reference</span></a> for a detailed overview of the new
+features and for instructions on <a class="reference internal" href="javascript.html#javascript-migrate"><span class="std std-ref">how to migrate</span></a> from
+the old JavaScript files to the new one.</p>
+<hr class="docutils" />
+<p><strong>New feature</strong>: the <a class="reference internal" href="multiple_pagination.html#multiple-page-templates"><span class="std std-ref">page_templates</span></a> decorator
+also accepts a sequence of <code class="docutils literal"><span class="pre">(template,</span> <span class="pre">key)</span></code> pairs, functioning as a dict
+mapping templates and keys (still present), e.g.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">endless_pagination.decorators</span> <span class="k">import</span> <span class="n">page_templates</span>
+
+<span class="nd">@page_templates</span><span class="p">((</span>
+    <span class="p">(</span><span class="s1">&#39;myapp/entries_page.html&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;myapp/other_entries_page.html&#39;</span><span class="p">,</span> <span class="s1">&#39;other_entries_page&#39;</span><span class="p">),</span>
+<span class="p">))</span>
+<span class="k">def</span> <span class="nf">entry_index</span><span class="p">():</span>
+    <span class="o">...</span>
+</pre></div>
+</div>
+<p>This also supports serving different paginated objects with the same template.</p>
+<hr class="docutils" />
+<p><strong>New feature</strong>: ability to provide nested context variables in the
+<a class="reference internal" href="templatetags_reference.html#templatetags-paginate"><span class="std std-ref">paginate</span></a> and <a class="reference internal" href="templatetags_reference.html#templatetags-lazy-paginate"><span class="std std-ref">lazy_paginate</span></a> template
+tags, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">paginate</span> <span class="nv">entries.all</span> <span class="k">as</span> <span class="nv">myentries</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>The code above is basically equivalent to:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">with</span> <span class="nv">entries.all</span> <span class="k">as</span> <span class="nv">myentries</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="k">paginate</span> <span class="nv">myentries</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">endwith</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>In this case, and only in this case, the <cite>as</cite> argument is mandatory, and a
+<em>TemplateSyntaxError</em> will be raised if the variable name is missing.</p>
+<hr class="docutils" />
+<p><strong>New feature</strong>: the page list object returned by the
+<a class="reference internal" href="templatetags_reference.html#templatetags-get-pages"><span class="std std-ref">get_pages</span></a> template tag has been improved adding the
+following new methods:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="c">{# whether the page list contains more than one page #}</span>
+<span class="cp">{{</span> <span class="nv">pages.paginated</span> <span class="cp">}}</span>
+
+<span class="c">{# the 1-based index of the first item on the current page #}</span>
+<span class="cp">{{</span> <span class="nv">pages.current_start_index</span> <span class="cp">}}</span>
+
+<span class="c">{# the 1-based index of the last item on the current page #}</span>
+<span class="cp">{{</span> <span class="nv">pages.current_end_index</span> <span class="cp">}}</span>
+
+<span class="c">{# the total number of objects, across all pages #}</span>
+<span class="cp">{{</span> <span class="nv">pages.total_count</span> <span class="cp">}}</span>
+
+<span class="c">{# the first page represented as an arrow #}</span>
+<span class="cp">{{</span> <span class="nv">pages.first_as_arrow</span> <span class="cp">}}</span>
+
+<span class="c">{# the last page represented as an arrow #}</span>
+<span class="cp">{{</span> <span class="nv">pages.last_as_arrow</span> <span class="cp">}}</span>
+</pre></div>
+</div>
+<p>In the <em>arrow</em> representation, the page label defaults to <code class="docutils literal"><span class="pre">&lt;&lt;</span></code> for the first
+page and to <code class="docutils literal"><span class="pre">&gt;&gt;</span></code> for the last one. As a consequence, the labels of the
+previous and next pages are now single brackets, respectively <code class="docutils literal"><span class="pre">&lt;</span></code> and <code class="docutils literal"><span class="pre">&gt;</span></code>.
+First and last pages&#8217; labels can be customized using
+<code class="docutils literal"><span class="pre">settings.ENDLESS_PAGINATION_FIRST_LABEL</span></code> and
+<code class="docutils literal"><span class="pre">settings.ENDLESS_PAGINATION_LAST_LABEL</span></code>: see <a class="reference internal" href="customization.html"><span class="doc">Customization</span></a>.</p>
+<hr class="docutils" />
+<p><strong>New feature</strong>: The sequence returned by the callable
+<code class="docutils literal"><span class="pre">settings.ENDLESS_PAGINATION_PAGE_LIST_CALLABLE</span></code> can now contain two new
+values:</p>
+<ul class="simple">
+<li><em>&#8216;first&#8217;</em>: will display the first page as an arrow;</li>
+<li><em>&#8216;last&#8217;</em>: will display the last page as an arrow.</li>
+</ul>
+<p>The <a class="reference internal" href="templatetags_reference.html#templatetags-show-pages"><span class="std std-ref">show_pages</span></a> template tag documentation describes how to
+customize Digg-style pagination defining your own page list callable.</p>
+<p>When using the default Digg-style pagination (i.e. when
+<code class="docutils literal"><span class="pre">settings.ENDLESS_PAGINATION_PAGE_LIST_CALLABLE</span></code> is set to <em>None</em>), it is
+possible to enable first / last page arrows by setting the new flag
+<code class="docutils literal"><span class="pre">settings.ENDLESS_PAGINATION_DEFAULT_CALLABLE_ARROWS</span></code> to <em>True</em>.</p>
+<hr class="docutils" />
+<p><strong>New feature</strong>: <code class="docutils literal"><span class="pre">settings.ENDLESS_PAGINATION_PAGE_LIST_CALLABLE</span></code> can now be
+either a callable or a <strong>dotted path</strong> to a callable, e.g.:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ENDLESS_PAGINATION_PAGE_LIST_CALLABLE</span> <span class="o">=</span> <span class="s1">&#39;path.to.callable&#39;</span>
+</pre></div>
+</div>
+<p>In addition to the default, <code class="docutils literal"><span class="pre">endless_pagination.utils.get_page_numbers</span></code>, an
+alternative implementation is now available:
+<code class="docutils literal"><span class="pre">endless_pagination.utils.get_elastic_page_numbers</span></code>. It adapts its output
+to the number of pages, making it arguably more usable when there are many
+of them. To enable it, add the following line to your <code class="docutils literal"><span class="pre">settings.py</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ENDLESS_PAGINATION_PAGE_LIST_CALLABLE</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s1">&#39;endless_pagination.utils.get_elastic_page_numbers&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><strong>New feature</strong>: ability to create a development and testing environment
+(see <a class="reference internal" href="contributing.html"><span class="doc">Contributing</span></a>).</p>
+<hr class="docutils" />
+<p><strong>New feature</strong>: in addition to the ability to provide a customized pagination
+URL as a context variable, the <a class="reference internal" href="templatetags_reference.html#templatetags-paginate"><span class="std std-ref">paginate</span></a> and
+<a class="reference internal" href="templatetags_reference.html#templatetags-lazy-paginate"><span class="std std-ref">lazy_paginate</span></a> tags now support hardcoded pagination URL
+endpoints, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">paginate</span> <span class="m">20</span> <span class="nv">entries</span> <span class="k">with</span> <span class="s2">&quot;/mypage/&quot;</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><strong>New feature</strong>: ability to specify negative indexes as values for the
+<code class="docutils literal"><span class="pre">starting</span> <span class="pre">from</span> <span class="pre">page</span></code> argument of the <a class="reference internal" href="templatetags_reference.html#templatetags-paginate"><span class="std std-ref">paginate</span></a> template
+tag.</p>
+<p>When changing the default page, it is now possible to reference the last page
+(or the second last page, and so on) by using negative indexes, e.g:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">paginate</span> <span class="nv">entries</span> <span class="nv">starting</span> <span class="nv">from</span> <span class="nv">page</span> <span class="o">-</span><span class="m">1</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="templatetags_reference.html"><span class="doc">Templatetags reference</span></a>.</p>
+<hr class="docutils" />
+<p><strong>Documentation</strong>: general clean up.</p>
+<hr class="docutils" />
+<p><strong>Documentation</strong>: added a <a class="reference internal" href="contributing.html"><span class="doc">Contributing</span></a> page. Have a look!</p>
+<hr class="docutils" />
+<p><strong>Documentation</strong>: included a comprehensive <a class="reference internal" href="javascript.html"><span class="doc">JavaScript reference</span></a>.</p>
+<hr class="docutils" />
+<p><strong>Fix</strong>: <code class="docutils literal"><span class="pre">endless_pagination.views.AjaxListView</span></code> no longer subclasses
+<code class="docutils literal"><span class="pre">django.views.generic.list.ListView</span></code>. Instead, the base objects and
+mixins composing the final view are now defined by this app.</p>
+<p>This change eliminates the ambiguity of having two separate pagination
+machineries in place: the Django Endless Pagination one and the built-in
+Django <code class="docutils literal"><span class="pre">ListView</span></code> one.</p>
+<hr class="docutils" />
+<p><strong>Fix</strong>: the <em>using</em> argument of <a class="reference internal" href="templatetags_reference.html#templatetags-paginate"><span class="std std-ref">paginate</span></a> and
+<a class="reference internal" href="templatetags_reference.html#templatetags-lazy-paginate"><span class="std std-ref">lazy_paginate</span></a> template tags now correctly handles
+querystring keys containing dashes, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">lazy_paginate</span> <span class="nv">entries</span> <span class="nv">using</span> <span class="s2">&quot;entries-page&quot;</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><strong>Fix</strong>: replaced namespace <code class="docutils literal"><span class="pre">endless_pagination.paginator</span></code> with
+<code class="docutils literal"><span class="pre">endless_pagination.paginators</span></code>: the module contains more than one
+paginator classes.</p>
+<hr class="docutils" />
+<p><strong>Fix</strong>: in some corner cases, loading <code class="docutils literal"><span class="pre">endless_pagination.models</span></code> raised
+an <em>ImproperlyConfigured</em> error while trying to pre-load the templates.</p>
+<hr class="docutils" />
+<p><strong>Fix</strong>: replaced doctests with proper unittests. Improved the code coverage
+as a consequence. Also introduced integration tests exercising JavaScript,
+based on Selenium.</p>
+<hr class="docutils" />
+<p><strong>Fix</strong>: overall code lint and clean up.</p>
+</div>
+<div class="section" id="version-1-1">
+<h2>Version 1.1<a class="headerlink" href="#version-1-1" title="Permalink to this headline">¶</a></h2>
+<p><strong>New feature</strong>: now it is possible to set the bottom margin used for
+pagination on scroll (default is 1 pixel).</p>
+<p>For example, if you want the pagination on scroll to be activated when
+20 pixels remain until the end of the page:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">endless_pagination/js/endless.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">endless_pagination/js/endless_on_scroll.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+
+<span class="c">{# add the lines below #}</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;utf-8&quot;</span><span class="p">&gt;</span>
+    <span class="kd">var</span> <span class="nx">endless_on_scroll_margin</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><strong>New feature</strong>: added ability to avoid Ajax requests when multiple pagination
+is used.</p>
+<p>A template for multiple pagination with Ajax support may look like this
+(see <a class="reference internal" href="multiple_pagination.html"><span class="doc">Multiple paginations in the same page</span></a>):</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">endless_pagination/js/endless.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+
+<span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="s2">&quot;myapp/entries_page.html&quot;</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Other entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="s2">&quot;myapp/other_entries_page.html&quot;</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>But what if you need Ajax pagination for <em>entries</em> but not for <em>other entries</em>?
+You will only have to add a class named <code class="docutils literal"><span class="pre">endless_page_skip</span></code> to the
+page container element, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Other entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template endless_page_skip&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="s2">&quot;myapp/other_entries_page.html&quot;</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><strong>New feature</strong>: implemented a class-based generic view allowing
+Ajax pagination of a list of objects (usually a queryset).</p>
+<p>Intended as a substitution of <em>django.views.generic.ListView</em>, it recreates
+the behaviour of the <em>page_template</em> decorator.</p>
+<p>For a complete explanation, see <a class="reference internal" href="generic_views.html"><span class="doc">Generic views</span></a>.</p>
+<hr class="docutils" />
+<p><strong>Fix</strong>: the <code class="docutils literal"><span class="pre">page_template</span></code> and <code class="docutils literal"><span class="pre">page_templates</span></code> decorators no longer
+hide the original view name and docstring (<em>update_wrapper</em>).</p>
+<hr class="docutils" />
+<p><strong>Fix</strong>: pagination on scroll now works on Firefox &gt;= 4.</p>
+<hr class="docutils" />
+<p><strong>Fix</strong>: tests are now compatible with Django 1.3.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#version-3-2-0">Version 3.2.0</a></li>
+<li><a class="reference internal" href="#version-3-1-0">Version 3.1.0</a></li>
+<li><a class="reference internal" href="#version-3-0-0">Version 3.0.0</a></li>
+<li><a class="reference internal" href="#version-2-1-1">Version 2.1.1</a></li>
+<li><a class="reference internal" href="#version-2-1-0">Version 2.1.0</a></li>
+<li><a class="reference internal" href="#version-2-0">Version 2.0</a></li>
+<li><a class="reference internal" href="#version-1-1">Version 1.1</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Django EL(Endless) Pagination</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="start.html"
+                        title="next chapter">Getting started</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/changelog.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="start.html" title="Getting started"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Django EL(Endless) Pagination"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2009-2017, Oleksandr Shtalinberg and Francesco Banconi.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+    </div>
+  </body>
+</html>

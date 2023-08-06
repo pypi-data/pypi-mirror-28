@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Customization &#8212; Django EL(Endless) Pagination 3.0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing" href="contributing.html" />
+    <link rel="prev" title="Generic views" href="generic_views.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="contributing.html" title="Contributing"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generic_views.html" title="Generic views"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="customization">
+<h1>Customization<a class="headerlink" href="#customization" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="settings">
+<h2>Settings<a class="headerlink" href="#settings" title="Permalink to this headline">¶</a></h2>
+<p>You can customize the application using <code class="docutils literal"><span class="pre">settings.py</span></code>.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="8%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_PER_PAGE</span></code></td>
+<td>10</td>
+<td>How many objects are normally displayed
+in a page (overwriteable by templatetag).</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_PAGE_LABEL</span></code></td>
+<td>&#8216;page&#8217;</td>
+<td>The querystring key of the page number
+(e.g. <code class="docutils literal"><span class="pre">http://example.com?page=2</span></code>).</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_ORPHANS</span></code></td>
+<td>0</td>
+<td>See Django <em>Paginator</em> definition of orphans.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_LOADING</span></code></td>
+<td>&#8216;loading&#8217;</td>
+<td>If you use the default <code class="docutils literal"><span class="pre">show_more</span></code> template,
+here you can customize the content of the
+loader hidden element. HTML is safe here,
+e.g. you can show your pretty animated GIF
+<code class="docutils literal"><span class="pre">EL_PAGINATION_LOADING</span> <span class="pre">=</span> <span class="pre">&quot;&quot;&quot;&lt;img</span> <span class="pre">src=&quot;/static/img/loader</span> <span class="pre">.gif&quot;</span> <span class="pre">alt=&quot;loading&quot;</span> <span class="pre">/&gt;&quot;&quot;&quot;</span></code>.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_PREVIOUS_LABEL</span></code></td>
+<td>&#8216;&lt;&#8217;</td>
+<td>Default label for the <em>previous</em> page link.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_NEXT_LABEL</span></code></td>
+<td>&#8216;&gt;&#8217;</td>
+<td>Default label for the <em>next</em> page link.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_FIRST_LABEL</span></code></td>
+<td>&#8216;&lt;&lt;&#8217;</td>
+<td>Default label for the <em>first</em> page link.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_LAST_LABEL</span></code></td>
+<td>&#8216;&gt;&gt;&#8217;</td>
+<td>Default label for the <em>last</em> page link.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_ADD_NOFOLLOW</span></code></td>
+<td><em>False</em></td>
+<td>Set to <em>True</em> if your SEO alchemist
+wants search engines not to follow
+pagination links.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_PAGE_LIST_CALLABLE</span></code></td>
+<td><em>None</em></td>
+<td>Callable (or dotted path to a callable) that
+returns pages to be displayed.
+If <em>None</em>, a default callable is used;
+that produces <a class="reference internal" href="digg_pagination.html"><span class="doc">Digg-style pagination</span></a>.
+The applicationt provides also a callable
+producing elastic pagination:
+<code class="docutils literal"><span class="pre">EL_pagination.utils.get_elastic_page_numbers</span></code>.
+It adapts its output to the number of pages,
+making it arguably more usable when there are
+many of them.
+See <a class="reference internal" href="templatetags_reference.html"><span class="doc">Templatetags reference</span></a> for
+information about writing custom callables.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_DEFAULT_CALLABLE_EXTREMES</span></code></td>
+<td>3</td>
+<td>Default number of <em>extremes</em> displayed when
+<a class="reference internal" href="digg_pagination.html"><span class="doc">Digg-style pagination</span></a> is used with the
+default callable.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_DEFAULT_CALLABLE_AROUNDS</span></code></td>
+<td>2</td>
+<td>Default number of <em>arounds</em> displayed when
+<a class="reference internal" href="digg_pagination.html"><span class="doc">Digg-style pagination</span></a> is used with the
+default callable.</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_DEFAULT_CALLABLE_ARROWS</span></code></td>
+<td><em>False</em></td>
+<td>Whether or not the first and last pages arrows
+are displayed when <a class="reference internal" href="digg_pagination.html"><span class="doc">Digg-style pagination</span></a> is
+used with the default callable.</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_TEMPLATE_VARNAME</span></code></td>
+<td>&#8216;template&#8217;</td>
+<td>Template variable name used by the
+<code class="docutils literal"><span class="pre">page_template</span></code> decorator. You can change
+this value if you are going to decorate
+generic views using a different variable name
+for the template (e.g. <code class="docutils literal"><span class="pre">template_name</span></code>).</td>
+</tr>
+<tr class="row-even"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_PAGE_OUT_OF_RANGE_404</span></code></td>
+<td><em>False</em></td>
+<td>If True on page out of range, throw a 404
+exception, otherwise display the first page.
+There is a view that maintains the original
+functionality but sets the 404 status code
+found in el_pagination\views.py</td>
+</tr>
+<tr class="row-odd"><td><code class="docutils literal"><span class="pre">EL_PAGINATION_USE_NEXT_PREVIOUS_LINKS</span></code></td>
+<td><em>False</em></td>
+<td>Add <cite>is_previous</cite> &amp; <cite>is_next</cite> flags
+for <cite>previous</cite> and <cite>next</cite> pages</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="templates-and-css">
+<h2>Templates and CSS<a class="headerlink" href="#templates-and-css" title="Permalink to this headline">¶</a></h2>
+<p>You can override the default template for <code class="docutils literal"><span class="pre">show_more</span></code> templatetag following
+some rules:</p>
+<ul class="simple">
+<li><em>more</em> link is shown only if the variable <code class="docutils literal"><span class="pre">querystring</span></code> is not False;</li>
+<li>the container (most external html element) class is <em>endless_container</em>;</li>
+<li>the <em>more</em> link and the loader hidden element live inside the container;</li>
+<li>the <em>more</em> link class is <em>endless_more</em>;</li>
+<li>the <em>more</em> link data-el-querystring-key attribute is <code class="docutils literal"><span class="pre">{{</span> <span class="pre">querystring_key</span> <span class="pre">}}</span></code>;</li>
+<li>the loader hidden element class is <em>endless_loading</em>.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Customization</a><ul>
+<li><a class="reference internal" href="#settings">Settings</a></li>
+<li><a class="reference internal" href="#templates-and-css">Templates and CSS</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generic_views.html"
+                        title="previous chapter">Generic views</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="contributing.html"
+                        title="next chapter">Contributing</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/customization.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="contributing.html" title="Contributing"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generic_views.html" title="Generic views"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2009-2017, Oleksandr Shtalinberg and Francesco Banconi.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+    </div>
+  </body>
+</html>
