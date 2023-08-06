@@ -1,0 +1,169 @@
+UK Election IDs
+===============
+
+|Build Status| |Coverage Status|
+
+Create Democracy Club Election Identifiers.
+
+Democracy Club defines a specification for creating reproducible unique
+identifiers for elections in the UK. See our `reference
+definition <https://elections.democracyclub.org.uk/reference_definition>`__.
+If you are interested in independently producing identifiers which are
+compatible with those produced by our `Every
+Election <https://elections.democracyclub.org.uk/>`__ platform, this
+python package includes a builder object, slugging logic and validation
+rules for creating identifiers that conform to the spec.
+
+Installation
+------------
+
+.. code:: bash
+
+    pip install uk-election-ids
+
+Platform Support
+----------------
+
+``uk-election-ids`` is tested under Python 3.4, 3.5 and 3.6
+
+Usage Examples
+--------------
+
+.. code:: python
+
+    >>> from uk_election_ids.election_ids import IdBuilder
+    >>> from datetime import date
+
+
+    # Chain method calls to build up an ID object
+    >>> myid = IdBuilder('local', date(2018, 5, 3))\
+    ...     .with_organisation('Test Org')\
+    ...     .with_division('Test Division')
+    # IdBuilder will deal with slugging strings for us
+    >>> myid.ballot_id
+    'local.test-org.test-division.2018-05-03'
+    >>> myid.ids
+    [
+        'local.2018-05-03',
+        'local.test-org.2018-05-03',
+        'local.test-org.test-division.2018-05-03'
+    ]
+
+
+    # IdBuilder only allows values defined in the Reference Definition
+    >>> myid = IdBuilder('gla', date(2018, 5, 3)).with_subtype('x')
+    ValueError: Allowed values for subtype are ('c', 'a')
+
+
+    # Group IDs can be created with partial information
+    >>> myid = IdBuilder('local', date(2018, 5, 3)).with_organisation('Test Org')
+    >>> myid.election_group_id
+    'local.2018-05-03'
+    >>> myid.election_group_id
+    'local.2018-05-03'
+    >>> myid.ballot_id
+    ValueError: election_type local must have a division in order to create a ballot id
+
+
+    # A Group ID object can be used to create multiple ballot IDs
+    >>> divisions = ["area1", "area2", "area3"]
+    >>> org_id = IdBuilder('local', date(2018, 5, 3)).with_organisation('Test Org')
+    >>> [org_id.with_division(d).ballot_id for d in divisions]
+    [
+        'local.test-org.area1.2018-05-03',
+        'local.test-org.area2.2018-05-03',
+        'local.test-org.area3.2018-05-03'
+    ]
+
+API Documentation
+-----------------
+
+See the full `API
+Reference <https://github.com/DemocracyClub/uk-election-ids/blob/master/docs.txt>`__
+
+Data Sources
+------------
+
+Election Types and Subtypes
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Valid Election types and subtypes are defined in the `reference
+definition <https://elections.democracyclub.org.uk/reference_definition>`__.
+
+Organisation Names
+~~~~~~~~~~~~~~~~~~
+
+For compatibility, organisation segments must use official names.
+Organisation names can be sourced from `gov.uk
+registers <https://registers.cloudapps.digital/>`__. Short form versions
+of names should be used i.e: add an organisation segment with
+``myid.with_organisation('Birmingham')`` not
+``myid.with_organisation('Birmingham City Council')``
+
+-  `Local authorities in
+   England <https://local-authority-eng.register.gov.uk/>`__: use the
+   'name' column/key
+-  `Principal local authorities in
+   Wales <https://principal-local-authority.register.gov.uk/>`__: use
+   the 'name' column/key
+-  `Local authorities in
+   Scotland <https://local-authority-sct.register.gov.uk/>`__: use the
+   'name' column/key
+-  TBC: source for Northern Ireland
+
+Alternatively organisation names can be sourced from the `Every Election
+API <https://elections.democracyclub.org.uk/api/organisations/>`__. Use
+the ``common_name`` key.
+
+Division Names
+~~~~~~~~~~~~~~
+
+For compatibility, division segments must use official names. For
+boundaries that are already in use, names of parliamentary
+constituencies, district wards and county electoral divisions should be
+sourced from `OS Boundary
+Line <https://www.ordnancesurvey.co.uk/business-and-government/products/boundary-line.html>`__.
+New boundaries must be extracted from legislation. We also maintain a
+`parser <https://github.com/DemocracyClub/eco-parser>`__ which can help
+with extracting this data from Electoral Change Orders.
+
+Licensing
+---------
+
+``uk-election-ids`` is made available under the MIT License.
+
+Support
+-------
+
+To report a bug, `raise an
+issue <https://github.com/DemocracyClub/uk-election-ids/issues>`__. If
+you are using election identifiers, `join our
+slack <https://slack.democracyclub.org.uk/>`__ to ask questions or tell
+us about your project.
+
+Development
+-----------
+
+Run the tests locally:
+
+.. code:: bash
+
+    ./run_tests.py
+
+Build locally:
+
+.. code:: bash
+
+    sudo apt-get install pandoc
+    ./build.sh
+
+Rebuild the API docs:
+
+.. code:: bash
+
+    pydoc uk_election_ids.election_ids.IdBuilder > docs.txt
+
+.. |Build Status| image:: https://travis-ci.org/DemocracyClub/uk-election-ids.svg?branch=master
+   :target: https://travis-ci.org/DemocracyClub/uk-election-ids
+.. |Coverage Status| image:: https://coveralls.io/repos/github/DemocracyClub/uk-election-ids/badge.svg?branch=master
+   :target: https://coveralls.io/github/DemocracyClub/uk-election-ids?branch=master
