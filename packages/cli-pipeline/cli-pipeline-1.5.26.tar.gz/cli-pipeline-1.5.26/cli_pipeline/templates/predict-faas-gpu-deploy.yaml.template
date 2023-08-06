@@ -1,0 +1,60 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    faas_function: {{ PIPELINE_IMAGE_REGISTRY_NAMESPACE }}-{{ PIPELINE_MODEL_NAME }}-{{ PIPELINE_MODEL_TAG }}
+  name: {{ PIPELINE_IMAGE_REGISTRY_NAMESPACE }}-{{ PIPELINE_MODEL_NAME }}-{{ PIPELINE_MODEL_TAG }}
+  namespace: {{ PIPELINE_MODEL_NAMESPACE }}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      faas_function: {{ PIPELINE_IMAGE_REGISTRY_NAMESPACE }}-{{ PIPELINE_MODEL_NAME }}-{{ PIPELINE_MODEL_TAG }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: {{ PIPELINE_IMAGE_REGISTRY_NAMESPACE }}-{{ PIPELINE_MODEL_NAME }}
+        # Note:  'tag' is used by PipelineAI, 'version' is used by Istio.
+        #        for now, keep these together - and keep them the same value
+        name: {{ PIPELINE_MODEL_NAME }}
+        tag: "{{ PIPELINE_MODEL_TAG }}"
+        version: "{{ PIPELINE_MODEL_TAG }}"
+        faas_function: {{ PIPELINE_IMAGE_REGISTRY_NAMESPACE }}-{{ PIPELINE_MODEL_NAME }}-{{ PIPELINE_MODEL_TAG }}
+      name: {{ PIPELINE_IMAGE_REGISTRY_NAMESPACE }}-{{ PIPELINE_MODEL_NAME }}-{{ PIPELINE_MODEL_TAG }}
+      namespace: {{ PIPELINE_MODEL_NAMESPACE }}
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "9040"
+    spec:
+      containers:
+      - image: {{ PIPELINE_IMAGE_REGISTRY_URL }}/{{ PIPELINE_IMAGE_REGISTRY_REPO }}/{{ PIPELINE_IMAGE_REGISTRY_NAMESPACE }}-{{ PIPELINE_MODEL_NAME }}:{{ PIPELINE_MODEL_TAG }} 
+        imagePullPolicy: Always
+        resources:
+          limits:
+            alpha.kubernetes.io/nvidia-gpu: 1
+        volumeMounts:
+        - mountPath: /usr/local/cuda
+          name: cuda
+          readOnly: true
+        - mountPath: /rootfs/usr/lib
+          name: rootfs-usr-lib
+          readOnly: true
+        name: {{ PIPELINE_IMAGE_REGISTRY_NAMESPACE }}-{{ PIPELINE_MODEL_NAME }}-{{ PIPELINE_MODEL_TAG }}
+        ports:
+        - containerPort: 8080
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      volumes:
+      - hostPath:
+          path: /usr/local/cuda
+        name: cuda
+      - hostPath:
+          path: /usr/lib
+        name: rootfs-usr-lib
