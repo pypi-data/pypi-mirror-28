@@ -1,0 +1,280 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pymodis.qualitymodis &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<link rel="stylesheet" href="../../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pymodis.qualitymodis</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#  class to convert/process modis data</span>
+<span class="c1">#</span>
+<span class="c1">#  (c) Copyright Ingmar Nitze 2013</span>
+<span class="c1">#  Authors: Ingmar Nitze, Luca Delucchi</span>
+<span class="c1">#  Email: initze at ucc dot ie</span>
+<span class="c1">#  Email: luca dot delucchi at iasma dot it</span>
+<span class="c1">#</span>
+<span class="c1">##################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#  This MODIS Python class is licensed under the terms of GNU GPL 2.</span>
+<span class="c1">#  This program is free software; you can redistribute it and/or</span>
+<span class="c1">#  modify it under the terms of the GNU General Public License as</span>
+<span class="c1">#  published by the Free Software Foundation; either version 2 of</span>
+<span class="c1">#  the License, or (at your option) any later version.</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span>
+<span class="c1">#  See the GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">##################################################################</span>
+<span class="sd">&quot;&quot;&quot;A class for the extraction and transformation of MODIS quality layers to</span>
+<span class="sd">specific information</span>
+
+<span class="sd">Classes:</span>
+
+<span class="sd">* :class:`QualityModis`</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># python 2 and 3 compatibility</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">dict</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;Numpy library not found, please install it&#39;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">osgeo.gdal</span> <span class="k">as</span> <span class="nn">gdal</span>
+    <span class="kn">import</span> <span class="nn">osgeo.gdal_array</span> <span class="k">as</span> <span class="nn">gdal_array</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">gdal</span>
+        <span class="kn">import</span> <span class="nn">gdal_array</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;Python GDAL library not found, please install &#39;</span>
+                          <span class="s1">&#39;python-gdal&#39;</span><span class="p">)</span>
+
+
+<span class="n">VALIDTYPES</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">({</span><span class="s1">&#39;13&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">)))),</span> <span class="s1">&#39;11&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">))))})</span>
+
+<span class="n">PRODUCTPROPS</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">({</span>
+    <span class="s1">&#39;MOD13Q1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD13Q1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MOD13A1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD13A1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MOD13A2&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD13A2&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MOD13A3&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD13A3&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MOD13C1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD13C1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MOD13C2&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD13C2&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp1&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MOD11A1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp2&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD11A1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp2&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MOD11A2&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp4&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp4&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD11A2&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp4&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp4&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MOD11B1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp3&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD11B1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp3&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MOD11C1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp3&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD11C1&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp3&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MOD11C2&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp2&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD11C2&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp2&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MOD11C3&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp2&#39;</span><span class="p">]),</span>
+    <span class="s1">&#39;MYD11C3&#39;</span><span class="p">:</span> <span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;QAGrp2&#39;</span><span class="p">,</span> <span class="s1">&#39;QAGrp2&#39;</span><span class="p">])</span>
+<span class="p">})</span>
+
+
+<span class="n">QAindices</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">({</span>
+    <span class="s1">&#39;QAGrp1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="p">[[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">9</span><span class="p">,</span> <span class="o">-</span><span class="mi">8</span><span class="p">],</span>
+               <span class="p">[</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">9</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">11</span><span class="p">,</span> <span class="o">-</span><span class="mi">10</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">14</span><span class="p">,</span> <span class="o">-</span><span class="mi">11</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="o">-</span><span class="mi">14</span><span class="p">],</span>
+               <span class="p">[</span><span class="o">-</span><span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">]]),</span>
+    <span class="s1">&#39;QAGrp2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="p">[[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">],</span>
+               <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">]]),</span>
+    <span class="s1">&#39;QAGrp3&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="p">[[</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">]]),</span>
+    <span class="s1">&#39;QAGrp4&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="p">[[</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">6</span><span class="p">,</span> <span class="o">-</span><span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="o">-</span><span class="mi">8</span><span class="p">,</span> <span class="o">-</span><span class="mi">6</span><span class="p">]])</span>
+<span class="p">})</span>
+
+
+<div class="viewcode-block" id="QualityModis"><a class="viewcode-back" href="../../pymodis/qualitymodis.html#pymodis.qualitymodis.QualityModis">[docs]</a><span class="k">class</span> <span class="nc">QualityModis</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;A Class for the extraction and transformation of MODIS</span>
+<span class="sd">    quality layers to specific information</span>
+
+<span class="sd">    :param str infile: the full path to the hdf file</span>
+<span class="sd">    :param str outfile: the full path to the parameter file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">infile</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">qType</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">qLayer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pType</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to initialize the object&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">infile</span> <span class="o">=</span> <span class="n">infile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outfile</span> <span class="o">=</span> <span class="n">outfile</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qType</span> <span class="o">=</span> <span class="n">qType</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qLayer</span> <span class="o">=</span> <span class="n">qLayer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qaGroup</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pType</span> <span class="o">=</span> <span class="n">pType</span>
+
+<div class="viewcode-block" id="QualityModis.loadData"><a class="viewcode-back" href="../../pymodis/qualitymodis.html#pymodis.qualitymodis.QualityModis.loadData">[docs]</a>    <span class="k">def</span> <span class="nf">loadData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;loads the input file to the object&quot;&quot;&quot;</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">infile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">infile</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QualityModis.setProductType"><a class="viewcode-back" href="../../pymodis/qualitymodis.html#pymodis.qualitymodis.QualityModis.setProductType">[docs]</a>    <span class="k">def</span> <span class="nf">setProductType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;read productType from Metadata of hdf file&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pType</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">productType</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">GetMetadata</span><span class="p">()[</span><span class="s1">&#39;SHORTNAME&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">productType</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pType</span></div>
+
+<div class="viewcode-block" id="QualityModis.setProductGroup"><a class="viewcode-back" href="../../pymodis/qualitymodis.html#pymodis.qualitymodis.QualityModis.setProductGroup">[docs]</a>    <span class="k">def</span> <span class="nf">setProductGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;read productGroup from Metadata of hdf file&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">productGroup</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">productType</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="QualityModis.setQAGroup"><a class="viewcode-back" href="../../pymodis/qualitymodis.html#pymodis.qualitymodis.QualityModis.setQAGroup">[docs]</a>    <span class="k">def</span> <span class="nf">setQAGroup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;set QA dataset group type&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">productType</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">PRODUCTPROPS</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">qaGroup</span> <span class="o">=</span> <span class="n">PRODUCTPROPS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">productType</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qLayer</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Product version is currently not supported!&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QualityModis.setQALayer"><a class="viewcode-back" href="../../pymodis/qualitymodis.html#pymodis.qualitymodis.QualityModis.setQALayer">[docs]</a>    <span class="k">def</span> <span class="nf">setQALayer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;function sets the input path of the designated QA layer&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qaLayer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ds</span><span class="o">.</span><span class="n">GetSubDatasets</span><span class="p">()[</span><span class="n">PRODUCTPROPS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">productType</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qLayer</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="QualityModis.loadQAArray"><a class="viewcode-back" href="../../pymodis/qualitymodis.html#pymodis.qualitymodis.QualityModis.loadQAArray">[docs]</a>    <span class="k">def</span> <span class="nf">loadQAArray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;loads the QA layer to the object&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qaArray</span> <span class="o">=</span> <span class="n">gdal_array</span><span class="o">.</span><span class="n">LoadFile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qaLayer</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QualityModis.qualityConvert"><a class="viewcode-back" href="../../pymodis/qualitymodis.html#pymodis.qualitymodis.QualityModis.qualityConvert">[docs]</a>    <span class="k">def</span> <span class="nf">qualityConvert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modisQaValue</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;converts encoded Bit-Field values to designated QA information&quot;&quot;&quot;</span>
+        <span class="n">startindex</span> <span class="o">=</span> <span class="n">QAindices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">qaGroup</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qType</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">endindex</span> <span class="o">=</span> <span class="n">QAindices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">qaGroup</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qType</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">binary_repr</span><span class="p">(</span><span class="n">modisQaValue</span><span class="p">,</span> <span class="n">QAindices</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">qaGroup</span><span class="p">][</span><span class="mi">0</span><span class="p">])[</span><span class="n">startindex</span><span class="p">:</span> <span class="n">endindex</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="QualityModis.exportData"><a class="viewcode-back" href="../../pymodis/qualitymodis.html#pymodis.qualitymodis.QualityModis.exportData">[docs]</a>    <span class="k">def</span> <span class="nf">exportData</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;writes calculated QA values to physical .tif file&quot;&quot;&quot;</span>
+        <span class="n">qaDS</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qaLayer</span><span class="p">)</span>
+        <span class="n">dr</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s1">&#39;GTiff&#39;</span><span class="p">)</span>
+        <span class="n">outds</span> <span class="o">=</span> <span class="n">dr</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outfile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nrows</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span><span class="p">)</span>
+        <span class="n">outds</span><span class="o">.</span><span class="n">SetProjection</span><span class="p">(</span><span class="n">qaDS</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">())</span>
+        <span class="n">outds</span><span class="o">.</span><span class="n">SetGeoTransform</span><span class="p">(</span><span class="n">qaDS</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">())</span>
+        <span class="n">outds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">WriteArray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qaOut</span><span class="p">)</span>
+        <span class="n">outds</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">qaDS</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="QualityModis.run"><a class="viewcode-back" href="../../pymodis/qualitymodis.html#pymodis.qualitymodis.QualityModis.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function defines the entire process&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loadData</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setProductType</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setProductGroup</span><span class="p">()</span>
+        <span class="c1">#self.setDSversion()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setQAGroup</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setQALayer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loadQAArray</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nrows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qaArray</span><span class="o">.</span><span class="n">shape</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Conversion started !&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qaOut</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qaArray</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">productGroup</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;11&#39;</span><span class="p">,</span> <span class="s1">&#39;13&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">qType</span> <span class="ow">in</span> <span class="n">VALIDTYPES</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">productGroup</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">qaGroup</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qaArray</span><span class="p">):</span>
+                <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qaArray</span> <span class="o">==</span> <span class="n">val</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">qaOut</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qualityConvert</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">qaArray</span><span class="p">[</span><span class="n">ind</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exportData</span><span class="p">()</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Export finished!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;This MODIS type is currently not supported.&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>

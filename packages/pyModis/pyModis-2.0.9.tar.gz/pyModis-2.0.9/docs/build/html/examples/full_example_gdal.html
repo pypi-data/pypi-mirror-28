@@ -1,0 +1,192 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Example of a full process with GDAL library &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Example reproject data with MRT" href="full_example_mrt.html" />
+    <link rel="prev" title="Examples" href="examples.html" />
+<link rel="stylesheet" href="../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="full_example_mrt.html" title="Example reproject data with MRT"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="examples.html" accesskey="U">Examples</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Example of a full process with GDAL library</a><ul>
+<li><a class="reference internal" href="#downloading-data">Downloading data</a></li>
+<li><a class="reference internal" href="#mosaic-data">Mosaic data</a></li>
+<li><a class="reference internal" href="#convert-data">Convert data</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="previous chapter">Examples</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="full_example_mrt.html"
+                        title="next chapter">Example reproject data with MRT</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="example-of-a-full-process-with-gdal-library">
+<h1>Example of a full process with GDAL library<a class="headerlink" href="#example-of-a-full-process-with-gdal-library" title="Permalink to this headline">¶</a></h1>
+<p>In this short example you will learn how to run a series of
+scripts to obtain a GeoTIFF file for each band of the
+chosen product using as backend GDAL library.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This example is based on a Linux based system. If you use
+another operating system you need to change the paths where data will be saved</p>
+</div>
+<div class="section" id="downloading-data">
+<span id="download-data"></span><h2>Downloading data<a class="headerlink" href="#downloading-data" title="Permalink to this headline">¶</a></h2>
+<p>For first you need to obtain data, so you need to use <a class="reference internal" href="../scripts/modis_download.html"><span class="doc">modis_download.py</span></a></p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Remember to register in the NASA portal following the instructions at <a class="reference internal" href="../info.html#userpw-label"><span class="std std-ref">User and password</span></a> session</p>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span>mkdir $HOME/tmp
+modis_download.py -I -f 2012-12-05 -O -t h28v05,h29v05,h28v04 $HOME/tmp
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p>In this example we are working on the spatial extent of Italy:
+for your area of interest, change the tile name(s) according to your region.</p>
+<p>User and password are passed through standard input.</p>
+<p class="last">We are going to download data for only one day (2012-12-05) using the option “-O”.</p>
+</div>
+<p>Inside the <code class="docutils literal"><span class="pre">$HOME/tmp/</span></code> directory you will find a file called <em>listfileMOD11A1.005.txt</em>
+containing the names of downloaded files. The name of file is related to
+the product that you want to download.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Every time that you download new files of the same product they will be overwritten,
+so if you need them, you must rename the file before.</p>
+</div>
+</div>
+<div class="section" id="mosaic-data">
+<h2>Mosaic data<a class="headerlink" href="#mosaic-data" title="Permalink to this headline">¶</a></h2>
+<p>At this point you need to create the mosaic of the tiles downloaded.
+<a class="reference internal" href="../scripts/modis_mosaic.html"><span class="doc">modis_mosaic.py</span></a> is the script to use. We create a <em>VRT</em>
+file (<code class="docutils literal"><span class="pre">flag</span> <span class="pre">-v</span></code>) to improve the speed of analysis, without losing any data
+only for the first layer</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>modis_mosaic.py -s &quot;1&quot; -o $HOME/tmp/mosaic -v $HOME/tmp/listfileMOD11A1.005.txt
+</pre></div>
+</div>
+<p>The command will create a file called <code class="docutils literal"><span class="pre">mosaic_LST_Day_1km.vrt</span></code> in $HOME/tmp/
+directory</p>
+</div>
+<div class="section" id="convert-data">
+<h2>Convert data<a class="headerlink" href="#convert-data" title="Permalink to this headline">¶</a></h2>
+<p>The last part of the procedure is to convert the mosaic using
+<a class="reference internal" href="../scripts/modis_convert.html"><span class="doc">modis_convert.py</span></a>. Using <em>VRT</em> format it create dataset
+of only one later, so you are forced to use <code class="docutils literal"><span class="pre">-s</span> <span class="pre">&quot;(</span> <span class="pre">1</span> <span class="pre">)&quot;</span></code>. The
+following command create a GeoTIFF file called
+final_mosaic_LST_Day_1km.vrt.tif</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>modis_convert.py -v -s &quot;( 1 )&quot; -o $HOME/tmp/final -e 4326 $HOME/tmp/mosaic_LST_Day_1km.vrt
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="full_example_mrt.html" title="Example reproject data with MRT"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="Examples"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="examples.html" >Examples</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>

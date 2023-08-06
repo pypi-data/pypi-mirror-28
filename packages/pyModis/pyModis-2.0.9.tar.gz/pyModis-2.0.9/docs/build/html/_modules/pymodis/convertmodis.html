@@ -1,0 +1,349 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pymodis.convertmodis &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<link rel="stylesheet" href="../../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pymodis.convertmodis</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#  class to convert/process modis data</span>
+<span class="c1">#</span>
+<span class="c1">#  (c) Copyright Luca Delucchi 2010</span>
+<span class="c1">#  Authors: Luca Delucchi</span>
+<span class="c1">#  Email: luca dot delucchi at iasma dot it</span>
+<span class="c1">#</span>
+<span class="c1">##################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#  This MODIS Python class is licensed under the terms of GNU GPL 2.</span>
+<span class="c1">#  This program is free software; you can redistribute it and/or</span>
+<span class="c1">#  modify it under the terms of the GNU General Public License as</span>
+<span class="c1">#  published by the Free Software Foundation; either version 2 of</span>
+<span class="c1">#  the License, or (at your option) any later version.</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span>
+<span class="c1">#  See the GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">##################################################################</span>
+<span class="sd">&quot;&quot;&quot;Convert MODIS HDF file to GeoTiff file or create a HDF mosaic file for</span>
+<span class="sd">several tiles using Modis Reprojection Tools.</span>
+
+<span class="sd">Classes:</span>
+
+<span class="sd">* :class:`convertModis`</span>
+<span class="sd">* :class:`createMosaic`</span>
+<span class="sd">* :class:`processModis`</span>
+
+<span class="sd">Functions:</span>
+
+<span class="sd">* :func:`checkMRTpath`</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># python 2 and 3 compatibility</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+
+<div class="viewcode-block" id="checkMRTpath"><a class="viewcode-back" href="../../pymodis/convertmodis.html#pymodis.convertmodis.checkMRTpath">[docs]</a><span class="k">def</span> <span class="nf">checkMRTpath</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Function to check if MRT path it correct</span>
+
+<span class="sd">       :param str mrtpath: the path to MRT directory</span>
+<span class="sd">       :return: The path to &#39;bin&#39; and &#39;data&#39; directory inside MRT path</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">,</span> <span class="s1">&#39;bin&#39;</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{path}</span><span class="s2">:</span><span class="si">{data}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PATH&#39;</span><span class="p">],</span>
+                                                            <span class="n">data</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">))</span>
+            <span class="n">mrtpathbin</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">,</span> <span class="s1">&#39;bin&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The path </span><span class="si">{path}</span><span class="s1"> does not exist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">,</span> <span class="s1">&#39;bin&#39;</span><span class="p">)))</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)):</span>
+            <span class="n">mrtpathdata</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;MRTDATADIR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The path </span><span class="si">{path}</span><span class="s1"> does not exist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The path </span><span class="si">{name}</span><span class="s1"> does not exist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">mrtpath</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">mrtpathbin</span><span class="p">,</span> <span class="n">mrtpathdata</span></div>
+
+
+<div class="viewcode-block" id="convertModis"><a class="viewcode-back" href="../../pymodis/convertmodis.html#pymodis.convertmodis.convertModis">[docs]</a><span class="k">class</span> <span class="nc">convertModis</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class to convert modis data from hdf to tif using resample</span>
+<span class="sd">       (from MRT tools)</span>
+
+<span class="sd">       :param str hdfname: the full path to the hdf file</span>
+<span class="sd">       :param str confile: the full path to the paramater file</span>
+<span class="sd">       :param str mrtpath: the full path to mrt directory which contains</span>
+<span class="sd">                           the bin and data directories</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdfname</span><span class="p">,</span> <span class="n">confile</span><span class="p">,</span> <span class="n">mrtpath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialization function&quot;&quot;&quot;</span>
+        <span class="c1"># check if the hdf file exists</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">hdfname</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">hdfname</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1"> does not exist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">hdfname</span><span class="p">))</span>
+        <span class="c1"># check if confile exists</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">confile</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conf</span> <span class="o">=</span> <span class="n">confile</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1"> does not exist&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">confile</span><span class="p">))</span>
+        <span class="c1"># check if mrtpath and subdirectories exists and set environment</span>
+        <span class="c1"># variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mrtpathdata</span> <span class="o">=</span> <span class="n">checkMRTpath</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">)</span>
+
+<div class="viewcode-block" id="convertModis.executable"><a class="viewcode-back" href="../../pymodis/convertmodis.html#pymodis.convertmodis.convertModis.executable">[docs]</a>    <span class="k">def</span> <span class="nf">executable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the executable of resample MRT software&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;linux&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;darwin&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;resample&#39;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;resample&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;win32&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;resample.exe&#39;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;resample.exe&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;resample&#39;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;resample&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No possible to find MRT resample executable&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="convertModis.run"><a class="viewcode-back" href="../../pymodis/convertmodis.html#pymodis.convertmodis.convertModis.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Exec the convertion process&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">subprocess</span>
+        <span class="n">execut</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">executable</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">execut</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The path </span><span class="si">{name}</span><span class="s1"> does not exist: it could be an &#39;</span>
+                            <span class="s1">&#39;erroneus path or software&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">execut</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="n">execut</span><span class="p">,</span> <span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="p">])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The hdf file </span><span class="si">{name}</span><span class="s2"> was converted &quot;</span>
+                  <span class="s2">&quot;successfully&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+
+
+<div class="viewcode-block" id="createMosaic"><a class="viewcode-back" href="../../pymodis/convertmodis.html#pymodis.convertmodis.createMosaic">[docs]</a><span class="k">class</span> <span class="nc">createMosaic</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class to convert several MODIS tiles into a mosaic</span>
+
+<span class="sd">       :param str listfile: the path to file with the list of HDF MODIS</span>
+<span class="sd">                            file</span>
+<span class="sd">       :param str outprefix: the prefix for output files</span>
+<span class="sd">       :param str mrtpath: the full path to mrt directory which contains</span>
+<span class="sd">                           the bin and data directories</span>
+<span class="sd">       :param str subset: a string composed by 1 and 0 according with the</span>
+<span class="sd">                          layer to mosaic. The string should something like</span>
+<span class="sd">                          &#39;1 0 1 0 0 0 0&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listfile</span><span class="p">,</span> <span class="n">outprefix</span><span class="p">,</span> <span class="n">mrtpath</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to initialize the object&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">tempfile</span>
+        <span class="c1"># check if the hdf file exists</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">listfile</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">basepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">listfile</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fullpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listfiles</span> <span class="o">=</span> <span class="n">listfile</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tmplistfiles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempfile</span><span class="o">.</span><span class="n">gettempdir</span><span class="p">(),</span>
+                                                  <span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">.prm&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpid</span><span class="p">()))),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">HDFfiles</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">listfile</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{name}</span><span class="s1"> not exists&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">listfile</span><span class="p">))</span>
+        <span class="c1"># check if mrtpath and subdirectories exists and set environment</span>
+        <span class="c1"># variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mrtpathdata</span> <span class="o">=</span> <span class="n">checkMRTpath</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">,</span> <span class="n">outprefix</span> <span class="o">+</span> <span class="s1">&#39;.hdf&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">outxml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">+</span> <span class="s1">&#39;.xml&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span>
+
+<div class="viewcode-block" id="createMosaic.write_mosaic_xml"><a class="viewcode-back" href="../../pymodis/convertmodis.html#pymodis.convertmodis.createMosaic.write_mosaic_xml">[docs]</a>    <span class="k">def</span> <span class="nf">write_mosaic_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write the XML metadata file for MODIS mosaic&quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.parsemodis</span> <span class="k">import</span> <span class="n">parseModisMulti</span>
+        <span class="n">listHDF</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">HDFfiles</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">i</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;.hdf.xml&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Attention: maybe you do not have the full path in the&quot;</span>
+                      <span class="s2">&quot; HDF file list&quot;</span><span class="p">)</span>
+                <span class="n">listHDF</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tmplistfiles</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">basepath</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">())))</span>
+            <span class="k">elif</span> <span class="n">i</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;.hdf.xml&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">listHDF</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tmplistfiles</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fullpath</span><span class="p">,</span> <span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">())))</span>
+        <span class="n">pmm</span> <span class="o">=</span> <span class="n">parseModisMulti</span><span class="p">(</span><span class="n">listHDF</span><span class="p">)</span>
+        <span class="n">pmm</span><span class="o">.</span><span class="n">writexml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">outxml</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tmplistfiles</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="createMosaic.executable"><a class="viewcode-back" href="../../pymodis/convertmodis.html#pymodis.convertmodis.createMosaic.executable">[docs]</a>    <span class="k">def</span> <span class="nf">executable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the executable of mrtmosaic MRT software&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;linux&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;darwin&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;mrtmosaic&#39;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;mrtmosaic&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;win32&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;mrtmosaic.exe&#39;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;mrtmosaic.exe&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;mrtmosaic&#39;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;mrtmosaic&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;No possible to find MRT mrtmosaic executable&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="createMosaic.run"><a class="viewcode-back" href="../../pymodis/convertmodis.html#pymodis.convertmodis.createMosaic.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Exect the mosaic process&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">subprocess</span>
+        <span class="n">execut</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">executable</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">execut</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The path </span><span class="si">{name}</span><span class="s1"> does not exist, it could be an &#39;</span>
+                            <span class="s1">&#39;erroneus path or software&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">execut</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">write_mosaic_xml</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="n">execut</span><span class="p">,</span> <span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmplistfiles</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">,</span> <span class="s1">&#39;-s&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">],</span>
+                                 <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="n">execut</span><span class="p">,</span> <span class="s1">&#39;-i&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tmplistfiles</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span>
+                                 <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">],</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">STDOUT</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The mosaic file </span><span class="si">{name}</span><span class="s2"> has been &quot;</span>
+                  <span class="s2">&quot;created&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+
+
+<div class="viewcode-block" id="processModis"><a class="viewcode-back" href="../../pymodis/convertmodis.html#pymodis.convertmodis.processModis">[docs]</a><span class="k">class</span> <span class="nc">processModis</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class to process raw modis data from hdf to tif using swath2grid</span>
+<span class="sd">       (from MRT Swath tools)</span>
+
+<span class="sd">       :param str hdfname: the full path to the hdf file</span>
+<span class="sd">       :param str confile: the full path to the paramater file</span>
+<span class="sd">       :param str mrtpath: the full path to mrt directory which contains</span>
+<span class="sd">                           the bin and data directories</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdfname</span><span class="p">,</span> <span class="n">confile</span><span class="p">,</span> <span class="n">mrtpath</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to initialize the object&quot;&quot;&quot;</span>
+        <span class="c1"># check if the hdf file exists</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">hdfname</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">hdfname</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> does not exist&#39;</span> <span class="o">%</span> <span class="n">hdfname</span><span class="p">)</span>
+        <span class="c1"># check if confile exists</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">confile</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">conf</span> <span class="o">=</span> <span class="n">confile</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> does not exist&#39;</span> <span class="o">%</span> <span class="n">confile</span><span class="p">)</span>
+        <span class="c1"># check if mrtpath and subdirectories exists and set environment</span>
+        <span class="c1"># variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mrtpathdata</span> <span class="o">=</span> <span class="n">checkMRTpath</span><span class="p">(</span><span class="n">mrtpath</span><span class="p">)</span>
+
+<div class="viewcode-block" id="processModis.executable"><a class="viewcode-back" href="../../pymodis/convertmodis.html#pymodis.convertmodis.processModis.executable">[docs]</a>    <span class="k">def</span> <span class="nf">executable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the executable of resample MRT software&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;linux&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">or</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;darwin&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;swath2grid&#39;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;swath2grid&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;win32&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;swath2grid.exe&#39;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mrtpathbin</span><span class="p">,</span> <span class="s1">&#39;swath2grid.exe&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="processModis.run"><a class="viewcode-back" href="../../pymodis/convertmodis.html#pymodis.convertmodis.processModis.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Exec the convertion process&quot;&quot;&quot;</span>
+        <span class="kn">import</span> <span class="nn">subprocess</span>
+        <span class="n">execut</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">executable</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">execut</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;The path </span><span class="si">{name}</span><span class="s1"> does not exist, it could be an &#39;</span>
+                            <span class="s1">&#39;erroneus path or software&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">execut</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">call</span><span class="p">([</span><span class="n">execut</span><span class="p">,</span> <span class="s1">&#39;-pf=</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">conf</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The hdf file </span><span class="si">{name}</span><span class="s2"> has been &quot;</span>
+                  <span class="s2">&quot;converted&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>

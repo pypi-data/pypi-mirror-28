@@ -1,0 +1,333 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>convertmodis_gdal module &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="qualitymodis module" href="qualitymodis.html" />
+    <link rel="prev" title="convertmodis module" href="convertmodis.html" />
+<link rel="stylesheet" href="../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="qualitymodis.html" title="qualitymodis module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="convertmodis.html" title="convertmodis module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">pyModis Library</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="convertmodis.html"
+                        title="previous chapter"><code class="docutils literal"><span class="pre">convertmodis</span></code> module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="qualitymodis.html"
+                        title="next chapter"><code class="docutils literal"><span class="pre">qualitymodis</span></code> module</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pymodis.convertmodis_gdal">
+<span id="convertmodis-gdal-module"></span><h1><code class="xref py py-mod docutils literal"><span class="pre">convertmodis_gdal</span></code> module<a class="headerlink" href="#module-pymodis.convertmodis_gdal" title="Permalink to this headline">¶</a></h1>
+<p>Convert MODIS HDF file using GDAL Python bindings. It can create GeoTiff
+file (or other GDAL supported formats) or HDF mosaic file for several tiles.</p>
+<p>Classes:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#pymodis.convertmodis_gdal.file_info" title="pymodis.convertmodis_gdal.file_info"><code class="xref py py-class docutils literal"><span class="pre">file_info</span></code></a></li>
+<li><a class="reference internal" href="#pymodis.convertmodis_gdal.createMosaicGDAL" title="pymodis.convertmodis_gdal.createMosaicGDAL"><code class="xref py py-class docutils literal"><span class="pre">createMosaicGDAL</span></code></a></li>
+<li><a class="reference internal" href="#pymodis.convertmodis_gdal.convertModisGDAL" title="pymodis.convertmodis_gdal.convertModisGDAL"><code class="xref py py-class docutils literal"><span class="pre">convertModisGDAL</span></code></a></li>
+</ul>
+<p>Functions:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#pymodis.convertmodis_gdal.getResampling" title="pymodis.convertmodis_gdal.getResampling"><code class="xref py py-func docutils literal"><span class="pre">getResampling()</span></code></a></li>
+<li><a class="reference internal" href="#pymodis.convertmodis_gdal.raster_copy" title="pymodis.convertmodis_gdal.raster_copy"><code class="xref py py-func docutils literal"><span class="pre">raster_copy()</span></code></a></li>
+<li><a class="reference internal" href="#pymodis.convertmodis_gdal.raster_copy_with_nodata" title="pymodis.convertmodis_gdal.raster_copy_with_nodata"><code class="xref py py-func docutils literal"><span class="pre">raster_copy_with_nodata()</span></code></a></li>
+</ul>
+<dl class="class">
+<dt id="pymodis.convertmodis_gdal.convertModisGDAL">
+<em class="property">class </em><code class="descclassname">pymodis.convertmodis_gdal.</code><code class="descname">convertModisGDAL</code><span class="sig-paren">(</span><em>hdfname</em>, <em>prefix</em>, <em>subset</em>, <em>res</em>, <em>outformat='GTiff'</em>, <em>epsg=None</em>, <em>wkt=None</em>, <em>resampl='NEAREST_NEIGHBOR'</em>, <em>vrt=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#convertModisGDAL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.convertModisGDAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A class to convert modis data from hdf to GDAL formats using GDAL</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hdfname</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of input data</li>
+<li><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – prefix for output data</li>
+<li><strong>subset</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the subset to consider</li>
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – output resolution</li>
+<li><strong>outformat</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – output format, it is possible to use all the
+supported GDAL format</li>
+<li><strong>epsg</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – the EPSG code for the preojection of output file</li>
+<li><strong>wkt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the WKT string for the preojection of output file</li>
+<li><strong>resampl</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the resampling method to use</li>
+<li><strong>vrt</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – True to read GDAL VRT file created with
+createMosaicGDAL</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pymodis.convertmodis_gdal.convertModisGDAL.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>quiet=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#convertModisGDAL.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.convertModisGDAL.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reproject all the subset of chosen layer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.convertmodis_gdal.convertModisGDAL.run_vrt_separated">
+<code class="descname">run_vrt_separated</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#convertModisGDAL.run_vrt_separated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.convertModisGDAL.run_vrt_separated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reproject VRT created by createMosaicGDAL, function write_vrt with
+separated=True</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pymodis.convertmodis_gdal.createMosaicGDAL">
+<em class="property">class </em><code class="descclassname">pymodis.convertmodis_gdal.</code><code class="descname">createMosaicGDAL</code><span class="sig-paren">(</span><em>hdfnames</em>, <em>subset</em>, <em>outformat='HDF4Image'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#createMosaicGDAL"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.createMosaicGDAL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A class to mosaic modis data from hdf to GDAL formats using GDAL</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hdfnames</strong> (<em>list</em>) – a list containing the name of tile to mosaic</li>
+<li><strong>subset</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the subset of layer to consider</li>
+<li><strong>outformat</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the output format to use, this parameter is
+not used for the VRT output, supported values
+are HDF4Image, GTiff, HFA, and maybe something
+else not tested.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pymodis.convertmodis_gdal.createMosaicGDAL.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>output</em>, <em>quiet=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#createMosaicGDAL.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.createMosaicGDAL.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the mosaic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the name of output file</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.convertmodis_gdal.createMosaicGDAL.write_mosaic_xml">
+<code class="descname">write_mosaic_xml</code><span class="sig-paren">(</span><em>prefix</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#createMosaicGDAL.write_mosaic_xml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.createMosaicGDAL.write_mosaic_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the XML metadata file for MODIS mosaic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the prefix for the XML file containing metadata</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.convertmodis_gdal.createMosaicGDAL.write_vrt">
+<code class="descname">write_vrt</code><span class="sig-paren">(</span><em>output</em>, <em>separate=True</em>, <em>quiet=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#createMosaicGDAL.write_vrt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.createMosaicGDAL.write_vrt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write VRT file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>output</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the prefix of output file</li>
+<li><strong>separate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – True to write a VRT file for each band, False to
+write an unique file</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pymodis.convertmodis_gdal.file_info">
+<em class="property">class </em><code class="descclassname">pymodis.convertmodis_gdal.</code><code class="descname">file_info</code><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#file_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.file_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A class holding information about a GDAL file.</p>
+<p>Class copied from gdal_merge.py</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Name of file to read.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">1 on success or 0 if the file can’t be opened.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pymodis.convertmodis_gdal.file_info.copy_into">
+<code class="descname">copy_into</code><span class="sig-paren">(</span><em>t_fh</em>, <em>s_band=1</em>, <em>t_band=1</em>, <em>nodata_arg=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#file_info.copy_into"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.file_info.copy_into" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy this files image into target file.</p>
+<p>This method will compute the overlap area of the file_info objects
+file, and the target gdal.Dataset object, and copy the image data
+for the common window area.  It is assumed that the files are in
+a compatible projection. no checking or warping is done.  However,
+if the destination file is a different resolution, or different
+image pixel type, the appropriate resampling and conversions will
+be done (using normal GDAL promotion/demotion rules).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>t_fh</strong> – gdal.Dataset object for the file into which some or all
+of this file may be copied.</li>
+<li><strong>s_band</strong> – </li>
+<li><strong>t_band</strong> – </li>
+<li><strong>nodata_arg</strong> – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">1 on success (or if nothing needs to be copied), and zero one
+failure.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.convertmodis_gdal.file_info.init_from_name">
+<code class="descname">init_from_name</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#file_info.init_from_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.file_info.init_from_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize file_info from filename</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pymodis.convertmodis_gdal.getResampling">
+<code class="descclassname">pymodis.convertmodis_gdal.</code><code class="descname">getResampling</code><span class="sig-paren">(</span><em>res</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#getResampling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.getResampling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the GDAL resampling method</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the string of resampling method</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="pymodis.convertmodis_gdal.raster_copy">
+<code class="descclassname">pymodis.convertmodis_gdal.</code><code class="descname">raster_copy</code><span class="sig-paren">(</span><em>s_fh</em>, <em>s_xoff</em>, <em>s_yoff</em>, <em>s_xsize</em>, <em>s_ysize</em>, <em>s_band_n</em>, <em>t_fh</em>, <em>t_xoff</em>, <em>t_yoff</em>, <em>t_xsize</em>, <em>t_ysize</em>, <em>t_band_n</em>, <em>nodata=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#raster_copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.raster_copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a band of raster into the output file.</p>
+<p>Function copied from gdal_merge.py</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pymodis.convertmodis_gdal.raster_copy_with_nodata">
+<code class="descclassname">pymodis.convertmodis_gdal.</code><code class="descname">raster_copy_with_nodata</code><span class="sig-paren">(</span><em>s_fh</em>, <em>s_xoff</em>, <em>s_yoff</em>, <em>s_xsize</em>, <em>s_ysize</em>, <em>s_band_n</em>, <em>t_fh</em>, <em>t_xoff</em>, <em>t_yoff</em>, <em>t_xsize</em>, <em>t_ysize</em>, <em>t_band_n</em>, <em>nodata</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis_gdal.html#raster_copy_with_nodata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis_gdal.raster_copy_with_nodata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy a band of raster into the output file with nodata values.</p>
+<p>Function copied from gdal_merge.py</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="qualitymodis.html" title="qualitymodis module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="convertmodis.html" title="convertmodis module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >pyModis Library</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>

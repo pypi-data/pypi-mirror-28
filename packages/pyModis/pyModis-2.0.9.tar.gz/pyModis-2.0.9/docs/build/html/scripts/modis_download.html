@@ -1,0 +1,211 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>modis_download.py &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="modis_download_from_list.py" href="modis_download_from_list.html" />
+    <link rel="prev" title="pyModis Scripts" href="software.html" />
+<link rel="stylesheet" href="../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modis_download_from_list.html" title="modis_download_from_list.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="software.html" title="pyModis Scripts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="software.html" accesskey="U">pyModis Scripts</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">modis_download.py</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="software.html"
+                        title="previous chapter">pyModis Scripts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modis_download_from_list.html"
+                        title="next chapter">modis_download_from_list.py</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="modis-download-py">
+<h1>modis_download.py<a class="headerlink" href="#modis-download-py" title="Permalink to this headline">¶</a></h1>
+<p><strong>modis_download.py</strong> downloads MODIS data from NASA FTP servers.
+It can download large amounts of data and it can be profitably
+used with cron jobs to receive data with a fixed delay of time.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">Remember to register yourself at <a class="reference external" href="https://urs.earthdata.nasa.gov/users/new">https://urs.earthdata.nasa.gov/users/new</a>,
+read more at <a class="reference internal" href="../info.html#userpw-label"><span class="std std-ref">User and password</span></a> session.</p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>The script is able also to read the
+<a class="reference external" href="https://www.gnu.org/software/inetutils/manual/html_node/The-_002enetrc-file.html">.netrc file</a>.
+You have to add something similar to this</p>
+<div class="last highlight-default"><div class="highlight"><pre><span></span><span class="n">machine</span> <span class="n">urs</span><span class="o">.</span><span class="n">earthdata</span><span class="o">.</span><span class="n">nasa</span><span class="o">.</span><span class="n">gov</span>
+<span class="n">login</span> <span class="n">YOURUSER</span>
+<span class="n">password</span> <span class="n">YOURPASSWD</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">modis_download</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="n">options</span><span class="p">]</span> <span class="n">destination_folder</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<a class="gui reference internal image-reference" href="../_images/modis_download.png"><img alt="GUI for modis_download.py" class="gui align-left" src="../_images/modis_download.png" style="width: 365.4px; height: 414.0px;" /></a>
+<div class="highlight-none"><div class="highlight"><pre><span></span>-h  --help        shows the help message and exit
+-u  --url         http/ftp server url [default=https://e4ftl01.cr.usgs.gov]
+-I   --input      insert user and password from standard input
+-P  --password    password to connect
+-U  --username    username to connect
+-t  --tiles       string of tiles separated by comma
+                  [default=none] for all tiles
+-s  --source      directory on the http/ftp server
+                  [default=MOLT]
+-p  --product     product name as on the http/ftp server
+                  [default=MOD11A1.005]
+-D  --delta       delta of day starting from first day [default=10]
+-f  --firstday    the day to start download, if you want change
+                  data you have to use this format YYYY-MM-DD
+                  ([default=none] is for today)
+-e  --endday      the day to finish download, if you want change
+                  data you have to use this format YYYY-MM-DD
+                  ([default=none] use delta option)
+-x                useful for debugging the download
+                  [default=False]
+-j                download also the jpeg files [default=False]
+-O                download only one day, it sets delta=1 [default=False]
+-A                download all days, useful for initial download of a
+                  product. It overwrites the &#39;firstday&#39; and &#39;endday&#39;
+                  options [default=False]
+-r                remove files with size same to zero from
+                  &#39;destination_folder&#39;  [default=False]
+</pre></div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<p>Download Terra LST data for a month for two tiles from HTTP server</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>modis_download.py -I -r -t h18v03,h18v04 -f 2008-01-01 -e 2008-01-31 lst_terra/
+</pre></div>
+</div>
+<p>Download the last 15 days of Aqua LST data</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>modis_download.py -I -r -s MOLA -p MYD11A1.005 -t h18v03,h18v04 -D 15 lst_aqua/
+</pre></div>
+</div>
+<p>Download all tiles of NDVI for one day (you have pick the right day otherwise it does not download anything)</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>modis_download.py -U user -P passwd -r -p MOD13Q1.005 -f 2010-12-31 -O
+</pre></div>
+</div>
+<p>Download Snow product from FTP server</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>modis_download.py -I -u ftp://n4ftl01u.ecs.nasa.gov -p mail@pymodis.com -s SAN/MOST -p MOD10A1.005
+</pre></div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modis_download_from_list.html" title="modis_download_from_list.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="software.html" title="pyModis Scripts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="software.html" >pyModis Scripts</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>

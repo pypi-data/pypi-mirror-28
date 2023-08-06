@@ -1,0 +1,821 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pymodis.convertmodis_gdal &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<link rel="stylesheet" href="../../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pymodis.convertmodis_gdal</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#  class to convert/process modis data using gdal</span>
+<span class="c1">#</span>
+<span class="c1">#  Some code is coming from GDAL/OGR Test Suite</span>
+<span class="c1">#  Copyright (c) 2008, Andrey Kiselev &lt;dron16@ak4719.spb.edu&gt;</span>
+<span class="c1">#  Copyright (c) 2008-2014, Even Rouault &lt;even dot rouault at mines-paris dot org&gt;</span>
+<span class="c1">#  http://trac.osgeo.org/gdal/browser/trunk/autotest/alg/warp.py#L782</span>
+<span class="c1">#</span>
+<span class="c1">#  (c) Copyright Luca Delucchi 2014</span>
+<span class="c1">#  Authors: Luca Delucchi</span>
+<span class="c1">#  Email: luca dot delucchi at iasma dot it</span>
+<span class="c1">#</span>
+<span class="c1">##################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#  This MODIS Python class is licensed under the terms of GNU GPL 2.</span>
+<span class="c1">#  This program is free software; you can redistribute it and/or</span>
+<span class="c1">#  modify it under the terms of the GNU General Public License as</span>
+<span class="c1">#  published by the Free Software Foundation; either version 2 of</span>
+<span class="c1">#  the License, or (at your option) any later version.</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span>
+<span class="c1">#  See the GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">##################################################################</span>
+<span class="sd">&quot;&quot;&quot;Convert MODIS HDF file using GDAL Python bindings. It can create GeoTiff</span>
+<span class="sd">file (or other GDAL supported formats) or HDF mosaic file for several tiles.</span>
+
+<span class="sd">Classes:</span>
+
+<span class="sd">* :class:`file_info`</span>
+<span class="sd">* :class:`createMosaicGDAL`</span>
+<span class="sd">* :class:`convertModisGDAL`</span>
+
+<span class="sd">Functions:</span>
+
+<span class="sd">* :func:`getResampling`</span>
+<span class="sd">* :func:`raster_copy`</span>
+<span class="sd">* :func:`raster_copy_with_nodata`</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># python 2 and 3 compatibility</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">osgeo.gdal</span> <span class="k">as</span> <span class="nn">gdal</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">gdal</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;Python GDAL library not found, please install &#39;</span>
+                          <span class="s1">&#39;python-gdal&#39;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">osgeo.osr</span> <span class="k">as</span> <span class="nn">osr</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">osr</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s1">&#39;Python GDAL library not found, please install &#39;</span>
+                          <span class="s1">&#39;python-gdal&#39;</span><span class="p">)</span>
+
+
+<span class="n">RESAM_GDAL</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;AVERAGE&#39;</span><span class="p">,</span> <span class="s1">&#39;BILINEAR&#39;</span><span class="p">,</span> <span class="s1">&#39;CUBIC&#39;</span><span class="p">,</span> <span class="s1">&#39;CUBIC_SPLINE&#39;</span><span class="p">,</span> <span class="s1">&#39;LANCZOS&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;MODE&#39;</span><span class="p">,</span> <span class="s1">&#39;NEAREST_NEIGHBOR&#39;</span><span class="p">]</span>
+<span class="n">SINU_WKT</span> <span class="o">=</span> <span class="s1">&#39;PROJCS[&quot;Sinusoidal_Sanson_Flamsteed&quot;,GEOGCS[&quot;GCS_Unknown&quot;,&#39;</span> \
+           <span class="s1">&#39;DATUM[&quot;D_unknown&quot;,SPHEROID[&quot;Unknown&quot;,6371007.181,&quot;inf&quot;]],&#39;</span> \
+           <span class="s1">&#39;PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;Degree&quot;,0.017453292519943295]]&#39;</span> \
+           <span class="s1">&#39;,PROJECTION[&quot;Sinusoidal&quot;],PARAMETER[&quot;central_meridian&quot;,0],&#39;</span> \
+           <span class="s1">&#39;PARAMETER[&quot;false_easting&quot;,0],PARAMETER[&quot;false_northing&quot;,0]&#39;</span> \
+           <span class="s1">&#39;,UNIT[&quot;Meter&quot;,1]]&#39;</span>
+
+
+<div class="viewcode-block" id="getResampling"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.getResampling">[docs]</a><span class="k">def</span> <span class="nf">getResampling</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return the GDAL resampling method</span>
+
+<span class="sd">       :param str res: the string of resampling method</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;AVERAGE&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GRA_Average</span>
+    <span class="k">elif</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;BILINEAR&#39;</span> <span class="ow">or</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;BICUBIC&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GRA_Bilinear</span>
+    <span class="k">elif</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;LANCZOS&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GRA_Lanczos</span>
+    <span class="k">elif</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;MODE&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GRA_Mode</span>
+    <span class="k">elif</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;NEAREST_NEIGHBOR&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GRA_NearestNeighbour</span>
+    <span class="k">elif</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;CUBIC_CONVOLUTION&#39;</span> <span class="ow">or</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;CUBIC&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GRA_Cubic</span>
+    <span class="k">elif</span> <span class="n">res</span> <span class="o">==</span> <span class="s1">&#39;CUBIC_SPLINE&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GRA_CubicSpline</span></div>
+
+
+<div class="viewcode-block" id="convertModisGDAL"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.convertModisGDAL">[docs]</a><span class="k">class</span> <span class="nc">convertModisGDAL</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class to convert modis data from hdf to GDAL formats using GDAL</span>
+
+<span class="sd">       :param str hdfname: name of input data</span>
+<span class="sd">       :param str prefix: prefix for output data</span>
+<span class="sd">       :param str subset: the subset to consider</span>
+<span class="sd">       :param int res: output resolution</span>
+<span class="sd">       :param str outformat: output format, it is possible to use all the</span>
+<span class="sd">                             supported GDAL format</span>
+<span class="sd">       :param int epsg: the EPSG code for the preojection of output file</span>
+<span class="sd">       :param str wkt: the WKT string for the preojection of output file</span>
+<span class="sd">       :param str resampl: the resampling method to use</span>
+<span class="sd">       :param bool vrt: True to read GDAL VRT file created with</span>
+<span class="sd">                        createMosaicGDAL</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdfname</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">res</span><span class="p">,</span> <span class="n">outformat</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
+                 <span class="n">epsg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wkt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resampl</span><span class="o">=</span><span class="s1">&#39;NEAREST_NEIGHBOR&#39;</span><span class="p">,</span> <span class="n">vrt</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function for the initialize the object&quot;&quot;&quot;</span>
+        <span class="c1"># Open source dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_name</span> <span class="o">=</span> <span class="n">hdfname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">src_ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_ds</span><span class="o">.</span><span class="n">GetSubDatasets</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_pref</span> <span class="o">=</span> <span class="n">prefix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span> <span class="o">=</span> <span class="n">res</span>
+        <span class="k">if</span> <span class="n">epsg</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dst_srs</span> <span class="o">=</span> <span class="n">osr</span><span class="o">.</span><span class="n">SpatialReference</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dst_srs</span><span class="o">.</span><span class="n">ImportFromEPSG</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">epsg</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dst_wkt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst_srs</span><span class="o">.</span><span class="n">ExportToWkt</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">wkt</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">wkt</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dst_wkt</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dst_wkt</span> <span class="o">=</span> <span class="n">wkt</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;You have to set one of the following option: &#39;</span>
+                            <span class="s1">&#39;&quot;epsg&quot;, &quot;wkt&quot;&#39;</span><span class="p">)</span>
+        <span class="c1"># error threshold the same value as gdalwarp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_threshold</span> <span class="o">=</span> <span class="mf">0.125</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resampling</span> <span class="o">=</span> <span class="n">getResampling</span><span class="p">(</span><span class="n">resampl</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subset</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subset</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Type for subset parameter not supported&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="n">outformat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vrt</span> <span class="o">=</span> <span class="n">vrt</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">driver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Format driver </span><span class="si">%s</span><span class="s1"> not found, pick a supported &#39;</span>
+                            <span class="s1">&#39;driver.&#39;</span> <span class="o">%</span> <span class="n">outformat</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_boundingBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Obtain the bounding box of raster in the new coordinate system</span>
+
+<span class="sd">           :param src: a GDAL dataset object</span>
+
+<span class="sd">           :return: a bounding box value in lists</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">src_gtrn</span> <span class="o">=</span> <span class="n">src</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">(</span><span class="n">can_return_null</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">src_bbox_cells</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">RasterYSize</span><span class="p">),</span> <span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">RasterXSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                          <span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">RasterXSize</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">RasterYSize</span><span class="p">))</span>
+
+        <span class="n">geo_pts_x</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">geo_pts_y</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">src_bbox_cells</span><span class="p">:</span>
+            <span class="n">x2</span> <span class="o">=</span> <span class="n">src_gtrn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">src_gtrn</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">src_gtrn</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">y</span>
+            <span class="n">y2</span> <span class="o">=</span> <span class="n">src_gtrn</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">src_gtrn</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">src_gtrn</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="n">y</span>
+            <span class="n">geo_pts_x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">x2</span><span class="p">)</span>
+            <span class="n">geo_pts_y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">((</span><span class="nb">min</span><span class="p">(</span><span class="n">geo_pts_x</span><span class="p">),</span> <span class="nb">min</span><span class="p">(</span><span class="n">geo_pts_y</span><span class="p">)),</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">geo_pts_x</span><span class="p">),</span>
+                                                   <span class="nb">max</span><span class="p">(</span><span class="n">geo_pts_y</span><span class="p">)))</span>
+
+    <span class="k">def</span> <span class="nf">_calculateRes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">minn</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculate the number of pixel from extent and resolution</span>
+
+<span class="sd">           :param float minn: minimum value of extent</span>
+<span class="sd">           :param float maxx: maximum value of extent</span>
+<span class="sd">           :param int res: resolution of output raster</span>
+
+<span class="sd">           :return: integer number with the number of pixels</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">((</span><span class="n">maxx</span> <span class="o">-</span> <span class="n">minn</span><span class="p">)</span> <span class="o">/</span> <span class="n">res</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">_createWarped</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">raster</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a warped VRT file to fetch default values for target raster</span>
+<span class="sd">        dimensions and geotransform</span>
+
+<span class="sd">        :param str raster: the name of raster, for HDF have to be one subset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">raster</span><span class="p">)</span>
+        <span class="n">tmp_ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">AutoCreateWarpedVRT</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">src</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">(),</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">dst_wkt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resampling</span><span class="p">,</span>
+                                          <span class="bp">self</span><span class="o">.</span><span class="n">error_threshold</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dst_xsize</span> <span class="o">=</span> <span class="n">tmp_ds</span><span class="o">.</span><span class="n">RasterXSize</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dst_ysize</span> <span class="o">=</span> <span class="n">tmp_ds</span><span class="o">.</span><span class="n">RasterYSize</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dst_gt</span> <span class="o">=</span> <span class="n">tmp_ds</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">bbox</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_boundingBox</span><span class="p">(</span><span class="n">tmp_ds</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dst_xsize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculateRes</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dst_ysize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculateRes</span><span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                                                <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst_xsize</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid number of pixel 0 for X size. The &#39;</span>
+                                <span class="s1">&#39;problem could be in an invalid value of &#39;</span>
+                                <span class="s1">&#39;resolution&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst_ysize</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Invalid number of pixel 0 for Y size. The &#39;</span>
+                                <span class="s1">&#39;problem could be in an invalid value of &#39;</span>
+                                <span class="s1">&#39;resolution&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dst_gt</span> <span class="o">=</span> <span class="p">[</span><span class="n">bbox</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">bbox</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="mf">0.0</span><span class="p">,</span>
+                           <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">]</span>
+        <span class="n">tmp_ds</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">_progressCallback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pct</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">user_data</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;For the progress status&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span>  <span class="c1"># 1 to continue, 0 to stop</span>
+
+    <span class="k">def</span> <span class="nf">_reprojectOne</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reproject a single subset of MODIS product</span>
+
+<span class="sd">        l = complete name of input dataset</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">l_src_ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">l</span><span class="p">)</span>
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">l_src_ds</span><span class="o">.</span><span class="n">GetMetadata</span><span class="p">()</span>
+        <span class="n">band</span> <span class="o">=</span> <span class="n">l_src_ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;_FillValue&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">fill_value</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">band</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">():</span>
+            <span class="n">fill_value</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fill_value</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">datatype</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">DataType</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">l_name</span> <span class="o">=</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">out_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{pref}</span><span class="s2">_</span><span class="si">{lay}</span><span class="s2">.tif&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_pref</span><span class="p">,</span>
+                                                 <span class="n">lay</span><span class="o">=</span><span class="n">l_name</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">out_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{pref}</span><span class="s2">.tif&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_pref</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vrt</span><span class="p">:</span>
+            <span class="n">out_name</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{pref}</span><span class="s2">.tif&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">output_pref</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">dst_ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">out_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dst_xsize</span><span class="p">,</span>
+                                        <span class="bp">self</span><span class="o">.</span><span class="n">dst_ysize</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">datatype</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not possible to create dataset </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">out_name</span><span class="p">)</span>
+        <span class="n">dst_ds</span><span class="o">.</span><span class="n">SetProjection</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dst_wkt</span><span class="p">)</span>
+        <span class="n">dst_ds</span><span class="o">.</span><span class="n">SetGeoTransform</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dst_gt</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fill_value</span><span class="p">:</span>
+            <span class="n">dst_ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">SetNoDataValue</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">fill_value</span><span class="p">))</span>
+            <span class="n">dst_ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">Fill</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">fill_value</span><span class="p">))</span>
+        <span class="n">cbk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_progressCallback</span>
+        <span class="c1"># value for last parameter of above self._progressCallback</span>
+        <span class="n">cbk_user_data</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gdal</span><span class="o">.</span><span class="n">ReprojectImage</span><span class="p">(</span><span class="n">l_src_ds</span><span class="p">,</span> <span class="n">dst_ds</span><span class="p">,</span> <span class="n">l_src_ds</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">(),</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">dst_wkt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resampling</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">error_threshold</span><span class="p">,</span> <span class="n">cbk</span><span class="p">,</span> <span class="n">cbk_user_data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Layer </span><span class="si">{name}</span><span class="s2"> reprojected&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">l</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not possible to reproject dataset &#39;</span>
+                            <span class="s1">&#39;</span><span class="si">{name}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">l</span><span class="p">))</span>
+        <span class="n">dst_ds</span><span class="o">.</span><span class="n">SetMetadata</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+        <span class="n">dst_ds</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">l_src_ds</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="convertModisGDAL.run_vrt_separated"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.convertModisGDAL.run_vrt_separated">[docs]</a>    <span class="k">def</span> <span class="nf">run_vrt_separated</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reproject VRT created by createMosaicGDAL, function write_vrt with</span>
+<span class="sd">        separated=True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_createWarped</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reprojectOne</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_name</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dataset &#39;</span><span class="si">{name}</span><span class="s2">&#39; reprojected&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_name</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="convertModisGDAL.run"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.convertModisGDAL.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Reproject all the subset of chosen layer&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vrt</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run_vrt_separated</span><span class="p">()</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_createWarped</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_reprojectOne</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">quiet</span><span class="o">=</span><span class="n">quiet</span><span class="p">)</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All layer for dataset &#39;</span><span class="si">{name}</span><span class="s2">&#39; &quot;</span>
+                      <span class="s2">&quot;reprojected&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">in_name</span><span class="p">))</span></div></div>
+
+
+<span class="c1"># =============================================================================</span>
+<div class="viewcode-block" id="raster_copy"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.raster_copy">[docs]</a><span class="k">def</span> <span class="nf">raster_copy</span><span class="p">(</span><span class="n">s_fh</span><span class="p">,</span> <span class="n">s_xoff</span><span class="p">,</span> <span class="n">s_yoff</span><span class="p">,</span> <span class="n">s_xsize</span><span class="p">,</span> <span class="n">s_ysize</span><span class="p">,</span> <span class="n">s_band_n</span><span class="p">,</span>
+                <span class="n">t_fh</span><span class="p">,</span> <span class="n">t_xoff</span><span class="p">,</span> <span class="n">t_yoff</span><span class="p">,</span> <span class="n">t_xsize</span><span class="p">,</span> <span class="n">t_ysize</span><span class="p">,</span> <span class="n">t_band_n</span><span class="p">,</span>
+                <span class="n">nodata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Copy a band of raster into the output file.</span>
+
+<span class="sd">       Function copied from gdal_merge.py</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">nodata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">raster_copy_with_nodata</span><span class="p">(</span><span class="n">s_fh</span><span class="p">,</span> <span class="n">s_xoff</span><span class="p">,</span> <span class="n">s_yoff</span><span class="p">,</span> <span class="n">s_xsize</span><span class="p">,</span> <span class="n">s_ysize</span><span class="p">,</span>
+                                       <span class="n">s_band_n</span><span class="p">,</span> <span class="n">t_fh</span><span class="p">,</span> <span class="n">t_xoff</span><span class="p">,</span> <span class="n">t_yoff</span><span class="p">,</span> <span class="n">t_xsize</span><span class="p">,</span>
+                                       <span class="n">t_ysize</span><span class="p">,</span> <span class="n">t_band_n</span><span class="p">,</span> <span class="n">nodata</span><span class="p">)</span>
+
+    <span class="n">s_band</span> <span class="o">=</span> <span class="n">s_fh</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">s_band_n</span><span class="p">)</span>
+    <span class="n">t_band</span> <span class="o">=</span> <span class="n">t_fh</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">t_band_n</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">s_band</span><span class="o">.</span><span class="n">ReadRaster</span><span class="p">(</span><span class="n">s_xoff</span><span class="p">,</span> <span class="n">s_yoff</span><span class="p">,</span> <span class="n">s_xsize</span><span class="p">,</span> <span class="n">s_ysize</span><span class="p">,</span>
+                             <span class="n">t_xsize</span><span class="p">,</span> <span class="n">t_ysize</span><span class="p">,</span> <span class="n">t_band</span><span class="o">.</span><span class="n">DataType</span><span class="p">)</span>
+    <span class="n">t_band</span><span class="o">.</span><span class="n">WriteRaster</span><span class="p">(</span><span class="n">t_xoff</span><span class="p">,</span> <span class="n">t_yoff</span><span class="p">,</span> <span class="n">t_xsize</span><span class="p">,</span> <span class="n">t_ysize</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">t_xsize</span><span class="p">,</span>
+                       <span class="n">t_ysize</span><span class="p">,</span> <span class="n">t_band</span><span class="o">.</span><span class="n">DataType</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="raster_copy_with_nodata"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.raster_copy_with_nodata">[docs]</a><span class="k">def</span> <span class="nf">raster_copy_with_nodata</span><span class="p">(</span><span class="n">s_fh</span><span class="p">,</span> <span class="n">s_xoff</span><span class="p">,</span> <span class="n">s_yoff</span><span class="p">,</span> <span class="n">s_xsize</span><span class="p">,</span> <span class="n">s_ysize</span><span class="p">,</span> <span class="n">s_band_n</span><span class="p">,</span>
+                            <span class="n">t_fh</span><span class="p">,</span> <span class="n">t_xoff</span><span class="p">,</span> <span class="n">t_yoff</span><span class="p">,</span> <span class="n">t_xsize</span><span class="p">,</span> <span class="n">t_ysize</span><span class="p">,</span> <span class="n">t_band_n</span><span class="p">,</span>
+                            <span class="n">nodata</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Copy a band of raster into the output file with nodata values.</span>
+
+<span class="sd">       Function copied from gdal_merge.py</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">Numeric</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">Numeric</span>
+
+    <span class="n">s_band</span> <span class="o">=</span> <span class="n">s_fh</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">s_band_n</span><span class="p">)</span>
+    <span class="n">t_band</span> <span class="o">=</span> <span class="n">t_fh</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">t_band_n</span><span class="p">)</span>
+
+    <span class="n">data_src</span> <span class="o">=</span> <span class="n">s_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(</span><span class="n">s_xoff</span><span class="p">,</span> <span class="n">s_yoff</span><span class="p">,</span> <span class="n">s_xsize</span><span class="p">,</span> <span class="n">s_ysize</span><span class="p">,</span>
+                                  <span class="n">t_xsize</span><span class="p">,</span> <span class="n">t_ysize</span><span class="p">)</span>
+    <span class="n">data_dst</span> <span class="o">=</span> <span class="n">t_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(</span><span class="n">t_xoff</span><span class="p">,</span> <span class="n">t_yoff</span><span class="p">,</span> <span class="n">t_xsize</span><span class="p">,</span> <span class="n">t_ysize</span><span class="p">)</span>
+
+    <span class="n">nodata_test</span> <span class="o">=</span> <span class="n">Numeric</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">data_src</span><span class="p">,</span> <span class="n">nodata</span><span class="p">)</span>
+    <span class="n">to_write</span> <span class="o">=</span> <span class="n">Numeric</span><span class="o">.</span><span class="n">choose</span><span class="p">(</span><span class="n">nodata_test</span><span class="p">,</span> <span class="p">(</span><span class="n">data_src</span><span class="p">,</span> <span class="n">data_dst</span><span class="p">))</span>
+
+    <span class="n">t_band</span><span class="o">.</span><span class="n">WriteArray</span><span class="p">(</span><span class="n">to_write</span><span class="p">,</span> <span class="n">t_xoff</span><span class="p">,</span> <span class="n">t_yoff</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="file_info"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.file_info">[docs]</a><span class="k">class</span> <span class="nc">file_info</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class holding information about a GDAL file.</span>
+
+<span class="sd">       Class copied from gdal_merge.py</span>
+
+<span class="sd">       :param str filename: Name of file to read.</span>
+
+<span class="sd">       :return: 1 on success or 0 if the file can&#39;t be opened.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="file_info.init_from_name"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.file_info.init_from_name">[docs]</a>    <span class="k">def</span> <span class="nf">init_from_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize file_info from filename&quot;&quot;&quot;</span>
+        <span class="n">fh</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fh</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bands</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">RasterCount</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xsize</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">RasterXSize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ysize</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">RasterYSize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">band_type</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">DataType</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">block_size</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">GetBlockSize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ulx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uly</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lrx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ulx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">xsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">uly</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">ysize</span>
+
+        <span class="n">meta</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">GetMetadata</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;_FillValue&#39;</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">fh</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">ct</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">GetRasterColorTable</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">ct</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ct</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">Clone</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ct</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="file_info.copy_into"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.file_info.copy_into">[docs]</a>    <span class="k">def</span> <span class="nf">copy_into</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t_fh</span><span class="p">,</span> <span class="n">s_band</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">t_band</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodata_arg</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Copy this files image into target file.</span>
+
+<span class="sd">        This method will compute the overlap area of the file_info objects</span>
+<span class="sd">        file, and the target gdal.Dataset object, and copy the image data</span>
+<span class="sd">        for the common window area.  It is assumed that the files are in</span>
+<span class="sd">        a compatible projection. no checking or warping is done.  However,</span>
+<span class="sd">        if the destination file is a different resolution, or different</span>
+<span class="sd">        image pixel type, the appropriate resampling and conversions will</span>
+<span class="sd">        be done (using normal GDAL promotion/demotion rules).</span>
+
+<span class="sd">        :param t_fh: gdal.Dataset object for the file into which some or all</span>
+<span class="sd">                     of this file may be copied.</span>
+<span class="sd">        :param s_band:</span>
+<span class="sd">        :param t_band:</span>
+<span class="sd">        :param nodata_arg:</span>
+
+<span class="sd">        :return: 1 on success (or if nothing needs to be copied), and zero one</span>
+<span class="sd">                 failure.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">t_geotransform</span> <span class="o">=</span> <span class="n">t_fh</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+        <span class="n">t_ulx</span> <span class="o">=</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">t_uly</span> <span class="o">=</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">t_lrx</span> <span class="o">=</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">t_fh</span><span class="o">.</span><span class="n">RasterXSize</span> <span class="o">*</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">t_lry</span> <span class="o">=</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">t_fh</span><span class="o">.</span><span class="n">RasterYSize</span> <span class="o">*</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+
+        <span class="c1"># figure out intersection region</span>
+        <span class="n">tgw_ulx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">t_ulx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ulx</span><span class="p">)</span>
+        <span class="n">tgw_lrx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">t_lrx</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lrx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">tgw_uly</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">t_uly</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uly</span><span class="p">)</span>
+            <span class="n">tgw_lry</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">t_lry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lry</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tgw_uly</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">t_uly</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uly</span><span class="p">)</span>
+            <span class="n">tgw_lry</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">t_lry</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lry</span><span class="p">)</span>
+
+        <span class="c1"># do they even intersect?</span>
+        <span class="k">if</span> <span class="n">tgw_ulx</span> <span class="o">&gt;=</span> <span class="n">tgw_lrx</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">tgw_uly</span> <span class="o">&lt;=</span> <span class="n">tgw_lry</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">tgw_uly</span> <span class="o">&gt;=</span> <span class="n">tgw_lry</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># compute target window in pixel coordinates.</span>
+        <span class="n">tw_xoff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tgw_ulx</span> <span class="o">-</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">tw_yoff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tgw_uly</span> <span class="o">-</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.1</span><span class="p">)</span>
+        <span class="n">tw_xsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tgw_lrx</span> <span class="o">-</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-</span> <span class="n">tw_xoff</span>
+        <span class="n">tw_ysize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tgw_lry</span> <span class="o">-</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="n">t_geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-</span> <span class="n">tw_yoff</span>
+
+        <span class="k">if</span> <span class="n">tw_xsize</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">tw_ysize</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Compute source window in pixel coordinates.</span>
+        <span class="n">sw_xoff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tgw_ulx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">sw_yoff</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tgw_uly</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span>
+        <span class="n">sw_xsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tgw_lrx</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                       <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-</span> <span class="n">sw_xoff</span>
+        <span class="n">sw_ysize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tgw_lry</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+                       <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">-</span> <span class="n">sw_yoff</span>
+
+        <span class="k">if</span> <span class="n">sw_xsize</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">sw_ysize</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Open the source file, and copy the selected region.</span>
+        <span class="n">s_fh</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="k">return</span> \
+            <span class="n">raster_copy</span><span class="p">(</span><span class="n">s_fh</span><span class="p">,</span> <span class="n">sw_xoff</span><span class="p">,</span> <span class="n">sw_yoff</span><span class="p">,</span> <span class="n">sw_xsize</span><span class="p">,</span> <span class="n">sw_ysize</span><span class="p">,</span> <span class="n">s_band</span><span class="p">,</span>
+                        <span class="n">t_fh</span><span class="p">,</span> <span class="n">tw_xoff</span><span class="p">,</span> <span class="n">tw_yoff</span><span class="p">,</span> <span class="n">tw_xsize</span><span class="p">,</span> <span class="n">tw_ysize</span><span class="p">,</span> <span class="n">t_band</span><span class="p">,</span>
+                        <span class="n">nodata_arg</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="createMosaicGDAL"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.createMosaicGDAL">[docs]</a><span class="k">class</span> <span class="nc">createMosaicGDAL</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class to mosaic modis data from hdf to GDAL formats using GDAL</span>
+
+<span class="sd">       :param list hdfnames: a list containing the name of tile to mosaic</span>
+<span class="sd">       :param str subset: the subset of layer to consider</span>
+<span class="sd">       :param str outformat: the output format to use, this parameter is</span>
+<span class="sd">                             not used for the VRT output, supported values</span>
+<span class="sd">                             are HDF4Image, GTiff, HFA, and maybe something</span>
+<span class="sd">                             else not tested.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hdfnames</span><span class="p">,</span> <span class="n">subset</span><span class="p">,</span> <span class="n">outformat</span><span class="o">=</span><span class="s2">&quot;HDF4Image&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function for the initialize the object&quot;&quot;&quot;</span>
+        <span class="c1"># Open source dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">in_names</span> <span class="o">=</span> <span class="n">hdfnames</span>
+        <span class="c1"># #TODO use resolution into mosaic.</span>
+        <span class="c1"># self.resolution = res</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">subset</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subset</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">subset</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="n">subset</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;(&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;)&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Type for subset parameter not supported&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="n">outformat</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">driver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Format driver </span><span class="si">%s</span><span class="s1"> not found, pick a supported &#39;</span>
+                            <span class="s1">&#39;driver.&#39;</span> <span class="o">%</span> <span class="n">outformat</span><span class="p">)</span>
+        <span class="n">driverMD</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">GetMetadata</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s1">&#39;DCAP_CREATE&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">driverMD</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Format driver </span><span class="si">%s</span><span class="s1"> does not support creation and&#39;</span>
+                            <span class="s1">&#39; piecewise writing.</span><span class="se">\n</span><span class="s1">Please select a format that&#39;</span>
+                            <span class="s1">&#39; does, such as GTiff (the default) or HFA (Erdas&#39;</span>
+                            <span class="s1">&#39; Imagine).&#39;</span> <span class="o">%</span> <span class="nb">format</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initLayers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_getUsedLayers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_names_to_fileinfos</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_initLayers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set up the variable self.layers as dictionary for each chosen</span>
+<span class="sd">        subset&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_names</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">src_ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">in_names</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;The input value should be a list of HDF files&quot;</span><span class="p">)</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="n">src_ds</span><span class="o">.</span><span class="n">GetSubDatasets</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">layers</span><span class="p">))]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">layers</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_getUsedLayers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add each subset to the correct list for each input layers&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_names</span><span class="p">:</span>
+            <span class="n">src_ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">layers</span> <span class="o">=</span> <span class="n">src_ds</span><span class="o">.</span><span class="n">GetSubDatasets</span><span class="p">()</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span><span class="p">:</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">layers</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">layers</span><span class="p">[</span><span class="n">n</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="nf">_names_to_fileinfos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Translate a list of GDAL filenames, into file_info objects.</span>
+<span class="sd">        Returns a list of file_info objects. There may be less file_info</span>
+<span class="sd">        objects than names if some of the names could not be opened as GDAL</span>
+<span class="sd">        files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">v</span><span class="p">:</span>
+                <span class="n">fi</span> <span class="o">=</span> <span class="n">file_info</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">fi</span><span class="o">.</span><span class="n">init_from_name</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="p">[</span><span class="n">k</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fi</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span>
+
+    <span class="k">def</span> <span class="nf">_calculateNewSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the new size of output raster</span>
+
+<span class="sd">           :return: X size, Y size and geotransform parameters</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">l1</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">ulx</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="n">ulx</span>
+        <span class="n">uly</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="n">uly</span>
+        <span class="n">lrx</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="n">lrx</span>
+        <span class="n">lry</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="n">lry</span>
+        <span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]:</span>
+            <span class="n">ulx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ulx</span><span class="p">,</span> <span class="n">fi</span><span class="o">.</span><span class="n">ulx</span><span class="p">)</span>
+            <span class="n">uly</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">uly</span><span class="p">,</span> <span class="n">fi</span><span class="o">.</span><span class="n">uly</span><span class="p">)</span>
+            <span class="n">lrx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">lrx</span><span class="p">,</span> <span class="n">fi</span><span class="o">.</span><span class="n">lrx</span><span class="p">)</span>
+            <span class="n">lry</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">lry</span><span class="p">,</span> <span class="n">fi</span><span class="o">.</span><span class="n">lry</span><span class="p">)</span>
+        <span class="n">psize_x</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">psize_y</span> <span class="o">=</span> <span class="n">l1</span><span class="o">.</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+
+        <span class="n">geotransform</span> <span class="o">=</span> <span class="p">[</span><span class="n">ulx</span><span class="p">,</span> <span class="n">psize_x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">uly</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">psize_y</span><span class="p">]</span>
+        <span class="n">xsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">lrx</span> <span class="o">-</span> <span class="n">ulx</span><span class="p">)</span> <span class="o">/</span> <span class="n">geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ysize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">lry</span> <span class="o">-</span> <span class="n">uly</span><span class="p">)</span> <span class="o">/</span> <span class="n">geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">,</span> <span class="n">geotransform</span>
+
+<div class="viewcode-block" id="createMosaicGDAL.write_mosaic_xml"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.createMosaicGDAL.write_mosaic_xml">[docs]</a>    <span class="k">def</span> <span class="nf">write_mosaic_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write the XML metadata file for MODIS mosaic</span>
+
+<span class="sd">           :param str prefix: the prefix for the XML file containing metadata</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">.parsemodis</span> <span class="k">import</span> <span class="n">parseModisMulti</span>
+        <span class="kn">import</span> <span class="nn">os</span>
+        <span class="n">listHDF</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">in_names</span><span class="p">:</span>
+            <span class="n">listHDF</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">()))</span>
+        <span class="n">pmm</span> <span class="o">=</span> <span class="n">parseModisMulti</span><span class="p">(</span><span class="n">listHDF</span><span class="p">)</span>
+        <span class="n">pmm</span><span class="o">.</span><span class="n">writexml</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%s</span><span class="s2">.xml&quot;</span> <span class="o">%</span> <span class="n">prefix</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="createMosaicGDAL.run"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.createMosaicGDAL.run">[docs]</a>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create the mosaic</span>
+
+<span class="sd">           :param str output: the name of output file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">l1</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">,</span> <span class="n">geotransform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculateNewSize</span><span class="p">()</span>
+        <span class="n">t_fh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">,</span>
+                                  <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="o">.</span><span class="n">keys</span><span class="p">())),</span>
+                                  <span class="n">l1</span><span class="o">.</span><span class="n">band_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">t_fh</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Not possible to create dataset </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">output</span><span class="p">)</span>
+
+        <span class="n">t_fh</span><span class="o">.</span><span class="n">SetGeoTransform</span><span class="p">(</span><span class="n">geotransform</span><span class="p">)</span>
+        <span class="n">t_fh</span><span class="o">.</span><span class="n">SetProjection</span><span class="p">(</span><span class="n">l1</span><span class="o">.</span><span class="n">projection</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">names</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="n">fill</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_value</span><span class="p">:</span>
+                <span class="n">fill</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fill_value</span><span class="p">)</span>
+                <span class="n">t_fh</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">SetNoDataValue</span><span class="p">(</span><span class="n">fill</span><span class="p">)</span>
+                <span class="n">t_fh</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">Fill</span><span class="p">(</span><span class="n">fill</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">names</span><span class="p">:</span>
+                <span class="n">n</span><span class="o">.</span><span class="n">copy_into</span><span class="p">(</span><span class="n">t_fh</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">fill</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">write_mosaic_xml</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="n">t_fh</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The mosaic file </span><span class="si">{name}</span><span class="s2"> has been &quot;</span>
+                  <span class="s2">&quot;created&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">output</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+    <span class="k">def</span> <span class="nf">_calculateOffset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fileinfo</span><span class="p">,</span> <span class="n">geotransform</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the offset between main origin and the origin of current</span>
+<span class="sd">        file</span>
+
+<span class="sd">        :param fileinfo: a file_info object</span>
+<span class="sd">        :param geotransform: the geotransform parameters to keep x and y origin</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">fileinfo</span><span class="o">.</span><span class="n">ulx</span><span class="p">)</span> <span class="o">/</span> <span class="n">geotransform</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">int</span><span class="p">((</span><span class="n">geotransform</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">fileinfo</span><span class="o">.</span><span class="n">uly</span><span class="p">)</span> <span class="o">/</span> <span class="n">geotransform</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span>
+
+<div class="viewcode-block" id="createMosaicGDAL.write_vrt"><a class="viewcode-back" href="../../pymodis/convertmodis_gdal.html#pymodis.convertmodis_gdal.createMosaicGDAL.write_vrt">[docs]</a>    <span class="k">def</span> <span class="nf">write_vrt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">separate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">quiet</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write VRT file</span>
+
+<span class="sd">        :param str output: the prefix of output file</span>
+<span class="sd">        :param bool separate: True to write a VRT file for each band, False to</span>
+<span class="sd">                              write an unique file</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">write_complex</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">geot</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Write a complex source to VRT file&quot;&quot;&quot;</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1">&lt;ComplexSource&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t\t</span><span class="s1">&lt;SourceFilename relativeToVRT=&quot;0&quot;&gt;</span><span class="si">{name}</span><span class="s1">&#39;</span>
+                      <span class="s1">&#39;&lt;/SourceFilename&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">filename</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t\t</span><span class="s1">&lt;SourceBand&gt;1&lt;/SourceBand&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t\t</span><span class="s1">&lt;SourceProperties RasterXSize=&quot;</span><span class="si">{x}</span><span class="s1">&quot; &#39;</span>
+                      <span class="s1">&#39;RasterYSize=&quot;</span><span class="si">{y}</span><span class="s1">&quot; DataType=&quot;</span><span class="si">{typ}</span><span class="s1">&quot; &#39;</span>
+                      <span class="s1">&#39;BlockXSize=&quot;</span><span class="si">{bx}</span><span class="s1">&quot; BlockYSize=&quot;</span><span class="si">{by}</span><span class="s1">&quot; /&gt;&#39;</span>
+                      <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">xsize</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">ysize</span><span class="p">,</span>
+                                  <span class="n">typ</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GetDataTypeName</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">band_type</span><span class="p">),</span>
+                                  <span class="n">bx</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">block_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">by</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">block_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t\t</span><span class="s1">&lt;SrcRect xOff=&quot;0&quot; yOff=&quot;0&quot; xSize=&quot;</span><span class="si">{x}</span><span class="s1">&quot; &#39;</span>
+                      <span class="s1">&#39;ySize=&quot;</span><span class="si">{y}</span><span class="s1">&quot; /&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">xsize</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">ysize</span><span class="p">))</span>
+            <span class="n">xoff</span><span class="p">,</span> <span class="n">yoff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculateOffset</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">geot</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t\t</span><span class="s1">&lt;DstRect xOff=&quot;</span><span class="si">{xoff}</span><span class="s1">&quot; yOff=&quot;</span><span class="si">{yoff}</span><span class="s1">&quot; &#39;</span>
+                      <span class="s1">&#39;xSize=&quot;</span><span class="si">{x}</span><span class="s1">&quot; ySize=&quot;</span><span class="si">{y}</span><span class="s1">&quot; /&gt;&#39;</span>
+                      <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">xoff</span><span class="o">=</span><span class="n">xoff</span><span class="p">,</span> <span class="n">yoff</span><span class="o">=</span><span class="n">yoff</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">xsize</span><span class="p">,</span>
+                                  <span class="n">y</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">ysize</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">l1</span><span class="o">.</span><span class="n">fill_value</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t\t</span><span class="s1">&lt;NODATA&gt;</span><span class="si">{va}</span><span class="s1">&lt;/NODATA&gt;&#39;</span>
+                          <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">va</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">fill_value</span><span class="p">))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1">&lt;/ComplexSource&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">,</span> <span class="n">geot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calculateNewSize</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">separate</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">l1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{pref}</span><span class="s2">_</span><span class="si">{band}</span><span class="s2">.vrt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">output</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="n">k</span><span class="p">),</span>
+                           <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;VRTDataset rasterXSize=&quot;</span><span class="si">{x}</span><span class="s1">&quot; rasterYSize=&quot;</span><span class="si">{y}</span><span class="s1">&quot;&gt;&#39;</span>
+                          <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xsize</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">ysize</span><span class="p">))</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&lt;SRS&gt;</span><span class="si">{proj}</span><span class="s1">&lt;/SRS&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proj</span><span class="o">=</span><span class="n">l1</span><span class="o">.</span><span class="n">projection</span><span class="p">))</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&lt;GeoTransform&gt;</span><span class="si">{geo0}</span><span class="s1">, </span><span class="si">{geo1}</span><span class="s1">, </span><span class="si">{geo2}</span><span class="s1">, </span><span class="si">{geo3}</span><span class="s1">,&#39;</span>
+                          <span class="s1">&#39; </span><span class="si">{geo4}</span><span class="s1">, </span><span class="si">{geo5}</span><span class="s1">&lt;/GeoTransform&gt;&#39;</span>
+                          <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">geo0</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">geo1</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">geo2</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                                      <span class="n">geo3</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">geo4</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                                      <span class="n">geo5</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
+                <span class="n">gtype</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDataTypeName</span><span class="p">(</span><span class="n">l1</span><span class="o">.</span><span class="n">band_type</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&lt;VRTRasterBand dataType=&quot;</span><span class="si">{typ}</span><span class="s1">&quot; band=&quot;1&quot;&#39;</span>
+                          <span class="s1">&#39;&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="n">gtype</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">l1</span><span class="o">.</span><span class="n">fill_value</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1">&lt;NoDataValue&gt;</span><span class="si">{val}</span><span class="s1">&lt;/NoDataValue&#39;</span>
+                              <span class="s1">&#39;&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">val</span><span class="o">=</span><span class="n">l1</span><span class="o">.</span><span class="n">fill_value</span><span class="p">))</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;ColorInterp&gt;Gray&lt;/ColorInterp&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+                    <span class="n">write_complex</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">geot</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&lt;/VRTRasterBand&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;/VRTDataset&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="n">l1</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">band</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># the number of band</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{pref}</span><span class="s2">.vrt&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pref</span><span class="o">=</span><span class="n">output</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;VRTDataset rasterXSize=&quot;</span><span class="si">{x}</span><span class="s1">&quot; rasterYSize=&quot;</span><span class="si">{y}</span><span class="s1">&quot;&gt;&#39;</span>
+                      <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xsize</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">ysize</span><span class="p">))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&lt;SRS&gt;</span><span class="si">{proj}</span><span class="s1">&lt;/SRS&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">proj</span><span class="o">=</span><span class="n">l1</span><span class="o">.</span><span class="n">projection</span><span class="p">))</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&lt;GeoTransform&gt;</span><span class="si">{geo0}</span><span class="s1">, </span><span class="si">{geo1}</span><span class="s1">, </span><span class="si">{geo2}</span><span class="s1">, </span><span class="si">{geo3}</span><span class="s1">,&#39;</span>
+                      <span class="s1">&#39; </span><span class="si">{geo4}</span><span class="s1">, </span><span class="si">{geo5}</span><span class="s1">&lt;/GeoTransform&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">geo0</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                      <span class="n">geo1</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">geo2</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">geo3</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">geo4</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                      <span class="n">geo5</span><span class="o">=</span><span class="n">geot</span><span class="p">[</span><span class="mi">5</span><span class="p">]))</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="n">l1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&lt;VRTRasterBand dataType=&quot;</span><span class="si">{typ}</span><span class="s1">&quot; band=&quot;</span><span class="si">{n}</span><span class="s1">&quot;&#39;</span>
+                          <span class="s1">&#39;&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">typ</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GetDataTypeName</span><span class="p">(</span><span class="n">l1</span><span class="o">.</span><span class="n">band_type</span><span class="p">),</span>
+                                       <span class="n">n</span><span class="o">=</span><span class="n">band</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">l1</span><span class="o">.</span><span class="n">fill_value</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1">&lt;NoDataValue&gt;</span><span class="si">{val}</span><span class="s1">&lt;/NoDataValue&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                              <span class="n">val</span><span class="o">=</span><span class="n">l1</span><span class="o">.</span><span class="n">fill_value</span><span class="p">))</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t\t</span><span class="s1">&lt;ColorInterp&gt;Gray&lt;/ColorInterp&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">file_infos</span><span class="p">[</span><span class="n">k</span><span class="p">]:</span>
+                    <span class="n">write_complex</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">geot</span><span class="p">)</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&lt;/VRTRasterBand&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">band</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;&lt;/VRTDataset&gt;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">out</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">quiet</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The VRT mosaic file </span><span class="si">{name}</span><span class="s2"> has been &quot;</span>
+                  <span class="s2">&quot;created&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">output</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>

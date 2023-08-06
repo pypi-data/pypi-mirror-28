@@ -1,0 +1,498 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>downmodis module &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="parsemodis module" href="parsemodis.html" />
+    <link rel="prev" title="pyModis Library" href="modules.html" />
+<link rel="stylesheet" href="../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parsemodis.html" title="parsemodis module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="pyModis Library"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">pyModis Library</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modules.html"
+                        title="previous chapter">pyModis Library</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="parsemodis.html"
+                        title="next chapter"><code class="docutils literal"><span class="pre">parsemodis</span></code> module</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pymodis.downmodis">
+<span id="downmodis-module"></span><h1><code class="xref py py-mod docutils literal"><span class="pre">downmodis</span></code> module<a class="headerlink" href="#module-pymodis.downmodis" title="Permalink to this headline">¶</a></h1>
+<p>Module to download MODIS HDF files from NASA repository.
+It supports both FTP and HTTP repositories</p>
+<p>Classes:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#pymodis.downmodis.modisHtmlParser" title="pymodis.downmodis.modisHtmlParser"><code class="xref py py-class docutils literal"><span class="pre">modisHtmlParser</span></code></a></li>
+<li><a class="reference internal" href="#pymodis.downmodis.downModis" title="pymodis.downmodis.downModis"><code class="xref py py-class docutils literal"><span class="pre">downModis</span></code></a></li>
+</ul>
+<p>Functions:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#pymodis.downmodis.urljoin" title="pymodis.downmodis.urljoin"><code class="xref py py-func docutils literal"><span class="pre">urljoin()</span></code></a></li>
+<li><a class="reference internal" href="#pymodis.downmodis.getNewerVersion" title="pymodis.downmodis.getNewerVersion"><code class="xref py py-func docutils literal"><span class="pre">getNewerVersion()</span></code></a></li>
+<li><a class="reference internal" href="#pymodis.downmodis.str2date" title="pymodis.downmodis.str2date"><code class="xref py py-func docutils literal"><span class="pre">str2date()</span></code></a></li>
+</ul>
+<dl class="class">
+<dt id="pymodis.downmodis.ModisHTTPRedirectHandler">
+<em class="property">class </em><code class="descclassname">pymodis.downmodis.</code><code class="descname">ModisHTTPRedirectHandler</code><a class="reference internal" href="../_modules/pymodis/downmodis.html#ModisHTTPRedirectHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.ModisHTTPRedirectHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">urllib.request.HTTPRedirectHandler</span></code></p>
+<p>Class to return 302 error</p>
+<dl class="method">
+<dt id="pymodis.downmodis.ModisHTTPRedirectHandler.http_error_302">
+<code class="descname">http_error_302</code><span class="sig-paren">(</span><em>req</em>, <em>fp</em>, <em>code</em>, <em>msg</em>, <em>headers</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#ModisHTTPRedirectHandler.http_error_302"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.ModisHTTPRedirectHandler.http_error_302" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pymodis.downmodis.downModis">
+<em class="property">class </em><code class="descclassname">pymodis.downmodis.</code><code class="descname">downModis</code><span class="sig-paren">(</span><em>destinationFolder</em>, <em>password=None</em>, <em>user=None</em>, <em>url='https://e4ftl01.cr.usgs.gov'</em>, <em>tiles=None</em>, <em>path='MOLT'</em>, <em>product='MOD11A1.005'</em>, <em>today=None</em>, <em>enddate=None</em>, <em>delta=10</em>, <em>jpg=False</em>, <em>debug=False</em>, <em>timeout=30</em>, <em>checkgdal=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A class to download MODIS data from NASA FTP or HTTP repositories</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>destinationFolder</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – where the files will be stored</li>
+<li><strong>password</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the password required by NASA authentication system</li>
+<li><strong>user</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the user namerequired by NASA authentication system</li>
+<li><strong>url</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the base url from where to download the MODIS data,
+it can be FTP or HTTP but it has to start with
+‘<a class="reference external" href="ftp://">ftp://</a>’ or ‘<a class="reference external" href="http://">http://</a>’ or ‘<a class="reference external" href="https://">https://</a>’</li>
+<li><strong>path</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the directory where the data that you want to
+download are stored on the FTP server. For HTTP
+requests, this is the part of the url between the ‘url’
+parameter and the ‘product’ parameter.</li>
+<li><strong>product</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the code of the product to download, the code
+should be idential to the one of the url</li>
+<li><strong>tiles</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – a set of tiles to be downloaded, None == all tiles.
+This can be passed as a string of tileIDs separated
+by commas, or as a list of individual tileIDs</li>
+<li><strong>today</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the day to start downloading; in order to pass a
+date different from today use the format YYYY-MM-DD</li>
+<li><strong>enddate</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the day to end downloading; in order to pass a
+date use the format YYYY-MM-DD. This day must be
+before the ‘today’ parameter. Downloading happens
+in reverse order (currently)</li>
+<li><strong>delta</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – timelag i.e. the number of days starting from
+today backwards. Will be overwritten if
+‘enddate’ is specifed during instantiation</li>
+<li><strong>jpeg</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – set to True if you want to download the JPG overview
+file in addition to the HDF</li>
+<li><strong>debug</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – set to True if you want to obtain debug information</li>
+<li><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – Timeout value for HTTP server (seconds)</li>
+<li><strong>checkgdal</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – variable to set the GDAL check</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.checkDataExist">
+<code class="descname">checkDataExist</code><span class="sig-paren">(</span><em>listNewFile</em>, <em>move=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.checkDataExist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.checkDataExist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if a file already exists in the local download directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>listNewFile</strong> (<em>list</em>) – list of all files, returned by getFilesList
+function</li>
+<li><strong>move</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – it is useful to know if a function is called from
+download or move function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">list of files to download</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.checkFile">
+<code class="descname">checkFile</code><span class="sig-paren">(</span><em>filHdf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.checkFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.checkFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check by using GDAL to be sure that the download went ok</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filHdf</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the HDF file to check</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">0 if file is correct, 1 for error</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.closeFTP">
+<code class="descname">closeFTP</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.closeFTP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.closeFTP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close ftp connection and close the file list document</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.closeFilelist">
+<code class="descname">closeFilelist</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.closeFilelist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.closeFilelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to close the file list of where the files are downloaded</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>ncon=20</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Connect to the server and fill the dirData variable</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>ncon</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – maximum number of attempts to connect to the HTTP
+server before failing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.dayDownload">
+<code class="descname">dayDownload</code><span class="sig-paren">(</span><em>day</em>, <em>listFilesDown</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.dayDownload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.dayDownload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads tiles for the selected day</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>day</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the day in format YYYY.MM.DD</li>
+<li><strong>listFilesDown</strong> (<em>list</em>) – list of the files to download, returned
+by checkDataExist function</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.debugDays">
+<code class="descname">debugDays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.debugDays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.debugDays" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function is useful to debug the number of days</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.debugLog">
+<code class="descname">debugLog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.debugLog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.debugLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to create the debug file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a Logger object to use to write debug info</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.debugMaps">
+<code class="descname">debugMaps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.debugMaps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.debugMaps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints the files to download to the debug stream</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.downloadFile">
+<code class="descname">downloadFile</code><span class="sig-paren">(</span><em>filDown</em>, <em>filHdf</em>, <em>day</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.downloadFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.downloadFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download a single file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filDown</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the file to download</li>
+<li><strong>filHdf</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the file to write to</li>
+<li><strong>day</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the day in format YYYY.MM.DD</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.downloadsAllDay">
+<code class="descname">downloadsAllDay</code><span class="sig-paren">(</span><em>clean=False</em>, <em>allDays=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.downloadsAllDay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.downloadsAllDay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download all requested days</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>clean</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – if True remove the empty files, they could have
+some problems in the previous download</li>
+<li><strong>allDays</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – download all passable days</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.getAllDays">
+<code class="descname">getAllDays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.getAllDays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.getAllDays" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all days</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.getFilesList">
+<code class="descname">getFilesList</code><span class="sig-paren">(</span><em>day=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.getFilesList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.getFilesList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of files to download. HDF and XML files are
+downloaded by default. JPG files will be downloaded if
+self.jpeg == True.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>day</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the date of data in format YYYY.MM.DD</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of files to download for the day</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.getListDays">
+<code class="descname">getListDays</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.getListDays"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.getListDays" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of all selected days</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.removeEmptyFiles">
+<code class="descname">removeEmptyFiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.removeEmptyFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.removeEmptyFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to remove files in the download directory that have
+filesize equal to 0</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.setDirectoryIn">
+<code class="descname">setDirectoryIn</code><span class="sig-paren">(</span><em>day</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.setDirectoryIn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.setDirectoryIn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Enter into the file directory of a specified day</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>day</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – a string representing a day in format YYYY.MM.DD</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.downModis.setDirectoryOver">
+<code class="descname">setDirectoryOver</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#downModis.setDirectoryOver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.downModis.setDirectoryOver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Move up within the file directory</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pymodis.downmodis.getNewerVersion">
+<code class="descclassname">pymodis.downmodis.</code><code class="descname">getNewerVersion</code><span class="sig-paren">(</span><em>oldFile</em>, <em>newFile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#getNewerVersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.getNewerVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check two files to determine which is newer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>oldFile</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – one of the two similar files</li>
+<li><strong>newFile</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – one of the two similar files</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the name of newer file</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pymodis.downmodis.modisHtmlParser">
+<em class="property">class </em><code class="descclassname">pymodis.downmodis.</code><code class="descname">modisHtmlParser</code><span class="sig-paren">(</span><em>fh</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#modisHtmlParser"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.modisHtmlParser" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">html.parser.HTMLParser</span></code></p>
+<p>A class to parse HTML</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>fh</strong> – content of http request</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pymodis.downmodis.modisHtmlParser.get_all">
+<code class="descname">get_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#modisHtmlParser.get_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.modisHtmlParser.get_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return everything</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.modisHtmlParser.get_dates">
+<code class="descname">get_dates</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#modisHtmlParser.get_dates"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.modisHtmlParser.get_dates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of directories with date</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.modisHtmlParser.get_tiles">
+<code class="descname">get_tiles</code><span class="sig-paren">(</span><em>prod</em>, <em>tiles</em>, <em>jpeg=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#modisHtmlParser.get_tiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.modisHtmlParser.get_tiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of files to download</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>prod</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the code of MODIS product that we are going to
+analyze</li>
+<li><strong>tiles</strong> (<em>list</em>) – the list of tiles to consider</li>
+<li><strong>jpeg</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – True to also check for jpeg data</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.downmodis.modisHtmlParser.handle_starttag">
+<code class="descname">handle_starttag</code><span class="sig-paren">(</span><em>tag</em>, <em>attrs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#modisHtmlParser.handle_starttag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.modisHtmlParser.handle_starttag" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="pymodis.downmodis.str2date">
+<code class="descclassname">pymodis.downmodis.</code><code class="descname">str2date</code><span class="sig-paren">(</span><em>datestring</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#str2date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.str2date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert to datetime.date object from a string</p>
+<p>:param str datestring string with format (YYYY-MM-DD)
+:return: a datetime.date object representing datestring</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="pymodis.downmodis.urljoin">
+<code class="descclassname">pymodis.downmodis.</code><code class="descname">urljoin</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/downmodis.html#urljoin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.downmodis.urljoin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Joins given arguments into a url. Trailing but not leading slashes are
+stripped for each argument.
+<a class="reference external" href="http://stackoverflow.com/a/11326230">http://stackoverflow.com/a/11326230</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="parsemodis.html" title="parsemodis module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modules.html" title="pyModis Library"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >pyModis Library</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>

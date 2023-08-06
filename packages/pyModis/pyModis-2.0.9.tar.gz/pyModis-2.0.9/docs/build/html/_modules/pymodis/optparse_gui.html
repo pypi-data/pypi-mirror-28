@@ -1,0 +1,513 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pymodis.optparse_gui &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<link rel="stylesheet" href="../../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pymodis.optparse_gui</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">A drop-in replacement for optparse (&quot;import optparse_gui as optparse&quot;)</span>
+<span class="sd">Provides an identical interface to optparse(.OptionParser),</span>
+<span class="sd">But displays an automatically generated wx dialog in order to enter the</span>
+<span class="sd">options/args, instead of parsing command line arguments</span>
+
+<span class="sd">Classes:</span>
+
+<span class="sd">* :class:`OptparseDialog`</span>
+<span class="sd">* :class:`UserCancelledError`</span>
+<span class="sd">* :class:`Option`</span>
+<span class="sd">* :class:`OptionParser`</span>
+
+<span class="sd">Functions:</span>
+
+<span class="sd">* :func:`checkLabel`</span>
+
+<span class="sd">&#39;&#39;&#39;</span>
+
+<span class="c1"># python 2 and 3 compatibility</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">dict</span>
+
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">optparse</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">wx</span>
+    <span class="kn">import</span> <span class="nn">wx.lib.filebrowsebutton</span> <span class="k">as</span> <span class="nn">filebrowse</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="mf">0.2</span>
+<span class="n">__revision__</span> <span class="o">=</span> <span class="s1">&#39;$Id$&#39;</span>
+
+<span class="c1"># for required options</span>
+<span class="kn">from</span> <span class="nn">.optparse_required</span> <span class="k">import</span> <span class="n">STREQUIRED</span>
+
+<span class="n">TEXTCTRL_SIZE</span> <span class="o">=</span> <span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="checkLabel"><a class="viewcode-back" href="../../pymodis/optparse.html#pymodis.optparse_gui.checkLabel">[docs]</a><span class="k">def</span> <span class="nf">checkLabel</span><span class="p">(</span><span class="n">option</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create the label for an option, it add the required string if needed</span>
+
+<span class="sd">       :param option: and Option object</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">option</span><span class="o">.</span><span class="n">dest</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="n">label</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">option</span><span class="o">.</span><span class="n">required</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{lab}</span><span class="s2"> [</span><span class="si">{req}</span><span class="s2">]&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">lab</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">req</span><span class="o">=</span><span class="n">STREQUIRED</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">label</span></div>
+
+
+<div class="viewcode-block" id="OptparseDialog"><a class="viewcode-back" href="../../pymodis/optparse.html#pymodis.optparse_gui.OptparseDialog">[docs]</a><span class="k">class</span> <span class="nc">OptparseDialog</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">Dialog</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;The dialog presented to the user with dynamically generated controls,</span>
+<span class="sd">    to fill in the required options.</span>
+
+<span class="sd">    :param optParser: the optparse object</span>
+<span class="sd">    :param str title: the title to add in the GUI</span>
+<span class="sd">    :param parent: the parent GUI</span>
+<span class="sd">    :param int ID: the ID of GUI</span>
+<span class="sd">    :param pos: the position of GUI</span>
+<span class="sd">    :param size: the dimension of GUI</span>
+<span class="sd">    :param style: the style of GUI</span>
+
+<span class="sd">    Based on the wx.Dialog sample from wx Docs &amp; Demos</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">optParser</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">pos</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">DefaultPosition</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">DefaultSize</span><span class="p">,</span>
+                 <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">DEFAULT_DIALOG_STYLE</span><span class="o">|</span><span class="n">wx</span><span class="o">.</span><span class="n">THICK_FRAME</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function for initialization&quot;&quot;&quot;</span>
+
+        <span class="c1"># TODO fix icon</span>
+<span class="c1">#        modis_icon = wx.Icon(&#39;/home/lucadelu/github/pyModis/pyModis.ico&#39;,</span>
+<span class="c1">#                             wx.BITMAP_TYPE_ICO)</span>
+<span class="c1">#        self.SetIcon(modis_icon)</span>
+        <span class="n">provider</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">SimpleHelpProvider</span><span class="p">()</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">HelpProvider_Set</span><span class="p">(</span><span class="n">provider</span><span class="p">)</span>
+
+        <span class="n">pre</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">PreDialog</span><span class="p">()</span>
+        <span class="n">pre</span><span class="o">.</span><span class="n">SetExtraStyle</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">DIALOG_EX_CONTEXTHELP</span><span class="p">)</span>
+        <span class="n">pre</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">style</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">PostCreate</span><span class="p">(</span><span class="n">pre</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CenterOnScreen</span><span class="p">()</span>
+        <span class="n">sizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">VERTICAL</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">args_ctrl</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">option_controls</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+<span class="c1">#       IN THE TOP OF GUI THERE WAS THE NAME OF THE SCRIPT, BUT NOW IT IS IN</span>
+<span class="c1">#       THE TITLE</span>
+
+<span class="c1">#        top_label_text = &#39;%s %s&#39; % (optParser.get_prog_name(),</span>
+<span class="c1">#                                     optParser.get_version())</span>
+<span class="c1">#        label = wx.StaticText(self, -1, top_label_text)</span>
+<span class="c1">#        sizer.Add(label, 0, wx.ALIGN_CENTRE | wx.ALL, 5)</span>
+
+        <span class="c1"># Add a text control for entering args</span>
+
+        <span class="n">arg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkArg</span><span class="p">(</span><span class="n">optParser</span><span class="o">.</span><span class="n">get_prog_name</span><span class="p">())</span>
+        <span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GROW</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_CENTER_VERTICAL</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">RIGHT</span> <span class="o">|</span>
+                  <span class="n">wx</span><span class="o">.</span><span class="n">TOP</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">browse_option_map</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="c1"># Add controls for all the options</span>
+        <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">optParser</span><span class="o">.</span><span class="n">list_of_option</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">option</span><span class="o">.</span><span class="n">dest</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">option</span><span class="o">.</span><span class="n">help</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">option</span><span class="o">.</span><span class="n">help</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+            <span class="k">if</span> <span class="n">checkLabel</span><span class="p">(</span><span class="n">option</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;Formats&#39;</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">box</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">HORIZONTAL</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;store&#39;</span> <span class="o">==</span> <span class="n">option</span><span class="o">.</span><span class="n">action</span><span class="p">:</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">checkLabel</span><span class="p">(</span><span class="n">option</span><span class="p">))</span>
+                <span class="n">label</span><span class="o">.</span><span class="n">SetHelpText</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; [default=</span><span class="si">%d</span><span class="s1">efault]&#39;</span><span class="p">,</span>
+                                                      <span class="s1">&#39;&#39;</span><span class="p">))</span>
+                <span class="n">box</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_CENTRE</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="s1">&#39;choice&#39;</span> <span class="o">==</span> <span class="n">option</span><span class="o">.</span><span class="n">type</span><span class="p">:</span>
+                    <span class="n">choices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">choices</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">optparse</span><span class="o">.</span><span class="n">NO_DEFAULT</span> <span class="o">==</span> <span class="n">option</span><span class="o">.</span><span class="n">default</span><span class="p">:</span>
+                        <span class="n">option</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">choices</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">ctrl</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">ComboBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">choices</span><span class="p">,</span>
+                                       <span class="n">value</span><span class="o">=</span><span class="n">option</span><span class="o">.</span><span class="n">default</span><span class="p">,</span>
+                                       <span class="n">size</span><span class="o">=</span><span class="n">TEXTCTRL_SIZE</span><span class="p">,</span>
+                                       <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">CB_DROPDOWN</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">CB_READONLY</span> <span class="o">|</span>
+                                       <span class="n">wx</span><span class="o">.</span><span class="n">CB_SORT</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">option</span><span class="o">.</span><span class="n">type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">]:</span>
+                    <span class="k">if</span> <span class="n">option</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;file&#39;</span><span class="p">:</span>
+                        <span class="n">fmode</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">OPEN</span>
+                    <span class="k">elif</span> <span class="n">option</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;output&#39;</span><span class="p">:</span>
+                        <span class="n">fmode</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">SAVE</span>
+                    <span class="n">ctrl</span> <span class="o">=</span> <span class="n">filebrowse</span><span class="o">.</span><span class="n">FileBrowseButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span>
+                                                       <span class="n">fileMask</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span>
+                                                       <span class="n">labelText</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                                       <span class="n">dialogTitle</span><span class="o">=</span><span class="s1">&#39;Choose output file&#39;</span><span class="p">,</span>
+                                                       <span class="n">buttonText</span><span class="o">=</span><span class="s1">&#39;Browse&#39;</span><span class="p">,</span>
+                                                       <span class="n">startDirectory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span>
+                                                       <span class="n">fileMode</span><span class="o">=</span><span class="n">fmode</span><span class="p">,</span>
+                                                       <span class="n">size</span><span class="o">=</span><span class="n">TEXTCTRL_SIZE</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">option</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s1">&#39;directory&#39;</span><span class="p">:</span>
+                    <span class="n">ctrl</span> <span class="o">=</span> <span class="n">filebrowse</span><span class="o">.</span><span class="n">DirBrowseButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span>
+                                                      <span class="n">labelText</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                                      <span class="n">dialogTitle</span><span class="o">=</span><span class="s1">&#39;Choose output file&#39;</span><span class="p">,</span>
+                                                      <span class="n">buttonText</span><span class="o">=</span><span class="s1">&#39;Browse&#39;</span><span class="p">,</span>
+                                                      <span class="n">startDirectory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span>
+                                                      <span class="n">size</span><span class="o">=</span><span class="n">TEXTCTRL_SIZE</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="s1">&#39;MULTILINE&#39;</span> <span class="ow">in</span> <span class="n">option</span><span class="o">.</span><span class="n">help</span><span class="p">:</span>
+                        <span class="n">ctrl</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span>
+                                           <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">TE_MULTILINE</span> <span class="o">|</span>
+                                           <span class="n">wx</span><span class="o">.</span><span class="n">TE_PROCESS_ENTER</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">ctrl</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">TextCtrl</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">TEXTCTRL_SIZE</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">default</span> <span class="o">!=</span> <span class="n">optparse</span><span class="o">.</span><span class="n">NO_DEFAULT</span><span class="p">)</span> <span class="ow">and</span> \
+                       <span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+                        <span class="n">ctrl</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">default</span><span class="p">)</span>
+
+                <span class="n">box</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_RIGHT</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">option</span><span class="o">.</span><span class="n">action</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;store_true&#39;</span><span class="p">,</span> <span class="s1">&#39;store_false&#39;</span><span class="p">):</span>
+                <span class="n">ctrl</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">CheckBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">checkLabel</span><span class="p">(</span><span class="n">option</span><span class="p">),</span>
+                                   <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">box</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">ctrl</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_CENTRE</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">option</span><span class="o">.</span><span class="n">action</span> <span class="o">==</span> <span class="s1">&#39;group_name&#39;</span><span class="p">:</span>
+                <span class="n">label</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">checkLabel</span><span class="p">(</span><span class="n">option</span><span class="p">))</span>
+                <span class="n">font</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">DECORATIVE</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">NORMAL</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">BOLD</span><span class="p">)</span>
+                <span class="n">label</span><span class="o">.</span><span class="n">SetFont</span><span class="p">(</span><span class="n">font</span><span class="p">)</span>
+                <span class="n">box</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_CENTRE</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+                <span class="n">ctrl</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;Unknown option action: &#39;</span>
+                                          <span class="s1">&#39;</span><span class="si">{act}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">act</span><span class="o">=</span><span class="nb">repr</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">action</span><span class="p">)))</span>
+            <span class="k">if</span> <span class="n">ctrl</span><span class="p">:</span>
+                <span class="n">ctrl</span><span class="o">.</span><span class="n">SetHelpText</span><span class="p">(</span><span class="n">option</span><span class="o">.</span><span class="n">help</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; [default=</span><span class="si">%d</span><span class="s1">efault]&#39;</span><span class="p">,</span>
+                                                     <span class="s1">&#39;&#39;</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">option_controls</span><span class="p">[</span><span class="n">option</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctrl</span>
+            <span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">box</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">GROW</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_CENTER_VERTICAL</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+        <span class="n">line</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticLine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">LI_HORIZONTAL</span><span class="p">)</span>
+        <span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+                  <span class="n">wx</span><span class="o">.</span><span class="n">GROW</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_CENTER_VERTICAL</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">RIGHT</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">TOP</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+        <span class="n">btnsizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StdDialogButtonSizer</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">wx</span><span class="o">.</span><span class="n">Platform</span> <span class="o">!=</span> <span class="s2">&quot;__WXMSW__&quot;</span><span class="p">:</span>
+            <span class="n">btn</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">ContextHelpButton</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">btnsizer</span><span class="o">.</span><span class="n">AddButton</span><span class="p">(</span><span class="n">btn</span><span class="p">)</span>
+
+        <span class="n">btn</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_OK</span><span class="p">)</span>
+        <span class="n">btn</span><span class="o">.</span><span class="n">SetHelpText</span><span class="p">(</span><span class="s2">&quot;The OK button completes the dialog&quot;</span><span class="p">)</span>
+        <span class="n">btn</span><span class="o">.</span><span class="n">SetDefault</span><span class="p">()</span>
+        <span class="n">btnsizer</span><span class="o">.</span><span class="n">AddButton</span><span class="p">(</span><span class="n">btn</span><span class="p">)</span>
+
+        <span class="n">btn</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_CANCEL</span><span class="p">)</span>
+        <span class="n">btn</span><span class="o">.</span><span class="n">SetHelpText</span><span class="p">(</span><span class="s2">&quot;The Cancel button cancels the dialog. (Cool, huh?)&quot;</span><span class="p">)</span>
+        <span class="n">btnsizer</span><span class="o">.</span><span class="n">AddButton</span><span class="p">(</span><span class="n">btn</span><span class="p">)</span>
+        <span class="n">btnsizer</span><span class="o">.</span><span class="n">Realize</span><span class="p">()</span>
+
+        <span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">btnsizer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_CENTER_VERTICAL</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">SetSizer</span><span class="p">(</span><span class="n">sizer</span><span class="p">)</span>
+        <span class="n">sizer</span><span class="o">.</span><span class="n">Fit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_getOptions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a dictionary with the options and their values&quot;&quot;&quot;</span>
+        <span class="n">option_values</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">option</span><span class="p">,</span> <span class="n">ctrl</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">option_controls</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">option_values</span><span class="p">[</span><span class="n">option</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctrl</span><span class="o">.</span><span class="n">Value</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">option_values</span><span class="p">[</span><span class="n">option</span><span class="p">]</span> <span class="o">=</span> <span class="n">ctrl</span><span class="o">.</span><span class="n">GetValue</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">option_values</span>
+
+    <span class="k">def</span> <span class="nf">_checkArg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an option in WX</span>
+
+<span class="sd">        :param str name: the name of command to parse</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sizer</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">BoxSizer</span><span class="p">(</span><span class="n">wx</span><span class="o">.</span><span class="n">HORIZONTAL</span><span class="p">)</span>
+        <span class="c1"># check what is the module</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;modis_convert.py&#39;</span> <span class="ow">or</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;modis_parse.py&#39;</span> <span class="ow">or</span> \
+           <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;modis_quality.py&#39;</span><span class="p">:</span>
+            <span class="n">ltext</span> <span class="o">=</span> <span class="s1">&#39;File HDF [</span><span class="si">%s</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="n">STREQUIRED</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">htext</span> <span class="o">=</span> <span class="s1">&#39;Select HDF file&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">typecont</span> <span class="o">=</span> <span class="s1">&#39;file&#39;</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;modis_download.py&#39;</span> <span class="ow">or</span> \
+             <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;modis_download_from_list.py&#39;</span><span class="p">:</span>
+            <span class="n">ltext</span> <span class="o">=</span> <span class="s1">&#39;Destination Folder [</span><span class="si">%s</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="n">STREQUIRED</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">htext</span> <span class="o">=</span> <span class="s1">&#39;Select directory where save MODIS files&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">typecont</span> <span class="o">=</span> <span class="s1">&#39;dir&#39;</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;modis_mosaic.py&#39;</span><span class="p">:</span>
+            <span class="n">ltext</span> <span class="o">=</span> <span class="s1">&#39;File containig HDF list [</span><span class="si">%s</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="n">STREQUIRED</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">htext</span> <span class="o">=</span> <span class="s1">&#39;Select file containig a list of MODIS file&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">typecont</span> <span class="o">=</span> <span class="s1">&#39;file&#39;</span>
+        <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;modis_multiparse.py&#39;</span><span class="p">:</span>
+            <span class="n">ltext</span> <span class="o">=</span> <span class="s1">&#39;List of HDF file [</span><span class="si">%s</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="n">STREQUIRED</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">htext</span> <span class="o">=</span> <span class="s1">&#39;List of MODIS files&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">typecont</span> <span class="o">=</span> <span class="s1">&#39;mfile&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ltext</span> <span class="o">=</span> <span class="s1">&#39;Test&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">htext</span> <span class="o">=</span> <span class="s1">&#39;Test&#39;</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">StaticText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ltext</span><span class="p">)</span>
+        <span class="n">label</span><span class="o">.</span><span class="n">SetHelpText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">htext</span><span class="p">)</span>
+
+        <span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">label</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_LEFT</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_CENTRE_VERTICAL</span> <span class="o">|</span>
+                  <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typecont</span> <span class="o">==</span> <span class="s1">&#39;dir&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arg_ctrl</span> <span class="o">=</span> <span class="n">filebrowse</span><span class="o">.</span><span class="n">DirBrowseButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span>
+                                                       <span class="n">labelText</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                                       <span class="n">dialogTitle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">htext</span><span class="p">,</span>
+                                                       <span class="n">buttonText</span><span class="o">=</span><span class="s1">&#39;Browse&#39;</span><span class="p">,</span>
+                                                       <span class="n">startDirectory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span>
+                                                       <span class="n">changeCallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onText</span><span class="p">,</span>
+                                                       <span class="n">size</span><span class="o">=</span><span class="n">TEXTCTRL_SIZE</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">typecont</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="s1">&#39;mfile&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arg_ctrl</span> <span class="o">=</span> <span class="n">filebrowse</span><span class="o">.</span><span class="n">FileBrowseButton</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">ID_ANY</span><span class="p">,</span>
+                                                        <span class="n">fileMask</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">,</span>
+                                                        <span class="n">labelText</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span>
+                                                        <span class="n">dialogTitle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">htext</span><span class="p">,</span>
+                                                        <span class="n">buttonText</span><span class="o">=</span><span class="s1">&#39;Browse&#39;</span><span class="p">,</span>
+                                                        <span class="n">startDirectory</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span>
+                                                        <span class="n">fileMode</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">OPEN</span><span class="p">,</span>
+                                                        <span class="n">changeCallback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">onText</span><span class="p">,</span>
+                                                        <span class="n">size</span><span class="o">=</span><span class="n">TEXTCTRL_SIZE</span><span class="p">)</span>
+        <span class="n">sizer</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">arg_ctrl</span><span class="p">,</span> <span class="n">flag</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">ALIGN_RIGHT</span> <span class="o">|</span> <span class="n">wx</span><span class="o">.</span><span class="n">ALL</span><span class="p">,</span> <span class="n">border</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">sizer</span>
+
+<div class="viewcode-block" id="OptparseDialog.onText"><a class="viewcode-back" href="../../pymodis/optparse.html#pymodis.optparse_gui.OptparseDialog.onText">[docs]</a>    <span class="k">def</span> <span class="nf">onText</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;File changed&quot;&quot;&quot;</span>
+        <span class="n">myId</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">GetId</span><span class="p">()</span>
+        <span class="n">me</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">FindWindowById</span><span class="p">(</span><span class="n">myId</span><span class="p">)</span>
+        <span class="n">wktfile</span> <span class="o">=</span> <span class="n">me</span><span class="o">.</span><span class="n">GetValue</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wktfile</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typecont</span> <span class="o">==</span> <span class="s1">&#39;mfile&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">args_ctrl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wktfile</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">args_ctrl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">wktfile</span><span class="p">)</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">Skip</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OptparseDialog.onBrowse"><a class="viewcode-back" href="../../pymodis/optparse.html#pymodis.optparse_gui.OptparseDialog.onBrowse">[docs]</a>    <span class="k">def</span> <span class="nf">onBrowse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Choose file&quot;&quot;&quot;</span>
+        <span class="n">dlg</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">FileDialog</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">htext</span><span class="p">,</span>
+                            <span class="n">defaultDir</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="n">style</span><span class="o">=</span><span class="n">wx</span><span class="o">.</span><span class="n">OPEN</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dlg</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span> <span class="o">==</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_OK</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">dlg</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">args_ctrl</span><span class="o">.</span><span class="n">SetValue</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">dlg</span><span class="o">.</span><span class="n">Destroy</span><span class="p">()</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">Skip</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="OptparseDialog.getOptionsAndArgs"><a class="viewcode-back" href="../../pymodis/optparse.html#pymodis.optparse_gui.OptparseDialog.getOptionsAndArgs">[docs]</a>    <span class="k">def</span> <span class="nf">getOptionsAndArgs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;Parse the options and args</span>
+
+<span class="sd">        :return: a dictionary of option names and values, a sequence of args</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">option_values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getOptions</span><span class="p">()</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">args_ctrl</span>
+        <span class="k">return</span> <span class="n">option_values</span><span class="p">,</span> <span class="n">args</span></div></div>
+
+
+<div class="viewcode-block" id="UserCancelledError"><a class="viewcode-back" href="../../pymodis/optparse.html#pymodis.optparse_gui.UserCancelledError">[docs]</a><span class="k">class</span> <span class="nc">UserCancelledError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;??&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Option"><a class="viewcode-back" href="../../pymodis/optparse.html#pymodis.optparse_gui.Option">[docs]</a><span class="k">class</span> <span class="nc">Option</span><span class="p">(</span><span class="n">optparse</span><span class="o">.</span><span class="n">Option</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extended optparse.Option class&quot;&quot;&quot;</span>
+    <span class="n">SUPER</span> <span class="o">=</span> <span class="n">optparse</span><span class="o">.</span><span class="n">Option</span>
+    <span class="n">TYPES</span> <span class="o">=</span> <span class="n">SUPER</span><span class="o">.</span><span class="n">TYPES</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="s1">&#39;directory&#39;</span><span class="p">,</span> <span class="s1">&#39;group_name&#39;</span><span class="p">)</span>
+    <span class="n">ACTIONS</span> <span class="o">=</span> <span class="n">SUPER</span><span class="o">.</span><span class="n">ACTIONS</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;group_name&#39;</span><span class="p">,)</span>
+    <span class="n">TYPED_ACTIONS</span> <span class="o">=</span> <span class="n">SUPER</span><span class="o">.</span><span class="n">TYPED_ACTIONS</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;group_name&#39;</span><span class="p">,)</span>
+    <span class="c1"># for required options</span>
+    <span class="n">ATTRS</span> <span class="o">=</span> <span class="n">optparse</span><span class="o">.</span><span class="n">Option</span><span class="o">.</span><span class="n">ATTRS</span> <span class="o">+</span> <span class="p">[</span><span class="n">STREQUIRED</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">opts</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">STREQUIRED</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;help&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;(Required) &#39;</span> <span class="o">+</span> <span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;help&#39;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">optparse</span><span class="o">.</span><span class="n">Option</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">opts</span><span class="p">,</span> <span class="o">**</span><span class="n">attrs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OptionParser"><a class="viewcode-back" href="../../pymodis/optparse.html#pymodis.optparse_gui.OptionParser">[docs]</a><span class="k">class</span> <span class="nc">OptionParser</span><span class="p">(</span><span class="n">optparse</span><span class="o">.</span><span class="n">OptionParser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extended optparse.OptionParser to create the GUI for the module&quot;&quot;&quot;</span>
+    <span class="n">SUPER</span> <span class="o">=</span> <span class="n">optparse</span><span class="o">.</span><span class="n">OptionParser</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to initialize the object&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">wx</span><span class="o">.</span><span class="n">GetApp</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">wx</span><span class="o">.</span><span class="n">App</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;option_class&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;option_class&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Option</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SUPER</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OptionParser.parse_args"><a class="viewcode-back" href="../../pymodis/optparse.html#pymodis.optparse_gui.OptionParser.parse_args">[docs]</a>    <span class="k">def</span> <span class="nf">parse_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;This is the heart of it all overrides</span>
+<span class="sd">        optparse.OptionParser.parse_args</span>
+
+<span class="sd">        :param arg: is irrelevant and thus ignored, it&#39;s here only for</span>
+<span class="sd">                    interface compatibility</span>
+<span class="sd">        :param values: is irrelevant and thus ignored, it&#39;s here only for</span>
+<span class="sd">                       interface compatibility</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># preprocess command line arguments and set to defaults</span>
+        <span class="n">option_values</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPER</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_of_option</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">option_list</span>
+        <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">option_groups</span><span class="p">:</span>
+            <span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;--</span><span class="si">{n}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">group</span><span class="o">.</span><span class="n">title</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;_&quot;</span><span class="p">))</span>
+            <span class="n">o</span> <span class="o">=</span> <span class="n">Option</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;group_name&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+                       <span class="n">metavar</span><span class="o">=</span><span class="n">title</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s1">&#39;group_name&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">list_of_option</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">option_list</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">list_of_option</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">option</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">option</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">list_of_option</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">option</span><span class="o">.</span><span class="n">dest</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">option_values</span><span class="p">,</span> <span class="n">option</span><span class="o">.</span><span class="n">dest</span><span class="p">):</span>
+                <span class="n">default</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">option_values</span><span class="p">,</span> <span class="n">option</span><span class="o">.</span><span class="n">dest</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">option</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">default</span>
+
+        <span class="n">dlg</span> <span class="o">=</span> <span class="n">OptparseDialog</span><span class="p">(</span><span class="n">optParser</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span>
+                             <span class="n">title</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="s2"> GUI&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">description</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">args</span><span class="p">:</span>
+            <span class="n">dlg</span><span class="o">.</span><span class="n">args_ctrl</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="n">dlg_result</span> <span class="o">=</span> <span class="n">dlg</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">wx</span><span class="o">.</span><span class="n">ID_OK</span> <span class="o">!=</span> <span class="n">dlg_result</span><span class="p">:</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_default_values</span><span class="p">()</span>
+
+        <span class="n">option_values</span><span class="p">,</span> <span class="n">args</span> <span class="o">=</span> <span class="n">dlg</span><span class="o">.</span><span class="n">getOptionsAndArgs</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">option</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">option_values</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">option</span><span class="o">.</span><span class="n">required</span> <span class="ow">and</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;The option </span><span class="si">%s</span><span class="s2"> is mandatory&quot;</span> <span class="o">%</span> <span class="n">option</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;store_true&#39;</span> <span class="o">==</span> <span class="n">option</span><span class="o">.</span><span class="n">action</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">option</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;store_false&#39;</span> <span class="o">==</span> <span class="n">option</span><span class="o">.</span><span class="n">action</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">):</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">option</span><span class="o">.</span><span class="n">dest</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">option</span><span class="o">.</span><span class="n">takes_value</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">option</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">option</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">values</span><span class="p">,</span> <span class="n">args</span></div>
+
+<div class="viewcode-block" id="OptionParser.error"><a class="viewcode-back" href="../../pymodis/optparse.html#pymodis.optparse_gui.OptionParser.error">[docs]</a>    <span class="k">def</span> <span class="nf">error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return an error message with wx.MessageDialog</span>
+
+<span class="sd">           :param str msg: is the error string to pass to message dialog</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wx</span><span class="o">.</span><span class="n">MessageDialog</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="s1">&#39;Error!&#39;</span><span class="p">,</span> <span class="n">wx</span><span class="o">.</span><span class="n">ICON_ERROR</span><span class="p">)</span><span class="o">.</span><span class="n">ShowModal</span><span class="p">()</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>

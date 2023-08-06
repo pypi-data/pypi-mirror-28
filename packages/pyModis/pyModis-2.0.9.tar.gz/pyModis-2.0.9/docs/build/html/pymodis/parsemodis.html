@@ -1,0 +1,738 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>parsemodis module &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="convertmodis module" href="convertmodis.html" />
+    <link rel="prev" title="downmodis module" href="downmodis.html" />
+<link rel="stylesheet" href="../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="convertmodis.html" title="convertmodis module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="downmodis.html" title="downmodis module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">pyModis Library</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="downmodis.html"
+                        title="previous chapter"><code class="docutils literal"><span class="pre">downmodis</span></code> module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="convertmodis.html"
+                        title="next chapter"><code class="docutils literal"><span class="pre">convertmodis</span></code> module</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pymodis.parsemodis">
+<span id="parsemodis-module"></span><h1><code class="xref py py-mod docutils literal"><span class="pre">parsemodis</span></code> module<a class="headerlink" href="#module-pymodis.parsemodis" title="Permalink to this headline">¶</a></h1>
+<p>Simple class to parse MODIS metadata file, it can also write the XML
+metadata file for a mosaic.</p>
+<p>Classes:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#pymodis.parsemodis.parseModis" title="pymodis.parsemodis.parseModis"><code class="xref py py-class docutils literal"><span class="pre">parseModis</span></code></a></li>
+<li><a class="reference internal" href="#pymodis.parsemodis.parseModisMulti" title="pymodis.parsemodis.parseModisMulti"><code class="xref py py-class docutils literal"><span class="pre">parseModisMulti</span></code></a></li>
+</ul>
+<dl class="class">
+<dt id="pymodis.parsemodis.parseModis">
+<em class="property">class </em><code class="descclassname">pymodis.parsemodis.</code><code class="descname">parseModis</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Class to parse MODIS xml files, it can also create the parameter
+configuration file for resampling MODIS DATA with the MRT software or
+convertmodis Module</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the name of MODIS hdf file</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.confResample">
+<code class="descname">confResample</code><span class="sig-paren">(</span><em>spectral</em>, <em>res=None</em>, <em>output=None</em>, <em>datum='WGS84'</em>, <em>resample='NEAREST_NEIGHBOR'</em>, <em>projtype='GEO'</em>, <em>utm=None</em>, <em>projpar='( 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 )'</em>, <em>bound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.confResample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.confResample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the parameter file to use with resample MRT software to
+create tif (geotiff) file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>spectral</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – <p>the spectral subset to be used, see the product
+table to understand the layer that you want use.
+For example:</p>
+<ul>
+<li>NDVI ( 1 1 1 0 0 0 0 0 0 0 0 0) copy only layer
+NDVI, EVI and QA VI the other layers are not used</li>
+<li>LST ( 1 1 0 0 1 1 0 0 0 0 0 0 ) copy only layer
+daily and nightly temperature and QA</li>
+</ul>
+</li>
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – the resolution for the output file, it must be set in
+the map unit of output projection system. The software
+will use the original resolution of input file if res
+not set</li>
+<li><strong>output</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the output name, if not set if not set the prefix
+name of input hdf file will be used</li>
+<li><strong>utm</strong> – the UTM zone if projection system is UTM</li>
+<li><strong>resample</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – <p>the type of resampling, the valid values are:</p>
+<ul>
+<li>NN (nearest neighbor)</li>
+<li>BI (bilinear)</li>
+<li>CC (cubic convolution)</li>
+</ul>
+</li>
+<li><strong>projtype</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – <p>the output projection system, valid values are:</p>
+<ul>
+<li>AEA (Albers Equal Area)</li>
+<li>ER (Equirectangular)</li>
+<li>GEO (Geographic Latitude/Longitude)</li>
+<li>HAM (Hammer)</li>
+<li>ISIN (Integerized Sinusoidal)</li>
+<li>IGH (Interrupted Goode Homolosine)</li>
+<li>LA (Lambert Azimuthal)</li>
+<li>LCC (LambertConformal Conic)</li>
+<li>MERCAT (Mercator)</li>
+<li>MOL (Mollweide)</li>
+<li>PS (Polar Stereographic)</li>
+<li>SIN (Sinusoidal)</li>
+<li>UTM (Universal TransverseMercator)</li>
+</ul>
+</li>
+<li><strong>datum</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – <p>the datum to use, the valid values are:</p>
+<ul>
+<li>NAD27</li>
+<li>NAD83</li>
+<li>WGS66</li>
+<li>WGS76</li>
+<li>WGS84</li>
+<li>NODATUM</li>
+</ul>
+</li>
+<li><strong>projpar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – a list of projection parameters, for more info
+check the Appendix C of MODIS reprojection tool
+user manual <a class="reference external" href="https://lpdaac.usgs.gov/content/download/4831/22895/file/mrt41_usermanual_032811.pdf">https://lpdaac.usgs.gov/content/download/4831/22895/file/mrt41_usermanual_032811.pdf</a></li>
+<li><strong>bound</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – <p>dictionary with the following keys:</p>
+<ul>
+<li>max_lat</li>
+<li>max_lon</li>
+<li>min_lat</li>
+<li>min_lon</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.confResample_swath">
+<code class="descname">confResample_swath</code><span class="sig-paren">(</span><em>sds</em>, <em>geoloc</em>, <em>res</em>, <em>output=None</em>, <em>sphere='8'</em>, <em>resample='NN'</em>, <em>projtype='GEO'</em>, <em>utm=None</em>, <em>projpar='0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0'</em>, <em>bound=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.confResample_swath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.confResample_swath" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Create the parameter file to use with resample MRT software to</dt>
+<dd>create tif (geotiff) file</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>sds</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Name of band/s (Science Data Set) to resample</li>
+<li><strong>geoloc</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Name geolocation file (example MOD3, MYD3)</li>
+<li><strong>res</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – the resolution for the output file, it must be set in
+the map unit of output projection system. The software
+will use the original resolution of input file if res
+not set</li>
+<li><strong>output</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the output name, if not set the prefix name of
+input hdf file will be used</li>
+<li><strong>sphere</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – <p>Output sphere number. Valid options are:</p>
+<ul>
+<li>0=Clarke 1866</li>
+<li>1=Clarke 1880</li>
+<li>2=Bessel</li>
+<li>3=International 1967</li>
+<li>4=International 1909</li>
+<li>5=WGS 72</li>
+<li>6=Everest</li>
+<li>7=WGS 66</li>
+<li>8=GRS1980/WGS 84</li>
+<li>9=Airy</li>
+<li>10=Modified Everest</li>
+<li>11=Modified Airy</li>
+<li>12=Walbeck</li>
+<li>13=Southeast Asia</li>
+<li>14=Australian National</li>
+<li>15=Krassovsky</li>
+<li>16=Hough</li>
+<li>17=Mercury1960</li>
+<li>18=Modified Mercury1968</li>
+<li>19=Sphere 19 (Radius 6370997)</li>
+<li>20=MODIS Sphere (Radius 6371007.181)</li>
+</ul>
+</li>
+<li><strong>resample</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – <p>the type of resampling, the valid values are:</p>
+<ul>
+<li>NN (nearest neighbor)</li>
+<li>BI (bilinear)</li>
+<li>CC (cubic convolution)</li>
+</ul>
+</li>
+<li><strong>projtype</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – <p>the output projection system, valid values are:</p>
+<ul>
+<li>AEA (Albers Equal Area)</li>
+<li>ER (Equirectangular)</li>
+<li>GEO (Geographic Latitude/Longitude)</li>
+<li>HAM (Hammer)</li>
+<li>ISIN (Integerized Sinusoidal)</li>
+<li>IGH (Interrupted Goode Homolosine)</li>
+<li>LA (Lambert Azimuthal)</li>
+<li>LCC (LambertConformal Conic)</li>
+<li>MERCAT (Mercator)</li>
+<li>MOL (Mollweide)</li>
+<li>PS (Polar Stereographic),</li>
+<li>SIN ()Sinusoidal)</li>
+<li>UTM (Universal TransverseMercator)</li>
+</ul>
+</li>
+<li><strong>utm</strong> – the UTM zone if projection system is UTM</li>
+<li><strong>projpar</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – a list of projection parameters, for more info
+check the Appendix C of MODIS reprojection tool
+user manual <a class="reference external" href="https://lpdaac.usgs.gov/content/download/4831/22895/file/mrt41_usermanual_032811.pdf">https://lpdaac.usgs.gov/content/download/4831/22895/file/mrt41_usermanual_032811.pdf</a></li>
+<li><strong>bound</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – <p>dictionary with the following keys:</p>
+<ul>
+<li>max_lat</li>
+<li>max_lon</li>
+<li>min_lat</li>
+<li>min_lon</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.getGranule">
+<code class="descname">getGranule</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.getGranule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.getGranule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the GranuleURMetaData element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.getLayersName">
+<code class="descname">getLayersName</code><span class="sig-paren">(</span><em>output=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.getLayersName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.getLayersName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the names of layers using GDAL</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the path of the file where write the output</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.getMeasureName">
+<code class="descname">getMeasureName</code><span class="sig-paren">(</span><em>output=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.getMeasureName"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.getMeasureName" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the names of measure names</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>output</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the path of the file where write the output</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.getRoot">
+<code class="descname">getRoot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.getRoot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.getRoot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the root element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retBoundary">
+<code class="descname">retBoundary</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retBoundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retBoundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the maximum extend (Bounding Box) of the MODIS file as
+dictionary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retBrowseProduct">
+<code class="descname">retBrowseProduct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retBrowseProduct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retBrowseProduct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the BrowseProduct element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retCollectionMetaData">
+<code class="descname">retCollectionMetaData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retCollectionMetaData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retCollectionMetaData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the CollectionMetaData element as dictionary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retDTD">
+<code class="descname">retDTD</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retDTD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retDTD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the DTDVersion element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retDataCenter">
+<code class="descname">retDataCenter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retDataCenter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retDataCenter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the DataCenterId element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retDataFiles">
+<code class="descname">retDataFiles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retDataFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retDataFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the DataFiles element as dictionary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retDataGranule">
+<code class="descname">retDataGranule</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retDataGranule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retDataGranule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ECSDataGranule elements as dictionary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retDbID">
+<code class="descname">retDbID</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retDbID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retDbID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the DbID element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retGranuleUR">
+<code class="descname">retGranuleUR</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retGranuleUR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retGranuleUR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the GranuleUR element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retInputGranule">
+<code class="descname">retInputGranule</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retInputGranule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retInputGranule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the input files (InputGranule) used to process the considered
+file</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retInsertTime">
+<code class="descname">retInsertTime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retInsertTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retInsertTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the InsertTime element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retLastUpdate">
+<code class="descname">retLastUpdate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retLastUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retLastUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the LastUpdate element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retMeasure">
+<code class="descname">retMeasure</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retMeasure"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retMeasure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return statistics of QA as dictionary</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retPGEVersion">
+<code class="descname">retPGEVersion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retPGEVersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retPGEVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the PGEVersion element</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retPSA">
+<code class="descname">retPSA</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retPSA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retPSA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the PSA values as dictionary, the PSAName is the key and
+and PSAValue is the value</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retPlatform">
+<code class="descname">retPlatform</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retPlatform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retPlatform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the platform values as dictionary.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModis.retRangeTime">
+<code class="descname">retRangeTime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModis.retRangeTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModis.retRangeTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the RangeDateTime elements as dictionary</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pymodis.parsemodis.parseModisMulti">
+<em class="property">class </em><code class="descclassname">pymodis.parsemodis.</code><code class="descname">parseModisMulti</code><span class="sig-paren">(</span><em>hdflist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A class to obtain some variables for the xml file of several MODIS
+tiles. It can also create the xml file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>hdflist</strong> (<em>list</em>) – python list containing the hdf files</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valBound">
+<code class="descname">valBound</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valBound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valBound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function return the Bounding Box of mosaic</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valBrowseProduct">
+<code class="descname">valBrowseProduct</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valBrowseProduct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valBrowseProduct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add BrowseGranuleId</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add BrowseGranuleId</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valCollectionMetaData">
+<code class="descname">valCollectionMetaData</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valCollectionMetaData"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valCollectionMetaData" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add CollectionMetaData</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add CollectionMetaData</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valDTD">
+<code class="descname">valDTD</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valDTD"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valDTD" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add DTDVersion</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add DTDVersion</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valDataCenter">
+<code class="descname">valDataCenter</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valDataCenter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valDataCenter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add DataCenter</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add DataCenter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valDataFiles">
+<code class="descname">valDataFiles</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valDataFiles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valDataFiles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add DataFileContainer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add DataFileContainer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valDataGranule">
+<code class="descname">valDataGranule</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valDataGranule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valDataGranule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add DataFileContainer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add DataFileContainer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valDbID">
+<code class="descname">valDbID</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valDbID"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valDbID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add DbID</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add DbID</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valGranuleUR">
+<code class="descname">valGranuleUR</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valGranuleUR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valGranuleUR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add GranuleUR</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add GranuleUR</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valInputPointer">
+<code class="descname">valInputPointer</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valInputPointer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valInputPointer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add InputPointer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add InputPointer</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valInsTime">
+<code class="descname">valInsTime</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valInsTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valInsTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add the minimum of InsertTime</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add InsertTime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valInsertTime">
+<code class="descname">valInsertTime</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valInsertTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valInsertTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add InsertTime elements</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add InsertTime elements</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valLastUpdate">
+<code class="descname">valLastUpdate</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valLastUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valLastUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add LastUpdate elements</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add LastUpdate elements</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valMeasuredParameter">
+<code class="descname">valMeasuredParameter</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valMeasuredParameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valMeasuredParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add ParameterName</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add ParameterName</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valPGEVersion">
+<code class="descname">valPGEVersion</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valPGEVersion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valPGEVersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add PGEVersion</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add PGEVersion</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valPSA">
+<code class="descname">valPSA</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valPSA"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valPSA" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add PSA</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add PSA</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valPlatform">
+<code class="descname">valPlatform</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valPlatform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valPlatform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add Platform elements</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add Platform elements</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.valRangeTime">
+<code class="descname">valRangeTime</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.valRangeTime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.valRangeTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to add RangeDateTime</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> – element to add RangeDateTime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.parsemodis.parseModisMulti.writexml">
+<code class="descname">writexml</code><span class="sig-paren">(</span><em>outputname</em>, <em>pretty=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/parsemodis.html#parseModisMulti.writexml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.parsemodis.parseModisMulti.writexml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a xml file for a mosaic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>outputname</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the name of output xml file</li>
+<li><strong>pretty</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)"><em>bool</em></a>) – write prettyfy output, by default true</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="convertmodis.html" title="convertmodis module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="downmodis.html" title="downmodis module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >pyModis Library</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>

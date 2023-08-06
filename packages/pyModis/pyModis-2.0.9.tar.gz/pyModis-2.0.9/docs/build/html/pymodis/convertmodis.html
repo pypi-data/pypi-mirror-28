@@ -1,0 +1,263 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>convertmodis module &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="convertmodis_gdal module" href="convertmodis_gdal.html" />
+    <link rel="prev" title="parsemodis module" href="parsemodis.html" />
+<link rel="stylesheet" href="../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="convertmodis_gdal.html" title="convertmodis_gdal module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="parsemodis.html" title="parsemodis module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">pyModis Library</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="parsemodis.html"
+                        title="previous chapter"><code class="docutils literal"><span class="pre">parsemodis</span></code> module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="convertmodis_gdal.html"
+                        title="next chapter"><code class="docutils literal"><span class="pre">convertmodis_gdal</span></code> module</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pymodis.convertmodis">
+<span id="convertmodis-module"></span><h1><code class="xref py py-mod docutils literal"><span class="pre">convertmodis</span></code> module<a class="headerlink" href="#module-pymodis.convertmodis" title="Permalink to this headline">¶</a></h1>
+<p>Convert MODIS HDF file to GeoTiff file or create a HDF mosaic file for
+several tiles using Modis Reprojection Tools.</p>
+<p>Classes:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#pymodis.convertmodis.convertModis" title="pymodis.convertmodis.convertModis"><code class="xref py py-class docutils literal"><span class="pre">convertModis</span></code></a></li>
+<li><a class="reference internal" href="#pymodis.convertmodis.createMosaic" title="pymodis.convertmodis.createMosaic"><code class="xref py py-class docutils literal"><span class="pre">createMosaic</span></code></a></li>
+<li><a class="reference internal" href="#pymodis.convertmodis.processModis" title="pymodis.convertmodis.processModis"><code class="xref py py-class docutils literal"><span class="pre">processModis</span></code></a></li>
+</ul>
+<p>Functions:</p>
+<ul class="simple">
+<li><a class="reference internal" href="#pymodis.convertmodis.checkMRTpath" title="pymodis.convertmodis.checkMRTpath"><code class="xref py py-func docutils literal"><span class="pre">checkMRTpath()</span></code></a></li>
+</ul>
+<dl class="function">
+<dt id="pymodis.convertmodis.checkMRTpath">
+<code class="descclassname">pymodis.convertmodis.</code><code class="descname">checkMRTpath</code><span class="sig-paren">(</span><em>mrtpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis.html#checkMRTpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis.checkMRTpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to check if MRT path it correct</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mrtpath</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the path to MRT directory</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The path to ‘bin’ and ‘data’ directory inside MRT path</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pymodis.convertmodis.convertModis">
+<em class="property">class </em><code class="descclassname">pymodis.convertmodis.</code><code class="descname">convertModis</code><span class="sig-paren">(</span><em>hdfname</em>, <em>confile</em>, <em>mrtpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis.html#convertModis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis.convertModis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A class to convert modis data from hdf to tif using resample
+(from MRT tools)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hdfname</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the full path to the hdf file</li>
+<li><strong>confile</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the full path to the paramater file</li>
+<li><strong>mrtpath</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the full path to mrt directory which contains
+the bin and data directories</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pymodis.convertmodis.convertModis.executable">
+<code class="descname">executable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis.html#convertModis.executable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis.convertModis.executable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the executable of resample MRT software</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.convertmodis.convertModis.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>quiet=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis.html#convertModis.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis.convertModis.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exec the convertion process</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pymodis.convertmodis.createMosaic">
+<em class="property">class </em><code class="descclassname">pymodis.convertmodis.</code><code class="descname">createMosaic</code><span class="sig-paren">(</span><em>listfile</em>, <em>outprefix</em>, <em>mrtpath</em>, <em>subset=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis.html#createMosaic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis.createMosaic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A class to convert several MODIS tiles into a mosaic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>listfile</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the path to file with the list of HDF MODIS
+file</li>
+<li><strong>outprefix</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the prefix for output files</li>
+<li><strong>mrtpath</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the full path to mrt directory which contains
+the bin and data directories</li>
+<li><strong>subset</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – a string composed by 1 and 0 according with the
+layer to mosaic. The string should something like
+‘1 0 1 0 0 0 0’</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pymodis.convertmodis.createMosaic.executable">
+<code class="descname">executable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis.html#createMosaic.executable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis.createMosaic.executable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the executable of mrtmosaic MRT software</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.convertmodis.createMosaic.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>quiet=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis.html#createMosaic.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis.createMosaic.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exect the mosaic process</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.convertmodis.createMosaic.write_mosaic_xml">
+<code class="descname">write_mosaic_xml</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis.html#createMosaic.write_mosaic_xml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis.createMosaic.write_mosaic_xml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the XML metadata file for MODIS mosaic</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pymodis.convertmodis.processModis">
+<em class="property">class </em><code class="descclassname">pymodis.convertmodis.</code><code class="descname">processModis</code><span class="sig-paren">(</span><em>hdfname</em>, <em>confile</em>, <em>mrtpath</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis.html#processModis"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis.processModis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>A class to process raw modis data from hdf to tif using swath2grid
+(from MRT Swath tools)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>hdfname</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the full path to the hdf file</li>
+<li><strong>confile</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the full path to the paramater file</li>
+<li><strong>mrtpath</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – the full path to mrt directory which contains
+the bin and data directories</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pymodis.convertmodis.processModis.executable">
+<code class="descname">executable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis.html#processModis.executable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis.processModis.executable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the executable of resample MRT software</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pymodis.convertmodis.processModis.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>quiet=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pymodis/convertmodis.html#processModis.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pymodis.convertmodis.processModis.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exec the convertion process</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="convertmodis_gdal.html" title="convertmodis_gdal module"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="parsemodis.html" title="parsemodis module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >pyModis Library</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>

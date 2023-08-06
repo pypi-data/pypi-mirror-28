@@ -1,0 +1,1042 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pymodis.downmodis &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<link rel="stylesheet" href="../../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pymodis.downmodis</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1">#  class to download modis data</span>
+<span class="c1">#</span>
+<span class="c1">#  (c) Copyright Luca Delucchi 2010-2016</span>
+<span class="c1">#  (c) Copyright Logan C Byers 2014</span>
+<span class="c1">#  Authors: Luca Delucchi</span>
+<span class="c1">#           Logan C Byers</span>
+<span class="c1">#  Email: luca dot delucchi at fmach dot it</span>
+<span class="c1">#         loganbyers@ku.edu</span>
+<span class="c1">#</span>
+<span class="c1">##################################################################</span>
+<span class="c1">#</span>
+<span class="c1">#  This MODIS Python class is licensed under the terms of GNU GPL 2.</span>
+<span class="c1">#  This program is free software; you can redistribute it and/or</span>
+<span class="c1">#  modify it under the terms of the GNU General Public License as</span>
+<span class="c1">#  published by the Free Software Foundation; either version 2 of</span>
+<span class="c1">#  the License, or (at your option) any later version.</span>
+<span class="c1">#  This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#  but WITHOUT ANY WARRANTY; without even implied warranty of</span>
+<span class="c1">#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.</span>
+<span class="c1">#  See the GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">##################################################################</span>
+<span class="sd">&quot;&quot;&quot;Module to download MODIS HDF files from NASA repository.</span>
+<span class="sd">It supports both FTP and HTTP repositories</span>
+
+<span class="sd">Classes:</span>
+
+<span class="sd">* :class:`modisHtmlParser`</span>
+<span class="sd">* :class:`downModis`</span>
+
+<span class="sd">Functions:</span>
+
+<span class="sd">* :func:`urljoin`</span>
+<span class="sd">* :func:`getNewerVersion`</span>
+<span class="sd">* :func:`str2date`</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># python 2 and 3 compatibility</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">dict</span>
+
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">date</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">timedelta</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">from</span> <span class="nn">ftplib</span> <span class="k">import</span> <span class="n">FTP</span>
+<span class="kn">import</span> <span class="nn">ftplib</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="c1"># urllib in python 2 and 3</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">future.standard_library</span> <span class="k">import</span> <span class="n">install_aliases</span>
+    <span class="n">install_aliases</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;Future library not found, please install it&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">urllib.request</span> <span class="k">import</span> <span class="n">urlopen</span>
+<span class="kn">import</span> <span class="nn">urllib.request</span>
+<span class="kn">import</span> <span class="nn">urllib.error</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="k">import</span> <span class="n">b64encode</span>
+<span class="kn">from</span> <span class="nn">html.parser</span> <span class="k">import</span> <span class="n">HTMLParser</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">netrc</span>
+<span class="c1"># urlparse in python 2 and 3</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">urlparse</span> <span class="k">import</span> <span class="n">urlparse</span>
+    <span class="n">URLPARSE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="k">import</span> <span class="n">urlparse</span>
+        <span class="n">URLPARSE</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">URLPARSE</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;WARNING: urlparse not found, it is not possible to use&#39;</span>
+              <span class="s1">&#39; netrc file&#39;</span><span class="p">)</span>
+<span class="k">global</span> <span class="n">GDAL</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">osgeo.gdal</span> <span class="k">as</span> <span class="nn">gdal</span>
+    <span class="n">GDAL</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">gdal</span>
+        <span class="n">GDAL</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">GDAL</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;WARNING: Python GDAL library not found, please install it to&#39;</span>
+              <span class="s1">&#39; check data downloaded with pyModis&#39;</span><span class="p">)</span>
+<span class="c1"># setup gdal</span>
+<span class="k">if</span> <span class="n">GDAL</span><span class="p">:</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">UseExceptions</span><span class="p">()</span>
+    <span class="n">gdalDriver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s1">&#39;HDF4&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">gdalDriver</span><span class="p">:</span>
+        <span class="n">GDAL</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;GDAL installation has no support for HDF4, please update GDAL&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="urljoin"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.urljoin">[docs]</a><span class="k">def</span> <span class="nf">urljoin</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Joins given arguments into a url. Trailing but not leading slashes are</span>
+<span class="sd">    stripped for each argument.</span>
+<span class="sd">    http://stackoverflow.com/a/11326230</span>
+
+<span class="sd">    :return: a string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="s2">&quot;/&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">args</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="getNewerVersion"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.getNewerVersion">[docs]</a><span class="k">def</span> <span class="nf">getNewerVersion</span><span class="p">(</span><span class="n">oldFile</span><span class="p">,</span> <span class="n">newFile</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check two files to determine which is newer</span>
+
+<span class="sd">       :param str oldFile: one of the two similar files</span>
+<span class="sd">       :param str newFile: one of the two similar files</span>
+
+<span class="sd">       :return: the name of newer file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># get the processing date (YYYYDDDHHMMSS) from the file strings</span>
+    <span class="k">if</span> <span class="n">oldFile</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">4</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">newFile</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">4</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">oldFile</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">newFile</span></div>
+
+
+<div class="viewcode-block" id="str2date"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.str2date">[docs]</a><span class="k">def</span> <span class="nf">str2date</span><span class="p">(</span><span class="n">datestring</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert to datetime.date object from a string</span>
+
+<span class="sd">       :param str datestring string with format (YYYY-MM-DD)</span>
+<span class="sd">       :return: a datetime.date object representing datestring</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;-&#39;</span> <span class="ow">in</span> <span class="n">datestring</span><span class="p">:</span>
+        <span class="n">stringSplit</span> <span class="o">=</span> <span class="n">datestring</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">datestring</span><span class="p">:</span>
+        <span class="n">stringSplit</span> <span class="o">=</span> <span class="n">datestring</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="s1">&#39; &#39;</span> <span class="ow">in</span> <span class="n">datestring</span><span class="p">:</span>
+        <span class="n">stringSplit</span> <span class="o">=</span> <span class="n">datestring</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">date</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">stringSplit</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">stringSplit</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">stringSplit</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="ModisHTTPRedirectHandler"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.ModisHTTPRedirectHandler">[docs]</a><span class="k">class</span> <span class="nc">ModisHTTPRedirectHandler</span><span class="p">(</span><span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPRedirectHandler</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class to return 302 error&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ModisHTTPRedirectHandler.http_error_302"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.ModisHTTPRedirectHandler.http_error_302">[docs]</a>    <span class="k">def</span> <span class="nf">http_error_302</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">headers</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPRedirectHandler</span><span class="o">.</span><span class="n">http_error_302</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">req</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span>
+                                                                 <span class="n">code</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span>
+                                                                 <span class="n">headers</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="modisHtmlParser"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.modisHtmlParser">[docs]</a><span class="k">class</span> <span class="nc">modisHtmlParser</span><span class="p">(</span><span class="n">HTMLParser</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A class to parse HTML</span>
+
+<span class="sd">       :param fh: content of http request</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fh</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to initialize the object&quot;&quot;&quot;</span>
+        <span class="n">HTMLParser</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feed</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fh</span><span class="p">))</span>
+
+<div class="viewcode-block" id="modisHtmlParser.handle_starttag"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.modisHtmlParser.handle_starttag">[docs]</a>    <span class="k">def</span> <span class="nf">handle_starttag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tag</span><span class="p">,</span> <span class="n">attrs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;a&#39;</span><span class="p">:</span>
+            <span class="n">attrD</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fileids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">attrD</span><span class="p">[</span><span class="s1">&#39;href&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="modisHtmlParser.get_all"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.modisHtmlParser.get_all">[docs]</a>    <span class="k">def</span> <span class="nf">get_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return everything&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileids</span></div>
+
+<div class="viewcode-block" id="modisHtmlParser.get_dates"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.modisHtmlParser.get_dates">[docs]</a>    <span class="k">def</span> <span class="nf">get_dates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a list of directories with date&quot;&quot;&quot;</span>
+        <span class="n">regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;(\d</span><span class="si">{4}</span><span class="s1">)[/.-](\d</span><span class="si">{2}</span><span class="s1">)[/.-](\d</span><span class="si">{2}</span><span class="s1">)$&#39;</span><span class="p">)</span>
+        <span class="n">alldata</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">elem</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileids</span> <span class="k">if</span> <span class="n">regex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">elem</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">alldata</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="modisHtmlParser.get_tiles"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.modisHtmlParser.get_tiles">[docs]</a>    <span class="k">def</span> <span class="nf">get_tiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prod</span><span class="p">,</span> <span class="n">tiles</span><span class="p">,</span> <span class="n">jpeg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a list of files to download</span>
+
+<span class="sd">           :param str prod: the code of MODIS product that we are going to</span>
+<span class="sd">                            analyze</span>
+<span class="sd">           :param list tiles: the list of tiles to consider</span>
+<span class="sd">           :param bool jpeg: True to also check for jpeg data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">finalList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileids</span><span class="p">:</span>
+            <span class="c1"># distinguish jpg from hdf by where the tileID is within the string</span>
+            <span class="c1"># jpgs have the tileID at index 3, hdf have tileID at index 2</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+            <span class="c1"># if product is not in the filename, move to next filename in list</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">prod</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="c1"># if tiles are not specified and the file is not a jpg, add to list</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">tiles</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;jpg&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">name</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;BROWSE&#39;</span><span class="p">)):</span>
+                <span class="n">finalList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="c1"># if tiles are specified</span>
+            <span class="k">if</span> <span class="n">tiles</span><span class="p">:</span>
+                <span class="c1"># if a tileID is at index 3 and jpgs are to be downloaded</span>
+                <span class="k">if</span> <span class="n">tiles</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">jpeg</span><span class="p">:</span>
+                    <span class="n">finalList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="c1"># if a tileID is at in index 2, it is known to be HDF</span>
+                <span class="k">elif</span> <span class="n">tiles</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">finalList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">finalList</span></div></div>
+
+
+<div class="viewcode-block" id="downModis"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis">[docs]</a><span class="k">class</span> <span class="nc">downModis</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;A class to download MODIS data from NASA FTP or HTTP repositories</span>
+
+<span class="sd">       :param str destinationFolder: where the files will be stored</span>
+<span class="sd">       :param str password: the password required by NASA authentication system</span>
+<span class="sd">       :param str user: the user namerequired by NASA authentication system</span>
+<span class="sd">       :param str url: the base url from where to download the MODIS data,</span>
+<span class="sd">                       it can be FTP or HTTP but it has to start with</span>
+<span class="sd">                       &#39;ftp://&#39; or &#39;http://&#39; or &#39;https://&#39;</span>
+<span class="sd">       :param str path: the directory where the data that you want to</span>
+<span class="sd">                        download are stored on the FTP server. For HTTP</span>
+<span class="sd">                        requests, this is the part of the url between the &#39;url&#39;</span>
+<span class="sd">                        parameter and the &#39;product&#39; parameter.</span>
+<span class="sd">       :param str product: the code of the product to download, the code</span>
+<span class="sd">                           should be idential to the one of the url</span>
+<span class="sd">       :param str tiles: a set of tiles to be downloaded, None == all tiles.</span>
+<span class="sd">                         This can be passed as a string of tileIDs separated</span>
+<span class="sd">                         by commas, or as a list of individual tileIDs</span>
+<span class="sd">       :param str today: the day to start downloading; in order to pass a</span>
+<span class="sd">                         date different from today use the format YYYY-MM-DD</span>
+<span class="sd">       :param str enddate: the day to end downloading; in order to pass a</span>
+<span class="sd">                           date use the format YYYY-MM-DD. This day must be</span>
+<span class="sd">                           before the &#39;today&#39; parameter. Downloading happens</span>
+<span class="sd">                           in reverse order (currently)</span>
+
+<span class="sd">       :param int delta: timelag i.e. the number of days starting from</span>
+<span class="sd">                         today backwards. Will be overwritten if</span>
+<span class="sd">                         &#39;enddate&#39; is specifed during instantiation</span>
+<span class="sd">       :param bool jpeg: set to True if you want to download the JPG overview</span>
+<span class="sd">                         file in addition to the HDF</span>
+<span class="sd">       :param bool debug: set to True if you want to obtain debug information</span>
+<span class="sd">       :param int timeout: Timeout value for HTTP server (seconds)</span>
+<span class="sd">       :param bool checkgdal: variable to set the GDAL check</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">destinationFolder</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">url</span><span class="o">=</span><span class="s2">&quot;https://e4ftl01.cr.usgs.gov&quot;</span><span class="p">,</span> <span class="n">tiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s2">&quot;MOLT&quot;</span><span class="p">,</span>
+                 <span class="n">product</span><span class="o">=</span><span class="s2">&quot;MOD11A1.005&quot;</span><span class="p">,</span> <span class="n">today</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">enddate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                 <span class="n">jpg</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">checkgdal</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to initialize the object&quot;&quot;&quot;</span>
+
+        <span class="c1"># prepare the base url and set the url type (ftp/http)</span>
+        <span class="k">if</span> <span class="s1">&#39;ftp://&#39;</span> <span class="ow">in</span> <span class="n">url</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;ftp://&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">urltype</span> <span class="o">=</span> <span class="s1">&#39;ftp&#39;</span>
+        <span class="k">elif</span> <span class="s1">&#39;http://&#39;</span> <span class="ow">in</span> <span class="n">url</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">urltype</span> <span class="o">=</span> <span class="s1">&#39;http&#39;</span>
+        <span class="k">elif</span> <span class="s1">&#39;https://&#39;</span> <span class="ow">in</span> <span class="n">url</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">urltype</span> <span class="o">=</span> <span class="s1">&#39;http&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;The url should contain &#39;ftp://&#39; or &#39;http://&#39;&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">user</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">password</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">URLPARSE</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Please use &#39;user&#39; and &#39;password&#39; parameters&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">user</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">password</span> <span class="ow">and</span> <span class="n">URLPARSE</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">domain</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">hostname</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">nt</span> <span class="o">=</span> <span class="n">netrc</span><span class="o">.</span><span class="n">netrc</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Please set &#39;user&#39; and &#39;password&#39; parameters&quot;</span>
+                              <span class="s2">&quot;, netrc file does not exist&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">account</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">domain</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">account</span> <span class="o">=</span> <span class="n">nt</span><span class="o">.</span><span class="n">hosts</span><span class="p">[</span><span class="s1">&#39;urs.earthdata.nasa.gov&#39;</span><span class="p">]</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Please set &#39;user&#39; and &#39;password&#39; parameters&quot;</span>
+                                  <span class="s2">&quot;, netrc file does not contain parameter &quot;</span>
+                                  <span class="s2">&quot;for NASA url&quot;</span><span class="p">)</span>
+            <span class="c1"># user for download</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">account</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="c1"># password for download</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">account</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># user for download</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+            <span class="c1"># password for download</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">password</span> <span class="o">=</span> <span class="n">password</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">userpwd</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{us}</span><span class="s2">:</span><span class="si">{pw}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">us</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span>
+                                          <span class="n">pw</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+        <span class="n">userAndPass</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="nb">str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">userpwd</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">http_header</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="s1">&#39;Basic </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>  <span class="n">userAndPass</span><span class="p">}</span>
+        <span class="n">cookieprocessor</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">HTTPCookieProcessor</span><span class="p">()</span>
+        <span class="n">opener</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">build_opener</span><span class="p">(</span><span class="n">ModisHTTPRedirectHandler</span><span class="p">,</span>
+                                             <span class="n">cookieprocessor</span><span class="p">)</span>
+        <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">install_opener</span><span class="p">(</span><span class="n">opener</span><span class="p">)</span>
+        <span class="c1"># the product (product_code.004 or product_cod.005)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">product</span> <span class="o">=</span> <span class="n">product</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">product_code</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># url directory where data are located</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">product</span><span class="p">)</span>
+        <span class="c1"># tiles to downloads</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tiles</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span> <span class="o">=</span> <span class="n">tiles</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># tiles are list, tuple, or None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span> <span class="o">=</span> <span class="n">tiles</span>
+        <span class="c1"># set destination folder</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">destinationFolder</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">destinationFolder</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span> <span class="o">=</span> <span class="n">destinationFolder</span>
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="n">destinationFolder</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">W_OK</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span> <span class="o">=</span> <span class="n">destinationFolder</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">destinationFolder</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span> <span class="o">=</span> <span class="n">destinationFolder</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Folder to store downloaded files does not &quot;</span>
+                                <span class="s2">&quot;exist or is not writeable&quot;</span><span class="p">)</span>
+        <span class="c1"># return the name of product</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">product</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">product</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="c1"># write a file with the name of file to be downloaded</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filelist</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span><span class="p">,</span>
+                                          <span class="s1">&#39;listfile</span><span class="si">{pro}</span><span class="s1">.txt&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pro</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">product</span><span class="p">)),</span>
+                             <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+        <span class="c1"># set if to download jpgs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">jpeg</span> <span class="o">=</span> <span class="n">jpg</span>
+        <span class="c1"># today, or the last day in the download series chronologically</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">today</span> <span class="o">=</span> <span class="n">today</span>
+        <span class="c1"># chronologically the first day in the download series</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enday</span> <span class="o">=</span> <span class="n">enddate</span>
+        <span class="c1"># default number of days to consider if enddate not specified</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span>
+        <span class="c1"># status of tile download</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="c1"># for debug, you can download only xml files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">debug</span> <span class="o">=</span> <span class="n">debug</span>
+        <span class="c1"># for logging</span>
+        <span class="n">log_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span><span class="p">,</span>
+                                    <span class="s1">&#39;modis</span><span class="si">{pro}</span><span class="s1">.log&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pro</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">product</span><span class="p">))</span>
+        <span class="n">log_format</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">log_filename</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">,</span>
+                            <span class="nb">format</span><span class="o">=</span><span class="n">log_format</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">captureWarnings</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># global connection attempt counter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nconnection</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># timeout for HTTP connection before failing (seconds)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="c1"># files within the directory where data will be saved</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fileInPath</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span><span class="p">,</span> <span class="n">f</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">fileInPath</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">global</span> <span class="n">GDAL</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">GDAL</span> <span class="ow">and</span> <span class="n">checkgdal</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;WARNING: Python GDAL library not found&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">GDAL</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">checkgdal</span><span class="p">:</span>
+            <span class="n">GDAL</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dirData</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="downModis.removeEmptyFiles"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.removeEmptyFiles">[docs]</a>    <span class="k">def</span> <span class="nf">removeEmptyFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to remove files in the download directory that have</span>
+<span class="sd">           filesize equal to 0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+        <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">product</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.A</span><span class="si">%s</span><span class="s1">*&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">year</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">fil</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">fil</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fil</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="downModis.connect"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ncon</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Connect to the server and fill the dirData variable</span>
+
+<span class="sd">           :param int ncon: maximum number of attempts to connect to the HTTP</span>
+<span class="sd">                            server before failing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">urltype</span> <span class="o">==</span> <span class="s1">&#39;ftp&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connectFTP</span><span class="p">(</span><span class="n">ncon</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">urltype</span> <span class="o">==</span> <span class="s1">&#39;http&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connectHTTP</span><span class="p">(</span><span class="n">ncon</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirData</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;There are some troubles with the server. &quot;</span>
+                            <span class="s2">&quot;The directory seems to be empty&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_connectHTTP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ncon</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Connect to HTTP server, create a list of directories for all days</span>
+
+<span class="sd">           :param int ncon: maximum number of attempts to connect to the HTTP</span>
+<span class="sd">                            server before failing. If ncon &lt; 0, connection</span>
+<span class="sd">                            attempts are unlimited in number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nconnection</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">http_header</span><span class="p">)</span>
+                <span class="n">http</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dirData</span> <span class="o">=</span> <span class="n">modisHtmlParser</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">get_dates</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Error in connection. Code </span><span class="si">{code}</span><span class="s1">, &#39;</span>
+                              <span class="s1">&#39;reason </span><span class="si">{re}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="n">re</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">))</span>
+                <span class="n">http</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dirData</span> <span class="o">=</span> <span class="n">modisHtmlParser</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">get_dates</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dirData</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Error in connection. Code </span><span class="si">{code}</span><span class="s1">, &#39;</span>
+                              <span class="s1">&#39;reason </span><span class="si">{re}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="n">re</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">))</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Error </span><span class="si">{er}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">er</span><span class="o">=</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nconnection</span> <span class="o">&lt;=</span> <span class="n">ncon</span> <span class="ow">or</span> <span class="n">ncon</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_connectHTTP</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_connectFTP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ncon</span><span class="o">=</span><span class="mi">20</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set connection to ftp server, move to path where data are stored,</span>
+<span class="sd">           and create a list of directories for all days</span>
+
+<span class="sd">           :param int ncon: maximum number of attempts to connect to the FTP</span>
+<span class="sd">                            server before failing.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nconnection</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># connect to ftp server</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span> <span class="o">=</span> <span class="n">FTP</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">password</span><span class="p">)</span>
+            <span class="c1"># enter in directory</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">cwd</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dirData</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># return data inside directory</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirData</span><span class="o">.</span><span class="n">append</span><span class="p">)</span>
+            <span class="c1"># reverse order of data for have first the nearest to today</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dirData</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+            <span class="c1"># ensure dirData contains only directories, remove all references to files</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dirData</span> <span class="o">=</span> <span class="p">[</span><span class="n">elem</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirData</span> <span class="k">if</span> <span class="n">elem</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;d&quot;</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Open connection </span><span class="si">{url}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">))</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">EOFError</span><span class="p">,</span> <span class="n">ftplib</span><span class="o">.</span><span class="n">error_perm</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Error in connection: </span><span class="si">{err}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err</span><span class="o">=</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nconnection</span> <span class="o">&lt;=</span> <span class="n">ncon</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_connectFTP</span><span class="p">()</span>
+
+<div class="viewcode-block" id="downModis.closeFTP"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.closeFTP">[docs]</a>    <span class="k">def</span> <span class="nf">closeFTP</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close ftp connection and close the file list document&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">closeFilelist</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Close connection </span><span class="si">{url}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="downModis.closeFilelist"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.closeFilelist">[docs]</a>    <span class="k">def</span> <span class="nf">closeFilelist</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to close the file list of where the files are downloaded&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="downModis.setDirectoryIn"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.setDirectoryIn">[docs]</a>    <span class="k">def</span> <span class="nf">setDirectoryIn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">day</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Enter into the file directory of a specified day</span>
+
+<span class="sd">           :param str day: a string representing a day in format YYYY.MM.DD</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">cwd</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">ftplib</span><span class="o">.</span><span class="n">error_reply</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error </span><span class="si">{err}</span><span class="s2"> entering in directory &quot;</span>
+                          <span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">day</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setDirectoryIn</span><span class="p">(</span><span class="n">day</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="downModis.setDirectoryOver"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.setDirectoryOver">[docs]</a>    <span class="k">def</span> <span class="nf">setDirectoryOver</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Move up within the file directory&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">cwd</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">ftplib</span><span class="o">.</span><span class="n">error_reply</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error </span><span class="si">{err}</span><span class="s2"> when trying to come back&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err</span><span class="o">=</span><span class="n">e</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setDirectoryOver</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_getToday</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the dates for the start and end of downloading&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">today</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># set today variable from datetime.date method</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">today</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">today</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># set today variable from string data passed by user</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">today</span> <span class="o">=</span> <span class="n">str2date</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">today</span><span class="p">)</span>
+        <span class="c1"># set enday variable to data passed by user</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enday</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">enday</span> <span class="o">=</span> <span class="n">str2date</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">enday</span><span class="p">)</span>
+        <span class="c1"># set delta</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">today</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">enday</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">today</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">enday</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">today</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">enday</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enday</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">today</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">today</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">enday</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">delta</span><span class="o">.</span><span class="n">days</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="downModis.getListDays"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.getListDays">[docs]</a>    <span class="k">def</span> <span class="nf">getListDays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a list of all selected days&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_getToday</span><span class="p">()</span>
+
+        <span class="n">today_s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">today</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y.%m.</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># dirData is reverse sorted</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dirData</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">d</span> <span class="o">&lt;=</span> <span class="n">today_s</span><span class="p">:</span>
+                <span class="n">today_index</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="k">break</span>
+<span class="c1">#            else:</span>
+<span class="c1">#                logging.error(&quot;No data available for requested days&quot;)</span>
+<span class="c1">#                import sys</span>
+<span class="c1">#                sys.exit()</span>
+        <span class="n">days</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirData</span><span class="p">[</span><span class="n">today_index</span><span class="p">:][:</span><span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">]</span>
+        <span class="c1"># this is useful for 8/16 days data, delta could download more images</span>
+        <span class="c1"># that you want</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enday</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">enday_s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">enday</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y.%m.</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># make a full cycle from the last index and find</span>
+            <span class="c1"># it make a for cicle from the last value and find the internal</span>
+            <span class="c1"># delta to remove file outside temporaly range</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">days</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">days</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">enday_s</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">delta</span> <span class="o">=</span> <span class="n">delta</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="c1"># remove days outside new delta</span>
+            <span class="n">days</span> <span class="o">=</span> <span class="n">days</span><span class="p">[:</span><span class="n">delta</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">days</span></div>
+
+<div class="viewcode-block" id="downModis.getAllDays"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.getAllDays">[docs]</a>    <span class="k">def</span> <span class="nf">getAllDays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a list of all days&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dirData</span></div>
+
+<div class="viewcode-block" id="downModis.getFilesList"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.getFilesList">[docs]</a>    <span class="k">def</span> <span class="nf">getFilesList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">day</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of files to download. HDF and XML files are</span>
+<span class="sd">           downloaded by default. JPG files will be downloaded if</span>
+<span class="sd">           self.jpeg == True.</span>
+
+<span class="sd">           :param str day: the date of data in format YYYY.MM.DD</span>
+
+<span class="sd">           :return: a list of files to download for the day</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">urltype</span> <span class="o">==</span> <span class="s1">&#39;http&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getFilesListHTTP</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">urltype</span> <span class="o">==</span> <span class="s1">&#39;ftp&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getFilesListFTP</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">_getFilesListHTTP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">day</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a list of files to download from http server, which will</span>
+<span class="sd">           be HDF and XML files, and optionally JPG files if specified by</span>
+<span class="sd">           self.jpeg</span>
+
+<span class="sd">           :param str day: the date of data in format YYYY.MM.DD</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># return the files list inside the directory of each day</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;The url is: </span><span class="si">{url}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">http</span> <span class="o">=</span> <span class="n">modisHtmlParser</span><span class="p">(</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span>
+                                                    <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="n">http</span> <span class="o">=</span> <span class="n">modisHtmlParser</span><span class="p">(</span><span class="n">urlopen</span><span class="p">(</span><span class="n">url</span><span class="p">,</span>
+                                               <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+            <span class="c1"># download JPG files also</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jpeg</span><span class="p">:</span>
+                <span class="c1"># if tiles not specified, download all files</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">:</span>
+                    <span class="n">finalList</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">get_all</span><span class="p">()</span>
+                <span class="c1"># if tiles specified, download all files with jpegs</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">finalList</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">get_tiles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">product_code</span><span class="p">,</span>
+                                               <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">,</span> <span class="n">jpeg</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># if JPG files should not be downloaded, get only HDF and XML</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">finalList</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">get_tiles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">product_code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;The number of file to download is: &quot;</span>
+                              <span class="s2">&quot;</span><span class="si">{num}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">finalList</span><span class="p">)))</span>
+
+            <span class="k">return</span> <span class="n">finalList</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error </span><span class="si">{err}</span><span class="s2"> when try to receive list of &quot;</span>
+                          <span class="s2">&quot;files&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err</span><span class="o">=</span><span class="n">e</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_getFilesListHTTP</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_getFilesListFTP</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a list of files to download from FTP server, it is possible</span>
+<span class="sd">           choose to download also the JPG overview files or only the HDF files</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">def</span> <span class="nf">cicle_file</span><span class="p">(</span><span class="n">jpeg</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Check the type of file&quot;&quot;&quot;</span>
+            <span class="n">finalList</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">listfiles</span><span class="p">:</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+                <span class="c1"># distinguish jpeg files from hdf files by the number of index</span>
+                <span class="c1"># where find the tile index</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span><span class="n">name</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;jpg&#39;</span><span class="p">)</span> <span class="ow">or</span>
+                                           <span class="n">name</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;BROWSE&#39;</span><span class="p">)):</span>
+                    <span class="n">finalList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="c1"># is a jpeg of tiles number</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">jpeg</span><span class="p">:</span>
+                        <span class="n">finalList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+                <span class="c1"># is a hdf of tiles number</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">finalList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">finalList</span>
+
+        <span class="c1"># return the file&#39;s list inside the directory of each day</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">listfiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">nlst</span><span class="p">()</span>
+            <span class="c1"># download also jpeg</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">jpeg</span><span class="p">:</span>
+                <span class="c1"># finallist is ugual to all file with jpeg file</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">tiles</span><span class="p">:</span>
+                    <span class="n">finalList</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">listfiles</span>
+                <span class="c1"># finallist is ugual to tiles file with jpeg file</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">finalList</span> <span class="o">=</span> <span class="n">cicle_file</span><span class="p">(</span><span class="n">jpeg</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="c1"># not download jpeg</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">finalList</span> <span class="o">=</span> <span class="n">cicle_file</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;The number of file to download is: &quot;</span>
+                              <span class="s2">&quot;</span><span class="si">{num}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">finalList</span><span class="p">)))</span>
+            <span class="k">return</span> <span class="n">finalList</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">ftplib</span><span class="o">.</span><span class="n">error_reply</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error </span><span class="si">{err}</span><span class="s2"> when trying to receive list of &quot;</span>
+                          <span class="s2">&quot;files&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">err</span><span class="o">=</span><span class="n">e</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_getFilesListFTP</span><span class="p">()</span>
+
+<div class="viewcode-block" id="downModis.checkDataExist"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.checkDataExist">[docs]</a>    <span class="k">def</span> <span class="nf">checkDataExist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">listNewFile</span><span class="p">,</span> <span class="n">move</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if a file already exists in the local download directory</span>
+
+<span class="sd">           :param list listNewFile: list of all files, returned by getFilesList</span>
+<span class="sd">                                    function</span>
+<span class="sd">           :param bool move: it is useful to know if a function is called from</span>
+<span class="sd">                             download or move function</span>
+<span class="sd">           :return: list of files to download</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># different return if this method is used from downloadsAllDay() or</span>
+        <span class="c1"># moveFile()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">listNewFile</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileInPath</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;checkDataExist both lists are empty&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">listNewFile</span><span class="p">:</span>
+            <span class="n">listNewFile</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">fileInPath</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fileInPath</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">move</span><span class="p">:</span>
+            <span class="n">listOfDifferent</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">listNewFile</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileInPath</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">move</span><span class="p">:</span>
+            <span class="n">listOfDifferent</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fileInPath</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">listNewFile</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">listOfDifferent</span></div>
+
+<div class="viewcode-block" id="downModis.checkFile"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.checkFile">[docs]</a>    <span class="k">def</span> <span class="nf">checkFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filHdf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check by using GDAL to be sure that the download went ok</span>
+
+<span class="sd">           :param str filHdf: name of the HDF file to check</span>
+
+<span class="sd">           :return: 0 if file is correct, 1 for error</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">filHdf</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">RuntimeError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span></div>
+
+<div class="viewcode-block" id="downModis.downloadFile"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.downloadFile">[docs]</a>    <span class="k">def</span> <span class="nf">downloadFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filDown</span><span class="p">,</span> <span class="n">filHdf</span><span class="p">,</span> <span class="n">day</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Download a single file</span>
+
+<span class="sd">           :param str filDown: name of the file to download</span>
+<span class="sd">           :param str filHdf: name of the file to write to</span>
+<span class="sd">           :param str day: the day in format YYYY.MM.DD</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">urltype</span> <span class="o">==</span> <span class="s1">&#39;http&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_downloadFileHTTP</span><span class="p">(</span><span class="n">filDown</span><span class="p">,</span> <span class="n">filHdf</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">urltype</span> <span class="o">==</span> <span class="s1">&#39;ftp&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_downloadFileFTP</span><span class="p">(</span><span class="n">filDown</span><span class="p">,</span> <span class="n">filHdf</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_downloadFileHTTP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filDown</span><span class="p">,</span> <span class="n">filHdf</span><span class="p">,</span> <span class="n">day</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Download a single file from the http server</span>
+
+<span class="sd">           :param str filDown: name of the file to download</span>
+<span class="sd">           :param str filHdf: name of the file to write to</span>
+<span class="sd">           :param str day: the day in format YYYY.MM.DD</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filSave</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filHdf</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">filDown</span><span class="p">)</span>
+        <span class="n">orig_size</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>  <span class="c1"># download and write the file</span>
+            <span class="n">req</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">Request</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">http_header</span><span class="p">)</span>
+            <span class="n">http</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">urlopen</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+            <span class="n">orig_size</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Content-Length&#39;</span><span class="p">]</span>
+            <span class="n">filSave</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+        <span class="c1"># if local file has an error, try to download the file again</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Tried to downlaod with urllib but got this &quot;</span>
+                            <span class="s2">&quot;error </span><span class="si">{ex}</span><span class="s2">, reason </span><span class="si">{re}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">,</span>
+                                                             <span class="n">re</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">http</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+                <span class="n">orig_size</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Content-Length&#39;</span><span class="p">]</span>
+                <span class="n">filSave</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Tried to downlaod with requests but got this &quot;</span>
+                                <span class="s2">&quot;error </span><span class="si">{co}</span><span class="s2">, reason </span><span class="si">{re}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">co</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">,</span>
+                                                                 <span class="n">re</span><span class="o">=</span><span class="n">e</span><span class="o">.</span><span class="n">reason</span><span class="p">))</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Cannot download </span><span class="si">{name}</span><span class="s2">. &quot;</span>
+                              <span class="s2">&quot;Retrying...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">))</span>
+                <span class="n">filSave</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filSave</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                <span class="kn">import</span> <span class="nn">time</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_downloadFileHTTP</span><span class="p">(</span><span class="n">filDown</span><span class="p">,</span> <span class="n">filHdf</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+        <span class="n">filSave</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">transf_size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">filSave</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">orig_size</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">{name}</span><span class="s2"> downloaded but not &quot;</span>
+                              <span class="s2">&quot;check the size&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">))</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">orig_size</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">(</span><span class="n">transf_size</span><span class="p">):</span>
+            <span class="c1"># if no xml file, delete the HDF and redownload</span>
+            <span class="k">if</span> <span class="n">filHdf</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;.xml&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">test</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">GDAL</span><span class="p">:</span>
+                    <span class="n">test</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkFile</span><span class="p">(</span><span class="n">filHdf</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">test</span><span class="p">:</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filSave</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_downloadFileHTTP</span><span class="p">(</span><span class="n">filDown</span><span class="p">,</span> <span class="n">filHdf</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">{name}</span><span class="s2"> downloaded &quot;</span>
+                                      <span class="s2">&quot;correctly&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># xml exists</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">{name}</span><span class="s2"> downloaded &quot;</span>
+                                  <span class="s2">&quot;correctly&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">))</span>
+                <span class="k">return</span> <span class="mi">0</span>
+        <span class="c1"># if filesizes are different, delete and try again</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Different size for file </span><span class="si">{name}</span><span class="s2"> - original data: &quot;</span>
+                            <span class="s2">&quot;</span><span class="si">{orig}</span><span class="s2">, downloaded: </span><span class="si">{down}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">,</span>
+                                                                <span class="n">orig</span><span class="o">=</span><span class="n">orig_size</span><span class="p">,</span>
+                                                                <span class="n">down</span><span class="o">=</span><span class="n">transf_size</span><span class="p">))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filSave</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_downloadFileHTTP</span><span class="p">(</span><span class="n">filDown</span><span class="p">,</span> <span class="n">filHdf</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_downloadFileFTP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filDown</span><span class="p">,</span> <span class="n">filHdf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Download a single file from ftp server</span>
+
+<span class="sd">           :param str filDown: name of the file to download</span>
+<span class="sd">           :param str filHdf: name of the file to write to</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">filSave</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filHdf</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>  <span class="c1"># transfer file from ftp</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">retrbinary</span><span class="p">(</span><span class="s2">&quot;RETR &quot;</span> <span class="o">+</span> <span class="n">filDown</span><span class="p">,</span> <span class="n">filSave</span><span class="o">.</span><span class="n">write</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">{name}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filelist</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;File </span><span class="si">{name}</span><span class="s2"> downloaded&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">))</span>
+        <span class="c1"># if error during download process, try to redownload the file</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">ftplib</span><span class="o">.</span><span class="n">error_reply</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">error</span><span class="p">,</span> <span class="n">ftplib</span><span class="o">.</span><span class="n">error_temp</span><span class="p">,</span>
+                <span class="ne">EOFError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Cannot download </span><span class="si">{name}</span><span class="s2">, the error was &#39;</span><span class="si">{err}</span><span class="s2">&#39;. &quot;</span>
+                          <span class="s2">&quot;Retrying...&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">,</span> <span class="n">err</span><span class="o">=</span><span class="n">e</span><span class="p">))</span>
+            <span class="n">filSave</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filSave</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">pwd</span><span class="p">()</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">ftplib</span><span class="o">.</span><span class="n">error_temp</span><span class="p">,</span> <span class="ne">EOFError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_connectFTP</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_downloadFileFTP</span><span class="p">(</span><span class="n">filDown</span><span class="p">,</span> <span class="n">filHdf</span><span class="p">)</span>
+        <span class="n">filSave</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">orig_size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ftp</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">filDown</span><span class="p">)</span>
+        <span class="n">transf_size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">filSave</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">orig_size</span> <span class="o">==</span> <span class="n">transf_size</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Different size for file </span><span class="si">{name}</span><span class="s2"> - original data: &quot;</span>
+                            <span class="s2">&quot;</span><span class="si">{orig}</span><span class="s2">, downloaded: </span><span class="si">{down}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">filDown</span><span class="p">,</span>
+                                                                <span class="n">orig</span><span class="o">=</span><span class="n">orig_size</span><span class="p">,</span>
+                                                                <span class="n">down</span><span class="o">=</span><span class="n">transf_size</span><span class="p">))</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filSave</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_downloadFileFTP</span><span class="p">(</span><span class="n">filDown</span><span class="p">,</span> <span class="n">filHdf</span><span class="p">)</span>
+
+<div class="viewcode-block" id="downModis.dayDownload"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.dayDownload">[docs]</a>    <span class="k">def</span> <span class="nf">dayDownload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">day</span><span class="p">,</span> <span class="n">listFilesDown</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Downloads tiles for the selected day</span>
+
+<span class="sd">           :param str day: the day in format YYYY.MM.DD</span>
+<span class="sd">           :param list listFilesDown: list of the files to download, returned</span>
+<span class="sd">                                      by checkDataExist function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># for each file in files&#39; list</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">listFilesDown</span><span class="p">:</span>
+            <span class="n">fileSplit</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+            <span class="n">filePrefix</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{a}</span><span class="s2">.</span><span class="si">{b}</span><span class="s2">.</span><span class="si">{c}</span><span class="s2">.</span><span class="si">{d}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="n">fileSplit</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                  <span class="n">b</span><span class="o">=</span><span class="n">fileSplit</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                                  <span class="n">c</span><span class="o">=</span><span class="n">fileSplit</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                                                  <span class="n">d</span><span class="o">=</span><span class="n">fileSplit</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+
+            <span class="c1"># check if this file already exists in the save directory</span>
+            <span class="n">oldFile</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span><span class="p">,</span> <span class="n">filePrefix</span> <span class="o">+</span> <span class="s2">&quot;*&quot;</span>
+                                 <span class="o">+</span> <span class="n">fileSplit</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">numFiles</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">oldFile</span><span class="p">)</span>
+            <span class="c1"># if it doesn&#39;t exist</span>
+            <span class="k">if</span> <span class="n">numFiles</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">file_hdf</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="c1"># if one does exist</span>
+            <span class="k">elif</span> <span class="n">numFiles</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># check the version of file, delete local file if it is older</span>
+                <span class="n">fileDown</span> <span class="o">=</span> <span class="n">getNewerVersion</span><span class="p">(</span><span class="n">oldFile</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">i</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">fileDown</span> <span class="o">!=</span> <span class="n">oldFile</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span><span class="p">,</span> <span class="n">oldFile</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+                    <span class="n">file_hdf</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">writeFilePath</span><span class="p">,</span> <span class="n">fileDown</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">numFiles</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;There are to many files for &quot;</span>
+                              <span class="s2">&quot;</span><span class="si">{name}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">i</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">numFiles</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="p">(</span><span class="n">numFiles</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">fileDown</span> <span class="o">!=</span> <span class="n">oldFile</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">downloadFile</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">file_hdf</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="downModis.downloadsAllDay"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.downloadsAllDay">[docs]</a>    <span class="k">def</span> <span class="nf">downloadsAllDay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">clean</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">allDays</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Download all requested days</span>
+
+<span class="sd">           :param bool clean: if True remove the empty files, they could have</span>
+<span class="sd">                              some problems in the previous download</span>
+<span class="sd">           :param bool allDays: download all passable days</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">clean</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">removeEmptyFiles</span><span class="p">()</span>
+        <span class="c1"># get the days to download</span>
+        <span class="k">if</span> <span class="n">allDays</span><span class="p">:</span>
+            <span class="n">days</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getAllDays</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">days</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getListDays</span><span class="p">()</span>
+        <span class="c1"># log the days to download</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;The number of days to download is: &quot;</span>
+                          <span class="s2">&quot;</span><span class="si">{num}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">num</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">days</span><span class="p">)))</span>
+        <span class="c1"># download the data</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">urltype</span> <span class="o">==</span> <span class="s1">&#39;http&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_downloadAllDaysHTTP</span><span class="p">(</span><span class="n">days</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">urltype</span> <span class="o">==</span> <span class="s1">&#39;ftp&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_downloadAllDaysFTP</span><span class="p">(</span><span class="n">days</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_downloadAllDaysHTTP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">days</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Downloads all the tiles considered from HTTP server</span>
+
+<span class="sd">           :param list days: the list of days to download</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># for each day</span>
+        <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">days</span><span class="p">:</span>
+            <span class="c1"># obtain list of all files</span>
+            <span class="n">listAllFiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFilesList</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
+            <span class="c1"># filter files based on local files in save directory</span>
+            <span class="n">listFilesDown</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkDataExist</span><span class="p">(</span><span class="n">listAllFiles</span><span class="p">)</span>
+            <span class="c1"># download files for a day</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dayDownload</span><span class="p">(</span><span class="n">day</span><span class="p">,</span> <span class="n">listFilesDown</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">closeFilelist</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Download terminated&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">_downloadAllDaysFTP</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">days</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Downloads all the tiles considered from FTP server</span>
+
+<span class="sd">           :param list days: the list of days to download</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># for each day</span>
+        <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">days</span><span class="p">:</span>
+            <span class="c1"># enter in the directory of day</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setDirectoryIn</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
+            <span class="c1"># obtain list of all files</span>
+            <span class="n">listAllFiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFilesList</span><span class="p">()</span>
+            <span class="c1"># filter files based on local files in save directory</span>
+            <span class="n">listFilesDown</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">checkDataExist</span><span class="p">(</span><span class="n">listAllFiles</span><span class="p">)</span>
+            <span class="c1"># download files for a day</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dayDownload</span><span class="p">(</span><span class="n">day</span><span class="p">,</span> <span class="n">listFilesDown</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setDirectoryOver</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">closeFTP</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Download terminated&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="downModis.debugLog"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.debugLog">[docs]</a>    <span class="k">def</span> <span class="nf">debugLog</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to create the debug file</span>
+
+<span class="sd">        :return: a Logger object to use to write debug info</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># create logger</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;PythonLibModis debug&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="c1"># create console handler and set level to debug</span>
+        <span class="n">ch</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+        <span class="n">ch</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="c1"># create formatter</span>
+        <span class="n">formatter</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - &quot;</span>
+                                      <span class="s2">&quot;</span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="c1"># add formatter to console handler</span>
+        <span class="n">ch</span><span class="o">.</span><span class="n">setFormatter</span><span class="p">(</span><span class="n">formatter</span><span class="p">)</span>
+        <span class="c1"># add console handler to logger</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">ch</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">logger</span></div>
+
+<div class="viewcode-block" id="downModis.debugDays"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.debugDays">[docs]</a>    <span class="k">def</span> <span class="nf">debugDays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This function is useful to debug the number of days&quot;&quot;&quot;</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">debugLog</span><span class="p">()</span>
+        <span class="n">days</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getListDays</span><span class="p">()</span>
+        <span class="c1"># if length of list of days and the delta of days are different</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">days</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span><span class="p">:</span>
+            <span class="c1"># for each day</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="c1"># calculate the current day using datetime.timedelta</span>
+                <span class="n">delta</span> <span class="o">=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">day</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">today</span> <span class="o">-</span> <span class="n">delta</span>
+                <span class="n">day</span> <span class="o">=</span> <span class="n">day</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y.%m.</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="c1"># check if day is in the days list</span>
+                <span class="k">if</span> <span class="n">day</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">days</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;This day </span><span class="si">{day}</span><span class="s2"> is not present on &quot;</span>
+                                    <span class="s2">&quot;list&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">day</span><span class="o">=</span><span class="n">day</span><span class="p">))</span>
+        <span class="c1"># the length of list of days and delta are equal</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;debugDays() : getListDays() and self.delta are same &quot;</span>
+                        <span class="s2">&quot;length&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="downModis.debugMaps"><a class="viewcode-back" href="../../pymodis/downmodis.html#pymodis.downmodis.downModis.debugMaps">[docs]</a>    <span class="k">def</span> <span class="nf">debugMaps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Prints the files to download to the debug stream&quot;&quot;&quot;</span>
+        <span class="n">logger</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">debugLog</span><span class="p">()</span>
+        <span class="n">days</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getListDays</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">days</span><span class="p">:</span>
+            <span class="n">listAllFiles</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getFilesList</span><span class="p">(</span><span class="n">day</span><span class="p">)</span>
+            <span class="n">string</span> <span class="o">=</span> <span class="n">day</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">listAllFiles</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>

@@ -1,0 +1,242 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>modis_convert.py &#8212; pyModis 2.0.9 documentation</title>
+    <link rel="stylesheet" href="../_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.0.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="modis_quality.py" href="modis_quality.html" />
+    <link rel="prev" title="modis_mosaic.py" href="modis_mosaic.html" />
+<link rel="stylesheet" href="../_static/pymodis.css" type="text/css" />
+
+  </head>
+  <body>
+<h1 class="bigger"><img src="../_static/pyModis.png"></img> pyModis</h1>
+
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modis_quality.html" title="modis_quality.py"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="modis_mosaic.html" title="modis_mosaic.py"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="software.html" accesskey="U">pyModis Scripts</a> &#187;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">modis_convert.py</a><ul>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#options">Options</a></li>
+<li><a class="reference internal" href="#examples">Examples</a><ul>
+<li><a class="reference internal" href="#modis-reprojection-tools">MODIS Reprojection Tools</a></li>
+<li><a class="reference internal" href="#gdal">GDAL</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="modis_mosaic.html"
+                        title="previous chapter">modis_mosaic.py</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="modis_quality.html"
+                        title="next chapter">modis_quality.py</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script><br /><br />
+<p>
+<script type="text/javascript" src="http://www.ohloh.net/p/486825/widgets/project_partner_badge.js"></script>
+</p>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="modis-convert-py">
+<h1>modis_convert.py<a class="headerlink" href="#modis-convert-py" title="Permalink to this headline">¶</a></h1>
+<p><strong>modis_convert.py</strong>  converts MODIS data to TIF formats and different
+projection reference system. It is an interface to MRT mrtmosaic
+software or GDAL library.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none"><div class="highlight"><pre><span></span>modis_convert.py [options] hdf_file
+</pre></div>
+</div>
+</div>
+<div class="section" id="options">
+<h2>Options<a class="headerlink" href="#options" title="Permalink to this headline">¶</a></h2>
+<a class="gui reference internal image-reference" href="../_images/modis_convert.png"><img alt="GUI for modis_convert.py" class="gui align-left" src="../_images/modis_convert.png" style="width: 417.9px; height: 564.1999999999999px;" /></a>
+<div class="highlight-none"><div class="highlight"><pre><span></span>-h, --help            show this help message and exit
+
+Required options:
+  -s SUBSET, --subset=SUBSET
+                      (Required) a subset of product&#39;s layers. The string
+                      should be similar to: ( 1 0 )
+  -o OUTPUT_FILE, --output=OUTPUT_FILE
+                      (Required) the prefix of output file
+  -g RESOLUTION, --grain=RESOLUTION
+                      the spatial resolution of output file
+  -r RESAMPLING_TYPE, --resampl=RESAMPLING_TYPE
+                      the method of resampling. -- mrt methods:
+                      &#39;NEAREST_NEIGHBOR&#39;, &#39;BICUBIC&#39;, &#39;CUBIC_CONVOLUTION&#39;,
+                      &#39;NONE&#39; -- gdal methods: &#39;AVERAGE&#39;, &#39;BILINEAR&#39;,
+                      &#39;CUBIC&#39;, &#39;CUBIC_SPLINE&#39;, &#39;LANCZOS&#39;, &#39;MODE&#39;,
+                      &#39;NEAREST_NEIGHBOR&#39; [default=NEAREST_NEIGHBOR]
+
+Options for GDAL:
+  -f OUTPUT_FORMAT, --output-format=OUTPUT_FORMAT
+                      output format supported by GDAL [default=GTiff]
+  -e EPSG, --epsg=EPSG
+                      EPSG code for the output
+  -w WKT, --wkt_file=WKT
+                      file or string containing projection definition in WKT
+                      format
+  -v, --vrt           Read from a GDAL VRT file.
+  --formats           print supported GDAL formats
+
+Options for MRT:
+  -m MRT_PATH, --mrt=MRT_PATH
+                      the path to MRT software
+  -d DATUM, --datum=DATUM
+                      the code of datum. Available: &#39;NODATUM&#39;, &#39;NAD27&#39;,
+                      &#39;NAD83&#39;, &#39;WGS66&#39;, &#39;WGS72&#39;, &#39;WGS84&#39; [default=WGS84]
+  -t PROJECTION_SYSTEM, --proj_type=PROJECTION_SYSTEM
+                      the output projection system. Available: &#39;AEA&#39;, &#39;GEO&#39;,
+                      &#39;HAM&#39;, &#39;IGH&#39;, &#39;ISIN&#39;, &#39;LA&#39;, &#39;LCC&#39;, &#39;MOL&#39;, &#39;PS&#39;, &#39;SIN&#39;,
+                      &#39;TM&#39;, &#39;UTM&#39;, &#39;MERCAT&#39; [default=GEO]
+  -p PROJECTION_PARAMETERS, --proj_parameters=PROJECTION_PARAMETERS
+                      a list of projection parameters, for more info check
+                      the &#39;Appendix C&#39; of MODIS reprojection tool user&#39;s
+                      manual https://lpdaac.usgs.gov/content/download/4831/2
+                      2895/file/mrt41_usermanual_032811.pdf [default=( 0.0
+                      0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+                      0.0 )]
+  -u UTM_ZONE, --utm=UTM_ZONE
+                      the UTM zone if projection system is UTM
+            the UTM zone if projection system is UTM
+</pre></div>
+</div>
+</div>
+<div class="section" id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The resolution value in <code class="docutils literal"><span class="pre">modis_convert.py</span></code> has to be set with the
+right value depending on the projection used. 1 kilometer in metrical
+projection has to be set as 1000 meter, instead in latitude and longitude
+something like 0.01* depending on the placement in the Earth.</p>
+</div>
+<div class="section" id="modis-reprojection-tools">
+<h3>MODIS Reprojection Tools<a class="headerlink" href="#modis-reprojection-tools" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">You can find the supported projections in the ‘Appendix C’ of
+<a class="reference external" href="https://lpdaac.usgs.gov/sites/default/files/public/mrt41_usermanual_032811.pdf">MODIS reprojection tool user’s manual</a> and the datums at section
+<code class="docutils literal"><span class="pre">Datum</span> <span class="pre">Conversion</span></code> of the same manual</p>
+</div>
+<p>Convert layers from MODIS data with the original resolution in
+latitude and longitude reference system</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>modis_convert.py -s &quot;( 1 0 1 0 )&quot; -o OUTPUT_FILE -m &quot;/usr/local/bin/&quot; FILE
+</pre></div>
+</div>
+<p>Convert layers from MODIS data with output resolution in 500 meters with
+UTM projection in the 32 zone</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>modis_convert.py -s &quot;( 1 0 1 0 )&quot; -o OUTPUT_FILE -m &quot;/usr/local/bin/&quot; -g 500 -p UTM -u 32 FILE
+</pre></div>
+</div>
+</div>
+<div class="section" id="gdal">
+<h3>GDAL<a class="headerlink" href="#gdal" title="Permalink to this headline">¶</a></h3>
+<p>Convert the first layer in latitude and longitude with the original resolution</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>modis_convert.py -s &quot;( 1 )&quot; -o OUTPUT_FILE -e 4326 FILE
+</pre></div>
+</div>
+<p>Convert the first three layers from MODIS data with output resolution in 500
+meters with UTM projection in the 32 zone</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>modis_convert.py -s &quot;( 1 1 1 )&quot; -o OUTPUT_FILE -g 500 -e 32632 FILE
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="modis_quality.html" title="modis_quality.py"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="modis_mosaic.html" title="modis_mosaic.py"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyModis 2.0.9 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="software.html" >pyModis Scripts</a> &#187;</li> 
+      </ul>
+    </div>
+<table align="rigth">
+<tr>
+<td><div class="footer"><a href="http://gis.cri.fmach.it" target="_blank">GIS & Remote Sensing Platform, Fondazione Edmund Mach</a></div></td>
+<td><div class="footer">Documentation created using <a href="http://sphinx.pocoo.org" target="_blank">Sphinx</a></div></td>
+<td>
+    <div class="footer" role="contentinfo">
+      Last updated on Feb 01, 2018.
+    </div></td>
+</tr>
+</table>
+
+  </body>
+</html>
