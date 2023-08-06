@@ -1,0 +1,147 @@
+
+# ------------------------------------------------------------------------------ Handle node folders
+
+{{% for scopeName, scope in data.files.scopeByName.iteritems() %}}
+{{% if scope.folders|length > 0 %}}
+- hosts: {{{ scopeName }}}
+  any_errors_fatal: {{{ src.exit_on_fail }}}
+  tasks:
+{{% for folder in scope.folders %}}
+  - name: Create folder '{{{folder.path}}}'
+    file: path={{{folder.path}}} owner={{{folder.owner}}} group={{{folder.group}}} mode="{{{folder.mode}}}" state=directory
+{{% endfor %}}
+{{%endif %}}
+{{% endfor %}}
+
+# ------------------------------------------------------------------------------ Handle node files and trees
+
+{{% for scopeName, scope in data.files.scopeByName.iteritems() %}}
+{{% if scope.files|length > 0 or  scope.trees|length > 0 %}}
+- hosts: {{{ scopeName }}}
+  any_errors_fatal: {{{ src.exit_on_fail }}}
+{{% if scope.willUseMavenRepo %}}
+  roles:
+    - lxml
+{{% endif %}}
+  tasks:
+{{% for file in scope.files %}}
+{{% if file.src.startswith("file://") %}}
+  - name: Copy file '{{{file._displaySrc_}}}' to '{{{file._target_}}}'
+    copy: src={{{file._src_}}} dest={{{file._target_}}} owner={{{file.owner}}} group={{{file.group}}} mode="{{{file.mode}}}" 
+{{% if file._notify_ is defined %}}
+    notify: reload_{{{file._notify_}}}
+{{% endif %}}     
+{{% elif file.src.startswith("http://") or file.src.startswith("https://") %}}
+  - name: Download '{{{file.src}}}' to '{{{file._target_}}}'
+    get_url: url={{{file.src}}} dest={{{file._target_}}} owner={{{file.owner}}} group={{{file.group}}} mode="{{{file.mode}}}" validate_certs={{{file.validate_certs}}} force_basic_auth={{{file.force_basic_auth }}} {{% if file.url_username is defined %}}url_username={{{file.url_username}}}{{%endif%}} {{% if file.url_password is defined %}}url_password={{{file.url_password}}}{{%endif%}}
+{{% if file._notify_ is defined %}}
+    notify: reload_{{{file._notify_}}}
+{{% endif %}}     
+{{% elif file.src.startswith("tmpl://")  %}}
+  - name: Copy template file '{{{file._displaySrc_}}}' to '{{{file._target_}}}'
+    template: src={{{file._src_}}} dest={{{file._target_}}} owner={{{file.owner}}} group={{{file.group}}} mode="{{{file.mode}}}" 
+{{% if file._notify_ is defined %}}
+    notify: reload_{{{file._notify_}}}
+{{% endif %}}     
+{{% elif file.src.startswith("mvn://")  %}}
+  - name: Fetch artifact '{{{file._groupId_}}}:{{{file._artifactId_}}}:{{{file._version_}}}' '(classifier:{{{file._classifier_|default("none")}}}  extension:{{{file._extension_}}}) from repository '{{{file._repo_}}}'
+    maven_artifact:
+      repository_url: "{{{ file._repoUrl_ }}}"
+      group_id:  "{{{ file._groupId_ }}}"
+      artifact_id: "{{{ file._artifactId_ }}}" 
+      version:  "{{{ file._version_ }}}"
+      extension:  "{{{ file._extension_ }}}"
+{{% if file._classifier_ is defined %}}
+      classifier: "{{{ file._classifier_ }}}"
+{{% endif %}}      
+      dest: "{{{ file._target_ }}}"
+      timeout: "{{{ data.mavenRepoByName[file._repo_].timeout }}}"
+      validate_certs: {{{ data.mavenRepoByName[file._repo_].validate_certs }}}
+{{% if data.mavenRepoByName[file._repo_].username is defined %}}
+      username: "{{{data.mavenRepoByName[file._repo_].username}}}"      
+{{% endif %}}      
+{{% if data.mavenRepoByName[file._repo_].password is defined %}}
+      password: "{{{data.mavenRepoByName[file._repo_].password}}}"      
+{{% endif %}}     
+{{% if file._notify_ is defined %}}
+    notify: reload_{{{file._notify_}}}
+{{% endif %}}     
+  - name: Adjust rights on "{{{ file._target_ }}}"
+    file: path="{{{ file._target_ }}}" owner={{{file.owner}}} group={{{file.group}}} mode="{{{file.mode}}}" 
+{{% endif %}}
+
+{{% endfor %}}
+
+{{% for tree in scope.trees %}}
+  - name: Adjust rights on subfolders (And create empty ones if neeeded)
+    file: path="{{item}}" owner={{{tree.owner}}} group={{{tree.group}}} mode="{{{tree.folder_mode}}}" state=directory
+    with_items:
+{{% for dirname in tree._targetFolders_ %}}
+    - "{{{ dirname }}}"
+{{% endfor %}}
+{{% if tree.src.startswith("file://") %}}
+  - name: Copy tree '{{{tree._displaySrc_}}}' to '{{{tree.dest_folder}}}'
+    copy: src={{{tree._src_}}} dest={{{tree.dest_folder}}} owner={{{tree.owner}}} group={{{tree.group}}} mode="{{{tree.file_mode}}}"  directory_mode="{{{tree.folder_mode}}}"
+{{% elif tree.src.startswith("tmpl://")  %}}
+{{% if tree._tmplList|length > 0 %}}
+  - name: Copy template tree '{{{tree._displaySrc_}}}' to '{{{tree.dest_folder}}}'
+    template: src={{item.src}} dest={{item.dst}} owner={{{tree.owner}}} group={{{tree.group}}} mode="{{{tree.file_mode}}}"
+    with_items:
+{{% for x in tree._tmplList %}}
+    - { src: "{{{ x.src }}}", dst: "{{{ x.dst }}}" }
+{{% endfor %}}    
+    loop_control:
+      label: "{{item.dst}}"
+{{% endif %}}
+{{% endif %}}
+{{% endfor %}}
+
+{{% if scope.systemdNotifications|length > 0 %}}
+{{% for _, unit in scope.systemdNotifications.iteritems() %}}
+  - name: Get current state for '{{{ unit.name }}}
+    command: systemctl is-active {{{ unit.name }}}.service
+    register: unit_{{{ unit.name }}}
+    changed_when: false
+    failed_when: false
+{{% endfor %}}
+  handlers:
+{{% for notified, unit in scope.systemdNotifications.iteritems() %}}
+{{% if unit.action_on_notify == "restart" %}}
+  - name: Restart {{{unit.name}}} service
+    systemd: name={{{ unit.name }}}.service state=restarted
+{{% elif unit.action_on_notify == "reload" %}}
+  - name: Reload {{{unit.name}}} service
+    systemd: name={{{ unit.name }}}.service state=reloaded
+{{% else %}}
+  - name: Notify {{{unit.name}}} service
+    debug: 
+      msg="Service {{{unit.name}}} may need a restart as some configuration has changed."
+{{% endif %}}
+    listen: "reload_{{{notified}}}"
+    when: unit_{{{ unit.name }}}.rc == 0
+{{% endfor %}}
+{{% endif %}}
+
+
+
+{{% if scope.supervisorPrgNotification|length > 0 %}}
+{{% for _, prg in scope.supervisorPrgNotification.iteritems() %}}
+  - name: Get current state for supervisor_{{{prg.supervisor}}}_{{{prg.name}}} programs
+    shell: "supervisorctl -c {{{ prg.supervisorConf }}} status '{{{prg._name_}}}' | awk '{ print $2 }'"
+    register: supervisor_{{{prg.supervisor}}}_{{{prg.name}}} 
+    changed_when: false
+    failed_when: false
+#  - debug: msg="Program {{{prg.supervisor}}}_{{{prg.name}}} is  {{supervisor_{{{prg.supervisor}}}_{{{prg.name}}}.stdout}}"    
+{{% endfor %}}
+  handlers:
+{{% for notified, prg in scope.supervisorPrgNotification.iteritems() %}}
+  - name: Restart supervisor_{{{ prg.supervisor }}} program {{{ prg.name }}}
+    supervisorctl: config={{{ prg.supervisorConf }}} name="{{{ prg._name_ }}}" state=restarted
+    listen: reload_{{{notified}}}
+    when: supervisor_{{{prg.supervisor}}}_{{{prg.name}}}.stdout.find("RUNNING") != -1
+{{% endfor %}}
+{{% endif %}}
+
+
+{{%endif%}}
+{{% endfor %}}
