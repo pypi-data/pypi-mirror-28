@@ -1,0 +1,50 @@
+Metadata-Version: 2.0
+Name: PyFastNER
+Version: 1.0.8.dev2
+Summary: A fast implementation of dictionary based named entity recognition.
+Home-page: https://github.com/jianlins/PyFastNER
+Author: Jianlin
+Author-email: jianlinshi.cn@gmail.com
+License: UNKNOWN
+Download-URL: https://github.com/jianlins/PyFastNER/archive/1.0.8.dev2.zip
+Description-Content-Type: UNKNOWN
+Keywords: PyFastNER,ner,regex
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Text Processing :: Linguistic
+Requires-Dist: intervaltree
+
+PyFastNER
+PyFastNER is the python implementation of FastNER, which is orginally developed using Java. It uses hash function to process multiple rules at the same time. Similar to FastNER, PyFastNER supports token-based rules (FastNER--under developing) and character-based rules (FastCNER). It is licensed under the Apache License, Version 2.0.
+
+Install:
+
+pip install PyFastNER
+Examples:
+
+Here is a simiple example of using external dictionary to find matches in an input string. It will return a dictionary of spans grouped by the named entity types.
+
+from PyFastNER.FastCNER import FastCNER
+# initiate fastner using external rule file
+fastner = FastCNER('conf/crule_test.tsv')
+# process an input string
+res = fastner.processString('Pt came with fever, T 102.0F.')
+# display processed results
+for type in res.keys():
+	for span in res[type]:
+		print(span)
+Here is another example if you need process a sentence within a document, where you just need to tell the offset of the sentence to the beginning of the document.
+
+from PyFastNER.FastCNER import FastCNER
+fastner = FastCNER('conf/crule_test.tsv')
+res = fastner.processString('Pt came with fever, T 102.0F.',134)
+For more examples, please refer to TestFastCNER.py
+
