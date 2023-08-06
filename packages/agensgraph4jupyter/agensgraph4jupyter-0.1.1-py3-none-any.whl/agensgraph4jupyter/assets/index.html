@@ -1,0 +1,49 @@
+<div id="{id}" style="height: 700px;"></div>
+
+<script type="text/javascript">
+
+    var nodes = {nodes};
+    var edges = {edges};
+
+    var container = document.getElementById("{id}");
+
+    var data = {{
+	nodes: nodes,
+	    edges: edges
+    }};
+
+    var options = {{
+	nodes: {{
+	    shape: 'dot',
+		size: 15,
+		font: {{
+		    size: 14
+		}},
+		widthConstraint: true 
+	}},
+	    edges: {{
+		font: {{
+		    size: 14,
+			align: 'middle'
+		}},
+		    color: 'gray',
+		    arrows: {{
+			to: {{
+			    enabled: true,
+				scaleFactor: 0.5
+			}}
+		    }},
+
+	    }},
+	    "physics": {{
+		"forceAtlas2Based": {{
+		    "springLength": 100
+		}},
+		    "minVelocity": 0.75,
+		    "solver": "forceAtlas2Based"
+	    }}
+    }};
+
+    var network = new vis.Network(container, data, options);
+
+</script>
