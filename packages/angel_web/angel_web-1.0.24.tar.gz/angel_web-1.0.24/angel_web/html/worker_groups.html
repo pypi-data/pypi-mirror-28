@@ -1,0 +1,48 @@
+<script type="text/javascript">
+$('#wg_datagrid').datagrid({
+    height: '100%',
+    gridTitle : 'Worker Group Information',
+    showToolbar: true,
+    toolbarItem: 'all',
+    local: 'local',
+    delPK: 'id',
+    dataUrl: '/data/all_wgs',
+    editUrl: '/data/update_wgs',
+    delUrl: '/data/delete_wgs',
+	columns:[
+		{
+			name:"id",
+			label:"ID",
+			align:"center",
+            add:false,
+            edit:false,
+			width:70
+		},
+		{
+			name:"name",
+			label:"Group Name",
+			align:"center",
+			width:70
+		},
+		{
+			name:"desc",
+			label:"Description",
+			align:"center",
+			width:70
+		}
+	],
+    paging: {pageSize:20, pageCurrent:1},
+    linenumberAll: true,
+    tableWidth:'100%',
+    noremove: false
+})
+</script>
+<div class="bjui-pageHeader" style="background-color:#fff; border-bottom:none;">
+    <div class="bs-callout bs-callout-warning">
+        <h4>All worker groups are list as follows</h4>
+		<p>You can add, delete, update, query groups here</p>
+    </div>
+</div>
+<div class="bjui-pageContent">
+	<table id="wg_datagrid" class="table table-bordered"></table>
+</div>
