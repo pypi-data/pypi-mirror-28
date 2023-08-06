@@ -1,0 +1,179 @@
+
+[[ send to:
+   wxpython-users@googlegroups.com,
+   wxpython-dev@googlegroups.com,
+   wx-users@googlegroups.com,
+   wx-announce@googlegroups.com,
+   Python-Announce-List@Python.Org
+   ]]
+
+
+Announcing wxPython 4.0.0
+=========================
+
+PyPI:   https://pypi.python.org/pypi/wxPython/4.0.0
+Extras: https://extras.wxPython.org/wxPython4/extras/
+Pip:    ``pip install wxPython==4.0.0``
+
+Changes in this release include the following:
+
+* Fixes in wx.aui to properly transfer ownership of the menubar, and also some
+  tweaks in the AUI_MDI sample in the demo. (#540)
+
+* Added a wx.BUILD_TYPE value to distinguish between development, snapshot,
+  and release builds. The value is also appended to wx.PlatformInfo. (Thanks
+  Mesalu!)
+
+* Fix crash when trying to fetch multiple items from a composite data object
+  in wx.DropTarget.OnData. (#550) Also fixed the CustomDragAndDrop sample to
+  not fail on Python 2.7.
+
+* Add ability for wxArray wrappers to return a copy of the item in the
+  ``__getitem__`` method. This solves problems where an array that is the
+  return value of some method call is indexed immediately and a reference to
+  the array is not held, which could result in garbage values for the indexed
+  item. Currently this is turned on for just GridCellCoordsArray, but others
+  can be switched in the future if needed. (#297)
+
+* Add missing ``wx.GetLocale`` function. (#572)
+
+* Add methods to wx.TextCtrl for output "file-like" compatibility. (#578)
+
+* Fix object ownership issue for menus added to toolbar items. (#580)
+
+* Updated SIP to version 4.19.5. One of the new features of this version is
+  that integer overflows are no longer silently truncated and ignored. In
+  other words, if a wrapped API has a parameter that is a C int type, and you
+  pass a value that is larger than what will fit in that type of integer then
+  an OverflowError exception will be raised.
+
+* Fixed wx.richtext.RichTextBuffer.GetExtWildcard to return a tuple of 2
+  values, as was done in Classic. (#594)
+
+* Various fixes in UltimateListCtrl, HyperTreeList and CheckListCtrlMixin.
+  (#592, #349, #612)
+
+* Fixes in TextEditMixin to ensure that the new value is passed in the
+  event. (#605)
+
+* Fix comparing DataViewItem and TreeListItem objects with None. (#595)
+
+* Fix event type name in wx/lib/sheet.py (#613)
+
+* The wx.MessageDialog methods which take ButtonLabel parameters are now able
+  to accept either strings or stock IDs. (#607, #276)
+
+* Fix wx.EvtHandler.Unbind to work correctly when specifying the handler and
+  it is a bound method. (#624)
+
+* Fix OGL's ShapeCanvas to draw properly when the window is scrolled, and
+  to also adjust the mouse coordinates, etc. (#635)
+
+* Set a default background color for the generic buttons. (#651)
+
+* Fixed HtmlWindow's OnFoo virtual methods so calls to them are propagated to
+  the Python class. (#642)
+
+* Fixed wx.CallLater to explicitly hold a reference instead of depending on an
+  uncollectable cycle to keep the instance around. Like before the cycle is
+  broken and the saved reference is deleted after the timer expires and the
+  callable has been called. (#457)
+
+* Although it's more or less just an implementation detail, add wrappers for
+  wx.aui.AuiTabCtrl so references to it will get the correct type. (#664)
+
+* List-like wrapper classes generated for accessing wxLists and wxArrays now
+  support reverse indexing. (#669) For example::
+
+      child = panel.GetChildren()[-1]
+
+
+* Ported some of the classes in Classic's gizmos module from C++ to Python,
+  including LEDNumberCtrl, DynamicSashWindow, and TreeListCtrl. The classes
+  are now located in the wx.lib.gizmos package, with a compatibility module at
+  the old wx.gizmos location. Please note that this TreeListCtrl class is a
+  very different implementation than wx.dataview.TreeListCtrl, although there
+  is some overlap in purpose. In addition, the new TreeListCtrl class is not
+  actually a port from the old gizmos.TreeListCtrl but rather just a thin
+  layer around AGW's HyperTreeList. This means that if you are using a non-
+  default style flag you'll need to pass it to the agwStyle parameter instead
+  of the style parameter.
+
+* Fix crash when deleting all wx.dataview.TreeListCtrl items with wxGTK3.
+  (#679, #704)
+
+* Fix displaying '&' in the label of wx.RadioBox on GTK. (#39)
+
+* Fix problems of the wrong C++ method being called in wx.ProgressDialog on MS
+  Windows. (#701)
+
+* Fixed how the scrollbar events are captured in DynamicSashWindow in order to
+  fix regression in the sample. (#687)
+
+* Allow extra CLI args to be passed to build.py by setting WXPYTHON_BUILD_ARGS
+  in the environment.
+
+* Added context manager methods to wx.DC that explicitly destroys the C++
+  part of the DC upon exit. Using DCs as context managers is not required, but
+  can be handy in the rare cases where something holds on to a DC for too
+  long, perhaps unintentionally. (#680)
+
+* Fixed crash due to too aggressive management of wxModules when we load
+  subordinate extensions that have their own wxModules (wx.html, wx.adv, etc.)
+  (#688)
+
+* Fixed StyledTextCtrl.MarkerDefineRGBAImage and RegisterRGBAImage methods to
+  be able to accept any Python buffer compatible object for the pixel data. (#716)
+
+
+
+
+
+What is wxPython?
+-----------------
+
+wxPython is a cross-platform GUI toolkit for the Python programming
+language.  It allows Python programmers to create programs with a
+robust, highly functional graphical user interface, simply and
+easily. It is implemented as a set of Python extension modules that
+wrap the GUI components of the popular wxWidgets cross platform
+library, which is written in C++. Supported platforms are Microsoft
+Windows, Mac OS X and macOS, and Linux or other unix-like systems with
+GTK2 or GTK3 libraries. In most cases the native widgets are used on
+each platform to provide a 100% native look and feel for the
+application.
+
+
+What is wxPython Phoenix?
+-------------------------
+
+wxPython's Project Phoenix is a new from-the-ground-up implementation
+of wxPython, created with the intent of making wxPython “better,
+stronger, faster than he was before.” In other words, this new
+implementation is focused on improving speed, maintainability and
+extensibility of wxPython, as well as removing most of the cruft that
+had accumulated over the long life of Classic wxPython.
+
+The project has been in development off and on, mostly behind the
+scenes, for many years. For the past few years automated snapshot
+builds have been available for those adventurous enough to try it, and
+many people eventually started using the snapshots in their projects,
+even for production releases.  While there are still some things on
+the periphery that need to be completed, the core of the new wxPython
+extension modules which wrap the wxWidgets code has been stable for a
+long time now.
+
+Due to some things being cleaned up, reorganized, simplified and
+dehackified wxPython Phoenix is not completely backwards compatible
+with wxPython Classic.  This is intended. In general, however, the API
+differences tend to be minor and some applications can use Phoenix
+with slight, or even with no modifications.  In some other cases the
+correct way to do things was also available in Classic and it's only
+the wrong way that has been removed from Phoenix.  For more
+information there is a Migration Guide document available at:
+https://docs.wxpython.org/MigrationGuide.html
+
+The new wxPython API reference documentation, including all
+Python-specific additions and customizations, and docs for the wx.lib
+package, is located at: https://docs.wxpython.org/
+
