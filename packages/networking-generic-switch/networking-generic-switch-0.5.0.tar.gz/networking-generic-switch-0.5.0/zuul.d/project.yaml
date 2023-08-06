@@ -1,0 +1,18 @@
+- project:
+    name: openstack/networking-generic-switch
+    check:
+      jobs:
+        - networking-generic-switch-tempest-dsvm-dlm
+        - ironic-tempest-dsvm-ipa-wholedisk-agent_ipmitool-tinyipa-multinode:
+            irrelevant-files:
+              - ^(test-|)requirements.txt$
+              - ^setup.cfg$
+        - ironic-grenade-dsvm-multinode-multitenant
+    gate:
+      jobs:
+        - networking-generic-switch-tempest-dsvm-dlm
+        - ironic-tempest-dsvm-ipa-wholedisk-agent_ipmitool-tinyipa-multinode:
+            irrelevant-files:
+              - ^(test-|)requirements.txt$
+              - ^setup.cfg$
+        - ironic-grenade-dsvm-multinode-multitenant
