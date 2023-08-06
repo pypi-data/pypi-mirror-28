@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+
+        <!-- group: online access -->
+        <record model="res.group" id="group_fints_access_bank">
+            <field name="name">Account Statement FinTS - online access</field>
+        </record>
+
+        <!-- group member: administrator -->
+        <record model="res.user-res.group" 
+                id="user_admin_group-group_fints_access_bank">
+            <field name="user" ref="res.user_admin"/>
+            <field name="group" ref="group_fints_access_bank"/>
+        </record>
+
+        <!-- permissions -->
+        <!-- wizard: CheckBankAccessWizard -->
+        <record model="ir.action-res.group" 
+                id="act_checkbankaccess_wizard-group_fints_access_bank">
+            <field name="action" ref="act_checkbankaccess_wizard"/>
+            <field name="group" ref="group_fints_access_bank"/>
+        </record>
+        <!-- wizard: ImportByFinTSWizard -->
+        <record model="ir.action-res.group" 
+                id="act_import_wizard-group_fints_access_bank">
+            <field name="action" ref="act_import_wizard"/>
+            <field name="group" ref="group_fints_access_bank"/>
+        </record>
+
+        <!-- bank -->
+        <record model="ir.model.field.access" 
+                id="field_access_bank-access_bank-fintsblz">
+            <field name="field"
+                search="[('model.model', '=', 'bank'), ('name', '=', 'fintsblz')]"/>
+            <field name="group" ref="group_fints_access_bank"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record model="ir.model.field.access" 
+                id="field_access_bank-access_bank-fintsurl">
+            <field name="field"
+                search="[('model.model', '=', 'bank'), ('name', '=', 'fintsurl')]"/>
+            <field name="group" ref="group_fints_access_bank"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+
+        <!-- login data -->
+        <record model="ir.model.field.access" 
+                id="field_access_bank_account_number-access_bank-fints_ena">
+            <field name="field"
+                search="[('model.model', '=', 'bank.account.number'), ('name', '=', 'fints_ena')]"/>
+            <field name="group" ref="group_fints_access_bank"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record model="ir.model.field.access" 
+                id="field_access_bank_account_number-access_bank-fints_login">
+            <field name="field"
+                search="[('model.model', '=', 'bank.account.number'), ('name', '=', 'fints_login')]"/>
+            <field name="group" ref="group_fints_access_bank"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record model="ir.model.field.access" 
+                id="field_access_bank_account_number-access_bank-fints_pin">
+            <field name="field"
+                search="[('model.model', '=', 'bank.account.number'), ('name', '=', 'fints_pin')]"/>
+            <field name="group" ref="group_fints_access_bank"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+        <record model="ir.model.field.access" 
+                id="field_access_bank_account_number-access_bank-fints_name">
+            <field name="field"
+                search="[('model.model', '=', 'bank.account.number'), ('name', '=', 'fints_name')]"/>
+            <field name="group" ref="group_fints_access_bank"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+        </record>
+
+    </data>
+</tryton>
