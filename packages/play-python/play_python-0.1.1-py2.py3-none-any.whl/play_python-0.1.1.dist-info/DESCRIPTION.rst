@@ -1,0 +1,193 @@
+===========
+play python
+===========
+
+
+.. image:: https://img.shields.io/pypi/v/play_python.svg
+        :target: https://pypi.python.org/pypi/play_python
+
+.. image:: https://img.shields.io/travis/tierratelematics/play_python.svg
+        :target: https://travis-ci.org/tierratelematics/play_python
+
+.. image:: https://readthedocs.org/projects/play-python/badge/?version=latest
+        :target: https://play-python.readthedocs.io/en/latest/?badge=latest
+        :alt: Documentation Status
+
+.. image:: https://codecov.io/gh/tierratelematics/play_python/branch/develop/graph/badge.svg
+     :target: https://codecov.io/gh/tierratelematics/play_python
+
+
+pytest-play plugin with restricted Python expressions and assertions and it is
+based on the ``RestrictedPython`` package.
+
+``RestrictedPython`` is a tool that helps to define a subset of the Python
+language which allows to provide a program input into a trusted environment.
+RestrictedPython is not a sandbox system or a secured environment, but it helps
+to define a trusted environment and execute untrusted code inside of it.
+
+See:
+
+* https://github.com/zopefoundation/RestrictedPython
+
+More info and examples on:
+
+* pytest-play_, documentation
+* cookiecutter-qa_, see ``pytest-play`` in action with a working example if you want to start hacking
+
+
+Features
+========
+
+
+This project defines the following pytest-play_ commands based on Python
+expressions.
+
+
+Store variables
+---------------
+
+You can store a pytest-play_ variables::
+
+    {
+     'provider': 'python',
+     'type': 'store_variable',
+     'expression': '1+1',
+     'name': 'foo'
+    }
+
+Make a Python assertion
+-----------------------
+
+You can make an assertion based on a Python expression::
+
+    {
+     'provider': 'python',
+     'type': 'assert',
+     'expression': 'variables["foo"] == 2'
+    }
+
+Sleep
+-----
+
+Sleep for a given amount of seconds::
+
+    {
+     'provider': 'python',
+     'type': 'sleep',
+     'seconds': 2
+    }
+
+Exec a Python expresssion
+-------------------------
+
+You can execute a Python expression::
+
+    {
+     'provider': 'python',
+     'type': 'exec',
+     'expression': 'variables.update({'play_requests': {'parameters': {'headers': {'Authorization': '$bearer', 'Content-Type': 'application/json'}}}})'
+    }
+
+Wait until condition
+--------------------
+
+The ``wait_until_not`` command waits until the wait expression is False::
+
+    {
+     'provider': 'python',
+     'type': 'wait_until_not',
+     'expression': 'variables["expected_id"] is not None and variables["expected_id"][0] == $id',
+     'timeout': 5,
+     'poll': 0.1,
+     'subcommands': [{
+         'provider': 'play_sql',
+         'type': 'sql',
+         'database_url': 'postgresql://$db_user:$db_pwd@$db_host/$db_name',
+         'query': 'SELECT id FROM table WHERE id=$id ORDER BY id DESC;',
+         'variable': 'expected_id',
+         'expression': 'results.first()'
+     }]
+    }
+
+assuming that the subcommand updates the execution results updating a ``pytest-play``
+variable (eg: ``expected_id``) where tipically the ``$id`` value comes
+from a previously executed command that causes an asynchrounous update on a relational
+database soon or later (eg: a play_requests_ command making a ``HTTP POST`` call
+or a ``MQTT`` message coming from a simulated IoT device with play_mqtt_).
+
+The wait command will try (and retry) to execute the subcommand with a poll frequency
+``poll`` (default: 0.1 seconds) until the provided ``timeout`` expressed
+in seconds expires or an exception occurs.
+
+You can use the opposite command named ``wait_until`` that waits until the wait
+expression is not False.
+
+Loop commands
+-------------
+
+You can repeat a group of subcommands using a variable as a counter. Assuming you
+have defined a ``countdown`` variable with 10 value, the wait until command will
+repeat the group of commands for 10 times::
+
+    play_json.execute_command({
+        'provider': 'python',
+        'type': 'wait_until',
+        'expression': 'variables["countdown"] == 0',
+        'timeout': 0,
+        'poll': 0,
+        'sub_commands': [{
+            'provider': 'python',
+            'type': 'store_variable',
+            'name': 'countdown',
+            'expression': 'variables["countdown"] - 1'
+        }]
+    })
+
+Twitter
+=======
+
+``pytest-play`` tweets happens here:
+
+* `@davidemoro`_
+
+Credits
+=======
+
+This package was created with Cookiecutter_ and the cookiecutter-play-plugin_ (based on `audreyr/cookiecutter-pypackage`_ project template).
+
+.. _Cookiecutter: https://github.com/audreyr/cookiecutter
+.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+.. _`cookiecutter-play-plugin`: https://github.com/tierratelematics/cookiecutter-play-plugin
+.. _pytest-play: https://github.com/tierratelematics/pytest-play
+.. _cookiecutter-qa: https://github.com/tierratelematics/cookiecutter-qa
+.. _`@davidemoro`: https://twitter.com/davidemoro
+.. _play_requests: https://github.com/tierratelematics/play_requests
+.. _play_mqtt: https://github.com/tierratelematics/play_mqtt
+
+
+=======
+CHANGES
+=======
+
+0.1.1 (2018-01-17)
+------------------
+
+- add ``filter`` and ``map``
+
+
+0.1.0 (2018-01-16)
+------------------
+
+- add ``wait_until`` and ``wait_until_not`` commands
+
+- add ``datetime`` based expressions
+
+- add json ``dumps`` and ``loads`` based expressions
+
+
+0.0.1 (2018-01-10)
+------------------
+
+* First release
+
+
