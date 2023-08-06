@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>sima.lib.simafm &#8212; MPD_sima 0.14.4 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.14.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../../../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="top" title="MPD_sima 0.14.4 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../../index.html">
+          MPD_sima</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.14.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/meta.html">Track object Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/meta.html#meta-object-documentation">Meta object Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/lastfm.html">Last.fm  HTTP Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/echonest.html">EchoNest HTTP Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../dev/cache.html">HTTP Cache Objects</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <h1>Source code for sima.lib.simafm</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="c1"># Copyright (c) 2009, 2010, 2011, 2012, 2013, 2014 Jack Kaliko &lt;kaliko@azylum.org&gt;</span>
+<span class="c1">#</span>
+<span class="c1">#   This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#   it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#   the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#   (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#   This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#   but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#   GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#   You should have received a copy of the GNU General Public License</span>
+<span class="c1">#   along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="c1">#</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Consume Last.fm web service</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.5.1&#39;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Jack Kaliko&#39;</span>
+
+
+
+<span class="kn">from</span> <span class="nn">sima</span> <span class="k">import</span> <span class="n">LFM</span>
+<span class="kn">from</span> <span class="nn">sima.lib.meta</span> <span class="k">import</span> <span class="n">Artist</span>
+<span class="kn">from</span> <span class="nn">sima.lib.track</span> <span class="k">import</span> <span class="n">Track</span>
+
+<span class="kn">from</span> <span class="nn">sima.lib.http</span> <span class="k">import</span> <span class="n">HttpClient</span>
+<span class="kn">from</span> <span class="nn">sima.utils.utils</span> <span class="k">import</span> <span class="n">WSError</span><span class="p">,</span> <span class="n">WSNotFound</span>
+<span class="kn">from</span> <span class="nn">sima.utils.utils</span> <span class="k">import</span> <span class="n">getws</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">LFM</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;apikey&#39;</span><span class="p">))</span> <span class="o">==</span> <span class="mi">43</span><span class="p">:</span>  <span class="c1"># simple hack allowing imp.reload</span>
+    <span class="n">getws</span><span class="p">(</span><span class="n">LFM</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SimaFM"><a class="viewcode-back" href="../../../dev/lastfm.html#sima.lib.simafm.SimaFM">[docs]</a><span class="k">class</span> <span class="nc">SimaFM</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Last.fm http client</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">root_url</span> <span class="o">=</span> <span class="s1">&#39;http://</span><span class="si">{host}</span><span class="s1">/</span><span class="si">{version}</span><span class="s1">/&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="n">LFM</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Last.fm&#39;</span>
+    <span class="n">cache</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="sd">&quot;&quot;&quot;HTTP cache to use, in memory or persitent.</span>
+
+<span class="sd">    :param BaseCache cache: Set a cache, defaults to `False`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stats</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;etag&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+             <span class="s1">&#39;ccontrol&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span>
+             <span class="s1">&#39;total&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">http</span> <span class="o">=</span> <span class="n">HttpClient</span><span class="p">(</span><span class="n">cache</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">,</span> <span class="n">stats</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">artist</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_controls_answer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ans</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Controls answer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;error&#39;</span> <span class="ow">in</span> <span class="n">ans</span><span class="p">:</span>
+            <span class="n">code</span> <span class="o">=</span> <span class="n">ans</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">)</span>
+            <span class="n">mess</span> <span class="o">=</span> <span class="n">ans</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">WSNotFound</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">: &quot;</span><span class="si">{1}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mess</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">artist</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="n">WSError</span><span class="p">(</span><span class="n">mess</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="nf">_forge_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artist</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;similar&#39;</span><span class="p">,</span> <span class="n">track</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Build payload</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">payloads</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">({</span><span class="s1">&#39;similar&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;method&#39;</span><span class="p">:</span><span class="s1">&#39;artist.getsimilar&#39;</span><span class="p">,},</span>
+                         <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;method&#39;</span><span class="p">:</span><span class="s1">&#39;artist.gettoptracks&#39;</span><span class="p">,},</span>
+                         <span class="s1">&#39;track&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;method&#39;</span><span class="p">:</span><span class="s1">&#39;track.getsimilar&#39;</span><span class="p">,},</span>
+                         <span class="s1">&#39;info&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;method&#39;</span><span class="p">:</span><span class="s1">&#39;artist.getinfo&#39;</span><span class="p">,},</span>
+                        <span class="p">})</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="n">payloads</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">method</span><span class="p">)</span>
+        <span class="n">payload</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">LFM</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;apikey&#39;</span><span class="p">),</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;json&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">Artist</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;&quot;</span><span class="si">{0!r}</span><span class="s1">&quot; not an Artist object&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">artist</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">artist</span> <span class="o">=</span> <span class="n">artist</span>
+        <span class="k">if</span> <span class="n">artist</span><span class="o">.</span><span class="n">mbid</span><span class="p">:</span>
+            <span class="n">payload</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">mbid</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">artist</span><span class="o">.</span><span class="n">mbid</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">payload</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="n">artist</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                           <span class="n">autocorrect</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">payload</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">results</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s1">&#39;track&#39;</span><span class="p">:</span>
+            <span class="n">payload</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">track</span><span class="o">=</span><span class="n">track</span><span class="p">)</span>
+        <span class="c1"># &gt; hashing the URL into a cache key</span>
+        <span class="c1"># return a sorted list of 2-tuple to have consistent cache</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">payload</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">param</span><span class="p">:</span> <span class="n">param</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<div class="viewcode-block" id="SimaFM.get_similar"><a class="viewcode-back" href="../../../dev/lastfm.html#sima.lib.simafm.SimaFM.get_similar">[docs]</a>    <span class="k">def</span> <span class="nf">get_similar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artist</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetch similar artists</span>
+
+<span class="sd">        :param sima.lib.meta.Artist artist: `Artist` to fetch similar artists from</span>
+<span class="sd">        :returns: generator of :class:`sima.lib.meta.Artist`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forge_payload</span><span class="p">(</span><span class="n">artist</span><span class="p">)</span>
+        <span class="c1"># Construct URL</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_url</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controls_answer</span><span class="p">(</span><span class="n">ans</span><span class="o">.</span><span class="n">json</span><span class="p">())</span> <span class="c1"># pylint: disable=no-member</span>
+        <span class="c1"># Artist might be found be return no &#39;artist&#39; list…</span>
+        <span class="c1"># cf. &quot;Mulatu Astatqe&quot; vs. &quot;Mulatu Astatqé&quot; with autocorrect=0</span>
+        <span class="c1"># json format is broken IMHO, xml is more consistent IIRC</span>
+        <span class="c1"># Here what we got:</span>
+        <span class="c1"># &gt;&gt;&gt; {&quot;similarartists&quot;:{&quot;#text&quot;:&quot;\n&quot;,&quot;artist&quot;:&quot;Mulatu Astatqe&quot;}}</span>
+        <span class="c1"># autocorrect=1 should fix it, checking anyway.</span>
+        <span class="n">simarts</span> <span class="o">=</span> <span class="n">ans</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;similarartists&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;artist&#39;</span><span class="p">)</span> <span class="c1"># pylint: disable=no-member</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">simarts</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">WSError</span><span class="p">(</span><span class="s1">&#39;Artist found but no similarities returned&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">art</span> <span class="ow">in</span> <span class="n">ans</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;similarartists&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;artist&#39;</span><span class="p">):</span> <span class="c1"># pylint: disable=no-member</span>
+            <span class="k">yield</span> <span class="n">Artist</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">art</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">),</span> <span class="n">mbid</span><span class="o">=</span><span class="n">art</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mbid&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="SimaFM.get_toptrack"><a class="viewcode-back" href="../../../dev/lastfm.html#sima.lib.simafm.SimaFM.get_toptrack">[docs]</a>    <span class="k">def</span> <span class="nf">get_toptrack</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">artist</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetch artist top tracks</span>
+
+<span class="sd">        :param sima.lib.meta.Artist artist: `Artist` to fetch top tracks from</span>
+<span class="sd">        :returns: generator of :class:`sima.lib.track.Track`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_forge_payload</span><span class="p">(</span><span class="n">artist</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">)</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root_url</span><span class="p">,</span> <span class="n">payload</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_controls_answer</span><span class="p">(</span><span class="n">ans</span><span class="o">.</span><span class="n">json</span><span class="p">())</span> <span class="c1"># pylint: disable=no-member</span>
+        <span class="n">tops</span> <span class="o">=</span> <span class="n">ans</span><span class="o">.</span><span class="n">json</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;toptracks&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;track&#39;</span><span class="p">)</span> <span class="c1"># pylint: disable=no-member</span>
+        <span class="n">art</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;artist&#39;</span><span class="p">:</span> <span class="n">artist</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+               <span class="s1">&#39;musicbrainz_artistid&#39;</span><span class="p">:</span> <span class="n">artist</span><span class="o">.</span><span class="n">mbid</span><span class="p">,}</span>
+        <span class="k">for</span> <span class="n">song</span> <span class="ow">in</span> <span class="n">tops</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;artist&#39;</span><span class="p">,</span> <span class="s1">&#39;streamable&#39;</span><span class="p">,</span> <span class="s1">&#39;listeners&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="s1">&#39;@attr&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">song</span><span class="p">:</span>
+                    <span class="n">song</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="n">song</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">art</span><span class="p">)</span>
+            <span class="n">song</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">song</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">))</span>
+            <span class="n">song</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">song</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;duration&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="k">yield</span> <span class="n">Track</span><span class="p">(</span><span class="o">**</span><span class="n">song</span><span class="p">)</span></div></div>
+
+<span class="c1"># VIM MODLINE</span>
+<span class="c1"># vim: ai ts=4 sw=4 sts=4 expandtab</span>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015-2017, kaliko.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

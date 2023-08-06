@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Last.fm HTTP Client &#8212; MPD_sima 0.14.4 documentation</title>
+    
+    <link rel="stylesheet" href="../_static/basic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-3.3.6/css/bootstrap-theme.min.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.14.4',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="../_static/js/jquery-fix.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../_static/bootstrap-sphinx.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="top" title="MPD_sima 0.14.4 documentation" href="../index.html" />
+    <link rel="next" title="EchoNest HTTP Client" href="echonest.html" />
+    <link rel="prev" title="Track object Documentation" href="meta.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+  </head>
+  <body role="document">
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          MPD_sima</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.14.4</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="meta.html">Track object Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="meta.html#meta-object-documentation">Meta object Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Last.fm  HTTP Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="echonest.html">EchoNest HTTP Client</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cache.html">HTTP Cache Objects</a></li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Page <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"><ul>
+<li><a class="reference internal" href="#">Last.fm  HTTP Client</a></li>
+</ul>
+</ul>
+</li>
+              
+            
+            
+              
+                
+  <li>
+    <a href="meta.html" title="Previous Chapter: Track object Documentation"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Track object ...</span>
+    </a>
+  </li>
+  <li>
+    <a href="echonest.html" title="Next Chapter: EchoNest HTTP Client"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">EchoNest HTTP... &raquo;</span>
+    </a>
+  </li>
+              
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/dev/lastfm.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 content">
+      
+  <div class="section" id="module-sima.lib.simafm">
+<span id="last-fm-http-client"></span><h1>Last.fm  HTTP Client<a class="headerlink" href="#module-sima.lib.simafm" title="Permalink to this headline">¶</a></h1>
+<p>Consume Last.fm web service</p>
+<dl class="class">
+<dt id="sima.lib.simafm.SimaFM">
+<em class="property">class </em><code class="descclassname">sima.lib.simafm.</code><code class="descname">SimaFM</code><a class="reference internal" href="../_modules/sima/lib/simafm.html#SimaFM"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sima.lib.simafm.SimaFM" title="Permalink to this definition">¶</a></dt>
+<dd><p>Last.fm http client</p>
+<dl class="attribute">
+<dt id="sima.lib.simafm.SimaFM.cache">
+<code class="descname">cache</code><em class="property"> = False</em><a class="headerlink" href="#sima.lib.simafm.SimaFM.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP cache to use, in memory or persitent.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cache</strong> (<a class="reference internal" href="cache.html#sima.lib.cache.BaseCache" title="sima.lib.cache.BaseCache"><em>BaseCache</em></a>) &#8211; Set a cache, defaults to <cite>False</cite>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="sima.lib.simafm.SimaFM.get_similar">
+<code class="descname">get_similar</code><span class="sig-paren">(</span><em>artist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sima/lib/simafm.html#SimaFM.get_similar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sima.lib.simafm.SimaFM.get_similar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch similar artists</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>artist</strong> (<a class="reference internal" href="meta.html#sima.lib.meta.Artist" title="sima.lib.meta.Artist"><em>sima.lib.meta.Artist</em></a>) &#8211; <cite>Artist</cite> to fetch similar artists from</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">generator of <a class="reference internal" href="meta.html#sima.lib.meta.Artist" title="sima.lib.meta.Artist"><code class="xref py py-class docutils literal"><span class="pre">sima.lib.meta.Artist</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="sima.lib.simafm.SimaFM.get_toptrack">
+<code class="descname">get_toptrack</code><span class="sig-paren">(</span><em>artist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/sima/lib/simafm.html#SimaFM.get_toptrack"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sima.lib.simafm.SimaFM.get_toptrack" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch artist top tracks</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>artist</strong> (<a class="reference internal" href="meta.html#sima.lib.meta.Artist" title="sima.lib.meta.Artist"><em>sima.lib.meta.Artist</em></a>) &#8211; <cite>Artist</cite> to fetch top tracks from</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">generator of <a class="reference internal" href="meta.html#sima.lib.track.Track" title="sima.lib.track.Track"><code class="xref py py-class docutils literal"><span class="pre">sima.lib.track.Track</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2015-2017, kaliko.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.9.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
