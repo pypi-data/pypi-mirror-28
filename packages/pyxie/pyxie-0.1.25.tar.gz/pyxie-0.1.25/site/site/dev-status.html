@@ -1,0 +1,407 @@
+<html>
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Exo+2:400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='base.css' type='text/css'/>
+<title> Detailed Dev status </title>
+</head>
+<body>
+<span id="subscribe"><a href="http://tinyletter.com/sparkslabs">Subscribe for updates!</a></span>
+<div class="panel">
+    <h1><a href="index.html" class="plain">Pyxie</a></h1>
+</div>
+<div class="panel">
+    <div class="column col1_5">
+    <br>
+<a href="changelog.html">Changelog</a> <br> <a href="copyright.html">Open Source</a> <br> <a href="credits.html">Credits</a> <br> <a href="dev-status.html">Dev Status</a> <br> <a href="index.html">Overview</a> <br> <a href="language-spec.html">Language Spec</a> <br> <a href="language-status.html">Language Status</a> <br> <a href="project-status.html">Project Status</a> <br> <a href="resources.html">Downloads, Links, etc</a> <br> <a href="specific-profile-arduino.html">Arduino Profile</a>
+    </div>
+    <div class="column col4_5">
+    <h2>Detailed Development status</h2>
+<p>The purpose of this page is for those who wonder "what's being
+done/planned", either because they're just interested or potentially
+interested in contributing.  That should explain the ordering.  Numbers have
+no relevance, aside from to allow identification of a given task in git
+commits. <em>(This is exported from trello)</em></p>
+<h3>Project Stage</h3>
+<ul>
+<li>HEADLINE: PRE-ALPHA</li>
+<li>DEV STATE: WORKING (USABLE)</li>
+<li>DEV VERSION: 0.1.23</li>
+<li>RELEASED: 0.0.22 (25 Sep 2016)</li>
+<li>LANGUAGE STATE: BARE*</li>
+<li>FOCUS: Practicalities (Arduino Profile real example) - Get the Puppy/Kitten Robot working</li>
+<li>Newsletter created at http://tinyletter.com/sparkslabs</li>
+</ul>
+<h3>WIP</h3>
+<h3>Paused</h3>
+<ul>
+<li>227. .get_type() should be delegated, not rely on internal pynode details.</li>
+<li>Flesh out a micro:bit profile.</li>
+</ul>
+<h3>Backlog: Arising</h3>
+<ul>
+<li>259. Would be nice to remove extraneous brackets round generated C++ expressions</li>
+</ul>
+<h3>Release Backlog: Features</h3>
+<ul>
+<li>0.1.23 = = = = = = = = = =</li>
+</ul>
+<h3>Release Backlog: Tasks</h3>
+<ul>
+<li>0.1.23 - - - - - (tasks)</li>
+<li>57. Blog post: Pyxie structure #website</li>
+<li>Release tasks</li>
+</ul>
+<h3>Known Bugs / Anti-features</h3>
+<h3>Backlog: Proposed Next</h3>
+<ul>
+<li>196. Batch Compiler</li>
+<li>59. Start thoughts on pyxie-web #reflect #website</li>
+<li>195. Functionality of bin/pyxie-dev is in core, not a script</li>
+<li>3.5 Analysis code looks for an arduino profile file describing c-types appropriately.</li>
+<li>3.6 arduino profile file is propogated with something relating to core functions that read values, to avoid forcing types "manually"</li>
+<li>213. v0 no funcs Playful Puppy code analyses</li>
+<li>214. v0 no funcs Playful Puppy code generates code</li>
+<li>215. v0 no funcs Playful Puppy code compiles, and runs on device correctly</li>
+<li>221. Initial spike support for function definitions. (no args, no return values)</li>
+<li>223. Spike support for functions with basic arguments.</li>
+<li>222. Spike support for functions which use local variables</li>
+</ul>
+<h3>Backlog: Features</h3>
+<ul>
+<li>251. Profile Context is usable for defining externally defined methods/functions (for typechecking)</li>
+<li>9. Add the manpage to the distributed files, into the right places #docs</li>
+<li>8. Add updating man page to the makefile #docs</li>
+<li>197. Web Editor</li>
+<li>4. Compilation profiles are pluggable</li>
+<li>11. MBed compatible compilation profile? (Seeedstudio Arch)</li>
+<li>12. MSP430 compatible compilation profile?</li>
+<li>13. Pyxie compile harness supports custom working directories #practicalities</li>
+<li>14. Code Cleanups #refactor #internals</li>
+<li>15. Refactor code generation #refactor #internals</li>
+<li>16. Find Variables duplicates effort from the analysis phase, while also relying on results from it #internals</li>
+<li>17. Transform step is throwing away data. This seems broken and should perhaps pass through decorated pynodes - or at least retain a reference. #internals</li>
+<li>18. Code generation of C literals is muddled up a touch with structural representation #internals</li>
+<li>19. Website should use responsive CSS #website</li>
+<li>20. Website side bar could be better implemented. #website</li>
+<li>21. Truthiness for values that AND/OR/NOT arguments needs resolving properly in C. (deferred) #pylang</li>
+<li>22. Truthiness of expressions is explicitly checked/valid - for us in if and while statements and boolean expressions #pylang #internals</li>
+<li>23. Website could do with some pictures :-) #website</li>
+<li>24. Currently have 2 shift/reduce conflicts. They're auto-resolved correctly, but could be worth seeing if they could be resolved better. #pylang #internals</li>
+<li>25. Consider using CppHeaderParser on the C++ side of things - to inform the code generation side of things #internals #pylang</li>
+<li>26. Block structure of generated C Code is pretty/human friendly/readable #internals</li>
+<li>27. Operations and operators could be unified with a bit of tweaking - using "x.operation", not "x.tag/x.comparison" etc #internals #refactor</li>
+<li>28. Better Error messages for users #pylang #practicalties</li>
+<li>29. Duplication exists within code generation for operators. (cf convert_operator etc) #internals #refactor</li>
+<li>31. Features focusses on BARE level functionality</li>
+<li>32. C Syntax Tree is a Tree #internals</li>
+<li>33. Can find_variables(AST) in pyxie.model.transform actually just look in the results of the analysis phase? It should be able to. Building the same structure after all #internals</li>
+<li>34. Function call code supports simplified type definitions for externals. #practicalities</li>
+<li>35. Unify Boolean operator pynode implementations #refactor #internals</li>
+<li>36. Comments are implemented - would be useful for documented tests more appropriately #pylang</li>
+<li>37. Add special case for function calls like print... #pylang</li>
+<li>38. Generalise special casing of function calls. #practicalities</li>
+<li>39. Variables inside while loops are handled correctly #testing</li>
+<li>40. Core expression code generation for strings #pylang</li>
+<li>41. Implement container oriented comparison operators  #pylang</li>
+<li>42. Implement identity oriented comparison operators  #pylang</li>
+<li>43. Code generation for integer literals retains original representation where possible (Octal, hex, binary, etc) #practicalities</li>
+<li>44. Function call code supports C style function prototypes for type definitions #tbd</li>
+<li>45. Function call code supports name C headers for type definitions #tbd</li>
+<li>46. Pyxie caches results of C style header parsing #tbd</li>
+<li>47. Modulo Operator for Strings #pylang</li>
+<li>48. Modulo Operator for Integers #pylang</li>
+<li>49. Modulo Operator for Floats #pylang</li>
+</ul>
+<h3>Backlog: Tasks</h3>
+<ul>
+<li>52. Review whether context should check types of ALL expressions, rather than just first, and whether we can should try to detect type mismatches #reflect</li>
+<li>53. Use https://travis-ci.org/ ? #reflect</li>
+<li>54. Review pypi packaging for things we should be doing #reflect #practicalities</li>
+<li>55. Create pyxie-service for managing batch compilation services #practicalities</li>
+</ul>
+<h3>Backlog: Website, docs, etc</h3>
+<ul>
+<li>232. Would be nice to have a prettier website</li>
+<li>233. Some sort of Logo would be nice</li>
+<li>58. Blog Post: Pyxie Decisions #website</li>
+<li>60. Start thoughts on pyxie-gui #reflect</li>
+<li>30. Should we allow comments on website? #website</li>
+<li>50. Link current test programs on the website, maybe #website</li>
+</ul>
+<h3>Features Implemented</h3>
+<ul>
+<li>258. Improve Arduino profile documentation</li>
+<li>260. Arduino Profile supports HIGH,LOW,INPUT,OUTPUT,A0-A7</li>
+<li>238. Update grammar on website/in docs to match current grammar.</li>
+<li>206. Arduino profile supports millis()</li>
+<li>241. Arduino: Support "constrain"</li>
+<li>242. Arduino: Support "random"</li>
+<li>247. Arduino: Support "Serial.println"</li>
+<li>243. Arduino: Support "analogWrite"</li>
+<li>246. Arduino: Support "Serial.print"</li>
+<li>244. Arduino: Support "Serial" object</li>
+<li>245. Arduino: Support "Serial.begin"</li>
+<li>240. Arduino: Support arduino "map"</li>
+<li>205. Arduino: Support "analogRead"</li>
+<li>257. Arduino Analog sample compiles</li>
+<li>256. Arduino Analog sample analyses</li>
+<li>3.8 Arduino compiled programs can use values returned from functions.</li>
+<li>250. Profile Context is usable for defining external predefined/preinitialised variables</li>
+<li>249. Profile Context is usable for defining types of external identifiers</li>
+<li>248. Identifiers as rvalues should codegen as names not strings</li>
+<li>255. Arduino Analog sample parses</li>
+<li>254. Create Analog arduino sample</li>
+<li>252. MAJOR CHANGE print must be a function (to enable Serial.print to be valid syntax)</li>
+<li>253. FIXBUG: no default profile context breaks tests</li>
+<li>259. Update various statements on website about utility of Pyxie</li>
+<li>0.0.22 = = = = = = = = = =</li>
+<li>Add ability to control the arduino model building for</li>
+<li>0.0.21 = = = = = = = = = =</li>
+<li>203. Arduino profile supports delayMicroseconds</li>
+<li>225. Implementation of attribute access is sufficient for arduino profile.</li>
+<li>210. Parsing of Servo.writeMicroseconds() method call works as you'd expect</li>
+<li>201. Arduino profile supports Servos</li>
+<li>230. Implementation can generate code for myservo.attach(pin)</li>
+<li>231. PyAttribute(PyNode) needs to have a reference to the thing it's an attribute of when it's being accessed via PyAttributeAccess</li>
+<li>229. Implementation can analyse call to myservo.attach(pin)</li>
+<li>0.0.20 = = = = = = = = = =</li>
+<li>Subsume tree functionality into core</li>
+<li>Shorten names in profile definitions for clarity</li>
+<li>Better python 3 compatibility</li>
+<li>Experimental addition to look at name of thing, not value</li>
+<li>Use func_label to refer to the callable, not callable_</li>
+<li>Removed use of indenting logger :-)</li>
+<li>Add comment to indenting logger</li>
+<li>Changes to support debugging analysis</li>
+<li>Prettify generated C++ files</li>
+<li>Bump packaging for release</li>
+<li>194. Docs on pyxie-dev usage</li>
+<li>0.0.19 = = = = = = = = = =</li>
+<li>207. Arduino profile supports constants "HIGH", "LOW", "OUTPUT"</li>
+<li>202. Arduino profile supports digitalWrite</li>
+<li>204. Arduino profile supports pinMode</li>
+<li>209. Parsing of Servo.attach() method call works as you'd expect</li>
+<li>226. Implementation can analyse a simple call to arduino Servo() from Servo.h</li>
+<li>228. Compiler Runs under Python 3 (and Python 2)</li>
+<li>0.0.18 = = = = = = = = = =</li>
+<li>224. Parsing of attribute access is implemented</li>
+<li>51. Pyxie compile harness is switched over to use a better system for determining runtime options #internals</li>
+<li>220. range(start,end,step) is supported</li>
+<li>218. Method calls for objects can be parsed.</li>
+<li>219. Support for dumping the parse tree results as a json file.</li>
+<li>200. Pyxie can generate signed long values</li>
+<li>199. Pyxie can generate unsigned long values</li>
+<li>217. Code Generation understands what to do with LONG/UNSIGNED LONG values</li>
+<li>216. Pynodes exist for LONG/UNSIGNED LONG</li>
+<li>211. Negated expression like "-temp/2" are parsed and work</li>
+<li>208. Parsing of 0l and 0L works for unsigned and signed longs</li>
+<li>198. Pyxie Code for Playful Puppy Exists basic version</li>
+<li>212. Basic version of Playful Puppy code parses</li>
+<li>0.0.17 = = = = = = = = = =</li>
+<li>193. Update website to include the changes for 0.0.16/0.0.17 #docs</li>
+<li>56. Blog post: Introducing Pyxie #docs #website</li>
+<li>3.7.1 Integrate alternative generator/iterator protocol into compiler</li>
+<li>3.7 Arduino platform has alternative generator/exception implementation due to lack of exceptions</li>
+<li>pass statement</li>
+<li>6. Functionality of bin/pyxie is in core, not a script</li>
+<li>0.0.16 = = = = = = = = = =</li>
+<li>3. Arduino LEONARDO compatible compilation profile.</li>
+<li>3.3 Code generation outputs code targetting "setup" instead of "main"</li>
+<li>3.4 Makefile uses the arduino makefile #arduino leonardo</li>
+<li>4.1 compilation profiles support removal of elements of the clib</li>
+<li>3.2 Code generation is called with this switch toggled</li>
+<li>3.1 Detect that we are in a profile mode from a command line switch</li>
+<li>2. Function calls that do not require arguments are tested</li>
+<li>61. Make Release Script</li>
+<li>62. build_release_script.py</li>
+<li>63. Documentation in /docs is generated from website source documentation</li>
+<li>64. Docs on usage #docs</li>
+<li>65. Man page for pyxie</li>
+<li>66. Docs in README.md, setup.py and docs/ are generated from website.</li>
+<li>67. Support for for statements</li>
+<li>0.0.15 = = = = = = = = = =</li>
+<li>71. BUG: clibs can only be used on development machine...</li>
+<li>0.0.14 = = = = = = = = = =</li>
+<li>74. BUG: Putting the for loop at the end of the program causes compilation to fail</li>
+<li>75. BUG: statement_block at EOF not emitting dedents correctly #fixed</li>
+<li>76. Simple for...range loops</li>
+<li>77. Function call code supports simplified type definitions for builtins (such as range)</li>
+<li>78. Compile phase is split into "codegen" and "compile"</li>
+<li>79. Implement a simple iterator protocol for C++ objects - to allow implementation of something like range functions and generators.</li>
+<li>80. Implementation of a simple C Library to include into user generated code as necessary.</li>
+<li>0.0.13 = = = = = = = = = =</li>
+<li>82. Parsing bracketed full expressions</li>
+<li>83. Chained boolean expressions and chained mixtures of boolean expressions work as expected</li>
+<li>84. Boolean expression support: NOT</li>
+<li>85. Boolean expression support: AND</li>
+<li>86. Boolean expression support: OR</li>
+<li>87. Support for if/elif/else statements</li>
+<li>88. Support for if statements</li>
+<li>0.0.12 = = = = = = = = = =</li>
+<li>92. Release tasks: 0.0.12</li>
+<li>93. Comparison operators</li>
+<li>94. Can now handle loops that count towards zero and do something with them...</li>
+<li>95. support for while statements</li>
+<li>96. While Loop conditional is a expression</li>
+<li>97. Continue works in a While loop</li>
+<li>98. Break works with With True</li>
+<li>99. While works with While True:</li>
+<li>100. Define basic principles for Pyxie</li>
+<li>0.0.11 = = = = = = = = = =</li>
+<li>108. Function call code generation supports Print as special case</li>
+<li>109. Code generation function calls</li>
+<li>110. Support python comments so we can CHEAT and do things like #include <arduino.h> :-D (What a <em>neat</em> idea :-) )</li>
+<li>111. Parsing function calls</li>
+<li>0.0.10 = = = = = = = = = =</li>
+<li>115. Pyxie will now compile files outside the pyxie code tree</li>
+<li>116. Code generation of expression statements.</li>
+<li>117. Test suite checks that programs that should fail to compile do so</li>
+<li>118. Test suite uses new analysis hook</li>
+<li>119. PARSING USES STANDARD TREE MODEL, BUT ALSO USES CUSTOM TRAVERSALS FOR FLEXIBILITY</li>
+<li>120. Type inference code changes are refactored and cleaned up</li>
+<li>121. Strategy for managing variables needs defining</li>
+<li>122. New strategy for type inference - lexical scope friendly</li>
+<li>123. Analysis through tree for identifiers doesn't work as expected. Needs fixing/resolving</li>
+<li>124. Now, before we analyse types, all identifiers are guaranteed to be in the global context. We don't need to stuff in a new version, just update it.</li>
+<li>125. Contexts themselves are kinda wrong, need a rethink</li>
+<li>126. Analysis Phase adds context</li>
+<li>127. Pynodes are tree nodes (and hence trees)</li>
+<li>128. Analyse is an explicit phase internally, initially focussed on types</li>
+<li>129. Results of analyse phase can be made visible.</li>
+<li>130. Docs added to pyxie/<strong>init</strong>.py</li>
+<li>0.0.9 = = = = = = = = = =</li>
+<li>139. Pyxie harness supports parsing random files</li>
+<li>140. Pyxie harness supports compiling random files</li>
+<li>141. Pyxie harness has a testing mode</li>
+<li>142. Bracket negative literal values in expressions to avoid confusing C++</li>
+<li>145. Pyxie is now left recursive not right recursive</li>
+<li>146. conversion of expression statements</li>
+<li>147. BUG: 10-1-2 gives 9 not 11</li>
+<li>0.0.8 = = = = = = = = = =</li>
+<li>151. Replace python AST list style representation with a nodal representation - to simplify type decoration etc</li>
+<li>152. Type inference for expressions</li>
+<li>153. assignment where the rvalue is a simple integer expression</li>
+<li>154. Variable types are looked upin/stored to  a global context.</li>
+<li>155. Testcase added for assignments where the rvalue is an expression</li>
+<li>156. BUGFIX: Should only include iostream once, if at all.</li>
+<li>157. Printing of op_func blocks</li>
+<li>158. Conversion of core "operator functions" for integers</li>
+<li>159. Code generation for INTEGER core expressions</li>
+<li>160. BUGFIX: Precedence for operators is inverted for some reason.  +- binding tighter than */</li>
+<li>161. BUG - When the parser is reused, line numbers in lexer do not reset for new files</li>
+<li>162.Parsing core expressions - times, divide, power, plus, minus  - NOT function call, not parenthesised</li>
+<li>163. Parsing blocks generates block tokens</li>
+<li>164. Lexical Analysis matches initial language spec</li>
+<li>165. Print handles mixed literals</li>
+<li>166. Code generation for atomic literals</li>
+<li>167. "models" contains an initial baseline model mapping python-CST to CPP-CST</li>
+<li>168. Generation of decorated CPP-CST from parsed assignment statements</li>
+<li>169. C++ Code can be generated from the baseline CPP-CST for libc based testing</li>
+<li>170. Parsing assignment statements</li>
+<li>171. Parsing identifiers</li>
+<li>172. Parsing of value literals</li>
+<li>173. Baseline parser/lexer infrastructure for parser build/testing</li>
+<li>174. Long description on PyPI</li>
+</ul>
+<h3>Tasks Done</h3>
+<ul>
+<li>0.0.22 - - - - - (tasks)</li>
+<li>239. 0.0.22 Release tasks</li>
+<li>0.0.22 - - - - - (tasks)</li>
+<li>239. 0.0.21 Release tasks</li>
+<li>0.0.20 - - - - - (tasks)</li>
+<li>Update changelog</li>
+<li>Add newsletter subscription to site info</li>
+<li>234. Replicate <em>target</em> release issues for 0.0.20 into github</li>
+<li>235. Newsletter for sparkslabs projects exists.</li>
+<li>236. Re-order trello lists by left to right order to make more usable</li>
+<li>237. Tweak git repo</li>
+<li>0.0.19 - - - - - (tasks)</li>
+<li>0.0.18 - - - - - (tasks)</li>
+<li>Package for release and release (DONE)</li>
+<li>Cleanup clib packaging</li>
+<li>0.0.17 - - - - - (tasks)</li>
+<li>10. Decide whether to add functionality of bin/pyxie-dev is in core</li>
+<li>0.0.16 - - - - - (tasks)</li>
+<li>1. Number Cards in backlog.</li>
+<li>7. For Release: 0.0.16</li>
+<li>192. Trello snapshot generation escapes task numbers.</li>
+<li>68. Write Bump Versions Script.</li>
+<li>69. Re-prioritise backlog for 0.0.16</li>
+<li>70. Breakdown features needed for a release script</li>
+<li>0.0.15 - - - - - (tasks)</li>
+<li>72. For Release: 0.0.15</li>
+<li>73. Bump Versions</li>
+<li>0.0.14 - - - - - (tasks)</li>
+<li>81. For Release: 0.0.14</li>
+<li>0.0.13 - - - - - (tasks)</li>
+<li>89. For Release: 0.0.13</li>
+<li>90. Decide on Python Modulo operator?</li>
+<li>91. Bump Versions</li>
+<li>0.0.12 - - - - - (tasks)</li>
+<li>101. Update language status for 0.0.12</li>
+<li>102. BUG: Parser generates far too many "empty statements"</li>
+<li>103. Update language status for 0.0.11</li>
+<li>104. Check docs in pyxie/<strong>init</strong>.py match 0.0.12 Release</li>
+<li>105. Bump Versions</li>
+<li>106. Push rebased site to github/live</li>
+<li>107. Site for Pyxie, should link to language spec -- http://www.sparkslabs.com/Pyxie/language-spec.md</li>
+<li>0.0.11 - - - - - (tasks)</li>
+<li>112. For release: 0.0.11</li>
+<li>113. Check docs in pyxie/<strong>init</strong>.py match 0.0.11 Release</li>
+<li>114. Bump Versions</li>
+<li>0.0.10 - - - - - (tasks)</li>
+<li>131. For release: 0.0.10</li>
+<li>132. Check that programs that compile produce expected code</li>
+<li>134. Check docs in pyxie/<strong>init</strong>.py match 0.0.10 Release</li>
+<li>135. Update test target in makefile to match new pyxie args</li>
+<li>136. Bump Versions</li>
+<li>137. Order of functions in pynode matches grammar - making it easier to follow</li>
+<li>138. Document current parsing status more accurately</li>
+<li>0.0.9 - - - - - (tasks)</li>
+<li>148. Check that debian package being built/created does actually contains what's wanted</li>
+<li>149. Check that the tar ball being built/created for pypi actually contains what you want</li>
+<li>150. Version number bumped</li>
+<li>0.0.8 - - - - - (tasks earlier)</li>
+<li>175. Why the project doesn't use the standard python compiler/AST module</li>
+<li>176. Break down language features into specific feature tasks - for initial feature set</li>
+<li>177. pyxie compiler now accepts runtime options to control what tests get compiled</li>
+<li>178. Changelog for initial releases</li>
+<li>179. Initial language spec</li>
+<li>180. Packaging for pypi exists</li>
+<li>181. Packaging via PPA exists</li>
+<li>182. The CST for baseline Python code is simplified</li>
+<li>183. Initial testing infrastructure in place</li>
+<li>184. Private github repo for Pyxie</li>
+<li>185. initial README for Pyxie</li>
+<li>186. Pyxie 0.0.1 Released</li>
+<li>187. Pyxie 0.0.2 Released</li>
+<li>188. Pyxies 0.0.3 Released</li>
+<li>189. Pyxie 0.0.4 Released</li>
+<li>190. Pyxie 0.0.5 Released</li>
+<li>191. Bump Versions</li>
+</ul>
+<h3>Pinned</h3>
+<ul>
+<li>Things to feed into Pyxie</li>
+<li>Licensing links</li>
+<li>.p files are parsing tests. If they compile, they should be renamed .pyxie which are compilation tests.</li>
+<li>How to deploy the website</li>
+<li>Release tasks</li>
+</ul>
+<h3>Rejected</h3>
+    <br style="clear: both"><hr>
+    Updated: 11 October 2016
+    </div>
+</div>
+<div class="columnpanel lightgrey_darkgrey topsolid">
+ <div class="panel centred-text">
+<a href="resources.html"> Help, Contacts &amp; Downloads </a> <br>
+<div class="smaller">
+Copyright &copy; 2016 Michael Sparks <a href="copyright.html"> Open Source</a>
+</div>
+ </div>
+</div>
+</body>
+</html>

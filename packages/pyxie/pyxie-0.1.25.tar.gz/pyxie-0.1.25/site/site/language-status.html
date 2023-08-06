@@ -1,0 +1,455 @@
+<html>
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Exo+2:400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='base.css' type='text/css'/>
+<title> Language Status for Pyxie </title>
+</head>
+<body>
+<span id="subscribe"><a href="http://tinyletter.com/sparkslabs">Subscribe for updates!</a></span>
+<div class="panel">
+    <h1><a href="index.html" class="plain">Pyxie</a></h1>
+</div>
+<div class="panel">
+    <div class="column col1_5">
+    <br>
+<a href="changelog.html">Changelog</a> <br> <a href="copyright.html">Open Source</a> <br> <a href="credits.html">Credits</a> <br> <a href="dev-status.html">Dev Status</a> <br> <a href="index.html">Overview</a> <br> <a href="language-spec.html">Language Spec</a> <br> <a href="language-status.html">Language Status</a> <br> <a href="project-status.html">Project Status</a> <br> <a href="resources.html">Downloads, Links, etc</a> <br> <a href="specific-profile-arduino.html">Arduino Profile</a>
+    </div>
+    <div class="column col4_5">
+    <h2>Language Status</h2>
+<p>Last updated for version: <strong>0.1.23</strong></p>
+<h3>Direct Compilation</h3>
+<p>Pyxie can now compile (directly) any file that matches pyxie's current subset of
+python. For example if the example program below was called demo.pyxie, you could
+do this:</p>
+<pre><code>$ pyxie compile demo.pyxie
+$ ./demo
+</code></pre>
+<p>The first line would compile "demo.pyxie" to C++, then compile the C++, rename the
+result "demo" and clean up after itself.</p>
+<p>Python programs that target arduino can also be compiled directly on the commandline:</p>
+<pre><code>$ pyxie --profile arduino compile tests/progs/arduino-for-blink.pyxie
+$ ls tests/progs/arduino-for-blink.hex
+tests/progs/arduino-for-blink.hex
+</code></pre>
+<p>In order to do this, you need the arduino tool chain installed, along with
+commandline tools, but the easiest way of doing this is to do this:</p>
+<pre><code>sudo apt-get install arduino-mk
+</code></pre>
+<h2>Example program that lexes, parses, analyses &amp; compiles</h2>
+<p>Clearly a single example doesn't tell you everything. This gives you a flavour.</p>
+<div class="columnpanel">
+<div class="column col2_5">
+<b>Source:</b>
+
+<pre>
+age = 10
+new_age = 10 +1
+new_age_too = age + 1
+new_age_three = age + new_age_too
+foo = "Hello"
+bar = "World"
+foobar = foo + bar
+
+print(10-1-2,7)
+print(1+2*3*4-5/7,25)
+print(age, new_age, new_age_too)
+print(foo, bar, foobar)
+
+countdown = 2147483647
+print("COUNTING DOWN")
+while countdown:
+    countdown = countdown - 1
+
+print("BLASTOFF")
+</pre>
+</div>
+
+<div class="column col3_5">
+<b>Generated:</b>
+<pre>
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+    int age;
+    string bar;
+    int countdown;
+    string foo;
+    string foobar;
+    int new_age;
+    int new_age_three;
+    int new_age_too;
+
+    age = 10;
+    new_age = (10+1);
+    new_age_too = (age+1);
+    new_age_three = (age+new_age_too);
+    foo = "Hello";
+    bar = "World";
+    foobar = (foo+bar);
+    cout &lt;&lt; ((10-1)-2) &lt;&lt; " " &lt;&lt; 7 &lt;&lt; endl;
+    cout &lt;&lt; ((1+((2*3)*4))-(5/7)) &lt;&lt; " " &lt;&lt; 25 &lt;&lt; endl;
+    cout &lt;&lt; age &lt;&lt; " " &lt;&lt; new_age &lt;&lt; " " &lt;&lt; new_age_too &lt;&lt; endl;
+    cout &lt;&lt; foo &lt;&lt; " " &lt;&lt; bar &lt;&lt; " " &lt;&lt; foobar &lt;&lt; endl;
+    countdown = 2147483647;
+    cout &lt;&lt; "COUNTING DOWN" &lt;&lt; endl;
+    while(countdown) {
+        countdown = (countdown-1);
+    };
+    cout &lt;&lt; "BLASTOFF" &lt;&lt; endl;
+    return 0;
+}
+</pre>
+</div>
+
+</div>
+
+<p>Supported language features that are not in this example</p>
+<ul>
+<li>Major control structures - in addition to while loops, if/elif/else, conditionals,
+  boolean, parenthesised expressions and for statements/etc are all supported. Not
+  only that for loops actually support an iterator protocol, not just translation of
+  "range" into a simple C style for loop.</li>
+</ul>
+<p>Note: for this to compile, this needs simple type inference. We need to be able to
+derive the types of foobar and new_age_three. In the case of new_age_three, that
+needs to be derived in the context of another variable that has to be derived from
+another one.</p>
+<p>The same techniques are used to derive types in "for statement" loop iterators.</p>
+<h3>Function Calls</h3>
+<p>Function <strong>calls</strong> are supported. At present they are treated
+as having a value type of "None".  They should be treated as statements
+not as expressions. However the compiler passes through function calls
+to the backend, assuming the backend will understand the function call.</p>
+<p>Grammar wise though, they're things in expressions.</p>
+<h3>C++ Libraries</h3>
+<p>Additionally, you can pull C++ libraries in standard locations by simply
+incuding them -- for example:</p>
+<pre><code>#include &lt;Arduino.h&gt;
+</code></pre>
+<p>This is ignored by the python parsing because it's a comment, and so I've
+chosen to capture such #include lines, and pass them through to the C++ side.
+This naturally enables a wide selection of functionality to start making
+Pyxie useful.</p>
+<h3>Bare Minimum Support</h3>
+<p>Now supports control structures, key statements</p>
+<ul>
+<li>while (arbitrary expression for control)</li>
+<li>for loops, where the general expression must be an iterable.</li>
+<li>The only iterable at present is "range". This will get more expressive</li>
+<li>break/continue</li>
+<li>if/ elif / else</li>
+<li>print</li>
+<li>function calls</li>
+<li>assignment</li>
+</ul>
+<p>Key expression support:</p>
+<ul>
+<li>Variables have their types inferred for int, bool, char, float, string, hex, binary, octal</li>
+<li>Parenthesised expressions</li>
+<li>Comparisons (&gt;,&lt;,&gt;=,&lt;=, !=,&lt;&gt;, ==)</li>
+<li>Boolean operators: and, or, not</li>
+</ul>
+<p>This means we can almost start writing useful programs, but in particular
+can start creating simplistic benchmarks for measuring run speed.</p>
+<h2>High Level things missing</h2>
+<h3>Language related</h3>
+<p>From a high level the key things I view as missing are support for:</p>
+<ul>
+<li>def - function definitions - and therefore implementation of scope</li>
+<li>What happens with mixed types in expressions</li>
+<li>Modulo operator support</li>
+<li>import statements</li>
+<li>yield - generator definitions</li>
+<li>class - class definitions</li>
+<li>object usage - method access, and attribute access</li>
+</ul>
+<p>There is obviously more missing, but these are the high level issues with pyxie's
+implementation of language at present.</p>
+<h3>Profile related</h3>
+<ul>
+<li>
+<p>Linux host profile:</p>
+<ul>
+<li>Support for output (print) needs to be matched by (raw_)input support</li>
+<li>Needs to support input/output from files</li>
+</ul>
+</li>
+<li>
+<p>Arduino profile - supports:</p>
+<ul>
+<li>functions/etc<ul>
+<li>digitalWrite</li>
+<li>delayMicroseconds</li>
+<li>pinMode</li>
+<li>analogRead</li>
+<li>millis</li>
+</ul>
+</li>
+<li>Servo</li>
+<li>Arduino Constants:<ul>
+<li>OUTPUT, INPUT (pinModes)</li>
+<li>A0, A1, A2, A3, A4, A5, A6, A7</li>
+<li>HIGH, LOW (general pin values)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Arduino profile - todo:</p>
+<ul>
+<li>Hardware devices/libraries etc<ul>
+<li>IOToy</li>
+<li>prototype microbit</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>Grammar Currently Supported</h2>
+<p>Clearly we're not going to implement the full language spec in one go, so this
+documents the current version of the grammar that is supported. Parsing does not
+necessarily imply code generation, differences will be noted below.</p>
+<pre><code>program : statements
+statements : statement
+           | statement statements
+
+statement_block : INDENT statements DEDENT
+
+statement : assignment_statement
+          | general_expression
+          | EOL
+          | while_statement
+          | break_statement
+          | continue_statement
+          | pass_statement
+          | if_statement
+          | for_statement
+
+assignment_statement : IDENTIFIER ASSIGN general_expression # ASSIGN is currently limited to "="
+
+while_statement : WHILE general_expression COLON EOL statement_block
+
+break_statement : BREAK
+
+pass_statement : PASS
+
+continue_statement : CONTINUE
+
+if_statement : IF general_expression COLON EOL statement_block
+             | IF general_expression COLON EOL statement_block extended_if_clauses
+
+extended_if_clauses : else_clause
+                    | elif_clause
+
+else_clause : ELSE COLON EOL statement_block
+
+elif_clause : ELIF general_expression COLON EOL statement_block
+            | ELIF general_expression COLON EOL statement_block extended_if_clauses
+
+# NOTE: print_statement has been removed and replaced by python 3 style function
+
+for_statement : FOR IDENTIFIER IN general_expression COLON EOL statement_block
+
+expr_list : general_expression
+          | general_expression COMMA expr_list
+
+general_expression : boolean_expression
+
+boolean_expression : boolean_and_expression
+                   | boolean_expression OR boolean_and_expression
+
+boolean_and_expression : boolean_not_expression
+                       | boolean_and_expression AND boolean_not_expression
+
+boolean_not_expression : relational_expression
+                       | NOT boolean_not_expression
+
+relational_expression : expression
+                      | relational_expression COMPARISON_OPERATOR expression
+
+expression : arith_expression
+           | expression '+' arith_expression
+           | expression '-' arith_expression
+           | expression '**' arith_expression
+
+arith_expression : negatable_expression_atom
+                 | arith_expression '*' negatable_expression_atom
+                 | arith_expression '/' negatable_expression_atom
+
+
+negatable_expression_atom : "-" negatable_expression_atom
+                          | expression_molecule
+
+expression_molecule : expression_atom
+                    | bracketed_expression
+
+expression_atom : value_literal
+                | expression_atom '(' expr_list ')' # Function call
+                | expression_atom '(' ')' # Function call, with no arguments
+
+bracketed_expression : PARENL general_expression PARENR
+
+value_literal : number
+              | STRING
+              | CHARACTER
+              | BOOLEAN
+              | identifiable
+
+identifiable : IDENTIFIER
+             | expression_molecule dotexpression
+
+dotexpression : DOT IDENTIFIER
+
+number : NUMBER
+       | FLOAT
+       | HEX
+       | OCTAL
+       | BINARY
+       | LONG         (suffice is L)
+       | UNSIGNEDLONG (suffice is l)
+       | '-' number
+</code></pre>
+<p>Current Lexing rules used by the grammar:</p>
+<pre><code>NUMBER : \d+
+FLOAT : \d+.\d+ # different from normal python, which allows .1 and 1.
+HEX : 0x([abcdef]|\d)+
+OCTAL : 0o\d+
+BINARY : 0b\d+
+STRING - "([^\"]|\.)*" or '([^\']|\.)*' # single/double quote strings, with escaped values
+CHARACTER : c'.' /  c"." # Simplification - can be an escaped character
+BOOLEAN : True|False
+IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]*
+</code></pre>
+<p>The lexing supports most aspects of python - much more than this, but the grammar
+does not as yet use them, so this summary does not list them.</p>
+<h2>Limitations</h2>
+<p>Most expressions currently rely on the C++ counterparts. As a result not all
+combinations which are valid are directly supported yet. Notable ones:</p>
+<ul>
+<li>Combinations of strings with other strings (outlawing /*, etc)</li>
+<li>Combinations of strings with numbers </li>
+</ul>
+<h2>print statement?</h2>
+<p>Python 2 has a print statement. Python 3 doesn't. In early days of Pyxie,
+Pyxie supported a python 2 statement to make life easier before function calls
+were implemented, with a note to say that "print" as a statement would disappear.</p>
+<p>As of 0.1.23, the print_statement has been removed. As well as being simplifying
+the syntax, it also means that Arudino statements like Serial.print now become
+legal statements.</p>
+<h2>Compilation process strategy</h2>
+<p>The compiler consists of the following parts:</p>
+<ul>
+<li>
+<p>A lexical analyser. This is a simple parse with 3 modes. These modes are essentially:</p>
+<ul>
+<li>NORMAL - this is used most of the time and is regular parsing</li>
+<li>BLOCKS - entered at end of line, and used to check whether to start/finish a BLOCK</li>
+<li>ENDBLOCKS - this is used to close off 1 or more blocks</li>
+</ul>
+</li>
+<li>
+<p>A grammar parser - this constructs an abstract syntax tree for the python code. This
+  uses Pynodes - which form a tree. This process does as little as possible beyond
+  building the tree - however it aims to throw away as little information as possible.</p>
+</li>
+<li>
+<p>Pynodes - these are used to capture information in the abstract tree, and to assist
+  with analysis. These are standard tree nodes (now), but can perform custom traversals
+  for specific tasks.</p>
+</li>
+<li>
+<p>Analysis Phase - WIP. This performs the following tasks:</p>
+<ul>
+<li>Works down through the AST, DEPTH FIRST, adding context to identifier nodes. This
+  is to allow type identification/capture.<ul>
+<li>This idea here is that if you pass into an AST node that represents a syntactic
+  scoped namespace - such as a function, class/etc, that we can stack the scopes
+  with regard to names, values and especially types</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Open issues:</p>
+<ul>
+<li>
+<p>We need logical values of some kind to be avilable for use in contexts, to be
+  referenced by identifiers. Logical values are values that can be assigned or
+  read at a specific point in time. In traditional terms this are literally
+  represented as expressions, but it's a bit more subtle than that - we want to
+  represent expression results.</p>
+</li>
+<li>
+<p>Namespaces have been improved, and are now nested - which simplifies profiles,
+  and will simplify scoping implementation later.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>The analysis phase decorates the AST with additional data</p>
+</li>
+<li>
+<p>Code generation phase:</p>
+<ul>
+<li>Takes a JSON description from the AST and uses that to create a C-Syntax Tree.
+  This syntax tree kinda mirrors the sort of tree that you'd expect to get out
+  of the semantic analysis phases of a simplistic C compiler.</li>
+<li>This is then walked to generate simple C++ code</li>
+<li>Open issue: As time goes on it becomes clearer and clearer that this would be
+  better using actual objects for nodes rather than a JSON description.</li>
+</ul>
+</li>
+<li>
+<p>Compilation</p>
+<ul>
+<li>The next step is to take the generated code and compile it. For the moment, this
+  operates on the code generated, and compiles it as a linux standalone. This will
+  switch over to allowing arduino as a target at some point.</li>
+</ul>
+</li>
+</ul>
+<p>Analysis phase now picks up on the use of a variable before it's definition in code.
+This is the start of useful error states and therefore useful error messages!</p>
+<h2>Type inference strategy</h2>
+<p>Create the node tree.</p>
+<ul>
+<li>
+<p>Traverse down the tree adding a context object to all NODES. <strong>DONE</strong></p>
+</li>
+<li>
+<p>Then when we do types, we search inside the object and set it inside the object. <strong>DONE</strong></p>
+</li>
+</ul>
+<p><strong>TBD</strong></p>
+<ul>
+<li>
+<p>When you pass through a class or def, you push the current one onto a stack and refer to it as the parent context <strong>TBD</strong></p>
+</li>
+<li>
+<p>We repeat this until all the types of variables are <em>known</em> <strong>TBD</strong> (def/class still TBD)</p>
+</li>
+<li>
+<p>If any are unknown we stop type inference. <strong>TBD</strong></p>
+</li>
+</ul>
+<p>It's simple, but should work and has stopping criteria.</p>
+<p>And can build on what we have now</p>
+    <br style="clear: both"><hr>
+    Updated: October 2016
+    </div>
+</div>
+<div class="columnpanel lightgrey_darkgrey topsolid">
+ <div class="panel centred-text">
+<a href="resources.html"> Help, Contacts &amp; Downloads </a> <br>
+<div class="smaller">
+Copyright &copy; 2016 Michael Sparks <a href="copyright.html"> Open Source</a>
+</div>
+ </div>
+</div>
+</body>
+</html>

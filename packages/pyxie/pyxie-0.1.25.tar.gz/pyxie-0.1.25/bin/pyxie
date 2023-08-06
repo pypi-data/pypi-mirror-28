@@ -1,0 +1,89 @@
+#!/usr/bin/python
+#
+# Copyright 2016 Michael Sparks
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+from __future__ import print_function
+from __future__ import absolute_import
+
+import sys
+
+from pyxie.api import CommandLineDispatcher
+from pyxie.api import TestsLauncher
+from pyxie.api import StandardOptions
+from pyxie.api import PyxieAPI
+
+from pyxie.api import initialise_API
+
+
+class BadArguments(Exception):
+    pass
+
+
+def main(argv):
+    global profile
+    if len(argv) < 2:
+        raise BadArguments()
+
+    profile = "default"
+
+    if argv[1] == "--profile" and len(argv)> 2:
+        profile = argv[2]
+        argv[1:3] = []  # Chop out arguments relating to profile
+
+    initialise_API(profile_name=profile)
+
+    if argv[1] == "--test":
+        command = argv[2]
+        if TestsLauncher.handles(command):
+            return TestsLauncher.handle(command, *(argv[3:]))
+
+    else:
+        command = argv[1]
+        if StandardOptions.handles(command):
+            return StandardOptions.handle(command, *(argv[2:]))
+
+    # Not handled by anything
+    raise BadArguments("Bad Arguments")
+
+
+def show_help():
+    print("""\npyxie -- A little python compiler\nUsage:\n
+    pyxie -- show runtime arguments
+    pyxie --test run-tests -- Run all tests
+    pyxie --test parse-tests -- Just run parse tests
+    pyxie --test compile-tests -- Just run compile tests
+    pyxie --test parse filename -- Parses a given test given a certain filename
+    pyxie --test compile filename -- Parses a given test given a certain filename
+    pyxie parse filename -- parses the given filename, outputs result to console
+    pyxie analyse filename -- parses and analyse the given filename, outputs result to console
+    pyxie codegen filename -- parses, analyse and generate code for the given filename, outputs result to console. Does not attempt compiling
+    pyxie [--profile arduino] compile path/to/filename.suffix -- compiles the given file to path/to/filename
+    pyxie [--profile arduino] compile path/to/filename.suffix  path/to/other/filename -- compiles the given file to the destination filename
+""")
+
+
+if __name__ == "__main__":
+    try:
+        main(argv = sys.argv[:])
+    except BadArguments:
+        show_help()
+    except TypeError as e:
+        print("USAGE ERROR: (see end)")
+        show_help()
+        print("USAGE ERROR:", e)
+        print
+        print("Original traceback follows")
+        raise 

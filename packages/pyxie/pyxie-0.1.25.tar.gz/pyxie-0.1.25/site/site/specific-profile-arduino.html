@@ -1,0 +1,182 @@
+<html>
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Exo+2:400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='base.css' type='text/css'/>
+<title> Arduino Profile </title>
+</head>
+<body>
+<span id="subscribe"><a href="http://tinyletter.com/sparkslabs">Subscribe for updates!</a></span>
+<div class="panel">
+    <h1><a href="index.html" class="plain">Pyxie</a></h1>
+</div>
+<div class="panel">
+    <div class="column col1_5">
+    <br>
+<a href="changelog.html">Changelog</a> <br> <a href="copyright.html">Open Source</a> <br> <a href="credits.html">Credits</a> <br> <a href="dev-status.html">Dev Status</a> <br> <a href="index.html">Overview</a> <br> <a href="language-spec.html">Language Spec</a> <br> <a href="language-status.html">Language Status</a> <br> <a href="project-status.html">Project Status</a> <br> <a href="resources.html">Downloads, Links, etc</a> <br> <a href="specific-profile-arduino.html">Arduino Profile</a>
+    </div>
+    <div class="column col4_5">
+    <h2>Arduino Profile</h2>
+<p>Pyxie supports the concept of profiles - that is compilation environments.
+The arduino profile triggers the creation of code suitable for compilation
+with the arduino toolchain that can run on arduino devices.</p>
+<h3>Is this Useful?</h3>
+<p>Yes, this should be. This is definitely sufficient for building little robots
+that are made of microcontrollers, servos, sensors and can report data via
+the serial port. That in itself covers an awful lot of use-cases!</p>
+<p>Bear in mind though that pyxie is pre-alpha, and error messages are at best
+cryptic, and also that the language is VERY far from being anywhere near
+complete.</p>
+<h3>Initialise your variables.</h3>
+<p>In order to simplify identification of types, <strong>always initialise all variables</strong> before you use them.
+We could do better than this, but at this stage, it makes a big difference.
+In particular, it enables alot of what makes this useful.</p>
+<h2>Usage</h2>
+<p>You write your python program as normal - except you can use the functions that
+someone writing an arduino program uses. For example, the blink arduino program
+looks like this in python:</p>
+<pre><code>led = 13
+
+pinMode(led, OUTPUT)
+
+while True:
+    digitalWrite(led, HIGH)
+    delay(1000)
+    digitalWrite(led, LOW)
+    delay(1000)
+</code></pre>
+<p>To compile this, assuming you've installed pyxie - you do this:</p>
+<pre><code>./bin/pyxie --profile arduino compile arduino-blink.pyxie
+</code></pre>
+<p>This compiles the code, and creates a <strong><code>build-TIMESTAMP directory</code></strong> . If you
+want to upload this to your device, change into that directory, and do
+a <strong><code>make upload</code></strong> .</p>
+<p>For example</p>
+<pre><code>./bin/pyxie --profile arduino compile arduino-blink.pyxie
+cd build-1234567890
+make upload
+</code></pre>
+<p>If you have an Arduino Leonardo - or similar/compatible device - attached
+to <strong><code>/dev/ACM0</code></strong> , then this will upload the code onto your device.</p>
+<h3>Compiling for YOUR arduino device</h3>
+<p>The approach in the section above worse fine. However, you might not have
+an Arduino Leonardo (or something similar Atmega 32U4 based). Or even if
+you do, it might show up on a different port from <strong><code>/dev/ACM0</code></strong> - it might
+show up as <strong><code>/dev/ACM1</code></strong> for example.</p>
+<p>To control the board you're building for, and the port your board is
+connected to, you can create a <strong><code>program-name.Makefile.in</code></strong> file.</p>
+<p>So for example, you have a program called <strong><code>arduino-blink.pyxie</code></strong> that
+looks like this:</p>
+<pre><code>led = 13
+
+pinMode(led, OUTPUT)
+
+while True:
+    digitalWrite(led, HIGH)
+    delay(1000)
+    digitalWrite(led, LOW)
+    delay(1000)
+</code></pre>
+<p>... and you have an atmega8 based device (eg a Dagu Mini) on port <strong><code>/dev/ACM1</code></strong> .
+You create a file called <strong><code>arduino-blink.Makefile</code></strong> .in with the following
+contents:</p>
+<pre><code>BOARD_TAG    = atmega8
+ARDUINO_PORT = /dev/ttyACM1
+</code></pre>
+<p>You can then build your program and upload it to the device as follows:</p>
+<pre><code>./bin/pyxie --profile arduino compile arduino-blink.pyxie
+cd build-1234567890
+make upload
+</code></pre>
+<p>This uses the contents of your <strong><code>program-name.Makefile.in</code></strong> file to override the defaults
+that would otherwise be used.</p>
+<h2>Examples</h2>
+<p>There are a handful of examples in the <strong>examples/</strong> directory.</p>
+<ul>
+<li><a href="https://github.com/sparkslabs/pyxie/tree/master/examples/arduino">arduino</a> - basic example that blinks a light on/off</li>
+<li><a href="https://github.com/sparkslabs/pyxie/tree/master/examples/servo">servo</a> - Example that shows how to use servo motors</li>
+<li><a href="https://github.com/sparkslabs/pyxie/tree/master/examples/analog">analog</a> - Example that shows how to use analog sensors and the serial port</li>
+<li><a href="https://github.com/sparkslabs/pyxie/tree/master/examples/puppy">puppy</a> - Sample code for controlling the Dagu Playful puppy. (A quaduped
+  robot with 10 servos and an an IR sensor based "head")</li>
+</ul>
+<p>Links above take you to github locations for the code.</p>
+<h2>Status</h2>
+<h3>Functions/etc available</h3>
+<p>Function/functionality specifically checked:</p>
+<ul>
+<li><code>digitalWrite</code></li>
+<li><code>analogRead</code> , <code>analogWrite</code></li>
+<li><code>constrain</code> , <code>map</code></li>
+<li><code>delay</code> , <code>millis</code> , <code>delayMicroseconds</code></li>
+<li><code>random</code> , <code>randomSeed</code></li>
+<li><code>Serial.begin</code> , <code>Serial.print</code> , <code>Serial.println</code></li>
+</ul>
+<p>Servo functionality tested:</p>
+<ul>
+<li><code>#include &lt;Servo.h&gt;</code> -- (ab)uses fact that "#" is a comment in python</li>
+<li><code>Servo()</code> -- works as expected.</li>
+<li><code>servo.attach(pin)</code> - works as expected.</li>
+<li><code>servo.write(pos)</code> - works as expected.</li>
+<li><code>servo.writeMicroseconds</code> - works as expected.</li>
+</ul>
+<p>Variables/Constants made available:</p>
+<ul>
+<li><code>A0</code> , <code>A1</code> , <code>A2</code> , <code>A3</code> , <code>A4</code> , <code>A5</code> , <code>A6</code> , <code>A7</code></li>
+<li><code>HIGH</code> , <code>LOW</code></li>
+<li><code>INPUT</code> , <code>OUTPUT</code></li>
+</ul>
+<h3>Other Arduino Variables?</h3>
+<p><code>IN</code>/<code>OUT</code>/etc need to be predefined to work. The same would go for many other
+Arduino variables that are defined in the library. I will have missed some,
+or even many. Please look in the code for <strong><code>bin/pyxie</code></strong> for the moment to
+see how these are defined. The approach take will improve as time goes on,
+and this is a stub - while we work things out.</p>
+<p>Do get in contact (preferably by raising issues on github) if you need more
+added.</p>
+<h3>Will Other functions work?</h3>
+<p>Quite probably. The approach of identifying types for variables based on
+how they're first used makes things a lot simpler. The reason for this
+is because if we don't <em>need</em> to know what the type of something is to
+transform it, we don't try to identify it.</p>
+<p>This means that pyxie cannot perform type <em>verification</em> at present, and
+it doesn't try. It may do at a later point in time. Primarily it looks
+for clues as to types and works from there.</p>
+<p><strong>PLEASE</strong> let me know if:</p>
+<ul>
+<li>
+<p>You try functions that aren't listed here, and find they work - I can
+  add them to the list</p>
+</li>
+<li>
+<p>You try functions that aren't listed here, and find they don't work - I
+  can add them to a todo list so that they can work later, or assist you
+  in figuring it out. (Please remember though that this is not my day job,
+  and I do have a life outside work too!)</p>
+</li>
+</ul>
+<p>When I say "get in contact" - I mean preferably by raising issues on github!</p>
+<h3>Custom Arduino Types?</h3>
+<p>There are circumstances where the profile needs extending. The most
+common examples of these are when objects get created like servos.
+I'll hope to document later better how this gets sorted. For the moment,
+take a look at how servos are defined in <strong><code>model/functions.py</code></strong>, and see
+how you extend the profile.</p>
+<p>I'm deferring documenting this in part because I think this will be in
+a bit of flux for a while the best approach is identified.</p>
+<h2>Is this Done?</h2>
+<p>No, far from it. It should be useful though at this stage, and with
+additional usecases, it will become more useful!.</p>
+    <br style="clear: both"><hr>
+    Updated: October 2016
+    </div>
+</div>
+<div class="columnpanel lightgrey_darkgrey topsolid">
+ <div class="panel centred-text">
+<a href="resources.html"> Help, Contacts &amp; Downloads </a> <br>
+<div class="smaller">
+Copyright &copy; 2016 Michael Sparks <a href="copyright.html"> Open Source</a>
+</div>
+ </div>
+</div>
+</body>
+</html>

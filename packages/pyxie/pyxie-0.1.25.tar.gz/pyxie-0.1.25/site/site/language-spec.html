@@ -1,0 +1,403 @@
+<html>
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Exo+2:400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='base.css' type='text/css'/>
+<title> Language Spec for Pyxie </title>
+</head>
+<body>
+<span id="subscribe"><a href="http://tinyletter.com/sparkslabs">Subscribe for updates!</a></span>
+<div class="panel">
+    <h1><a href="index.html" class="plain">Pyxie</a></h1>
+</div>
+<div class="panel">
+    <div class="column col1_5">
+    <br>
+<a href="changelog.html">Changelog</a> <br> <a href="copyright.html">Open Source</a> <br> <a href="credits.html">Credits</a> <br> <a href="dev-status.html">Dev Status</a> <br> <a href="index.html">Overview</a> <br> <a href="language-spec.html">Language Spec</a> <br> <a href="language-status.html">Language Status</a> <br> <a href="project-status.html">Project Status</a> <br> <a href="resources.html">Downloads, Links, etc</a> <br> <a href="specific-profile-arduino.html">Arduino Profile</a>
+    </div>
+    <div class="column col4_5">
+    <h2>Little Python Language Spec</h2>
+<p>Little Python is a restricted subset of Python 3. (and 2.7)</p>
+<p><strong>This is a work in progress.</strong> The implementation does not yet match
+this spec. As a result, the grammar will be slightly bogus. You hopefully
+get the idea though.</p>
+<h2>Semi-formal syntactic language features todo:</h2>
+<h3>Built in types to be supported</h3>
+<p>Simple:</p>
+<ul>
+<li>Numbers</li>
+<li>Strings
+** Characters - the only extension beyond standard python because we're working in a restricted environment</li>
+<li>Booleans</li>
+</ul>
+<p>Harder:</p>
+<ul>
+<li>NULL - Probably constrained <strong>[TBD]</strong></li>
+<li>LISTS - Probably constrained <strong>[TBD]</strong></li>
+<li>TUPLES - Probably constrained <strong>[TBD]</strong></li>
+<li>DICTIONARIES - Probably constrained <strong>[TBD]</strong></li>
+<li>Objects - classes <strong>[TBD]</strong></li>
+</ul>
+<h3>Lexical Analysis TODO</h3>
+<pre><code>Keywords: "and", "not", "or",
+          "True", "False",
+          "class", "def", "yield", "return",
+          "while", "for", "in", "if", "elif", "else", "break", "continue",
+          "from", "import",
+          "pass",
+          "print"
+
+Punctuation: ','  '('  ')'  ':'  '*'  '/'  '+'  '-'  '**' **[TBD]**
+             COMPARISON_OPERATOR      **[TBD]**
+             ASSIGN
+
+COMPARISON_OPERATOR: (&lt;|&gt;|==|&gt;=|&lt;=|&lt;&gt;|!=|in|not +in|is|is +not)
+ASSIGN: '='
+
+Structural: EOL INDENT DEDENT
+    EOL -- Should be logical, actually '\n'
+    INDENT -- emitted after increased number of leading spaces after EOL
+    DEDENT -- emitted after decreased number of leading spaces after EOL
+
+Literals: IDENTIFIER NUMBER STRING
+    IDENTIFIER:     [a-zA-Z_][a-zA-Z0-9_]*
+
+    NUMBER: BINARY OCTAL HEX FLOAT INTEGER
+        BINARY -- 0b\d+
+        OCTAL -- 0o\d+
+        HEX -- 0x([abcdef]|\d)+
+        FLOAT -- \d+\.\d+
+        INTEGER -- \d+
+
+    STRING: DQUOTESTRING | SQUOTESTRING 
+        DQUOTESTRING: "([^"]|.)*"
+        SQUOTESTRING: '([^']|.)*'
+
+    CHARACTER: SCHARACTER | DCHARACTER
+        SCHARACTER: c'([^']|.)'
+        DCHARACTER: c"([^"]|.)"
+
+        I'm actually contemplating having b'&lt;char&gt;' instead, but that
+        makes single character byte string tricky.  This will probably
+        be revisited, but one thought is this: If a single character
+        byte string is actually required, do this: b'C'+b'' - ie append
+        an empty byte string.  The compiler will be special cased to
+        detect this and force the expression to be the single bytestring
+        b'C'. It's a bit icky, so for the moment I've added a character
+        literal instead to see what works better.
+
+        This isn't ideal, but it deals with the fact that often we do
+        want to be able to deal with just characters C in embedded
+        systems.
+</code></pre>
+<h3>Grammar todo</h3>
+<h4>High Level</h4>
+<pre><code>program              : statements
+
+statements           : statement
+                     | statement statements
+
+statement_block      : INDENT statements DEDENT
+
+statement            : EOL
+                     | assignment_statement
+                     | general_expression  **[PARTIAL]**
+                     | while_statement
+                     | break_statement
+                     | continue_statement
+                     | if_statement
+                     | for_statement
+                     | import_statement  **[TBD]**
+                     | class_statement  **[TBD]**
+                     | def_statement  **[TBD]**
+                     | return_statement  **[TBD]**
+                     | yield_statement  **[TBD]**
+                     | pass_statement
+</code></pre>
+<p><strong>NB</strong> Previously this included a print_statement. This is now a function call, ala python 3.</p>
+<p>Note: general_expression  <strong>[PARTIAL]</strong> means we have parsing of general
+expressions but not all types have appropriate functionality yet</p>
+<p>Open question:</p>
+<ul>
+<li>try/except</li>
+<li>assert</li>
+</ul>
+<p>(These are open questions because they are harder to implement on some levels,
+assert would be useful though, but more useful if try/except were implemented)</p>
+<h3>non-specific statements</h3>
+<pre><code>pass_statement       : PASS
+</code></pre>
+<h3>Support for class definition  <strong>[TBD]</strong></h3>
+<pre><code>class_statement      : CLASS PARENL ident_list PARENR COLON EOL class_block
+class_block          : INDENT class_statementlist DEDENT
+class_statementlist  : def_statement
+                     | assignment_statement
+</code></pre>
+<h3>Support for function definition  <strong>[TBD]</strong></h3>
+<pre><code>def_statement        : DEF identifier PARENL PARENR COLON EOL statement_block
+                     | DEF identifier PARENL ident_list PARENR COLON EOL statement_block
+
+yield_statement      : YIELD general_expression
+
+return_statement     : RETURN
+                     | RETURN general_expression
+
+ident_list           : identifier
+                     | identifier COMMA ident_list
+</code></pre>
+<h3>Assignment Statement</h3>
+<pre><code>assignment_statement : identifier ASSIGN general_expression
+</code></pre>
+<h3>Namespace Functions  <strong>[TBD]</strong></h3>
+<pre><code>import_statement     : FROM identifier IMPORT identifier
+                     | IMPORT identifier
+</code></pre>
+<h3>Block Statements  <strong>[WIP]</strong></h3>
+<h4>Loops</h4>
+<p>All of these have been done - to a BARE level. That is:</p>
+<ul>
+<li>
+<p>In for_statement general_expression is required to be an iterator function listed
+  in pyxie.model.functions.builtins. This is currently just the function range with
+  an interator implementation in clib. This is however the "correct" structure, not a
+  sidestep.</p>
+</li>
+<li>
+<p>In while_statement this is a general expression expected to evaluate to a bool.</p>
+<p>for_statement        : FOR identifier IN general_expression COLON EOL statement_block</p>
+<p>while_statement      : WHILE general_expression COLON EOL statement_block</p>
+<p>break_statement      : BREAK
+continue_statement   : CONTINUE</p>
+</li>
+</ul>
+<h4>Selection</h4>
+<pre><code>if_statement : IF general_expression COLON EOL statement_block
+             | IF general_expression COLON EOL statement_block extended_if_clauses
+
+extended_if_clauses : else_clause
+                    | elif_clause
+
+elif_clause : ELIF general_expression COLON EOL statement_block
+            | ELIF general_expression COLON EOL statement_block extended_if_clauses
+
+else_clause : ELSE COLON EOL statement_block
+</code></pre>
+<h3>Expressions involving sub-expressions</h3>
+<pre><code>general_expression : boolean_expression
+
+boolean_expression : boolean_and_expression
+                   | boolean_expression OR boolean_and_expression
+
+boolean_and_expression : boolean_not_expression
+                       | boolean_and_expression AND boolean_not_expression
+
+boolean_not_expression : relational_expression
+                       | NOT boolean_not_expression
+
+relational_expression : relational_expression COMPARISON_OPERATOR expression
+                      | expression
+</code></pre>
+<p>NOTE: Not all <strong>types</strong> are valid yet, and truthiness needs implementing</p>
+<h3>Core Expressions  <strong>[WIP]</strong></h3>
+<pre><code>expression           : arith_expression  **[WIP]**
+                     | arith_expression PLUS expression
+                     | arith_expression MINUS expression
+                     | arith_expression POWER expression  **[TBD]**
+
+arith_expression     : expression_atom
+                     | expression_atom TIMES arith_expression
+                     | expression_atom DIVIDE arith_expression
+
+expression_atom      : value_literal
+                     | func_call
+                     | PARENL general_expression PARENR
+
+value_literal        : number
+                     | identifier
+                     | string
+                     | character
+                     | boolean
+</code></pre>
+<p>Note: These are done for ints, floats, and for some strings. ("hello"+"world"
+for example using std::string)</p>
+<p>The lack of strings is why it's not listed as done</p>
+<h3>Core Literals</h3>
+<pre><code>number               : INTEGER
+                     | FLOAT
+                     | HEX
+                     | OCTAL
+                     | BINARY
+                     | MINUS number
+
+string               : STRING
+
+character            : CHARACTER
+
+boolean              : TRUE | FALSE
+
+identifier : IDENTIFIER
+</code></pre>
+<h3>Function Calls</h3>
+<pre><code>func_call            : IDENTIFIER PARENL PARENR
+                     | IDENTIFIER PARENL expr_list PARENR
+
+expr_list : general_expression
+          | general_expression COMMA expr_list
+</code></pre>
+<hr>
+
+<h2>Practical Details</h2>
+<h2>C++ Interaction</h2>
+<p>Pyxie is intended to interact with C++, in that it compiles to C++
+targetting embedded systems. To that purpose it is useful to be able
+to pass through commands to C++. In particular the pass through ONLY
+supports #include pre-processor directives.</p>
+<p>The way this is done is through python comments, so for example this is
+legal:</p>
+<pre><code>#include &lt;stdio.h&gt;
+</code></pre>
+<p>As is this:</p>
+<pre><code>#include &lt;Arduino.h&gt;
+</code></pre>
+<p>By definition this does not support every aspect that might be needed, but
+it's a useful start.</p>
+<h2>Lexical Analysis Implementation</h2>
+<p>Lexical analyser has the following states:</p>
+<ul>
+<li>INITIAL - Starting state - actually the same as BLOCKS</li>
+<li>NORMAL - This is used for usual parsing rules</li>
+<li>BLOCKS - Switched into after we detect a newline - to allow injection of
+  indents, and switching to dedent or code if appropriate. </li>
+<li>ENDBLOCKS - Used for emitting sufficient dedents - contains just one rule,
+  that either returns a dedent if needed or switches to CODE. Does not
+  consume any tokens</li>
+</ul>
+<hr>
+
+<h2>Informal done list</h2>
+<p>(The changelog is a better place to look as to what specifically has been done)</p>
+<ul>
+<li>Statements are separated by NEWLINES</li>
+<li>Block structure generates INDENT/DEDENT tokens</li>
+<li>Value literals: Integers, String, Boolean</li>
+<li>Identifiers</li>
+<li>basic assignment statements - ie identifer equals expression</li>
+<li>function calls with expressions as arguments </li>
+<li>print python 2 style statements</li>
+<li>expression statements</li>
+<li>expressions - specifically:<ul>
+<li>Those involving value literals, identifiers and function calls</li>
+<li>Infix expressions involving * + / -</li>
+<li>Parentheses ( ) for nested expressions.</li>
+</ul>
+</li>
+<li>Arithemtic expressions for strings "+", "*", etc</li>
+<li>Loops - while / for</li>
+<li>forever_loop (while True)</li>
+<li>while takes an expression for the condition</li>
+<li>for takes an identifier for the iterator, and expression to be
+   iterated over. The expression is treated as indexable thing with
+   a length. A range() function call is detected and treated as a
+   special case.</li>
+<li>If statements including elif and else clauses</li>
+<li>Can "import" C++ libraries - at least pre-processor directives work</li>
+<li>break / continue statements</li>
+<li>Partial comment support (check)</li>
+<li>Internals of implementation for generators (for implementing builtins first)</li>
+<li>print replace as python 3 style statements</li>
+</ul>
+<h2>Informal todo list</h2>
+<ul>
+<li>Comments are started with a # character [*]   <strong>[TBD]</strong></li>
+<li>Lists, list literals   <strong>[TBD]</strong></li>
+<li>
+<p>Dictionaries, dictionary literals   <strong>[TBD]</strong></p>
+</li>
+<li>
+<p>function definitions with an optional argument list  <strong>[TBD]</strong></p>
+</li>
+<li>Iterator version/expression of for_statement is tided up, and pluggable <strong>[TBD]</strong></li>
+<li>parsing of yield statements   <strong>[TBD]</strong></li>
+<li>parsing of import statements, parsing of from...import... statements   <strong>[TBD]</strong></li>
+<li>Expressions - bitwise operators, logical operators, boolean operators   <strong>[TBD]</strong></li>
+<li>doc strings   <strong>[TBD]</strong></li>
+<li>Objects / object attribute access   <strong>[TBD]</strong></li>
+<li>return statement   <strong>[TBD]</strong></li>
+<li>The parser is line oriented, should be logical lines   <strong>[TBD]</strong></li>
+<li>Lines are logical lines    <strong>[TBD]</strong></li>
+<li>ie Newlines are not yet suppressed.   <strong>[TBD]</strong></li>
+<li>Explicit line joining is not supported [2.1.5]    <strong>[TBD]</strong></li>
+<li>Implicitly line joining is not yet supported  [2.1.6]   <strong>[TBD]</strong></li>
+<li>Generator implementation   <strong>[TBD]</strong></li>
+</ul>
+<h2>Language features NOT supported    <strong>[TBC]</strong></h2>
+<p>Note: Operator precedence needs ironing out   <strong>[TBD]</strong></p>
+<ul>
+<li>Encoding declarations are not supported. Files are UTF-8 only</li>
+<li>General assignment statements -<ul>
+<li>No unpacking of identifier lists - ie no x,y,z = <rhs>, nor x,(y,z) = <rhs></li>
+<li>No augmented assignment - eg no += -= *= and so on</li>
+</ul>
+</li>
+<li>Generalised classes (classes are specifically limited here)</li>
+<li>No dynamic functions, classes</li>
+<li>No dynamic lists, dictionaries yet*</li>
+<li>exceptions - exception values; raise statements;  try, except, finally, else blocks. (maybe later)</li>
+<li>operators: ** (power), ~ (bitwise negation), modulo, //, string templates via modulo operator, shift operators, conditional expressions</li>
+<li>Line continuation: using parentheses, using string literal, for string concatenation</li>
+<li>function calls : named arguments, calling with <em>argv, </em>*argd</li>
+<li>function definitions : optional arguments, named arguments, <em>argv, </em>*ard</li>
+<li>redirected print statements</li>
+<li>generator expressions</li>
+<li>list/dictionary/set comprehensions, slices - not generally supported - just a subset</li>
+<li>tuples, sets - not generally supported - just a subset</li>
+<li>with statements</li>
+<li>decorators</li>
+<li>long integers, imaginary numbers</li>
+<li>backquoted string conversions</li>
+<li>variant string literal types. (include r'' strings)</li>
+<li>Escaped strings (for now)</li>
+<li>else clauses for while / for loops</li>
+<li>for does not support unpacking of iterated objects - ie for x,y,z in <thing> is not supported</li>
+<li>for does not support single line nesting (for x in y for y in z)</li>
+<li>yield expression parsing</li>
+<li>implementation of yield</li>
+<li>asserts, del statement</li>
+<li>importing modules, importing names from modules, relative imports</li>
+<li>future statements</li>
+<li>exec statement, eval expressions</li>
+<li>global statements, nonlocal statements</li>
+<li>The python standard library is not available</li>
+</ul>
+<h2>Language features To be decided   <strong>[TBD]</strong></h2>
+<ul>
+<li>Scope &amp; Implementation of Lists, Dictionaries, Sets, Tuples, Objects, Classes, import</li>
+<li>Tuple unpacking</li>
+<li>List access</li>
+<li>Blank lines are valid [2.1.8]</li>
+<li>Whitespace separates otherwise ambigious tokens [2.1.9]</li>
+<li>Identifiers follow the syntax [a-zA-Z_][a-zA-Z_0-9]* - the extended syntax for identifiers - for not Roman literals is not supported (yet)</li>
+<li>The following identifiers are reserved:</li>
+<li>and as assert break class continue def del elif else except finally for from global if</li>
+<li>import in is lambda nonlocal not or pass raise return try while with yield True False None </li>
+<li>Reserved classes of identifiers are not supported as yet [2.3.2]</li>
+<li>There may be an additional syntax to assist with tweaking C compilation.</li>
+<li>This is partially supported at present - specifically the "#include thing"</li>
+<li>This approach may be used further</li>
+<li>If it does, this may use the term "pragma"</li>
+<li>How to handle/provide exceptions, if at all -- Seems odd not to</li>
+</ul>
+    <br style="clear: both"><hr>
+    Updated: July 2015 (partially with release 0.0.14)
+    </div>
+</div>
+<div class="columnpanel lightgrey_darkgrey topsolid">
+ <div class="panel centred-text">
+<a href="resources.html"> Help, Contacts &amp; Downloads </a> <br>
+<div class="smaller">
+Copyright &copy; 2016 Michael Sparks <a href="copyright.html"> Open Source</a>
+</div>
+ </div>
+</div>
+</body>
+</html>

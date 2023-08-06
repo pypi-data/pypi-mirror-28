@@ -1,0 +1,786 @@
+<html>
+<head>
+    <link href='http://fonts.googleapis.com/css?family=Exo+2:400' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Libre+Baskerville' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='base.css' type='text/css'/>
+<title> Changelog </title>
+</head>
+<body>
+<span id="subscribe"><a href="http://tinyletter.com/sparkslabs">Subscribe for updates!</a></span>
+<div class="panel">
+    <h1><a href="index.html" class="plain">Pyxie</a></h1>
+</div>
+<div class="panel">
+    <div class="column col1_5">
+    <br>
+<a href="changelog.html">Changelog</a> <br> <a href="copyright.html">Open Source</a> <br> <a href="credits.html">Credits</a> <br> <a href="dev-status.html">Dev Status</a> <br> <a href="index.html">Overview</a> <br> <a href="language-spec.html">Language Spec</a> <br> <a href="language-status.html">Language Status</a> <br> <a href="project-status.html">Project Status</a> <br> <a href="resources.html">Downloads, Links, etc</a> <br> <a href="specific-profile-arduino.html">Arduino Profile</a>
+    </div>
+    <div class="column col4_5">
+    <h2>Change Log</h2>
+<p>All notable changes to this project will be documented in this file.
+This project adheres to <a href="http://semver.org/">Semantic Versioning</a>, within
+reason. (Prior to a 1.0.0 release minor version increases may be backwards
+incompatible) See doc/Versioning.md for more details</p>
+<h2>[0.1.25] - 2018-02-03</h2>
+<p>The focus of this release is the result of the independent intermediate
+node refactoring project I was undertaking. This was to transform the list
+oriented data structure for representing a "pure" intermediate form of
+code into a more stuctured/generalisable format.</p>
+<p>The motivation behind this change was the realisation that implementation
+of end user functions (ie <code>def</code>) would be very difficult with this more
+structured approach. </p>
+<h3>New</h3>
+<ul>
+<li><code>doc/Versioning.md</code> - semantic versioning as it applies to pyxie</li>
+<li><code>doc/WIPNOTES/6.Models.md</code> - start of some docs around the models in use</li>
+<li>Added explicit notes on licensing of pyxie's output.
+  (Short version: I view the output as being derived from your code by you)</li>
+<li>Language focussed examples / acceptance tests added:
+  <code>if</code> <code>if-else</code> <code>pass</code> <code>print</code>  <code>while-break</code> <code>while-continue</code></li>
+<li>Change <code>arduino</code> profile to support the <code>Adafruit_NeoPixel</code> library</li>
+<li><code>neopixel</code> example added</li>
+</ul>
+<h3>What's been fixed? / Improved</h3>
+<ul>
+<li>Handling if if/elif/else improved/fixed</li>
+<li>added <code>clean.sh</code> to <code>arduino</code> example</li>
+<li>added <code>clean.sh</code> to <code>servo</code> example</li>
+<li>added <code>README.md</code> to <code>simplest_function</code> example (won't work yet)</li>
+</ul>
+<h3>Internal Changes</h3>
+<ul>
+<li><code>bin/pyxie</code> now pulls in functionality from <code>pyxie.api</code> to be clearer
+   about what the API is</li>
+<li>added <code>pyxie/api.py</code> - public API for embedding pyxie. (Assumes
+  ubuntu host) Core contents:<ul>
+<li><code>initialise_API(profile="default")</code> - Call first</li>
+<li><code>set_profile(profile_name)</code> - Call later</li>
+<li><code>PyxieAPI.parse(filename)</code> - parse file, output goes to console</li>
+<li><code>PyxieAPI.analyse(filename)</code> - parse &amp; analyse flle, output to console</li>
+<li><code>PyxieAPI.codegen(filename, result_filename=None)</code> - parse through
+   code generation. Output to console</li>
+<li><code>PyxieAPI.compile(filename, result_filename=None)</code> - Compile file,
+   result ends up as "result_filename"</li>
+</ul>
+</li>
+<li><code>pyxie/core</code> - changed over to drive the conversion of pynodes to
+   cppnodes via iinodes. (aim is to simplify pynodes down the line and
+   make iinodes our main location for analysis/etc)</li>
+<li>Minor changes to <code>.gitignore</code></li>
+<li>Minor change to the <code>Makefile</code> to make editting simpler for me...</li>
+<li>Update <code>clib.py</code> based on changes to <code>clib</code></li>
+<li><code>pyxie/codegen/simple_cpp.py</code> - functionality shifted out to
+  <code>pyxie/models/cppnodes.py</code> to allow a model driven approach</li>
+<li><code>pyxie/model/cppnodes.py</code> Created. A better code representation
+   model for C++. Code generation therefore means transforming from the
+   <code>iiNode</code>s to <code>CppNode</code>s </li>
+<li><code>pyxie/model/iinodes.py</code> - Introduces <code>iiNode</code>s - which are used to
+  represent an intermediate version of a program such that it can bridge
+  the conversion between languages</li>
+<li><code>pyxie/model/pynodes/operators.py</code> - added <code>args()</code> method to a number
+   of classes to unify behaviours</li>
+<li><code>pyxie/model/transform.py</code> - Major change - converts <code>PyNode</code>s to
+  <code>iiNode</code> representation rather than json objects.</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li><code>doc/newsletter/07-20161110.Pyxie-Release-0.1.24.md</code> corrected release date</li>
+<li><code>doc/newsletter/XX-TBD.Pyxie-2017-Goals.md</code> - Unreleased newsletter.
+  Interesting notes, will get reused if appropriate later. Rather moot
+  contents now though.</li>
+<li><code>doc/newsletter/08-TBD.Focus-Or-Pyxie-Release-X.X.XX.md</code> Template for
+   next newsletter</li>
+</ul>
+<h2>[0.1.24] - 2016-11-10</h2>
+<h3>What's been fixed?</h3>
+<ul>
+<li>Code generation for <code>else</code>/<code>elif</code> was failing when the statements inside
+  contained identifiers. This was due to context not propogating into
+  <code>else</code>/<code>elif</code>. This was caused by neither <code>if</code> nor <code>elif</code> adding else clauses
+  as children. This was done and now this operates correctly.</li>
+</ul>
+<h3>New</h3>
+<ul>
+<li>Added playful puppy example that compiles and controls the Dagu Playful Puppy
+  robot. (8 leg servos, 2 head/neck servos, infrared array sensor/eye)</li>
+<li>v0 no funcs Playful Puppy code analyses #213</li>
+<li>v0 no funcs Playful Puppy code generates code #214</li>
+<li>
+<p>v0 no funcs Playful Puppy code compiles, &amp; runs on device correctly #215</p>
+</li>
+<li>
+<p>Profile specific code has been extracted to a specific file. In this
+  case, the iniitial profile made more managable is of course the arduino
+  profile. To configure this/extend this, you now update the file
+  <code>pyxie/profile/arduino.py</code></p>
+</li>
+<li>
+<p>To add more predefined variables/etc that are used in the context (ala
+  A0, etc) you extend the function <code>populate_profile_context</code>.</p>
+</li>
+<li>
+<p>If you need to add extra types - ala the <code>Servo</code> type - you can use
+  the <code>Servo</code> function call as an example. Note that it has a return
+  type of <code>Servo</code>. This means of course that the <code>Servo</code> function is
+  a constructor. For this to work   clearly the type needs to be
+  defined - so you define it below in the variable <code>types</code>.</p>
+</li>
+<li>
+<p>Started on <em>parsing</em> side aspects of definition of simple user functions.
+  (ie <code>def</code> statements) Hopefully basic functions should be in the next
+  iteration of pyxie.</p>
+</li>
+</ul>
+<h3>Internal Changes</h3>
+<ul>
+<li>
+<p><code>pyxie-dev</code> - Pyxie's release management tool, has had an overhaul,
+  and transferred into the pyxie package, rather than standalone code.
+  In the process code was improved, such that "dryrun" and "verbose"
+  now mean precisely that. Help text is deliberately verbose to note
+  what the release process is.</p>
+</li>
+<li>
+<p>Check all Pynodes add all sub nodes as children correctly #264</p>
+</li>
+<li>
+<p>Start of function support:</p>
+</li>
+<li>Lexing for function definition succeeds #265</li>
+<li>Grammar parsing for function definition succeeds #266</li>
+<li>Pynode support for def statements #269.</li>
+<li>Add a callable type #270</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>Reorganised backlog based on priorities - need, useful, want, wouldlike.
+  Plan going forward is to primarily focus on needs, and one or two from
+  each of the other categories.</li>
+<li>Function call code supports simplified type definitions for externals. #34</li>
+<li>Block structure of generated C Code is pretty/human friendly/readable #26</li>
+<li>Add special case for function calls like print #37</li>
+</ul>
+<h2>[0.1.23] - 2016-10-11</h2>
+<p>Not backwards compatible due to changes to "print"</p>
+<h4>print</h4>
+<p>print is no longer a python 2 style print statement, but rather a python 3 style
+print function. The reason for this is primarily down to the fact that things
+like Serial.print - necessary for arduino support - are not valid python if you
+have print as a statement.</p>
+<p>It's for this reason that the new version is 0.1.23</p>
+<h4>Overview</h4>
+<p>Aims in this release are to start enabling more functions inside an enclosing
+profile. Specifically to start enabling more arduino programs using default
+pin names (eg A0) and the ability to read from analog pins. (Which requires
+implementing analysis of return values of functions)</p>
+<p>In order to make this work/work better, work on improving how contexts (mappings
+of names to types) are handled has taken place, in particular nested lookups
+now work (This will simplify scoping later on too).</p>
+<h3>New</h3>
+<ul>
+<li>
+<p>Lots of internal changes to switch print from being a statement
+  to a function call</p>
+<ul>
+<li>Update all tests to use print as function, not as statement</li>
+<li>Lexer - remove keyword</li>
+<li>Disable "print" as statement type in the grammar</li>
+<li>Disable "print" as a pynode in the AST model</li>
+<li>Transform bare function calls to "print" (not method accesses)
+  into print statements internally. This will need improving
+  later, but for now is enough. It will need improving once we
+  implement custom function support.</li>
+</ul>
+</li>
+<li>
+<p>Handle emitting identifiers as rvalues in assignments correctly</p>
+</li>
+<li>
+<p>Enable use of function calls as rvalues in assignments (eg enable "analogRead")</p>
+</li>
+<li>
+<p>Added README.md for the analog example</p>
+</li>
+<li>
+<p>Update examples/README.md overview of the various examples.</p>
+</li>
+<li>
+<p>Initial user (single page) documentation of how to use the arduino profile</p>
+</li>
+</ul>
+<h3>Arduino Support</h3>
+<p>Specific set of functionality checked/added in this release:</p>
+<ul>
+<li>Serial support - .begin(), .print(), .println()</li>
+<li>constrain</li>
+<li>map</li>
+<li>random</li>
+<li>analogWrite</li>
+<li>analogRead</li>
+<li>millis</li>
+<li>Support for constants/ids : A0-A7, HIGH, LOW, INPUT, OUTPUT</li>
+</ul>
+<p>This is in addition to:</p>
+<ul>
+<li>Servos</li>
+<li>DigitalWrite</li>
+<li>pinMode</li>
+<li>delay</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>
+<p>Document how the various autogenerated docs get generated.</p>
+</li>
+<li>
+<p>Some extra scripts in test-data - designed to support quick turn around testing of
+  specific language features.</p>
+</li>
+<li>
+<p>Clarify source of logging messages</p>
+</li>
+<li>
+<p>Add recursive lookup through context stacks. This allows us effectively to
+  manage scope, to be able to treate profiles as an enclosing scope, and a step
+  towards being able to generate better error messages.</p>
+</li>
+<li>
+<p>Created a default (empty) global context stack - may provide a better hook for things
+  like print-as-function later on.</p>
+</li>
+<li>
+<p>Simplify cruftiness/verbosity of logging from parser</p>
+</li>
+<li>
+<p>Initial tests with profile nodes (for context). Tag is profile_identifier. Purpose is
+  primarily to support analysis. </p>
+</li>
+<li>
+<p>Help with debugging</p>
+</li>
+<li>Add tags to contexts</li>
+<li>Tag global context as program context</li>
+<li>
+<p>Tag (test) arduino profile context as "arduino"</p>
+</li>
+<li>
+<p>Start of support for analogRead, analogWrite, (arduino) map, and Serial object</p>
+</li>
+<li>
+<p>Example added exercising these</p>
+</li>
+<li>
+<p>Update site/src/panels/current-grammar.md to match current grammar...</p>
+</li>
+<li>remove print_statement</li>
+<li>minor cleanups</li>
+<li>
+<p>Expression syntax supports expression molecules - object method access</p>
+</li>
+<li>
+<p>Updated docs</p>
+</li>
+</ul>
+<h2>[0.0.22] - 2016-09-25</h2>
+<p>This release sees a practicality change - specifically to allow the user
+to specify which arduino board they want their code compiled for. The way
+this works is to override the arduino-mk process.</p>
+<p>As a result, in order to compile (say) examples/servo/servo-test-target.pyxie
+for the arduino Uno, you change the file examples/servo/servo-test-target.Makefile.in
+to contain the following:</p>
+<pre><code>BOARD_TAG    = uno
+ARDUINO_PORT = /dev/ttyACM0
+</code></pre>
+<p>This generates the appropriate file. If you had a Dagi Mini, you might change
+the contents to this:</p>
+<pre><code>BOARD_TAG    = atmega8
+ARDUINO_PORT = /dev/ttyACM0
+</code></pre>
+<p>Full documentation will come later but this should be sufficient to get started
+with.</p>
+<h3>New</h3>
+<ul>
+<li>Ability to override which arduino board you're working with.</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>Minor cleanups</li>
+</ul>
+<h2>[0.0.21] - 2016-09-17</h2>
+<p>Various small changes that result in the abilty to generate C++ code
+for a python arduino program that looks like this:</p>
+<pre><code>#include &lt;Servo.h&gt;
+
+myservo = Servo()
+pos = 0
+pin=11
+
+myservo.attach(pin)
+while True:
+    for pos in range(180):
+        myservo.write(pos)
+        delay(15)
+
+    for pos in range(180):
+        myservo.write(179-pos)
+        delay(15)
+</code></pre>
+<p>This isn't complete because reading arduino sensors won't work like this
+yet and so on, but this is a start. The generated code doesn't seek to make
+optimisations and aims to be accurate, so the above creates two iterators - one
+for each range and runs those.</p>
+<p>Internal improvements to contexts also suggest better mechanisms for handling
+profiles.</p>
+<h3>New</h3>
+<ul>
+<li>Code generation for object methods. Allows things like myservo.attach(pin) and myservo.write(pos)</li>
+<li>Started changes regarding how contexts will be managed/accessed by pynodes</li>
+<li>Global context handling improved</li>
+<li>Internals supported for code generation of functions extended to include attribute access</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>Improved notes on how context nodes will operate</li>
+<li>Minimal servo tests extended slightly to support moving servos</li>
+</ul>
+<h3>Internal</h3>
+<ul>
+<li>Simplified pynode internals (removed explicit tree type)</li>
+<li>Cleaned up/removed extraneous code</li>
+<li>Bump for release</li>
+</ul>
+<h2>[0.0.20] - 2016-08-12</h2>
+<p>Bulk of changes for this release are internal - various refactoring and so
+on. This isn't particularly exciting, but a release made just to say "yes
+the project is still progressing".</p>
+<p>Probably the most interesting addition is actually the creation of "WIPNOTES"
+designed to support ongoing (ie WIP) development. You can also now see the
+next target for the arduino profile - to support servos. This requires a
+fair collection of (useful) improvements to the python type inference which
+is not yet complete. As a result while the servo example <em>parses</em> it does not
+yet <em>analyse</em> or <em>compile</em>.</p>
+<p>Indeed, that's required a fair amount of rethinking about internal structure,
+hence the new WIPNOTES :-)</p>
+<h3>New</h3>
+<ul>
+<li>Update arduino examples; servo target example started</li>
+<li>Introduces a collection of WIPNOTES</li>
+</ul>
+<h3>Internal</h3>
+<ul>
+<li>Bump packaging for release</li>
+<li>Sync website updates</li>
+<li>Trello/doc sync</li>
+<li>Prettify generated C++ files</li>
+<li>Sync release info</li>
+<li>Add newsletter subscription to site info</li>
+<li>Changes to support debugging analysis -- </li>
+<li>Version bumps 0.0.20</li>
+<li>Add comment to indenting logger</li>
+<li>Removed use of indenting logger :-)</li>
+<li>Use func_label to refer to the callable, not callable_</li>
+<li>Experimental addition to look at name of thing, not value</li>
+<li>Better python 3 compatibility</li>
+<li>Shorten names in profile definitions for clarity</li>
+<li>Subsume tree functionality into core</li>
+<li>Update changelog</li>
+</ul>
+<h2>[0.0.19] - 2016-01-31</h2>
+<h3>Fixes</h3>
+<ul>
+<li>Fix regression in code generation for function calls</li>
+<li>This was due to FunctionCalls now assuming they work on a callable
+   which may be an identifier, but can also be other things too</li>
+</ul>
+<h3>New</h3>
+<ul>
+<li>Changes to support Python 3</li>
+<li>Now runs under python 3 as well as python 2 :-)</li>
+<li>(internals) Pynode docs - very much work in progress</li>
+<li>Arduino blink test case copied into examples</li>
+<li>Makes testing easier and usage more obvious</li>
+</ul>
+<h3>Internals</h3>
+<ul>
+<li>Massive reorg of pynodes from single file to categorised files</li>
+<li>Use annotated tags for releases - makes them show up on github - showing
+  releases</li>
+<li>Help text for pyxie-dev extended to show release process</li>
+<li>Bump versions for 0.0.19</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>Work on arduino profile continues with more work on servos (still WIP)</li>
+<li>Bump copyright notices to 2016(!)</li>
+<li>Add link to latest release on homepage</li>
+</ul>
+<h2>[0.0.18] - 2016-01-10</h2>
+<h3>New</h3>
+<ul>
+<li>Parsing of "long" integers, treating "l" as unsigned long values and "L" as signed long values.</li>
+<li>Code generation for long and unsigned long values works</li>
+<li>Add first major example of a pyxie parsable program - for controlling a 4 legged robot - DAGU playful puppy (8 servos for 4 legs, 2 for pan/tilt in head, IR Array)
+  -- Does not parse/compile yet! (But will!)</li>
+<li>Add parsing of attribute lookup for objects</li>
+<li>Parsing tests for object attribute and method access</li>
+<li>Test cases for attribute access</li>
+<li>Add simple servo example</li>
+<li>Couple of versions to simplify development - target version + simplest
+   working version</li>
+<li>Some helper scripts to help while building/testing examples</li>
+<li>Redo function calls to allow attribute access ordering</li>
+<li>Recast identifier in functions as a callable expression</li>
+<li>Initial version of arduino function call descriptors</li>
+<li>Initial support for arduino profile in pynodes</li>
+<li>
+<p>Code generation for first arduino specific types (specifically "Servo")</p>
+</li>
+<li>
+<p>Re-enable parse only option</p>
+</li>
+<li>Allow expression atoms to be negatable, not just numbers (allows things like -step/2)</li>
+<li>Remove trailing semi-colons in arduino-blink test</li>
+<li>Fix Missing import regarding parsing testfiles in bin/pyxie</li>
+<li>Changes regarding precedence of brackets to other expression atoms</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>Add a list of the high level things 'missing' to Language status</li>
+<li>Support for dumping the parse tree results as a json file - for debug purposes (disabled in code by default)</li>
+<li>Restores long/unsigned hinting where necessary</li>
+<li>Update range to support start, end and step - replacing max</li>
+<li>Test case for new range implementation</li>
+<li>Make PyAttribute's jdump correctly</li>
+<li>MAJOR Clean up how options are handled - shifted into introspected classes in bin/pyxie, along with improved internal docs</li>
+<li>Initial cleanup inside bin/pyxie-dev</li>
+<li>Improve lexing error messages</li>
+<li>clib updated</li>
+</ul>
+<h3>Will need revisiting</h3>
+<ul>
+<li>Do not clean up builds temporarily</li>
+</ul>
+<h2>[0.0.17] - 2015-08-12</h2>
+<h3>New</h3>
+<ul>
+<li>Implemented "pass" statement.</li>
+<li>For loops now work on arduino profile (reimplemented C++ generators to use
+  generator state, not to use an exception)</li>
+<li>Arduino test case using for loop</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>Extracted core code for "pyxie" script into pyxie.core</li>
+<li>Updated usage instructions to include covering using arduino profile</li>
+<li>Documentation updated to current status (to a large extent)</li>
+</ul>
+<h2>[0.0.16] - 2015-08-02</h2>
+<p>Summary: Adds initial Arduino LEONARDO support, improved function call, release build scripts</p>
+<p>In particular, to compile for a compilation target you do this:</p>
+<p>pyxie --profile arduino some_program.pyxie</p>
+<p>This will generate some_program.hex. You then need to load this onto your
+arduino. Support for assisting with this will probably be in a largert
+version. Requires Arduino.mk to be installed in a standard place. Docs TBD
+as functionality stabilises.</p>
+<h3>Features</h3>
+<ul>
+<li>Arduino LEONARDO compatible compilation profile (#3)</li>
+<li>Detect that we are in a profile mode from a command line switch (#3.1)</li>
+<li>Code generation is called with current profile (#3.2)</li>
+<li>Code generation outputs code targetting "setup" instead of "main" (#3.3)</li>
+<li>Makefile uses the arduino makefile #arduino leonardo (#3.4)</li>
+<li>
+<p>Compilation profiles support removal of elements of the clib (#4.1)</p>
+</li>
+<li>
+<p>Function calls that do not require arguments work (#2)</p>
+</li>
+</ul>
+<h3>Docs</h3>
+<ul>
+<li>Docs in README.md, setup.py and docs/ are generated from website. (#66)</li>
+<li>Documentation in /docs is generated from website source documentation (#63)</li>
+<li>Docs on usage #docs (#64)</li>
+<li>Man page for pyxie (#65)</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>Make Release Script (#61)</li>
+<li>build_release_script.py (#62)</li>
+<li>Core setup.py files/etc now auto-generated from templates</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>Clean up build local script</li>
+<li>Man file added (not installed yet though)</li>
+<li>Build distributed docs from the same source as the website</li>
+<li>Added pyxie-dev script to assist in release automation</li>
+<li>Re-enable doc building</li>
+</ul>
+<h2>[0.0.15] - 2015-07-18</h2>
+<ul>
+<li>clib converted to py clib for adding to build directory</li>
+</ul>
+<h2>[0.0.14] - 2015-07-18</h2>
+<h3>New</h3>
+<ul>
+<li>clib - this will be a collection of C++ code that can be directly or indirectly used in  generated programs. Current focus is iterators</li>
+<li>C++ generator support - to support C++ iterators</li>
+<li>C++ generator implemention of python's range iterator + acceptance test harness</li>
+<li>Lex/Parsing of For</li>
+<li>Type inference/analysis for special cased iterator functions</li>
+<li>Pynode representation of for loops</li>
+<li>Code generation for for loops using iterators</li>
+</ul>
+<h3>Other</h3>
+<ul>
+<li>Extra test case for while - testing 3 way logical expressions</li>
+<li>Test case for for loops</li>
+<li>Massive website revamp</li>
+</ul>
+<h2>[0.0.13] - 2015-06-21</h2>
+<p>This probably marks the first release that's potentially properly useful when combined with
+an appropriate included .h file... We support if/elif/else while/break/continue and arbitray
+expressions.</p>
+<h3>New</h3>
+<ul>
+<li>Support for if statements</li>
+<li>Support for elif clauses (as many as desired)</li>
+<li>Support for else clauses</li>
+<li>Support for boolean operators - specifically and/or/not, including any mixture</li>
+<li>Support for parenthesised expressions</li>
+</ul>
+<h2>[0.0.12] - 2015-06-17</h2>
+<h3>New</h3>
+<ul>
+<li>Initial iteration of website - hosted at www.sparkslabs.com/pyxie/ . Stored in repo</li>
+<li>support for while statements:</li>
+<li>While works with While True</li>
+<li>Break works with With True</li>
+<li>'Continue' works in a While loop</li>
+<li>While Loop conditional is a expression</li>
+<li>This allows things like loops that count towards zero and do things... :-)</li>
+<li>Comparison Operators :  &lt; &gt; &lt;= &gt;= &lt;&gt; != ==</li>
+</ul>
+<p>Combination of these things allows things like countdown programs, basic
+benchmarking and so on. Creative use ( while + break) allows creation of "if" like
+constructs meaning the code at this point supports sequence, selection and iteration
+as well as very basic datatypes. That's almost useful... :-)</p>
+<h2>[0.0.11] - 2015-06-06</h2>
+<h3>New</h3>
+<ul>
+<li>Function call support:</li>
+<li>Extended Grammar, and pynodes to support function calls.</li>
+<li>Code generation for function calls</li>
+<li>Test cases for function calls added</li>
+<li>Creation of  "Print" built in for the moment- to be replaced by 'print'</li>
+<li>C++ "bridge":</li>
+<li>Create simple C++ include bridging - #includes are copied straight through</li>
+<li>Document C++ bridging, and test case</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Language Spec updates</li>
+</ul>
+<h3>Fixes</h3>
+<ul>
+<li>Support empty statements/empty lines</li>
+</ul>
+<h2>[0.0.10] - 2015-06-03</h2>
+<ul>
+<li>Documentation added to pyxie/<strong>init</strong>.py, to allow project level help from "pydoc pyxie"</li>
+<li>Expression Statements</li>
+<li>Improved type inference in explicit analysis phase </li>
+<li>Explicit analysis phase added - decorates AST, focussed on types. Results of this phase viewable.</li>
+<li>Pynodes are now tree nodes, simplifying tree traversal for common cases</li>
+<li>Variables are managed by contexts -- context is added to pynodes during analysis phase, simplifying type inference</li>
+<li>Contexts changes to store name and list of expressions -- not name and identifier, again, simplifying and generalising type inference</li>
+<li>Ensure all identifies in global context <em>before</em> analysis starts, simplifying analysis phase</li>
+<li>New strategy for type inference documented, opens up lexical scoping</li>
+<li>pyxie compile harness now runs/compiles programs outside the pyxie tree</li>
+</ul>
+<h2>[0.0.9] - 2015-05-23</h2>
+<p>Primary changes are to how the program is run, and fixes to precedence. This is the first
+version to support a non-test mode - so you can output binaries, but also JSON parse trees.</p>
+<h3>New</h3>
+<ul>
+<li>Test modes for pyxie harness moved into a --test mode</li>
+<li>Standalone parse mode -- pyxie parse filename -- parses the given filename, outputs result to console</li>
+<li>Standalone compiler mode --</li>
+<li>pyxie compile path/to/filename.suffix -- compiles the given file to path/to/filename</li>
+<li>pyxie compile path/to/filename.suffix path/to/other/filename -- compiles the given file to the destination filename</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Switch to left recursion. The reason is because YACC style grammars handle
+  this better than right recursion, and the fact it also fixes operator precedence
+  correctly in expressions. The reason the grammar was originally right recursive
+  is because that's the Grammar that CPython uses, but the parsing process must
+  be different (since it's LL(1) and suitable for top down rather than bottom up
+  parsing)</li>
+</ul>
+<h3>Fixes</h3>
+<ul>
+<li>Bracket negative literal values in expressions to avoid confusing C++</li>
+<li>Precedence as noted above.</li>
+</ul>
+<h2>[0.0.8] - 2015-05-13</h2>
+<h3>Changed</h3>
+<p>Switched compilation over to using PyNode objects rather than lists</p>
+<p>Rolls up alot of changes, and improvements:</p>
+<ul>
+<li>Simple test case for testing expressions in assignments</li>
+<li>Added release date for 0.0.7</li>
+<li>Bump revisions for next release</li>
+<li>
+<p>Use PyNodes to represent python programs
+  In particular, this replaces the use of lists with the use of objects.
+  The aim here is to simplify type inference from code, and injection of
+  context - like scoping - into the tree to be able to infer types and
+  usage thereof.</p>
+</li>
+<li>
+<p>We're doing this at this stage because the language is complex enough for
+  it to start to be useful, but simple enough for it to be not too difficult
+  to switch over to.</p>
+</li>
+</ul>
+<p>Furthermore, by allowing nodes to generate a JSON representation, it's easier
+  to see the actual structure being generated - to allow  tree simplification,
+  but also to allow - at least temporarily - decoupling of changes from the
+  python parsing from the C tree generation, and from the C code generation</p>
+<ul>
+<li>Clean up statements node creation in grammar</li>
+<li>Simplify expression lists</li>
+<li>Support iterating over statements</li>
+<li>Transform pynodes to CST lists for assignment</li>
+<li>Reverse number order to not match line numbers</li>
+<li>Iterate over expressions within an expr_list</li>
+<li>Convert assignments from pynodes</li>
+<li>Remove old code</li>
+<li>Can now transform basic core programs based on pynodes</li>
+<li>Code generation for expressions as rvalues</li>
+<li>Better test for code generation of expression rvalues</li>
+<li>Add context into pyidentifier nodes</li>
+<li>Support transforms for expression rvalues in assignment</li>
+<li>First pass at adding context - variable lookups into the system</li>
+<li>Test case that derives types for variables</li>
+</ul>
+<h2>[0.0.7] - 2015-04-29</h2>
+<h3>Changed</h3>
+<ul>
+<li>Bump revision for release</li>
+<li>Compiler structure &amp; testing improvements</li>
+<li>Initial support for infix integer addition expressions</li>
+<li>Support for plus/minus/times/divide infix operations</li>
+<li>Add test regarding adding string variables together</li>
+<li>Make parser more relaxed about source file not ending with a newline</li>
+<li>Bugfix: Fix precedence for plus/minus/times/divide</li>
+<li>Bugfix: Only output each include once</li>
+</ul>
+<h2>[0.0.6] - 2015-04-26</h2>
+<p>Overview -- Character Literals, math expressions, build/test improvements</p>
+<h3>Changed</h3>
+<ul>
+<li>Character literals - parsing and compilation</li>
+<li>Initial version of changelog</li>
+<li>Mark WIP/TBD, add character</li>
+<li>Adds character type, mark which bits of the spec are now TBD, and which are WIP</li>
+<li>Add "in progress" section to CHANGELOG</li>
+<li>Build lexer explicitly</li>
+<li>Basic mathematical expression parsing</li>
+<li>Parsing of basic expressions involving basic mathematical operators, as opposed to just value_literals.</li>
+<li>Test case for parsing mathematical expressions</li>
+<li>Allow parser to be reset</li>
+<li>Restructure test harness to allow more selective testing
+  This also changes the test harness to be closer to a standard
+  compiler style API.</li>
+<li>Run all tests from makefile</li>
+<li>Codegen test for basic math expressions
+  Simplest possible test initially</li>
+</ul>
+<h2>[0.0.5] - 2015-04-23</h2>
+<h3>Added</h3>
+<ul>
+<li>Core lexical analysis now matches language spec - collection of changes, which can be summarised as follows:</li>
+<li>Language spec updated relative to implementation &amp; lexing states</li>
+<li>Lexical analysis of block structure</li>
+<li>Lexical analysis of operators, punctuation, numerical negation</li>
+<li>Implement numbers part of the grammar (including negation), including basic tests</li>
+<li>Fleshed out lexical tokens to match language spec</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Code cleanups</li>
+</ul>
+<h2>[0.0.4] - 2015-04-22</h2>
+<h3>Added</h3>
+<ul>
+<li>Extends C AST to match python AST semantics</li>
+<li>Ability to use mixed literals in a print statement (1,True, "hello" etc)</li>
+<li>Argument list management</li>
+<li>Convert argument lists explicitly</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Use Print not print</li>
+</ul>
+<h3>Fixed</h3>
+<ul>
+<li>Cleaned up debug output.</li>
+</ul>
+<h2>[0.0.3] - 2015-04-21</h2>
+<h3>Added</h3>
+<ul>
+<li>Adds ability to print and work with a small number of variables</li>
+<li>Better handling, and code gneration for integer literals</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Add long description (setup.py)</li>
+<li>Update README.md to reflect project slightly better</li>
+<li>Reworded/tightened up README</li>
+<li>Updated documentation</li>
+<li>Emphasise "yet" when saying what it does (README)</li>
+<li>Zap the source between compilation runs</li>
+<li>Build test results inside the test-data/genprogs directory</li>
+</ul>
+<h2>[0.0.2] - 2015-03-30</h2>
+<p><em>Initial Release</em> -- 0.0.1 was not released and rolled into 0.0.2 (release notes for 0.0.1 below)</p>
+<p>Simple assignment</p>
+<h3>Added</h3>
+<ul>
+<li>Transform Python AST to C CST - compile python to C++ for v simple program</li>
+</ul>
+<h3>Changed</h3>
+<ul>
+<li>Various tweaks for README/docs</li>
+<li>Packaging for pypi and Ubuntu Launchpad PPA for initial release 0.0.2</li>
+</ul>
+<h2>[0.0.1] - Unreleased - rolled into 0.0.2</h2>
+<h3>Added</h3>
+<ul>
+<li>Initial structure, loosely based on SWP from a few years ago</li>
+<li>http://www.slideshare.net/kamaelian/swp-a-generic-language-parser</li>
+<li>Initial pyxie parsing/model/codegen modules</li>
+<li>Basic parsing of value literals, decorated with source information</li>
+<li>Support for basic identifiers and assignment including simple type inference</li>
+<li>First pass at a simple C++ code generator for concrete C++ AST</li>
+<li>Directories to hold semantic models and for code generation</li>
+<li>Represent C programs as json, and allow construction from json</li>
+<li>Simple program that matches the C++ code generator</li>
+</ul>
+    <br style="clear: both"><hr>
+    Updated: February 2018
+    </div>
+</div>
+<div class="columnpanel lightgrey_darkgrey topsolid">
+ <div class="panel centred-text">
+<a href="resources.html"> Help, Contacts &amp; Downloads </a> <br>
+<div class="smaller">
+Copyright &copy; 2016 Michael Sparks <a href="copyright.html"> Open Source</a>
+</div>
+ </div>
+</div>
+</body>
+</html>
