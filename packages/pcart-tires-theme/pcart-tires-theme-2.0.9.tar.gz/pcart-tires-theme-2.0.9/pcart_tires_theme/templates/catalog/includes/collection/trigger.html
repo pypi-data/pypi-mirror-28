@@ -1,0 +1,29 @@
+{% load pcart_core i18n %}
+{% if trigger_obj %}
+    {% call_method trigger_obj.variant "get_grouped_filters" collection as data %}
+    {% if data %}
+    <h3>{% blocktrans with title=trigger_obj.variant.title %}Sizes for {{ title }}{% endblocktrans %}</h3>
+    {% for k, v in data.items %}
+        {% if v %}
+        <div class="row">
+            <div class="col-md-3">
+                <h4>{{ k }}</h4>
+            </div>
+            <div class="col-md-9">
+                <ul class="nav nav-pills">
+                {% for i in v %}
+                    <li role="presentation"
+                            {% if i.tags|is_subset:filter_tags %} class="active"{% endif %}>
+                        {% if i.count > 0 %}
+                            <a href="{{ i.url }}">{{ i.title }}</a></li>
+                        {% else %}
+                            <a><del>{{ i.title }}</del></a>
+                        {% endif %}
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+    {% endif %}
+{% endif %}

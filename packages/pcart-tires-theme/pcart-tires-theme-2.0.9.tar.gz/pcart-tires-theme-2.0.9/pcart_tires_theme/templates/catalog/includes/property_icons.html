@@ -1,0 +1,13 @@
+{% load staticfiles pcart_core %}
+<div style="height:20px;{% if not gap %}margin-top:-10px;{% endif %}">
+    {% if product.properties|get_element:"Сезон" or product.properties|get_element:"Шипи" or product.properties|get_element:"Вісь" %}
+        {% if product.properties|get_element:"Сезон" == "літня" %}<img src="{% static 'assets/sun.gif' %}" title="{{ product.properties|get_element:'Сезон' }}" alt="{{ product.properties|get_element:'Сезон' }}">{% endif %}
+        {% if product.properties|get_element:"Сезон" == "зимова" %}<img src="{% static 'assets/snow.gif' %}" title="{{ product.properties|get_element:'Сезон' }}" alt="{{ product.properties|get_element:'Сезон' }}">{% endif %}
+        {% if product.properties|get_element:"Сезон" == "всесезонна" %}<img src="{% static 'assets/all.gif' %}" title="{{ product.properties|get_element:'Сезон' }}" alt="{{ product.properties|get_element:'Сезон' }}">{% endif %}
+        {% if product.properties|get_element:"Шипи" == "шип" %}<img src="{% static 'assets/ship.gif' %}" title="{{ product.properties|get_element:'Шипи' }}" alt="{{ product.properties|get_element:'Шипи' }}">{% endif %}
+        {% if product.properties|get_element:"Вісь" == "універсальна" %}<img src="{% static 'assets/osi-lubaya-transp.png' %}" title="{{ product.properties|get_element:'Вісь' }}" alt="{{ product.properties|get_element:'Вісь' }}">{% endif %}
+        {% if product.properties|get_element:"Вісь" == "ведуча" %}<img src="{% static 'assets/osi-vedushaya-green-transp.png' %}" title="{{ product.properties|get_element:'Вісь' }}" alt="{{ product.properties|get_element:'Вісь' }}">{% endif %}
+        {% if product.properties|get_element:"Вісь" == "рульова" %}<img src="{% static 'assets/osi-rul-green-transp.png' %}" title="{{ product.properties|get_element:'Вісь' }}" alt="{{ product.properties|get_element:'Вісь' }}">{% endif %}
+        {% if product.properties|get_element:"Вісь" == "причіп" %}<img src="{% static 'assets/osi-pricep-green-transp.png' %}" title="{{ product.properties|get_element:'Вісь' }}" alt="{{ product.properties|get_element:'Вісь' }}">{% endif %}
+    {% endif %}
+</div>

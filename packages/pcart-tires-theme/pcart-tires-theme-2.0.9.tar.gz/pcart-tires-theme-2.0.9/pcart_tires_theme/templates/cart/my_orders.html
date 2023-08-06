@@ -1,0 +1,29 @@
+{% extends CMS_TEMPLATE %}
+{% load i18n pcart_core cms_tags %}
+
+{% block sidebar %}{% include "customers/includes/profile_menu.html" %}{% endblock %}
+
+{% block content %}
+<h1 class="page_heading">{% trans "My orders" %}</h1>
+
+{% if orders %}
+<table class="table table-bordered table-striped table-hover">
+    <tr>
+        <th>{% trans "Number" %}</th>
+        <th>{% trans "Status" %}</th>
+        <th>{% trans "Total price" %}</th>
+        <th>{% trans "Added" %}</th>
+    </tr>
+{% for order in orders %}
+<tr>
+    <td><a href="{% url 'pcart_customers:customer-profile-section-subsection' 'orders' order.id %}">{{ order.number }}</a></td>
+    <td>{{ order.status }}</td>
+    <td>{{ order.total_price|money }}</td>
+    <td>{{ order.added }}</td>
+</tr>
+{% endfor %}
+</table>
+{% else %}
+<div class="alert alert-info">{% trans "There are no orders." %}</div>
+{% endif %}
+{% endblock %}
