@@ -1,0 +1,189 @@
+#compdef fac
+
+typeset -g -A __fac_search_cache
+typeset -g -A __fac_opt_args
+
+zstyle ':completion::complete:fac-*:*:local-mods' matcher 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}'
+
+__fac_mods () {
+  local tag flag='-E'
+
+  case $words[1] in
+    (enable|disable)  tag=disabled     ;|
+    (pack|unpack)     tag=unpacked     ;|
+    (hold|unhold)     tag=held         ;|
+    (make-compatible) tag=incompatible ;|
+
+    (enable|unhold|pack|make-compatible)
+      flag='-I'
+    ;;
+  esac
+
+  local cmd="fac list -F $'{mod.name}\\n{mod.info.title}'"
+  [[ -n $tag ]] && cmd+=" $flag $tag"
+
+  typeset -A mod_lines=(${(f)"$(_call_program fac $cmd)"})
+  typeset -a mods
+  local name
+
+  for name in ${(k)mod_lines}; do
+    (( $+line[(re)$name] )) && continue
+    mods+=($name:${mod_lines[$name]//:/\:})
+  done
+
+  _describe -t local-mods "mods to ${words[1]//_/ }" mods
+}
+
+__fac_search () {
+  # TODO: version operators?
+  local word=${(L)PREFIX}${(L)SUFFIX}
+
+  [[ ${word:0:1} == - ]] && return 1
+  [[ ${#word} -lt 3 ]] && {
+    _message -e remote-mods "mods to $words[1]"
+    return 1
+  }
+
+  typeset -A args=("${(@kv)opt_args}" "${(@kv)__fac_opt_args}")
+
+  local cmd="fac search -a -l25 -F $'{result.name}\\n{result.title}' "
+  cmd+="${(kv)args[(I)-g|--game-version|-i|--ignore-game-ver]}"
+  cmd+=" -- ${(q)word}"
+
+  local search_result
+  if (( ${+__fac_search_cache[$cmd]} )); then
+    search_result=$__fac_search_cache[$cmd]
+  else
+    search_result=$(_call_program fac $cmd 2>/dev/null)
+    __fac_search_cache[$cmd]="$search_result"
+  fi
+
+  typeset -A mods=(${(f)search_result})
+  typeset -a desc
+
+  for name in ${(k)mods}; do
+    (( $+line[(re)$name] )) && continue
+    desc+=("$name:${mods[$name]//:/\\:}")
+  done
+
+  _describe -t remote-mods "mods to $words[1]" desc -U
+  compstate[insert]=menu
+  compstate[list]='list force'
+}
+
+_fac () {
+  local curcontext=$curcontext state line
+  typeset -a opts
+  typeset -A opt_args
+
+  opts=(
+    '(- :)'{-h,--help}'[display help]' \
+    '(-v --verbose)'{-v,--verbose}'[show more detailled output]' \
+    '(-m --mods-directory)'{-m+,--mods-directory=}'[use the specified mods directory]: :_directories' \
+    '(-i --ignore-game-ver)'{-i,--ignore-game-ver}'[ignore game version when selecting packages]' \
+    '(-g --game-version)'{-g+,--game-version=}'[force a specific game version]:game version:')
+
+  _arguments -s -S -C $opts \
+    '(-): :->command' \
+    '(-)*:: :->opt-or-arg' && return
+
+  __fac_opt_args=("${(@kv)opt_args}")
+
+  case $state in
+    (command)
+      local -a commands
+      commands=(
+        'list:list installed mods and their status' \
+        'enable:enable mods' \
+        'disable:disable mods' \
+        'search:search the mods database' \
+        'show:show details about mods' \
+        'install:install (or update) mods' \
+        'update:update installed mods' \
+        'remove:remove mods' \
+        'hold:hold mods or show held mods with no argument' \
+        'unhold:unhold mods' \
+        'pack:pack mods' \
+        'unpack:unpack mods' \
+        'fetch:fetch a mod from the mod portal' \
+        'make-compatible:change the supported factorio version of mods')
+      _describe -t commands command commands && ret=0
+    ;;
+    (opt-or-arg)
+      curcontext=${curcontext%:*}-$line[1]:
+      case $line[1] in
+        (enable|disable|hold|unhold|pack|unpack|remove|make-compatible)
+          opts+=("*:mods:__fac_mods")
+        ;|
+        (show|install|fetch)
+          opts+=("*:mods:__fac_search")
+        ;|
+
+        (list)
+          local tags=(disabled unpacked held incompatible)
+          opts+=(
+            '*'{-I+,--include=}"[only include mods having the specified tags]:tag:($tags)" \
+            '*'{-E+,--exclude=}"[exclude mods having any of the specified tags]:tag:($tags)" \
+            '(-F --format)'{-F+,--format=}'[show installed mods using the specified format string]:format string:')
+        ;;
+
+        (show)
+          opts+=(
+            '(-F --format)'{-F+,--format=}'[show mods using the specified format string]:format string:')
+        ;;
+
+        (search)
+          opts+=(
+            '*-t+[filter by tag]:tag:' \
+            '(-d -a -u)-d[sort results by most downloaded]' \
+            '(-d -a -u)-a[sort results alphabetically]' \
+            '(-d -a -u)-u[sort results by most recently updated]' \
+            '(-l --limit)'{-l+,--limit=}'[stop after returning that many results]:limit:' \
+            '(-p --page)'{-p+,--page=}'[starting page number for the API calls]:page:' \
+            '(-s --page-size)'{-s+,--page-size=}'[maximum number of returned results per page]:page size:' \
+            '(-c --page-count)'{-c+,--page-count=}'[maximum number of pages to fetch]:page count:' \
+            '(-F --format)'{-F+,--format=}'[show results using the specified format string]:format string:' \
+            '::query:'
+            )
+        ;;
+        (install)
+          opts+=(
+            '(-H --held)'{-H,--held}'[allow updating held mods]' \
+            '(-R --reinstall)'{-R,--reinstall}'[allow reinstalling mods]' \
+            '(-D --downgrade)'{-D,--downgrade}'[allow downgrading mods]' \
+            '(-U --unpack)'{-U,--unpack}'[unpack mods zip files]' \
+            '(-d --no-deps)'{-d,--no-deps}'[do not install any dependencies]')
+        ;;
+        (update)
+          opts+=(
+            '(-s --show)'{-s,--show}'[only show what would be updated]' \
+            '(-y --yes)'{-y,--yes}'[automatic yes to confirmation prompt]' \
+            '(-U --unpacked)'{-U,--unpacked}'[allow updating unpacked mods]' \
+            '(-H --held)'{-H,--held}'[allow updating held mods]')
+        ;;
+        (remove)
+          opts+=(
+            '(-y --yes)'{-y,--yes}'[automatic yes to confirmation prompt]' \
+            '(-U --unpacked)'{-U,--unpacked}'[only remove unpacked mods]' \
+            '(-P --packed)'{-P,--packed}'[only remove packed mods]')
+        ;;
+        (pack|unpack)
+          opts+=(
+            '(-R --replace)'{-R,--replace}'[replace existing file/directory when packing/unpacking]' \
+            '(-K --keep)'{-K,--keep}'[keep existing directory/file after packing/unpacking]')
+        ;;
+        (fetch)
+          opts+=(
+            '(-U --unpack)'{-U,--unpack}'[unpack mods zip files after downloading]' \
+            '(-K --keep)'{-K,--keep}'[keep mod zip file after unpacking]' \
+            '(-d --dest)'{-d+,--dest=}'[destination directory (default: current directory)]:destination:_directories' \
+            '(-R --replace)'{-R,--replace}'[replace existing file/directory]')
+        ;;
+      esac
+    ;;
+  esac
+  _arguments -s -S $opts && ret=0
+  return ret
+}
+
+_fac "$@"
