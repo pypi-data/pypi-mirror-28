@@ -1,0 +1,107 @@
+Metadata-Version: 2.0
+Name: devpi-web
+Version: 3.2.2
+Summary: devpi-web: a web view for devpi-server
+Home-page: http://doc.devpi.net
+Author: Holger Krekel, Florian Schulze
+Author-email: holger@merlinux.eu
+License: MIT
+Description-Content-Type: UNKNOWN
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Web Environment
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Programming Language :: Python :: Implementation :: PyPy
+Classifier: Topic :: Internet :: WWW/HTTP :: WSGI :: Application
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Dist: Whoosh (<3)
+Requires-Dist: beautifulsoup4 (>=4.3.2)
+Requires-Dist: defusedxml
+Requires-Dist: devpi-server (>=3.0.0)
+Requires-Dist: devpi-common (>=3.2.0rc1)
+Requires-Dist: docutils (>=0.11)
+Requires-Dist: pygments (>=1.6)
+Requires-Dist: pyramid
+Requires-Dist: pyramid-chameleon
+Requires-Dist: readme-renderer
+
+================================================
+devpi-web: web interface plugin for devpi-server
+================================================
+
+This plugin adds a web interface with search for `devpi-server`_.
+
+.. _devpi-server: http://pypi.python.org/pypi/devpi-server
+
+
+Installation
+============
+
+``devpi-web`` needs to be installed alongside ``devpi-server``.
+
+You can install it with::
+
+    pip install devpi-web
+
+There is no configuration needed as ``devpi-server`` will automatically discover the plugin through calling hooks using the setuptools entry points mechanism.
+
+
+=========
+Changelog
+=========
+
+
+
+.. towncrier release notes start
+
+3.2.2 (2018-01-17)
+==================
+
+Bug Fixes
+---------
+
+- fix issue482: let external links in documentation open outside of iframe.
+
+- Prevent stale static resources from browser caching by adding devpi-web
+  version to their URLs.
+
+
+3.2.1 (2017-11-23)
+==================
+
+No significant changes.
+
+
+3.2.1rc1 (2017-09-08)
+=====================
+
+Bug Fixes
+---------
+
+- make search results compatible with pip showing INSTALLED/LATEST info.
+
+- fix server error by returning 404 when a toxresult can't be found.
+
+
+3.2.0 (2017-04-23)
+==================
+
+- version.pt: add "No releases" when there are none.
+
+- project.pt: add "Documentation" column with link to documentation per version.
+
+
+3.1.1 (2016-07-15)
+==================
+
+- removed unnecessary fetching of mirror data during indexing.
+
+
+
