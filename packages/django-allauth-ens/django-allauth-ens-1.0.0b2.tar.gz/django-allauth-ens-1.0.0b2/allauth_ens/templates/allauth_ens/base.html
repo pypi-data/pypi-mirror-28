@@ -1,0 +1,94 @@
+{% load i18n static %}
+{% load account allauth_ens %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+
+  <title>{% block title %}{% endblock %}{% if request.site.name %} · {{ request.site.name }}{% endif %}</title>
+
+  {# Responsive UI #}
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  {# CSS #}
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Roboto:400,700|Roboto+Slab:400">
+  <link rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
+  <link rel="stylesheet"
+    href="{% static "allauth_ens/screen.css" %}">
+
+  {# JS #}
+  <script type="text/javascript"
+    src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="
+    crossorigin="anonymous"></script>
+  <script type="text/javascript"
+    src="{% static "allauth_ens/authens.js" %}"></script>
+
+  {% block extra_js %}{% endblock %}
+
+</head>
+
+<body>
+
+  <div class="wrapper">
+
+    <header>
+      <h1>{% block header-title %}{% endblock %}</h1>
+      <div class="right">
+
+        <div id="view-site">
+          {% get_home_url as home_url %}
+          {% if home_url %}
+            <a href="{{ home_url }}">
+              {{ request.site.name|default:"View site" }}
+            </a>
+          {% else %}
+            <span>{{ request.site.name|default:"View site" }}</span>
+          {% endif %}
+        </div>
+
+        <div id="connect-status">
+          {% if user.is_authenticated %}
+            {% get_profile_url as profile_url %}
+            {% if profile_url %}
+              <a href="{{ profile_url }}">
+                <i class="fa fa-user"></i>
+                {% user_display user %}
+              </a>
+            {% else %}
+              <span>
+                <i class="fa fa-user"></i>
+                {% user_display user %}
+              </span>
+            {% endif %}
+          {% else %}
+            <a href="{% url "account_login" %}">
+              <i class="fa fa-sign-in"></i>
+              {% trans "Not Connected" %}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    {% include "allauth_ens/block-messages.html" %}
+
+    {% block messages-extra %}{% endblock %}
+
+    <div class="content-wrapper">
+      {% block content %}{% endblock %}
+    </div>
+
+  </div>
+
+</body>
+
+</html>

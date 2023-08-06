@@ -1,0 +1,59 @@
+{% load widget_tweaks %}
+
+{% csrf_token %}
+
+{% for field in form.visible_fields %}
+  {% with widget_type=field|widget_type %}
+  <div class="input-wrapper {% if field.errors %}input-error{% endif %}" data-widget-type="{{ widget_type }}">
+  {% if widget_type == "checkboxinput" %}
+    <div>
+      <label>{{ field.label }}</label>
+      <div class="buttons-choices">
+        <button type="button" class="choice-yes {% if field.initial %}selected{% endif %}">Oui</button>
+        <button type="button" class="choice-no {% if not field.initial %}selected{% endif %}">Non</button>
+      </div>
+      <div class="hidden">
+        {% render_field field %}
+      </div>
+    </div>
+  {% elif widget_type == "radioselect" %}
+    <div>
+      <label>{{ field.label }}</label>
+      <div class="buttons-choices">
+        {% for choice in field %}
+          <button type="button" class="{% if choice.data.selected %}selected{% endif %}">
+            {{ choice.choice_label }}
+            <div class="hidden">{{ choice.tag }}</div>
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+  {% elif widget_type == "select" %}
+    <div>
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {% render_field field %}
+    </div>
+  {% else %}
+    <div class="transform-label">
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {% render_field field class+="field" size="" autocomplete="off" autocapitalize="none" placeholder="" %}
+    </div>
+  {% endif %}
+    <div class="messages-spacer"></div>
+    <ul class="messages">
+      {% if field.help_text %}
+      <li>{{ field.help_text|safe }}</li>
+      {% endif %}
+      {% for error in field.errors %}
+      <li class="error-desc">{{ error }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endwith %}
+{% endfor %}
+
+<div class="hidden">
+  {% for field in form.hidden_fields %}
+    {{ field }}
+  {% endfor %}
+</div>

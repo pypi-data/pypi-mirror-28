@@ -1,0 +1,43 @@
+{% extends "allauth_ens/base.html" %}
+{% load i18n %}
+{% load account %}
+
+{% block title %}{% trans "Confirm E-mail Address" %}{% endblock %}
+{% block header-title %}{% trans "Confirm E-mail Address" %}{% endblock %}
+
+{% block content %}
+
+{% user_display confirmation.email_address.user as user_display %}
+
+<section>
+  {% if confirmation %}
+
+  {% user_display confirmation.email_address.user as user_display %}
+
+  <p>
+    {% blocktrans with confirmation.email_address.email as email %}
+    Please confirm that <b>{{ email }}</b> is an e-mail address for user
+    {{ user_display }}.
+    {% endblocktrans %}
+  </p>
+
+  <form action="{% url "account_confirm_email" confirmation.key %}" method="post">
+    {% csrf_token %}
+    <input type="submit" value="{% trans "Confirm" %}">
+  </form>
+
+  {% else %}
+
+  {% url "account_email" as email_url %}
+
+  <p>
+    {% blocktrans %}
+    This e-mail confirmation link expired or is invalid.<br>
+    Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.
+    {% endblocktrans %}
+  </p>
+
+  {% endif %}
+</section>
+
+{% endblock %}

@@ -1,0 +1,108 @@
+{% extends "allauth_ens/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "E-mail Addresses" %}{% endblock %}
+{% block header-title %}{% trans "E-mail Addresses" %}{% endblock %}
+
+{% block content %}
+
+{% with user.emailaddress_set.all|dictsort:"email" as emailaddresses %}
+
+<section>
+
+  {% if emailaddresses %}
+
+  <p>
+    {% blocktrans %}
+    The following e-mail addresses are associated with your account:
+    {% endblocktrans %}
+  </p>
+
+  <ul class="emailaddress-list">
+    {% for emailaddress in emailaddresses %}
+    <li class="emailaddress">
+      <ul class="summary">
+        <li class="email">
+          {{ emailaddress.email }}
+        </li>
+
+        {% if emailaddress.verified %}
+        <li class="verified-status verified" title="{% trans "This email address is verified." %}">
+          <i class="fa fa-check"></i>
+        </li>
+        {% else %}
+        <li class="verified-status unverified" title="{% trans "This email address is not verified." %}">
+          <i class="fa fa-question"></i>
+        </li>
+        {% endif %}
+
+        {% if emailaddress.primary %}
+        <li class="primary" title="{% trans "This is your primary email address." %}">
+          <i class="fa fa-star"></i>
+        </li>
+        {% endif %}
+
+      </ul>
+
+      <ul class="actions">
+
+        <li class="remove">
+          <form action="{% url "account_email" %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="email" value="{{ emailaddress.email }}">
+            <button type="submit" class="link" name="action_remove">
+              {% trans "Remove" %}
+            </button>
+          </form>
+        </li>
+
+        {% if not emailaddress.verified %}
+        <li class="verify">
+          <form action="{% url "account_email" %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="email" value="{{ emailaddress.email }}">
+            <button type="submit" class="link" name="action_send">
+              {% trans "Re-send verification" %}
+            </button>
+          </form>
+        </li>
+        {% endif %}
+
+        {% if not emailaddress.primary %}
+        <li class="primary">
+          <form action="{% url "account_email" %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="email" value="{{ emailaddress.email }}">
+            <button type="submit" class="link" name="action_primary">
+              {% trans "Make primary" %}
+            </button>
+          </form>
+        </li>
+        {% endif %}
+      </ul>
+    </li>
+    {% endfor %}
+  </ul>
+
+  {% else %}
+
+  <p>
+    {% blocktrans %}
+    You currently do not have any e-mail address set up. You should really
+    add an e-mail address so you can receive notifications, reset your
+    password, etc.
+    {% endblocktrans %}
+  </p>
+
+  {% endif %}
+
+  <form action="{% url "account_email" %}" method="post" class="form-inline">
+    {% include "allauth_ens/block-form.html" with form=form %}
+    <button type="submit" class="link" name="action_add">{% trans "Add E-mail" %}</button>
+  </form>
+
+</section>
+
+{% endwith %}
+
+{% endblock %}

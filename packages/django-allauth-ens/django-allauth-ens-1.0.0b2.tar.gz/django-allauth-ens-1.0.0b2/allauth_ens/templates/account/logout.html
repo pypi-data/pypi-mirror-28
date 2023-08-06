@@ -1,0 +1,24 @@
+{% extends "allauth_ens/base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Sign Out" %}{% endblock %}
+{% block header-title %}{% trans "Sign Out" %}{% endblock %}
+
+{% block content %}
+
+<section>
+  <p>
+    {% blocktrans %}
+    Are you sure you want to sign out?
+    {% endblocktrans %}
+  </p>
+  <form action="{% url "account_logout" %}" method="post">
+    {% csrf_token %}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}">
+    {% endif %}
+    <input type="submit" value="{% trans "Sign Out" %}">
+  </form>
+</section>
+
+{% endblock %}

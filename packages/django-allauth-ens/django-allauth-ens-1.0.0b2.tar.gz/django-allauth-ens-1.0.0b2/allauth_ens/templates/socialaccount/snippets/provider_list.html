@@ -1,0 +1,26 @@
+{% load socialaccount %}
+
+{% if not socialaccount_providers %}
+  {% get_providers as socialaccount_providers %}
+{% endif %}
+
+{% for provider in socialaccount_providers %}
+{% if provider.id == "openid" %}
+  {% for brand in provider.get_brands %}
+  <li class="method-wrapper">
+    <a title="{{ brand.name }}"
+      href="{% provider_login_url provider.id openid=brand.openid_url process=process %}"
+      >
+      {{ brand.name }}
+    </a>
+  </li>
+  {% endfor %}
+{% endif %}
+<li class="method-wrapper">
+  <a title="{{ provider.name }}"
+    href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_parms %}"
+    >
+    {{ provider.name }}
+  </a>
+</li>
+{% endfor %}
