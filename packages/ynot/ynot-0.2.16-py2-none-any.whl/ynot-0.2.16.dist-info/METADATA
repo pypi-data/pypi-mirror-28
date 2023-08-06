@@ -1,0 +1,978 @@
+Metadata-Version: 2.0
+Name: ynot
+Version: 0.2.16
+Summary: Yaml-based No-xml Transformation
+Home-page: https://github.com/ynot/ynot
+Author: Jakob Stemberger
+Author-email: yaccob@gmx.net
+License: Apache 2.0
+Download-URL: https://github.com/yaccob/ynot/archive/0.2.16.tar.gz
+Description-Content-Type: UNKNOWN
+Keywords: yaml,json,transform,xslt,jsonpath,json-path,dump,convert,validate,schema
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 2.7
+Requires-Dist: PyYaml
+Requires-Dist: jsonpath-ng
+Requires-Dist: jsonschema
+
+y!
+==
+
+Language for processing structured data from sources that can provide
+data in ``yaml`` or ``json`` format.
+
+Why not?
+========
+
+That's the way ***y!*** is pronounced.
+
+And that's the question I asked myself when I had the the idea to
+implement a programming language completely different from the ones I
+know so far:
+
+**y**.aml-based **no**-XML **t**.ransformation
+
+***y!*** is the answer to the question ***"why not?"***
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+So what does ***y!*** focus on?
+
+-  ***y!*** is an incredibly simple programming language for processing
+   structured data (``json``, ``yaml``, ...).
+
+   -  Therfore it is also perfectly suited for processing output from
+      various NOSQL databases! And with little effort even from
+      relational databases.
+
+-  | ***y!*** focuses on quickly and easily producing output.
+   | This output can be:
+
+   -  Text
+   -  Structured data
+
+-  ***y!*** represents the power of ``yaml``
+
+-  ***y!*** represents the power of ``jsonpath``
+
+-  ***y!*** adopts the power of xslt (and more) without adopting its
+   complexity
+
+-  ***y!*** supports self-verification of programs by simply providing
+   samples for input and output.
+
+   -  No need for using test-frameworks, writing unit-tests or any other
+      hassle.
+
+-  ***y!*** supports producing well-formatted documentation without any
+   tools-magic.
+
+   -  It doesn't require any more than a command-line flag.
+
+***y!*** Installation
+=====================
+
+You need python 2.7. Probably any python >= 2.7 will be supported but
+right now it wasn't tested at all for any version but 2.7
+
+| To install ***y!*** simply enter
+| ``pip install --upgrade ynot``
+| on your command line and you should be able to use it.
+
+You can check if the installation succeeded:
+
+::
+
+    $ ynot --version
+    ynot 0.2.2
+
+The output may look different dependent on where your installer
+installed it.
+
+Now try
+
+::
+
+    $ ynot -h
+    Usage: ynot [OPTION] -t trafoFile document...
+
+    Apply transformation to yaml documents
+
+    Options:
+      --version             show program's version number and exit
+      -h, --help            show this help message and exit
+      -t TRAFOFILENAME, --trafo=TRAFOFILENAME
+                            File transformation is read from
+      -l LOGLEVEL, --log-level=LOGLEVEL
+                            Log level. Choices: [u'DEBUG', u'INFO', u'WARN',
+                            u'ERROR']; Defaults to INFO
+      --verify              Verify transformator file TRANSFORMATOR
+      --dry-run             Only validate and verify. No document processing
+      --encoding=ENCODING   endoding of input files. Default: [utf-8]
+
+Again the output may look slightly different on your system.
+
+Quick Start
+===========
+
+Unfortunately tradition forces me to start with a *hello world*
+application:
+
+Hello World
+-----------
+
+``$ cat hello_world.ynot``
+
+.. code:: yaml
+
+    actions:
+    - print: Hello World
+
+::
+
+    $ ynot -t hello_world.ynot
+    Hello World
+
+| Not very interesting, right?
+| Not useful at all, right?
+
+But quite simple, right?
+
+Process input data
+------------------
+
+Now let's do something a bit more useful. Let's process data - that's
+what ***y!*** is made for:
+
+Let's say we have an input that represents multiple text documents with
+sections and chapters:
+
+``$ cat sample_simple.yaml``
+
+.. code:: yaml
+
+    - title: Some document title
+      sections:
+      - title: Some section title
+        chapters:
+        - title: Some chapter title
+          text: |
+            Some long text
+            with lots of paragraphs
+        - title: Some other chapter title
+          text: |
+            Some long text
+            with lots of paragraphs
+      - title: Some other section title
+        chapters:
+          - title: Some chapter title for some other section
+          text: |
+            Some long text
+            with lots of paragraphs
+    - title: Some other document title
+
+| ... just regular ``yaml`` - nothing magic.
+| Now we want to print all the titles and nothing else.
+
+For the given input file we expect the following output:
+
+::
+
+    Some document title
+    Some section title
+    Some chapter title
+    Some other chapter title
+    Some other section title
+    Some chapter title for some other section
+    Some other document title
+
+The program for achieving that looks as simple as this:
+
+``$ cat sample_simple.ynot``
+
+.. code:: yaml
+
+    actions:
+    - for:
+        path: '..title'
+        actions:
+        - print: '@y!{.@}'
+
+You already may have noticed that ***y!*** programs are ``yaml`` files.
+Following a particular schema that we'll see later on.
+
+The ``for`` action introduces an iterator. It iterates over all nodes
+addressed by ``path`` (``jsonpath`` expression) and performs the defined
+``actions`` on them.
+
+One of the possible actions is ``print`` as we already saw in the hello
+world program.
+
+Here we see that we are not limited to printing static text, but we can
+refer to any node of the document by using the special template syntax
+``@y!{whatever}``, where ``whatever`` again is nothing else but a
+``jsonpath`` expression.
+
+``jsonpath`` expressions are evaluated relative to the path of the node
+addressed by parent actions like ``for``, unless they start with ``$`` -
+then they are absolute ``jsonpath`` expressions, starting at the
+document's root.
+
+Now let's try it:
+
+::
+
+    $ ynot -t sample_simple.ynot sample01.yaml
+    Some document title
+    Some section title
+    Some chapter title
+    Some other chapter title
+    Some other section title
+    Some chapter title for some other section
+    Some other document title
+
+Looks good so far.
+
+But while developing and testing the program we don't always want to
+manually check if the output is correct, do we?
+
+With verification
+~~~~~~~~~~~~~~~~~
+
+| ***y!*** has a very simple and straightforward solution.
+| You can add samples to the program:
+
+``$ cat sample_verficication_succeeding.ynot``
+
+.. code:: yaml
+
+    actions:
+    - for:
+        path: '..title'
+        actions:
+        - print: '@y!{.@}'
+
+    samples:
+      sample1:
+
+        input:
+        - title: Some document title
+          sections:
+          - title: Some section title
+            chapters:
+            - title: Some chapter title
+              text: |
+                Some long text
+                with lots of paragraphs
+            - title: Some other chapter title
+              text: |
+                Some long text
+                with lots of paragraphs
+          - title: Some other section title
+            chapters:
+            - title: Some chapter title for some other section
+              text: |
+                Some long text
+                with lots of paragraphs
+        - title: Some other document title
+
+        output: |
+          Some document title
+          Some section title
+          Some chapter title
+          Some other chapter title
+          Some other section title
+          Some chapter title for some other section
+          Some other document title
+
+... and simply verify the program against expected output for given
+input by just invoking it without input files or with the ``--dry-run``
+option:
+
+``$ ynot -t sample_verification_succeeding.ynot --dry-run``
+
+*Oh! No output!*
+
+| That's intended. When everything is right it doesn't output anything.
+| Let's prove that in case of problems they are reported.
+
+With failing verification
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+So we change the program slightly by prepending *``title:``* to the
+actual title:
+
+``$ cat sample_verification_failing.ynot``
+
+.. code:: yaml
+
+    actions:
+    - for:
+        path: '..title'
+        actions:
+        - print: 'title: @y!{.@}'
+
+    samples:
+      sample1:
+
+        input:
+        - title: Some document title
+          sections:
+          - title: Some section title
+            chapters:
+            - title: Some chapter title
+              text: |
+                Some long text
+                with lots of paragraphs
+            - title: Some other chapter title
+              text: |
+                Some long text
+                with lots of paragraphs
+          - title: Some other section title
+            chapters:
+            - title: Some chapter title for some other section
+              text: |
+                Some long text
+                with lots of paragraphs
+        - title: Some other document title
+
+        output: |
+          Some document title
+          Some section title
+          Some chapter title
+          Some other chapter title
+          Some other section title
+          Some chapter title for some other section
+          Some other document title
+
+Now we can see that the actual output doesn't match the expected one:
+
+::
+
+    ynot -t samples/trafos/sample_verification_failing.yaml --dry-run
+    ERROR:ynot.globals:Verifying sample sample1 failed
+
+    Expected:
+    Some document title
+    Some section title
+    Some chapter title
+    Some other chapter title
+    Some other section title
+    Some chapter title for some other section
+    Some other document title
+
+    Got:
+    title: Some document title
+    title: Some section title
+    title: Some chapter title
+    title: Some other chapter title
+    title: Some other section title
+    title: Some chapter title for some other section
+    title: Some other document title
+
+
+    ERROR:ynot.globals:Verifying sample sample1 failed for trafo <undefined>
+
+Nice, isn't it?
+
+You can add as many samples as you want - all of them will be processed
+and verified.
+
+Actions
+=======
+
+``print``
+^^^^^^^^^
+
+We already saw this action in action.
+
+``write``
+^^^^^^^^^
+
+Same as ``print`` but without trailing newline.
+
+``log``
+^^^^^^^
+
+Allows writing logging information (currently on INFO level - probably
+this will be made configurable).
+
+What can be logged is intentionally limited to some attributes of the
+current node:
+
+-  path
+-  pathstack
+-  node
+-  document
+
+You can refer to these context attributes using python's string
+formatting capabilities (see `Python 2.7.14
+documentation <https://docs.python.org/2/library/stdtypes.html#str.format>`__):
+
+.. code:: yaml
+
+    actions:
+    - log: 'current path: {path}, current node value: {node}'
+
+Since log messages are written to stderr the output verification is not
+affected by adding log actions.
+
+``call``
+^^^^^^^^
+
+There is a simple concept or ``routines`` that can be defined on top
+level of the transformator file.
+
+All routines defined there can be called from ``actions`` as well as
+from ``routines``.
+
+Details are explained in the routines section below.
+
+Routines
+========
+
+-  Routines are defined on top level of the ``ynot`` yaml-file.
+-  Any ``routines`` key can be used as a parameter for the ``call``
+   action.
+-  A ``routines`` key maps a list of actions.
+-  ***y!*** will also support parameters for routines, but that's not
+   yet implemented.
+-  These actions can call routines recursively. The following sample
+   demonstrates this.
+
+``$ cat sample_routines.ynot``
+
+.. code:: yaml
+
+    actions:
+    - for:
+        path: '$'
+        actions:
+        - log: 'path: "%(path)s"'
+        - print: Depth First
+        - print: ===========
+        - call: print_list
+
+    routines:
+
+      print_list:
+      - log: "print_list(path='%(path)s')"
+      - for:
+          path: '[*]'
+          actions:
+          - call: print_map
+          - call: print_title
+
+      print_map:
+      - log: "print_map(path='%(path)s')"
+      - for:
+          path: '.*'
+          actions:
+          - call: print_list
+
+      print_title:
+      - log: "print_title(path='%(path)s')"
+      - for:
+          path: '.title'
+          actions:
+          - print: '@y!{.@}'
+
+
+    samples:
+
+      sample1:
+
+        input:
+        - title: Some document title
+          sections:
+          - title: Some section title
+            chapters:
+            - title: Some chapter title
+              text: |
+                Some long text
+                with lots of paragraphs
+            - title: Some other chapter title
+              text: |
+                Some long text
+                with lots of paragraphs
+          - title: Some other section title
+            chapters:
+            - title: Some chapter title for some other section
+              text: |
+                Some long text
+                with lots of paragraphs
+        - title: Some other document title
+
+        output: |
+          Depth First
+          ===========
+          Some chapter title
+          Some other chapter title
+          Some section title
+          Some chapter title for some other section
+          Some other section title
+          Some document title
+          Some other document title
+
+Documenting
+-----------
+
+Generating gfm markdown from ``.ynot`` transformators out of the box by
+a simple command line option.
+
+Just try it with the routines sample:
+
+``ynot routines.ynot --doc > routines.md``
+
+``cat routines.md``
+
+When you view the output in any markdown viewer that's able to present
+gfm markdown you'll see this result:
+
+--------------
+
+.. routinesynot:
+
+routines.ynot
+
+
+.. routines-1:
+
+Routines
+========
+
+-  `Samples <#samples>`__
+
+   -  `Sample document 1 <#sample01>`__
+   -  `Sample document 2 <#sample02>`__
+
+-  `routines.ynot <#transformator>`__
+
+Transformator that shows how routines can be used
+-------------------------------------------------
+
+This transformator lists all titles in *depth-first* mode.
+
+Routines can be invoced recursively - that does the trick.
+
+Samples
+-------
+
+sample01
+
+
+Sample document 1
+~~~~~~~~~~~~~~~~~
+
+This document contains two documents:
+
+-  the first one has two sections,
+
+   -  the first section has two chapters
+   -  the second section has only one chapters
+
+-  the second one has nothing.
+
+Input
+^^^^^
+
+.. code:: yaml
+
+    input:
+    - title: Document 1
+      sections:
+      - title: Section 1.1
+        chapters:
+        - title: Chapter 1.1.1
+        - title: Chatper 1.1.2
+      - title: Section 2
+        chapters:
+        - title: Chapter 1.2.1
+        - title: Chatper 1.2.2
+    - title: Document 2
+      sections:
+      - title: Section 2.1
+        chapters:
+        - title: Chapter 2.1.1
+        - title: Chapter 2.1.2
+      - title: Section 2.2
+        chapters:
+        - title: Chapter 2.2.1
+        - title: Chapter 2.2.2
+
+Output
+^^^^^^
+
+::
+
+    Depth First
+    ===========
+    Chapter 1.1.1
+    Chatper 1.1.2
+    Section 1.1
+    Chapter 1.2.1
+    Chatper 1.2.2
+    Section 2
+    Document 1
+    Chapter 2.1.1
+    Chapter 2.1.2
+    Section 2.1
+    Chapter 2.2.1
+    Chapter 2.2.2
+    Section 2.2
+    Document 2
+
+sample02
+
+
+Sample document 2
+~~~~~~~~~~~~~~~~~
+
+This document contains two documents:
+
+-  the first one has two sections,
+
+   -  the first section has two chapters
+   -  the second section has only one chapters
+
+-  the second one has nothing.
+
+.. input-1:
+
+Input
+^^^^^
+
+.. code:: yaml
+
+    input:
+    - title: Some document title
+      sections:
+      - title: Some section title
+        chapters:
+        - title: Some chapter title
+          text: 'Some long text
+
+            with lots of paragraphs
+
+            '
+        - title: Some other chapter title
+          text: 'Some long text
+
+            with lots of paragraphs
+
+            '
+      - title: Some other section title
+        chapters:
+        - title: Some chapter title for some other section
+          text: 'Some long text
+
+            with lots of paragraphs
+
+            '
+    - title: Some other document title
+
+.. output-1:
+
+Output
+^^^^^^
+
+::
+
+    Depth First
+    ===========
+    Some chapter title
+    Some other chapter title
+    Some section title
+    Some chapter title for some other section
+    Some other section title
+    Some document title
+    Some other document title
+
+Transformator
+-------------
+
+.. code:: yaml
+
+    id: routines.ynot
+    name: Routines
+    title: Transformator that shows how routines can be used
+    description: 'This transformator lists all titles
+
+      in _depth-first_ mode.
+
+
+      Routines can be invoced recursively - that does the trick.
+
+      '
+    actions:
+    - log: 'Root path: {path}"'
+    - for:
+        path: $
+        actions:
+        - print: Depth First
+        - print: ===========
+        - call: print_list
+    routines:
+      print_list:
+      - log: print_list(path='{path}')
+      - for:
+          path: '[*]'
+          actions:
+          - call: print_map
+          - call: print_title
+      print_map:
+      - log: print_map(path='{path}')
+      - for:
+          path: '*'
+          actions:
+          - call: print_list
+      print_title:
+      - log: print_title(path='{path}')
+      - for:
+          path: title
+          actions:
+          - print: null
+    samples:
+      sample1:
+        id: sample01
+        title: Sample document 1
+        description: "This document contains two documents:\n* the first one has two sections,\n  * the first section has two chapters\n\
+          \  * the second section has only one chapters\n* the second one has nothing.\n"
+        input:
+        - title: Document 1
+          sections:
+          - title: Section 1.1
+            chapters:
+            - title: Chapter 1.1.1
+            - title: Chatper 1.1.2
+          - title: Section 2
+            chapters:
+            - title: Chapter 1.2.1
+            - title: Chatper 1.2.2
+        - title: Document 2
+          sections:
+          - title: Section 2.1
+            chapters:
+            - title: Chapter 2.1.1
+            - title: Chapter 2.1.2
+          - title: Section 2.2
+            chapters:
+            - title: Chapter 2.2.1
+            - title: Chapter 2.2.2
+        output: 'Depth First
+
+          ===========
+
+          Chapter 1.1.1
+
+          Chatper 1.1.2
+
+          Section 1.1
+
+          Chapter 1.2.1
+
+          Chatper 1.2.2
+
+          Section 2
+
+          Document 1
+
+          Chapter 2.1.1
+
+          Chapter 2.1.2
+
+          Section 2.1
+
+          Chapter 2.2.1
+
+          Chapter 2.2.2
+
+          Section 2.2
+
+          Document 2
+
+          '
+      sample2:
+        id: sample02
+        title: Sample document 2
+        description: "This document contains two documents:\n* the first one has two sections,\n  * the first section has two chapters\n\
+          \  * the second section has only one chapters\n* the second one has nothing.\n"
+        input:
+        - title: Some document title
+          sections:
+          - title: Some section title
+            chapters:
+            - title: Some chapter title
+              text: 'Some long text
+
+                with lots of paragraphs
+
+                '
+            - title: Some other chapter title
+              text: 'Some long text
+
+                with lots of paragraphs
+
+                '
+          - title: Some other section title
+            chapters:
+            - title: Some chapter title for some other section
+              text: 'Some long text
+
+                with lots of paragraphs
+
+                '
+        - title: Some other document title
+        output: 'Depth First
+
+          ===========
+
+          Some chapter title
+
+          Some other chapter title
+
+          Some section title
+
+          Some chapter title for some other section
+
+          Some other section title
+
+          Some document title
+
+          Some other document title
+
+          '
+
+--------------
+
+Currently under implementation
+==============================
+
+Variables support
+-----------------
+
+Variables can be set during execution. They are saved in the current
+node's context.
+
+When accessing a variable, variables from all parent nodes' contexts are
+visible as well.
+
+Variables can be accessed programmatically or as part of
+value-templates.
+
+-  Value template to be substituted by a variable value: ``${...}``
+-  Path-match template to be substituted by a single match result:
+   ``@y!{...}``
+-  Path-multimatch template to be substituted by the
+   string-representation of multiple matches: ``@y!*{...}``
+
+.. code:: yaml
+
+    actions:
+    - set:
+        key: myMagicNumber
+        value: 42
+    - print: '${myMagicNumber}'
+
+Call parameter support
+----------------------
+
+.. code:: yaml
+
+    actions:
+    - call:
+        routine: some_routine
+        parameters:
+          paramX: some value
+          paramY: some value
+
+Not yet implemented
+===================
+
+... nor verified ...
+
+Sorting
+-------
+
+Maybe sufficiently supported out of the box by jsonpath_ng extensions.
+To be verified ...
+
+Alternatively something like this might be implemented
+
+.. code:: yaml
+
+    actions:
+    - for:
+        path: '$.some.path'
+        sorting:
+          order: descending
+          criteria:
+          - '.some_field'
+          - '.some_other_field'
+        actions:
+        - print: whatever
+
+Grouping
+--------
+
+.. code:: yaml
+
+    actions:
+    - for:
+        path: '$.some.path'
+        grouping:
+          criteria:
+          - '.some_field'
+          - '.some_other_field'
+          having:
+          - 'whatever'
+          - 'whatever'
+        actions:
+        - print: whatever
+
+Conditional processing
+----------------------
+
+.. code:: yaml
+
+    actions:
+    - if:
+      - and:
+        - value1: some value
+          comparator: equals
+          value2: some other value
+        - value1: some value
+          comparator: equals
+          value2: some other value
+        - or:
+          - value1: some value
+            comparator: equals
+            value2: some other value
+      then:
+      - print: matched if branch
+      else:
+      - print: matched else branch
+
+Transormator/Document processing order
+--------------------------------------
+
+... for multi-document transformator yamls
+
+Allow command line switch like ``--processing-order=templates-first`` or
+``--processing-order=documents-first``
+
+.. command-line-option-for-defining-template-patterns:
+
+Command line option for defining template patterns.
+---------------------------------------------------
+
+Something like ...
+
+``template-pattern='{separator: "@", idpattern: "[{}+]"}'``
+
+Connecting to data sources
+--------------------------
+
+like *Elasticsearch*, *Redis*, *Cassandra*, *MySQL*, *Kafka*, ... ...
+...
+
+

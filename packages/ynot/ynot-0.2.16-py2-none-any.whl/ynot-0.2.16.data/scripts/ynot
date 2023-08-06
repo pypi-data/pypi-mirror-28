@@ -1,0 +1,107 @@
+#!python
+from __future__ import print_function, unicode_literals
+
+import sys
+import logging
+import optparse
+import os
+import fileinput
+import yaml
+import collections
+import jsonschema
+import pkg_resources
+
+import ynot
+from ynot import __version__, logger
+import ynot.constants
+
+trafoschema = pkg_resources.resource_string(ynot.__name__, 'data/trafoschema.yaml')
+doctrafo = ynot.Trafo.from_yaml(
+    pkg_resources.resource_string(ynot.__name__, 'data/documentation_trafo.yaml'),
+    trafoschema,
+    verify=False)
+
+def get_opts_and_args(argv):
+    loglevelchoices = ['DEBUG', 'INFO', 'WARN', 'ERROR']
+    optparser = optparse.OptionParser(
+        prog = argv[0],
+        usage='Usage: %prog [OPTION] -t trafoFile document...',
+        description = 'Apply transformation to yaml documents',
+        version='%s %s' % ("%prog", __version__)
+    )
+    optparser.add_option('-t', '--trafo', dest='trafofilename', help="File transformation is read from")
+    optparser.add_option('--doc', dest='doc',
+        help="Output documentation in gfm markdown format and exit. Format: {type: file, name: myTransformator}")
+    optparser.add_option('--dont-verify', action='store_true', help="Don't execute samples specified in transformator file")
+    optparser.add_option('-l', '--log-level', type='choice',
+        choices=loglevelchoices, dest='loglevel', default=loglevelchoices[1],
+        help="Log level. Choices: %s; Defaults to %s" % (loglevelchoices, loglevelchoices[1])
+    )
+    optparser.add_option('--encoding', default='utf-8', help='endoding of input files. Default: [%default]')
+    return optparser.parse_args(argv[1:])
+
+def yaml_from_filename(filename):
+    data = None
+    try:
+        with open(filename) as infile:
+            data = yaml.load(infile)
+    except Exception, e:
+        logger.warn("Could not open %s" % (filename))
+    return data
+
+def get_sample(sampledir):
+    sample = collections.OrderedDict()
+    sampledata = {k: yaml_from_filename("%s/%s.yaml" % (sampledir, k)) for k in ["input", "metadata"]}
+    sample.update(sampledata["metadata"])
+    sample["input"] = sampledata["input"]
+    with open("%s/%s.yaml" % (sampledir, "output")) as output:
+        sample["output"] = output.read()
+    return sample
+
+def update_samples(docparams, trafo):
+    basedir = docparams.get("dir")
+    sampledirs = os.listdir("%s/samples" % basedir)
+    trafo["samples"] = collections.OrderedDict()
+    for sampledir in sampledirs:
+        trafo["samples"][sampledir] = get_sample("%s/samples/%s" % (basedir, sampledir))
+
+def document_trafo(trafodata, verify):
+    try:
+        ynot.Trafo.from_dict(trafodata, trafoschema, verify=verify)
+    except ynot.VerificationException, e:
+        logger.error(e)
+        sys.exit(1)
+    # ynot.Transformation(ynot.Node.from_yaml(trafodata), doctrafo).transform()
+
+def document_trafofile(filename, encoding, verify):
+    trafoyaml = "".join(fileinput.input(filename, openhook=fileinput.hook_encoded(encoding)))
+    document_trafo(yaml.load(trafoyaml), verify)
+
+def main(argv):
+    opts, args = get_opts_and_args(argv)
+    logger.setLevel(eval('logging.%s' % opts.loglevel))
+    logger.debug("main(%s)" % args)
+    if opts.doc:
+        # {type: file, name: mytrafo.yaml} | {type: dir, dir: dirname, name: mytrafo}
+        params = yaml.load(opts.doc)
+        jsonschema.validate(params, ynot.constants.docparamschema)
+        if params.get("type") == 'file':
+            document_trafofile(params.get("name"), opts.encoding, not opts.dont_verify)
+        elif params.get("type") == 'dir':
+            trafo = collections.OrderedDict()
+            trafo.update(yaml_from_filename("%s/ynot/%s.yaml" % (params.get("dir"), params.get("name"))))
+            update_samples(params, trafo)
+            document_trafo(trafo, not opts.dont_verify)
+        else:
+            raise Exception("Unexpected doc params type %s" % (params.get("type")))
+    else:
+        try:
+            trafo = ynot.Trafo.from_yaml("".join(fileinput.input(opts.trafofilename, openhook=fileinput.hook_encoded(opts.encoding))), trafoschema, verify=not opts.dont_verify)
+        except ynot.VerificationException, e:
+            logger.error(e)
+            sys.exit(1)
+        if len(args) > 0:
+            ynot.Transformation(ynot.Node.from_yaml("".join(fileinput.input(args, openhook=fileinput.hook_encoded(opts.encoding)))), trafo).transform()
+
+if __name__ == "__main__":
+    main(sys.argv)
