@@ -1,0 +1,153 @@
+Metadata-Version: 1.2
+Name: system-query
+Version: 0.1.0
+Summary: comprehensive and concise system information querying tool
+Home-page: https://mbdevpl.github.io/
+Author: Mateusz Bysiek
+Author-email: mb@mbdev.pl
+License: Apache License 2.0
+Download-URL: https://github.com/mbdevpl/system-query
+Description-Content-Type: UNKNOWN
+Description: .. role:: bash(code)
+            :language: bash
+        
+        .. role:: python(code)
+            :language: python
+        
+        
+        system_query
+        ============
+        
+        .. image:: https://img.shields.io/pypi/v/system-query.svg
+            :target: https://pypi.python.org/pypi/system-query
+            :alt: package version from PyPI
+        
+        .. image:: https://travis-ci.org/mbdevpl/system-query.svg?branch=master
+            :target: https://travis-ci.org/mbdevpl/system-query
+            :alt: build status from Travis CI
+        
+        .. image:: https://ci.appveyor.com/api/projects/status/github/mbdevpl/system-query?branch=master&svg=true
+            :target: https://ci.appveyor.com/project/mbdevpl/system-query
+            :alt: build status from AppVeyor
+        
+        .. image:: https://api.codacy.com/project/badge/Grade/b44e2fc42fcd4301bcd0fb11938a89da
+            :target: https://www.codacy.com/app/mbdevpl/system-query
+            :alt: grade from Codacy
+        
+        .. image:: https://codecov.io/gh/mbdevpl/system-query/branch/master/graph/badge.svg
+            :target: https://codecov.io/gh/mbdevpl/system-query
+            :alt: test coverage from Codecov
+        
+        .. image:: https://img.shields.io/github/license/mbdevpl/system-query.svg
+            :target: https://github.com/mbdevpl/system-query/blob/master/NOTICE
+            :alt: license
+        
+        Comprehensive and concise system information tool.
+        
+        It is also attempting to be fail-safe.
+        
+        Usable as library and as a command-line tool.
+        
+        
+        as library
+        ----------
+        
+        .. code:: python
+        
+            In [1]: from system_query import query_cpu
+                    query_cpu()
+        
+            Out[1]: {'brand': 'Intel(R) Core(TM) i7-3770K CPU @ 3.50GHz',
+                     'clock': 1771.0370000000003,
+                     'clock_max': 3900.0,
+                     'clock_min': 1600.0,
+                     'logical_cores': 8,
+                     'physical_cores': 4}
+        
+        More examples in `<examples.ipynb>`_.
+        
+        
+        as command-line tool
+        --------------------
+        
+        For example:
+        
+        .. code:: bash
+        
+            $ python3 -m system_query
+            {'cpu': {'brand': 'Intel(R) Core(TM) i7-3770K CPU @ 3.50GHz',
+                     'clock': 1725.031125,
+                     'clock_max': 3900.0,
+                     'clock_min': 1600.0,
+                     'logical_cores': 8,
+                     'physical_cores': 4},
+             'gpus': [],
+             'host': 'mbLab',
+             'os': 'Linux-4.4.0-109-generic-x86_64-with-debian-stretch-sid',
+             'ram': {'banks': [], 'total': 33701269504},
+             'swap': 0}
+        
+        Usage information:
+        
+        .. code::
+        
+            $ python3 -m system_query -h
+            usage: system_query [-h] [-s {all,cpu,gpu,ram}] [-f {raw,json}] [-t TARGET]
+                                [--version]
+        
+            Comprehensive and concise system information tool. Query a given hardware
+            and/or softawre scope of your system and get results in human- and machine-
+            readable formats.
+        
+            optional arguments:
+              -h, --help            show this help message and exit
+              -s {all,cpu,gpu,ram}, --scope {all,cpu,gpu,ram}
+                                    Scope of the query (default: all)
+              -f {raw,json}, --format {raw,json}
+                                    Format of the results of the query. (default: raw)
+              -t TARGET, --target TARGET
+                                    File path where to write the results of the query.
+                                    Special values: "stdout" and "stderr" to write to
+                                    stdout and stderr, respectively. (default: stdout)
+              --version             show program's version number and exit
+        
+            Copyright 2017-2018 by the contributors, Apache License 2.0,
+            https://github.com/mbdevpl/system-query
+        
+        
+        requirements
+        ------------
+        
+        As defined in `<requirements.txt>`_. Recommended (but optional) packages are listed in
+        `<optional_requirements.txt>`_.
+        
+        Additionally, building and testing requires packages listed in `<test_requirements.txt>`_.
+        
+        
+        contributors
+        ------------
+        
+        Aleksandr Drozd
+        
+        Mateusz Bysiek
+        
+        For licensing information, please see `<LICENSE>`_ and `<NOTICE>`_.
+        
+Keywords: system,software,hardware
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Natural Language :: English
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: Microsoft :: Windows
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Education
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Utilities
+Requires-Python: >=3.5
