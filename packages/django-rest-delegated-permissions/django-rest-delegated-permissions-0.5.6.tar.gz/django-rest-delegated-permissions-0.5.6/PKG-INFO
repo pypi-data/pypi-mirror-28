@@ -1,0 +1,40 @@
+Metadata-Version: 1.0
+Name: django-rest-delegated-permissions
+Version: 0.5.6
+Summary: Taking (delegating) REST permissions from a model instance to a model pointed by ForeignKey/m2m
+Home-page: https://github.com/mesemus/django-rest-delegated-permissions
+Author: Mirek Simek
+Author-email: miroslav.simek@gmail.com
+License: MIT
+Description-Content-Type: UNKNOWN
+Description: 
+        Delegate django rest framework object permissions to an object pointed by foreign key/m2m
+        
+        Sample: set up permissions so that anyone having django/django guardian permissions on Invoice will have the same set of permissions on its address:
+        
+        .. code-block:: python
+        
+            class Address(models.Model):
+                ... address fields
+        
+            class Invoice(models.Model):
+                address = models.OneToOneField(Address, related_name='invoice')
+                ... invoice fields
+        
+            perms = RestPermissions()
+        
+            @perms.apply(permissions=DelegatedPermissions(perms, "invoice")
+            class AddressViewSet(ModelViewSet):
+                queryset = Address.objects.all()
+                serializer = AddressSerializer
+                ...
+        
+            @perms.apply()            # implicitely adds django model permissions and guardian permissions
+            class InvoiceViewSet(ModelViewSet):
+                queryset = Invoice.objects.all()
+                serializer = InvoiceSerializer
+                ...
+                
+        See docs and API at `github <https://github.com/mesemus/django-rest-delegated-permissions>`_.
+        
+Platform: UNKNOWN
