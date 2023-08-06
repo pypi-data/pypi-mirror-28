@@ -1,0 +1,53 @@
+Metadata-Version: 2.0
+Name: slack-releaser
+Version: 0.0.3
+Summary: A zest.releaser plugin for posting changelogs to Slack
+Home-page: https://github.com/mypebble/slack-releaser
+Author: Pebble
+Author-email: sysadmin@mypebble.co.uk
+License: MIT
+Platform: UNKNOWN
+Requires-Dist: zest.releaser
+Requires-Dist: requests
+Requires-Dist: six
+
+
+Slack Releaser Utility
+======================
+
+A simple utility that posts release changelogs to a configured Slack Webhook.
+
+Usage
+-----
+
+Install ``slack-releaser`` from PyPI:
+
+.. code-block::
+
+   pip install slack-releaser
+
+Add the following to your ``setup.cfg``\ :
+
+.. code-block:: ini
+
+   [zest.releaser]
+   prereleaser.after =
+     slack_releaser.releaser.post_to_slack
+
+   [slack.releaser]
+
+   webhook = https://example.slack.com/hook/abc123
+   repository = https://github.com/example/repository
+
+Replace ``webhook`` with the webhook URL that Slack gives you when you setup a
+webhook.
+
+See the `Slack Documentation <https://api.slack.com/custom-integrations/incoming-webhooks>`_
+for help in setting up webhooks.
+
+License
+-------
+
+`MIT License <./LICENSE>`_
+
+
