@@ -1,0 +1,132 @@
+Metadata-Version: 1.1
+Name: cluspro_api
+Version: 1.0.0
+Summary: Library for submitting and downloading job data from ClusPro.
+Home-page: https://bitbucket.org/bu-structure/cluspro_api
+Author: Katie Porter
+Author-email: kaporter@bu.edu
+License: MIT
+Description: cluspro_api
+        ===========
+        
+        Python library and associated scripts for submiting jobs and
+        downloading results from ClusPro.
+        
+        Installation
+        ------------
+        
+        Ensure you have ``pip``, then run:
+        
+        .. code-block:: bash
+        
+            pip install --user cluspro_api
+        
+        or
+        
+        .. code-block:: bash
+        
+           [sudo] pip install cluspro_api
+        
+        ``sudo`` is only needed if you are installing it globally. We recommend use of
+        Anaconda (https://www.continuum.io).
+        
+        Usage
+        -----
+        
+        Submitting Jobs
+        ~~~~~~~~~~~~~~~
+        
+        To submit a docking job to ClusPro:
+        
+        .. code-block:: bash
+        
+            cluspro_submit --receptor <path to receptor pdb file> --ligand <path to ligand pdb file>
+        
+        This will prompt you for your username and API secret, which can be found on the API tab
+        after logging into ClusPro. These will be stored in a ``.clusprorc`` file in your home
+        directory.
+        
+        Options: 
+        
+        .. code-block:: bash
+        
+            $ cluspro_submit --help
+        
+            Usage: cluspro_submit [OPTIONS]
+        
+             Jobs are expected to be in one of three "modes": docking with a provided
+             ligand PDB ID or PDB file, docking in multimer mode (using --multimer), or
+             peptide docking (using --pepmot and --pepseq). If using multimer mode add
+             --multimer and specify dimer or trimer (ex. --multimer dimer or --multimer
+             trimer). If using peptide mode supply both the peptide motif and sequence
+             (ex. --pepmot KXRRL --pepseq KGRRL). Mixing options from these three modes
+             is not supported and will result in an error message.
+        
+            Options:
+              --username TEXT
+              --secret TEXT
+              --coeffs PATH               Coefficients file [Advanced]
+              --rotations PATH            Rotations file [Advanced]
+              -j, --jobname TEXT          Will default to job number
+              -a, --antibodymode          Use Antibody mode [Advanced]
+              -o, --othersmode            Use Others mode [Advanced]
+              --receptor PATH             Upload a PDB file
+              --ligand PATH               Upload a PDB file
+              --recpdb TEXT               4-letter PDB code
+              --ligpdb TEXT               4-letter PDB code
+              --pepmot TEXT               Peptide motif [Advanced]
+              --pepseq TEXT               Peptide sequence [Advanced]
+              --pepexclusion TEXT         List of PDB ids to exclude from motif
+                                          search [Advanced]
+              --rec-chains TEXT           Chains to use, for example "A B" (in double
+                                          quotes)
+              --lig-chains TEXT           Chains to use, for example "A B" (in double
+                                          quotes)
+              --rec-mask PATH             Receptor mask [Advanced]
+              --lig-mask PATH             Ligand mask [Advanced]
+              --rec-attraction PATH       Receptor attraction [Advanced]
+              --lig-attraction PATH       Ligand attraction [Advanced]
+              --rec-dssp                  Remove unstructured terminal residues in
+                                          receptor [Advanced]
+              --lig-dssp                  Remove unstructured terminal residues in ligand [Advanced]
+              --restraints PATH           Upload restraints file [Advanced]
+              --saxs-file PATH            Upload SAXS profile [Advanced]
+              --masknoncdr                Automatically mask non-CDR region, Antibody mode only [Advanced]
+              --multimers [dimer|trimer]  Multimer mode [Advanced]
+              --help                      Show this message and exit.
+        
+        If you write a script which submits the jobs in a loop, please submit no more than 50 jobs
+        per batch (and then wait until these jobs finish before submitting more). Please pause for
+        5-10 seconds between job submissions within each batch. 
+        
+        Running ``cluspro_submit`` will print out the cluspro job id, which you should record and use
+        later to download your job results. 
+        
+        Downloading Results
+        ~~~~~~~~~~~~~~~~~~~
+        
+        To download results from a finished job:
+        
+        .. code-block:: bash
+        
+            cluspro_download <jobid>
+        
+        You can download multiple jobs at once:
+        
+        .. code-block:: bash
+        
+            cluspro_download <jobid1> <jobid2> <jobid3> ...
+        
+        The results will be saved in the directory from which you ran the command.
+        
+Keywords: cluspro protein
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: MacOS
+Classifier: Operating System :: POSIX
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
