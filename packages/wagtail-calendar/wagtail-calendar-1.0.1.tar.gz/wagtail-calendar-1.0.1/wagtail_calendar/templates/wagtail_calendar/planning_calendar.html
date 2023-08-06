@@ -1,0 +1,55 @@
+{% extends "wagtailadmin/base.html" %}
+{% load i18n static wagtail_calendar_utils %}
+
+{% block extra_css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "wagtail_calendar/fullcalendar/fullcalendar.min.css" %}" />
+  <link rel="stylesheet" href="{% static "wagtail_calendar/css/planning.css" %}" />
+{% endblock %}
+
+{% block titletag %}{% trans 'Calendar' %}{% endblock %}
+
+{% block content %}
+  {% trans "Planning calendar" as title_trans %}
+  {% include "wagtailadmin/shared/header.html" with title=title_trans %}
+
+  <div id="calendar-content">
+    <div id="side-events" class="collapsible">
+      <h2>{% trans "Unplanned pages" %}</h2>
+
+      <div id="side-events-dropzone">
+      {% block unplanned_events %}
+        {% for event in unplanned_events %}
+          <div class="side-events fc-event{% if event.editable %} side-event-draggable{% endif %}" id="side-event-{{ event.id }}" data-event="{{ event|json }}">{{ event.title }}</div>
+        {% endfor %}
+      {% endblock %}
+      </div>
+    </div>
+
+    {% get_current_language as LANGUAGE_CODE %}
+    {% block planning_calendar %}
+      <div id="planning-calendar"
+           data-locale="{{ LANGUAGE_CODE }}"
+           data-update-url="{% url "wagtail_calendar:planning_calendar_plan_page" pk=0 %}"
+           data-events-url="{% url 'wagtail_calendar:planning_calendar_events' %}"
+           data-csrf="{{ csrf_token }}"></div>
+    {% endblock %}
+  </div>
+
+  {% block event_popup %}
+  <div id="event-popup" style="display: none">
+    <a id="event-popup-close" href="#" class="icon icon-cross"></a>
+    <div id="event-title"></div>
+    <div id="event-author"></div>
+    <div id="event-description"></div>
+  </div>
+  {% endblock %}
+{% endblock %}
+
+{% block extra_js %}
+  {{ block.super }}
+  <script src="{% static "wagtail_calendar/moment/moment.min.js" %}"></script>
+  <script src="{% static "wagtail_calendar/fullcalendar/fullcalendar.min.js" %}"></script>
+  <script src="{% static "wagtail_calendar/fullcalendar/locale-all.js" %}"></script>
+  <script src="{% static "wagtail_calendar/js/planning.js" %}"></script>
+{% endblock %}
