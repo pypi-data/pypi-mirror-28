@@ -1,0 +1,94 @@
+{% macro instructions_tab_link(package, platform, is_first) %}
+    {% if is_first %}
+        <li class="active"><a href="#{{ package.name }}-{{platform}}" data-toggle="tab"><img src="/static/img/logo-{{ platform }}.png" class="tab-icon">{{ platform_name(platform) }}</a></li>
+    {% else %}
+        <li><a href="#{{ package.name }}-{{platform}}" data-toggle="tab"><img src="/static/img/logo-{{ platform }}.png" class="tab-icon">{{ platform_name(platform) }}</a></li>
+    {% endif %}
+{% endmacro %}
+
+{% macro instructions_tab_content(package, platform, value, host_url, setup_url, is_first) %}
+    {% if is_first %}
+        <div class="tab-pane fade in active" id="{{ package.name }}-{{platform}}">
+    {% else %}
+        <div class="tab-pane fade" id="{{ package.name }}-{{platform}}">
+    {% endif %}
+    <h3>Instructions for {{ platform_name(platform) }}</h3>
+    {% if platform in ("redhat", "oracle", "centos", "ubuntu", "suse") and package.requires_setup %}
+        <h4>Setup (first time only)</h4>
+        <div class="copylink">
+            <input class="cmd" value="curl -s {{ setup_url }} | sudo sh -" readonly="readonly">
+            <i class="glyphicon glyphicon-copy" data-toggle="tooltip" data-placement="bottom" title="Copy to Clipboard"></i>
+        </div>
+    {% endif %}
+    {% if platform == "aix" %}
+        <h4>Setup (first time only)</h4><a href="http://www.perzl.org/aix/index.php?n=main.curl" target="_blank">Download and install curl</a>
+    {% endif %}
+    {% if value.install %}
+        <h4>Install</h4>
+        {{ instructions_content_part(platform, value.install, value.installable, host_url) }}
+    {% endif %}
+    {% if value.upgrade %}
+        <h4>Upgrade</h4>
+        {{ instructions_content_part(platform, value.upgrade, value.installable, host_url) }}
+    {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro instructions_content_part(platform, instructions, installable, host_url) %}
+    {% if platform == 'vmware' %}
+        {% if instructions.notes %}
+            {% for note in instructions.notes %}
+                {{ note }}<br>
+            {% endfor %}
+        {% else %}
+            <a href="{{ instructions.download_link }}">Download</a> the OVF and deploy it via VMware vSphere.
+        {% endif %}
+    {% elif platform == 'python-docs' %}
+            <a href="{{ instructions.download_link }}">Download</a> and extact the documentation archive.
+    {% else %}
+        {% if instructions.command %}
+            <div class="copylink">
+                <input class="cmd" value="{{ instructions.command.replace("//", host_url) }}" readonly="readonly">
+                <i class="glyphicon glyphicon-copy" data-toggle="tooltip" data-placement="bottom" title="Copy to Clipboard"></i>
+            </div>
+        {% elif instructions.download_link %}
+            {% if installable %}
+                <a href="{{ instructions.download_link }}">Download</a> the installer and run it.
+            {% else %}
+                <a href="{{ instructions.download_link }}">Download</a> the executable and run it.
+            {% endif %}
+        {% else %}
+            {{ instructions }}
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+
+{% macro platform_name(platform) %}
+    {% if platform == "aix" %}
+        AIX
+    {% elif platform == "redhat" %}
+        RedHat
+    {% elif platform == "centos" %}
+        CentOS
+    {% elif platform == "oracle" %}
+        Oracle
+    {% elif platform == "windows-x86" %}
+         Windows (x86)
+    {% elif platform == "windows-x64" %}
+         Windows (x64)
+    {% elif platform == "vmware" %}
+        VMware
+    {% elif platform == "solaris" %}
+        Solaris
+    {% elif platform == "suse" %}
+        SUSE
+    {% elif platform == "ubuntu" %}
+        Ubuntu
+    {% elif platform == "python" %}
+        Python
+    {% elif platform == "python-docs" %}
+         Python Docs
+    {% else %}
+        {{ platform }}
+    {% endif %}
+{% endmacro %}
