@@ -1,0 +1,16 @@
+
+import ttk
+
+
+# TODO: Rethink this. A MixIn doesn't really make sense.
+#       Maybe a separate class
+
+class StyleMixIn(object):
+
+    def __init__(self,
+                 *args,
+                 **kwargs):
+
+        super(StyleMixIn, self).__init__()
+
+        self.style = ttk.Style()
