@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+
+
+
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    
+    <title>1. The GeologicalToolbox API reference &mdash; Geological Toolbox 0.1.1.b1 documentation</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Play:400,700|Raleway:400,400i,700,700i&amp;subset=latin-ext" media="screen and (min-width:481px)" type="text/css" />
+
+<link rel="stylesheet" href="_static/css/basicstrap-base.css" type="text/css" />
+<link rel="stylesheet" id="current-theme" href="_static/css/bootstrap3/bootswatch-cosmo.css" type="text/css" />
+<link rel="stylesheet" id="current-adjust-theme" href="_static/css/adjust_theme/bootswatch-cosmo.css" type="text/css" />
+
+<link rel="stylesheet" href="_static/css/font-awesome.min.css">
+
+<style type="text/css">
+  body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+  }
+</style>
+
+<link rel="stylesheet" href="_static/css/basicstrap.css" type="text/css" />
+<link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+<link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    
+<script type="text/javascript">
+  var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:    './',
+            VERSION:     '0.1.1.b1',
+            COLLAPSE_INDEX: false,
+            FILE_SUFFIX: '.html',
+            HAS_SOURCE:  true
+  };
+</script>
+    <script type="text/javascript" src="_static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/bootstrap3.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="_static/js/basicstrap.js"></script>
+<script type="text/javascript">
+</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Geological Toolbox 0.1.1.b1 documentation" href="index.html" />
+    <link rel="next" title="2. The GeologicalToolbox API reference" href="tests.html" />
+    <link rel="prev" title="Welcome to the documentation of the Geological Toolbox!" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div id="navbar-top" class="navbar navbar-fixed-top navbar-default" role="navigation" aria-label="top navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Geological Toolbox 0.1.1.b1 documentation</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown visible-xs">
+                <a role="button" id="localToc" data-toggle="dropdown" data-target="#" href="#">Table Of Contents <b class="caret"></b></a>
+                <ul class="dropdown-menu localtoc sp-localtoc" role="menu" aria-labelledby="localToc">
+                <ul>
+<li><a class="reference internal" href="#">1. The GeologicalToolbox API reference</a><ul>
+<li><a class="reference internal" href="#module-GeologicalToolbox">1.1. Members of the ‘GeologicalToolbox’ package</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.AbstractLog">1.2. Members of the ‘GeologicalToolbox.AbstractLog’ module</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.Constants">1.3. Constants defined in the ‘GeologicalToolbox’ package</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.DBHandler">1.4. Members of the ‘GeologicalToolbox.DBHandler’ module</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.Exceptions">1.5. Exceptions defined for the API</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.Geometries">1.6. Members of the ‘GeologicalToolbox.Geometries’ module</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.GeoObject">1.7. Members of the ‘GeologicalToolbox.GeoObject’ module</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.Properties">1.8. Members of the ‘GeologicalToolbox.Properties’ module</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.Requests">1.9. Members of the ‘GeologicalToolbox.Requests’ module</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.Stratigraphy">1.10. Members of the ‘GeologicalToolbox.Stratigraphy’ module</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.WellLogs">1.11. Members of the ‘GeologicalToolbox.WellLogs’ module</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.Wells">1.12. Members of the ‘GeologicalToolbox.Wells’ module</a></li>
+</ul>
+</li>
+</ul>
+
+                </ul>
+              </li>
+
+            
+              <li><a href="index.html" title="Welcome to the documentation of the Geological Toolbox!" accesskey="P">previous </a></li>
+              <li><a href="tests.html" title="2. The GeologicalToolbox API reference" accesskey="N">next </a></li>
+              <li><a href="py-modindex.html" title="Python Module Index" >modules </a></li>
+              <li><a href="genindex.html" title="General Index" accesskey="I">index </a></li>
+            
+            <li class="visible-xs"><a href="_sources/api.rst.txt" rel="nofollow">Show Source</a></li>
+
+            <li class="visible-xs">
+                <form class="search form-search form-inline navbar-form navbar-right sp-searchbox" action="search.html" method="get">
+                  <div class="input-append input-group">
+                    <input type="text" class="search-query form-control" name="q" placeholder="Search...">
+                    <span class="input-group-btn">
+                    <input type="submit" class="btn" value="Go" />
+                    </span>
+                  </div>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </li>
+
+            
+
+          </ul>
+
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- container -->
+    <div class="container">
+
+      <!-- row -->
+      <div class="row">
+         
+<div class="col-md-3 hidden-xs" id="sidebar-wrapper">
+  <div class="sidebar hidden-xs" role="navigation" aria-label="main navigation">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to the documentation of the Geological Toolbox!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tests.html"
+                        title="next chapter">2. The GeologicalToolbox API reference</a></p>
+<div id="searchbox" role="search">
+  <h3>Quick search</h3>
+  <form class="search form-inline" action="search.html" method="get">
+      <div class="input-append input-group">
+        <input type="text" class="search-query form-control" name="q" placeholder="Search...">
+        <span class="input-group-btn">
+        <input type="submit" class="btn" value="Go" />
+        </span>
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+  </div>
+</div> 
+        
+
+        <div class="col-md-9" id="content-wrapper">
+          <div class="document" role="main">
+            <div class="documentwrapper">
+              <div class="bodywrapper">
+                <div class="body">
+                  
+  <div class="section" id="the-geologicaltoolbox-api-reference">
+<h1>1. The GeologicalToolbox API reference<a class="headerlink" href="#the-geologicaltoolbox-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-GeologicalToolbox">
+<span id="members-of-the-geologicaltoolbox-package"></span><h2>1.1. Members of the ‘GeologicalToolbox’ package<a class="headerlink" href="#module-GeologicalToolbox" title="Permalink to this headline">¶</a></h2>
+<p>Geological Toolbox Module</p>
+<p>This Module is the base for processing and storing of geological data.</p>
+</div>
+<div class="section" id="module-GeologicalToolbox.AbstractLog">
+<span id="members-of-the-geologicaltoolbox-abstractlog-module"></span><h2>1.2. Members of the ‘GeologicalToolbox.AbstractLog’ module<a class="headerlink" href="#module-GeologicalToolbox.AbstractLog" title="Permalink to this headline">¶</a></h2>
+<p>This module provides an abstract base class for storing logging or property information.</p>
+<div class="admonition-todo admonition" id="index-0">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>reformat docstrings, espacially of setter and getter functions</li>
+<li>check exception types</li>
+</ul>
+</div>
+<dl class="class">
+<dt id="GeologicalToolbox.AbstractLog.AbstractLogClass">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.AbstractLog.</code><code class="descname">AbstractLogClass</code><span class="sig-paren">(</span><em>property_name</em>, <em>property_unit</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.AbstractLog.AbstractLogClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is the base for storing logging information or properties. This class should be treated as abstract, no
+object should be created directly!</p>
+<dl class="attribute">
+<dt id="GeologicalToolbox.AbstractLog.AbstractLogClass.property_name">
+<code class="descname">property_name</code><a class="headerlink" href="#GeologicalToolbox.AbstractLog.AbstractLogClass.property_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the name of the property</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.AbstractLog.AbstractLogClass.property_unit">
+<code class="descname">property_unit</code><a class="headerlink" href="#GeologicalToolbox.AbstractLog.AbstractLogClass.property_unit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the unit of the property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the unit of the property</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.Constants">
+<span id="constants-defined-in-the-geologicaltoolbox-package"></span><h2>1.3. Constants defined in the ‘GeologicalToolbox’ package<a class="headerlink" href="#module-GeologicalToolbox.Constants" title="Permalink to this headline">¶</a></h2>
+<p>This module defines constants which are used in the API.</p>
+<dl class="data">
+<dt id="GeologicalToolbox.Constants.float_precision">
+<code class="descclassname">GeologicalToolbox.Constants.</code><code class="descname">float_precision</code><em class="property"> = 0.001</em><a class="headerlink" href="#GeologicalToolbox.Constants.float_precision" title="Permalink to this definition">¶</a></dt>
+<dd><p>precision for float comparison</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="GeologicalToolbox.Constants.project_version">
+<code class="descclassname">GeologicalToolbox.Constants.</code><code class="descname">project_version</code><em class="property"> = ['0', '1', '1', 'b1']</em><a class="headerlink" href="#GeologicalToolbox.Constants.project_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current project version</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.DBHandler">
+<span id="members-of-the-geologicaltoolbox-dbhandler-module"></span><h2>1.4. Members of the ‘GeologicalToolbox.DBHandler’ module<a class="headerlink" href="#module-GeologicalToolbox.DBHandler" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a class for database access through an SQLAlchemy session and the base class for all database
+related classes.</p>
+<dl class="class">
+<dt id="GeologicalToolbox.DBHandler.AbstractDBObject">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.DBHandler.</code><code class="descname">AbstractDBObject</code><span class="sig-paren">(</span><em>session</em>, <em>name=''</em>, <em>comment=''</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.DBHandler.AbstractDBObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents the base class for all database objects. It should be treated as abstract, no object should be
+created directly!</p>
+<dl class="attribute">
+<dt id="GeologicalToolbox.DBHandler.AbstractDBObject.comment">
+<code class="descname">comment</code><a class="headerlink" href="#GeologicalToolbox.DBHandler.AbstractDBObject.comment" title="Permalink to this definition">¶</a></dt>
+<dd><p>The additional comments for the AbstractDBObject</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.DBHandler.AbstractDBObject.delete_from_db">
+<em class="property">classmethod </em><code class="descname">delete_from_db</code><span class="sig-paren">(</span><em>obj</em>, <em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.DBHandler.AbstractDBObject.delete_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes an object from the database
+:param obj: object to delete
+:type obj; object
+:param session: SQLAlchemy Session handling the connection to the database
+:type session: Session
+:return: Nothing</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.DBHandler.AbstractDBObject.load_all_from_db">
+<em class="property">classmethod </em><code class="descname">load_all_from_db</code><span class="sig-paren">(</span><em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.DBHandler.AbstractDBObject.load_all_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all well marker in the database connected to the SQLAlchemy Session session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of well marker representing the result of the database query</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">List[<a class="reference internal" href="#GeologicalToolbox.Wells.WellMarker" title="GeologicalToolbox.Wells.WellMarker">WellMarker</a>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.DBHandler.AbstractDBObject.load_by_id_from_db">
+<em class="property">classmethod </em><code class="descname">load_by_id_from_db</code><span class="sig-paren">(</span><em>id</em>, <em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.DBHandler.AbstractDBObject.load_by_id_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the line with the given id in the database connected to the SQLAlchemy Session session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>id</strong> (<em>int</em>) – Only the object with this id will be returned (has to be 1, unique value)</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a single line representing the result of the database query</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#GeologicalToolbox.Geometries.Line" title="GeologicalToolbox.Geometries.Line">Line</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>NoResultFound</strong> – Raises NoResultFound if no line was found with this id</li>
+<li><strong>IntegrityError</strong> – Raises IntegrityError if more than one line is found (more than one unique value)</li>
+<li><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.DBHandler.AbstractDBObject.load_by_name_from_db">
+<em class="property">classmethod </em><code class="descname">load_by_name_from_db</code><span class="sig-paren">(</span><em>name</em>, <em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.DBHandler.AbstractDBObject.load_by_name_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all DBObjects with the given name in the database connected to the SQLAlchemy Session session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – Only DBObjects or derived types with this name will be returned</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a list of DBObjects representing the result of the database query</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">List[cls]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.DBHandler.AbstractDBObject.name">
+<code class="descname">name</code><a class="headerlink" href="#GeologicalToolbox.DBHandler.AbstractDBObject.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the AbstractDBObject</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.DBHandler.AbstractDBObject.save_to_db">
+<code class="descname">save_to_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.DBHandler.AbstractDBObject.save_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves all changes of the well marker to the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IntegrityError</strong> – raises IntegrityError if the commit to the database fails and rolls all changes back</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.DBHandler.AbstractDBObject.session">
+<code class="descname">session</code><a class="headerlink" href="#GeologicalToolbox.DBHandler.AbstractDBObject.session" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current Session object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Session</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>TypeError</strong> – if session is not of an instance of Session</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeologicalToolbox.DBHandler.DBHandler">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.DBHandler.</code><code class="descname">DBHandler</code><span class="sig-paren">(</span><em>connection='sqlite:///:memory:'</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.DBHandler.DBHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class for database access through an SQLAlchemy session.</p>
+<dl class="method">
+<dt id="GeologicalToolbox.DBHandler.DBHandler.get_session">
+<code class="descname">get_session</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.DBHandler.DBHandler.get_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the session object for the current database connection</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the session object for the current database connection</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.Exceptions">
+<span id="exceptions-defined-for-the-api"></span><h2>1.5. Exceptions defined for the API<a class="headerlink" href="#module-GeologicalToolbox.Exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="GeologicalToolbox.Exceptions.ArgumentError">
+<em class="property">exception </em><code class="descclassname">GeologicalToolbox.Exceptions.</code><code class="descname">ArgumentError</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Exceptions.ArgumentError" title="Permalink to this definition">¶</a></dt>
+<dd><p>This exception should be raised, if a wrong number of arguments are submitted or an other failure inside the
+arguments are recognised.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="GeologicalToolbox.Exceptions.DatabaseException">
+<em class="property">exception </em><code class="descclassname">GeologicalToolbox.Exceptions.</code><code class="descname">DatabaseException</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Exceptions.DatabaseException" title="Permalink to this definition">¶</a></dt>
+<dd><p>This exception should be raised, if an unresolved database issue occurred (e.g. more than one value in a unique
+column</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="GeologicalToolbox.Exceptions.DatabaseRequestException">
+<em class="property">exception </em><code class="descclassname">GeologicalToolbox.Exceptions.</code><code class="descname">DatabaseRequestException</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Exceptions.DatabaseRequestException" title="Permalink to this definition">¶</a></dt>
+<dd><p>This exception should be raised, if an error occurs during a database request (e.g. not the expected result)</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="GeologicalToolbox.Exceptions.FaultException">
+<em class="property">exception </em><code class="descclassname">GeologicalToolbox.Exceptions.</code><code class="descname">FaultException</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Exceptions.FaultException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will be raised, if a fault marker causes an interruption</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="GeologicalToolbox.Exceptions.ListOrderException">
+<em class="property">exception </em><code class="descclassname">GeologicalToolbox.Exceptions.</code><code class="descname">ListOrderException</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Exceptions.ListOrderException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will be raised, if the ordering of a list is wrong (e.g. min values in an extent list after max…)</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="GeologicalToolbox.Exceptions.WellMarkerDepthException">
+<em class="property">exception </em><code class="descclassname">GeologicalToolbox.Exceptions.</code><code class="descname">WellMarkerDepthException</code><span class="sig-paren">(</span><em>msg</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Exceptions.WellMarkerDepthException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Will be raised, if a new well marker should be located deeper than the depth of the well</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.Geometries">
+<span id="members-of-the-geologicaltoolbox-geometries-module"></span><h2>1.6. Members of the ‘GeologicalToolbox.Geometries’ module<a class="headerlink" href="#module-GeologicalToolbox.Geometries" title="Permalink to this headline">¶</a></h2>
+<p>This module provides basic geometries (points and lines) for storing geological data in database.</p>
+<dl class="class">
+<dt id="GeologicalToolbox.Geometries.GeoPoint">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.Geometries.</code><code class="descname">GeoPoint</code><span class="sig-paren">(</span><em>horizon</em>, <em>has_z</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.GeoPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class GeoPoint</p>
+<p>Represents a geological point feature, e.g. for storing line nodes or geological outcrops in a database.</p>
+<dl class="method">
+<dt id="GeologicalToolbox.Geometries.GeoPoint.add_property">
+<code class="descname">add_property</code><span class="sig-paren">(</span><em>prop</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.GeoPoint.add_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new property to the point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>prop</strong> (<a class="reference internal" href="#GeologicalToolbox.Properties.Property" title="GeologicalToolbox.Properties.Property"><em>Property</em></a>) – new point property</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>TypeError</strong> – if log is not of type Property</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Geometries.GeoPoint.del_z">
+<code class="descname">del_z</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.GeoPoint.del_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>removes the z-value from the point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Geometries.GeoPoint.delete_property">
+<code class="descname">delete_property</code><span class="sig-paren">(</span><em>prop</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.GeoPoint.delete_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a property from the point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>prop</strong> (<a class="reference internal" href="#GeologicalToolbox.Properties.Property" title="GeologicalToolbox.Properties.Property"><em>Property</em></a>) – property to delete</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – if log is not of type Property</li>
+<li><strong>ValueError</strong> – if log is not part of self.properties</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Geometries.GeoPoint.get_property">
+<code class="descname">get_property</code><span class="sig-paren">(</span><em>property_name</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.GeoPoint.get_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns requested property, if the property with the name property_name exists for the GeoPoint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>property_name</strong> (<em>str</em>) – name of the requested property</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns the property</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#GeologicalToolbox.Properties.Property" title="GeologicalToolbox.Properties.Property">Property</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if no property with the name exists</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Geometries.GeoPoint.has_property">
+<code class="descname">has_property</code><span class="sig-paren">(</span><em>property_name</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.GeoPoint.has_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True, if a property with the name property_name exists for the GeoPoint, else False</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>property_name</strong> (<em>str</em>) – name of the requested property</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns True, if a property with the name property_name exists for the GeoPoint, else False</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.Geometries.GeoPoint.horizon">
+<code class="descname">horizon</code><a class="headerlink" href="#GeologicalToolbox.Geometries.GeoPoint.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>The stratigraphy of the point object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">StratigraphicObject or None</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>TypeError</strong> – if value is not of type Stratigraphy</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Geometries.GeoPoint.load_all_without_lines_from_db">
+<em class="property">classmethod </em><code class="descname">load_all_without_lines_from_db</code><span class="sig-paren">(</span><em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.GeoPoint.load_all_without_lines_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all points in the database connected to the SQLAlchemy Session session, which are not part of a line.
+This function is similar the AbstractGeoObject.load_all_from_db(…) function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of points representing the result of the database query</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">List[<a class="reference internal" href="#GeologicalToolbox.Geometries.GeoPoint" title="GeologicalToolbox.Geometries.GeoPoint">GeoPoint</a>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Geometries.GeoPoint.load_by_name_without_lines_from_db">
+<em class="property">classmethod </em><code class="descname">load_by_name_without_lines_from_db</code><span class="sig-paren">(</span><em>name</em>, <em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.GeoPoint.load_by_name_without_lines_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all GeoPoints with the given name in the database connected to the SQLAlchemy Session session, which
+don’t belong to a line</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – Only GeoPoints with this name will be returned</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a list of GeoPoints representing the result of the database query</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">List[GeoPoints]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Geometries.GeoPoint.load_in_extent_without_lines_from_db">
+<em class="property">classmethod </em><code class="descname">load_in_extent_without_lines_from_db</code><span class="sig-paren">(</span><em>session</em>, <em>min_easting</em>, <em>max_easting</em>, <em>min_northing</em>, <em>max_northing</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.GeoPoint.load_in_extent_without_lines_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all points inside the given extent in the database connected to the SQLAlchemy Session session, which
+are not part of a line. This function is similar the AbstractGeoObject.load_in_extent_from_db(…) function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>min_easting</strong> (<em>float</em>) – minimal easting of extent</li>
+<li><strong>max_easting</strong> (<em>float</em>) – maximal easting of extent</li>
+<li><strong>min_northing</strong> (<em>float</em>) – minimal northing of extent</li>
+<li><strong>max_northing</strong> (<em>float</em>) – maximal northing of extent</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a list of points representing the result of the database query</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">List[<a class="reference internal" href="#GeologicalToolbox.Geometries.GeoPoint" title="GeologicalToolbox.Geometries.GeoPoint">GeoPoint</a>]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if one of the extension values is not compatible to type float</li>
+<li><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Geometries.GeoPoint.use_z">
+<code class="descname">use_z</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.GeoPoint.use_z" title="Permalink to this definition">¶</a></dt>
+<dd><p>uses the altitude value as z coordinate</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeologicalToolbox.Geometries.Line">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.Geometries.</code><code class="descname">Line</code><span class="sig-paren">(</span><em>closed</em>, <em>horizon</em>, <em>points</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.Line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class Line</p>
+<p>Represents a geological line feature, e.g. for storing faults or horizon surface expressions.</p>
+<dl class="method">
+<dt id="GeologicalToolbox.Geometries.Line.delete_point">
+<code class="descname">delete_point</code><span class="sig-paren">(</span><em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.Line.delete_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the point from the line</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>point</strong> (<a class="reference internal" href="#GeologicalToolbox.Geometries.GeoPoint" title="GeologicalToolbox.Geometries.GeoPoint"><em>GeoPoint</em></a>) – GeoPoint object which should be deleted</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – Raises TypeError if point is not of type GeoPoint</li>
+<li><strong>ValueError</strong> – Raises ValueError the point is not part of the line</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Geometries.Line.delete_point_by_coordinates">
+<code class="descname">delete_point_by_coordinates</code><span class="sig-paren">(</span><em>easting</em>, <em>northing</em>, <em>altitude=0</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.Line.delete_point_by_coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a point with the given coordinates from the line</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>easting</strong> (<em>float</em>) – easting value of the point to be deleted</li>
+<li><strong>northing</strong> (<em>float</em>) – northing value of the point to be deleted</li>
+<li><strong>altitude</strong> (<em>float</em>) – altitude value of the point to be deleted (only necessary if point has z-values!)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> – Raises ValueError if one parameter is not compatible to type float or no point can be found</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Geometries.Line.get_point_index">
+<code class="descname">get_point_index</code><span class="sig-paren">(</span><em>point</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.Line.get_point_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the index of the given point in the line</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>point</strong> (<a class="reference internal" href="#GeologicalToolbox.Geometries.GeoPoint" title="GeologicalToolbox.Geometries.GeoPoint"><em>GeoPoint</em></a>) – point which has to be looked up</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Index of the point in the line</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – Raises ValueError if committed point is not part of the line</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.Geometries.Line.horizon">
+<code class="descname">horizon</code><a class="headerlink" href="#GeologicalToolbox.Geometries.Line.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>The stratigraphy of the line object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">StratigraphicObject</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>TypeError</strong> – Raises TypeError if value is not of type Stratigraphy</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Geometries.Line.insert_point">
+<code class="descname">insert_point</code><span class="sig-paren">(</span><em>point</em>, <em>position</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.Line.insert_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a point in the line at the committed index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>point</strong> (<a class="reference internal" href="#GeologicalToolbox.Geometries.GeoPoint" title="GeologicalToolbox.Geometries.GeoPoint"><em>GeoPoint</em></a>) – point to be inserted in the line</li>
+<li><strong>position</strong> (<em>int</em>) – Index, where points should be inserted in the line</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – Raises TypeError if point is not of type GeoPoint</li>
+<li><strong>ValueError</strong> – Raises ValueError if position is not of type int or cannot be converted to int</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Geometries.Line.insert_points">
+<code class="descname">insert_points</code><span class="sig-paren">(</span><em>points</em>, <em>position</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.Line.insert_points" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a points in the line at the committed index.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> (<em>List</em><em>[</em><a class="reference internal" href="#GeologicalToolbox.Geometries.GeoPoint" title="GeologicalToolbox.Geometries.GeoPoint"><em>GeoPoint</em></a><em>]</em>) – List of points to be inserted in the line</li>
+<li><strong>position</strong> (<em>int</em>) – Index, where points should be inserted in the line</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – Raises TypeError if one of the points is not of type GeoPoint</li>
+<li><strong>ValueError</strong> – Raises ValueError if position is not of type int or cannot be converted to int</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.Geometries.Line.is_closed">
+<code class="descname">is_closed</code><a class="headerlink" href="#GeologicalToolbox.Geometries.Line.is_closed" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if the line is closed else False</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bool</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if value is not compatible to type bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Geometries.Line.load_in_extent_from_db">
+<em class="property">classmethod </em><code class="descname">load_in_extent_from_db</code><span class="sig-paren">(</span><em>session</em>, <em>min_easting</em>, <em>max_easting</em>, <em>min_northing</em>, <em>max_northing</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Geometries.Line.load_in_extent_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all lines with at least on point inside the given extent in the database connected to the SQLAlchemy
+Session session. This function overloads the AbstractGeoObject.load_in_extent_from_db(…) function.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>min_easting</strong> (<em>float</em>) – minimal easting of extent</li>
+<li><strong>max_easting</strong> (<em>float</em>) – maximal easting of extent</li>
+<li><strong>min_northing</strong> (<em>float</em>) – minimal northing of extent</li>
+<li><strong>max_northing</strong> (<em>float</em>) – maximal northing of extent</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a list of lines representing the result of the database query</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">List[<a class="reference internal" href="#GeologicalToolbox.Geometries.Line" title="GeologicalToolbox.Geometries.Line">Line</a>]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if one of the extension values is not compatible to type float</li>
+<li><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.GeoObject">
+<span id="members-of-the-geologicaltoolbox-geoobject-module"></span><h2>1.7. Members of the ‘GeologicalToolbox.GeoObject’ module<a class="headerlink" href="#module-GeologicalToolbox.GeoObject" title="Permalink to this headline">¶</a></h2>
+<p>This module hosts the basic AbstractGeoObject class. This class inherits all basic function for GeoObjects</p>
+<dl class="class">
+<dt id="GeologicalToolbox.GeoObject.AbstractGeoObject">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.GeoObject.</code><code class="descname">AbstractGeoObject</code><span class="sig-paren">(</span><em>reference_system</em>, <em>easting</em>, <em>northing</em>, <em>altitude</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.GeoObject.AbstractGeoObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a base class which stores central GeoObject data. This class should be treated as abstract, no object
+should be created directly!</p>
+<dl class="attribute">
+<dt id="GeologicalToolbox.GeoObject.AbstractGeoObject.altitude">
+<code class="descname">altitude</code><a class="headerlink" href="#GeologicalToolbox.GeoObject.AbstractGeoObject.altitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>The height above sea level of the object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">float</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if value is not compatible to type float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.GeoObject.AbstractGeoObject.easting">
+<code class="descname">easting</code><a class="headerlink" href="#GeologicalToolbox.GeoObject.AbstractGeoObject.easting" title="Permalink to this definition">¶</a></dt>
+<dd><p>The easting value of the object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">float</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if value is not compatible to type float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.GeoObject.AbstractGeoObject.load_in_extent_from_db">
+<em class="property">classmethod </em><code class="descname">load_in_extent_from_db</code><span class="sig-paren">(</span><em>session</em>, <em>min_easting</em>, <em>max_easting</em>, <em>min_northing</em>, <em>max_northing</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.GeoObject.AbstractGeoObject.load_in_extent_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all points inside the given extent in the database connected to the SQLAlchemy Session session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>min_easting</strong> (<em>float</em>) – minimal easting of extent</li>
+<li><strong>max_easting</strong> (<em>float</em>) – maximal easting of extent</li>
+<li><strong>min_northing</strong> (<em>float</em>) – minimal northing of extent</li>
+<li><strong>max_northing</strong> (<em>float</em>) – maximal northing of extent</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a list of points representing the result of the database query</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">List[cls]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if one of the extension values is not compatible to type float</li>
+<li><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.GeoObject.AbstractGeoObject.northing">
+<code class="descname">northing</code><a class="headerlink" href="#GeologicalToolbox.GeoObject.AbstractGeoObject.northing" title="Permalink to this definition">¶</a></dt>
+<dd><p>The northing value of the object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">float</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if value is not compatible to type float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.GeoObject.AbstractGeoObject.reference_system">
+<code class="descname">reference_system</code><a class="headerlink" href="#GeologicalToolbox.GeoObject.AbstractGeoObject.reference_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>The reference system in WKT format
+ATTENTION: The reference system is not checked!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the current reference system</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.Properties">
+<span id="members-of-the-geologicaltoolbox-properties-module"></span><h2>1.8. Members of the ‘GeologicalToolbox.Properties’ module<a class="headerlink" href="#module-GeologicalToolbox.Properties" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a class for storing properties of points (and therefore also for lines). Properties for points are
+the same as logs, except there is only one value, not a list of values. They are both derived from the AbstractLogClass.</p>
+<div class="admonition-todo admonition" id="index-1">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>reformat docstrings, espacially of setter and getter functions</li>
+<li>check exception types</li>
+</ul>
+</div>
+<dl class="class">
+<dt id="GeologicalToolbox.Properties.Property">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.Properties.</code><code class="descname">Property</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Properties.Property" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents logging information for wells</p>
+<dl class="attribute">
+<dt id="GeologicalToolbox.Properties.Property.value">
+<code class="descname">value</code><a class="headerlink" href="#GeologicalToolbox.Properties.Property.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of the property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the value of the property</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.Requests">
+<span id="members-of-the-geologicaltoolbox-requests-module"></span><h2>1.9. Members of the ‘GeologicalToolbox.Requests’ module<a class="headerlink" href="#module-GeologicalToolbox.Requests" title="Permalink to this headline">¶</a></h2>
+<p>This module hosts the class Requests, which provides functionality for special (geo-)database requests.</p>
+<dl class="class">
+<dt id="GeologicalToolbox.Requests.Requests">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.Requests.</code><code class="descname">Requests</code><a class="headerlink" href="#GeologicalToolbox.Requests.Requests" title="Permalink to this definition">¶</a></dt>
+<dd><p>The class Requests, which provides functionality for special (geo-)database requests.</p>
+<dl class="staticmethod">
+<dt id="GeologicalToolbox.Requests.Requests.check_extent">
+<em class="property">static </em><code class="descname">check_extent</code><span class="sig-paren">(</span><em>extent</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Requests.Requests.check_extent" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks, if the given extent has the right format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>extent</strong> – value to be checked</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – if extent is not a list</li>
+<li><strong>ValueError</strong> – if on list element is not compatible to float or number of elements is not 4</li>
+<li><a class="reference internal" href="#GeologicalToolbox.Exceptions.ListOrderException" title="GeologicalToolbox.Exceptions.ListOrderException"><strong>ListOrderException</strong></a> – if the ordering of the extent list [min_easting, max_easting, min_northing,
+max_northing] is wrong.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="GeologicalToolbox.Requests.Requests.create_thickness_point">
+<em class="property">static </em><code class="descname">create_thickness_point</code><span class="sig-paren">(</span><em>sorted_dict</em>, <em>well_id</em>, <em>marker_1</em>, <em>marker_2</em>, <em>session</em>, <em>use_faulted=False</em>, <em>fault_name=''</em>, <em>add_properties=()</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Requests.Requests.create_thickness_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate a new GeoPoint with thickness property from 2 well marker</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sorted_dict</strong> (<em>dict</em><em>(</em><em>)</em>) – dictionary containing well_id / WellMarker data</li>
+<li><strong>well_id</strong> (<em>int</em>) – current well_id</li>
+<li><strong>marker_1</strong> (<em>int</em>) – id of marker 1</li>
+<li><strong>marker_2</strong> (<em>int</em>) – id of marker 2</li>
+<li><strong>session</strong> (<em>Session</em>) – current SQLAlchemy session</li>
+<li><strong>use_faulted</strong> (<em>bool</em>) – should faulted sequence be included?</li>
+<li><strong>fault_name</strong> (<em>str</em>) – name of fault stratigraphic unit (default: “Fault”)</li>
+<li><strong>add_properties</strong> (<em>tuple</em><em>(</em><em>)</em>) – Adds the properties to the GeoPoint. Format for each property: (name, unit, value)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">new GeoPoint Object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#GeologicalToolbox.Geometries.GeoPoint" title="GeologicalToolbox.Geometries.GeoPoint">GeoPoint</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#GeologicalToolbox.Exceptions.FaultException" title="GeologicalToolbox.Exceptions.FaultException"><strong>FaultException</strong></a> – if a fault is inside the section and use_faulted is False</li>
+<li><strong>ValueError</strong> – if a property in the add_property tuple has less than 3 entries</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="GeologicalToolbox.Requests.Requests.interpolate_geopoints">
+<em class="property">static </em><code class="descname">interpolate_geopoints</code><span class="sig-paren">(</span><em>points</em>, <em>property_name</em>, <em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Requests.Requests.interpolate_geopoints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolate the property values of the given GeoPoints using the interpolation method ‘method’</p>
+<div class="admonition-todo admonition" id="index-2">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>Integrate functionality</li>
+<li>define interpolation methods</li>
+<li>define return statement</li>
+</ul>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>points</strong> (<em>List</em><em>[</em><a class="reference internal" href="#GeologicalToolbox.Geometries.GeoPoint" title="GeologicalToolbox.Geometries.GeoPoint"><em>GeoPoint</em></a><em>]</em>) – List of GeoPoints as interpolation base</li>
+<li><strong>property_name</strong> (<em>str</em>) – Name of the property to interpolate</li>
+<li><strong>method</strong> (<em>str</em>) – Interpolation method</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Currently Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>TypeError</strong> – if on of the points is not of type GeoPoint</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>possible values for interpolation <strong>method</strong> are:</p>
+<ul class="simple">
+<li><strong>nearest</strong> (Nearest Neighbour interpolation)</li>
+<li><strong>ide</strong> (Inverse Distance interpolation)</li>
+<li><strong>spline</strong> (Thin-Plate-Spline interpolation)</li>
+</ul>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="GeologicalToolbox.Requests.Requests.well_markers_to_thickness">
+<em class="property">static </em><code class="descname">well_markers_to_thickness</code><span class="sig-paren">(</span><em>session</em>, <em>marker_1</em>, <em>marker_2</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Requests.Requests.well_markers_to_thickness" title="Permalink to this definition">¶</a></dt>
+<dd><p>This static method generates a point set including a thickness property derived from the committed well marker</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>session</strong> (<em>Session</em>) – The SQLAlchemy session connected to the database storing the geodata</li>
+<li><strong>marker_1</strong> (<em>str</em>) – First WellMarker unit name</li>
+<li><strong>marker_2</strong> (<em>str</em>) – Second WellMarker unit name</li>
+<li><strong>summarise_multiple</strong> (<em>bool</em>) – Summarise multiple occurrences of marker_1 and marker_2 to a maximum thickness. If this parameter is False (default value) create multiple points.</li>
+<li><strong>extent</strong> (<em>[</em><em>float</em><em>, </em><em>float</em><em>, </em><em>float</em><em>, </em><em>float</em><em>]</em>) – extension rectangle as list which borders the well distribution. The list has the following order: [min easting, max easting, min northing, max northing]</li>
+<li><strong>use_faulted</strong> (<em>bool</em>) – if True, also sections with faults between marker_1 and marker_2 are returned</li>
+<li><strong>fault_name</strong> (<em>str</em>) – unit name of fault marker (standard: ‘Fault’)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A list of GeoPoints each with a thickness property</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">[<a class="reference internal" href="#GeologicalToolbox.Geometries.GeoPoint" title="GeologicalToolbox.Geometries.GeoPoint">GeoPoint</a>]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>AttributeError</strong> – if marker_1 and marker_2 are equal</li>
+<li><a class="reference internal" href="#GeologicalToolbox.Exceptions.DatabaseException" title="GeologicalToolbox.Exceptions.DatabaseException"><strong>DatabaseException</strong></a> – if the database query results in less than 2 marker of a well_id</li>
+<li><a class="reference internal" href="#GeologicalToolbox.Exceptions.DatabaseRequestException" title="GeologicalToolbox.Exceptions.DatabaseRequestException"><strong>DatabaseRequestException</strong></a> – if an unexpected query result occurs</li>
+<li><strong>TypeError</strong> – if session is not an instance of SQLAlchemy session</li>
+<li><strong>ValueError</strong> – if a parameter is not compatible with the required type</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>for further raises see <a class="reference internal" href="#GeologicalToolbox.Requests.Requests.check_extent" title="GeologicalToolbox.Requests.Requests.check_extent"><code class="xref py py-meth docutils literal"><span class="pre">Requests.check_extent()</span></code></a></p>
+<p>Query for selecting markers:</p>
+<div class="highlight-sql"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="k">SELECT</span> <span class="n">wm1</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="n">well_marker</span> <span class="n">wm1</span>
+<span class="k">JOIN</span> <span class="n">stratigraphy</span> <span class="n">st1</span>
+<span class="k">ON</span> <span class="n">wm1</span><span class="p">.</span><span class="n">horizon_id</span> <span class="o">=</span> <span class="n">st1</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span> <span class="n">st1</span><span class="p">.</span><span class="n">unit_name</span> <span class="k">IN</span> <span class="p">(</span><span class="ss">&quot;mu&quot;</span><span class="p">,</span> <span class="ss">&quot;so&quot;</span><span class="p">)</span>
+<span class="k">AND</span> <span class="k">EXISTS</span>
+<span class="p">(</span>
+    <span class="k">SELECT</span> <span class="mi">1</span> <span class="k">FROM</span> <span class="n">well_marker</span> <span class="n">wm2</span>
+    <span class="k">JOIN</span> <span class="n">stratigraphy</span> <span class="n">st2</span>
+    <span class="k">ON</span> <span class="n">wm2</span><span class="p">.</span><span class="n">horizon_id</span> <span class="o">=</span> <span class="n">st2</span><span class="p">.</span><span class="n">id</span>
+    <span class="k">WHERE</span> <span class="n">st2</span><span class="p">.</span><span class="n">unit_name</span> <span class="k">IN</span> <span class="p">(</span><span class="ss">&quot;mu&quot;</span><span class="p">,</span> <span class="ss">&quot;so&quot;</span><span class="p">)</span>
+    <span class="k">AND</span> <span class="n">wm1</span><span class="p">.</span><span class="n">well_id</span> <span class="o">=</span> <span class="n">wm2</span><span class="p">.</span><span class="n">well_id</span>
+    <span class="k">AND</span> <span class="n">st1</span><span class="p">.</span><span class="n">unit_name</span> <span class="o">&lt;&gt;</span> <span class="n">st2</span><span class="p">.</span><span class="n">unit_name</span>
+<span class="p">)</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="n">wm1</span><span class="p">.</span><span class="n">well_id</span><span class="p">,</span><span class="n">wm1</span><span class="p">.</span><span class="n">drill_depth</span>
+</pre></div>
+</td></tr></table></div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.Stratigraphy">
+<span id="members-of-the-geologicaltoolbox-stratigraphy-module"></span><h2>1.10. Members of the ‘GeologicalToolbox.Stratigraphy’ module<a class="headerlink" href="#module-GeologicalToolbox.Stratigraphy" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a class for storing stratigraphical information in a database.</p>
+<dl class="class">
+<dt id="GeologicalToolbox.Stratigraphy.StratigraphicObject">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.Stratigraphy.</code><code class="descname">StratigraphicObject</code><span class="sig-paren">(</span><em>session</em>, <em>name</em>, <em>age=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class for storing stratigraphical information in a database.</p>
+<dl class="attribute">
+<dt id="GeologicalToolbox.Stratigraphy.StratigraphicObject.horizon_age">
+<code class="descname">horizon_age</code><a class="headerlink" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject.horizon_age" title="Permalink to this definition">¶</a></dt>
+<dd><p>The age of the stratigraphic unit</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">float</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – if new value is convertible to type int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Stratigraphy.StratigraphicObject.init_stratigraphy">
+<em class="property">classmethod </em><code class="descname">init_stratigraphy</code><span class="sig-paren">(</span><em>session</em>, <em>name</em>, <em>age=-1</em>, <em>update=False</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject.init_stratigraphy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a stratigraphic unit. Create a new one if unit doesn’t exists in the database, else use the existing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>session</strong> (<em>Session</em>) – SQLAlchemy session, which includes the database connection</li>
+<li><strong>name</strong> (<em>str</em>) – Name of the stratigraphic unit</li>
+<li><strong>age</strong> (<em>float</em>) – age of the stratigraphic unit (-1 if none)</li>
+<li><strong>update</strong> (<em>bool</em>) – update age if stratigraphic unit exists</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if age is not compatible to float</li>
+<li><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Stratigraphy.StratigraphicObject.load_all_from_db">
+<em class="property">classmethod </em><code class="descname">load_all_from_db</code><span class="sig-paren">(</span><em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject.load_all_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all stratigraphic units stored in the database connected to the SQLAlchemy Session session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a list of stratigraphic units representing the result of the database query</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">List[<a class="reference internal" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject" title="GeologicalToolbox.Stratigraphy.StratigraphicObject">StratigraphicObject</a>]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Stratigraphy.StratigraphicObject.load_by_age_from_db">
+<em class="property">classmethod </em><code class="descname">load_by_age_from_db</code><span class="sig-paren">(</span><em>min_age</em>, <em>max_age</em>, <em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject.load_by_age_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of stratigraphic units with an age between min_age and max_age from the database connected to
+the SQLAlchemy Session session. If no result was found, this function returns an empty list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>min_age</strong> (<em>float</em>) – Minimal age of the stratigraphic units</li>
+<li><strong>max_age</strong> (<em>float</em>) – Maximal age of the stratigraphic units</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Returns a list of stratigraphic units with an age between min_age and max_age.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">List[<a class="reference internal" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject" title="GeologicalToolbox.Stratigraphy.StratigraphicObject">StratigraphicObject</a>]</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ValueError</strong> – if min_age or max_age is not compatible to float</li>
+<li><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Stratigraphy.StratigraphicObject.load_by_name_from_db">
+<em class="property">classmethod </em><code class="descname">load_by_name_from_db</code><span class="sig-paren">(</span><em>name</em>, <em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject.load_by_name_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the stratigraphic unit with the given name in the database connected to the SQLAlchemy Session session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – The name of the requested stratigraphic unit</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">As the name is a unique value, only one result can be returned or None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject" title="GeologicalToolbox.Stratigraphy.StratigraphicObject">StratigraphicObject</a> or None</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference internal" href="#GeologicalToolbox.Exceptions.DatabaseException" title="GeologicalToolbox.Exceptions.DatabaseException"><strong>DatabaseException</strong></a> – if more than one result was found (name is an unique value)</li>
+<li><strong>TypeError</strong> – if session is not of type SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.Stratigraphy.StratigraphicObject.name">
+<code class="descname">name</code><a class="headerlink" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the stratigraphic unit</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Stratigraphy.StratigraphicObject.save_to_db">
+<code class="descname">save_to_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject.save_to_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves all changes of the line or the line itself to the connected database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>IntegrityError</strong> – if the commit to the database fails and rolls all changes back</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.Stratigraphy.StratigraphicObject.session">
+<code class="descname">session</code><a class="headerlink" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject.session" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current Session object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">Session</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>TypeError</strong> – if new value is not of an instance of Session</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.WellLogs">
+<span id="members-of-the-geologicaltoolbox-welllogs-module"></span><h2>1.11. Members of the ‘GeologicalToolbox.WellLogs’ module<a class="headerlink" href="#module-GeologicalToolbox.WellLogs" title="Permalink to this headline">¶</a></h2>
+<p>This module provides a class for storing logging information of wells. The logging class is derived from the
+AbstractLogClass.</p>
+<div class="admonition-todo admonition" id="index-3">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>reformat docstrings, espacially of setter and getter functions</li>
+<li>check exception types</li>
+</ul>
+</div>
+<dl class="class">
+<dt id="GeologicalToolbox.WellLogs.WellLog">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.WellLogs.</code><code class="descname">WellLog</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.WellLogs.WellLog" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents logging information for wells</p>
+<dl class="method">
+<dt id="GeologicalToolbox.WellLogs.WellLog.delete_value">
+<code class="descname">delete_value</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.WellLogs.WellLog.delete_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the value from the well log</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>value</strong> (<a class="reference internal" href="#GeologicalToolbox.WellLogs.WellLogValue" title="GeologicalToolbox.WellLogs.WellLogValue"><em>WellLogValue</em></a>) – WellLogValue object which should be deleted</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – Raises TypeError if value is not of type WellLogValue</li>
+<li><strong>ValueError</strong> – Raises ValueError the value is not part of the well log</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.WellLogs.WellLog.get_value_by_depth">
+<code class="descname">get_value_by_depth</code><span class="sig-paren">(</span><em>depth</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.WellLogs.WellLog.get_value_by_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value at depth ‘depth’</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>depth</strong> (<em>float</em>) – depth of the requested marker</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns the value at depth ‘depth’</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#GeologicalToolbox.WellLogs.WellLogValue" title="GeologicalToolbox.WellLogs.WellLogValue">WellLogValue</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – Raises ValueError if no marker was found for the committed depth or depth is
+not compatible to float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.WellLogs.WellLog.insert_log_value">
+<code class="descname">insert_log_value</code><span class="sig-paren">(</span><em>log_value</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.WellLogs.WellLog.insert_log_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a new log value in the log
+ATTENTION: If you insert a log value, the log will be automatically stored in the database!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>log_value</strong> (<a class="reference internal" href="#GeologicalToolbox.WellLogs.WellLogValue" title="GeologicalToolbox.WellLogs.WellLogValue"><em>WellLogValue</em></a>) – WellLogValue to be inserted</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – Raises TypeError if marker is not an instance of WellLogValue</li>
+<li><strong>ValueError</strong> – Raises ValueError if the depth of the marker is larger than the drilled depth of the well</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.WellLogs.WellLog.insert_multiple_log_values">
+<code class="descname">insert_multiple_log_values</code><span class="sig-paren">(</span><em>log_values</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.WellLogs.WellLog.insert_multiple_log_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert the multiple log values in the log
+ATTENTION: If you insert value, the log will be automatically stored in the database!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>log_values</strong> (<em>List</em><em>[</em><a class="reference internal" href="#GeologicalToolbox.WellLogs.WellLogValue" title="GeologicalToolbox.WellLogs.WellLogValue"><em>WellLogValue</em></a><em>]</em>) – List of marker to be inserted</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – Raises TypeError if one of the marker is not an instance of WellLogValue</li>
+<li><strong>ValueError</strong> – Raises ValueError if the depth of a value is larger than the drilled depth of the well</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeologicalToolbox.WellLogs.WellLogValue">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.WellLogs.</code><code class="descname">WellLogValue</code><span class="sig-paren">(</span><em>depth</em>, <em>value</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.WellLogs.WellLogValue" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class connects the logging values to their related depth</p>
+<dl class="attribute">
+<dt id="GeologicalToolbox.WellLogs.WellLogValue.depth">
+<code class="descname">depth</code><a class="headerlink" href="#GeologicalToolbox.WellLogs.WellLogValue.depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the depth of the log value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the depth of the log value</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.WellLogs.WellLogValue.value">
+<code class="descname">value</code><a class="headerlink" href="#GeologicalToolbox.WellLogs.WellLogValue.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the value of the log depth</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the value of the log depth</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.Wells">
+<span id="members-of-the-geologicaltoolbox-wells-module"></span><h2>1.12. Members of the ‘GeologicalToolbox.Wells’ module<a class="headerlink" href="#module-GeologicalToolbox.Wells" title="Permalink to this headline">¶</a></h2>
+<p>This module provides classes for storing drilling data in a database.</p>
+<div class="admonition-todo admonition" id="index-4">
+<p class="first admonition-title">Todo</p>
+<ul class="last simple">
+<li>reformat docstrings, especially of setter and getter functions</li>
+<li>check exception types</li>
+</ul>
+</div>
+<dl class="class">
+<dt id="GeologicalToolbox.Wells.Well">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.Wells.</code><code class="descname">Well</code><span class="sig-paren">(</span><em>well_name</em>, <em>short_name</em>, <em>depth</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.Well" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class Well</p>
+<p>Represents a well for storage of geoscientific data.</p>
+<dl class="method">
+<dt id="GeologicalToolbox.Wells.Well.add_log">
+<code class="descname">add_log</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.Well.add_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a new log to the well</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>log</strong> (<a class="reference internal" href="#GeologicalToolbox.WellLogs.WellLog" title="GeologicalToolbox.WellLogs.WellLog"><em>WellLog</em></a>) – new well log</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><strong>TypeError</strong> – Raises TypeError if log is not of type WellLog</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Wells.Well.delete_log">
+<code class="descname">delete_log</code><span class="sig-paren">(</span><em>log</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.Well.delete_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes a log from the well</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>log</strong> (<a class="reference internal" href="#GeologicalToolbox.WellLogs.WellLog" title="GeologicalToolbox.WellLogs.WellLog"><em>WellLog</em></a>) – log to delete</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – Raises TypeError if log is not of type WellLog</li>
+<li><strong>ValueError</strong> – Raises ValueError if log is not part of self.logs</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Wells.Well.delete_marker">
+<code class="descname">delete_marker</code><span class="sig-paren">(</span><em>marker</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.Well.delete_marker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the marker from the well</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>marker</strong> (<a class="reference internal" href="#GeologicalToolbox.Wells.WellMarker" title="GeologicalToolbox.Wells.WellMarker"><em>WellMarker</em></a>) – WellMarker object which should be deleted</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – Raises TypeError if marker is not of type WellMarker</li>
+<li><strong>ValueError</strong> – Raises ValueError the marker is not part of the well</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.Wells.Well.depth">
+<code class="descname">depth</code><a class="headerlink" href="#GeologicalToolbox.Wells.Well.depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the drilling depth of the well</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the drilling depth of the well</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Wells.Well.get_marker_by_depth">
+<code class="descname">get_marker_by_depth</code><span class="sig-paren">(</span><em>depth</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.Well.get_marker_by_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the marker at depth ‘depth’</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>depth</strong> (<em>float</em>) – depth of the requested marker</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Returns the marker at depth ‘depth’</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#GeologicalToolbox.Wells.WellMarker" title="GeologicalToolbox.Wells.WellMarker">WellMarker</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>ValueError</strong> – Raises ValueError if no marker was found for the committed depth or depth is
+not compatible to float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Wells.Well.insert_marker">
+<code class="descname">insert_marker</code><span class="sig-paren">(</span><em>marker</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.Well.insert_marker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert a new WellMarker in the well
+ATTENTION: If you insert a marker, the well will be automatically stored in the database!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>marker</strong> (<a class="reference internal" href="#GeologicalToolbox.Wells.WellMarker" title="GeologicalToolbox.Wells.WellMarker"><em>WellMarker</em></a>) – WellMarker to be inserted</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – Raises TypeError if marker is not of type WellMarker</li>
+<li><strong>ValueError</strong> – Raises ValueError if the depth of the marker is larger than the drilled depth of the well</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Wells.Well.insert_multiple_marker">
+<code class="descname">insert_multiple_marker</code><span class="sig-paren">(</span><em>marker</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.Well.insert_multiple_marker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Insert the multiple marker in the well
+ATTENTION: If you insert marker, the well will be automatically stored in the database!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>marker</strong> (<em>List</em><em>[</em><a class="reference internal" href="#GeologicalToolbox.Wells.WellMarker" title="GeologicalToolbox.Wells.WellMarker"><em>WellMarker</em></a><em>]</em>) – List of marker to be inserted</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Nothing</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>TypeError</strong> – Raises TypeError if one of the marker is not of type WellMarker</li>
+<li><strong>ValueError</strong> – Raises ValueError if the depth of a marker is larger than the drilled depth of the well</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Wells.Well.load_by_wellname_from_db">
+<em class="property">classmethod </em><code class="descname">load_by_wellname_from_db</code><span class="sig-paren">(</span><em>name</em>, <em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.Well.load_by_wellname_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the well with the given name in the database connected to the SQLAlchemy Session session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – Only the well with this name will be returned</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">As the name is a unique value, only one result can be returned or None</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference internal" href="#GeologicalToolbox.Wells.Well" title="GeologicalToolbox.Wells.Well">Well</a> or None</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#GeologicalToolbox.Exceptions.DatabaseException" title="GeologicalToolbox.Exceptions.DatabaseException"><strong>DatabaseException</strong></a> – Raises DatabaseException if more than one result was found (name is an unique value)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Wells.Well.load_deeper_than_value_from_db">
+<em class="property">classmethod </em><code class="descname">load_deeper_than_value_from_db</code><span class="sig-paren">(</span><em>session</em>, <em>min_depth</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.Well.load_deeper_than_value_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all wells with a drilled depth below the min_depth in the database connected to the SQLAlchemy Session
+session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>min_depth</strong> (<em>float</em>) – minimal drilled depth</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a list of wells representing the result of the database query</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">List[<a class="reference internal" href="#GeologicalToolbox.Wells.Well" title="GeologicalToolbox.Wells.Well">Well</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.Wells.Well.short_name">
+<code class="descname">short_name</code><a class="headerlink" href="#GeologicalToolbox.Wells.Well.short_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the short name of the well</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the short name of the well</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.Wells.Well.well_name">
+<code class="descname">well_name</code><a class="headerlink" href="#GeologicalToolbox.Wells.Well.well_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the well</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the name of the well</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeologicalToolbox.Wells.WellMarker">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.Wells.</code><code class="descname">WellMarker</code><span class="sig-paren">(</span><em>depth</em>, <em>horizon</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.WellMarker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class WellMarker</p>
+<p>Represents single markers in a drilled well</p>
+<dl class="attribute">
+<dt id="GeologicalToolbox.Wells.WellMarker.depth">
+<code class="descname">depth</code><a class="headerlink" href="#GeologicalToolbox.Wells.WellMarker.depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the depth of the well marker below Kelly Bushing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the depth of the well marker below Kelly Bushing.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="GeologicalToolbox.Wells.WellMarker.horizon">
+<code class="descname">horizon</code><a class="headerlink" href="#GeologicalToolbox.Wells.WellMarker.horizon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the stratigraphy of the point</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the current Stratigraphy</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject" title="GeologicalToolbox.Stratigraphy.StratigraphicObject">StratigraphicObject</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Wells.WellMarker.load_all_by_stratigraphy_from_db">
+<em class="property">classmethod </em><code class="descname">load_all_by_stratigraphy_from_db</code><span class="sig-paren">(</span><em>horizon</em>, <em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.WellMarker.load_all_by_stratigraphy_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all WellMarker in the database which are connected to the horizon ‘horizon’</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>horizon</strong> (<a class="reference internal" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject" title="GeologicalToolbox.Stratigraphy.StratigraphicObject"><em>StratigraphicObject</em></a>) – stratigraphy for the database query</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a list of WellMarker</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">List[<a class="reference internal" href="#GeologicalToolbox.Wells.WellMarker" title="GeologicalToolbox.Wells.WellMarker">WellMarker</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Wells.WellMarker.load_all_by_stratigraphy_in_extent_from_db">
+<em class="property">classmethod </em><code class="descname">load_all_by_stratigraphy_in_extent_from_db</code><span class="sig-paren">(</span><em>horizon</em>, <em>min_easting</em>, <em>max_easting</em>, <em>min_northing</em>, <em>max_northing</em>, <em>session</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.WellMarker.load_all_by_stratigraphy_in_extent_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all WellMarker in the database which are connected to the horizon ‘horizon’</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>horizon</strong> (<a class="reference internal" href="#GeologicalToolbox.Stratigraphy.StratigraphicObject" title="GeologicalToolbox.Stratigraphy.StratigraphicObject"><em>StratigraphicObject</em></a>) – stratigraphy for the database query</li>
+<li><strong>min_easting</strong> (<em>float</em>) – minimal easting of extent</li>
+<li><strong>max_easting</strong> (<em>float</em>) – maximal easting of extent</li>
+<li><strong>min_northing</strong> (<em>float</em>) – minimal northing of extent</li>
+<li><strong>max_northing</strong> (<em>float</em>) – maximal northing of extent</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a list of WellMarker</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">List[<a class="reference internal" href="#GeologicalToolbox.Wells.WellMarker" title="GeologicalToolbox.Wells.WellMarker">WellMarker</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="GeologicalToolbox.Wells.WellMarker.load_in_extent_from_db">
+<em class="property">classmethod </em><code class="descname">load_in_extent_from_db</code><span class="sig-paren">(</span><em>session</em>, <em>min_easting</em>, <em>max_easting</em>, <em>min_northing</em>, <em>max_northing</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.WellMarker.load_in_extent_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all well marker with committed horizon inside the given extent in the database connected to the
+SQLAlchemy Session session</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>min_easting</strong> (<em>float</em>) – minimal easting of extent</li>
+<li><strong>max_easting</strong> (<em>float</em>) – maximal easting of extent</li>
+<li><strong>min_northing</strong> (<em>float</em>) – minimal northing of extent</li>
+<li><strong>max_northing</strong> (<em>float</em>) – maximal northing of extent</li>
+<li><strong>session</strong> (<em>Session</em>) – represents the database connection as SQLAlchemy Session</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a list of wells representing the result of the database query</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">List[<a class="reference internal" href="#GeologicalToolbox.Wells.WellMarker" title="GeologicalToolbox.Wells.WellMarker">WellMarker</a>]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.Wells.WellMarker.to_geopoint">
+<code class="descname">to_geopoint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.Wells.WellMarker.to_geopoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current well marker as GeoPoint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns the current well marker as GeoPoint</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#GeologicalToolbox.Geometries.GeoPoint" title="GeologicalToolbox.Geometries.GeoPoint">GeoPoint</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+      </div><!-- /row -->
+
+      <!-- row -->
+      <div class="row footer-relbar">
+<div id="navbar-related" class=" related navbar navbar-default" role="navigation" aria-label="related navigation">
+  <div class="navbar-inner">
+    <ul class="nav navbar-nav ">
+        <li><a href="index.html">Geological Toolbox 0.1.1.b1 documentation</a></li>
+    </ul>
+<ul class="nav navbar-nav pull-right hidden-xs hidden-sm">
+      
+        <li><a href="index.html" title="Welcome to the documentation of the Geological Toolbox!" >previous</a></li>
+        <li><a href="tests.html" title="2. The GeologicalToolbox API reference" >next</a></li>
+        <li><a href="py-modindex.html" title="Python Module Index" >modules</a></li>
+        <li><a href="genindex.html" title="General Index" >index</a></li>
+        <li><a href="#">top</a></li> 
+      
+    </ul>
+  </div>
+</div>
+      </div><!-- /row -->
+
+      <!-- footer -->
+      <footer role="contentinfo">
+          &copy; Copyright 2018, Stephan Donndorf.
+        Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.6.
+      </footer>
+      <!-- /footer -->
+
+    </div>
+    <!-- /container -->
+
+  </body>
+</html>
