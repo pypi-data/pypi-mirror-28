@@ -1,0 +1,40 @@
+Metadata-Version: 1.0
+Name: thriftybuilder
+Version: 1.0.0b0
+Summary: TODO
+Home-page: https://github.com/wtsi-hgi/thrifty-builder
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: MIT
+Description: |Build Status| |codecov|
+        
+        Thrifty Builder
+        ===============
+        
+        Example configuration:
+        
+        .. code:: yaml
+        
+            docker:
+              images:
+                - name: wtsi-hgi/image-1
+                  dockerfile: /images/image-1/Dockerfile
+                  context: /images
+                - name: wtsi-hgi/image-2
+                  dockerfile: /images/image-2/Dockerfile
+                  # Context assumed to be /images/image-2 
+              registries:
+                - url: https://docker.io
+                  username: example
+                  password: other-example
+                
+            checksum_storage:
+              type: consul
+              key: /image-checksums
+        
+        .. |Build Status| image:: https://travis-ci.org/wtsi-hgi/thrifty-builder.svg?branch=master
+           :target: https://travis-ci.org/wtsi-hgi/thrifty-builder
+        .. |codecov| image:: https://codecov.io/gh/wtsi-hgi/thrifty-builder/branch/master/graph/badge.svg
+           :target: https://codecov.io/gh/wtsi-hgi/thrifty-builder
+        
+Platform: UNKNOWN
