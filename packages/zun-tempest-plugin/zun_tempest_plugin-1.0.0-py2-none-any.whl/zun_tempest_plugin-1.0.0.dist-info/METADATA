@@ -1,0 +1,69 @@
+Metadata-Version: 2.0
+Name: zun-tempest-plugin
+Version: 1.0.0
+Summary: Tempest plugin zun_tempest_plugin
+Home-page: http://www.openstack.org/
+Author: OpenStack
+Author-email: openstack-dev@lists.openstack.org
+License: UNKNOWN
+Description-Content-Type: UNKNOWN
+Platform: UNKNOWN
+Classifier: Environment :: OpenStack
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Requires-Dist: pbr (!=2.1.0,>=2.0.0)
+Requires-Dist: six (>=1.10.0)
+Requires-Dist: oslo.utils (>=3.33.0)
+Requires-Dist: oslo.serialization (!=2.19.1,>=2.18.0)
+Requires-Dist: oslo.config (>=5.1.0)
+Requires-Dist: docker (>=2.4.2)
+Requires-Dist: tempest (>=17.1.0)
+
+========================
+Team and repository tags
+========================
+
+.. image:: http://governance.openstack.org/badges/zun-tempest-plugin.svg
+    :target: http://governance.openstack.org/reference/tags/index.html
+
+==========================
+Tempest Integration of Zun
+==========================
+
+This directory contains Tempest tests to cover the Zun project, as well
+as a plugin to automatically load these tests into tempest.
+
+See the Tempest plugin docs for information on using it:
+https://docs.openstack.org/tempest/latest/#using-plugins
+
+* Free software: Apache license
+* Documentation: https://docs.openstack.org/zun-tempest-plugin/latest
+* Source: https://git.openstack.org/cgit/openstack/zun-tempest-plugin
+* Bugs: https://bugs.launchpad.net/zun
+
+Running the tests
+-----------------
+
+To run all tests from this plugin, install Zun into your environment and
+navigate to tempest directory::
+
+    $ cd /opt/stack/tempest
+
+Run this command::
+
+    $ tox -e all-plugin -- zun_tempest_plugin.tests.tempest.api
+
+To run a single test case, run with the test case name, for example::
+
+    $ tox -e all-plugin -- zun_tempest_plugin.tests.tempest.api.test_containers.test_list_containers
+
+
+
