@@ -1,0 +1,134 @@
+CHANGES
+=======
+
+1.6.19
+------
+
+* Re-install blackhole FIB routes periodically
+* Bump versions for release
+* Clean up documentation on installing and running faucet
+* Test stack and non stack DPs
+* Allow Prometheus variables to be tested
+* pylint
+* Correct P2 MAC
+* Test IPv6 ND
+* pylint
+* Add IP payload to test packets consistently
+* Cold start learning optimization (don't need to delete entries for host we have not learned before, if we know no hosts expired since we cold started)
+* Refactor \_is\_host\_fib\_route()
+* Add jitter to FIB blackhole time
+* Rate limiter shouldn't apply to route manager control plane messages
+* More time for FIB blackhole
+* Add nmap
+* router -> routed
+* Proactive resolver did not install temporary blackhole-pending-resolution FIB routes in all VLANs
+* Ban rules have to be processed early
+* Move test suite onto new faucet start script
+* Simplify L3 packet handling
+* Simplify packet in path and short circuit unexpected stack packet check
+* Further fix for loop protection
+* Loop protect logic needs cache age check
+* Simplify loop protection logic. When L2 learning, refresh flows less often, and refresh only (do not delete flows) if L2 re-learning a host on the same port
+* Simple test of L2 learning up to 512 hosts
+* Moves documentation and sample scripts to new faucet start script
+* Add optional ryu arguments to startup script
+* Tests for LLDP defaults
+* Provide sensible defaults for LLDP TLVs
+* Use empty list rather than None when missing config option is a list
+* Update arch diagram to reflect new event subsystem
+* Swap dockerfiles to use "faucet" start script
+* Add documentation for running docker with additional args
+* Add verbose and TLS control channel args to start script
+* Move VM documentation to Sphinx
+* Fix config parsing for meters
+* Noviflow docs: icmpv6 match moved to table 6 instead of 3
+* avoid hardcoded port in FaucetDeleteConfigReloadTest
+* Test opstatus\_reconf
+* Add port level config item opstatus\_reconf, default True. If False, the pipeline is not reconfigured if operational state of the port changes
+* Pre-version
+
+1.6.18
+------
+
+* version numbers for release
+* Test routing still works after cold start
+* Explicit reset neighbor cache as well as host cache on a cold start
+* When a port is mirroring another port, it cannot have any VLANs assigned to it (would result in duplicate packets being flooded, if the mirroring port was a member of the same VLAN as the mirrored port)
+* Comments clarifying mirror usage and interface ranges
+* Support stack and non-stack DPs in same config file
+* Add LLDP port\_descr
+* Add support for system\_name LLDP TLV
+* pylint
+* test\_gauge.py less noisy
+* Run test\_gauge.py in presubmit
+* pre-commit can be a symlink
+* If org\_tlv info isn't a hex string, conveniently interpret as bytes
+* more git hook fixes
+* More git hook fixes
+* Add type annotations so that pre-commit works on faucet.py
+* pylint
+* Allow configuration of orginzationally specific LLDP TLVs
+* Keep 2to3 happy
+* Fix typo in OVS command
+* Make pytype happy with use of stack config
+* Clarify use of LLDP beacon service (and simplfy helper functions)
+* Test LLDP beacon service
+* Valve ACL module should skip description field
+* Incremental LLDP implementation
+* Add lldp\_beacon
+* Add better config checks for stacking, add config for LLDP beacon/checking
+* Add helper that allows sending an LLDP beacon packet
+* Update readthedocs URL
+* Prevsion 1.6.18
+
+1.6.17
+------
+
+* Bump versions for release
+* Run Influx TooSlow single process so flow stats don't time out under load
+* Influx timeout test is impatient, when stats request to switch times out
+* Add test for multiple DBs in gauge
+* Allow the same stat to be collected into a single db
+* Re-merge
+* Revert "Pi builder script should only tag latest if the image is the latest."
+* Pi builder script should only tag latest if the image is the latest
+* Use common function for version parsing, and allow manual building/pushing of tags
+* Allow configuration of OFPP\_LOCAL
+* Rework order of docker tag operations
+* Prevsion 1.6.17
+
+1.6.16
+------
+
+* Need to allow packets from VLAN 101 on SwapVID mirror test, and set right tcpdump host
+* Test deferred apply actions
+* Defer ACL actions to instruction
+* Bump version numbers for release
+* pylint
+* Test unknown port key
+* Use config key consistently
+* Verify port key must be same as number or name
+* Don't need to verify meter name
+* Check unknown DP key
+* VLAN key must match VID or name
+* Don't use set() yet for VLAN attributes
+* Drop packets that are not stacked and are not in the right VLAN
+* Test trying to share BGP VLAN across DPs
+* Use common reset\_refs() function
+* Incremental fix to re-resolve ports after warm start
+* Verify packet in has reason OFPR\_ACTION (resulted from a flow specifying packet in)
+* Move tag/untagged config check to Port
+* Log consistently
+* Log port state changes verbosely
+* reparse\_ip() already has eth\_type
+* reparse\_ip() already has eth\_type
+* Simplify IP header size checking (don't use Ryu to calculate header size - hard code)
+* Revert "Really should just check if untagged, directly."
+* Really should just check if untagged, directly
+* Don't need build\_port\_out\_inst() any more
+* Test cannot have same VLAN tagged and native on same port
+* Move implementation to build output actions on a VLAN to a common function
+* metermod add are sent before barrier
+* meter\_mod delete sent before barrier in valve\_flowreorder
+* Fix ConfigReload tests
+* More explicitly cause all ports change detection to trigger
