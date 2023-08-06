@@ -1,0 +1,59 @@
+Metadata-Version: 1.1
+Name: fitchain
+Version: 0.0.1
+Summary: Ftchain Python Client
+Home-page: https://bitbucket.org/fitchain/fitchain-sdk-python
+Author: Fitchain
+Author-email: code@fitchain.io
+License: Proprietary
+Description: ### What is this repository for? ###
+        
+        * python based SDK  
+        * v0.1
+        
+        This repo implements the SDK to manage projects and models on the local pod
+        
+        ### How do I get set up? ###
+        
+        * run `python3 test_sdk.py`
+        
+        From any external project 
+        
+        ```
+        import fitchain_connector as fc
+        
+        if __name__ == "__main__":
+            """
+            conn = FitchainConnector(verbose=True)
+            ### #> fc projects list
+            projects = conn.get_projects()
+            awesome_project_id = projects[2].id
+        
+            ### #> fc project show <id>
+            project = conn.get_project(awesome_project_id)
+        
+            ### #> fc model create <project_id>
+            working_copy = conn.create_working_copy(awesome_project_id)
+            """
+            
+            conn = fc.FitchainConnector(verbose=True)
+            projects = conn.get_projects()
+            print('Get projects')
+            print('Found', len(projects), 'projects')
+            for p in projects:
+                p_id = p['id']
+                proj_desc = conn.get_project(project_id = p_id)
+                print('\n', proj_desc)
+        
+            # get the project id to work on 
+            my_project = projects[2]
+            my_project_id = my_project['id']
+            data = conn.load_data(project_id=my_project_id)
+            
+        ```
+        
+        
+Keywords: fitchain data client
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Topic :: Utilities
