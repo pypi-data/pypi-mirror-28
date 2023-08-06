@@ -1,0 +1,422 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Twitter-style Pagination &#8212; Django EL(Endless) Pagination 3.0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Digg-style pagination" href="digg_pagination.html" />
+    <link rel="prev" title="Getting started" href="start.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="digg_pagination.html" title="Digg-style pagination"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="start.html" title="Getting started"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="twitter-style-pagination">
+<h1>Twitter-style Pagination<a class="headerlink" href="#twitter-style-pagination" title="Permalink to this headline">¶</a></h1>
+<p>Assuming the developer wants Twitter-style pagination of
+entries of a blog post, in <em>views.py</em> we have class-based:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">el_pagination.views</span> <span class="k">import</span> <span class="n">AjaxListView</span>
+
+<span class="k">class</span> <span class="nc">EntryListView</span><span class="p">(</span><span class="n">AjaxListView</span><span class="p">):</span>
+    <span class="n">context_object_name</span> <span class="o">=</span> <span class="s2">&quot;entry_list&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;myapp/entry_list.html&quot;</span>
+
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or fuction-based:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">entry_index</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="s1">&#39;myapp/entry_list.html&#39;</span><span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;entry_list&#39;</span><span class="p">:</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In <em>myapp/entry_list.html</em>:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">entry</span> <span class="k">in</span> <span class="nv">entry_list</span> <span class="cp">%}</span>
+    <span class="c">{# your code to show the entry #}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<div class="section" id="split-the-template">
+<span id="twitter-split-template"></span><h2>Split the template<a class="headerlink" href="#split-the-template" title="Permalink to this headline">¶</a></h2>
+<p>The response to an Ajax request should not return the entire template,
+but only the portion of the page to be updated or added.
+So it is convenient to extract from the template the part containing the
+entries, and use it to render the context if the request is Ajax.
+The main template will include the extracted part, so it is convenient
+to put the page template name in the context.</p>
+<p><em>views.py</em> class-based becomes:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">el_pagination.views</span> <span class="k">import</span> <span class="n">AjaxListView</span>
+
+<span class="k">class</span> <span class="nc">EntryListView</span><span class="p">(</span><span class="n">AjaxListView</span><span class="p">)</span>
+    <span class="n">context_object_name</span> <span class="o">=</span> <span class="s2">&quot;entry_list&quot;</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s2">&quot;myapp/entry_list.html&quot;</span>
+    <span class="n">page_template</span><span class="o">=</span><span class="s1">&#39;myapp/entry_list_page.html&#39;</span>
+
+    <span class="k">def</span> <span class="nf">get_queryset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>or fuction-based:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">entry_list</span><span class="p">(</span><span class="n">request</span><span class="p">,</span>
+    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;myapp/entry_list.html&#39;</span><span class="p">,</span>
+    <span class="n">page_template</span><span class="o">=</span><span class="s1">&#39;myapp/entry_list_page.html&#39;</span><span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;entry_list&#39;</span><span class="p">:</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+        <span class="s1">&#39;page_template&#39;</span><span class="p">:</span> <span class="n">page_template</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">is_ajax</span><span class="p">():</span>
+        <span class="n">template</span> <span class="o">=</span> <span class="n">page_template</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See <a class="reference internal" href="#twitter-page-template"><span class="std std-ref">below</span></a> how to obtain the same result
+<strong>just decorating the view</strong>.</p>
+<p><em>myapp/entry_list.html</em> becomes:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p><em>myapp/entry_list_page.html</em> becomes:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">for</span> <span class="nv">entry</span> <span class="k">in</span> <span class="nv">entry_list</span> <span class="cp">%}</span>
+    <span class="c">{# your code to show the entry #}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-shortcut-for-ajaxed-views">
+<span id="twitter-page-template"></span><h2>A shortcut for ajaxed views<a class="headerlink" href="#a-shortcut-for-ajaxed-views" title="Permalink to this headline">¶</a></h2>
+<p>A good practice in writing views is to allow other developers to inject
+the template name and extra data, so that they are added to the context.
+This allows the view to be easily reused. Let&#8217;s resume the original view
+with extra context injection:</p>
+<p><em>views.py</em>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">entry_index</span><span class="p">(</span><span class="n">request</span><span class="p">,</span>
+        <span class="n">template</span><span class="o">=</span><span class="s1">&#39;myapp/entry_list.html&#39;</span><span class="p">,</span> <span class="n">extra_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;entry_list&#39;</span><span class="p">:</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">extra_context</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extra_context</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Splitting templates and putting the Ajax template name in the context
+is easily achievable by using an included decorator.</p>
+<p><em>views.py</em> becomes:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">el_pagination.decorators</span> <span class="k">import</span> <span class="n">page_template</span>
+
+<span class="nd">@page_template</span><span class="p">(</span><span class="s1">&#39;myapp/entry_list_page.html&#39;</span><span class="p">)</span>  <span class="c1"># just add this decorator</span>
+<span class="k">def</span> <span class="nf">entry_list</span><span class="p">(</span><span class="n">request</span><span class="p">,</span>
+        <span class="n">template</span><span class="o">=</span><span class="s1">&#39;myapp/entry_list.html&#39;</span><span class="p">,</span> <span class="n">extra_context</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">context</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;entry_list&#39;</span><span class="p">:</span> <span class="n">Entry</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">extra_context</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">context</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extra_context</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">template</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="paginating-objects">
+<h2>Paginating objects<a class="headerlink" href="#paginating-objects" title="Permalink to this headline">¶</a></h2>
+<p>All that&#8217;s left is changing the page template and loading the
+<a class="reference internal" href="templatetags_reference.html"><span class="doc">endless templatetags</span></a>, the jQuery library and the
+jQuery plugin <code class="docutils literal"><span class="pre">el-pagination.js</span></code> included in the distribution under
+<code class="docutils literal"><span class="pre">/static/el-pagination/js/</span></code>.</p>
+<p><em>myapp/entry_list.html</em> becomes:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">();&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p><em>myapp/entry_list_page.html</em> becomes:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">load</span> <span class="nv">el_pagination_tags</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">paginate</span> <span class="nv">entry_list</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">entry</span> <span class="k">in</span> <span class="nv">entry_list</span> <span class="cp">%}</span>
+    <span class="c">{# your code to show the entry #}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">show_more</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="templatetags_reference.html#templatetags-paginate"><span class="std std-ref">paginate</span></a> template tag takes care of customizing the
+given queryset and the current template context. In the context of a
+Twitter-style pagination the <a class="reference internal" href="templatetags_reference.html#templatetags-paginate"><span class="std std-ref">paginate</span></a> tag is often replaced
+by the <a class="reference internal" href="templatetags_reference.html#templatetags-lazy-paginate"><span class="std std-ref">lazy_paginate</span></a> one, which offers, more or less, the
+same functionalities and allows for reducing database access: see
+<a class="reference internal" href="lazy_pagination.html"><span class="doc">Lazy pagination</span></a>.</p>
+<p>The <a class="reference internal" href="templatetags_reference.html#templatetags-show-more"><span class="std std-ref">show_more</span></a> one displays the link to navigate to the next
+page.</p>
+<p>You might want to glance at the <a class="reference internal" href="javascript.html"><span class="doc">JavaScript reference</span></a> for a detailed explanation of
+how to integrate JavaScript and Ajax features in Django Endless Pagination.</p>
+</div>
+<div class="section" id="pagination-on-scroll">
+<h2>Pagination on scroll<a class="headerlink" href="#pagination-on-scroll" title="Permalink to this headline">¶</a></h2>
+<p>If you want new items to load when the user scroll down the browser page,
+you can use the <a class="reference internal" href="javascript.html#javascript-pagination-on-scroll"><span class="std std-ref">pagination on scroll</span></a>
+feature: just set the <em>paginateOnScroll</em> option of <em>$.endlessPaginate()</em> to
+<em>true</em>, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span><span class="nx">paginateOnScroll</span><span class="o">:</span> <span class="kc">true</span><span class="p">});&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>That&#8217;s all. See the <a class="reference internal" href="templatetags_reference.html"><span class="doc">Templatetags reference</span></a> to improve the use of
+included templatetags.</p>
+<p>It is possible to set the bottom margin used for
+<a class="reference internal" href="javascript.html#javascript-pagination-on-scroll"><span class="std std-ref">pagination on scroll</span></a> (default is 1
+pixel). For example, if you want the pagination on scroll to be activated when
+20 pixels remain to the end of the page:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span>
+            <span class="nx">paginateOnScroll</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">paginateOnScrollMargin</span><span class="o">:</span> <span class="mi">20</span>
+        <span class="p">});</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>Again, see the <a class="reference internal" href="javascript.html"><span class="doc">JavaScript reference</span></a>.</p>
+</div>
+<div class="section" id="on-scroll-pagination-using-chunks">
+<h2>On scroll pagination using chunks<a class="headerlink" href="#on-scroll-pagination-using-chunks" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes, when using on scroll pagination, you may want to still display
+the <em>show more</em> link after each <em>N</em> pages. In Django Endless Pagination this is
+called <em>chunk size</em>. For instance, a chunk size of 5 means that a <em>show more</em>
+link is displayed after page 5 is loaded, then after page 10, then after page
+15 and so on. Activating <a class="reference internal" href="javascript.html#javascript-chunks"><span class="std std-ref">chunks</span></a> is straightforward,
+just use the <em>paginateOnScrollChunkSize</em> option:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span>
+            <span class="nx">paginateOnScroll</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">paginateOnScrollChunkSize</span><span class="o">:</span> <span class="mi">5</span>
+        <span class="p">});</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="specifying-where-the-content-will-be-inserted">
+<h2>Specifying where the content will be inserted<a class="headerlink" href="#specifying-where-the-content-will-be-inserted" title="Permalink to this headline">¶</a></h2>
+<p>If you are paginating a table, you may want to include the <em>show_more</em> link
+after the table itself, but the loaded content should be placed inside the
+table.</p>
+<p>For any case like this, you may specify the <em>contentSelector</em> option that
+points to the element that will wrap the cumulative data:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span>
+            <span class="nx">contentSelector</span><span class="o">:</span> <span class="s1">&#39;.endless_content_wrapper&#39;</span>
+        <span class="p">});</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default, the contentSelector is null, making each new page be inserted
+before the <em>show_more</em> link container.</p>
+</div>
+<p>When using this approach, you should take 2 more actions.</p>
+<p>At first, the page template must be splitted a little different. You must do
+the pagination in the main template and only apply pagination in the page
+template if under ajax:</p>
+<p><em>myapp/entry_list.html</em> becomes:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">paginate</span> <span class="nv">entry_list</span> <span class="cp">%}</span>
+<span class="p">&lt;</span><span class="nt">ul</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">ul</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">show_more</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">();&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p><em>myapp/entry_list_page.html</em> becomes:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">load</span> <span class="nv">el_pagination_tags</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">if</span> <span class="nv">request.is_ajax</span> <span class="cp">%}{%</span> <span class="k">paginate</span> <span class="nv">entry_list</span> <span class="cp">%}{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">entry</span> <span class="k">in</span> <span class="nv">entry_list</span> <span class="cp">%}</span>
+    <span class="c">{# your code to show the entry #}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>This is needed because the <em>show_more</em> button now is taken off the
+page_template and depends of the <em>paginate</em> template tag. To avoid apply
+pagination twice, we avoid run it a first time in the page_template.</p>
+<p>You may also set the <em>EL_PAGINATION_PAGE_OUT_OF_RANGE_404</em> to True, so a blank
+page wouldn&#8217;t render the first page (the default behavior). When a blank page
+is loaded and propagates the 404 error, the <em>show_more</em> link is removed.</p>
+</div>
+<div class="section" id="before-version-2-0">
+<h2>Before version 2.0<a class="headerlink" href="#before-version-2-0" title="Permalink to this headline">¶</a></h2>
+<p>Django Endless Pagination v2.0 introduces a redesigned Ajax support for
+pagination. As seen above, Ajax can now be enabled using a brand new jQuery
+plugin that can be found in
+<code class="docutils literal"><span class="pre">static/el-pagination/js/el-pagination.js</span></code>.</p>
+<p>Old code was removed:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="c">{# new jQuery plugin #}</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="c">{# Removed. #}</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination-endless.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination_on_scroll.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre></div>
+</div>
+<p>However, please consider <a class="reference internal" href="javascript.html#javascript-migrate"><span class="std std-ref">migrating</span></a> as soon as
+possible: the old JavaScript files are removed.</p>
+<p>Please refer to the <a class="reference internal" href="javascript.html"><span class="doc">JavaScript reference</span></a> for a detailed overview of the new
+features and for instructions on <a class="reference internal" href="javascript.html#javascript-migrate"><span class="std std-ref">how to migrate</span></a> from
+the old JavaScript files to the new one.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Twitter-style Pagination</a><ul>
+<li><a class="reference internal" href="#split-the-template">Split the template</a></li>
+<li><a class="reference internal" href="#a-shortcut-for-ajaxed-views">A shortcut for ajaxed views</a></li>
+<li><a class="reference internal" href="#paginating-objects">Paginating objects</a></li>
+<li><a class="reference internal" href="#pagination-on-scroll">Pagination on scroll</a></li>
+<li><a class="reference internal" href="#on-scroll-pagination-using-chunks">On scroll pagination using chunks</a></li>
+<li><a class="reference internal" href="#specifying-where-the-content-will-be-inserted">Specifying where the content will be inserted</a></li>
+<li><a class="reference internal" href="#before-version-2-0">Before version 2.0</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="start.html"
+                        title="previous chapter">Getting started</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="digg_pagination.html"
+                        title="next chapter">Digg-style pagination</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/twitter_pagination.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="digg_pagination.html" title="Digg-style pagination"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="start.html" title="Getting started"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2009-2017, Oleksandr Shtalinberg and Francesco Banconi.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+    </div>
+  </body>
+</html>
