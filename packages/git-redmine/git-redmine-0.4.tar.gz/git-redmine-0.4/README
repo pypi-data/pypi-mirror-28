@@ -1,0 +1,90 @@
+git-redmine
+===========
+
+Redmine integration to git.
+
+Configuration
+-------------
+
+Add the following snippet to your .config/git/config file.::
+
+   [redmine]
+   url = https://redmine.mycompany.org/
+   key = apikey
+
+      OR
+
+   username = username
+   password = password
+
+Usage
+-----
+
+project
+.......
+
+Show the current default project.
+
+project set
+...........
+
+Set the current default project for this repository, useful for creating new
+issues.::
+
+   git redmine project set myproject-id
+
+issue new
+.........
+
+Given a default project, create a new issue, an editor is launched to define
+subject and description of the issue.::
+
+  git redmine issue new
+
+issue take
+..........
+
+Handle the given issue by creating or switching to a branch named
+`wip/<issue-number>-<slugified-issue-subject>` forking from `master`.::
+
+  git redmine issue take 123
+
+It will propose applying patches attached to the issue.
+
+issue show
+..........
+
+Show information about the current issue.::
+
+  git redmine issue show
+
+Show informations about issue 9999.::
+
+  git redmine issue show --issue 9999
+
+issue submit
+............
+
+Use `git format-patch` to create the patch serie from `master` and attach it to
+the current issue. An editor is launched to add a commment.::
+
+  git redmine issue submit
+
+To submit only the last commit::
+
+  git redmine issue submit 1
+
+To submit the last commit to issue 9999::
+
+  git redmine issue submit --issue 9999 1
+
+issue apply
+...........
+
+Apply patches attached to the current issue.::
+
+  git redmine issue apply
+
+Apply patched atteched to issue 9999.::
+
+  git redmine issue apply --issue 9999
