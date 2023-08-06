@@ -1,0 +1,14 @@
+# -*- snakemake -*-
+
+rule foo:
+    output: "foo.txt"
+    shell: "echo 'hello world' > {output}"
+
+rule bar:
+    input: "foo.txt"
+    output: "foo.bar.txt"
+    shell: "cp {input} {output}"
+
+rule foobar:
+    output: "foobar.txt"
+    shell: "exit 1"
