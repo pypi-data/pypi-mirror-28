@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+from __future__ import print_function, unicode_literals
+
+import sys
+import optparse
+import fileinput
+import pkg_resources
+
+import ynot
+from ynot import *
+from ynot.documenter import documentation_trafo
+
+trafoschema = pkg_resources.resource_string(ynot.__name__, 'trafoschema.yaml')
+documentation_trafo = pkg_resources.resource_string(ynot.__name__, 'documentation_trafo.yaml')
+
+def get_opts_and_args(argv):
+    loglevelchoices = ['DEBUG', 'INFO', 'WARN', 'ERROR']
+    optparser = optparse.OptionParser(
+        prog = argv[0],
+        usage='Usage: %prog [OPTION] -t trafoFile document...',
+        description = 'Apply transformation to yaml documents',
+        version='%s %s' % ("%prog", __version__)
+    )
+    optparser.add_option('-t', '--trafo', dest='trafofilename', help="File transformation is read from")
+    optparser.add_option('--doc', dest='docfile', action='store_true', help="Output documentation in gfm markdown format and exit")
+    optparser.add_option('-l', '--log-level', type='choice',
+        choices=loglevelchoices, dest='loglevel', default=loglevelchoices[1],
+        help="Log level. Choices: %s; Defaults to %s" % (loglevelchoices, loglevelchoices[1])
+    )
+    optparser.add_option('--dont-verify', action='store_true', help="Verify transformator file TRANSFORMATOR")
+    optparser.add_option('--encoding', default='utf-8', help='endoding of input files. Default: [%default]')
+    return optparser.parse_args(argv[1:])
+
+def main(argv):
+    opts, args = get_opts_and_args(argv)
+    logger.setLevel(eval('logging.%s' % opts.loglevel))
+    logger.debug("main(%s)" % args)
+    logger.setLevel(eval('logging.%s' % opts.loglevel))
+    if opts.docfile:
+        trafo = ynot.Trafo.from_yaml(documentation_trafo, trafoschema, verify=False)
+        to_document = "".join(fileinput.input(opts.trafofilename, openhook=fileinput.hook_encoded(opts.encoding)))
+        try:
+            ynot.Trafo.from_yaml(to_document, trafoschema, verify=not opts.dont_verify)
+        except ynot.VerificationException, e:
+            logger.error(e)
+            sys.exit(1)
+        Transformation(Node.from_yaml(to_document), trafo).transform()
+    else:
+        try:
+            trafo = ynot.Trafo.from_yaml("".join(fileinput.input(opts.trafofilename, openhook=fileinput.hook_encoded(opts.encoding))), trafoschema, verify=not opts.dont_verify)
+        except ynot.VerificationException, e:
+            logger.error(e)
+            sys.exit(1)
+        if len(args) > 0:
+            Transformation(Node.from_yaml("".join(fileinput.input(args, openhook=fileinput.hook_encoded(opts.encoding)))), trafo).transform()
+
+if __name__ == "__main__":
+    main(sys.argv)
