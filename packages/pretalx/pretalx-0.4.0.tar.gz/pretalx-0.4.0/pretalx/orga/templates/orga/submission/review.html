@@ -1,0 +1,97 @@
+{% extends "orga/submission/base.html" %}
+{% load bootstrap4 %}
+{% load i18n %}
+{% load rich_text %}
+{% block submission_content %}
+
+    <div class="alert alert-info">
+        {% if not read_only %}
+            {% blocktrans trimmed %}
+                Please give a fair review on why you'd like to see this submission at the conference,
+                or why you think it would not be a good fit.
+            {% endblocktrans %}
+            {% if not form.instance.pk %}
+            {% blocktrans trimmed %}
+                You will be able to see other reviews once you have given yours.
+            {% endblocktrans %}
+            {% endif %}
+        {% else %}
+            {% blocktrans trimmed %}
+                This submission can no longer be reviewed, as a decision regarding its
+                role in this event has already been made.
+            {% endblocktrans %}
+        {% endif %}
+        {% if override_left %}
+            {% blocktrans trimmed with count=override_left %}
+                You have <strong>{{ count }}</strong> override votes left.
+            {% endblocktrans %}
+        {% endif %}
+    </div>
+
+    {% if not form.instance.pk %}
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="id_text">{% trans "Abstract" %}</label>
+            <div class="col-md-9">
+                {{ submission.abstract|rich_text }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="id_text">{% trans "Description" %}</label>
+            <div class="col-md-9">
+                {{ submission.description|rich_text }}
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="id_text">{% trans "Notes for the organizer" %}</label>
+            <div class="col-md-9">
+                {{ submission.notes|rich_text }}
+            </div>
+        </div>
+        {% bootstrap_form form layout='event' %}
+        <div class="form-group row">
+            <div class="ml-auto col-md-9">
+                <button type="submit" class="btn btn-primary" name="show_next" value="1">{% trans "Save and next" %}</button>
+                <button type="submit" class="btn btn-secondary">{% trans "Save" %}</button>
+            </div>
+        </div>
+    </form>
+    {% endif %}
+
+    {% if form.instance.pk %}
+    <table class="table review-table table-responsive-md">
+            <tr>
+                <th>{% trans "Points" %}</th>
+                <th>{% trans "Review" %}</th>
+                <th></th>
+            </tr>
+        <tbody>
+            <tr><form method="post">
+                {% csrf_token %}
+                <td>{% bootstrap_field form.score layout="inline" %}</td>
+                <td>{% bootstrap_field form.text layout="inline" %}</td>
+                <td>
+                    {% if not read_only %}
+                        <button type="submit" class="btn btn-primary">{% trans "Save" %}
+                    {% else %}
+                        {{ request.user.get_display_name }}
+                    {% endif %}
+                </td>
+            </form></tr>
+            {% for review in submission.reviews.all %}
+                {% if review != form.instance %}
+                    <tr>
+                        <td>{{ review.display_score }}</td>
+                        <td>{{ review.text }}</td>
+                        <td>{{ review.user.get_display_name }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+
+{% endblock %}
+
