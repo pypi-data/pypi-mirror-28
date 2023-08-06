@@ -1,0 +1,21 @@
+{% load i18n mptt_tags %}
+
+<ul class="nav">
+    {% recursetree nodes %}
+        <li class="nav-item{% if not node.is_leaf_node %} dropdown{% endif %}">
+            <a href="{{ node.get_link }}" target="{{ node.target }}" {% if not node.is_leaf_node %}class="dropdown-toggle" data-toggle="dropdown"{% endif %}>
+                {{ node }}
+
+                {% if not node.is_leaf_node %}
+                    <b class="caret"></b>
+                {% endif %}
+            </a>
+
+            {% if not node.is_leaf_node %}
+                <ul class="dropdown-menu">
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
