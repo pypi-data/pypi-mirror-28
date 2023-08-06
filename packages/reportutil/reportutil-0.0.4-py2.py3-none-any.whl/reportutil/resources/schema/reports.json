@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "description": "Schema for Reports",
+
+  "definitions": {
+    "report_node": {
+      "type": "object",
+      "properties": {
+        "_type":  {"type": "string"}
+      },
+      "required": ["_type"],
+      "additionalProperties": { "$ref": "#/definitions/report_node" }
+    }
+  },
+
+  "type": "object",
+  "properties":{
+    "report_root": {"type": "string"},
+    "structure": { "$ref": "#/definitions/report_node" }
+  },
+  "required": ["report_root", "structure"],
+  "additionalProperties": false
+}
