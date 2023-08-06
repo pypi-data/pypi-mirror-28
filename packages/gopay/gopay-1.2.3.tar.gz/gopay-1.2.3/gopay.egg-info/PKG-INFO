@@ -1,0 +1,320 @@
+Metadata-Version: 1.1
+Name: gopay
+Version: 1.2.3
+Summary: GoPay's Python SDK for Payments REST API
+Home-page: https://github.com/gopaycommunity/gopay-python-sdk
+Author: GoPay
+Author-email: integrace@gopay.cz
+License: MIT
+Description: GoPay's Python SDK for Payments REST API
+        ========================================
+        
+        |Build Status|
+        
+         Requirements
+        -------------
+        
+        -  Python >= 2.6, Python 3
+        
+        
+         Installation
+        -------------
+        
+        The simplest way to install SDK is to use
+        `PIP <https://docs.python.org/2.7/installing/>`__:
+        
+        .. code:: bash
+        
+            pip install gopay
+        
+        Basic usage
+        -----------
+        
+        .. code:: python
+        
+            import gopay
+        
+            # minimal configuration
+            payments = gopay.payments({
+                'goid': 'my goid',
+                'clientId': 'my id',
+                'clientSecret': 'my secret',
+                'isProductionMode': False
+            })
+        
+            # full configuration
+            payments = gopay.payments({
+                'goid': 'my goid',
+                'clientId': 'my id',
+                'clientSecret': 'my secret',
+                'isProductionMode': False,
+                'scope': gopay.TokenScope.ALL,
+                'language': gopay.Language.CZECH,
+                'timeout': 30
+            })
+        
+        Configuration
+        ~~~~~~~~~~~~~
+        
+        Required fields
+        ^^^^^^^^^^^^^^^
+        
+        +------------------------+-------------+-----------------------------------------------------------------------------------+
+        | Required field         | Data type   | Documentation                                                                     |
+        +========================+=============+===================================================================================+
+        | ``goid``               | string      | default GoPay account used in ``create_payment`` if ``target`` is not specified   |
+        +------------------------+-------------+-----------------------------------------------------------------------------------+
+        | ``clientId``           | string      | https://doc.gopay.com/en/?shell#oauth                                             |
+        +------------------------+-------------+-----------------------------------------------------------------------------------+
+        | ``clientSecret``       | string      | https://doc.gopay.com/en/?shell#oauth                                             |
+        +------------------------+-------------+-----------------------------------------------------------------------------------+
+        | ``isProductionMode``   | boolean     | `test or production environment? <https://help.gopay.com/en/s/ey>`__              |
+        +------------------------+-------------+-----------------------------------------------------------------------------------+
+        
+        Optional fields
+        ^^^^^^^^^^^^^^^
+        
+        +------------------+-------------+----------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+        | Optional field   | Data type   | Default value                                            | Documentation                                                                                                                                            |
+        +==================+=============+==========================================================+==========================================================================================================================================================+
+        | ``scope``        | string      | ```gopay.enums.TokenScope.ALL`` </gopay/enums.py>`__     | https://doc.gopay.com/en/?shell#scope                                                                                                                    |
+        +------------------+-------------+----------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+        | ``language``     | string      | ```gopay.enums.Language.ENGLISH`` </gopay/enums.py>`__   | language used in ``create_payment`` if ``lang`` is not specified + used for `localization of errors <https://doc.gopay.com/en/?shell#return-errors>`__   |
+        +------------------+-------------+----------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+        | ``timeout``      | int         | 30                                                       | Browser timeout in seconds                                                                                                                               |
+        +------------------+-------------+----------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
+        
+         Available methods
+        ~~~~~~~~~~~~~~~~~~
+        
+        +-------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------+
+        | API                                                                                                                     | SDK method                                         |
+        +=========================================================================================================================+====================================================+
+        | `Create standard payment <https://doc.gopay.com/en/#standard-payment>`__                                                | ``payments.create_payment({})``                    |
+        +-------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------+
+        | `Status of the payment <https://doc.gopay.com/en/#status-of-the-payment>`__                                             | ``payments.get_status(id_payment)``                |
+        +-------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------+
+        | `Refund of the payment <https://doc.gopay.com/en/#refund-of-the-payment-(cancelation)>`__                               | ``payments.refund_payment(id_payment, $amount)``   |
+        +-------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------+
+        | `Create recurring payment <https://doc.gopay.com/en/#recurring-payment>`__                                              | ``payments.create_payment({})``                    |
+        +-------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------+
+        | `Recurring payment on demand <https://doc.gopay.com/en/#recurring-payment-on-demand>`__                                 | ``payments.create_recurrence(id_payment, {})``     |
+        +-------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------+
+        | `Cancellation of the recurring payment <https://doc.gopay.com/en/#cancellation-of-the-recurring-payment>`__             | ``payments.void_recurrence(id_payment)``           |
+        +-------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------+
+        | `Create pre-authorized payment <https://doc.gopay.com/en/#pre-authorized-payment>`__                                    | ``payments.create_payment({})``                    |
+        +-------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------+
+        | `Charge of pre-authorized payment <https://doc.gopay.com/en/#charge-of-pre-authorized-payment>`__                       | ``payments.capture_authorization(id_payment)``     |
+        +-------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------+
+        | `Cancellation of the pre-authorized payment <https://doc.gopay.com/en/#cancellation-of-the-pre-authorized-payment>`__   | ``payments.void_authorization(id_payment)``        |
+        +-------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------+
+        
+        SDK response? Has my call succeed?
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        | SDK returns wrapped API response. Every method returns
+        | ```gopay.http.response`` object </gopay/http.py>`__. Structure of
+        ``json/__str__``
+        | should be same as in `documentation <https://doc.gopay.com/en>`__.
+        | SDK throws no exception. Please create an issue if you catch one.
+        
+        .. code:: python
+        
+            response = payments.create_payment({})
+            if response.has_succeed():
+                print("hooray, API returned " + str(response))
+                return response.json['gw_url'] # url for initiation of gateway
+            else:
+                # errors format: https://doc.gopay.com/en/?shell#http-result-codes
+                print("oops, API returned " + str(response.status_code) + ": " + str(response))
+        
+        +------------------------------+----------------------------------------------------------------------------+
+        | Method                       | Description                                                                |
+        +==============================+============================================================================+
+        | ``response.has_succeed()``   | checks if API returns status code *200*                                    |
+        +------------------------------+----------------------------------------------------------------------------+
+        | ``response.json``            | decoded response, returned objects are converted into associative arrays   |
+        +------------------------------+----------------------------------------------------------------------------+
+        | ``response.status_code``     | HTTP status code                                                           |
+        +------------------------------+----------------------------------------------------------------------------+
+        | ``response.__str__()``       | raw body from HTTP response                                                |
+        +------------------------------+----------------------------------------------------------------------------+
+        
+         Are required fields and allowed values validated?
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        | **No.** API `validates
+        fields <https://doc.gopay.com/en/?shell#return-errors>`__ pretty
+        extensively
+        | so there is no need to duplicate validation in SDK. It would only
+        introduce new type of error.
+        | Or we would have to perfectly simulate API error messages. That's why
+        SDK just calls API which
+        | behavior is well documented in
+        `doc.gopay.com <https://doc.gopay.com/en>`__.
+        
+        --------------
+        
+        Advanced usage
+        --------------
+        
+        Initiation of the payment gateway
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        .. code:: python
+        
+            # create payment and pass url to template
+            response = payments.create_payment({})
+            if response.has_succeed():
+                templateParameters = {
+                    'gatewayUrl': response.json['gw_url'],
+                    'embedJs': gopay.url_to_embedjs()
+                }
+                # render template
+        
+        `Inline gateway <https://doc.gopay.com/en/#inline-option>`__
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        
+        .. code:: jinja
+        
+            <form action="<%= $gatewayUrl %>" method="post" id="gopay-payment-button">
+              <button name="pay" type="submit">Pay</button>
+              <script type="text/javascript" src="<%= $embedJs %>"></script>
+            </form>
+        
+        `Redirect gateway <https://doc.gopay.com/en/#redirect-option>`__
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        
+        .. code:: jinja
+        
+            <form action="<%= $gatewayUrl %>" method="post">
+              <button name="pay" type="submit">Pay</button>
+            </form>
+        
+        `Asynchronous initialization using JavaScript <https://github.com/gopaycommunity/gopay-php-api/blob/master/examples/js-initialization.md>`__
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        
+        Enums (`Code lists <https://doc.gopay.com/en/#code-lists>`__)
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        | Instead of hardcoding bank codes string you can use predefined enums.
+        | Check using enums in `create-payment
+        example </examples/create_payment.py>`__
+        
+        +----------------------------------------+------------------------------------------------------------------------+
+        | Type                                   | Description                                                            |
+        +========================================+========================================================================+
+        | `Language </gopay/enums.py>`__         | Payment language, localization of error messages                       |
+        +----------------------------------------+------------------------------------------------------------------------+
+        | `Token scope </gopay/enums.py>`__      | Authorization scope for `OAuth2 <https://doc.gopay.com/en/#oauth>`__   |
+        +----------------------------------------+------------------------------------------------------------------------+
+        | `Payment enums </gopay/enums.py>`__    | Enums for creating payment                                             |
+        +----------------------------------------+------------------------------------------------------------------------+
+        | `Response enums </gopay/enums.py>`__   | Result of creating payment, executing payment operations               |
+        +----------------------------------------+------------------------------------------------------------------------+
+        
+        Cache access token
+        ~~~~~~~~~~~~~~~~~~
+        
+        | Access token expires after 30 minutes so it's expensive to use new
+        token for every request.
+        | Unfortunately it's default behavior of
+        ```gopay.oauth2.InMemoryTokenCache`` </gopay/oauth2.py>`__.
+        | But you can implement your cache and store tokens in Memcache, Redis,
+        files, ... It's up to you.
+        
+        | Your cache must implement template methods ``get_token`` and
+        ``set_token``.
+        | Be aware that there are two
+        `scopes <https://doc.gopay.com/en/?shell#scope>`__ (``TokenScope``) and
+        | SDK can be used for different clients (``clientId``,
+        ``isProductionMode``). So ``client`` passed to
+        | methods is unique identifier (``string``) that is built for current
+        environment.
+        | Below you can see example implementation of caching tokens in memory:
+        
+        .. code:: python
+        
+            # register cache in optional service configuration
+            payments = gopay.payments(
+                {}, # your config
+                {'cache': MyCache()}
+            )
+        
+        .. code:: python
+        
+            class MyCache:
+                def __init__(self):
+                    self.tokens = {}
+        
+                def get_token(self, client):
+                    return self.tokens.get(client) # return None if token not exists
+        
+                def set_token(self, client, token):
+                    self.tokens[client] = token
+        
+        Log HTTP communication
+        ~~~~~~~~~~~~~~~~~~~~~~
+        
+        | You can log every request and response from communication with API.
+        Check available loggers below.
+        | Or you can implement your own logger, just implement function that
+        takes two arguments:
+        | ```gopay.http.request`` </gopay/http.py>`__ and
+        ```gopay.http.response`` </gopay/http.py>`__.
+        
+        .. code:: python
+        
+            # register logger in optional service configuration
+            payments = gopay.payments(
+                {}, # your config
+                {'logger': my_logger}
+            )
+        
+            def my_logger(request, response):
+                print(vars(request))
+                print(vars(response))
+        
+        +--------------------------------------------------------------+-------------------------------------------------------------------+
+        | Available logger                                             | Description                                                       |
+        +==============================================================+===================================================================+
+        | `gopay.http.null\_logger </gopay/http.py>`__                 | Default logger which does nothing                                 |
+        +--------------------------------------------------------------+-------------------------------------------------------------------+
+        | `tests.remote.debug\_logger </tests/remote/__init__.py>`__   | Prints request and response in `remote tests <tests/remote/>`__   |
+        +--------------------------------------------------------------+-------------------------------------------------------------------+
+        
+        Contributing
+        ------------
+        
+        | Contributions from others would be very much appreciated! Send
+        | `pull
+        request <https://github.com/gopaycommunity/gopay-python-api/pulls>`__/
+        | `issue <https://github.com/gopaycommunity/gopay-python-api/issues>`__.
+        Thanks!
+        
+        License
+        -------
+        
+        | Copyright (c) 2015 GoPay.com. MIT Licensed,
+        | see
+        `LICENSE <https://github.com/gopaycommunity/gopay-python-api/blob/master/LICENSE>`__
+        for details.
+        
+        .. |Build Status| image:: https://travis-ci.org/gopaycommunity/gopay-python-api.svg?branch=master
+        :target: https://travis-ci.org/gopaycommunity/gopay-python-api
+        
+Keywords: gopay payments sdk rest api
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: Implementation :: PyPy
