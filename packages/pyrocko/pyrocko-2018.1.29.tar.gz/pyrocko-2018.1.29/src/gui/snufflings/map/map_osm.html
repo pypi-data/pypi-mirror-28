@@ -1,0 +1,249 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://openlayers.org/en/v4.6.4/css/ol.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
+    <script src="https://openlayers.org/en/v4.6.4/build/ol.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="http://maplib.khtml.org/khtml.maplib/khtml_all.js"> </script>
+    <script type="text/javascript" src="map_util.js"> </script>
+    <script type="text/javascript" src="loadxmldoc.js"></script>
+    <script>
+        var apiKey = "ApTJzdkyN1DdFKkRAE6QIDtzihNaf6IWJsT-nQ_2eMoO4PN__0Tzhl2-WgJtXFSp";
+        xmlDoc = load_markers("markers.xml")
+
+        function get_transformed_lonlat(item){
+            return ol.proj.fromLonLat([parseFloat(item.lon), parseFloat(item.lat)]);
+        };
+
+        function get_station_layer(items){
+
+            var triangle = new ol.style.Style({
+                image: new ol.style.RegularShape({
+                    fill: new ol.style.Fill({
+                        color: 'red'}),
+                    stroke: new ol.style.Stroke({
+                        color: 'black',
+                        width: 2}),
+                    points: 3,
+                    radius: 8,
+                    angle: 0
+                  })
+            });
+
+            var features = new Array(items.length);
+            for (i=0; i<items.length; i++){
+                var item = items[i];
+
+                features[i] = new ol.Feature({
+                    name: item.nsl,
+                    geometry: new ol.geom.Point(
+                        get_transformed_lonlat(item)),
+                });
+                features[i].setStyle(triangle);
+            };
+
+            var station_marker_source = new ol.source.Vector({
+                features: features,
+                useSpatialIndex: true
+            });
+
+            var station_layer = new ol.layer.Vector({
+                visible: true,
+                source: station_marker_source,
+            });
+            return station_layer;
+        };
+
+        function get_event_layer(items, magmin, magmax, depth_min, depth_max) {
+
+            if (magmin < 0)
+                var magshift = magmin * -1;
+            else
+                var magshift = 0.;
+
+            var event_stroke = new ol.style.Stroke({
+                color: '#ffffff', width: 1
+            })
+            var features = new Array(items.length);
+
+            for (i=0; i<items.length; i++) {
+                var item = items[i];
+                var rad = magnitude_circle_radius(item.magnitude, magmin, magmax, magshift);
+
+                var style = new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: rad,
+                        fill: new ol.style.Fill({
+                            color: item.get_fill_color(depth_min, depth_max)
+                        }),
+                        stroke: event_stroke,
+                      })
+                });
+
+                features[i] = new ol.Feature({
+                    name: item.get_event_description(),
+                    geometry: new ol.geom.Point(
+                        get_transformed_lonlat(item)
+                    ),
+                });
+                features[i].setStyle(style);
+            }
+
+            var event_layer_source = new ol.source.Vector({
+                features: features,
+                useSpatialIndex: true,
+            });
+
+            var event_layer = new ol.layer.Vector({
+                source: event_layer_source,
+                /*eventListeners: layerListeners*/
+            });
+
+            return event_layer;
+        };
+
+        function zoomToExtent(map, layers) {
+            var extent = ol.extent.createEmpty();
+            layers.forEach(function(layers) {
+              ol.extent.extend(extent, layers.getSource().getExtent());
+            });
+            /*console.log(extent);*/
+            map.getView().fit(extent, map.getSize());
+        };
+
+    </script>
+
+</head>
+<body onload="init();">
+    <div class="map" id="map"><div id="popup"></div></div>
+    <div id="logger"></div>
+    <script type="text/javascript">
+        function init() {
+            var aerial = new ol.layer.Tile({
+                visibility: false,
+                isBaseLayer: false,
+                source: new ol.source.BingMaps({
+                    imagerySet: "Aerial",
+                    key: apiKey,
+                })
+            });
+
+            var stamen_terrain = new ol.layer.Tile({
+                visibility: true,
+                source: new ol.source.Stamen({
+                  layer: 'terrain'
+                })
+            });
+
+            var plate_boundary_style = new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    width: 4,
+                    color: "#f49842",
+                })
+            });
+
+/*            var plate_boundaries = new ol.layer.Vector({
+                visible: true,
+                style: plate_boundary_style,
+                source: new ol.source.Vector({
+                    url: "plates.kml",
+                    format: new ol.format.KML({
+                        extractStyles: false,
+                        extractAttributes: false,
+                        maxDepth: 2
+                    })
+                })
+            });*/
+
+            var data = myxmlExtractor(xmlDoc);
+
+            var stations = data[0];
+            var events = data[1];
+            var magnitudes = data[2];
+            var depths = data[3];
+
+            magnitude_min = 0;
+            magnitude_max = 0;
+            depth_min = 10;
+            depth_max = 10;
+            if (magnitudes.length>1){
+                magnitude_min, magnitude_max = get_minmax(magnitudes)
+                depth_min, depth_max = get_minmax(depths);
+            }
+
+            var event_layer = get_event_layer(events, magnitude_min, magnitude_max, depth_min, depth_max);
+            var station_layer = get_station_layer(stations);
+
+            map = new ol.Map({
+                target: document.getElementById('map'),
+                layers: [
+                    stamen_terrain,
+                    /*plate_boundaries,*/
+                    event_layer,
+                    station_layer,
+                ],
+                controls: [
+                    /*new ol.Control.LayerSwitcher({roundedCornerColor: "#999999"}),*/
+                    new ol.control.Attribution(),
+                    new ol.control.Zoom(),
+                    new ol.control.MousePosition({
+                        coordinateFormat: ol.coordinate.createStringXY(4),
+                        projection: 'EPSG:4326',
+                    }),
+                    new ol.control.ScaleLine(),
+                ],
+                view: new ol.View({
+                    center: [0, 0],
+                    zoom: 4
+                })
+            });
+
+            var element = document.getElementById('popup');
+            var popup = new ol.Overlay({
+                element: element,
+                positioning: 'bottom-center',
+                stopEvent: false,
+                offset: [0, -5]
+            });
+            map.addOverlay(popup);
+
+            // display popup on click
+            map.on('click', function(evt) {
+              var feature = map.forEachFeatureAtPixel(evt.pixel,
+                  function(feature) {
+                    return feature;
+                  });
+              if (feature) {
+                var coordinates = feature.getGeometry().getCoordinates();
+                popup.setPosition(coordinates);
+                $(element).popover({
+                  'placement': 'top',
+                  'html': true,
+                  'content': feature.get('name')
+                });
+                $(element).popover('show');
+              } else {
+                $(element).popover('destroy');
+              }
+            });
+
+            // change mouse cursor when over marker
+            map.on('pointermove', function(e) {
+                if (e.dragging) {
+                    $(element).popover('destroy');
+                    return;
+                }
+                var pixel = map.getEventPixel(e.originalEvent);
+                var hit = map.hasFeatureAtPixel(pixel);
+                map.getTarget().style.cursor = hit ? 'pointer' : '';
+            });
+
+            zoomToExtent(map, [station_layer, event_layer]);
+        }
+
+    </script>
+</body>
+</html>
