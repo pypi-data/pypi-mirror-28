@@ -1,0 +1,191 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>An Overview of the Deployment Process &#8212; pyqtdeploy v2.1 User Guide</title>
+    <link rel="stylesheet" href="_static/riverbank.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo_tn.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pyqt-demo" href="demo.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="demo.html" title="pyqt-demo"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtdeploy v2.1 User Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="an-overview-of-the-deployment-process">
+<h1>An Overview of the Deployment Process<a class="headerlink" href="#an-overview-of-the-deployment-process" title="Permalink to this headline">¶</a></h1>
+<p>The purpose of <strong class="program">pyqtdeploy</strong> is to convert a Python application, the
+Python interpreter, the Python standard library, Python C extension modules,
+third-party Python packages and third-party extension modules to a single,
+target-specific executable.  Depending on the target the executable may need to
+be packaged in some way to be truly deployable.  For example, Android
+applications need to be signed and packaged as a <code class="docutils literal"><span class="pre">.apk</span></code> file.  Any such
+packaging is outside the scope of <strong class="program">pyqtdeploy</strong>.</p>
+<p>While <strong class="program">pyqtdeploy</strong> allows you to create a single executable you are
+free to keep components external to the executable if required.</p>
+<p><strong class="program">pyqtdeploy</strong> supports the following target architectures:</p>
+<ul class="simple">
+<li>android-32</li>
+<li>ios-64</li>
+<li>linux-64</li>
+<li>macos-64</li>
+<li>win-32</li>
+<li>win-64.</li>
+</ul>
+<p>The full architecture name consists of the platform and the word size separated
+by a <code class="docutils literal"><span class="pre">-</span></code>.  Note that not all platform/word size combinations are supported.</p>
+<p><strong class="program">pyqtdeploy</strong> uses the following parts of Qt:</p>
+<ul class="simple">
+<li><strong class="program">qmake</strong> is the Qt build system that supports cross-compilation to
+multiple targets.</li>
+<li><strong class="program">rcc</strong> is a utility that converts arbitrary files to C++ data
+structures that implement an embedded filesystem that can be linked as part
+of an application.</li>
+<li>The <strong class="program">QtCore</strong> library implements file access APIs that recognise file
+and directory names that refer to the contents of the embedded filesystem
+created with <strong class="program">rcc</strong>.  <strong class="program">pyqtdeploy</strong> implements import hooks
+that use <strong class="program">QtCore</strong> to allow frozen Python modules to be imported from
+the embedded filesystem just as if they were being imported from an ordinary
+filesystem.</li>
+</ul>
+<p>Note that <strong class="program">pyqtdeploy</strong> generated code does not itself use PyQt.
+<strong class="program">pyqtdeploy</strong> can be used to deploy non-PyQt applications, including
+simple command line scripts.  However, as every deployed application is linked
+with the <strong class="program">QtCore</strong> library, you should make sure that you application’s
+license is compatible with the license of the version of Qt that you are using.</p>
+<p>When an application is made up of a number of third-party components (Python
+packages and extension modules) it is necessary to have these installed in
+defined locations so that they can be found during the build of the
+application.  While in some cases it is possible to use an existing Python
+installation for this it has a number of disadvantages:</p>
+<ul class="simple">
+<li>Different applications may have requirements for different versions of a
+third-party package making it difficult to share the same Python
+installation.</li>
+<li>Your application may require components (including the Python interpreter
+itself) to be configured differently.</li>
+<li>A standard Python installation will contain dynamically linked extension
+modules but you may want to use statically linked versions.</li>
+<li>It cannot be used when targeting a non-native platform.</li>
+</ul>
+<p>Experience has shown that it is easier to keep all of these components separate
+from any standard Python installation.  A target-specific system root directory
+(<em>sysroot</em>) can be used to contain appropriately configured and built versions
+of all the required components.  If you are developing a number of applications
+then it is likely that you will be standardising on the versions of the
+components used by those applications.  Therefore you can create a single
+sysroot to be used to build all applications.  While the use of a sysroot is
+completely optional, it is highly recommended.</p>
+<p>The steps required to develop a deployable application are as follows:</p>
+<ul class="simple">
+<li>Develop and test the application as normal using a native Python
+installation containing the required third-party components.</li>
+<li>Identify the third-party components that are required and build a
+target-specific sysroot.  See <a class="reference internal" href="sysroot.html#ref-building-a-sysroot"><span class="std std-ref">Building a System Root Directory</span></a> to learn how to
+use <strong class="program">pyqtdeploy-sysroot</strong> to do this.</li>
+<li>Create a project file for the application that identifies the application’s
+source code and all the components used by the application and their
+locations.  See <a class="reference internal" href="pyqtdeploy.html#ref-creating-a-project"><span class="std std-ref">Creating a pyqtdeploy Project</span></a> to learn how to use
+<strong class="program">pyqtdeploy</strong> to do this.</li>
+<li>Freeze the Python modules and generate a <strong class="program">qmake</strong> <code class="docutils literal"><span class="pre">.pro</span></code> file in a
+target-specific build directory.  The <code class="docutils literal"><span class="pre">.pro</span></code> file will reference all of the
+required components in the associated sysroot.  Run <strong class="program">qmake</strong> and then
+<strong class="program">make</strong> to create the application executable.  See
+<a class="reference internal" href="building.html#ref-building-an-application"><span class="std std-ref">Building the Application</span></a> to learn how to use
+<strong class="program">pyqtdeploy-build</strong> to do this.</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="introduction.html"
+                        title="previous chapter">Introduction</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="demo.html"
+                        title="next chapter"><strong class="program">pyqt-demo</strong></a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="demo.html" title="pyqt-demo"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="introduction.html" title="Introduction"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtdeploy v2.1 User Guide</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Riverbank Computing Limited.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

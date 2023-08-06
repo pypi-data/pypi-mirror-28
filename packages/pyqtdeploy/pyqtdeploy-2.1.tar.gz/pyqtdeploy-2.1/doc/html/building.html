@@ -1,0 +1,262 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Building the Application &#8212; pyqtdeploy v2.1 User Guide</title>
+    <link rel="stylesheet" href="_static/riverbank.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo_tn.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Windows and Dynamic Loading of Extension Modules" href="windows_dynamic_loading.html" />
+    <link rel="prev" title="Creating a pyqtdeploy Project" href="pyqtdeploy.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="windows_dynamic_loading.html" title="Windows and Dynamic Loading of Extension Modules"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyqtdeploy.html" title="Creating a pyqtdeploy Project"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtdeploy v2.1 User Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="building-the-application">
+<span id="ref-building-an-application"></span><h1>Building the Application<a class="headerlink" href="#building-the-application" title="Permalink to this headline">¶</a></h1>
+<p><strong class="program">pyqtdeploy-build</strong> uses the project file created by
+<strong class="program">pyqtdeploy</strong> to generate the target-specific source code, including
+the <strong class="program">qmake</strong> <code class="docutils literal"><span class="pre">.pro</span></code> files, needed to create the application.  The
+simplest invocation is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pyqtdeploy</span><span class="o">-</span><span class="n">build</span> <span class="n">pyqt</span><span class="o">-</span><span class="n">demo</span><span class="o">.</span><span class="n">pdy</span>
+</pre></div>
+</div>
+<p>The next step in the full build process would be to change to the build
+directory and run <strong class="program">qmake</strong>.  The final step is target-specific.  For
+Linux, macOS and Windows targets it is only necessary to run <strong class="program">make</strong>
+(or <strong class="program">nmake</strong> in the case of Windows).  For an Android target it is
+necessary to run <strong class="program">make</strong> and Qt’s <strong class="program">androiddeployqt</strong> utility.
+For an iOS target <strong class="program">qmake</strong> generates an Xcode project file.  Xcode is
+then used to perform the final build.</p>
+<p>The demo’s <strong class="program">build-demo.py</strong> script takes care of (almost) all of this
+process automatically.</p>
+<div class="section" id="the-command-line">
+<h2>The Command Line<a class="headerlink" href="#the-command-line" title="Permalink to this headline">¶</a></h2>
+<p>The full set of command line options is:</p>
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-h">
+<code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>This will display a summary of the command line options.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-build-dir">
+<code class="descname">--build-dir</code><code class="descclassname"> DIR</code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-build-dir" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">DIR</span></code> is the name of the directory where all the application source code
+will be placed.  The default value is <code class="docutils literal"><span class="pre">build-</span></code> followed by a
+target-specific suffix.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-include-dir">
+<code class="descname">--include-dir</code><code class="descclassname"> DIR</code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-include-dir" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">DIR</span></code> is the name of the directory containing the target Python
+installation’s <code class="docutils literal"><span class="pre">Python.h</span></code> file.  It overrides any value specified in the
+project file.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-interpreter">
+<code class="descname">--interpreter</code><code class="descclassname"> EXECUTABLE</code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-interpreter" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">EXECUTABLE</span></code> is the <strong>host</strong> Python interpreter used to compile all of
+the Python modules used by the application.  It overrides any value
+specified in the project file.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-no-clean">
+<code class="descname">--no-clean</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-no-clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normally the build directory is deleted and re-created before starting a
+new build.  Specifying this option leaves any existing build directory as
+it is before starting a new build.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-opt">
+<code class="descname">--opt</code><code class="descclassname"> LEVEL</code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-opt" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">LEVEL</span></code> is the level of optimisation performed when freezing Python
+source files:</p>
+<p>0 - no optimisation is done</p>
+<p>1 - <code class="docutils literal"><span class="pre">assert</span></code> statements are removed</p>
+<p>2 - <code class="docutils literal"><span class="pre">assert</span></code> statements and docstrings are removed.</p>
+<p>The default is <code class="docutils literal"><span class="pre">2</span></code>.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-python-library">
+<code class="descname">--python-library</code><code class="descclassname"> LIB</code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-python-library" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">LIB</span></code> is the name of the target Python interpreter library.  It overrides
+any value specified in the project file.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-resources">
+<code class="descname">--resources</code><code class="descclassname"> NUMBER</code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-resources" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">NUMBER</span></code> is the number of Qt <code class="docutils literal"><span class="pre">.qrc</span></code> resource files that are generated.
+On Windows, MSVC cannot cope with very large resource files and complains
+of a lack of heap space.  If you run into this problem then try increasing
+the the number of resource files generated.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-source-dir">
+<code class="descname">--source-dir</code><code class="descclassname"> DIR</code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-source-dir" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">DIR</span></code> is the name of the directory containing the Python source code.  It
+overrides any value specified in the project file.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-standard-library-dir">
+<code class="descname">--standard-library-dir</code><code class="descclassname"> DIR</code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-standard-library-dir" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">DIR</span></code> is the name of the directory containing the target Python
+interpreter’s standard library.  It overrides any value specified in the
+project file.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-sysroot">
+<code class="descname">--sysroot</code><code class="descclassname"> DIR</code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-sysroot" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">DIR</span></code> is the name of the system image root directory.  The
+<span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal"><span class="pre">SYSROOT</span></code> environment variable is set to <code class="docutils literal"><span class="pre">DIR</span></code> during the build
+replacing any existing value.  The default value is <code class="docutils literal"><span class="pre">sysroot-</span></code> followed
+by a target-specific suffix, but this is not set if the <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal"><span class="pre">SYSROOT</span></code>
+environment variable already has a value.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-target">
+<code class="descname">--target</code><code class="descclassname"> TARGET</code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-target" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">TARGET</span></code> is the target architecture.  By default the host architecture is
+used.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-quiet">
+<code class="descname">--quiet</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-quiet" title="Permalink to this definition">¶</a></dt>
+<dd><p>This specifies that progress messages should be disabled.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-verbose">
+<code class="descname">--verbose</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>This specifies that additional progress messages should be enabled.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-v">
+<code class="descname">-V</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--version</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-v" title="Permalink to this definition">¶</a></dt>
+<dd><p>This specifies that the version number should be displayed on <code class="docutils literal"><span class="pre">stdout</span></code>.
+The program will then terminate.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-build-arg-project">
+<code class="descname">project</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-build-arg-project" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">project</span></code> is the name of the project file created by
+<strong class="program">pyqtdeploy</strong>.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Building the Application</a><ul>
+<li><a class="reference internal" href="#the-command-line">The Command Line</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pyqtdeploy.html"
+                        title="previous chapter">Creating a <strong class="program">pyqtdeploy</strong> Project</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="windows_dynamic_loading.html"
+                        title="next chapter">Windows and Dynamic Loading of Extension Modules</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="windows_dynamic_loading.html" title="Windows and Dynamic Loading of Extension Modules"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pyqtdeploy.html" title="Creating a pyqtdeploy Project"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtdeploy v2.1 User Guide</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Riverbank Computing Limited.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

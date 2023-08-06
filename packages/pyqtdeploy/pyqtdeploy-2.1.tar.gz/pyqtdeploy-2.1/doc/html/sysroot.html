@@ -1,0 +1,1223 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Building a System Root Directory &#8212; pyqtdeploy v2.1 User Guide</title>
+    <link rel="stylesheet" href="_static/riverbank.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo_tn.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Creating a pyqtdeploy Project" href="pyqtdeploy.html" />
+    <link rel="prev" title="pyqt-demo" href="demo.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyqtdeploy.html" title="Creating a pyqtdeploy Project"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="demo.html" title="pyqt-demo"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtdeploy v2.1 User Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="building-a-system-root-directory">
+<span id="ref-building-a-sysroot"></span><h1>Building a System Root Directory<a class="headerlink" href="#building-a-system-root-directory" title="Permalink to this headline">¶</a></h1>
+<p><strong class="program">pyqtdeploy-sysroot</strong> is used to create a target-specific system root
+directory (<em>sysroot</em>) containing the target Python installation and any
+third-party components required by the application.  It’s use is optional but
+highly recommended.</p>
+<p><strong class="program">pyqtdeploy-sysroot</strong> is actually a wrapper around a number of
+component plugins.  A plugin, written in Python, is responsible for building
+and/or installing (in the sysroot) an individual component.  It would normally
+be a Python package or extension module but could just as easily be a
+supporting library.</p>
+<p>A sysroot is defined by a JSON sysroot specification file.  This contains an
+object for each component to build and/or install.  The attributes of an
+object determine how the component is configured.  Component and attribute
+names may be scoped in the same way as <strong class="program">qmake</strong> variables (described in
+<a class="reference internal" href="pyqtdeploy.html#ref-other-extension-modules"><span class="std std-ref">Adding Other Extension Modules</span></a>) so that components can be included and
+configured on a target by target basis.</p>
+<p>The components are built and/or installed in the order in which their objects
+appear in the specification file.</p>
+<p>An API is provided to allow you to develop your own component plugins.  If you
+develop a plugin for a commonly used component then please consider
+contributing it so that it can be included in a future release of
+<strong class="program">pyqtdeploy</strong>.</p>
+<div class="section" id="standard-component-plugins">
+<h2>Standard Component Plugins<a class="headerlink" href="#standard-component-plugins" title="Permalink to this headline">¶</a></h2>
+<p>The following component plugins are included as standard with
+<strong class="program">pyqtdeploy</strong>.</p>
+<dl class="docutils">
+<dt><strong>openssl</strong></dt>
+<dd>This builds the OpenSSL libraries for v1.0.* on Android (dynamically),
+macOS (statically) and Windows (statically).  It requires <code class="docutils literal"><span class="pre">perl</span></code> to be
+installed on <span class="target" id="index-0"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code>.</dd>
+<dt><strong>pip</strong></dt>
+<dd>This is a meta-component which will install any number of components that
+can be installed by <code class="docutils literal"><span class="pre">pip</span></code>.</dd>
+<dt><strong>pyqt3d</strong></dt>
+<dd>This builds a static version of the PyQt3D extension modules for all target
+architectures.  It must be built after PyQt5.</dd>
+<dt><strong>pyqt5</strong></dt>
+<dd>This builds a static version of the PyQt5 extension modules for all
+target architectures.  It must be built after sip and Qt5.</dd>
+<dt><strong>pyqtchart</strong></dt>
+<dd>This builds a static version of the PyQtChart extension module for all
+target architectures.  It must be built after PyQt5.</dd>
+<dt><strong>pyqtdatavisualization</strong></dt>
+<dd>This builds a static version of the PyQtDataVisualization extension module
+for all target architectures.  It must be built after PyQt5.</dd>
+<dt><strong>pyqtpurchasing</strong></dt>
+<dd>This builds a static version of the PyQtPurchasing extension module for
+all target architectures.  It must be built after PyQt5.</dd>
+<dt><strong>python</strong></dt>
+<dd>This will build Python from source, or install it into sysroot from an
+existing installation, for both the host and target architectures.
+Building the host version from source is not supported on Windows.
+Installing the host version from an existing installation is not supported
+on Android or iOS.  The target version of the Python library and extension
+modules built from source will be built statically.  Installing the target
+version from an existing installation is only supported on Windows.  If
+building the target version from source and SSL support is required then
+OpenSSL must be built first.</dd>
+<dt><strong>qscintilla</strong></dt>
+<dd>This builds a static version of the QScintilla library and Python extension
+module for all target architectures.  It must be built after PyQt5.</dd>
+<dt><strong>qt5</strong></dt>
+<dd>This will build a static version of Qt5 from source (but not for the
+Android and iOS targets).  It will also install Qt5 into the sysroot from
+an existing installation created by the standard installer.  When building
+from source on Windows it requires Python v2.7 to be installed (but it does
+not need to be on <span class="target" id="index-1"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code>).  If building from source and SSL support
+using OpenSSL is required then OpenSSL must be built first.</dd>
+<dt><strong>sip</strong></dt>
+<dd>This builds a static version of the sip extension module for all target
+architectures.  It also builds the sip code generator for the host
+platform.  It must be built after Python.</dd>
+</dl>
+</div>
+<div class="section" id="creating-a-sysroot-specification-file">
+<h2>Creating a Sysroot Specification File<a class="headerlink" href="#creating-a-sysroot-specification-file" title="Permalink to this headline">¶</a></h2>
+<p>The following specification file contains an object for each of the standard
+component plugins.  (You can also download a copy of the file from
+<a class="reference download internal" href="_downloads/skeleton.json" download=""><code class="xref download docutils literal"><span class="pre">here</span></code></a>).  No configuration options have been
+set for any component.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;Description&quot;</span><span class="p">:</span> <span class="s2">&quot;A skeleton sysroot specification.&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;openssl&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;qt5&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;python&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;sip&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;pyqt5&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;pyqt3d&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;pyqtchart&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;pyqtdatavisualization&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;pyqtpurchasing&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;qscintilla&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">},</span>
+
+    <span class="s2">&quot;pip&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The first object, called <code class="docutils literal"><span class="pre">Description</span></code>, is simple a way of including a
+comment in the specification and is otherwise ignored.</p>
+<p>Using this file, run the following command:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pyqtdeploy</span><span class="o">-</span><span class="n">sysroot</span> <span class="o">--</span><span class="n">options</span> <span class="n">skeleton</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>You will then see a description of each component’s configuration options, the
+type of value expected and whether or not a value is required.  You can then
+add options as attributes to the appropriate objects to meet your requirements.</p>
+<p>If your application does not require all of the standard components then simply
+remove the corresponding objects from the specification file.  If your
+application requires additional components then you need to create appropriate
+component plugins and add corresponding objects to the specification file.</p>
+<p>To build a native sysroot (i.e. for the host architecture) from a fully
+configured specification file, run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pyqtdeploy</span><span class="o">-</span><span class="n">sysroot</span> <span class="n">skeleton</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="the-pyqt-demo-sysroot">
+<h2>The <strong class="program">pyqt-demo</strong> Sysroot<a class="headerlink" href="#the-pyqt-demo-sysroot" title="Permalink to this headline">¶</a></h2>
+<p>In this section we walk through the sysroot specification file for
+<strong class="program">pyqt-demo</strong>, component by component.</p>
+<div class="section" id="openssl">
+<h3>openssl<a class="headerlink" href="#openssl" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;android|macos|win#openssl&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span>           <span class="s2">&quot;openssl-1.0.*.tar.gz&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;python_source&quot;</span><span class="p">:</span>    <span class="s2">&quot;Python-3.*.tar.xz&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>The first thing to notice is that the object name is scoped so that the
+component is only built for Android, macOS and Windows.  On iOS we choose to
+not support SSL from Python and use Qt’s SSL support instead (which will use
+Apple’s Secure Transport).  On Linux we will use the system versions of the
+OpenSSL libraries.</p>
+<p>The Python binary installer for macOS from <a class="reference external" href="www.python.org">www.python.org</a>
+includes a patched version of OpenSSL.  The plugin will apply the same patch to
+OpenSSL (on macOS only) if a Python source archive is specified.  The patch
+applies to a specific version of OpenSSL - which one depends on the version of
+Python being targeted.</p>
+</div>
+<div class="section" id="qt5">
+<h3>qt5<a class="headerlink" href="#qt5" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;qt5&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;android#qt_dir&quot;</span><span class="p">:</span>           <span class="s2">&quot;Qt/*/android_armv7&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ios#qt_dir&quot;</span><span class="p">:</span>               <span class="s2">&quot;Qt/*/ios&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;linux|macos|win#source&quot;</span><span class="p">:</span>   <span class="s2">&quot;qt-everywhere-*-src-5.*.tar.xz&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;android|linux#ssl&quot;</span><span class="p">:</span>        <span class="s2">&quot;openssl-runtime&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ios#ssl&quot;</span><span class="p">:</span>                  <span class="s2">&quot;securetransport&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;macos|win#ssl&quot;</span><span class="p">:</span>            <span class="s2">&quot;openssl-linked&quot;</span><span class="p">,</span>
+
+    <span class="s2">&quot;static_msvc_runtime&quot;</span><span class="p">:</span>      <span class="n">true</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>The Qt5 component plugin will install Qt into the sysroot from an existing
+installation.  We have chosen to do this for Android and iOS by specifying the
+<code class="docutils literal"><span class="pre">qt_dir</span></code> attribute.</p>
+<p>The plugin will build Qt from source if the <code class="docutils literal"><span class="pre">source</span></code> attribute is specified.
+We have chosen to do this for Linux, macOS and Windows.</p>
+<p>The <code class="docutils literal"><span class="pre">ssl</span></code> attribute specifies how Qt’s SSL support is to be implemented.</p>
+<p>For Android and Linux we have chosen to dynamically load external OpenSSL
+libraries at runtime.  On Android the external libraries are those built by the
+<code class="docutils literal"><span class="pre">openssl</span></code> component plugin and are bundled automaticallly with the
+application executable.  On Linux the external libraries are the system
+versions.</p>
+<p>For iOS Qt is dynamically linked to the Secure Transport libraries.</p>
+<p>For macOS and Windows we have chosen to link against the static OpenSSL
+libraries built by the <code class="docutils literal"><span class="pre">openssl</span></code> component plugin.</p>
+<p>Finally we have specified that (on Windows) we will link to static versions of
+the MSVC runtime libraries.</p>
+<p>For simplicity we have chosen to build a full Qt implementation when building
+from source.  We could have chosen to use the <code class="docutils literal"><span class="pre">configure_options</span></code>,
+<code class="docutils literal"><span class="pre">disabled_features</span></code> and <code class="docutils literal"><span class="pre">skip</span></code> attributes to tailor the Qt build in order
+to reduce the time taken to do the build.</p>
+</div>
+<div class="section" id="python">
+<h3>python<a class="headerlink" href="#python" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;python&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;build_host_from_source&quot;</span><span class="p">:</span>   <span class="n">false</span><span class="p">,</span>
+    <span class="s2">&quot;build_target_from_source&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span>                   <span class="s2">&quot;Python-3.*.tar.xz&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>The Python component plugin handles installation for both host and target
+architectures.  For the host we choose to use an existing Python installation
+rather than build from source.  On Windows the registry is searched for the
+location of the existing installation.  On Linux and macOS the Python
+interpreter must be on <span class="target" id="index-2"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code>.  For all target architecures we choose
+to build Python from source.</p>
+<p><strong class="program">pyqt-demo</strong> is a very simple application that does not need to
+dynamically load extension modules.  If this was needed then the
+<code class="docutils literal"><span class="pre">dynamic_loading</span></code> attribute would be set to <code class="docutils literal"><span class="pre">true</span></code>.</p>
+</div>
+<div class="section" id="sip">
+<h3>sip<a class="headerlink" href="#sip" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;sip&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span>   <span class="s2">&quot;sip-4.*.tar.gz&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>It is only necessary to specifiy the name of the source archive.</p>
+</div>
+<div class="section" id="pyqt5">
+<h3>pyqt5<a class="headerlink" href="#pyqt5" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;pyqt5&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;android#disabled_features&quot;</span><span class="p">:</span>    <span class="p">[</span>
+            <span class="s2">&quot;PyQt_Desktop_OpenGL&quot;</span><span class="p">,</span> <span class="s2">&quot;PyQt_Printer&quot;</span><span class="p">,</span> <span class="s2">&quot;PyQt_PrintDialog&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PyQt_PrintPreviewDialog&quot;</span><span class="p">,</span> <span class="s2">&quot;PyQt_PrintPreviewWidget&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;android#modules&quot;</span><span class="p">:</span>              <span class="p">[</span>
+            <span class="s2">&quot;QtCore&quot;</span><span class="p">,</span> <span class="s2">&quot;QtGui&quot;</span><span class="p">,</span> <span class="s2">&quot;QtNetwork&quot;</span><span class="p">,</span> <span class="s2">&quot;QtPrintSupport&quot;</span><span class="p">,</span> <span class="s2">&quot;QtWidgets&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;QtAndroidExtras&quot;</span>
+    <span class="p">],</span>
+
+    <span class="s2">&quot;ios#disabled_features&quot;</span><span class="p">:</span>        <span class="p">[</span>
+            <span class="s2">&quot;PyQt_Desktop_OpenGL&quot;</span><span class="p">,</span> <span class="s2">&quot;PyQt_MacOSXOnly&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PyQt_MacCocoaViewContainer&quot;</span><span class="p">,</span> <span class="s2">&quot;PyQt_Printer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PyQt_PrintDialog&quot;</span><span class="p">,</span> <span class="s2">&quot;PyQt_PrintPreviewDialog&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PyQt_PrintPreviewWidget&quot;</span><span class="p">,</span> <span class="s2">&quot;PyQt_Process&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PyQt_NotBootstrapped&quot;</span>
+    <span class="p">],</span>
+    <span class="s2">&quot;ios|macos#modules&quot;</span><span class="p">:</span>            <span class="p">[</span>
+            <span class="s2">&quot;QtCore&quot;</span><span class="p">,</span> <span class="s2">&quot;QtGui&quot;</span><span class="p">,</span> <span class="s2">&quot;QtNetwork&quot;</span><span class="p">,</span> <span class="s2">&quot;QtPrintSupport&quot;</span><span class="p">,</span> <span class="s2">&quot;QtWidgets&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;QtMacExtras&quot;</span>
+    <span class="p">],</span>
+
+    <span class="s2">&quot;linux#modules&quot;</span><span class="p">:</span>                <span class="p">[</span>
+            <span class="s2">&quot;QtCore&quot;</span><span class="p">,</span> <span class="s2">&quot;QtGui&quot;</span><span class="p">,</span> <span class="s2">&quot;QtNetwork&quot;</span><span class="p">,</span> <span class="s2">&quot;QtPrintSupport&quot;</span><span class="p">,</span> <span class="s2">&quot;QtWidgets&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;QtX11Extras&quot;</span>
+    <span class="p">],</span>
+
+    <span class="s2">&quot;win#disabled_features&quot;</span><span class="p">:</span>        <span class="p">[</span><span class="s2">&quot;PyQt_Desktop_OpenGL&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;win#modules&quot;</span><span class="p">:</span>                  <span class="p">[</span>
+            <span class="s2">&quot;QtCore&quot;</span><span class="p">,</span> <span class="s2">&quot;QtGui&quot;</span><span class="p">,</span> <span class="s2">&quot;QtNetwork&quot;</span><span class="p">,</span> <span class="s2">&quot;QtPrintSupport&quot;</span><span class="p">,</span> <span class="s2">&quot;QtWidgets&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;QtWinExtras&quot;</span>
+    <span class="p">],</span>
+
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span>                   <span class="s2">&quot;PyQt5_*-5.*.tar.gz&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>The two attributes used to tailor the build of PyQt5 are <code class="docutils literal"><span class="pre">disabled_features</span></code>
+and <code class="docutils literal"><span class="pre">modules</span></code>.</p>
+<p>Unfortunately the list of features that can be disabled is not properly
+documented and relate to how Qt5 was configured.  However how
+<code class="docutils literal"><span class="pre">disabled_features</span></code> is set in the above will be appropriate for most cases.</p>
+<p>The <code class="docutils literal"><span class="pre">modules</span></code> attribute is used to specify the names of the individual PyQt
+extension modules to be built.  We choose to build only those extension
+modules needed by <strong class="program">pyqt-demo</strong>.</p>
+</div>
+<div class="section" id="pyqt3d">
+<h3>pyqt3D<a class="headerlink" href="#pyqt3d" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;pyqt3d&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span>   <span class="s2">&quot;PyQt3D_*-5.*.tar.gz&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>It is only necessary to specifiy the name of the source archive.</p>
+</div>
+<div class="section" id="pyqtchart">
+<h3>pyqtchart<a class="headerlink" href="#pyqtchart" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;pyqtchart&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span>   <span class="s2">&quot;PyQtChart_*-5.*.tar.gz&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>It is only necessary to specifiy the name of the source archive.</p>
+</div>
+<div class="section" id="pyqtdatavisualization">
+<h3>pyqtdatavisualization<a class="headerlink" href="#pyqtdatavisualization" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;pyqtdatavisualization&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span>   <span class="s2">&quot;PyQtDataVisualization_*-5.*.tar.gz&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>It is only necessary to specifiy the name of the source archive.</p>
+</div>
+<div class="section" id="pyqtpurchasing">
+<h3>pyqtpurchasing<a class="headerlink" href="#pyqtpurchasing" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;pyqtpurchasing&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span>   <span class="s2">&quot;PyQtPurchasing_*-5.*.tar.gz&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>It is only necessary to specifiy the name of the source archive.</p>
+</div>
+<div class="section" id="qscintilla">
+<h3>qscintilla<a class="headerlink" href="#qscintilla" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="s2">&quot;qscintilla&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;source&quot;</span><span class="p">:</span>   <span class="s2">&quot;QScintilla_*-2.*.tar.gz&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>It is only necessary to specifiy the name of the source archive.</p>
+</div>
+</div>
+<div class="section" id="the-command-line">
+<h2>The Command Line<a class="headerlink" href="#the-command-line" title="Permalink to this headline">¶</a></h2>
+<p>The full set of command line options is:</p>
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-h">
+<code class="descname">-h</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--help</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-h" title="Permalink to this definition">¶</a></dt>
+<dd><p>This will display a summary of the command line options.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-component">
+<code class="descname">--component</code><code class="descclassname"> COMPONENT</code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-component" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">COMPONENT</span></code> is the name of the component (specified in the JSON file)
+that will be built.  It may be used more than once to build multiple
+components.  If the option is not specified then all components specified
+in the JSON file will be built.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-no-clean">
+<code class="descname">--no-clean</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-no-clean" title="Permalink to this definition">¶</a></dt>
+<dd><p>A temporary build directory (called <code class="docutils literal"><span class="pre">build</span></code> in the sysroot) is created in
+order to build the required components.  Normally this is removed
+automatically after all components have been built.  Specifying this option
+leaves the build directory in place to make debugging component plugins
+easier.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-options">
+<code class="descname">--options</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-options" title="Permalink to this definition">¶</a></dt>
+<dd><p>This causes the configurable options of each component specified in the
+JSON file to be displayed on <code class="docutils literal"><span class="pre">stdout</span></code>.  The program will then terminate.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-plugin-dir">
+<code class="descname">--plugin-dir</code><code class="descclassname"> DIR</code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-plugin-dir" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">DIR</span></code> is added to the list of directories that are searched for component
+plugins.  It may be used more than once to search multiple directories.
+All directories specified in this way will be searched before those
+directories (internal to <strong class="program">pyqtdeploy-sysroot</strong>) that are searched
+by default.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-source-dir">
+<code class="descname">--source-dir</code><code class="descclassname"> DIR</code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-source-dir" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">DIR</span></code> is the name of the directory containing the source archives used to
+build the components specified in the JSON file.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-sysroot">
+<code class="descname">--sysroot</code><code class="descclassname"> DIR</code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-sysroot" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">DIR</span></code> is the name of the system root directory.  The default value is
+<code class="docutils literal"><span class="pre">sysroot-</span></code> followed by a target-specific suffix.  Unless the
+<a class="reference internal" href="#cmdoption-pyqtdeploy-sysroot-component"><code class="xref std std-option docutils literal"><span class="pre">--component</span></code></a> option is specified any existing sysroot will first
+be removed and re-created.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-target">
+<code class="descname">--target</code><code class="descclassname"> TARGET</code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-target" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">TARGET</span></code> is the target architecture.  By default the host architecture is
+used.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-quiet">
+<code class="descname">--quiet</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-quiet" title="Permalink to this definition">¶</a></dt>
+<dd><p>This specifies that progress messages should be disabled.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-verbose">
+<code class="descname">--verbose</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>This specifies that additional progress messages should be enabled.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-v">
+<code class="descname">-V</code><code class="descclassname"></code><code class="descclassname">, </code><code class="descname">--version</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-v" title="Permalink to this definition">¶</a></dt>
+<dd><p>This specifies that the version number should be displayed on <code class="docutils literal"><span class="pre">stdout</span></code>.
+The program will then terminate.</p>
+</dd></dl>
+
+<dl class="option">
+<dt id="cmdoption-pyqtdeploy-sysroot-arg-specification">
+<code class="descname">specification</code><code class="descclassname"></code><a class="headerlink" href="#cmdoption-pyqtdeploy-sysroot-arg-specification" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="docutils literal"><span class="pre">specification</span></code> is the name of a JSON specification file that defines
+each component to be included in the sysroot and how each is to be
+configured.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="writing-a-component-plugin">
+<h2>Writing a Component Plugin<a class="headerlink" href="#writing-a-component-plugin" title="Permalink to this headline">¶</a></h2>
+<p>A component plugin is a Python module that defines a sub-class of
+<a class="reference internal" href="#pyqtdeploy.ComponentBase" title="pyqtdeploy.ComponentBase"><code class="xref py py-class docutils literal"><span class="pre">pyqtdeploy.ComponentBase</span></code></a>.  The sub-class must re-implement the
+<a class="reference internal" href="#pyqtdeploy.ComponentBase.build" title="pyqtdeploy.ComponentBase.build"><code class="xref py py-meth docutils literal"><span class="pre">build()</span></code></a> method and may also
+re-implement the <a class="reference internal" href="#pyqtdeploy.ComponentBase.configure" title="pyqtdeploy.ComponentBase.configure"><code class="xref py py-meth docutils literal"><span class="pre">configure()</span></code></a> method.  It
+should also include a class attribute called
+<a class="reference internal" href="#pyqtdeploy.ComponentBase.options" title="pyqtdeploy.ComponentBase.options"><code class="xref py py-attr docutils literal"><span class="pre">options</span></code></a> which is a sequence of
+<a class="reference internal" href="#pyqtdeploy.ComponentOption" title="pyqtdeploy.ComponentOption"><code class="xref py py-class docutils literal"><span class="pre">pyqtdeploy.ComponentOption</span></code></a> instances that describe each of the
+component’s configurable options.  It does not matter what the name of the
+class is.</p>
+<span class="target" id="module-pyqtdeploy"></span><dl class="class">
+<dt id="pyqtdeploy.ComponentBase">
+<em class="property">class </em><code class="descclassname">pyqtdeploy.</code><code class="descname">ComponentBase</code><a class="headerlink" href="#pyqtdeploy.ComponentBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is the base class of all component plugins.</p>
+<dl class="attribute">
+<dt id="pyqtdeploy.ComponentBase.options">
+<code class="descname">options</code><a class="headerlink" href="#pyqtdeploy.ComponentBase.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class attribute is a sequence of
+<a class="reference internal" href="#pyqtdeploy.ComponentOption" title="pyqtdeploy.ComponentOption"><code class="xref py py-class docutils literal"><span class="pre">ComponentOption</span></code></a> instances describing the
+component’s configurable options.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.ComponentBase.build">
+<code class="descname">build</code><span class="sig-paren">(</span><em>sysroot</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.ComponentBase.build" title="Permalink to this definition">¶</a></dt>
+<dd><p>This abstract method is re-implemented to build the component.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sysroot</strong> (<a class="reference internal" href="#pyqtdeploy.Sysroot" title="pyqtdeploy.Sysroot"><em>Sysroot</em></a>) – the sysroot being built.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.ComponentBase.configure">
+<code class="descname">configure</code><span class="sig-paren">(</span><em>sysroot</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.ComponentBase.configure" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is re-implemented to configure the component.  A component
+will always be configured even if it does not get built.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>sysroot</strong> (<a class="reference internal" href="#pyqtdeploy.Sysroot" title="pyqtdeploy.Sysroot"><em>Sysroot</em></a>) – the sysroot being configured.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyqtdeploy.ComponentOption">
+<em class="property">class </em><code class="descclassname">pyqtdeploy.</code><code class="descname">ComponentOption</code><span class="sig-paren">(</span><em>name</em>, <em>type=str</em>, <em>required=False</em>, <em>default=None</em>, <em>values=None</em>, <em>help=''</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.ComponentOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class implements an option used to configure the component.  An option
+can be specified as an attribute of the component’s object in the sysroot
+specification file.  An instance of the component plugin will contain an
+attribute for each option whose value is that specified in the sysroot
+specification file (or an appropriate default if it was omitted).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) – the name of the option.</li>
+<li><strong>type</strong> (<code class="docutils literal"><span class="pre">bool</span></code>, <code class="docutils literal"><span class="pre">int</span></code>, <code class="docutils literal"><span class="pre">list</span></code> or <code class="docutils literal"><span class="pre">str</span></code>) – the type of a value of the option.</li>
+<li><strong>required</strong> (<em>bool</em>) – <code class="docutils literal"><span class="pre">True</span></code> if a value for the option is required.</li>
+<li><strong>default</strong> – the default value of the option.</li>
+<li><strong>values</strong> – the possible values of the option.</li>
+<li><strong>help</strong> (<em>str</em>) – the help text displayed by the
+<a class="reference internal" href="#cmdoption-pyqtdeploy-sysroot-options"><code class="xref std std-option docutils literal"><span class="pre">--options</span></code></a> option of
+<strong class="program">pyqtdeploy-sysroot</strong>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="pyqtdeploy.Sysroot">
+<em class="property">class </em><code class="descclassname">pyqtdeploy.</code><code class="descname">Sysroot</code><a class="headerlink" href="#pyqtdeploy.Sysroot" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class encapsulates a sysroot as seen by a component plugin.  Instances
+are only created by <strong class="program">pyqtdeploy-sysroot</strong> and are passed to the
+plugin when required.</p>
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.android_api">
+<code class="descname">android_api</code><a class="headerlink" href="#pyqtdeploy.Sysroot.android_api" title="Permalink to this definition">¶</a></dt>
+<dd><p>The numerical Android API level to use.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.apple_sdk">
+<code class="descname">apple_sdk</code><a class="headerlink" href="#pyqtdeploy.Sysroot.apple_sdk" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Apple SDK to use.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.building_for_target">
+<code class="descname">building_for_target</code><a class="headerlink" href="#pyqtdeploy.Sysroot.building_for_target" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is set to <code class="docutils literal"><span class="pre">True</span></code> by the component plugin to configure building
+(i.e. compiling and linking) for the target (rather than the host)
+architecture.  The default value is <code class="docutils literal"><span class="pre">True</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.components">
+<code class="descname">components</code><a class="headerlink" href="#pyqtdeploy.Sysroot.components" title="Permalink to this definition">¶</a></dt>
+<dd><p>The sequence of component names in the sysroot specification.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.copy_file">
+<code class="descname">copy_file</code><span class="sig-paren">(</span><em>src</em>, <em>dst</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.copy_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>A file is copied.  Any errors are handled automatically.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>src</strong> (<em>str</em>) – is the name of the source file.</li>
+<li><strong>dst</strong> (<em>str</em>) – is the name of the destination file.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.copy_dir">
+<code class="descname">copy_dir</code><span class="sig-paren">(</span><em>src</em>, <em>dst</em>, <em>ignore=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.copy_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>A directory is copied, optionally excluding file and sub-directories
+that match a number of glob patterns.  If the destination directory
+already exists then it is first removed.  Any errors are handled
+automatically.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>src</strong> (<em>str</em>) – is the name of the source directory.</li>
+<li><strong>dst</strong> (<em>str</em>) – is the name of the destination directory.</li>
+<li><strong>ignore</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) – is an optional sequence of glob patterns that
+specify files and sub-directories that should be ignored.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.create_file">
+<code class="descname">create_file</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.create_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>A new text file is created and its file object returned.  Any errors
+are handled automatically.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – is the name of the file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the file object of the created file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.create_dir">
+<code class="descname">create_dir</code><span class="sig-paren">(</span><em>name</em>, <em>empty=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.create_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>A new directory is created if it does not already exist.  If it does
+already exist then it is optionally emptied.  Any errors are handled
+automatically.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>name</strong> (<em>str</em>) – is the name of the directory.</li>
+<li><strong>empty</strong> (<em>bool</em>) – <code class="docutils literal"><span class="pre">True</span></code> if an existing directory should be emptied.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.decode_version_nr">
+<code class="descname">decode_version_nr</code><span class="sig-paren">(</span><em>version_nr</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.decode_version_nr" title="Permalink to this definition">¶</a></dt>
+<dd><p>An encoded version number is decoded to a 3-tuple of major version,
+minor version and patch version.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>version_nr</strong> (<em>int</em>) – is the encoded version number.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the decoded 3-tuple.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.delete_dir">
+<code class="descname">delete_dir</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.delete_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>A directory and any contents are deleted.  Any errors are handled
+automatically.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – is the name of the directory.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.error">
+<code class="descname">error</code><span class="sig-paren">(</span><em>message</em>, <em>detail=''</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>An error message is displayed to the user and the program immediately
+terminates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>message</strong> (<em>str</em>) – is the message.</li>
+<li><strong>detail</strong> (<em>str</em>) – is additional detail displayed if the
+<a class="reference internal" href="#cmdoption-pyqtdeploy-sysroot-verbose"><code class="xref std std-option docutils literal"><span class="pre">--verbose</span></code></a> option was
+specified.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.extract_version_nr">
+<code class="descname">extract_version_nr</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.extract_version_nr" title="Permalink to this definition">¶</a></dt>
+<dd><p>An encoded version number is extracted from the name of file or
+directory based on common naming standards.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – is the name of the file or directory.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the encoded version number.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.find_component">
+<code class="descname">find_component</code><span class="sig-paren">(</span><em>name</em>, <em>required=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.find_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>The <a class="reference internal" href="#pyqtdeploy.ComponentBase" title="pyqtdeploy.ComponentBase"><code class="xref py py-class docutils literal"><span class="pre">ComponentBase</span></code></a> instance for a component is
+returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – is the name of the component.</li>
+<li><strong>required</strong> (<em>bool</em>) – <code class="docutils literal"><span class="pre">True</span></code> if the component must exist.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the component instance.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.find_exe">
+<code class="descname">find_exe</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.find_exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>The absolute path name of an executable located on <span class="target" id="index-3"></span><code class="xref std std-envvar docutils literal"><span class="pre">PATH</span></code> is
+returned.  Any errors are handled automatically.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – is the generic executable name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the absolute path name of the executable.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.find_file">
+<code class="descname">find_file</code><span class="sig-paren">(</span><em>name</em>, <em>required=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.find_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>The absolute path name of a file or directory is returned.  If the name
+is relative then it is assumed t be relative to the directory specified
+by the <a class="reference internal" href="#cmdoption-pyqtdeploy-sysroot-source-dir"><code class="xref std std-option docutils literal"><span class="pre">--source-dir</span></code></a> option.
+If this option has not been specified then the directory containing the
+JSON specification file is used.  The name may be a glob pattern but
+must only identify a single file or directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<em>str</em>) – is the name of the file or directory.</li>
+<li><strong>required</strong> (<em>bool</em>) – <code class="docutils literal"><span class="pre">True</span></code> if the file or directory must exist.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the absolute path name of the file or directory.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.format_version_nr">
+<code class="descname">format_version_nr</code><span class="sig-paren">(</span><em>version_nr</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.format_version_nr" title="Permalink to this definition">¶</a></dt>
+<dd><p>An encoded version number is converted to a string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>version_nr</strong> (<em>int</em>) – is the encoded version number.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the string conversion.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.get_python_install_path">
+<code class="descname">get_python_install_path</code><span class="sig-paren">(</span><em>version_nr=None</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.get_python_install_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the directory containing the root of a Python installation
+on Windows is returned.  If an encoded version number is not given then
+<a class="reference internal" href="#pyqtdeploy.Sysroot.target_py_version_nr" title="pyqtdeploy.Sysroot.target_py_version_nr"><code class="xref py py-attr docutils literal"><span class="pre">target_py_version_nr</span></code></a> is used.  It must only be called by a
+Windows host.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>version_nr</strong> (<em>int</em>) – is the encoded version number.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the absolute path of the installation directory.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.host_arch_name">
+<code class="descname">host_arch_name</code><a class="headerlink" href="#pyqtdeploy.Sysroot.host_arch_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the host architecture.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.host_bin_dir">
+<code class="descname">host_bin_dir</code><a class="headerlink" href="#pyqtdeploy.Sysroot.host_bin_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the directory where executables built for the host
+architecture should be installed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.host_dir">
+<code class="descname">host_dir</code><a class="headerlink" href="#pyqtdeploy.Sysroot.host_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the root directory where components built for the host
+architecture should be installed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.host_exe">
+<code class="descname">host_exe</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.host_exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>A generic executable name is converted to a host-specific version.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – is the generic name.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the host-specific name.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.host_make">
+<code class="descname">host_make</code><a class="headerlink" href="#pyqtdeploy.Sysroot.host_make" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the host <code class="docutils literal"><span class="pre">make</span></code> executable.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.host_platform_name">
+<code class="descname">host_platform_name</code><a class="headerlink" href="#pyqtdeploy.Sysroot.host_platform_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the host platform.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.host_pip">
+<code class="descname">host_pip</code><a class="headerlink" href="#pyqtdeploy.Sysroot.host_pip" title="Permalink to this definition">¶</a></dt>
+<dd><p>The full path name of the host <code class="docutils literal"><span class="pre">pip</span></code> executable.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.host_python">
+<code class="descname">host_python</code><a class="headerlink" href="#pyqtdeploy.Sysroot.host_python" title="Permalink to this definition">¶</a></dt>
+<dd><p>The full path name of the host <code class="docutils literal"><span class="pre">python</span></code> executable.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.host_qmake">
+<code class="descname">host_qmake</code><a class="headerlink" href="#pyqtdeploy.Sysroot.host_qmake" title="Permalink to this definition">¶</a></dt>
+<dd><p>The full path name of the host <code class="docutils literal"><span class="pre">qmake</span></code> executable.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.host_sip">
+<code class="descname">host_sip</code><a class="headerlink" href="#pyqtdeploy.Sysroot.host_sip" title="Permalink to this definition">¶</a></dt>
+<dd><p>The full path name of the host <code class="docutils literal"><span class="pre">sip</span></code> executable.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.make_symlink">
+<code class="descname">make_symlink</code><span class="sig-paren">(</span><em>src</em>, <em>dst</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.make_symlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>A symbolic link is made between source and destination files.  (Note
+that, on Windows, a copy of the source file is made.)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>src</strong> (<em>str</em>) – is the name of the source file.</li>
+<li><strong>dst</strong> (<em>str</em>) – is the name of the destination link that is created.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.open_file">
+<code class="descname">open_file</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.open_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>An existing text file is opened and its file object returned.  Any
+errors are handled automatically.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> (<em>str</em>) – is the name of the file.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the file object of the opened file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.parse_version_nr">
+<code class="descname">parse_version_nr</code><span class="sig-paren">(</span><em>version_str</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.parse_version_nr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a string in the form [M[.m[.p]]] to an encoded version number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>version_str</strong> (<em>str</em>) – is the version number to parse.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">an encoded version number.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.pip_install">
+<code class="descname">pip_install</code><span class="sig-paren">(</span><em>package</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.pip_install" title="Permalink to this definition">¶</a></dt>
+<dd><p>Install a package using <a class="reference internal" href="#pyqtdeploy.Sysroot.host_pip" title="pyqtdeploy.Sysroot.host_pip"><code class="xref py py-attr docutils literal"><span class="pre">host_pip</span></code></a> to
+<a class="reference internal" href="#pyqtdeploy.Sysroot.target_sitepackages_dir" title="pyqtdeploy.Sysroot.target_sitepackages_dir"><code class="xref py py-attr docutils literal"><span class="pre">target_sitepackages_dir</span></code></a>.  The package may refer either to a
+local file or to one to be downloaded from
+<a class="reference external" href="https://pypi.python.org/">PyPI</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>package</strong> (<em>str</em>) – is the name of the package.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.progress">
+<code class="descname">progress</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.progress" title="Permalink to this definition">¶</a></dt>
+<dd><p>A progress message is displayed to the user.  It will be suppressed if
+the <a class="reference internal" href="#cmdoption-pyqtdeploy-sysroot-quiet"><code class="xref std std-option docutils literal"><span class="pre">--quiet</span></code></a> option was
+specified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> (<em>str</em>) – is the message.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>*args</em>, <em>capture=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>An external command is run.  The command’s stdout can be optionally
+captured.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>*args</strong> – are the name of the command and its arguments.</li>
+<li><strong>capture</strong> (<em>bool</em>) – <code class="docutils literal"><span class="pre">True</span></code> if the command’s stdout should be
+captured and returned.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the stdout of the command if requested, otherwise <code class="docutils literal"><span class="pre">None</span></code>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_arch_name">
+<code class="descname">target_arch_name</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_arch_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the target architecture.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_include_dir">
+<code class="descname">target_include_dir</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_include_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the directory where header files built for the target
+architecture should be installed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_lib_dir">
+<code class="descname">target_lib_dir</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_lib_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the directory where libraries built for the target
+architecture should be installed.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_platform_name">
+<code class="descname">target_platform_name</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_platform_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the target platform.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_py_include_dir">
+<code class="descname">target_py_include_dir</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_py_include_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the directory where <code class="docutils literal"><span class="pre">Python.h</span></code> built for the target
+architecture can be found.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_py_lib">
+<code class="descname">target_py_lib</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_py_lib" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of Python library built for the target architecture.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_py_stdlib_dir">
+<code class="descname">target_py_stdlib_dir</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_py_stdlib_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the directory where the Python standard library built for
+the target architecture can be found.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_py_version_nr">
+<code class="descname">target_py_version_nr</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_py_version_nr" title="Permalink to this definition">¶</a></dt>
+<dd><p>The version of Python being targeted.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_pyqt_platform">
+<code class="descname">target_pyqt_platform</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_pyqt_platform" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the target platform as known by PyQt’s <code class="docutils literal"><span class="pre">configure.py</span></code>.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_sip_dir">
+<code class="descname">target_sip_dir</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_sip_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the directory where <code class="docutils literal"><span class="pre">.sip</span></code> files built for the target
+architecture can be found.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_sitepackages_dir">
+<code class="descname">target_sitepackages_dir</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_sitepackages_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the <code class="docutils literal"><span class="pre">site-packages</span></code> directory for the target
+architecture.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.target_src_dir">
+<code class="descname">target_src_dir</code><a class="headerlink" href="#pyqtdeploy.Sysroot.target_src_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the directory where source files can be found.  Note that
+these are sources left by components for the use of other components
+and not the sources used to build a component.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.unpack_archive">
+<code class="descname">unpack_archive</code><span class="sig-paren">(</span><em>archive</em>, <em>chdir=True</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.unpack_archive" title="Permalink to this definition">¶</a></dt>
+<dd><p>An archive (e.g. a <code class="docutils literal"><span class="pre">.tar.gz</span></code> or <code class="docutils literal"><span class="pre">.zip</span></code> file) is unpacked in the
+current directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>archive</strong> (<em>str</em>) – the name of the archive.</li>
+<li><strong>chdir</strong> (<em>bool</em>) – <code class="docutils literal"><span class="pre">True</span></code> if the top level directory of the extracted
+archive should become the new current directory.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the name of the top level directory of the extracted archive
+excluding any path.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyqtdeploy.Sysroot.verbose">
+<code class="descname">verbose</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="headerlink" href="#pyqtdeploy.Sysroot.verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>A verbose progress message is displayed to the user.  It will be
+suppressed unless the
+<a class="reference internal" href="#cmdoption-pyqtdeploy-sysroot-verbose"><code class="xref std std-option docutils literal"><span class="pre">--verbose</span></code></a> option was
+specified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>message</strong> (<em>str</em>) – is the message.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyqtdeploy.Sysroot.verbose_enabled">
+<code class="descname">verbose_enabled</code><a class="headerlink" href="#pyqtdeploy.Sysroot.verbose_enabled" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is set if the <a class="reference internal" href="#cmdoption-pyqtdeploy-sysroot-verbose"><code class="xref std std-option docutils literal"><span class="pre">--verbose</span></code></a>
+option was specified.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Building a System Root Directory</a><ul>
+<li><a class="reference internal" href="#standard-component-plugins">Standard Component Plugins</a></li>
+<li><a class="reference internal" href="#creating-a-sysroot-specification-file">Creating a Sysroot Specification File</a></li>
+<li><a class="reference internal" href="#the-pyqt-demo-sysroot">The <strong class="program">pyqt-demo</strong> Sysroot</a><ul>
+<li><a class="reference internal" href="#openssl">openssl</a></li>
+<li><a class="reference internal" href="#qt5">qt5</a></li>
+<li><a class="reference internal" href="#python">python</a></li>
+<li><a class="reference internal" href="#sip">sip</a></li>
+<li><a class="reference internal" href="#pyqt5">pyqt5</a></li>
+<li><a class="reference internal" href="#pyqt3d">pyqt3D</a></li>
+<li><a class="reference internal" href="#pyqtchart">pyqtchart</a></li>
+<li><a class="reference internal" href="#pyqtdatavisualization">pyqtdatavisualization</a></li>
+<li><a class="reference internal" href="#pyqtpurchasing">pyqtpurchasing</a></li>
+<li><a class="reference internal" href="#qscintilla">qscintilla</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#the-command-line">The Command Line</a></li>
+<li><a class="reference internal" href="#writing-a-component-plugin">Writing a Component Plugin</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="demo.html"
+                        title="previous chapter"><strong class="program">pyqt-demo</strong></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pyqtdeploy.html"
+                        title="next chapter">Creating a <strong class="program">pyqtdeploy</strong> Project</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyqtdeploy.html" title="Creating a pyqtdeploy Project"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="demo.html" title="pyqt-demo"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtdeploy v2.1 User Guide</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Riverbank Computing Limited.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

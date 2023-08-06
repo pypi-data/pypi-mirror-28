@@ -1,0 +1,203 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pyqt-demo &#8212; pyqtdeploy v2.1 User Guide</title>
+    <link rel="stylesheet" href="_static/riverbank.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '2.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="shortcut icon" href="_static/logo_tn.png"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Building a System Root Directory" href="sysroot.html" />
+    <link rel="prev" title="An Overview of the Deployment Process" href="overview.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sysroot.html" title="Building a System Root Directory"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="An Overview of the Deployment Process"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtdeploy v2.1 User Guide</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyqt-demo">
+<h1><strong class="program">pyqt-demo</strong><a class="headerlink" href="#pyqt-demo" title="Permalink to this headline">¶</a></h1>
+<p>The <strong class="program">pyqtdeploy</strong>
+<a class="reference external" href="https://pypi.python.org/pypi/pyqtdeploy#downloads">source package</a> contains
+a demo application called <strong class="program">pyqt-demo</strong> which can be found in the
+<code class="docutils literal"><span class="pre">demo</span></code> sub-directory.</p>
+<p>The demo consists of:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">pyqt-demo.py</span></code> which is the source code of the demo</li>
+<li><code class="docutils literal"><span class="pre">sysroot.json</span></code> which is the sysroot specification used by
+<strong class="program">pyqtdeploy-sysroot</strong> to build a target-specific sysroot</li>
+<li><code class="docutils literal"><span class="pre">pyqt-demo.pdy</span></code> which is the <strong class="program">pyqtdeploy</strong> project file describing
+the application and its components</li>
+<li><code class="docutils literal"><span class="pre">build-demo.py</span></code> which is a simple script to run
+<strong class="program">pyqtdeploy-sysroot</strong> and <strong class="program">pyqtdeploy-build</strong> to create the
+demo executable</li>
+<li><code class="docutils literal"><span class="pre">src</span></code> which is a directory which must contain the source archives of all
+the components that will be built by <strong class="program">pyqtdeploy-sysroot</strong>.</li>
+</ul>
+<p>Note that executables can be created for all supported targets without
+requiring any changes to any of the above.</p>
+<p>When run, the demo displays a GUI table of interesting values.  The demo
+running on macOS is shown below.</p>
+<a class="reference internal image-reference" href="_images/pyqt-demo.png"><img alt="_images/pyqt-demo.png" class="align-center" src="_images/pyqt-demo.png" style="width: 790.0px; height: 651.0px;" /></a>
+<p>The demo chooses to implement support for SSL for both Python and Qt in ways
+that differ between target platforms.  These are summarised in the table below.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="44%" />
+<col width="45%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Platform</th>
+<th class="head">Python</th>
+<th class="head">Qt</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>Android</td>
+<td>Bundled dynamically linked OpenSSL</td>
+<td>Bundled dynamically linked OpenSSL</td>
+</tr>
+<tr class="row-odd"><td>iOS</td>
+<td>Unsupported</td>
+<td>Dynamically linked Secure Transport</td>
+</tr>
+<tr class="row-even"><td>Linux</td>
+<td>Dynamically linked OpenSSL</td>
+<td>Dynamically linked OpenSSL</td>
+</tr>
+<tr class="row-odd"><td>macOS</td>
+<td>Statically linked OpenSSL</td>
+<td>Statically linked OpenSSL</td>
+</tr>
+<tr class="row-even"><td>Windows</td>
+<td>Statically linked OpenSSL</td>
+<td>Statically linked OpenSSL</td>
+</tr>
+</tbody>
+</table>
+<p>Before building the demo you must first populate the <code class="docutils literal"><span class="pre">src</span></code> directory with
+appropriate source archives for the following components:</p>
+<ul class="simple">
+<li>Python</li>
+<li>Qt</li>
+<li>OpenSSL</li>
+<li>sip</li>
+<li>PyQt5</li>
+<li>PyQt3D</li>
+<li>PyQtChart</li>
+<li>PyQtDataVisualization</li>
+<li>PyQtPurchasing</li>
+<li>QScintilla</li>
+</ul>
+<p>If you don’t want to build all of these then edit <code class="docutils literal"><span class="pre">sysroot.json</span></code> and remove
+the ones you don’t want.  (The Python, Qt, sip and PyQt5 sources are required.)</p>
+<p>If you are building the demo for either Android or iOS then you must also
+install an appropriate version of Qt from an installer from The Qt Company as
+<strong class="program">pyqtdeploy-sysroot</strong> does not support building Qt from source for
+those platforms.  It should be installed in a directory called <code class="docutils literal"><span class="pre">Qt</span></code> in the
+<code class="docutils literal"><span class="pre">src</span></code> directory.</p>
+<p>To build the demo for the native target, run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">build</span><span class="o">-</span><span class="n">demo</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>Note that, on Linux, macOS and Windows, Qt will be built from source which can
+take a significant amount of time.</p>
+<p><code class="docutils literal"><span class="pre">build-demo.py</span></code> has a number of command line options.  To see them, run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">build</span><span class="o">-</span><span class="n">demo</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<p>Throughout the rest of this documentation the demo will be used as a working
+example which we will look at in detail.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/logo.png" alt="Logo"/>
+            </a></p>
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="overview.html"
+                        title="previous chapter">An Overview of the Deployment Process</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="sysroot.html"
+                        title="next chapter">Building a System Root Directory</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="sysroot.html" title="Building a System Root Directory"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="overview.html" title="An Overview of the Deployment Process"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyqtdeploy v2.1 User Guide</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Riverbank Computing Limited.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>
