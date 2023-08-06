@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+
+"""
+Usage:
+  aloft create vpc <vpc_id>
+  aloft delete vpc <vpc_id>
+  aloft create cluster <cluster_id>
+  aloft use cluster <cluster_id>
+  aloft delete cluster <cluster_id>
+  aloft get clusters [<domain>] [--output=<output_type>]
+  aloft get current-cluster [--output=<output_type>]
+  aloft apply charts <release_id> <chart_set> [--charts=<charts>] [(-l | --lock-volumes)] [--sandbox=<sandbox_name>]
+  aloft delete charts <release_id> <chart_set> [--charts=<charts>] [--sandbox=<sandbox_name>]
+  aloft lock volume <release_id> <chart_set> [--charts=<charts>]
+  aloft unlock volume <release_id> <chart_set> [--charts=<charts>]
+
+Options:
+  -h --help                               Show this screen.
+  -v --version                            Show version.
+  -o output_type --output=output_type     Output format type.  yaml|text|name [default: text]
+  -s sandbox_name --sandbox=sandbox_name  Sandbox name to use.
+  --charts=<charts>                       Comma separated list of chart names. Example: "swa-jenkins,swa-nexus"
+
+"""
+
+from aloft.arguments import *
+from aloft.chart import apply_charts, delete_charts
+from aloft.cluster import create_cluster, delete_cluster, use_cluster, get_and_print_clusters, get_and_print_current_cluster
+from docopt import docopt
+
+if __name__ == '__main__':
+    arguments = docopt(__doc__, version='ops 0.1.0')
+    # print(arguments)
+
+    if arguments['charts']:
+        if arguments['apply']:
+            apply_charts(*get_apply_chart_args(arguments))
+        elif arguments['delete']:
+            delete_charts(*get_delete_chart_args(arguments))
+    elif arguments['cluster'] or arguments['clusters']:
+        if arguments['create']:
+            create_cluster(get_create_cluster_args(arguments))
+        elif arguments['use']:
+            use_cluster(get_use_cluster_args(arguments))
+        elif arguments['get']:
+            get_and_print_clusters(*get_get_clusters_args(arguments))
+        elif arguments['delete']:
+            delete_cluster(get_delete_cluster_args(arguments))
+    elif arguments['current-cluster']:
+        if arguments['get']:
+            get_and_print_current_cluster(get_get_current_cluster_args(arguments))
