@@ -1,0 +1,59 @@
+# -*- snakemake -*-
+import os
+
+configfile: "../config.yaml"
+configfile: "config.yaml"
+
+
+APPLICATION = "samtools"
+param = {
+    'ref' : os.path.join("{version}", config['input']['ref']),
+    'end': config['end'],
+    'regions': config['params']['regions'],
+}
+
+BAM = os.path.join("../{end}", config['input']['bam'])
+
+rule _symlink_ref:
+    input: os.path.abspath(os.path.join("../../ref", config['input']['ref']))
+    output: temporary(os.path.join("{version}", config['input']['ref']))
+    shell: "ln -s {input} {output}"
+
+rule samtools_depth:
+    params: regions = param['regions']
+    input: bam=BAM, conda="samtools-{version}.yaml"
+    output: **config['samtools']['samtools_depth']['output']
+    conda: "samtools-{version}.yaml"
+    shell: "samtools depth -r {params.regions} {input.bam} > {output.txt}"
+
+rule samtools_faidx:
+    input: ref=param['ref'],  conda="samtools-{version}.yaml"
+    output: **config['samtools']['samtools_faidx']['output']
+    conda: "samtools-{version}.yaml"
+    shell: "samtools faidx {input.ref}"
+
+rule samtools_flagstat:
+    input: bam=BAM, conda="samtools-{version}.yaml"
+    output: **config['samtools']['samtools_flagstat']['output']
+    conda: "samtools-{version}.yaml"
+    shell: "samtools flagstat {input.bam} > {output.txt}"
+
+rule samtools_idxstats:
+    input: bam=BAM, conda="samtools-{version}.yaml"
+    output: **config['samtools']['samtools_idxstats']['output']
+    conda: "samtools-{version}.yaml"
+    shell: "samtools idxstats {input.bam} > {output.txt}"
+
+rule samtools_rmdup:
+    input: bam=BAM, conda="samtools-{version}.yaml"
+    output: **config['samtools']['samtools_rmdup']['output']
+    conda: "samtools-{version}.yaml"
+    shell: "options=''; if [[ '{wildcards.end}' == 'se' ]]; then options='-s'; fi; samtools rmdup $options {input.bam} {wildcards.version}/{wildcards.end}/tmp.bam 2> {output.txt}; rm -f {wildcards.version}/{wildcards.end}/tmp.bam"
+           
+rule samtools_stats:
+    input: bam=BAM, conda="samtools-{version}.yaml"
+    output: **config['samtools']['samtools_stats']['output']
+    conda: "samtools-{version}.yaml"
+    shell: "samtools stats {input.bam} > {output.txt}"
+           
+include: "../fileutils.sm"
