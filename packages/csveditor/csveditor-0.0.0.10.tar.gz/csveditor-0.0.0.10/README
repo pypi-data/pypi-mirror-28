@@ -1,0 +1,145 @@
+CSV Editor
+==========
+
+Lightweight command-line editor for CSVs too large for tools such as Excel.
+
+Edit operations are pipeline-backed, meaning you can create your pipeline using a "preview" portion of the table and defer modifying the underlying data until the table is actually saved.
+
+CsvEditor is annotated using the `intermake` library, and therefore supports the following modes of operation: command-line, command-line-interactive, python-interactive-shell, python-scripting, and a basic GUI. 
+
+Supported operations
+--------------------
+
+* change dialect
+* replace text
+* join tables
+* lookup values
+* filter by column
+* filter to unique values
+* sort by column
+* rearrange columns
+* drop rows
+
+Getting started
+---------------
+
+* Make sure `csveditor` and the required libraries are all in your `PYTHONPATH` environment variable.
+* Run `bin/csveditor` to launch the program.
+* Use the `cmdlist` command to get an idea of what you can do.
+* Extensive help is built in and is not provided in this readme.
+
+General help - specifying columns
+---------------------------------
+
+* To identify columns by name, just use the name, e.g. `sequence`
+* To identify columns by index, use the prefix `#`, e.g. `#2`
+* To specify the table, use by the prefix `:`, e.g. `data:#2` for column 2 of the `data` table.
+* If no table is specified, the current working table is assumed.
+* Rows are always identified by their index in the working table, e.g. `5` for row 5 of the current table.
+* All indices are zero based.
+
+Example
+-------
+
+Our aim is to join two bio-informatics tables together based on a common column, _family_:
+* Left table columns: _id_, _family_, _eccentricity_
+* Right table columns: _sequence_, _family_
+* Join on column: _family_
+* Output table columns: _id_, _family_, _eccentricity_, _sequence_
+
+
+First we open up our _left_ table
+```
+$ open /Users/martinrusilowicz/examples/left.csv
+```
+
+We take a peek to make sure the data loaded okay:
+```
+$ head
+
+    -------------------- 0 --------------------
+    0  id                         [11532]
+    1  family                     [F11532]
+    2  eccentricity               [6]
+    ...
+```
+
+It loaded fine, so we load our _right_ table. It has a longer filename, so we provide an abbreviation - "right".
+```
+$ open /Users/martinrusilowicz/examples/the-right-table.csv right
+```
+
+We take another peek:
+```
+$ head
+
+    -------------------- 0 --------------------
+    0 sequence [ NZ_JQAK01000007|gi|692233712]
+    1 family   [ F0]
+```
+
+If we see some some unwanted space, e.g. `" F0"` instead of `"F0"`, we can fix that by being more specific about the CSV dialect we are using.
+
+```
+$ dialect +trim
+```
+
+Check again:
+```
+$ head
+
+    -------------------- 0 --------------------
+    0 sequence [NZ_JQAK01000007|gi|692233712]
+    1 family   [F0]
+```
+
+Notice how we don't need to reload our table to change the dialect.
+
+Let's _join_ our tables together now. Switch back to the _left_ table:
+
+```
+$ switch left
+```
+
+And add the _join_ operation:
+```
+$ join family right:family
+```
+
+Lets look to see if it worked:
+```
+$ summary
+
+    Initial: 5787 rows
+    Initial: 23 columns
+    Final: 45484 rows
+    Final: 24 columns
+```
+
+We see that our new table has a lot more rows, so the `join` probably worked, we could do some more peeking using `head` or `view`, but for now let's just save the table:
+
+```
+$ save /Users/martinrusilowicz/examples/leftright.csv
+```
+
+That's it.
+
+Notes
+-----
+
+You can use CsvEditor as a Python library, but its designed as a one-shot-tool, so backwards compatibility is not guaranteed.
+
+Meta
+----
+
+```ini
+author= Martin Rusilowicz
+licence= https://www.gnu.org/licenses/agpl-3.0.html
+date= 2017
+keywords= csv, tsv, editor, viewer, command-line, cli
+language= python3
+type= cli
+os= independent
+host=bitbucket,pypi
+type=application,application-cli
+```
