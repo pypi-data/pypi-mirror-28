@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    
+    <!-- Base element -->
+    <xs:element name="yamgl" type="UserInterface"/>
+
+    <!-- User interface base structure -->
+    <xs:complexType name="UserInterface">
+        <xs:all>
+            <xs:element name="fonts" type="Fonts" minOccurs="0"/>
+            <xs:element name="images" type="Images" minOccurs="0"/>
+        </xs:all>
+        <xs:attribute name="version" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <!-- A collection of images -->
+    <xs:complexType name="Images">
+        <xs:sequence>
+            <xs:element name="image" type="Image" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Image data type -->
+    <xs:complexType name="Image">
+        <xs:all>
+            <xs:element name="file_path" type="xs:anyURI"/>
+        </xs:all>
+        <xs:attribute name="name" type="xs:ID" use="required"/>
+    </xs:complexType>
+
+    <!-- A collection of fonts -->
+    <xs:complexType name="Fonts">
+        <xs:sequence>
+            <xs:element name="font" type="Font" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>    
+
+    <!-- Font data type -->
+    <xs:complexType name="Font">
+        <xs:all>
+            <xs:element name="file_path" type="xs:anyURI"/>
+            <xs:element name="point_size" type="FontPointSize"/>
+            <xs:element name="char_maps" type="UnicodeCharacterMaps"/>
+        </xs:all>
+        <xs:attribute name="name" type="xs:ID" use="required"/>
+    </xs:complexType>
+
+    <!-- Font point size -->
+    <xs:simpleType name="FontPointSize">
+        <xs:restriction base="xs:nonNegativeInteger">
+            <xs:minInclusive value="4"/>
+            <xs:maxInclusive value="1024"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- A series of unicode character maps -->
+    <xs:complexType name="UnicodeCharacterMaps">
+        <xs:sequence>
+            <xs:element name="char_map" type="UnicodeCharacterMap" maxOccurs="65536"/>
+        </xs:sequence>    
+    </xs:complexType>
+
+    <!-- A unicode character map -->
+    <xs:complexType name="UnicodeCharacterMap">
+        <xs:sequence>
+            <xs:element name="from" type="UnicodeCharacterLocation"/>
+            <xs:element name="to" type="UnicodeCharacterLocation"/>
+        </xs:sequence>    
+    </xs:complexType>
+
+    <!-- Defines a valid (convertible to bitmap) unicode character -->
+    <xs:simpleType name="UnicodeCharacterLocation">
+        <xs:union>
+            <xs:simpleType>
+                <xs:restriction base="xs:nonNegativeInteger">
+                    <!-- Exclude C0 set -->
+                    <xs:minExclusive value="31"/>
+                    <xs:maxExclusive value="127"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType>
+                <xs:restriction base="xs:nonNegativeInteger">
+                    <!-- Exclude DEL and C1 set -->
+                    <xs:minExclusive value="159"/>
+                    <xs:maxExclusive value="65536"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:union> 
+    </xs:simpleType>
+
+</xs:schema>
