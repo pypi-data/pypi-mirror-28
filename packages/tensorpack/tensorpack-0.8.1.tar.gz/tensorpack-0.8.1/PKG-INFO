@@ -1,0 +1,120 @@
+Metadata-Version: 1.0
+Name: tensorpack
+Version: 0.8.1
+Summary: Neural Network Toolbox on TensorFlow
+Home-page: https://github.com/ppwwyyxx/tensorpack
+Author: TensorPack contributors
+Author-email: ppwwyyxxc@gmail.com
+License: Apache
+Description-Content-Type: UNKNOWN
+Description: .. figure:: .github/tensorpack.png
+           :alt: Tensorpack
+        
+           Tensorpack
+        Tensorpack is a training interface based on TensorFlow.
+        
+        |Build Status| |ReadTheDoc| |Gitter chat|
+        
+        See some `examples <examples>`__ to learn about the framework.
+        Everything runs on multiple GPUs, because why not?
+        
+        Vision:
+        ~~~~~~~
+        
+        -  `Train ResNet/SE-ResNet on ImageNet <examples/ResNet>`__
+        -  `Train Faster-RCNN / Mask-RCNN on COCO object
+           detection <examples/FasterRCNN>`__
+        -  `Generative Adversarial Network(GAN) variants <examples/GAN>`__,
+           including DCGAN, InfoGAN, Conditional GAN, WGAN, BEGAN, DiscoGAN,
+           Image to Image, CycleGAN.
+        -  `DoReFa-Net: train binary / low-bitwidth CNN on
+           ImageNet <examples/DoReFa-Net>`__
+        -  `Fully-convolutional Network for Holistically-Nested Edge
+           Detection(HED) <examples/HED>`__
+        -  `Spatial Transformer Networks on MNIST
+           addition <examples/SpatialTransformer>`__
+        -  `Visualize CNN saliency maps <examples/Saliency>`__
+        -  `Similarity learning on MNIST <examples/SimilarityLearning>`__
+        
+        Reinforcement Learning:
+        ~~~~~~~~~~~~~~~~~~~~~~~
+        
+        -  `Deep Q-Network(DQN) variants on Atari
+           games <examples/DeepQNetwork>`__, including DQN, DoubleDQN,
+           DuelingDQN.
+        -  `Asynchronous Advantage Actor-Critic(A3C) with demos on OpenAI
+           Gym <examples/A3C-Gym>`__
+        
+        Speech / NLP:
+        ~~~~~~~~~~~~~
+        
+        -  `LSTM-CTC for speech recognition <examples/CTC-TIMIT>`__
+        -  `char-rnn for fun <examples/Char-RNN>`__
+        -  `LSTM language model on PennTreebank <examples/PennTreebank>`__
+        
+        Examples are not only for demonstration of the framework -- you can
+        train them and reproduce the results in papers.
+        
+        Features:
+        ---------
+        
+        It's Yet Another TF wrapper, but different in:
+        
+        1. Focus on **training speed**.
+        
+           -  Speed comes for free with tensorpack -- it uses TensorFlow in the
+              **correct way** with no extra overhead. On various CNNs, it runs
+              1.5~1.7x faster than the equivalent Keras code.
+        
+           -  Data-parallel multi-GPU training is off-the-shelf to use. It is as
+              fast as Google's `official
+              benchmark <https://www.tensorflow.org/performance/benchmarks>`__.
+              You cannot beat its speed unless you're a TensorFlow expert.
+        
+           -  See
+              `tensorpack/benchmarks <https://github.com/tensorpack/benchmarks>`__
+              for some benchmark scripts.
+        
+        2. Focus on **large datasets**.
+        
+           -  It's painful to read/preprocess data through TF. Tensorpack helps
+              you load large datasets (e.g. ImageNet) in **pure Python** with
+              autoparallelization.
+        
+        3. It's not a model wrapper.
+        
+           -  There are already too many symbolic function wrappers. Tensorpack
+              includes only a few common models, but you can use any other
+              wrappers within tensorpack, including
+              sonnet/Keras/slim/tflearn/tensorlayer/....
+        
+        See
+        `tutorials <http://tensorpack.readthedocs.io/en/latest/tutorial/index.html>`__
+        to know more about these features.
+        
+        Install:
+        --------
+        
+        Dependencies:
+        
+        -  Python 2.7 or 3
+        -  Python bindings for OpenCV (Optional, but required by a lot of
+           features)
+        -  TensorFlow >= 1.2.0 (Optional if you only want to use
+           ``tensorpack.dataflow`` alone as a data processing library)
+        
+           ::
+        
+               # install git, then:
+               pip install -U git+https://github.com/ppwwyyxx/tensorpack.git
+               # or add `--user` to avoid system-wide installation.
+        
+        .. |Build Status| image:: https://travis-ci.org/ppwwyyxx/tensorpack.svg?branch=master
+           :target: https://travis-ci.org/ppwwyyxx/tensorpack
+        .. |ReadTheDoc| image:: https://readthedocs.org/projects/tensorpack/badge/?version=latest
+           :target: http://tensorpack.readthedocs.io/en/latest/index.html
+        .. |Gitter chat| image:: https://badges.gitter.im/gitterHQ/gitter.png
+           :target: https://gitter.im/tensorpack/users
+        
+Keywords: tensorflow,deep learning,neural network
+Platform: UNKNOWN
