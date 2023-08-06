@@ -1,0 +1,137 @@
+===============
+Deadline support
+===============
+
+Here we demonstrate and test deadline support in shoobx.wfmc. Currently, only
+SYNCHRONOUSE deadlines are supported. When the deadline condition is met,
+the activity is put into its process's finishedActivities, but workitems are
+left untouched. Then the appropriate exception transition is followed.
+
+Directory with this file contains sample process using subflows::
+
+    >>> import os
+    >>> from shoobx.wfmc import xpdl
+    >>> sample_process = os.path.join(this_directory, "deadline.xpdl")
+    >>> with open(sample_process) as f:
+    ...     package = xpdl.read(f)
+
+First create environment for executing a process.
+
+    >>> import zope.interface
+    >>> from shoobx.wfmc import interfaces
+
+Define WorkItems used by the process::
+
+    >>> @zope.interface.implementer(interfaces.IWorkItem)
+    ... class OutputWorkItem(object):
+    ...     id = None
+    ... 
+    ...     def __init__(self, process, activity):
+    ...         self.process = process
+    ...         self.activity = activity
+    ... 
+    ...     def start(self, args):
+    ...         print(("START: " + args['message']))
+
+    >>> @zope.interface.implementer(interfaces.IWorkItem)
+    ... class InputWorkItem(object):
+    ...     id = None
+    ... 
+    ...     def __init__(self, process, activity):
+    ...         self.process = process
+    ...         self.activity = activity
+    ... 
+    ...     def start(self, args):
+    ...         print(("START: " + args['message']))
+
+Define integration object::
+
+    >>> from shoobx.wfmc.attributeintegration import AttributeIntegration
+    >>> class Integration(AttributeIntegration):
+    ...     def administratorParticipant(self, activity, process):
+    ...         return "admin"
+    ...
+    ...     def inputWorkItem(self, participant, process, activity):
+    ...         return InputWorkItem(process, activity)
+    ...
+    ...     def outputWorkItem(self, participant, process, activity):
+    ...         return OutputWorkItem(process, activity)
+
+Set integration for all definitions::
+
+    >>> integration = Integration()
+    >>> for pd in package.values():
+    ...     pd.integration = integration
+
+Register all processes in static factory::
+
+    >>> import zope.component
+    >>> from shoobx.wfmc.process import StaticProcessDefinitionFactory
+    >>> pdfactory = StaticProcessDefinitionFactory()
+    >>> for pd in package.values():
+    ...     pdfactory.register(pd)
+
+    >>> zope.component.provideUtility(pdfactory)
+
+Now we can create and execute our process::
+
+    >>> context = None
+    >>> mainproc_def = package['deadline']
+    >>> proc = mainproc_def(context)
+    >>> proc.start()
+    START: First activity
+
+We should be on an activity with a deadline
+    >>> deadlineActivity = proc.activities.getActive()[0]
+    >>> len(deadlineActivity.definition.deadlines)
+    1
+
+
+Wait for the deadline to pass
+    >>> import datetime, time
+    >>> deadline = proc.activities.getActive()[0].deadlines[0]
+    >>> while datetime.datetime.now() < deadline.deadline_time:
+    ...     time.sleep(0.1)
+    START: Exception activity
+
+We should have followed the exception transition
+    >>> deadlineActivity not in proc.activities.getActive()
+    True
+    >>> deadlineActivity in proc.activities.getFinished()
+    True
+    >>> len(deadlineActivity.workitems) > 0
+    False
+    >>> len(deadlineActivity.finishedWorkitems)
+    0
+    >>> proc.activities.getActive()[0].definition.id
+    'exception'
+
+Finish normally
+    >>> proc.activities.getActive()[0].finish()
+    START: Third activity
+    >>> proc.activities.getActive()[0].finish()
+    >>> proc.isFinished
+    True
+
+Do it again without the wait
+    >>> proc = mainproc_def(context)
+    >>> proc.start()
+    START: First activity
+    >>> deadlineActivity = proc.activities.getActive()[0]
+    >>> len(deadlineActivity.definition.deadlines)
+    1
+    >>> proc.activities.getActive()[0].finish()
+    START: Second activity
+
+    >>> deadlineActivity not in proc.activities.getActive()
+    True
+    >>> deadlineActivity in proc.activities.getFinished()
+    True
+
+    >>> proc.activities.getActive()[0].finish()
+    START: Third activity
+    >>> proc.activities.getActive()[0].finish()
+    >>> proc.isFinished
+    True
+
+
