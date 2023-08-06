@@ -1,0 +1,65 @@
+#######
+MiniPyP
+#######
+---------------------------------------
+A more traditional web server in Python
+---------------------------------------
+
+About the project
+=================
+MiniPyP (pronounced ``mini·pipe``) is an event-driven web server written in pure Python. **However, MiniPyP is not an application framework**. It's a full web server, with virtual hosts, reverse proxies, and everything else you need. MiniPyP is intended to replace Apache and nginx, so you can use Python without the performance hit of CGI.
+
+MiniPyP has some more advanced features right out of the box, too. For example, when a user goes to ``/some/url`` on your server, and the directory's ``static`` option is set to False (default), the server will look for the file ``/some/url``. If it doesn't exist, but the file ``/some`` does, that file will be served. Extensions do not need to be specified with the ``static`` option set to False. In addition, if a file does not exist but a file named ``catchall`` exists, it will be served instead of a 404. This makes creating a single-page application that much more elegant.
+
+Setup
+=====
+First, install MiniPyP via pip.
+
+.. code-block:: bash
+
+  pip install python
+
+Now let's start a server on ``*:80``. The default document root is ``/var/www/html``.
+
+.. code-block:: python
+
+  from minipyp import MiniPyP
+
+  MiniPyP().start()
+
+Some more basic options include sites (aka virtual hosts) and directory options.
+
+.. code-block:: python
+
+  from minipyp import MiniPyP
+
+  sites = [
+      {
+          'uris': ['mysite.com', 'www.mysite.com']
+          'root': '/var/www/mysite'
+      }
+  ]
+
+  directories = {
+      '/': {
+          'public': False
+      }
+      '/var/www': {
+          'public': True,
+          'indexing': False
+      }
+  }
+
+  MiniPyP(root='/var/www/default', sites=sites, directories=directories).start()
+
+Creating a page
+===============
+
+To create a page (e.g. 'https://mysite.com/test'), create a file called ``test.py`` in mysite.com's root with the following:
+
+.. code-block:: python
+
+  def render(minipyp, request):
+      return '<p>You requested the page <code>' + request.uri + '</code>.</p>'
+
+You should now understand basic use of MiniPyP. Visit the documentation to learn all of your options.
