@@ -1,0 +1,25 @@
+pytest:
+  stage: test
+  image: rootproject/root-ubuntu16
+  script: 
+  - sudo apt-get update -q
+  - sudo apt-get install python-pip -yqq
+  - pip install pytest pytest-cov
+  - export PYTHONPATH=/usr/local/lib/root:$PYTHONPATH
+  - python -m pytest -v
+  artifacts:
+    paths:
+      - htmlcov/
+
+pages:
+  stage: deploy
+  image: alpine:latest
+  dependencies:
+    - pytest
+  script:
+  - mv htmlcov public
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
