@@ -1,0 +1,106 @@
+Metadata-Version: 2.0
+Name: neuroglancer-scripts
+Version: 0.1.0
+Summary: Conversion of images to the Neuroglancer pre-computed format
+Home-page: https://github.com/HumanBrainProject/neuroglancer-scripts
+Author: Yann Leprince
+Author-email: y.leprince@fz-juelich.de
+License: UNKNOWN
+Description-Content-Type: UNKNOWN
+Keywords: neuroimaging
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Requires-Python: ~= 3.4
+Requires-Dist: nibabel (>=2)
+Requires-Dist: numpy (>=1.11.0)
+Requires-Dist: pillow (>=1.1.6)
+Requires-Dist: requests (>=2)
+Requires-Dist: scikit-image
+Requires-Dist: tqdm (>=4)
+Provides-Extra: dev
+Requires-Dist: pytest; extra == 'dev'
+Requires-Dist: check-manifest; extra == 'dev'
+Requires-Dist: pytest-cov; extra == 'dev'
+Requires-Dist: readme-renderer; extra == 'dev'
+Requires-Dist: sphinx; extra == 'dev'
+Requires-Dist: tox; extra == 'dev'
+
+neuroglancer-scripts
+====================
+
+Tools for converting 3D images to the Neuroglancer pre-computed format.
+
+
+.. image:: https://img.shields.io/pypi/v/neuroglancer-scripts.svg
+   :target: https://pypi.python.org/pypi/neuroglancer-scripts
+   :alt: PyPI Version
+
+.. image:: https://travis-ci.org/HumanBrainProject/neuroglancer-scripts.svg?branch=master
+   :target: https://travis-ci.org/HumanBrainProject/neuroglancer-scripts
+   :alt: Build Status
+
+.. image:: https://codecov.io/gh/HumanBrainProject/neuroglancer-scripts/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/HumanBrainProject/neuroglancer-scripts
+   :alt: Coverage Status
+
+.. image:: https://readthedocs.org/projects/neuroglancer-scripts/badge/?version=latest
+   :target: http://neuroglancer-scripts.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
+
+
+Installation
+------------
+
+The easiest way to install neuroglancer-scripts is in a virtual environment:
+
+.. code-block:: shell
+
+   python3 -m venv venv/
+   . venv/bin/activate
+   pip install neuroglancer-scripts
+
+
+Usage
+-----
+
+See the `documentation <http://neuroglancer-scripts.readthedocs.io/>`_.
+
+
+Development
+-----------
+
+The code is hosted `on GitHub
+<https://github.com/HumanBrainProject/neuroglancer-scripts>`_.
+
+This project uses ``pytest`` and ``tox`` for testing. You will need to install
+the project (a virtual environment is recommended) before you can use it or run
+the tests. ``pip install -e`` will install in editable mode, so you do not need
+to re-install when changing existing files. The ``[dev]`` suffix pulls extra
+dependencies that are useful for development.
+
+.. code-block:: shell
+
+   git clone https://github.com/HumanBrainProject/neuroglancer-scripts.git
+   cd neuroglancer-scripts
+   python3 -m venv venv/
+   . venv/bin/activate
+   pip install -e .[dev]
+
+   pytest --cov=neuroglancer_scripts --cov-report=html --cov-report=term
+
+
+It is advised to use ``tox`` for testing the code against all supported Python
+versions. This will run the same tests as the Travis continuous integration:
+
+.. code-block:: shell
+
+   tox
+
+
