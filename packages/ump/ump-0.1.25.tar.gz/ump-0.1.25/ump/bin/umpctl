@@ -1,0 +1,47 @@
+#!/usr/local/bin/python
+# -*- coding: utf-8 -*-
+
+import click
+import datetime
+import os
+import ump
+from ump import utils, constants
+
+
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+def version():
+    """
+    版本号
+    """
+    print ump.__version__
+
+
+@cli.command()
+@click.option('-f', '--file_path', required=True, help='file path')
+def pos(file_path):
+    """
+    查看pos
+    """
+    if not os.path.exists(file_path):
+        click.echo('file not exist. file_path: %s', file_path)
+        return
+
+    with open(file_path, 'rb') as f:
+        pos_data = f.read()
+        if pos_data:
+            timestamp, offset = utils.unpack_pos(pos_data)
+            pos_unit_time = datetime.datetime.fromtimestamp(timestamp)
+            unit = pos_unit_time.strftime(constants.UNIT_FMT)
+
+            click.echo('%s, %s' % (unit, offset))
+        else:
+            click.echo('empty content')
+
+
+if __name__ == '__main__':
+    cli()
