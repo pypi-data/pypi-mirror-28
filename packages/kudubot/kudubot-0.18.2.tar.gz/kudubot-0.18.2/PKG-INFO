@@ -1,0 +1,197 @@
+Metadata-Version: 1.1
+Name: kudubot
+Version: 0.18.2
+Summary: A messaging bot framework
+Home-page: https://gitlab.namibsun.net/namboy94/kudubot
+Author: Hermann Krumrey
+Author-email: hermann@krumreyh.com
+License: GNU GPL3
+Download-URL: https://gitlab.namibsun.net/namboy94/kudubot/repository/archive.zip?ref=master
+Description: Kudubot
+        =======
+        
+        +------------------+------------------+
+        | master           | develop          |
+        +==================+==================+
+        | |build status|   | |build status|   |
+        +------------------+------------------+
+        
+        .. figure:: resources/logo/logo-readme.png
+           :alt: Logo
+        
+           Logo
+        
+        Kudubot is a chat bot framework designed to work with arbitrary
+        messaging services, be it Whatsapp, Telegram, IRC or even Email. The
+        framework is completely modular and can be extended with other
+        connection types and services.
+        
+        Usage
+        -----
+        
+        Kudubot can be used using the ``kudubot`` command once it's installed
+        using the setup.py file or pip. To do so, run one of the following
+        commands, optionally with the ``--user`` flag to install it for the
+        current user as opposed to system-wide:
+        
+        ::
+        
+            python setup.py install
+        
+            pip install kudubot
+        
+        To use kudubot, a configuration directory must exist in ``~/.kudubot``
+        or be provided to the ``kudubot``-command using the ``--config`` option.
+        A configuration directory can be generated using ``kudubot-config-gen``.
+        Run ``kudubot-config-gen --help`` to explore the options that tool
+        provides you.
+        
+        Sample connection configurations can be found
+        `here <resources/connection-configs>`__
+        
+        Implementing a Connection.
+        --------------------------
+        
+        To implement a new Connection, you will have to create a subclass of the
+        ``kudubot.connections.Connection.Connection`` class and implement the
+        various abstract methods.
+        
+        To integrate the connection with Kudubot, make sure your class is in
+        your system's python path (i.e. importable) and add an import statement
+        to the config file located at ``$HOME/.kudubot/connections.conf`` that
+        would import your Connection class.
+        
+        For examples look at the implemented connections in
+        `services <kudubot/connections>`__.
+        
+        Implementing a Service
+        ----------------------
+        
+        To implement a Service, you will have to create a subclass of the
+        ``kudubot.services.Service.Service`` class and implement the various
+        abstract methods.
+        
+        To integrate the service with Kudubot, make sure your class is in your
+        system's python path (i.e. importable) and add an import statement to
+        the config file located at ``$HOME/.kudubot/services.conf`` that would
+        import your Service class.
+        
+        For examples look at the implemented services in
+        `services <kudubot/services/native>`__.
+        
+        Implementing an external Service
+        --------------------------------
+        
+        Kudubot enables you to write a Service in any language you would like.
+        For this to be possible, you first need to implement a very basic python
+        class that inherits from ``kudubot.services.ExternalService`` and
+        implement its abstract methods, which are:
+        
+        1. define\_executable\_file\_url
+        
+        Defines a URL from which the Service's executable file can be downloaded
+        if necessary. there is a helper method called
+        ``resolve_github_release_asset_url`` which makes it easy to provide a
+        Github release asset as the executable file.
+        
+        2. define\_executable\_command
+        
+        Defines the commands *preceeding* the actual executable if called from
+        the command line.
+        
+        For example, for a ``.jar`` file to run, one would have to return
+        ``["java","-jar"].``
+        
+        3. define\_identifier
+        
+           Simply a unique string which acts as an identifier for a service.
+        
+        Once that has been settled, you may start implementing the service in
+        your preferred language. Your program needs to be runnable as a single
+        executable.
+        
+        The kudubot framework will call your executable whenever it receives a
+        message, then checks if the message is applicable to your service and
+        then, if it is applicable, asks your executable to process the message.
+        
+        **In detail**:
+        
+        Your executable will be provided with 4 command line arguments:
+        
+        1. The mode in which your program should run. Can be either
+           ``is_applicable_to`` or ``handle_message``. Your program must act
+           accordingly.
+        2. A file location containing the message information in JSON format.
+           You will need to parse this yourself if no bindings exist for your
+           language.
+        3. A file location which is used to tell the kudubot program the result
+           of your program's execution.
+        
+        For example, if the ``is_applicable_to`` query was successful, i.e. the
+        Service is aplicable to the message, the following JSON data should be
+        written to the file:
+        
+        ::
+        
+               {"is_applicable": true}
+        
+        or when your program handled a message sucessfully and want to reply
+        with a message of its own:
+        
+        ::
+        
+               {"mode": "reply"}
+        
+        4. The location of the Connection's SQlite database file.
+        
+        Should you want to reply to a message, the original message file must be
+        overwritten with a new Message JSON string, which needs to have the
+        exact same attributes as the original, just different values. To
+        actually make kudubot reply, ``{"mode": "reply"}`` must be written into
+        the response file.
+        
+        Your executable file must be located in ``.kudubot/external/bin`` and
+        have the exact same name as your service's identifier, including the
+        file extension. If it is not there at runtime, kudubot will try to
+        download the executable from the download URL specified in
+        ``define_executable_file_url``.
+        
+        **Bindings**
+        
+        There are common bindings available for the following languages:
+        
+        -  Rust (`crates.io <https://crates.io/crates/kudubot-bindings>`__)
+        
+        Creating a standalone Bot Service
+        ---------------------------------
+        
+        To see how to create a single-purpose bot, take a look at the echobot:
+        
+        -  `starter script <bin/echobot>`__
+        -  `service <kudubot/services/native/echo>`__
+        
+        Further Information
+        -------------------
+        
+        -  `Changelog <https://gitlab.namibsun.net/namboy94/kudubot/raw/master/CHANGELOG>`__
+        -  `License
+           (GPLv3) <https://gitlab.namibsun.net/namboy94/kudubot/raw/master/LICENSE>`__
+        -  `Gitlab <https://gitlab.namibsun.net/namboy94/kudubot>`__
+        -  `Github <https://github.com/namboy94/kudubot>`__
+        -  `Python Package Index Site <https://pypi.python.org/pypi/kudubot>`__
+        -  `progstats <https://progstats.namibsun.net/project.py?name=kudubot>`__
+        
+        .. |build status| image:: https://gitlab.namibsun.net/namboy94/kudubot/badges/master/build.svg
+           :target: https://gitlab.namibsun.net/namboy94/kudubot/commits/master
+        .. |build status| image:: https://gitlab.namibsun.net/namboy94/kudubot/badges/develop/build.svg
+           :target: https://gitlab.namibsun.net/namboy94/kudubot/commits/develop
+        
+Platform: UNKNOWN
+Classifier: Environment :: Console
+Classifier: Natural Language :: English
+Classifier: Intended Audience :: Developers
+Classifier: Development Status :: 4 - Beta
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Topic :: Communications :: Chat
+Classifier: Programming Language :: Python
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
