@@ -1,0 +1,191 @@
+Metadata-Version: 2.0
+Name: deck-chores
+Version: 0.2
+Summary: Job scheduler for Docker containers, configured via container labels.
+Home-page: https://github.com/funkyfuture/deck_chores
+Author: Frank Sachsenheim
+Author-email: funkyfuture@riseup.net
+License: ISC license
+Description-Content-Type: UNKNOWN
+Keywords: docker,cron,scheduler,jobs,labels,metadata
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: ISC License (ISCL)
+Classifier: Natural Language :: English
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Requires-Dist: APScheduler (~=3.5)
+Requires-Dist: cerberus (~=1.1)
+Requires-Dist: docker (~=2.7)
+Requires-Dist: fasteners (~=0.14)
+
+deck-chores
+===========
+
+.. image:: https://img.shields.io/docker/pulls/funkyfuture/deck-chores.svg
+        :target: https://hub.docker.com/r/funkyfuture/deck-chores/
+
+.. image:: https://images.microbadger.com/badges/image/funkyfuture/deck-chores.svg
+        :target: https://microbadger.com/images/funkyfuture/deck-chores
+
+.. image:: https://img.shields.io/pypi/v/deck-chores.svg
+        :target: https://pypi.python.org/pypi/deck-chores
+
+**A job scheduler for Docker containers, configured via container labels.**
+
+* Documentation: https://deck-chores.readthedocs.io
+* Image repository: https://hub.docker.com/r/funkyfuture/deck-chores
+* Code repository: https://github.com/funkyfuture/deck-chores
+* Issue tracker: https://github.com/funkyfuture/deck-chores/issues
+* Free software: ISC license
+
+
+Features
+--------
+
+- define regular jobs to run within a container context with container and optionally with image
+  labels
+- use date, interval and cron-like triggers
+- set a maximum of simultaneously running instances per job
+- restrict job scheduling to one container per service
+- multi-architecture image supports ``amd64`` and ``armv7l`` platforms, no emulator involved
+
+
+Example
+-------
+
+Let's say you want to dump the database of a Wordpress once a day. Here's a ``docker-compose.yml``
+that defines a job that will be handled by *deck-chores*:
+
+.. code-block:: yaml
+
+    version: '2'
+
+    services:
+      wordpress:
+        image: wordpress
+      mysql:
+        image: mariadb
+        volumes:
+          - ./database_dumps:/dumps
+        labels:
+          deck-chores.dump.command: sh -c "mysqldump --all-databases > /dumps/dump-$$(date -Idate)"
+          deck-chores.dump.interval: daily
+
+It is however recommended to use scripts with a proper shebang for such actions. Their outputs to
+``stdout`` and ``stderr`` as well as their exit code will be logged by *deck-chores*.
+
+
+Limitations
+-----------
+
+At the moment *deck-chores* is designed to run on a single Docker node, not
+within a cluster of these. Code and documentation contribution covering this
+are highly encouraged.
+
+
+Acknowledgements
+----------------
+
+It wouldn't be as charming to write this piece of software without these projects:
+
+* `APScheduler <https://apscheduler.readthedocs.io>`_ for managing jobs
+* `cerberus <http://python-cerberus.org>`_ for processing metadata
+* `docker-py <https://docker-py.readthedocs.io>`_ for Docker interaction
+* `flake8 <http://flake8.pycqa.org/>`_, `mypy <http://mypy-lang.org>`_,
+  `pytest <http://pytest.org>`_ and `tox <https://tox.readthedocs.io>`_ for testing
+* `Python <https://python.org>`_
+
+
+Roadmap
+-------
+
+0.3
+...
+
+- parse time units for interval triggers
+- handle a global limit on concurrent jobs
+- print jobs when receiving SIGUSR1
+- support for configuring APScheduler's jitter option on Cron- & IntervalTrigger
+
+
+0.4
+...
+
+- keep output of job executions
+- a rudimentary web ui
+
+
+Authors
+-------
+
+- Frank Sachsenheim (maintaining)
+- aeri4list
+- alpine-digger
+- Brynjar Smári Bjarnason
+
+
+History
+-------
+
+0.2 (2018-02-23)
+~~~~~~~~~~~~~~~~
+
+* *new*: documentation how to run scheduled jobs only (:issue:`25` by @binnisb)
+* *fix*: documentation on cron triggers (:issue:`27` by @alpine-digger)
+
+0.2-rc3 (2017-12-23)
+~~~~~~~~~~~~~~~~~~~~
+
+* *changed*: arm builds base on `python:3.6-alpine <https://hub.docker.com/_/python/>`_
+  that are executed on an ARMv7l architecture
+* *changed*: Updated dependencies *APScheduler* and *docker-py*
+
+0.2-rc2 (2017-08-05)
+~~~~~~~~~~~~~~~~~~~~
+
+* *changed*: arm builds base on `arm32v6/python <https://hub.docker.com/r/arm32v6/python/>`_
+* *changed*: therefore ``arm32v6`` replaces the ``arm``-suffix in image tags
+* *changed*: there are no more images that get tagged with ``latest-$architecture``
+
+0.2-rc1 (2017-07-01)
+~~~~~~~~~~~~~~~~~~~~
+
+* *refactoring*: uses the Python Docker SDK 2 (:issue:`14`)
+* *removed*: ``ASSERT_FINGERPRINT`` environment variable
+* *renamed*: ``DOCKER_DAEMON`` to ``DOCKER_HOST`` to comply with the SDK
+* *fix*: check on fixed labels (:issue:`18` by @aeri4list)
+* documentation updates
+
+
+0.1 (2017-03-02)
+~~~~~~~~~~~~~~~~
+
+* *fix*: docker-py returns ``None`` for labels of images that were created with
+  older Docker versions (:issue:`7`)
+
+0.1.beta3 (2017-01-22)
+~~~~~~~~~~~~~~~~~~~~~~
+
+* *new*: there's now a build for arm architectures
+* *new*: an architecture agnostic manifest is pushed to the image registry for
+  release images
+
+0.1.beta2 (2016-12-08)
+~~~~~~~~~~~~~~~~~~~~~~
+
+* *new:* set log format per :envvar:LOG_FORMAT
+* *new:* an options label to set behavioural flags
+* *new:* containers can be identified as a service by configurable labels
+* *new:* job definitions for further containers of a service are ignored
+  (default, opt-out can be configured)
+* *new:* image labels can also be parsed for job definitions
+  (default, opt-out can be configured)
+
+0.1.beta1 (2016-12-04)
+~~~~~~~~~~~~~~~~~~~~~~
+
+* First release with full documentation
+
+
