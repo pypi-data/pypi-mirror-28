@@ -1,0 +1,257 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ulaval_notify.api.session &#8212; ulaval-notify 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ulaval_notify.api.session</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module contains the code related to the session handling.</span>
+
+<span class="sd">:copyright: (c) 2018 by Antoine Gagné.</span>
+<span class="sd">:license: MIT, see LICENSE for more details.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">namedtuple</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">copy</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="k">import</span> <span class="n">Lock</span><span class="p">,</span> <span class="n">Timer</span>
+
+<span class="kn">from</span> <span class="nn">requests</span> <span class="k">import</span> <span class="n">Request</span>
+
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="k">import</span> <span class="n">API_URL</span><span class="p">,</span> <span class="n">BASE_URL</span>
+
+
+<span class="c1">#: Immutable type that contains information about the session token</span>
+<span class="n">Token</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s1">&#39;Token&#39;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="s1">&#39;client_id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;token&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;token_type&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;expiration_date&#39;</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1">#: Immutable type that contains information about the current user of the API</span>
+<span class="n">UserDetails</span> <span class="o">=</span> <span class="n">namedtuple</span><span class="p">(</span>
+    <span class="s1">&#39;UserDetails&#39;</span><span class="p">,</span> <span class="p">[</span>
+        <span class="s1">&#39;user_id&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;email&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;identification_number&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;first_name&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;last_name&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;username&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;change_number&#39;</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="refresh_periodically"><a class="viewcode-back" href="../../../ulaval_notify.api.html#ulaval_notify.api.session.refresh_periodically">[docs]</a><span class="k">def</span> <span class="nf">refresh_periodically</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="n">session_manager</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Refresh the session held by the session manager every given interval.</span>
+
+<span class="sd">    :param interval: The number of time before refreshing the session</span>
+<span class="sd">    :param session_manager: The session manager that will refresh the session</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">session_manager</span><span class="o">.</span><span class="n">refresh</span><span class="p">()</span>
+    <span class="n">timer</span> <span class="o">=</span> <span class="n">Timer</span><span class="p">(</span>
+        <span class="n">interval</span><span class="p">,</span>
+        <span class="n">refresh_periodically</span><span class="p">,</span>
+        <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">interval</span><span class="p">,</span> <span class="n">session_manager</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">timer</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="create_token"><a class="viewcode-back" href="../../../ulaval_notify.api.html#ulaval_notify.api.session.create_token">[docs]</a><span class="k">def</span> <span class="nf">create_token</span><span class="p">(</span><span class="n">token_details</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a token based on the API response.</span>
+
+<span class="sd">    :param token_details: The API response containing the token details</span>
+<span class="sd">    :returns: The token details</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Token</span><span class="p">(</span>
+        <span class="n">client_id</span><span class="o">=</span><span class="n">token_details</span><span class="p">[</span><span class="s1">&#39;idClient&#39;</span><span class="p">],</span>
+        <span class="n">token</span><span class="o">=</span><span class="n">token_details</span><span class="p">[</span><span class="s1">&#39;token&#39;</span><span class="p">],</span>
+        <span class="n">token_type</span><span class="o">=</span><span class="n">token_details</span><span class="p">[</span><span class="s1">&#39;typeToken&#39;</span><span class="p">],</span>
+        <span class="n">expiration_date</span><span class="o">=</span><span class="n">token_details</span><span class="p">[</span><span class="s1">&#39;dateExpiration&#39;</span><span class="p">]</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="create_user_details"><a class="viewcode-back" href="../../../ulaval_notify.api.html#ulaval_notify.api.session.create_user_details">[docs]</a><span class="k">def</span> <span class="nf">create_user_details</span><span class="p">(</span><span class="n">user_details</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a type holding the user&#39;s details based on the API response.</span>
+
+<span class="sd">    :param user_details: The API response containing the user&#39;s details</span>
+<span class="sd">    :returns: The user details</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">UserDetails</span><span class="p">(</span>
+        <span class="n">user_id</span><span class="o">=</span><span class="n">user_details</span><span class="p">[</span><span class="s1">&#39;idUtilisateurMpo&#39;</span><span class="p">],</span>
+        <span class="n">email</span><span class="o">=</span><span class="n">user_details</span><span class="p">[</span><span class="s1">&#39;courrielPrincipal&#39;</span><span class="p">],</span>
+        <span class="n">identification_number</span><span class="o">=</span><span class="n">user_details</span><span class="p">[</span><span class="s1">&#39;nie&#39;</span><span class="p">],</span>
+        <span class="n">first_name</span><span class="o">=</span><span class="n">user_details</span><span class="p">[</span><span class="s1">&#39;prenom&#39;</span><span class="p">],</span>
+        <span class="n">last_name</span><span class="o">=</span><span class="n">user_details</span><span class="p">[</span><span class="s1">&#39;nom&#39;</span><span class="p">],</span>
+        <span class="n">username</span><span class="o">=</span><span class="n">user_details</span><span class="p">[</span><span class="s1">&#39;pseudonyme&#39;</span><span class="p">],</span>
+        <span class="n">change_number</span><span class="o">=</span><span class="n">user_details</span><span class="p">[</span><span class="s1">&#39;numeroChangement&#39;</span><span class="p">]</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SessionManager"><a class="viewcode-back" href="../../../ulaval_notify.api.html#ulaval_notify.api.session.SessionManager">[docs]</a><span class="k">class</span> <span class="nc">SessionManager</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;The session manager handles requests to the API related to the session.</span>
+
+<span class="sd">    :param session: The API session</span>
+<span class="sd">    :param cookie_name: The named of the cookie to set in the session</span>
+<span class="sd">    :param cookie_content: The content of the cookie to set in the session</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#: The route used to refresh the session token</span>
+    <span class="n">refresh_token_route</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{base_url}</span><span class="s1">/auth/rafraichirtoken&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">base_url</span><span class="o">=</span><span class="n">BASE_URL</span>
+    <span class="p">)</span>
+
+    <span class="c1">#: The route used to refresh the session details</span>
+    <span class="n">refresh_session_route</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{api_url}</span><span class="s1">/refreshsession&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">api_url</span><span class="o">=</span><span class="n">API_URL</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session</span><span class="p">,</span> <span class="n">cookie_name</span><span class="p">,</span> <span class="n">cookie_content</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a new session manager.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__session</span> <span class="o">=</span> <span class="n">session</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cookie_name</span> <span class="o">=</span> <span class="n">cookie_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_cookies</span><span class="p">(</span><span class="n">cookie_content</span><span class="p">)</span>
+        <span class="c1">#: The details of the API session token</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token_details</span> <span class="o">=</span> <span class="n">create_token</span><span class="p">(</span><span class="n">cookie_content</span><span class="p">[</span><span class="s1">&#39;detailsToken&#39;</span><span class="p">])</span>
+        <span class="c1">#: The details of the current user of the API</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user_details</span> <span class="o">=</span> <span class="n">create_user_details</span><span class="p">(</span><span class="n">cookie_content</span><span class="p">[</span><span class="s1">&#39;utilisateurMpo&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_update_cookies</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cookie_content</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__session</span><span class="o">.</span><span class="n">cookies</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cookie_name</span><span class="p">,</span>
+                <span class="n">cookie_content</span><span class="p">,</span>
+                <span class="n">domain</span><span class="o">=</span><span class="s1">&#39;monportail.ulaval.ca&#39;</span><span class="p">,</span>
+                <span class="n">path</span><span class="o">=</span><span class="s1">&#39;/public/modules/mpo-client/services/securestorage/cookie/&#39;</span><span class="p">,</span>
+                <span class="n">secure</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__session</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SessionManager.send"><a class="viewcode-back" href="../../../ulaval_notify.api.html#ulaval_notify.api.session.SessionManager.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Send the given request with the current session.</span>
+
+<span class="sd">        :param request: The request to send to the API</span>
+<span class="sd">        :returns: The response of the API</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
+            <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_authentication_header</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">send</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">prepare_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span> <span class="k">if</span> <span class="n">response</span> <span class="k">else</span> <span class="n">response</span></div>
+
+    <span class="k">def</span> <span class="nf">_add_authentication_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Authorization&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{token_type}</span><span class="s1"> </span><span class="si">{token}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">token_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token_details</span><span class="o">.</span><span class="n">token_type</span><span class="p">,</span>
+            <span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token_details</span><span class="o">.</span><span class="n">token</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">request</span>
+
+<div class="viewcode-block" id="SessionManager.refresh"><a class="viewcode-back" href="../../../ulaval_notify.api.html#ulaval_notify.api.session.SessionManager.refresh">[docs]</a>    <span class="k">def</span> <span class="nf">refresh</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Refresh the session.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_session</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_refresh_token</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_cookies</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token_details</span> <span class="o">=</span> <span class="n">create_token</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;detailsToken&#39;</span><span class="p">])</span></div>
+
+    <span class="k">def</span> <span class="nf">_refresh_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">__lock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">SessionManager</span><span class="o">.</span><span class="n">refresh_session_route</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_refresh_token</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="n">Request</span><span class="p">(</span>
+            <span class="s1">&#39;POST&#39;</span><span class="p">,</span>
+            <span class="n">SessionManager</span><span class="o">.</span><span class="n">refresh_token_route</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json, text/plain, */*&#39;</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Antoine Gagné.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

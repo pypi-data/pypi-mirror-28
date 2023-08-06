@@ -1,0 +1,450 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ulaval_notify.api package &#8212; ulaval-notify 0.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ulaval-notify-api-package">
+<h1>ulaval_notify.api package<a class="headerlink" href="#ulaval-notify-api-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-ulaval_notify.api.constants">
+<span id="ulaval-notify-api-constants-module"></span><h2>ulaval_notify.api.constants module<a class="headerlink" href="#module-ulaval_notify.api.constants" title="Permalink to this headline">¶</a></h2>
+<p>This module contains the constants related to monPortail API.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
+<li>2018 by Antoine Gagné.</li>
+</ol>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">MIT, see LICENSE for more details.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="data">
+<dt id="ulaval_notify.api.constants.API_URL">
+<code class="descclassname">ulaval_notify.api.constants.</code><code class="descname">API_URL</code><em class="property"> = 'https://api.ulaval.ca/ul/auth/oauth/v2'</em><a class="headerlink" href="#ulaval_notify.api.constants.API_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL of monPortail API</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="ulaval_notify.api.constants.AUTHENTICATION_PAGE_URL">
+<code class="descclassname">ulaval_notify.api.constants.</code><code class="descname">AUTHENTICATION_PAGE_URL</code><em class="property"> = 'https://authentification.ulaval.ca'</em><a class="headerlink" href="#ulaval_notify.api.constants.AUTHENTICATION_PAGE_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p>The authentication page URL</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="ulaval_notify.api.constants.BASE_URL">
+<code class="descclassname">ulaval_notify.api.constants.</code><code class="descname">BASE_URL</code><em class="property"> = 'https://monportail.ulaval.ca'</em><a class="headerlink" href="#ulaval_notify.api.constants.BASE_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL of the base website</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="ulaval_notify.api.constants.COOKIE_REGEX">
+<code class="descclassname">ulaval_notify.api.constants.</code><code class="descname">COOKIE_REGEX</code><em class="property"> = 'serviceSecureStorage.setItem\\((?P&lt;cookie_name&gt;&quot;mpo.securite.contexteUtilisateur&quot;),(?P&lt;cookie_content&gt;.+)\\);'</em><a class="headerlink" href="#ulaval_notify.api.constants.COOKIE_REGEX" title="Permalink to this definition">¶</a></dt>
+<dd><p>The regex that corresponds to the content of the cookie in the returned HTML
+page</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="ulaval_notify.api.constants.LOCATION_URL">
+<code class="descclassname">ulaval_notify.api.constants.</code><code class="descname">LOCATION_URL</code><em class="property"> = 'https://monportail.ulaval.ca/auth/deleguer/?urlretour=https://monportail.ulaval.ca/'</em><a class="headerlink" href="#ulaval_notify.api.constants.LOCATION_URL" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL to set the needed cookies to log in</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ulaval_notify.api.login">
+<span id="ulaval-notify-api-login-module"></span><h2>ulaval_notify.api.login module<a class="headerlink" href="#module-ulaval_notify.api.login" title="Permalink to this headline">¶</a></h2>
+<p>This module handles the login to monPortail API.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
+<li>2018 by Antoine Gagné.</li>
+</ol>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">MIT, see LICENSE for more details.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="ulaval_notify.api.login.User">
+<em class="property">class </em><code class="descclassname">ulaval_notify.api.login.</code><code class="descname">User</code><span class="sig-paren">(</span><em>username</em>, <em>password</em><span class="sig-paren">)</span><a class="headerlink" href="#ulaval_notify.api.login.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+<p>Immutable type to hold the user’s <em>IDUL</em> and the <em>password</em></p>
+<dl class="attribute">
+<dt id="ulaval_notify.api.login.User.password">
+<code class="descname">password</code><a class="headerlink" href="#ulaval_notify.api.login.User.password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.login.User.username">
+<code class="descname">username</code><a class="headerlink" href="#ulaval_notify.api.login.User.username" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="ulaval_notify.api.login.login">
+<code class="descclassname">ulaval_notify.api.login.</code><code class="descname">login</code><span class="sig-paren">(</span><em>session</em>, <em>user</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/login.html#login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.login.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Login to monPortail API as the specified user.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>session</strong> – The HTTP session to use for the requests</li>
+<li><strong>user</strong> – The user’s credentials (IDUL and password)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A session manager that handles refreshing the token and can make
+authenticated requests to the API</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ulaval_notify.api.notifications">
+<span id="ulaval-notify-api-notifications-module"></span><h2>ulaval_notify.api.notifications module<a class="headerlink" href="#module-ulaval_notify.api.notifications" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="ulaval_notify.api.notifications.NotificationManager">
+<em class="property">class </em><code class="descclassname">ulaval_notify.api.notifications.</code><code class="descname">NotificationManager</code><span class="sig-paren">(</span><em>session_manager</em>, <em>callback</em>, <em>create_request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/notifications.html#NotificationManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.notifications.NotificationManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="ulaval_notify.api.notifications.NotificationManager.check_notifications">
+<code class="descname">check_notifications</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/notifications.html#NotificationManager.check_notifications"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.notifications.NotificationManager.check_notifications" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.notifications.NotificationManager.notification_route">
+<code class="descname">notification_route</code><em class="property"> = 'https://monportail.ulaval.ca/communication/v1/messagesimportants'</em><a class="headerlink" href="#ulaval_notify.api.notifications.NotificationManager.notification_route" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="ulaval_notify.api.notifications.create_request">
+<code class="descclassname">ulaval_notify.api.notifications.</code><code class="descname">create_request</code><span class="sig-paren">(</span><em>session_manager</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/notifications.html#create_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.notifications.create_request" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ulaval_notify.api.notifications.find_appropriate_notification_callback">
+<code class="descclassname">ulaval_notify.api.notifications.</code><code class="descname">find_appropriate_notification_callback</code><span class="sig-paren">(</span><em>platform_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/notifications.html#find_appropriate_notification_callback"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.notifications.find_appropriate_notification_callback" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="ulaval_notify.api.notifications.send_linux_notification">
+<code class="descclassname">ulaval_notify.api.notifications.</code><code class="descname">send_linux_notification</code><span class="sig-paren">(</span><em>notification</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/notifications.html#send_linux_notification"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.notifications.send_linux_notification" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-ulaval_notify.api.session">
+<span id="ulaval-notify-api-session-module"></span><h2>ulaval_notify.api.session module<a class="headerlink" href="#module-ulaval_notify.api.session" title="Permalink to this headline">¶</a></h2>
+<p>This module contains the code related to the session handling.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">copyright:</th><td class="field-body"><ol class="first loweralpha simple" start="3">
+<li>2018 by Antoine Gagné.</li>
+</ol>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">license:</th><td class="field-body"><p class="first last">MIT, see LICENSE for more details.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="class">
+<dt id="ulaval_notify.api.session.SessionManager">
+<em class="property">class </em><code class="descclassname">ulaval_notify.api.session.</code><code class="descname">SessionManager</code><span class="sig-paren">(</span><em>session</em>, <em>cookie_name</em>, <em>cookie_content</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/session.html#SessionManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.session.SessionManager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>The session manager handles requests to the API related to the session.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>session</strong> – The API session</li>
+<li><strong>cookie_name</strong> – The named of the cookie to set in the session</li>
+<li><strong>cookie_content</strong> – The content of the cookie to set in the session</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="ulaval_notify.api.session.SessionManager.refresh">
+<code class="descname">refresh</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/session.html#SessionManager.refresh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.session.SessionManager.refresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refresh the session.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.SessionManager.refresh_session_route">
+<code class="descname">refresh_session_route</code><em class="property"> = 'https://api.ulaval.ca/ul/auth/oauth/v2/refreshsession'</em><a class="headerlink" href="#ulaval_notify.api.session.SessionManager.refresh_session_route" title="Permalink to this definition">¶</a></dt>
+<dd><p>The route used to refresh the session details</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.SessionManager.refresh_token_route">
+<code class="descname">refresh_token_route</code><em class="property"> = 'https://monportail.ulaval.ca/auth/rafraichirtoken'</em><a class="headerlink" href="#ulaval_notify.api.session.SessionManager.refresh_token_route" title="Permalink to this definition">¶</a></dt>
+<dd><p>The route used to refresh the session token</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ulaval_notify.api.session.SessionManager.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>request</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/session.html#SessionManager.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.session.SessionManager.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send the given request with the current session.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>request</strong> – The request to send to the API</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The response of the API</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.SessionManager.token_details">
+<code class="descname">token_details</code><em class="property"> = None</em><a class="headerlink" href="#ulaval_notify.api.session.SessionManager.token_details" title="Permalink to this definition">¶</a></dt>
+<dd><p>The details of the API session token</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.SessionManager.user_details">
+<code class="descname">user_details</code><em class="property"> = None</em><a class="headerlink" href="#ulaval_notify.api.session.SessionManager.user_details" title="Permalink to this definition">¶</a></dt>
+<dd><p>The details of the current user of the API</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ulaval_notify.api.session.Token">
+<em class="property">class </em><code class="descclassname">ulaval_notify.api.session.</code><code class="descname">Token</code><span class="sig-paren">(</span><em>client_id</em>, <em>token</em>, <em>token_type</em>, <em>expiration_date</em><span class="sig-paren">)</span><a class="headerlink" href="#ulaval_notify.api.session.Token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+<p>Immutable type that contains information about the session token</p>
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.Token.client_id">
+<code class="descname">client_id</code><a class="headerlink" href="#ulaval_notify.api.session.Token.client_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.Token.expiration_date">
+<code class="descname">expiration_date</code><a class="headerlink" href="#ulaval_notify.api.session.Token.expiration_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.Token.token">
+<code class="descname">token</code><a class="headerlink" href="#ulaval_notify.api.session.Token.token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.Token.token_type">
+<code class="descname">token_type</code><a class="headerlink" href="#ulaval_notify.api.session.Token.token_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ulaval_notify.api.session.UserDetails">
+<em class="property">class </em><code class="descclassname">ulaval_notify.api.session.</code><code class="descname">UserDetails</code><span class="sig-paren">(</span><em>user_id</em>, <em>email</em>, <em>identification_number</em>, <em>first_name</em>, <em>last_name</em>, <em>username</em>, <em>change_number</em><span class="sig-paren">)</span><a class="headerlink" href="#ulaval_notify.api.session.UserDetails" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">tuple</span></code></p>
+<p>Immutable type that contains information about the current user of the API</p>
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.UserDetails.change_number">
+<code class="descname">change_number</code><a class="headerlink" href="#ulaval_notify.api.session.UserDetails.change_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 6</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.UserDetails.email">
+<code class="descname">email</code><a class="headerlink" href="#ulaval_notify.api.session.UserDetails.email" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.UserDetails.first_name">
+<code class="descname">first_name</code><a class="headerlink" href="#ulaval_notify.api.session.UserDetails.first_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 3</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.UserDetails.identification_number">
+<code class="descname">identification_number</code><a class="headerlink" href="#ulaval_notify.api.session.UserDetails.identification_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.UserDetails.last_name">
+<code class="descname">last_name</code><a class="headerlink" href="#ulaval_notify.api.session.UserDetails.last_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 4</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.UserDetails.user_id">
+<code class="descname">user_id</code><a class="headerlink" href="#ulaval_notify.api.session.UserDetails.user_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ulaval_notify.api.session.UserDetails.username">
+<code class="descname">username</code><a class="headerlink" href="#ulaval_notify.api.session.UserDetails.username" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 5</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="ulaval_notify.api.session.create_token">
+<code class="descclassname">ulaval_notify.api.session.</code><code class="descname">create_token</code><span class="sig-paren">(</span><em>token_details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/session.html#create_token"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.session.create_token" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a token based on the API response.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>token_details</strong> – The API response containing the token details</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The token details</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ulaval_notify.api.session.create_user_details">
+<code class="descclassname">ulaval_notify.api.session.</code><code class="descname">create_user_details</code><span class="sig-paren">(</span><em>user_details</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/session.html#create_user_details"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.session.create_user_details" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a type holding the user’s details based on the API response.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>user_details</strong> – The API response containing the user’s details</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The user details</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="ulaval_notify.api.session.refresh_periodically">
+<code class="descclassname">ulaval_notify.api.session.</code><code class="descname">refresh_periodically</code><span class="sig-paren">(</span><em>interval</em>, <em>session_manager</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/ulaval_notify/api/session.html#refresh_periodically"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ulaval_notify.api.session.refresh_periodically" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refresh the session held by the session manager every given interval.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>interval</strong> – The number of time before refreshing the session</li>
+<li><strong>session_manager</strong> – The session manager that will refresh the session</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-ulaval_notify.api">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-ulaval_notify.api" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Antoine Gagné.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/ulaval_notify.api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

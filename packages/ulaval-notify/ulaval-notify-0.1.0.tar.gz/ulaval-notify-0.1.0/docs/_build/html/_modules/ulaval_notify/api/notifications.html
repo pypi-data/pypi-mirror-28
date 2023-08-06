@@ -1,0 +1,158 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ulaval_notify.api.notifications &#8212; ulaval-notify 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for ulaval_notify.api.notifications</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">requests</span> <span class="k">import</span> <span class="n">Request</span>
+<span class="kn">from</span> <span class="nn">pkg_resources</span> <span class="k">import</span> <span class="n">resource_filename</span>
+
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="k">import</span> <span class="n">BASE_URL</span>
+
+
+<div class="viewcode-block" id="create_request"><a class="viewcode-back" href="../../../ulaval_notify.api.html#ulaval_notify.api.notifications.create_request">[docs]</a><span class="k">def</span> <span class="nf">create_request</span><span class="p">(</span><span class="n">session_manager</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">Request</span><span class="p">(</span>
+        <span class="s1">&#39;GET&#39;</span><span class="p">,</span>
+        <span class="n">NotificationManager</span><span class="o">.</span><span class="n">notification_route</span><span class="p">,</span>
+        <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+            <span class="s1">&#39;idutilisateurmpo&#39;</span><span class="p">:</span> <span class="n">session_manager</span><span class="o">.</span><span class="n">user_details</span><span class="o">.</span><span class="n">user_id</span><span class="p">,</span>
+            <span class="s1">&#39;statutpublication&#39;</span><span class="p">:</span> <span class="s1">&#39;PUBLIE&#39;</span>
+        <span class="p">},</span>
+        <span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+            <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json, text/plain, */*&#39;</span>
+        <span class="p">}</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NotificationManager"><a class="viewcode-back" href="../../../ulaval_notify.api.html#ulaval_notify.api.notifications.NotificationManager">[docs]</a><span class="k">class</span> <span class="nc">NotificationManager</span><span class="p">:</span>
+    <span class="n">notification_route</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{base_url}</span><span class="s1">/communication/v1/messagesimportants&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">base_url</span><span class="o">=</span><span class="n">BASE_URL</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_manager</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">create_request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session_manager</span> <span class="o">=</span> <span class="n">session_manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span> <span class="o">=</span> <span class="n">callback</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_seen_notifications</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_request</span> <span class="o">=</span> <span class="n">create_request</span>
+
+<div class="viewcode-block" id="NotificationManager.check_notifications"><a class="viewcode-back" href="../../../ulaval_notify.api.html#ulaval_notify.api.notifications.NotificationManager.check_notifications">[docs]</a>    <span class="k">def</span> <span class="nf">check_notifications</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session_manager</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_create_request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_session_manager</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_display_notifications</span><span class="p">(</span>
+            <span class="n">notification</span> <span class="k">for</span> <span class="n">notification</span>
+            <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;messagesImportants&#39;</span><span class="p">,</span> <span class="p">())</span>
+            <span class="k">if</span> <span class="n">notification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;idMessageImportant&#39;</span><span class="p">)</span>
+            <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_seen_notifications</span>
+        <span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_display_notifications</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">notifications</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">notification</span> <span class="ow">in</span> <span class="n">notifications</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_seen_notifications</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+                <span class="n">notification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;idMessageImportant&#39;</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_callback</span><span class="p">(</span><span class="n">notification</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="send_linux_notification"><a class="viewcode-back" href="../../../ulaval_notify.api.html#ulaval_notify.api.notifications.send_linux_notification">[docs]</a><span class="k">def</span> <span class="nf">send_linux_notification</span><span class="p">(</span><span class="n">notification</span><span class="p">):</span>
+    <span class="kn">import</span> <span class="nn">notify2</span>
+    <span class="n">notify2</span><span class="o">.</span><span class="n">init</span><span class="p">(</span><span class="s1">&#39;ulaval-notify&#39;</span><span class="p">)</span>
+    <span class="n">notification</span> <span class="o">=</span> <span class="n">notify2</span><span class="o">.</span><span class="n">Notification</span><span class="p">(</span>
+        <span class="s1">&#39;New notification&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;</span><span class="si">{message}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">notification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;messageHtml&#39;</span><span class="p">)),</span>
+        <span class="n">resource_filename</span><span class="p">(</span><span class="s1">&#39;ulaval_notify&#39;</span><span class="p">,</span> <span class="s1">&#39;resources/images/ulaval-logo.png&#39;</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">notification</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="find_appropriate_notification_callback"><a class="viewcode-back" href="../../../ulaval_notify.api.html#ulaval_notify.api.notifications.find_appropriate_notification_callback">[docs]</a><span class="k">def</span> <span class="nf">find_appropriate_notification_callback</span><span class="p">(</span><span class="n">platform_name</span><span class="p">):</span>
+    <span class="n">notification_callbacks_by_platform_name</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;linux&#39;</span><span class="p">:</span> <span class="n">send_linux_notification</span>
+    <span class="p">}</span>
+
+    <span class="n">notification_callback</span> <span class="o">=</span> <span class="n">send_linux_notification</span>
+    <span class="k">for</span> <span class="n">platform</span><span class="p">,</span> <span class="n">callback</span> <span class="ow">in</span> <span class="n">notification_callbacks_by_platform_name</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">platform_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">platform</span><span class="p">):</span>
+            <span class="n">notification_callback</span> <span class="o">=</span> <span class="n">callback</span>
+
+    <span class="k">return</span> <span class="n">notification_callback</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Antoine Gagné.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
