@@ -1,0 +1,112 @@
+Metadata-Version: 1.1
+Name: aflak
+Version: 0.0.3
+Summary: Advanced Framework for Learning Astrophysical Knowledge
+Home-page: https://github.com/malikolivier/aflak
+Author: Malik Olivier Boussejra
+Author-email: malik@boussejra.com
+License: GPLv3
+Description-Content-Type: UNKNOWN
+Description: ===============================================================
+        aflak - Advanced Framework for Learning Astrophysical Knowledge
+        ===============================================================
+        
+        .. figure:: https://api.travis-ci.org/malikolivier/aflak.svg?branch=master
+           :alt: Build status
+        
+        Environment
+        ===========
+        
+        Support Python3.
+        
+        Setup
+        =====
+        
+        ::
+        
+            virtualenv -p python3 venv
+            . ./venv/bin/activate
+            pip install -r requirements.txt
+        
+        Open a FITS file
+        ================
+        
+        ::
+        
+            ./run my-fits-file.fits
+        
+        The provided FITS file is required to have the following extensions:
+        
+        - 'FLUX': 3D data containing 2D luminosity component for each wavelength value
+        - 'WAVE': 1D data containing value of each target wavelength
+        
+        After some fiddling you should be able to get a window like below:
+        
+        .. figure:: images/2017-11-13-screenshot.jpg?raw=true
+           :alt: Screen capture of the running GUI application
+        
+        Get sample FITS files
+        =====================
+        
+        The Makefile contains a few recipes to get sample fits files.
+        Run make as below:
+        
+        ::
+        
+            make data/manga-7443-12703-LINCUBE.fits
+        
+        To see a fits file header
+        =========================
+        
+        ::
+        
+            fold -w 80 foo.fits | less
+        
+        TODO
+        ====
+        
+        -  Show arbitrary sums over spectral data (currently only show one frame)
+        -  Benchmark / Test with several fits files
+        -  Improve ROI drawing
+        -  Include GUI way of showing a fits header
+        -  Set a label on the histogram's Y-axis (flux [1E-17 erg/s/cm^2])
+        -  Add a compass showing North and East directions and a scale bar in the unit
+           of arcsec on the image
+        
+        v0.0.3
+        ======
+        
+        Fix: Run aflak as module (with `python -m aflak`)
+        
+        New:
+        
+        - Include some unit tests
+        - Include units in waveform axes, read from loaded FITS files
+        
+        
+        v0.0.2
+        ======
+        
+        Fix: Use logarithmic scale on brightness histograms
+        
+        
+        v0.0.1
+        ======
+        
+        Very first version released on PyPI. Can only open FITS files and visualize
+        FLUX and WAVE data.
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 1 - Planning
+Classifier: Environment :: Console
+Classifier: Environment :: X11 Applications :: Qt
+Classifier: Intended Audience :: End Users/Desktop
+Classifier: Intended Audience :: Education
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Multimedia :: Graphics
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Topic :: Scientific/Engineering :: Visualization
