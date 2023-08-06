@@ -1,0 +1,166 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+
+import cessa
+import pkg_resources
+import os
+import sys, getopt
+
+#workload = 'scripts/nginx-test.workload'
+#trace_file = 'tmp/nginx.trace.list'
+#REC_DIR = 'tmp'
+#seccomp_profile = 'nginx-test.profile'
+
+
+# def auto_test():
+    # syscall_list = trace.data_preprocessing('tmp/nginx.trace.list', 'tmp')
+    # seccomp = profile.Seccomp(Action.ERRNO)
+    # seccomp.set_arch([Arch.X86_64])
+    # seccomp.add_rules(rule_coll_list)
+    # json_profile = seccomp.to_json()
+    # return json.dumps(json_profile, indent=4, sort_keys=True)
+
+# def trace_test(container_name, image_id, opts=[]):
+    # trace_file = 'tmp/{}.trace'.format(container_name)
+    # record_dir = 'tmp/{}'.format(container_name)
+    # workload = 'scripts/{}.workload'.format(container_name)
+    # container = trace.Container(container_name, image_id)
+    # container.set_option(opts)
+    # container.set_workload(workload)
+
+# def gen_rules_test(container, syscall_list, level=Level.NAME):
+    # record_dir = 'tmp/{}'.format(container.name)
+    # clabel_file = 'configs/{}.clabel.json'.format(container.name)
+    # rule_coll_list = rule.gen_rules(syscall_list, record_dir=record_dir, clabel_file=clabel_file, level=level)
+    # container.set_rules(rule_coll_list)
+
+# def dump_rules_test(container):
+    # seccomp_profile = 'profiles/{}.profile'.format(container.name)
+    # profile.dump_rules(seccomp_profile, container.rules)
+    # container.set_seccomp(seccomp_profile)
+
+# def adjust_test(container):
+    # audit.adjust_seccomp(container)
+
+# def all_test(container_name, image_id, opts=[], level=Level.NAME):
+    # container, syscall_list = trace_test(container_name, image_id, opts=opts)
+    # gen_rules_test(container, syscall_list, level=level)
+    # dump_rules_test(container)
+    # adjust_test(container)
+
+
+def get_input():
+    opts, args = getopt.getopt(sys.argv[1:], "vo:", ['version',
+                                                    'opts=',
+                                                    'name=',
+                                                    'image=',
+                                                    'level=',
+                                                    'tmp=',
+                                                    'clabel=',
+                                                    'workload='])
+    container_name = None
+    image_id = None
+    level = None
+    c_opts = None
+    record_dir = None
+    clabel_file = None
+    profile = None
+    workload = None
+    for op, value in opts:
+        if op == '-v' or op == '--version':
+            version = pkg_resources.require("cessa")[0].version
+            print('Cessa version {}'.format(version))
+            os._exit(0)
+        elif op == '-o':
+            profile = value
+        elif op == '--name':
+            container_name = value
+        elif op == '--image':
+            image_id = value
+        elif op == '--tmp':
+            record_dir = value
+        elif op == '--clabel':
+            clabel_file = value
+        elif op == '--workload':
+            workload = value
+        elif op == '--level':
+            level = {
+              'NAME': cessa.Level.NAME,
+              'ARG': cessa.Level.ARG,
+              'CLABEL': cessa.Level.CLABEL,
+              'CUSTOM': cessa.Level.CUSTOM
+            }.get(value, None)
+            if level == None:
+                raise ValueError('Level {} is not supported'.format(value))
+        elif op == '--opts':
+            c_opts = value.split()
+
+    if container_name == None or image_id == None:
+        raise ValueError('You have to provide both container name and image ID')
+    if profile == None:
+        profile = os.getcwd() + '/{}.profile'.format(container_name)
+    elif not os.path.isabs(profile):
+        profile = os.getcwd() + '/' + profile
+
+    if workload == None:
+        workload = os.getcwd() + '/{}.workload'.format(container_name)
+    elif not os.path.isabs(workload):
+        workload = os.getcwd() + '/' + workload
+
+    if record_dir == None:
+        record_dir = os.getcwd()
+    elif not os.path.isabs(record_dir):
+        record_dir = os.getcwd() + '/' + record_dir
+
+    if clabel_file != None and not os.path.isabs(clabel_file):
+        clabel_file = os.getcwd() + '/' + clabel_file
+
+    return container_name, image_id, workload, level, c_opts, record_dir, clabel_file, profile
+
+if __name__ == '__main__':
+    container_name, image_id, workload, level, c_opts, record_dir, clabel_file, profile = get_input()
+
+    # set container
+    if workload == None:
+        workload = '{}.workload'.format(container_name)
+    container = cessa.Container(container_name, image_id)
+    container.set_option(c_opts)
+    container.set_workload(workload)
+
+    # track container
+    print('>>> Track Container START')
+    if level == None:
+        level = cessa.Level.NAME
+    trace_file = '{}/{}.trace'.format(record_dir, container_name)
+    syscall_list = cessa.track_container(container, trace_file, record_dir)
+    print('* {} system calls are captured'.format(len(syscall_list)))
+    print('>>> Track Container DONE')
+
+    # generate rules
+    print('>>> Generate Rules({}) START'.format(level))
+    rule_coll_list = cessa.gen_rules(syscall_list,
+                                     match_action=cessa.Action.ALLOW,
+                                     record_dir=record_dir,
+                                     clabel_file=clabel_file,
+                                     level=level)
+    rule_count = 0
+    for rule_coll in rule_coll_list:
+        rule_count += len(rule_coll.rules)
+    print('* {} rules are generated'.format(rule_count))
+    print('>>> Generate Rules({}) DONE'.format(level))
+
+    # dump rules
+    print('>>> Dump Rules START')
+    cessa.dump_rules(profile, rule_coll_list)
+    container.set_rules(rule_coll_list)
+    container.set_seccomp(profile)
+    print(' * Redirect to {}'.format(profile))
+    print('>>> Dump Rules DONE')
+
+    # audit and adjust sandbox
+    print('>>> Audit Sandbox START')
+    cessa.adjust_seccomp(container)
+    print('>>> Audit Sandbox DONE')
+
+    print('------------------------------------------------------')
+    print('All DONE. Now you may use {} to restrict your container. Good luck.'.format(profile))
