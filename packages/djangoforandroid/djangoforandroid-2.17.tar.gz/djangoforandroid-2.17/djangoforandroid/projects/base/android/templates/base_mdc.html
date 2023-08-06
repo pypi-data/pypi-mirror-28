@@ -1,0 +1,58 @@
+{% load compile_static %}
+{% load static %}
+
+<!DOCTYPE html>
+<html class="mdc-typography">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{APPNAME}}</title>
+
+    <!--Include default material and touchsupport, this include JQuery too-->
+    {% include "djangoforandroid/mdc.html" %}
+
+  </head>
+  <body>
+
+
+<main>
+
+
+<header class="mdc-toolbar">
+  <div class="mdc-toolbar__row">
+    <section class="mdc-toolbar__section mdc-toolbar__section--align-start">
+      <a href="#" class="material-icons mdc-toolbar__menu-icon">menu</a>
+      <span class="mdc-toolbar__title">{{APPNAME}}</span>
+    </section>
+  </div>
+</header>
+
+
+<aside class="mdc-temporary-drawer mdc-typography">
+  <nav class="mdc-temporary-drawer__drawer">
+    <header class="mdc-temporary-drawer__header">
+      <div class="mdc-temporary-drawer__header-content mdc-theme--primary-bg mdc-theme--text-primary-on-primary">
+        Header here
+      </div>
+    </header>
+    <nav id="icon-with-text-demo" class="mdc-temporary-drawer__content mdc-list">
+
+      {% with name_url="home" %}
+      <a class="mdc-list-item {% url name_url as target_url %}{% ifequal target_url request.path %}mdc-temporary-drawer--selected{% endifequal %}{% ifequal target_url|add:"/" request.path %}mdc-temporary-drawer--selected{% endifequal %}" href="{% url name_url %}">
+        <i class="material-icons mdc-list-item__start-detail" aria-hidden="true">home</i>Home
+      </a>
+      {% endwith %}
+
+    </nav>
+  </nav>
+</aside>
+
+
+
+</main>
+
+{% block content %}{% endblock %}
+
+  </body>
+</html>
+
