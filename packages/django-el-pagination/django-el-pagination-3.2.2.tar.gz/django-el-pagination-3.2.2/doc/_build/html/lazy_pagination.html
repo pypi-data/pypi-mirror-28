@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Lazy pagination &#8212; Django EL(Endless) Pagination 3.0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Different number of items on the first page" href="different_first_page.html" />
+    <link rel="prev" title="Multiple paginations in the same page" href="multiple_pagination.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="different_first_page.html" title="Different number of items on the first page"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="multiple_pagination.html" title="Multiple paginations in the same page"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="lazy-pagination">
+<h1>Lazy pagination<a class="headerlink" href="#lazy-pagination" title="Permalink to this headline">¶</a></h1>
+<p>Usually pagination requires hitting the database to get the total number of
+items to display. Lazy pagination avoids this <em>select count</em> query and results
+in a faster page load, with a disadvantage: you won&#8217;t know the total number of
+pages in advance.</p>
+<p>For this reason it is better to use lazy pagination in conjunction with
+<a class="reference internal" href="twitter_pagination.html"><span class="doc">Twitter-style Pagination</span></a> (e.g. using the <a class="reference internal" href="templatetags_reference.html#templatetags-show-more"><span class="std std-ref">show_more</span></a>
+template tag).</p>
+<p>In order to switch to lazy pagination you have to use the
+<a class="reference internal" href="templatetags_reference.html#templatetags-lazy-paginate"><span class="std std-ref">lazy_paginate</span></a> template tag instead of the
+<a class="reference internal" href="templatetags_reference.html#templatetags-paginate"><span class="std std-ref">paginate</span></a> one, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">load</span> <span class="nv">el_pagination_tags</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">lazy_paginate</span> <span class="nv">entries</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">for</span> <span class="nv">entry</span> <span class="k">in</span> <span class="nv">entries</span> <span class="cp">%}</span>
+    <span class="c">{# your code to show the entry #}</span>
+<span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">show_more</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="templatetags_reference.html#templatetags-lazy-paginate"><span class="std std-ref">lazy_paginate</span></a> tag can take all the args of the
+<a class="reference internal" href="templatetags_reference.html#templatetags-paginate"><span class="std std-ref">paginate</span></a> one, with one exception: negative indexes can not
+be passed to the <code class="docutils literal"><span class="pre">starting</span> <span class="pre">from</span> <span class="pre">page</span></code> argument.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="multiple_pagination.html"
+                        title="previous chapter">Multiple paginations in the same page</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="different_first_page.html"
+                        title="next chapter">Different number of items on the first page</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/lazy_pagination.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="different_first_page.html" title="Different number of items on the first page"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="multiple_pagination.html" title="Multiple paginations in the same page"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2009-2017, Oleksandr Shtalinberg and Francesco Banconi.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+    </div>
+  </body>
+</html>

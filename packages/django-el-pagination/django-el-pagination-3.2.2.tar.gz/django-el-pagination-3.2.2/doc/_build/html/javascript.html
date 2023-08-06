@@ -1,0 +1,571 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>JavaScript reference &#8212; Django EL(Endless) Pagination 3.0.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '3.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Generic views" href="generic_views.html" />
+    <link rel="prev" title="Templatetags reference" href="templatetags_reference.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generic_views.html" title="Generic views"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="templatetags_reference.html" title="Templatetags reference"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="javascript-reference">
+<h1>JavaScript reference<a class="headerlink" href="#javascript-reference" title="Permalink to this headline">¶</a></h1>
+<p>For each type of pagination it is possible to enable Ajax so that the requested
+page is loaded using an asynchronous request to the server. This is especially
+important for <a class="reference internal" href="twitter_pagination.html"><span class="doc">Twitter-style Pagination</span></a> and
+<a class="reference internal" href="#javascript-pagination-on-scroll"><span class="std std-ref">endless pagination on scroll</span></a>, but
+<a class="reference internal" href="digg_pagination.html"><span class="doc">Digg-style pagination</span></a> can also take advantage of this technique.</p>
+<div class="section" id="activating-ajax-support">
+<h2>Activating Ajax support<a class="headerlink" href="#activating-ajax-support" title="Permalink to this headline">¶</a></h2>
+<p>Ajax support is activated linking jQuery and the <code class="docutils literal"><span class="pre">el-pagination.js</span></code> file
+included in this app. It is then possible to use the <em>$.endlessPaginate()</em>
+jQuery plugin to enable Ajax pagination, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">();&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>This example assumes that you
+<a class="reference internal" href="twitter_pagination.html#twitter-split-template"><span class="std std-ref">separated the fragment</span></a> containing the single
+page (<em>page_tempate</em>) from the main template (the code snipper above). More on
+this in <a class="reference internal" href="twitter_pagination.html"><span class="doc">Twitter-style Pagination</span></a> and <a class="reference internal" href="digg_pagination.html"><span class="doc">Digg-style pagination</span></a>.</p>
+<p>The <em>$.endlessPaginate()</em> call activates Ajax for each pagination present in
+the page.</p>
+</div>
+<div class="section" id="pagination-on-scroll">
+<span id="javascript-pagination-on-scroll"></span><h2>Pagination on scroll<a class="headerlink" href="#pagination-on-scroll" title="Permalink to this headline">¶</a></h2>
+<p>If you want new items to load when the user scrolls down the browser page,
+you can use the <strong>pagination on scroll</strong> feature: just set the
+<em>paginateOnScroll</em> option of <em>$.endlessPaginate()</em> to <em>true</em>, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span><span class="nx">paginateOnScroll</span><span class="o">:</span> <span class="kc">true</span><span class="p">});&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>That&#8217;s all. See the <a class="reference internal" href="templatetags_reference.html"><span class="doc">Templatetags reference</span></a> page to improve usage of
+the included templatetags.</p>
+<p>It is possible to set the <strong>bottom margin</strong> used for pagination on scroll
+(default is 1 pixel). For example, if you want the pagination on scroll
+to be activated when 20 pixels remain to the end of the page:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span>
+            <span class="nx">paginateOnScroll</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">paginateOnScrollMargin</span><span class="o">:</span> <span class="mi">200</span>
+        <span class="p">});</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="attaching-callbacks">
+<h2>Attaching callbacks<a class="headerlink" href="#attaching-callbacks" title="Permalink to this headline">¶</a></h2>
+<p>It is possible to customize the behavior of JavaScript pagination by attaching
+callbacks to <em>$.endlessPaginate()</em>, called when the following events are fired:</p>
+<ul class="simple">
+<li><em>onClick</em>: the user clicks on a page link;</li>
+<li><em>onCompleted</em>: the new page is fully loaded and inserted in the DOM.</li>
+</ul>
+<p>The context of both callbacks is the clicked link fragment: in other words,
+inside the callbacks, <em>this</em> will be the HTML fragment representing the clicked
+link, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span>
+            <span class="nx">onClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Label:&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">text</span><span class="p">());</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>Both callbacks also receive a <em>context</em> argument containing information about
+the requested page:</p>
+<ul class="simple">
+<li><em>context.url</em>: the requested URL;</li>
+<li><em>context.key</em>: the querystring key used to retrieve the requested contents.</li>
+</ul>
+<p>If the <em>onClick</em> callback returns <em>false</em>, the pagination process is stopped,
+the Ajax request is not performed and the <em>onCompleted</em> callback never called.</p>
+<p>The <em>onCompleted</em> callbacks also receives a second argument: the data returned
+by the server. Basically this is the HTML fragment representing the new
+requested page.</p>
+<p>To wrap it up, here is an example showing the callbacks&#8217; signatures:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span>
+            <span class="nx">onClick</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Label:&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">text</span><span class="p">());</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;URL:&#39;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Querystring key:&#39;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">key</span><span class="p">);</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nx">forbidden</span><span class="p">)</span> <span class="p">{</span>  <span class="c1">// to be defined...</span>
+                    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="nx">onCompleted</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">fragment</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Label:&#39;</span><span class="p">,</span> <span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">text</span><span class="p">());</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;URL:&#39;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">url</span><span class="p">);</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Querystring key:&#39;</span><span class="p">,</span> <span class="nx">context</span><span class="p">.</span><span class="nx">key</span><span class="p">);</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Fragment:&#39;</span><span class="p">,</span> <span class="nx">fragment</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="manually-selecting-what-to-bind">
+<h2>Manually selecting what to bind<a class="headerlink" href="#manually-selecting-what-to-bind" title="Permalink to this headline">¶</a></h2>
+<p>As seen above, <em>$.endlessPaginate()</em> enables Ajax support for each pagination
+in the page. But assuming you are using <a class="reference internal" href="multiple_pagination.html"><span class="doc">Multiple paginations in the same page</span></a>, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;entries&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="s2">&quot;myapp/entries_page.html&quot;</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Other entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;other-entries&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="s2">&quot;myapp/other_entries_page.html&quot;</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">();&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>What if you need Ajax pagination only for <em>entries</em> and not for
+<em>other entries</em>? You can do this in a straightforward way using jQuery
+selectors, e.g.:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#entries&#39;</span><span class="p">).</span><span class="nx">endlessPaginate</span><span class="p">();&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>The call to <em>$(&#8216;#entries&#8217;).endlessPaginate()</em> applies Ajax pagination starting
+from the DOM node with id <em>entries</em> and to all sub-nodes. This means that
+<em>other entries</em> are left intact. Of course you can use any selector supported
+by jQuery.</p>
+<p>At this point, you might have already guessed that <em>$.endlessPaginate()</em>
+is just an alias for <em>$(&#8216;body&#8217;).endlessPaginate()</em>.</p>
+</div>
+<div class="section" id="customize-each-pagination">
+<h2>Customize each pagination<a class="headerlink" href="#customize-each-pagination" title="Permalink to this headline">¶</a></h2>
+<p>You can also call <em>$.endlessPaginate()</em> multiple times if you want to customize
+the behavior of each pagination. E.g. if you need to register a callback for
+<em>entries</em> but not for <em>other entries</em>:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;entries&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="s2">&quot;myapp/entries_page.html&quot;</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Other entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;other-entries&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="s2">&quot;myapp/other_entries_page.html&quot;</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#entries&#39;</span><span class="p">).</span><span class="nx">endlessPaginate</span><span class="p">({</span>
+            <span class="nx">onCompleted</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;New entries loaded.&#39;</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">});</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#other-entries&#39;</span><span class="p">).</span><span class="nx">endlessPaginate</span><span class="p">();</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="selectors">
+<span id="javascript-selectors"></span><h2>Selectors<a class="headerlink" href="#selectors" title="Permalink to this headline">¶</a></h2>
+<p>Each time <em>$.endlessPaginate()</em> is used, several JavaScript selectors are used
+to select DOM nodes. Here is a list of them all:</p>
+<ul class="simple">
+<li>containerSelector: &#8216;.endless_container&#8217;
+(Twitter-style pagination container selector);</li>
+<li>loadingSelector: &#8216;.endless_loading&#8217; -
+(Twitter-style pagination loading selector);</li>
+<li>moreSelector: &#8216;a.endless_more&#8217; -
+(Twitter-style pagination link selector);</li>
+<li>contentSelector: null -
+(Twitter-style pagination content wrapper);</li>
+<li>pageSelector: &#8216;.endless_page_template&#8217;
+(Digg-style pagination page template selector);</li>
+<li>pagesSelector: &#8216;a.endless_page_link&#8217;
+(Digg-style pagination link selector).</li>
+</ul>
+<p>An example can better explain the meaning of the selectors above. Assume you
+have a Digg-style pagination like the following:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;entries&quot;</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="s2">&quot;myapp/entries_page.html&quot;</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#entries&#39;</span><span class="p">).</span><span class="nx">endlessPaginate</span><span class="p">();</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>Here the <code class="docutils literal"><span class="pre">#entries</span></code> node is selected and Digg-style pagination is applied.
+Digg-style needs to know which DOM node will be updated with new contents,
+and in this case it&#8217;s the same node we selected, because we added the
+<em>endless_page_template</em> class to that node, and <em>.endless_page_template</em>
+is the selector used by default. However, the following example is equivalent
+and does not involve adding another class to the container:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;entries&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="s2">&quot;myapp/entries_page.html&quot;</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;#entries&#39;</span><span class="p">).</span><span class="nx">endlessPaginate</span><span class="p">({</span>
+            <span class="nx">pageSelector</span><span class="o">:</span> <span class="s1">&#39;#entries&#39;</span>
+        <span class="p">});</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="on-scroll-pagination-using-chunks">
+<span id="javascript-chunks"></span><h2>On scroll pagination using chunks<a class="headerlink" href="#on-scroll-pagination-using-chunks" title="Permalink to this headline">¶</a></h2>
+<p>Sometimes, when using on scroll pagination, you may want to still display
+the <em>show more</em> link after each <em>N</em> pages. In Django Endless Pagination this is
+called <em>chunk size</em>. For instance, a chunk size of 5 means that a <em>show more</em>
+link is displayed after page 5 is loaded, then after page 10, then after page
+15 and so on. Activating this functionality is straightforward, just use the
+<em>paginateOnScrollChunkSize</em> option:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span>
+            <span class="nx">paginateOnScroll</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">paginateOnScrollChunkSize</span><span class="o">:</span> <span class="mi">5</span>
+        <span class="p">});</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>Each time a chunk size is complete, the class <code class="docutils literal"><span class="pre">endless_chunk_complete</span></code> is added to the <em>show more</em> link,
+so you still have a way to distinguish between the implicit
+click done by the scroll event and a real click on the button.</p>
+</div>
+<div class="section" id="migrate-from-version-1-1-to-2-1">
+<span id="javascript-migrate"></span><h2>Migrate from version 1.1 to 2.1<a class="headerlink" href="#migrate-from-version-1-1-to-2-1" title="Permalink to this headline">¶</a></h2>
+<p>Django Endless Pagination v2.0 introduces changes in how Ajax pagination
+is handled by JavaScript. These changes are discussed in this document and in
+the <a class="reference internal" href="changelog.html"><span class="doc">Changelog</span></a>.</p>
+<p>The JavaScript code now lives in a file named <code class="docutils literal"><span class="pre">el-pagination.js</span></code>.
+The two JavaScript files <code class="docutils literal"><span class="pre">el-pagination-endless.js</span></code> and <code class="docutils literal"><span class="pre">el-pagination_on_scroll.js</span></code> was removed.
+However, please consider migrating: the old JavaScript files was removed, are
+no longer maintained, and don&#8217;t provide the new JavaScript features.</p>
+<p>Instructions on how to migrate from the old version to the new one follow.</p>
+<div class="section" id="basic-migration">
+<h3>Basic migration<a class="headerlink" href="#basic-migration" title="Permalink to this headline">¶</a></h3>
+<p>Before:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination-endless.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>Now:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">();&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="id1">
+<h3>Pagination on scroll<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>Before:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination-endless.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination_on_scroll.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>Now:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span><span class="nx">paginateOnScroll</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pagination-on-scroll-with-customized-bottom-margin">
+<h3>Pagination on scroll with customized bottom margin<a class="headerlink" href="#pagination-on-scroll-with-customized-bottom-margin" title="Permalink to this headline">¶</a></h3>
+<p>Before:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination-endless.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination_on_scroll.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="kd">var</span> <span class="nx">endless_on_scroll_margin</span> <span class="o">=</span> <span class="mi">200</span><span class="p">;</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>Now:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">include</span> <span class="nv">page_template</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nx">$</span><span class="p">.</span><span class="nx">endlessPaginate</span><span class="p">({</span>
+            <span class="nx">paginateOnScroll</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+            <span class="nx">paginateOnScrollMargin</span><span class="o">:</span> <span class="mi">200</span>
+        <span class="p">});</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="avoid-enabling-ajax-on-one-or-more-paginations">
+<h3>Avoid enabling Ajax on one or more paginations<a class="headerlink" href="#avoid-enabling-ajax-on-one-or-more-paginations" title="Permalink to this headline">¶</a></h3>
+<p>Before:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Other entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template endless_page_skip&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="s2">&quot;myapp/other_entries_page.html&quot;</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination-endless.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>Now:</p>
+<div class="highlight-html+django"><div class="highlight"><pre><span></span><span class="p">&lt;</span><span class="nt">h2</span><span class="p">&gt;</span>Other entries:<span class="p">&lt;/</span><span class="nt">h2</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;endless_page_template endless_page_skip&quot;</span><span class="p">&gt;</span>
+    <span class="cp">{%</span> <span class="k">include</span> <span class="s2">&quot;myapp/other_entries_page.html&quot;</span> <span class="cp">%}</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">js</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nb">block</span><span class="nv">.super</span> <span class="cp">}}</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;http://code.jquery.com/jquery-latest.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;</span><span class="cp">{{</span> <span class="nv">STATIC_URL</span> <span class="cp">}}</span><span class="s">el-pagination/js/el-pagination.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;not:(.endless_page_skip)&#39;</span><span class="p">).</span><span class="nx">endlessPaginate</span><span class="p">();&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span>
+</pre></div>
+</div>
+<p>In this last example, activating Ajax just where you want might be preferred
+over excluding nodes.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">JavaScript reference</a><ul>
+<li><a class="reference internal" href="#activating-ajax-support">Activating Ajax support</a></li>
+<li><a class="reference internal" href="#pagination-on-scroll">Pagination on scroll</a></li>
+<li><a class="reference internal" href="#attaching-callbacks">Attaching callbacks</a></li>
+<li><a class="reference internal" href="#manually-selecting-what-to-bind">Manually selecting what to bind</a></li>
+<li><a class="reference internal" href="#customize-each-pagination">Customize each pagination</a></li>
+<li><a class="reference internal" href="#selectors">Selectors</a></li>
+<li><a class="reference internal" href="#on-scroll-pagination-using-chunks">On scroll pagination using chunks</a></li>
+<li><a class="reference internal" href="#migrate-from-version-1-1-to-2-1">Migrate from version 1.1 to 2.1</a><ul>
+<li><a class="reference internal" href="#basic-migration">Basic migration</a></li>
+<li><a class="reference internal" href="#id1">Pagination on scroll</a></li>
+<li><a class="reference internal" href="#pagination-on-scroll-with-customized-bottom-margin">Pagination on scroll with customized bottom margin</a></li>
+<li><a class="reference internal" href="#avoid-enabling-ajax-on-one-or-more-paginations">Avoid enabling Ajax on one or more paginations</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="templatetags_reference.html"
+                        title="previous chapter">Templatetags reference</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generic_views.html"
+                        title="next chapter">Generic views</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/javascript.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generic_views.html" title="Generic views"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="templatetags_reference.html" title="Templatetags reference"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Django EL(Endless) Pagination 3.0.2 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2009-2017, Oleksandr Shtalinberg and Francesco Banconi.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.5.
+    </div>
+  </body>
+</html>
