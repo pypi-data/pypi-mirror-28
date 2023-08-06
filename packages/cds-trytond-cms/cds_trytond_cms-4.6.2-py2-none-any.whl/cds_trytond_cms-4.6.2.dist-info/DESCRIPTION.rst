@@ -1,0 +1,48 @@
+trytond_cms
+===========
+
+A module that provides basic content management system (CMS) functions within
+the tryton server. A flask app or other framework can be used to present the
+content managed by this module.
+
+Installing
+----------
+
+See INSTALL
+
+Support
+-------
+
+If you encounter any problems with Tryton, please don't hesitate to ask
+questions on the Tryton bug tracker, mailing list, wiki or IRC channel:
+
+  http://bugs.tryton.org/
+  http://groups.tryton.org/
+  http://wiki.tryton.org/
+  irc://irc.freenode.net/tryton
+
+If you need assistance with this module specifcally please contact
+Coalesco Digital Systems:
+
+  https://src.coalesco.ca/tryton/modules/cds_trytond_cms
+
+License
+-------
+
+See LICENSE
+
+Copyright
+---------
+
+See COPYRIGHT
+
+
+For more information about Tryton please visit the Tryton web site:
+
+  http://www.tryton.org/
+
+For more information about this module please contact Coalesco Digital Systems:
+
+  https://coalesco.ca/
+
+
