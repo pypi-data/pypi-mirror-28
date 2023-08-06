@@ -1,0 +1,17 @@
+{% extends "mails/email.txt" %}
+{% load config %}
+{% block content %}
+Hallo lieber Buchhalter
+
+Folgender {% config "member_string" %} hat einen Anteilschein Bestellt
+{{member.get_name}}
+{{member.addr_street}}
+{{member.addr_zipcode}} {{member.addr_location}}
+{{member.email}}
+{{member.get_phone}}
+
+Bitte sobald er bezahlt und ausgestellt ist bitte hier eintragen
+{{serverurl}}/admin/juntagrico/anteilschein/{{share.id}}/change/
+
+Viel Spass beim Erfassen
+{% endblock %}
