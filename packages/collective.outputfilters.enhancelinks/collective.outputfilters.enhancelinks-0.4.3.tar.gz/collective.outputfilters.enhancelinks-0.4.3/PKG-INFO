@@ -1,0 +1,239 @@
+Metadata-Version: 1.1
+Name: collective.outputfilters.enhancelinks
+Version: 0.4.3
+Summary: An additional outputfilter that enhance file and image links informations in rich text
+Home-page: https://github.com/PloneGov-IT/collective.outputfilters.enhancelinks
+Author: RedTurtle Technology
+Author-email: sviluppoplone@redturtle.it
+License: GPL version 2
+Description-Content-Type: UNKNOWN
+Description: 
+        ==============================================================================
+        collective.outputfilters.enhancelinks
+        ==============================================================================
+        
+        .. image:: https://travis-ci.org/PloneGov-IT/collective.outputfilters.enhancelinks.svg?branch=master
+            :target: https://travis-ci.org/PloneGov-IT/collective.outputfilters.enhancelinks
+        
+        This product add a new outputfilter that generates additional informations for
+        Tiny MCE's internal link.
+        
+        It's a substitute of `collective.tinymceplugins.advfilelinks`__,
+        that doesn't work with Plone >= 4.3 because it uses Products.TinyMCE >= 1.3.
+        
+        .. contents:: **Table of contents**
+        
+        
+        Features
+        --------
+        For every link that points to an internal content (file or image),
+        in the rendered html will be added some new informations:
+        
+        - The mimetype icon before the link text
+        - The mimetype and filesize after the link text
+        - The url of a File points to the direct download
+        
+        
+        Installation
+        ------------
+        
+        Install collective.outputfilters.enhancelinks by adding it to your buildout::
+        
+           [buildout]
+        
+            ...
+        
+            eggs =
+                collective.outputfilters.enhancelinks
+        
+        
+        and then run "bin/buildout".
+        
+        
+        It doesn't need to be installed.
+        
+        Extending content-types
+        -----------------------
+        
+        This product is modular, so if you want to add this feature (or more features)
+        to some custom content-types you only need to provide a new adapter for the ``ILinkEnhancerProvider`` interface::
+        
+            <adapter
+                for="your.package.interfaces.IYourContent"
+                provides="collective.outputfilters.enhancelinks.interfaces.ILinkEnhancerProvider"
+                factory=".adapters.YourContentEnhanceLink"
+            />
+        
+        Then provide the Python adapter code::
+        
+            from collective.outputfilters.enhancelinks.adapters import BaseEnhanceLink
+        
+            class YourContentEnhanceLink(BaseEnhanceLink):
+                ...
+        
+        There are 4 basic methods for a basic override::
+        
+            def get_url_suffix(filename):
+                """ Return additional suffix to append at the end of the url """
+        
+            def get_icon_url(mime_infos):
+                """ Return the correct mimetype icon url """
+        
+            def get_extension(content_file, mime_infos):
+                """ Return the filename extension"""
+        
+            def get_formatted_size(content_file):
+                """ Return a formatted file size """
+        
+        
+        Additional mimetype icons
+        -------------------------
+        If you want more mimetype icons (for example for OpenOffice documents),
+        you could add and install `collective.mtrsetup`__ in your buildout.
+        
+        __ http://pypi.python.org/pypi/collective.mtrsetup
+        
+        
+        Contribute
+        ----------
+        
+        - Issue Tracker: https://github.com/PloneGov-IT/collective.outputfilters.enhancelinks/issues
+        - Source Code: https://github.com/PloneGov-IT/collective.outputfilters.enhancelinks
+        
+        
+        Compatibility
+        -------------
+        
+        This product has been tested on:
+        
+        * Plone 4.2
+        * Plone 4.3
+        * Plone 5.0
+        * Plone 5.1
+        
+        It works with Archetype-based and Dexterity-based (`plone.app.contenttypes`__)
+        standard File and Image content-types.
+        
+        __ http://pypi.python.org/pypi/plone.app.contenttypes
+        
+        
+        License
+        -------
+        
+        The project is licensed under the GPLv2.
+        
+        
+        Credits
+        -------
+        
+        Developed with the support of:
+        
+        * `Regione Emilia Romagna`__
+        
+        
+        All of them supports the `PloneGov initiative`__.
+        
+        __ http://www.regione.emilia-romagna.it/
+        __ http://www.plonegov.it/
+        
+        
+        Authors
+        -------
+        
+        This product was developed by RedTurtle Technology team.
+        
+        .. image:: http://www.redturtle.it/redturtle_banner.png
+           :alt: RedTurtle Technology Site
+           :target: http://www.redturtle.it/
+        
+        Contributors
+        ============
+        
+        - RedTurtle Technology, sviluppoplone@redturtle.it
+        
+        Changelog
+        =========
+        
+        
+        0.4.3 (2018-01-29)
+        ------------------
+        
+        - Use set() to remove duplicated entries in link detection
+          [cekk]
+        
+        
+        0.4.2 (2018-01-29)
+        ------------------
+        
+        - Fix xpath filter to get all old-style internal-links
+          [cekk]
+        
+        
+        0.4.1 (2017-12-18)
+        ------------------
+        
+        - Fixed unicode.
+          [daniele]
+        
+        
+        0.4.0 (2017-12-11)
+        ------------------
+        
+        - Add support for Plone5
+          [cekk]
+        
+        
+        0.3.0 (2017-01-26)
+        ------------------
+        
+        - Parse only links with `internal-link` class
+          [cekk]
+        
+        0.2.1 (2016-12-21)
+        ------------------
+        
+        - Handle problems with malformed html that etree are unable to parse.
+          Transformation is skipped and a warning log message is send.
+          [cekk]
+        
+        
+        0.2.0 (2016-12-14)
+        ------------------
+        
+        - Avoid etree.tostring to auto close empty divs with `method="html"` parameter.
+          This prevents some problems with browsers that don't like self-closed div
+          and renders a wrong html.
+          [cekk]
+        
+        
+        0.1.2 (2015-12-09)
+        ------------------
+        
+        - Fix additional infos position when a link has some children (for example a span)
+          [cekk]
+        
+        
+        0.1.1 (2015-12-03)
+        ------------------
+        
+        - Handled UnicodeDecodeError in Transform
+          [cekk]
+        
+        
+        0.1.0 (2015-12-02)
+        ------------------
+        
+        - Initial release.
+          [cekk]
+        
+        
+Keywords: Python Plone
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Plone
+Classifier: Framework :: Plone :: 5.0
+Classifier: Framework :: Plone :: 5.1
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Operating System :: OS Independent
+Classifier: License :: OSI Approved :: GNU General Public License v2 (GPLv2)
