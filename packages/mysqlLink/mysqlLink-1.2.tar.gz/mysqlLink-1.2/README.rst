@@ -1,0 +1,31 @@
+mysqlLink
+===========
+From del.icio.us to Python. Based on work done by Frank Timmermann\ [#]_.
+See `license.txt`__.
+
+Installation::
+
+    % python setup.py install
+
+    or pip install mysqlLink
+
+And either import the (documented) class::
+
+  >>> import mysqlLink
+
+Use the functions on the module, listed below.
+
+def mysql_connect(Host, Port, User, Passwd, Db, Charset):# Make a link object
+def execute_sql(connect, sql):# Execute sql after making a link object
+
+Please do `Email <1341449544@qq.com>`_ any bugs.
+
+Overview
+--------
+Use functions in my module can help you work easily when you are developing DBS with MySQL.
+
+Documentation
+-------------
+
+Historical
+----------
