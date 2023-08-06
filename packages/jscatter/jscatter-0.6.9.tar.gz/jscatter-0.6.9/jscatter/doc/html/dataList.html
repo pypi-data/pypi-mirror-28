@@ -1,0 +1,2040 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>3. dataList &#8212; jscatter 0.6.9 documentation</title>
+    <link rel="stylesheet" href="_static//default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.6.9',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="4. formel" href="formel.html" />
+    <link rel="prev" title="2. dataArray" href="dataArray.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="formel.html" title="4. formel"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="dataArray.html" title="2. dataArray"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jscatter 0.6.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="datalist">
+<h1>3. dataList<a class="headerlink" href="#datalist" title="Permalink to this headline">¶</a></h1>
+<p>dataList contain a list of dataArray for several datasets.</p>
+<ul class="simple">
+<li>list subclass as lists of dataArrays (allowing variable sizes).</li>
+<li>basic list routines as read/save, appending, selection, filter, sort, prune, interpolate, spline…</li>
+<li>multidimensional least square fit that uses the attributes of the dataArray elements.</li>
+<li>read/write in human readable ASCII text of multiple files in one run (gzip possible).</li>
+</ul>
+<p>dataList creation can be from read ASCII files or ndarrays as js.dL(‘filename.dat’).</p>
+<p>A file may contain several datasets.</p>
+<p>See <a class="reference internal" href="#jscatter.dataarray.dataList" title="jscatter.dataarray.dataList"><code class="xref py py-class docutils literal"><span class="pre">dataList</span></code></a> for details.</p>
+<p><strong>Example</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">grace</span><span class="p">()</span>
+<span class="n">dlist2</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">()</span>
+<span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mf">0.5</span><span class="p">]</span>
+<span class="n">D</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">q</span><span class="o">=</span><span class="mf">0.45</span><span class="p">,</span><span class="mf">0.99</span><span class="p">,</span><span class="mf">1.2</span>
+<span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mf">0.2</span><span class="p">]:</span>
+   <span class="n">dlist2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">js</span><span class="o">.</span><span class="n">dA</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">q</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">D</span><span class="o">*</span><span class="n">x</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span><span class="o">*</span><span class="mf">0.05</span><span class="p">]))</span> <span class="p">)</span>
+   <span class="n">dlist2</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">q</span><span class="o">=</span><span class="n">q</span>
+<span class="n">p</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">dlist2</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="s1">&#39;Q=$q&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">dlist2</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s1">&#39;test.dat.gz&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The dataarray module can be run standalone in a new project.</p>
+<div class="section" id="attributes">
+<h2>3.1. Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.attr" title="jscatter.dataarray.dataList.attr"><code class="xref py py-obj docutils literal"><span class="pre">dataList.attr</span></code></a></td>
+<td>Returns all attribute names (including commonAttr of elements) of the dataList.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.commonAttr" title="jscatter.dataarray.dataList.commonAttr"><code class="xref py py-obj docutils literal"><span class="pre">dataList.commonAttr</span></code></a></td>
+<td>Returns list of attribute names existing in elements.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.dtype" title="jscatter.dataarray.dataList.dtype"><code class="xref py py-obj docutils literal"><span class="pre">dataList.dtype</span></code></a></td>
+<td>return dtype of elements</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.names" title="jscatter.dataarray.dataList.names"><code class="xref py py-obj docutils literal"><span class="pre">dataList.names</span></code></a></td>
+<td>List of element names.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.whoHasAttributes" title="jscatter.dataarray.dataList.whoHasAttributes"><code class="xref py py-obj docutils literal"><span class="pre">dataList.whoHasAttributes</span></code></a></td>
+<td>Lists which attribute is found in which element.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.showattr" title="jscatter.dataarray.dataList.showattr"><code class="xref py py-obj docutils literal"><span class="pre">dataList.showattr</span></code></a>([maxlength,&nbsp;exclude])</td>
+<td>Show data specific attributes for all elements.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="fitting">
+<h2>3.2. Fitting<a class="headerlink" href="#fitting" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.fit" title="jscatter.dataarray.dataList.fit"><code class="xref py py-obj docutils literal"><span class="pre">dataList.fit</span></code></a>(model[,&nbsp;freepar,&nbsp;fixpar,&nbsp;…])</td>
+<td>Least square fit of model that minimizes chi**2 (uses scipy.optimize.leastsq).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.modelValues" title="jscatter.dataarray.dataList.modelValues"><code class="xref py py-obj docutils literal"><span class="pre">dataList.modelValues</span></code></a>(**kwargs)</td>
+<td>Calculates modelValues of model after a fit.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.setlimit" title="jscatter.dataarray.dataList.setlimit"><code class="xref py py-obj docutils literal"><span class="pre">dataList.setlimit</span></code></a>(**kwargs)</td>
+<td>Set upper and lower limits for parameters in least square fit.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.has_limit" title="jscatter.dataarray.dataList.has_limit"><code class="xref py py-obj docutils literal"><span class="pre">dataList.has_limit</span></code></a></td>
+<td>Return existing limits</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.makeErrPlot" title="jscatter.dataarray.dataList.makeErrPlot"><code class="xref py py-obj docutils literal"><span class="pre">dataList.makeErrPlot</span></code></a>([title,&nbsp;showfixpar])</td>
+<td>Creates a GracePlot for intermediate output from fit with residuals.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.makeNewErrPlot" title="jscatter.dataarray.dataList.makeNewErrPlot"><code class="xref py py-obj docutils literal"><span class="pre">dataList.makeNewErrPlot</span></code></a>(**kwargs)</td>
+<td>Creates a NEW ErrPlot without destroying the last.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.detachErrPlot" title="jscatter.dataarray.dataList.detachErrPlot"><code class="xref py py-obj docutils literal"><span class="pre">dataList.detachErrPlot</span></code></a>()</td>
+<td>Detaches ErrPlot without killing it and returns a reference to it.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.killErrPlot" title="jscatter.dataarray.dataList.killErrPlot"><code class="xref py py-obj docutils literal"><span class="pre">dataList.killErrPlot</span></code></a>([filename])</td>
+<td>Kills ErrPlot</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.showlastErrPlot" title="jscatter.dataarray.dataList.showlastErrPlot"><code class="xref py py-obj docutils literal"><span class="pre">dataList.showlastErrPlot</span></code></a>([title,&nbsp;modelValues])</td>
+<td>Shows last ErrPlot as created by makeErrPlot with last fit result.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.errPlot" title="jscatter.dataarray.dataList.errPlot"><code class="xref py py-obj docutils literal"><span class="pre">dataList.errPlot</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Plot into an existing ErrPlot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.savelastErrPlot" title="jscatter.dataarray.dataList.savelastErrPlot"><code class="xref py py-obj docutils literal"><span class="pre">dataList.savelastErrPlot</span></code></a>(filename[,&nbsp;format,&nbsp;…])</td>
+<td>Saves errplot to file with filename.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.interpolate" title="jscatter.dataarray.dataList.interpolate"><code class="xref py py-obj docutils literal"><span class="pre">dataList.interpolate</span></code></a>([func,&nbsp;invfunc,&nbsp;deg])</td>
+<td>Interpolates Y at given attribute values for X values.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.polyfit" title="jscatter.dataarray.dataList.polyfit"><code class="xref py py-obj docutils literal"><span class="pre">dataList.polyfit</span></code></a>([func,&nbsp;invfunc,&nbsp;xfunc,&nbsp;…])</td>
+<td>Inter/Extrapolated values along attribut for all given X values using a polyfit.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.extrapolate" title="jscatter.dataarray.dataList.extrapolate"><code class="xref py py-obj docutils literal"><span class="pre">dataList.extrapolate</span></code></a>([func,&nbsp;invfunc,&nbsp;xfunc,&nbsp;…])</td>
+<td>Inter/Extrapolated values along attribut for all given X values using a polyfit.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.bispline" title="jscatter.dataarray.dataList.bispline"><code class="xref py py-obj docutils literal"><span class="pre">dataList.bispline</span></code></a>([func,&nbsp;invfunc,&nbsp;tx,&nbsp;ta,&nbsp;…])</td>
+<td>Weighted least-squares bivariate spline approximation for interpolation of Y at given attribute values for X values.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="housekeeping">
+<h2>3.3. Housekeeping<a class="headerlink" href="#housekeeping" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.setColumnIndex" title="jscatter.dataarray.dataList.setColumnIndex"><code class="xref py py-obj docutils literal"><span class="pre">dataList.setColumnIndex</span></code></a>(*arg,&nbsp;**kwargs)</td>
+<td>Set the columnIndex where to find X,Y,Z, eY, eX, eZ…..</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.append" title="jscatter.dataarray.dataList.append"><code class="xref py py-obj docutils literal"><span class="pre">dataList.append</span></code></a>([objekt,&nbsp;index,&nbsp;usecols,&nbsp;…])</td>
+<td>Reads/creates new dataArrays and appends to dataList.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.extend" title="jscatter.dataarray.dataList.extend"><code class="xref py py-obj docutils literal"><span class="pre">dataList.extend</span></code></a>([objekt,&nbsp;index,&nbsp;usecols,&nbsp;…])</td>
+<td>Reads/creates new dataArrays and appends to dataList.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.insert" title="jscatter.dataarray.dataList.insert"><code class="xref py py-obj docutils literal"><span class="pre">dataList.insert</span></code></a>(i[,&nbsp;objekt,&nbsp;index,&nbsp;usecols,&nbsp;…])</td>
+<td>Reads/creates new dataArrays and inserts in dataList.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.prune" title="jscatter.dataarray.dataList.prune"><code class="xref py py-obj docutils literal"><span class="pre">dataList.prune</span></code></a>(*args,&nbsp;**kwargs)</td>
+<td>Reduce number of values between upper and lower limits.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.savetxt" title="jscatter.dataarray.dataList.savetxt"><code class="xref py py-obj docutils literal"><span class="pre">dataList.savetxt</span></code></a>([name,&nbsp;exclude,&nbsp;fmt])</td>
+<td>Saves dataList as ASCII text file, optional compressed (gzip).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.sort" title="jscatter.dataarray.dataList.sort"><code class="xref py py-obj docutils literal"><span class="pre">dataList.sort</span></code></a>([key,&nbsp;reverse])</td>
+<td>Sort dataList -&gt; INPLACE!!!</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.reverse" title="jscatter.dataarray.dataList.reverse"><code class="xref py py-obj docutils literal"><span class="pre">dataList.reverse</span></code></a>()</td>
+<td>Reverse dataList -&gt; INPLACE!!!</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.delete" title="jscatter.dataarray.dataList.delete"><code class="xref py py-obj docutils literal"><span class="pre">dataList.delete</span></code></a>(index)</td>
+<td>Delete element at index</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.extractAttribut" title="jscatter.dataarray.dataList.extractAttribut"><code class="xref py py-obj docutils literal"><span class="pre">dataList.extractAttribut</span></code></a>(parName[,&nbsp;func,&nbsp;…])</td>
+<td>Extract a simpler attribute from a complex attribute in each element of dataList.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.filter" title="jscatter.dataarray.dataList.filter"><code class="xref py py-obj docutils literal"><span class="pre">dataList.filter</span></code></a>(filterfunction)</td>
+<td>Filter elements according to filterfunction.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.index" title="jscatter.dataarray.dataList.index"><code class="xref py py-obj docutils literal"><span class="pre">dataList.index</span></code></a>(value[,&nbsp;start,&nbsp;stop])</td>
+<td>original doc from list</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.merge" title="jscatter.dataarray.dataList.merge"><code class="xref py py-obj docutils literal"><span class="pre">dataList.merge</span></code></a>(indices[,&nbsp;isort])</td>
+<td>Merges elements of dataList.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.mergeAttribut" title="jscatter.dataarray.dataList.mergeAttribut"><code class="xref py py-obj docutils literal"><span class="pre">dataList.mergeAttribut</span></code></a>(parName[,&nbsp;limit,&nbsp;…])</td>
+<td>Merges elements of dataList if attribute values are closer than limit (in place).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.pop" title="jscatter.dataarray.dataList.pop"><code class="xref py py-obj docutils literal"><span class="pre">dataList.pop</span></code></a>([i])</td>
+<td>original doc from list</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#jscatter.dataarray.dataList.copyattr2elements" title="jscatter.dataarray.dataList.copyattr2elements"><code class="xref py py-obj docutils literal"><span class="pre">dataList.copyattr2elements</span></code></a>([maxndim,&nbsp;exclude])</td>
+<td>Copy dataList specific attributes to all elements.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#jscatter.dataarray.dataList.getfromcomment" title="jscatter.dataarray.dataList.getfromcomment"><code class="xref py py-obj docutils literal"><span class="pre">dataList.getfromcomment</span></code></a>(attrname)</td>
+<td>Extract a non number parameter from comment with attrname in front</td>
+</tr>
+</tbody>
+</table>
+<hr class="docutils" />
+<dl class="class">
+<dt id="jscatter.dataarray.dataList">
+<em class="property">class </em><code class="descclassname">jscatter.dataarray.</code><code class="descname">dataList</code><span class="sig-paren">(</span><em>objekt=None</em>, <em>block=None</em>, <em>usecols=None</em>, <em>delimiter=None</em>, <em>takeline=None</em>, <em>index=slice(None</em>, <em>None</em>, <em>None)</em>, <em>replace=None</em>, <em>skiplines=None</em>, <em>ignore='#'</em>, <em>XYeYeX=None</em>, <em>lines2parameter=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jscatter/dataarray.html#dataList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jscatter.dataarray.dataList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">jscatter.dataarray.dataListBase</span></code></p>
+<p>A list of dataArrays with attributes for analysis, fitting and plotting.</p>
+<ul class="simple">
+<li>Allows reading, appending, selection, filter, sort, prune, least square fitting, ….</li>
+<li>Saves to human readable ASCII text format (possibly gziped). For file format see dataArray.</li>
+<li>The dataList allows simulteneous fit of all dataArrays dependent on attributes.</li>
+<li>and with different parameters for the dataArrays (see fit).</li>
+<li>dataList creation parameters (below) mainly determine how a file is read from file.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>objekt</strong> : strings, list of array or dataArray</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">Objects or filename(s) to read.</div>
+<div class="line">Filenames with extension ‘.gz’ are decompressed (gzip).</div>
+<div class="line">Accepts filenames with asterisk like exda=dataList(objekt=’aa12*’) as input for multiple file input.</div>
+</div>
+</div></blockquote>
+<p><strong>usecols</strong> : list of integer</p>
+<blockquote>
+<div><p>Use only given columns and ignore others.</p>
+</div></blockquote>
+<p><strong>skiplines</strong> : boolean function, list of string or single string</p>
+<blockquote>
+<div><p>Skip line if line meets condition. Function gets the list of words in a line.
+Examples:</p>
+<blockquote>
+<div><ul class="simple">
+<li>lambda words: any(w in words for w in [‘’,’ ‘,’NAN’,’‘<strong>*</strong>])   #with exact match</li>
+<li>lambda words: any(float(w)&gt;3.1411 for w in words)</li>
+<li>lambda words: len(words)==1</li>
+</ul>
+</div></blockquote>
+<p>If a list is given, the lambda function is generated automatically as in above example.
+If single string is given, it is tested if string is a substring of a word (  ‘abc’ in ‘12 3abc4 56’)</p>
+</div></blockquote>
+<p><strong>block</strong> : None,list int, string</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">block separates parts of a file</div>
+<div class="line">If block is found a new dataArray is created from a part and appended.</div>
+<div class="line">block can be something like “#next”</div>
+<div class="line">or the first parameter name of a new block as  block=’Temp’</div>
+<div class="line">block=slice(2,100,3) slices the lines in file as lines[i:j:k]</div>
+</div>
+</div></blockquote>
+<p><strong>index</strong> : integer, slice list of integer, default is a slice for all.</p>
+<blockquote>
+<div><p>Which datablock to use from single read file if multiple blocks are found.
+Can be integer , list of integer or slice notation.</p>
+</div></blockquote>
+<p><strong>XYeYeX</strong> : list integers, default=[0,1,2,None,None,None]</p>
+<blockquote>
+<div><p>Columns for X, Y, eY, eX, Z, eZ.
+This is ignored for dataList and dataArary objekts as these have defined columns.
+Change later by: data.setColumnIndex(3,5,-1).</p>
+</div></blockquote>
+<p><strong>delimiter</strong> : string, default any whitespace</p>
+<blockquote>
+<div><p>Separator between words (data fields) in a line.
+E.g. ‘     ‘ tabulator</p>
+</div></blockquote>
+<p><strong>ignore</strong> : string, default ‘#’</p>
+<blockquote>
+<div><p>Ignore lines starting with string e.g. ‘#’.
+For more complex lines to ignore use skiplines.</p>
+</div></blockquote>
+<p><strong>replace</strong> : dictionary of string:string</p>
+<blockquote>
+<div><p>String replacement in read lines as {‘old’:’new’,…}.
+String pairs in this dictionary are replaced in each line.
+This is done prior to determining line type
+and can be used to convert strings to number or ‘,’:’.’.</p>
+</div></blockquote>
+<p><strong>takeline</strong> : string</p>
+<blockquote>
+<div><p>takeline string is first word in a line with data.
+E.g. if dataline start with ‘atom’ in PDB files takeline=’atom’ to select specific lines</p>
+</div></blockquote>
+<p><strong>lines2parameter</strong> : list of integer</p>
+<blockquote>
+<div><p>List of lines i which to prepend with ‘line_i’ to be found as parameter line_i.
+Used to mark lines with parameters without name (only numbers in a line as in .pdh files in the header).
+E.g. to skip the first lines.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><strong>dataList</strong> : list of dataArray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt><strong>Attribute access as atlist</strong></dt>
+<dd>Attributes of the dataArray elements can be accessed like in dataArrays by .name notation.
+The difference is that a dataList returns atlist -a subclass of <strong>list</strong>- with some additional methods
+as the list of attributes in the dataList elements.
+This is necessary as it is allowed that dataList elements miss an attribute (indicated as None) or
+have different type. An numpy ndarray can be retrieved by the array property (as .name.array).</dd>
+<dt><strong>Global attributes</strong></dt>
+<dd>We have to discriminate attributes stored individual in each dataArray and in the dataList
+as a kind of global attribute. dataArray attributes belong to a dataArray and are saved
+with the dataArray, while global dataList attributes are only saved with
+the whole dataList at the beginning of a file. If dataArrays are saved as single files global attributes
+are lost.</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jscatter</span> <span class="k">as</span> <span class="nn">js</span>
+<span class="n">ex</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">(</span><span class="s1">&#39;aa12*&#39;</span><span class="p">)</span>        <span class="c1">#read aa files</span>
+<span class="n">ex</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="s1">&#39;bb12*&#39;</span><span class="p">)</span>      <span class="c1">#extend with other bb files</span>
+<span class="n">ex</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>            <span class="c1">#sort by attribute &quot;q&quot;</span>
+<span class="n">ex</span><span class="o">.</span><span class="n">prune</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>    <span class="c1"># reduce number of points; default is to calc the mean in an intervall</span>
+<span class="n">ex</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">Temperature</span><span class="o">&gt;</span><span class="mi">273</span><span class="p">)</span>  <span class="n">to</span> <span class="nb">filter</span> <span class="k">for</span> <span class="n">an</span> <span class="n">attribute</span> <span class="s2">&quot;Temperature&quot;</span> <span class="ow">or</span> <span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="n">value</span>
+<span class="c1"># do linear fit</span>
+<span class="n">ex</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">t</span><span class="p">:</span><span class="n">a</span><span class="o">*</span><span class="n">t</span><span class="o">+</span><span class="n">b</span><span class="p">,</span><span class="n">freepar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">},</span><span class="n">mapNames</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">})</span>
+<span class="c1"># fit using parameters in example the Temperature stored as parameter.</span>
+<span class="n">ex</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="k">lambda</span> <span class="n">Temperature</span><span class="p">,</span><span class="n">b</span><span class="p">,</span><span class="n">x</span><span class="p">:</span><span class="n">Temperature</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">b</span><span class="p">,</span><span class="n">freepar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">},</span><span class="n">mapNames</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+<p>more Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jscatter</span> <span class="k">as</span> <span class="nn">js</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">t</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">100</span><span class="p">:</span><span class="mi">5</span><span class="p">];</span><span class="n">D</span><span class="o">=</span><span class="mf">0.05</span><span class="p">;</span><span class="n">amp</span><span class="o">=</span><span class="mi">1</span>
+<span class="c1"># using list comprehension creating a numpy array</span>
+<span class="n">i5</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">t</span><span class="p">,</span><span class="n">amp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">D</span><span class="o">*</span><span class="n">t</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="mf">0.05</span><span class="p">]</span><span class="o">.</span><span class="n">T</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mf">0.2</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mf">0.4</span><span class="p">]])</span>
+<span class="c1"># calling a function returning dataArrays</span>
+<span class="n">i5</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">([</span><span class="n">js</span><span class="o">.</span><span class="n">dynamic</span><span class="o">.</span><span class="n">simpleDiffusion</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">amp</span><span class="p">,</span><span class="n">D</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mf">0.2</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mf">0.4</span><span class="p">]])</span>
+<span class="c1"># define a function and add dataArrays to dataList</span>
+<span class="n">ff</span><span class="o">=</span><span class="k">lambda</span> <span class="n">q</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">amp</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">t</span><span class="p">,</span><span class="n">amp</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">q</span><span class="o">*</span><span class="n">q</span><span class="o">*</span><span class="n">D</span><span class="o">*</span><span class="n">t</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">*</span><span class="mf">0.05</span><span class="p">]</span><span class="o">.</span><span class="n">T</span>
+<span class="n">i5</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">()</span>  <span class="c1"># empty list</span>
+<span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mf">0.2</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mf">0.4</span><span class="p">]:</span>
+   <span class="n">i5</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ff</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">amp</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Get elements of dataList with specific attribute values.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">i5</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">([</span><span class="n">js</span><span class="o">.</span><span class="n">dynamic</span><span class="o">.</span><span class="n">simpleDiffusion</span><span class="p">(</span><span class="n">q</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">amp</span><span class="p">,</span><span class="n">D</span><span class="p">)</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mf">0.2</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mf">0.4</span><span class="p">]])</span>
+<span class="c1"># get q=0.6</span>
+<span class="n">i5</span><span class="p">[</span><span class="n">i5</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">array</span><span class="o">==</span><span class="mf">0.6</span><span class="p">]</span>
+<span class="c1"># get q &gt; 0.5</span>
+<span class="n">i5</span><span class="p">[</span><span class="n">i5</span><span class="o">.</span><span class="n">q</span><span class="o">.</span><span class="n">array</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.append">
+<code class="descname">append</code><span class="sig-paren">(</span><em>objekt=None</em>, <em>index=slice(None</em>, <em>None</em>, <em>None)</em>, <em>usecols=None</em>, <em>skiplines=None</em>, <em>replace=None</em>, <em>ignore='#'</em>, <em>XYeYeX=None</em>, <em>delimiter=None</em>, <em>takeline=None</em>, <em>lines2parameter=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.append" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Reads/creates new dataArrays and appends to dataList.</p>
+<p>See dataList for description of all keywords.
+If objekt is dataArray or dataList all options except XYeYeX,index are ignored.</p>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>objekt,index,usecols,skiplines,replace,ignore,delimiter,takeline,lines2parameter</strong> : options</p>
+<blockquote>
+<div><p>See dataArray or dataList</p>
+</div></blockquote>
+<p><strong>original doc from list</strong></p>
+<p class="last"><strong>L.append(object) – append object to end</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jscatter.dataarray.dataList.aslist">
+<code class="descname">aslist</code><a class="headerlink" href="#jscatter.dataarray.dataList.aslist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return as simple list.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jscatter.dataarray.dataList.attr">
+<code class="descname">attr</code><a class="headerlink" href="#jscatter.dataarray.dataList.attr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all attribute names (including commonAttr of elements) of the dataList.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.bispline">
+<code class="descname">bispline</code><span class="sig-paren">(</span><em>func=None, invfunc=None, tx=None, ta=None, deg=[3, 3], eps=None, addErr=False, **kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.bispline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Weighted least-squares bivariate spline approximation for interpolation of Y at given attribute values for X values.</p>
+<p>Uses scipy.interpolate.LSQBivariateSpline
+eY values are used as weights (1/eY**2) if present.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>kwargs :</strong></p>
+<blockquote>
+<div><p>Keyword arguments
+The first keyword argument found as attribute is used for interpolation.
+E.g. conc=0.12 defines the attribute ‘conc’ to be interpolated to 0.12
+Special kwargs see below.</p>
+</div></blockquote>
+<p><strong>X</strong> : array</p>
+<blockquote>
+<div><p>List of X values were to evaluate.
+If X not given the .X of first element are used as default.</p>
+</div></blockquote>
+<p><strong>func</strong> : numpy ufunction or lambda</p>
+<blockquote>
+<div><p>Simple function to be used on Y values before interpolation.
+see dataArray.polyfit</p>
+</div></blockquote>
+<p><strong>invfunc</strong> : numpy ufunction or lambda</p>
+<blockquote>
+<div><p>To invert func after extrapolation again.</p>
+</div></blockquote>
+<p><strong>tx,ta</strong> : array like, None, int</p>
+<blockquote>
+<div><p>Strictly ordered 1-D sequences of knots coordinates for X and attribute.
+If None the X or attribute values are used.
+If integer&lt;len(X or attribute) the respective number of equidistante points in the interval between min and max are used.</p>
+</div></blockquote>
+<p><strong>deg</strong> : [int,int], optional</p>
+<blockquote>
+<div><p>Degrees of the bivariate spline for X and attribute. Default is 3.
+If single integer given this is used for both.</p>
+</div></blockquote>
+<p><strong>eps</strong> : float, optional</p>
+<blockquote>
+<div><p>A threshold for determining the effective rank of an over-determined
+linear system of equations. <cite>eps</cite> should have a value between 0 and 1,
+the default is 1e-16.</p>
+</div></blockquote>
+<p><strong>addErr</strong> : bool</p>
+<blockquote>
+<div><p>If errors are present spline the error colum and add it to the result.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dataArray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>The spline interpolation results in a good approximation if the data are narrow.
+Around peaks values are underestimated if the data are not dense enough as the
+flank values are included in the spline between the maxima. See Examples.</li>
+<li>Without peaks there should be no artefacts.</li>
+<li>To estimate new errors for the splined data use .setColimnIndex(iy=ii,iey=None) with ii as index of errors.
+Then spline the errors and add these as new column.</li>
+<li>Interpolation can not be as good as fitting with a prior known
+model and use this for extrapolating.</li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jscatter</span> <span class="k">as</span> <span class="nn">js</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">i5</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">([</span><span class="n">js</span><span class="o">.</span><span class="n">formel</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">50</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span><span class="n">mean</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">mean</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="mf">15.1</span><span class="p">:</span><span class="mi">3</span><span class="p">]])</span>
+<span class="n">i5b</span><span class="o">=</span><span class="n">i5</span><span class="o">.</span><span class="n">bispline</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">25</span><span class="p">:</span><span class="mi">25</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span><span class="n">tx</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">ta</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Spline comparison with different spacing of data&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Narrow spacing result in good interpolation&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">i5</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5b</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">tricontour</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5b</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">i5</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">([</span><span class="n">js</span><span class="o">.</span><span class="n">formel</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">50</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span><span class="n">mean</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">mean</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="mf">15.1</span><span class="p">:</span><span class="mi">15</span><span class="p">]])</span>
+<span class="n">i5b</span><span class="o">=</span><span class="n">i5</span><span class="o">.</span><span class="n">bispline</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">25</span><span class="p">:</span><span class="mi">25</span><span class="p">:</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Wide spacing result in artefacts between peaks&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">i5</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5b</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">tricontour</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5b</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jscatter.dataarray.dataList.commonAttr">
+<code class="descname">commonAttr</code><a class="headerlink" href="#jscatter.dataarray.dataList.commonAttr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of attribute names existing in elements.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deepcopy of dataList</p>
+<p>To make a normal shallow copy use copy.copy</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.copyattr2elements">
+<code class="descname">copyattr2elements</code><span class="sig-paren">(</span><em>maxndim=1, exclude=['comment']</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.copyattr2elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copy dataList specific attributes to all elements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>exclude</strong> : list of str</p>
+<blockquote>
+<div><p>list of attr names to exclude from show</p>
+</div></blockquote>
+<p><strong>maxndim</strong> : int, default 2</p>
+<blockquote class="last">
+<div><p>maximum dimension e.g. to prevent copy of 2d arrays like covariance matrix</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Main use is for copying fit parameters</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.count">
+<code class="descname">count</code><span class="sig-paren">(</span><em>value</em><span class="sig-paren">)</span> &#x2192; integer -- return number of occurrences of value<a class="headerlink" href="#jscatter.dataarray.dataList.count" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete element at index</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.detachErrPlot">
+<code class="descname">detachErrPlot</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/jscatter/dataarray.html#dataList.detachErrPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jscatter.dataarray.dataList.detachErrPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Detaches ErrPlot without killing it and returns a reference to it.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jscatter.dataarray.dataList.dtype">
+<code class="descname">dtype</code><a class="headerlink" href="#jscatter.dataarray.dataList.dtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>return dtype of elements</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.errPlot">
+<code class="descname">errPlot</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jscatter/dataarray.html#dataList.errPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jscatter.dataarray.dataList.errPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot into an existing ErrPlot. See Graceplot.plot for details.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.errPlotTitle">
+<code class="descname">errPlotTitle</code><span class="sig-paren">(</span><em>title</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jscatter/dataarray.html#dataList.errPlotTitle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jscatter.dataarray.dataList.errPlotTitle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.extend">
+<code class="descname">extend</code><span class="sig-paren">(</span><em>objekt=None</em>, <em>index=slice(None</em>, <em>None</em>, <em>None)</em>, <em>usecols=None</em>, <em>skiplines=None</em>, <em>replace=None</em>, <em>ignore='#'</em>, <em>XYeYeX=None</em>, <em>delimiter=None</em>, <em>takeline=None</em>, <em>lines2parameter=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.extend" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Reads/creates new dataArrays and appends to dataList.</p>
+<p>See dataList for description of all keywords.
+If objekt is dataArray or dataList all options except XYeYeX,index are ignored.</p>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>objekt,index,usecols,skiplines,replace,ignore,delimiter,takeline,lines2parameter</strong> : options</p>
+<blockquote>
+<div><p>See dataArray or dataList</p>
+</div></blockquote>
+<p><strong>original doc from list</strong></p>
+<p class="last"><strong>L.append(object) – append object to end</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.extractAttribut">
+<code class="descname">extractAttribut</code><span class="sig-paren">(</span><em>parName</em>, <em>func=None</em>, <em>newParName=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.extractAttribut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a simpler attribute from a complex attribute in each element of dataList.</p>
+<p>eg. extract the mean value from a list in an attribute</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>parName</strong> : string</p>
+<blockquote>
+<div><p>name of the parameter to process</p>
+</div></blockquote>
+<p><strong>func</strong> : function or lambda</p>
+<blockquote>
+<div><p>a function (eg lambda ) that creates a new content for the
+parameter from the original content
+eg lambda a:np.mean(a)*5.123
+the function gets the content of parameter whatever it is</p>
+</div></blockquote>
+<p><strong>newParName :string</strong></p>
+<blockquote class="last">
+<div><p>if None old parameter is overwritten,
+otherwise this is the new parname</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.extrapolate">
+<code class="descname">extrapolate</code><span class="sig-paren">(</span><em>func=None</em>, <em>invfunc=None</em>, <em>xfunc=None</em>, <em>invxfunc=None</em>, <em>exfunc=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.extrapolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inter/Extrapolated values along attribut for all given X values using a polyfit.</p>
+<p>To extrapolate along an attribute using twice a polyfit (first along X then along attribute).
+E.g. from a concentration series to extrapolate to concentration zero.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>**kwargs :</strong></p>
+<blockquote>
+<div><p>Keyword arguments
+The first keyword argument found as attribute is used for extrapolation
+e.g. q=0.01  attribute with values where to extrapolate to
+Special kwargs see below.</p>
+</div></blockquote>
+<p><strong>X</strong> : arraylike</p>
+<blockquote>
+<div><p>list of X values were to evaluate</p>
+</div></blockquote>
+<p><strong>funct</strong> : function or lambda</p>
+<blockquote>
+<div><p>Function to be used in Y values before extrapolating.
+See Notes.</p>
+</div></blockquote>
+<p><strong>invfunc</strong> : function or lambda</p>
+<blockquote>
+<div><p>To invert function after extrapolation again.</p>
+</div></blockquote>
+<p><strong>xfunct</strong> : function or lambda</p>
+<blockquote>
+<div><p>Function to be used for X values before interpolating along X.</p>
+</div></blockquote>
+<p><strong>invxfunc</strong> : function or lambda</p>
+<blockquote>
+<div><p>To invert xfunction again.</p>
+</div></blockquote>
+<p><strong>exfunc</strong> : function or lambda</p>
+<blockquote>
+<div><p>Weigth for extrapol along X</p>
+</div></blockquote>
+<p><strong>degx,degy</strong> : integer default degx=0, degy=1</p>
+<blockquote>
+<div><p>polynom degree for extrapolation in x,y
+If degx=0 (default) no extrapolation for X is done and values are linear interpolated.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dataArray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>funct is used to transfer the data to a simpler smoother or polynominal form.</dt>
+<dd><ul class="first last simple">
+<li>Think about data describing diffusion like I~exp(-q**2*D*t) and we want to interpolate along attribute q.
+If funct is np.log we interpolate on a simpler parabolic q**2 and linear in t.</li>
+<li>Same can be done with X axis thin in above case about subdiffusion t**a with a &lt; 1.</li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Task: Extrapolate to zero q for 3 X values for an exp decaying function.
+Here first log(Y) is used (problem linearized), then linear extrapolate and and exp function used for the result.
+This is like lin extapolation of the exponent:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">i5</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">],</span><span class="n">func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="n">invfunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="n">deg</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>concentration data with conc and extrapoleate to conc=0</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">conc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">X</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">X</span><span class="p">,</span><span class="n">deg</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.filter">
+<code class="descname">filter</code><span class="sig-paren">(</span><em>filterfunction</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter elements according to filterfunction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filterfunction</strong> : function or lambda function returning boolean</p>
+<blockquote class="last">
+<div><p>Return those items of sequence for which function(item) is true.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">i5</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">(</span><span class="s1">&#39;exampleData/iqt_1hho.dat&#39;</span><span class="p">)</span>
+<span class="n">i1</span><span class="o">=</span><span class="n">i5</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">q</span><span class="o">&gt;</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="n">i1</span><span class="o">=</span><span class="n">i5</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:(</span><span class="n">a</span><span class="o">.</span><span class="n">q</span><span class="o">&gt;</span><span class="mf">0.1</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">i5</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:(</span><span class="n">a</span><span class="o">.</span><span class="n">q</span><span class="o">&gt;</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">average</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">average</span>
+<span class="n">i5</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:(</span><span class="nb">max</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">q</span><span class="o">*</span><span class="n">a</span><span class="o">.</span><span class="n">X</span><span class="p">)</span><span class="o">&gt;</span><span class="mf">0.1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">average</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.fit">
+<code class="descname">fit</code><span class="sig-paren">(</span><em>model</em>, <em>freepar={}</em>, <em>fixpar={}</em>, <em>mapNames={}</em>, <em>method='leastsq'</em>, <em>xslice=slice(None</em>, <em>None</em>, <em>None)</em>, <em>condition=None</em>, <em>output=True</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Least square fit of model that minimizes chi**2 (uses scipy.optimize.leastsq).</p>
+<ul class="simple">
+<li>A least square fit of the .Y values dependent on X (, Z) and attributes (multidimensional fitting).</li>
+<li>Data attributes are used automatically in model if they have the same name as a parameter.</li>
+<li>Resulting parameter errors are 1-sigma errors, if the data errors are 1-sigma errors.</li>
+<li>Results can be simulated with changed parameters in .modelValues or .showlastErrPlot.</li>
+</ul>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>model</strong> : function or lambda</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Model function, should accept arrays as input (use numpy ufunctions in model).</dt>
+<dd><p class="first last">-example:  diffusion=lambda A,D,t,wavevector:A * np.exp(-wavevector**2*D*t)
+- Return value should be dataArray (.Y is used) or only Y values.
+- Errors in model should return negative integer.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>freepar</strong> : dictionary</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Fit parameter names with startvalues.</dt>
+<dd><ul class="first last simple">
+<li>{‘D’:2.56,..}             one common value for all</li>
+<li>{‘D’:[1,2.3,4.5,…],..}  individual parameters for independent fit.</li>
+<li>[..] is extended with missing values equal to last given value. [1] -&gt; [1,1,1,1,1,1]</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>fixpar</strong> : dictionary</p>
+<blockquote>
+<div><p>Fixed parameters, overwrites data attributes. (see freepar for syntax)</p>
+</div></blockquote>
+<p><strong>mapNames</strong> :    dictionary</p>
+<blockquote>
+<div><p>Map parameter names from model to attribute names in data e.g.  {‘t’:’X’,’wavevector’:’q’,}</p>
+</div></blockquote>
+<p><strong>method</strong> : default ‘leastsq’, ‘differential_evolution’, ‘BFGS’, ‘Nelder-Mead’  or from scipy.optimize.minimize</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Type of solver for minimization, for options see scipy.optimize. See last example for a comparison.</dt>
+<dd><ul class="first last simple">
+<li>Only ‘leastsq’ and ‘BFGS’ return errors for the fit parameters.</li>
+<li><dl class="first docutils">
+<dt>‘leastsq’ is fastest. ‘leastsq’ is a wrapper around MINPACK’s lmdif and lmder algorithms which are</dt>
+<dd>a modification of the Levenberg-Marquardt algorithm.</dd>
+</dl>
+</li>
+<li>All use bounds set in setlimits to allow bounds as described there.</li>
+<li>‘differential_evolution’ uses automatic bounds as (x0/10**0.5,x0*10**0.5)
+if no explicit limits are set for a freepar. x0 is start value from freepar.</li>
+<li>For some methods the Jacobian is required.</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>xslice</strong> : slice object</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Use selected X values by slicing.</dt>
+<dd><ul class="first last simple">
+<li>xslice=slice(2,-3,2)       To skip first 2,last 3 and take each second</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>condition</strong> : function or lambda</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>A lambda function to determine which datapoints to include.</dt>
+<dd><ul class="first last simple">
+<li>The function should evaluate to boolean with dataArray as input
+and combines with xslice used on full set (first xslice then the condition is used)</li>
+<li><dl class="first docutils">
+<dt>local operation on numpy arrays as  “&amp;”(and), “|”(or), “^”(xor)</dt>
+<dd><ul class="first last">
+<li>lambda a:(a.X&gt;1) &amp; (a.Y&lt;1)</li>
+<li>lambda a:(a.X&gt;1) &amp; (a.X&lt;100)</li>
+<li>lambda a: a.X&gt;a.q * a.X</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>output</strong> : None,’last’</p>
+<blockquote>
+<div><ul class="simple">
+<li>!=None  returns best parameters and erros</li>
+<li>None   Returns string</li>
+<li>‘last’ returns lastfit</li>
+</ul>
+</div></blockquote>
+<p><strong>debug</strong> : 1,2</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">debug modus returns:</div>
+<div class="line">1 Free and fixed parameters but not mappedNAmes.</div>
+<div class="line">2 Parameters in modelValues as dict to call model as model(<a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs) with mappedNames.</div>
+<div class="line">&gt;2 Prints parameters sent to model and returns the output of model without fitting.</div>
+</div>
+</div></blockquote>
+<p><strong>kw</strong> : additional keyword arguments</p>
+<blockquote>
+<div><p>Forwarded to minimizer as given in method.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><ul class="first last">
+<li><p class="first">dependent on output parameter</p>
+<blockquote>
+<div><ul class="simple">
+<li>Final results with errors is in .lastfit</li>
+<li>Fitparameters are additional in dataList object as .parname and corresponding errors as .parname_err.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul>
+<li><p class="first">The concept is to use data attributes as fixed parameters for the fit (multidimesional fit).
+This is realized by using data attribute with same name as fixed parameters if not given in freepar or fixpar.</p>
+</li>
+<li><p class="first">Fit parameters can be set equal for all elements ‘par’:1 or independent ‘par’:[1]
+just by writing the start value as a single float or as a list of float.
+The same is for fixed parameters.</p>
+</li>
+<li><p class="first">Change the fit is easy done by moving ‘par’:[1] between freepar and fixpar.</p>
+</li>
+<li><p class="first">Limits for parameters can be set prior to the fit as .setlimit(D=[1,4,0,10]).
+The first two numbers (min,max) are softlimits (increase chi2) and
+second are hardlimits to avoid extreme values (hard set to these values if outside interval and increasing chi2).</p>
+</li>
+<li><p class="first">If errors exist (.eY) and are not zero, weighted chi**2 is minimized.
+Without error or with single errors equal zero an unweighted chi**2 is minimized (equal weights).</p>
+</li>
+<li><p class="first">The change of parameters can be simulated by .modelValues(D=3) which overides attributes and fit parameters.</p>
+</li>
+<li><p class="first">.makeErrPlot creates an errorplot with residuals prior to the fit for intermediate output.</p>
+</li>
+<li><p class="first">The last errPlot can be recreated after the fit with showlastErrPlot.</p>
+</li>
+<li><p class="first">The simulated data can be shown in errPlot with .showlastErrPlot(D=3).</p>
+</li>
+<li><p class="first">Each dataArray in a dataList can be fit individually (same model function) like this</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># see Examples for dataList creation</span>
+<span class="k">for</span> <span class="n">dat</span> <span class="ow">in</span> <span class="n">datlist</span><span class="p">:</span>
+    <span class="n">dat</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span><span class="n">freepar</span><span class="p">,</span><span class="n">fixpar</span><span class="p">,</span><span class="o">.....</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p><strong>Additinal kwargs for ‘leastsq’</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nb">all</span> <span class="n">additional</span> <span class="n">optional</span> <span class="n">arguments</span> <span class="n">passed</span> <span class="n">to</span> <span class="n">leastsq</span> <span class="p">(</span><span class="n">see</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">leastsq</span><span class="p">)</span>
+<span class="n">col_deriv</span>    <span class="n">default</span>  <span class="mi">0</span>
+<span class="n">ftol</span>         <span class="n">default</span>  <span class="mf">1.49012e-08</span>
+<span class="n">xtol</span>         <span class="n">default</span>  <span class="mf">1.49012e-08</span>
+<span class="n">gtol</span>         <span class="n">default</span>  <span class="mf">0.0</span>
+<span class="n">maxfev</span>       <span class="n">default</span>  <span class="mi">200</span><span class="o">*</span><span class="p">(</span><span class="n">N</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span>
+<span class="n">epsfcn</span>       <span class="n">default</span>  <span class="mf">0.0</span>
+<span class="n">factor</span>       <span class="n">default</span>  <span class="mi">100</span>
+<span class="n">diag</span>         <span class="n">default</span>  <span class="kc">None</span>
+</pre></div>
+</div>
+<p><strong>Parameter result by name in lastfit</strong></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">exda</span><span class="o">.</span><span class="n">D</span>                    <span class="n">eg</span> <span class="n">freepar</span> <span class="s1">&#39;D&#39;</span> <span class="k">with</span> <span class="n">errors</span><span class="p">;</span> <span class="n">same</span> <span class="k">for</span> <span class="n">fixpar</span> <span class="n">but</span> <span class="n">no</span> <span class="n">error</span>
+                          <span class="n">use</span> <span class="n">exda</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">attr</span> <span class="n">to</span> <span class="n">see</span> <span class="n">attributes</span> <span class="n">of</span> <span class="n">model</span>
+<span class="n">exda</span><span class="o">.</span><span class="n">lastfit</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">D</span>         <span class="n">parameter</span> <span class="n">D</span> <span class="n">result</span> <span class="n">of</span> <span class="n">best</span> <span class="n">fit</span>
+<span class="n">exda</span><span class="o">.</span><span class="n">lastfit</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">D_err</span>     <span class="n">parameter</span> <span class="n">D</span> <span class="n">error</span> <span class="k">as</span> <span class="mi">1</span><span class="o">-</span><span class="n">sigma</span> <span class="n">error</span><span class="p">,</span> <span class="k">if</span> <span class="n">errors</span> <span class="n">of</span> <span class="n">data</span> <span class="n">have</span> <span class="n">also</span> <span class="mi">1</span><span class="o">-</span><span class="n">sigma</span> <span class="n">errors</span> <span class="ow">in</span> <span class="o">.</span><span class="n">eY</span>
+<span class="n">exda</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">chi2</span>         <span class="nb">sum</span><span class="p">((</span><span class="n">y</span><span class="o">-</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">best</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">dof</span><span class="p">;</span><span class="n">should</span> <span class="n">be</span> <span class="n">around</span> <span class="mi">1</span> <span class="k">if</span>  <span class="mi">1</span><span class="o">-</span><span class="n">sigma</span> <span class="n">errors</span> <span class="ow">in</span> <span class="o">.</span><span class="n">eY</span>
+<span class="n">exda</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">cov</span>          <span class="n">hessian</span><span class="o">**-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">chi2</span>
+<span class="n">exda</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">dof</span>          <span class="n">degrees</span> <span class="n">of</span> <span class="n">freedom</span>   <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">best</span><span class="p">)</span>
+<span class="n">exda</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">func_name</span>    <span class="n">name</span> <span class="n">of</span> <span class="n">used</span> <span class="n">model</span>
+<span class="n">exda</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">func_code</span>    <span class="n">where</span> <span class="n">to</span> <span class="n">find</span> <span class="n">code</span> <span class="n">of</span> <span class="n">used</span> <span class="n">model</span>
+<span class="n">exda</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">X</span>            <span class="n">X</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">fit</span>
+<span class="n">exda</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">Y</span>            <span class="n">Y</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">fit</span>
+<span class="n">exda</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">eY</span>           <span class="n">Yerrors</span> <span class="ow">in</span> <span class="n">fit</span>
+</pre></div>
+</div>
+<p>If intermediate output is desired (calculation of modeValues in errorplot) use
+exda.makeErrPlot()             to create an output plot and parameter output inside</p>
+<dl class="docutils">
+<dt>How to construct a model:</dt>
+<dd>The model function gets .X (.Z, .eY, eX, eZ) as ndarray and parameters (from attributes)
+as scalar input. It should return an ndarray as output (as Y values) or dataArray (.Y is used).
+Therefore it is advised to use numpy ufunctions in the model because these use them automatically
+in the correct way. Instead of math.sin use numpy.sin, which is achieved by
+import numpy as np
+and use np.sin
+see   <a class="reference external" href="http://docs.scipy.org/doc/numpy/reference/ufuncs.html">http://docs.scipy.org/doc/numpy/reference/ufuncs.html</a></dd>
+</dl>
+<p>A bunch of models as templates can be found in formel.py, formfactor.py, stucturefactor.py.</p>
+<p class="rubric">Examples</p>
+<p>Basic examples with synthetic data. Usually data are loaded from a file.</p>
+<ul>
+<li><p class="first">An error plot with residuals can be created for intermediate output</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">(</span><span class="s1">&#39;exampleData/iqt_1hho.dat&#39;</span><span class="p">)</span>
+<span class="n">diffusion</span><span class="o">=</span><span class="k">lambda</span> <span class="n">t</span><span class="p">,</span><span class="n">wavevector</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">b</span><span class="p">:</span><span class="n">A</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">wavevector</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">D</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="o">+</span><span class="n">b</span>
+<span class="n">data</span><span class="o">.</span><span class="n">setlimit</span><span class="p">(</span><span class="n">D</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>               <span class="c1"># set a limit for diffusion values</span>
+<span class="n">data</span><span class="o">.</span><span class="n">makeErrPlot</span><span class="p">()</span>                   <span class="c1"># create errorplot which is updated</span>
+<span class="n">data</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">diffusion</span> <span class="p">,</span>
+     <span class="n">freepar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;D&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span>               <span class="c1"># one value for all (as a first try)</span>
+              <span class="s1">&#39;A&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]},</span>          <span class="c1"># extended to [1,2,3,3,3,3,...3] independent parameters</span>
+     <span class="n">fixpar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span><span class="mf">0.</span><span class="p">}</span> <span class="p">,</span>               <span class="c1"># fixed parameters here, [1,2,3] possible</span>
+     <span class="n">mapNames</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">,</span>             <span class="c1"># maps time t of the model as .X column for the fit.</span>
+                <span class="s1">&#39;wavevector&#39;</span><span class="p">:</span><span class="s1">&#39;q&#39;</span><span class="p">},</span>   <span class="c1"># and map model parameter &#39;wavevector&#39; to data attribute .q</span>
+     <span class="n">condition</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:(</span><span class="n">a</span><span class="o">.</span><span class="n">Y</span><span class="o">&gt;</span><span class="mf">0.1</span><span class="p">)</span> <span class="p">)</span>  <span class="c1"># set a condition</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Fit sine to simulated data</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jscatter</span> <span class="k">as</span> <span class="nn">js</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mf">0.1</span><span class="p">]</span>
+<span class="n">data</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dA</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="mf">0.2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span><span class="n">x</span><span class="o">*</span><span class="mi">0</span><span class="o">+</span><span class="mf">0.2</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>           <span class="c1"># simulate data with error</span>
+<span class="n">data</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">B</span><span class="p">:</span><span class="n">A</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="n">B</span><span class="p">,{</span><span class="s1">&#39;A&#39;</span><span class="p">:</span><span class="mf">1.2</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="mf">1.2</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">},{},{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">})</span>  <span class="c1"># fit data</span>
+<span class="n">data</span><span class="o">.</span><span class="n">showlastErrPlot</span><span class="p">()</span>                                                         <span class="c1"># show fit</span>
+<span class="nb">print</span><span class="p">(</span>  <span class="n">data</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">A_err</span><span class="p">)</span>                                                        <span class="c1"># access A and error</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Fit sine to simulated data using an attribute in data with same name</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mf">0.1</span><span class="p">]</span>
+<span class="n">data</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dA</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="mf">1.234</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span><span class="n">x</span><span class="o">*</span><span class="mi">0</span><span class="o">+</span><span class="mf">0.1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>     <span class="c1"># create data</span>
+<span class="n">data</span><span class="o">.</span><span class="n">A</span><span class="o">=</span><span class="mf">1.234</span>                                                                   <span class="c1"># add attribute</span>
+<span class="n">data</span><span class="o">.</span><span class="n">makeErrPlot</span><span class="p">()</span>                                                             <span class="c1"># makes erroplot prior to fit</span>
+<span class="n">data</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">B</span><span class="p">:</span><span class="n">A</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="n">B</span><span class="p">,{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="mf">1.2</span><span class="p">,</span><span class="s1">&#39;B&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">},{},{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">})</span>          <span class="c1"># fit using .A</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Fit sine to simulated data using an attribute in data with different name and fixed B</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mf">0.1</span><span class="p">]</span>
+<span class="n">data</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dA</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">x</span><span class="p">,</span><span class="mf">1.234</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span><span class="n">x</span><span class="o">*</span><span class="mi">0</span><span class="o">+</span><span class="mf">0.1</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>       <span class="c1"># create data</span>
+<span class="n">data</span><span class="o">.</span><span class="n">dd</span><span class="o">=</span><span class="mf">1.234</span>                                                                    <span class="c1"># add attribute</span>
+<span class="n">data</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">B</span><span class="p">:</span><span class="n">A</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="p">)</span><span class="o">+</span><span class="n">B</span><span class="p">,{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="mf">1.2</span><span class="p">,},{</span><span class="s1">&#39;B&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">},{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;A&#39;</span><span class="p">:</span><span class="s1">&#39;dd&#39;</span><span class="p">})</span>   <span class="c1"># fit data</span>
+<span class="n">data</span><span class="o">.</span><span class="n">showlastErrPlot</span><span class="p">()</span>                                                           <span class="c1"># show fit</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Fit sine to simulated dataList using an attribute in data with different name and fixed B from data.
+first one common parameter then as parameter list in [].</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">x</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mf">0.1</span><span class="p">]</span>
+<span class="n">data</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">()</span>
+<span class="n">ef</span><span class="o">=</span><span class="mf">0.1</span>  <span class="c1"># increase this to increase error bars of final result</span>
+<span class="k">for</span> <span class="n">ff</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span><span class="mf">0.4</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">1.2</span><span class="p">,</span><span class="mf">1.6</span><span class="p">]:</span>                                                      <span class="c1"># create data</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">js</span><span class="o">.</span><span class="n">dA</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">x</span><span class="p">,(</span><span class="mf">1.234</span><span class="o">+</span><span class="n">ff</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">+</span><span class="n">ff</span><span class="p">)</span><span class="o">+</span><span class="n">ef</span><span class="o">*</span><span class="n">ff</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span><span class="n">x</span><span class="o">*</span><span class="mi">0</span><span class="o">+</span><span class="n">ef</span><span class="o">*</span><span class="n">ff</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="p">)</span>
+    <span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">B</span><span class="o">=</span><span class="mf">0.2</span><span class="o">*</span><span class="n">ff</span><span class="o">/</span><span class="mi">2</span>                                                                 <span class="c1"># add attributes</span>
+<span class="c1"># fit with a single parameter for all data, obviously wrong result</span>
+<span class="n">data</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">p</span><span class="p">:</span><span class="n">A</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">p</span><span class="p">)</span><span class="o">+</span><span class="n">B</span><span class="p">,{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="mf">1.2</span><span class="p">,</span><span class="s1">&#39;p&#39;</span><span class="p">:</span><span class="mi">0</span><span class="p">,</span><span class="s1">&#39;A&#39;</span><span class="p">:</span><span class="mf">1.2</span><span class="p">},{},{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">})</span>
+<span class="n">data</span><span class="o">.</span><span class="n">showlastErrPlot</span><span class="p">()</span>                                                                 <span class="c1"># show fit</span>
+<span class="c1"># now allowing multiple p,A,B as indicated by the list starting value</span>
+<span class="n">data</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">A</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">B</span><span class="p">,</span><span class="n">p</span><span class="p">:</span><span class="n">A</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">x</span><span class="o">+</span><span class="n">p</span><span class="p">)</span><span class="o">+</span><span class="n">B</span><span class="p">,{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="mf">1.2</span><span class="p">,</span><span class="s1">&#39;p&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">],</span><span class="s1">&#39;B&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">],</span><span class="s1">&#39;A&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">]},{},{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">})</span>
+<span class="c1"># plot p against A , just as demonstration</span>
+<span class="n">p</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">grace</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">A</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">p</span><span class="p">,</span><span class="n">data</span><span class="o">.</span><span class="n">p_err</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first"><strong>2D fit</strong> data with an X,Z grid data and Y values
+For 3D fit we calc Y values from X,Z coordinates (only for scalar Y data).
+For fitting we need data in X,Z,Y column format.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">cm</span>
+<span class="c1">#</span>
+<span class="c1"># create 3D data with X,Z axes and Y values as Y=f(X,Z)</span>
+<span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mgrid</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mf">0.25</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">:</span><span class="mi">5</span><span class="p">:</span><span class="mf">0.25</span><span class="p">]</span>
+<span class="n">xyz</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dA</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span><span class="n">z</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span><span class="mf">0.3</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">z</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">+</span><span class="mf">0.01</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">flatten</span><span class="p">())),</span><span class="mf">0.01</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+<span class="c1"># set columns where to find X,Y,Z )</span>
+<span class="n">xyz</span><span class="o">.</span><span class="n">setColumnIndex</span><span class="p">(</span><span class="n">ix</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">iz</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">iy</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">iey</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="c1">#</span>
+<span class="n">ff</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span><span class="n">a</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">b</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">z</span><span class="p">)</span>
+<span class="n">xyz</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ff</span><span class="p">,{</span><span class="s1">&#39;a&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">:</span><span class="mi">1</span><span class="o">/</span><span class="mf">3.</span><span class="p">},{},{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;z&#39;</span><span class="p">:</span><span class="s1">&#39;Z&#39;</span><span class="p">})</span>
+<span class="c1">#</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">X</span><span class="p">,</span><span class="n">xyz</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span><span class="n">xyz</span><span class="o">.</span><span class="n">Y</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">tricontour</span><span class="p">(</span><span class="n">xyz</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">X</span><span class="p">,</span><span class="n">xyz</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">Z</span><span class="p">,</span><span class="n">xyz</span><span class="o">.</span><span class="n">lastfit</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cm</span><span class="o">.</span><span class="n">coolwarm</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">antialiased</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Comparison of fit methods</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">jscatter</span> <span class="k">as</span> <span class="nn">js</span>
+<span class="n">diffusion</span><span class="o">=</span><span class="k">lambda</span> <span class="n">A</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">elastic</span><span class="p">,</span><span class="n">wavevector</span><span class="o">=</span><span class="mi">0</span><span class="p">:</span><span class="n">A</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">wavevector</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">D</span><span class="o">*</span><span class="n">t</span><span class="p">)</span><span class="o">+</span><span class="n">elastic</span>
+
+<span class="n">i5</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">(</span><span class="n">js</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">datapath</span><span class="o">+</span><span class="s1">&#39;/iqt_1hho.dat&#39;</span><span class="p">)</span>
+<span class="n">i5</span><span class="o">.</span><span class="n">makeErrPlot</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;diffusion model residual plot&#39;</span><span class="p">)</span>
+<span class="n">i5</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">diffusion</span><span class="p">,</span><span class="n">freepar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;D&#39;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,</span><span class="s1">&#39;A&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="n">fixpar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;elastic&#39;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">},</span>
+       <span class="n">mapNames</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;wavevector&#39;</span><span class="p">:</span><span class="s1">&#39;q&#39;</span><span class="p">},</span>  <span class="n">condition</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">X</span><span class="o">&gt;</span><span class="mf">0.01</span>  <span class="p">)</span>
+<span class="c1"># 22 evaluations; error YES -&gt; &#39;leastsq&#39;</span>
+<span class="c1">#with D=[0.2]  130 evaluations</span>
+
+<span class="n">i5</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">diffusion</span><span class="p">,</span><span class="n">freepar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;D&#39;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,</span><span class="s1">&#39;A&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="n">fixpar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;elastic&#39;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">},</span>
+       <span class="n">mapNames</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;wavevector&#39;</span><span class="p">:</span><span class="s1">&#39;q&#39;</span><span class="p">},</span>  <span class="n">condition</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">X</span><span class="o">&gt;</span><span class="mf">0.01</span> <span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;BFGS&#39;</span> <span class="p">)</span>
+<span class="c1"># 52 evaluations, error YES</span>
+
+<span class="n">i5</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">diffusion</span><span class="p">,</span><span class="n">freepar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;D&#39;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,</span><span class="s1">&#39;A&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="n">fixpar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;elastic&#39;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">},</span>
+       <span class="n">mapNames</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;wavevector&#39;</span><span class="p">:</span><span class="s1">&#39;q&#39;</span><span class="p">},</span>  <span class="n">condition</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">X</span><span class="o">&gt;</span><span class="mf">0.01</span> <span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;differential_evolution&#39;</span> <span class="p">)</span>
+<span class="c1"># 498 evaluations, error NO ; needs &gt;20000 evaluations using D=[0.2]; use only with low number of parameters</span>
+
+<span class="n">i5</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">diffusion</span><span class="p">,</span><span class="n">freepar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;D&#39;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,</span><span class="s1">&#39;A&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="n">fixpar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;elastic&#39;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">},</span>
+       <span class="n">mapNames</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;wavevector&#39;</span><span class="p">:</span><span class="s1">&#39;q&#39;</span><span class="p">},</span>  <span class="n">condition</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">X</span><span class="o">&gt;</span><span class="mf">0.01</span> <span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;Powell&#39;</span> <span class="p">)</span>
+<span class="c1"># 121 evaluations; error NO</span>
+
+<span class="n">i5</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">diffusion</span><span class="p">,</span><span class="n">freepar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;D&#39;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,</span><span class="s1">&#39;A&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="n">fixpar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;elastic&#39;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">},</span>
+       <span class="n">mapNames</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;wavevector&#39;</span><span class="p">:</span><span class="s1">&#39;q&#39;</span><span class="p">},</span>  <span class="n">condition</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">X</span><span class="o">&gt;</span><span class="mf">0.01</span> <span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;SLSQP&#39;</span> <span class="p">)</span>
+<span class="c1"># 37 evaluations, error NO</span>
+
+<span class="n">i5</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="n">diffusion</span><span class="p">,</span><span class="n">freepar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;D&#39;</span><span class="p">:</span><span class="mf">0.2</span><span class="p">,</span><span class="s1">&#39;A&#39;</span><span class="p">:</span><span class="mi">1</span><span class="p">},</span> <span class="n">fixpar</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;elastic&#39;</span><span class="p">:</span><span class="mf">0.0</span><span class="p">},</span>
+       <span class="n">mapNames</span><span class="o">=</span> <span class="p">{</span><span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="s1">&#39;wavevector&#39;</span><span class="p">:</span><span class="s1">&#39;q&#39;</span><span class="p">},</span>  <span class="n">condition</span><span class="o">=</span><span class="k">lambda</span> <span class="n">a</span><span class="p">:</span><span class="n">a</span><span class="o">.</span><span class="n">X</span><span class="o">&gt;</span><span class="mf">0.01</span> <span class="p">,</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;COBYLA&#39;</span> <span class="p">)</span>
+<span class="c1"># 308 evaluations, error NO</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.getfromcomment">
+<code class="descname">getfromcomment</code><span class="sig-paren">(</span><em>attrname</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.getfromcomment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract a non number parameter from comment with attrname in front</p>
+<p>If multiple names start with parname first one is used.
+Used comment line is deleted from comments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>attrname</strong> : string</p>
+<blockquote class="last">
+<div><p>name of the parameter in first place</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jscatter.dataarray.dataList.has_limit">
+<code class="descname">has_limit</code><a class="headerlink" href="#jscatter.dataarray.dataList.has_limit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return existing limits</p>
+<p>without limits returns None</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.index">
+<code class="descname">index</code><span class="sig-paren">(</span><em>value</em>, <em>start=0</em>, <em>stop=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>original doc from list
+L.index(value, [start, [stop]]) -&gt; integer – return first index of value.
+Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.insert">
+<code class="descname">insert</code><span class="sig-paren">(</span><em>i</em>, <em>objekt=None</em>, <em>index=0</em>, <em>usecols=None</em>, <em>skiplines=None</em>, <em>replace=None</em>, <em>ignore='#'</em>, <em>XYeYeX=None</em>, <em>delimiter=None</em>, <em>takeline=None</em>, <em>lines2parameter=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.insert" title="Permalink to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Reads/creates new dataArrays and inserts in dataList.</p>
+<p>If objekt is dataArray or dataList all options except XYeYeX,index are ignored.</p>
+</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>i</strong> : int, default 0</p>
+<blockquote>
+<div><blockquote>
+<div><p>Position where to insert.</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>objekt,index,usecols,skiplines,replace,ignore,delimiter,takeline,lines2parameter <span class="classifier-delimiter">:</span> <span class="classifier">options</span></dt>
+<dd><p class="first last">See dataArray or dataList</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>original doc from list</strong></p>
+<p class="last"><strong>L.insert(index, object) – insert object before index</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.interpolate">
+<code class="descname">interpolate</code><span class="sig-paren">(</span><em>func=None</em>, <em>invfunc=None</em>, <em>deg=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.interpolate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpolates Y at given attribute values for X values.</p>
+<p>Uses twice a linear interpolation (first along X then along attribute).
+If X and attributes are equal to existing these datapoints are returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>**kwargs :</strong></p>
+<blockquote>
+<div><p>Keyword arguments as float or array-like
+the first keyword argument found as attribute is used for interpolation.
+E.g. conc=0.12 defines the attribute ‘conc’ to be interpolated to 0.12
+Special kwargs see below.</p>
+</div></blockquote>
+<p><strong>X</strong> : array</p>
+<blockquote>
+<div><p>List of X values were to evaluate (linear interpolation).
+If X  &lt; or &gt; self.X the corresbonding min/max border is used.
+If X not given the .X of first element are used as default.</p>
+</div></blockquote>
+<p><strong>func</strong> : function or lambda</p>
+<blockquote>
+<div><p>Function to be used on Y values before interpolation.
+See dataArray.polyfit.</p>
+</div></blockquote>
+<p><strong>invfunc</strong> : function or lambda</p>
+<blockquote>
+<div><p>To invert func after extrapolation again.</p>
+</div></blockquote>
+<p><strong>deg</strong> : integer, default =1</p>
+<blockquote>
+<div><p>Polynom degree for interpolation along attribute.
+Outliers result in Nan.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dataArray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li>This interpolation results in a good approximation if the data are narrow.
+Around peaks values are underestimated if the data are not dense enough. See Examples.</li>
+<li>To estimate new errors for the splined data use .setColumnIndex(iy=ii,iey=None) with ii as index of errors.
+Then spline the errors and add these as new column.</li>
+<li>Interpolation can not be as good as fitting with a prior known
+model and use this for extrapolating.</li>
+</ul>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">jscatter</span> <span class="k">as</span> <span class="nn">js</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">211</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">212</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+<span class="c1"># try different kinds of polynaminal degree</span>
+<span class="n">deg</span><span class="o">=</span><span class="mi">2</span>
+<span class="n">i5</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">([</span><span class="n">js</span><span class="o">.</span><span class="n">formel</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">50</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span><span class="n">mean</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">mean</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="mf">15.1</span><span class="p">:</span><span class="mi">3</span><span class="p">]])</span>
+<span class="n">i5b</span><span class="o">=</span><span class="n">i5</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">25</span><span class="p">:</span><span class="mi">25</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span><span class="n">deg</span><span class="o">=</span><span class="n">deg</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Interpolation comparison with different spacing of data&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Narrow spacing result in good interpolation&quot;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">i5</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5b</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax1</span><span class="o">.</span><span class="n">tricontour</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5b</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">i5</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">([</span><span class="n">js</span><span class="o">.</span><span class="n">formel</span><span class="o">.</span><span class="n">gauss</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">50</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span><span class="n">mean</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="k">for</span> <span class="n">mean</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="mf">15.1</span><span class="p">:</span><span class="mi">15</span><span class="p">]])</span>
+<span class="n">i5b</span><span class="o">=</span><span class="n">i5</span><span class="o">.</span><span class="n">interpolate</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">15</span><span class="p">:</span><span class="mi">15</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span><span class="n">X</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="o">-</span><span class="mi">25</span><span class="p">:</span><span class="mi">25</span><span class="p">:</span><span class="mi">1</span><span class="p">],</span><span class="n">deg</span><span class="o">=</span><span class="n">deg</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Wide spacing result in artefacts between peaks&quot;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">i5</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">scatter3D</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5b</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">tricontour</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">i5b</span><span class="o">.</span><span class="n">mean</span><span class="p">,[</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">i5b</span><span class="o">.</span><span class="n">X</span><span class="p">]),</span> <span class="n">i5b</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">flatten</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.killErrPlot">
+<code class="descname">killErrPlot</code><span class="sig-paren">(</span><em>filename=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jscatter/dataarray.html#dataList.killErrPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jscatter.dataarray.dataList.killErrPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kills ErrPlot</p>
+<p>If filename given the plot is saved.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.makeErrPlot">
+<code class="descname">makeErrPlot</code><span class="sig-paren">(</span><em>title=None</em>, <em>showfixpar=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jscatter/dataarray.html#dataList.makeErrPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jscatter.dataarray.dataList.makeErrPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a GracePlot for intermediate output from fit with residuals.</p>
+<p>ErrPlot is updated only if consecutive steps need more than 2 seconds.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>title</strong> : string</p>
+<blockquote>
+<div><p>title of plot</p>
+</div></blockquote>
+<p><strong>residuals</strong> : string</p>
+<blockquote>
+<div><p>plot type of residuals
+‘absolut’ or ‘a’  absolute residuals
+‘relative’ or ‘r’  relative =res/y</p>
+</div></blockquote>
+<p><strong>showfixpar</strong> : boolean (None,False,0 or True,Yes,1)</p>
+<blockquote>
+<div><p>show the fixed parameters in errplot</p>
+</div></blockquote>
+<p><strong>yscale,xscale</strong> : ‘n’,’l’ for ‘normal’, ‘logarithmic’</p>
+<blockquote>
+<div><p>y scale, log or normal (linear)</p>
+</div></blockquote>
+<p><strong>fitlinecolor</strong> : int, [int,int,int]</p>
+<blockquote class="last">
+<div><p>Color for fit lines (or line style as in plot).
+if not given same color as data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.makeNewErrPlot">
+<code class="descname">makeNewErrPlot</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jscatter/dataarray.html#dataList.makeNewErrPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jscatter.dataarray.dataList.makeNewErrPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a NEW ErrPlot without destroying the last. See makeErrPlot for details.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>**kwargs</strong></p>
+<blockquote class="last">
+<div><p>keyword arguments passed to makeErrPlot</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.merge">
+<code class="descname">merge</code><span class="sig-paren">(</span><em>indices</em>, <em>isort=None</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merges elements of dataList.</p>
+<p>The merged dataArray is stored in the lowest indices. Others are removed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>indices</strong> : integer,’all’</p>
+<blockquote>
+<div><p>list of indices to merge
+‘all’ merges all elements into one.</p>
+</div></blockquote>
+<p><strong>isort</strong> : integer</p>
+<blockquote class="last">
+<div><p>argsort after merge along column eg isort=’X’, ‘Y’, or 0,1,2
+None is no sorting as default</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Attributes are copied as lists in the merged dataArray.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.mergeAttribut">
+<code class="descname">mergeAttribut</code><span class="sig-paren">(</span><em>parName</em>, <em>limit=None</em>, <em>isort=None</em>, <em>func=&lt;function mean&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.mergeAttribut" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merges elements of dataList if attribute values are closer than limit (in place).</p>
+<p>If attribute is list the average is taken for comparison.
+For special needs create new parameter and merge along this.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>parName</strong> : string</p>
+<blockquote>
+<div><p>name of a parameter</p>
+</div></blockquote>
+<p><strong>limit</strong> : float</p>
+<blockquote>
+<div><p>The relative limit value.
+If limit is None limit is determined as standardeviation of sorted differences
+as limit=np.std(np.array(data.q[:-1])-np.array(data.q[1:]))/np.mean(np.array(self.q)</p>
+</div></blockquote>
+<p><strong>isort</strong> : ‘X’, ‘Y’ or 0,1,2…, None, default None</p>
+<blockquote>
+<div><p>Column for isort.
+None is no sorting</p>
+</div></blockquote>
+<p><strong>func</strong> : function or lambda, default np.mean</p>
+<blockquote class="last">
+<div><p>a function to create a new value for parameter
+see extractAttribut
+stored as .parName+str(func.func_name)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">i5</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">(</span><span class="s1">&#39;exampleData/iqt_1hho.dat&#39;</span><span class="p">)</span>
+<span class="n">i5</span><span class="o">.</span><span class="n">mergeAttribut</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)</span>
+<span class="c1"># use qmean instead of q or calc the new value</span>
+<span class="nb">print</span><span class="p">(</span>  <span class="n">i5</span><span class="o">.</span><span class="n">qmean</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.modelValues">
+<code class="descname">modelValues</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.modelValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates modelValues of model after a fit.</p>
+<p>Model parameters are used from dataArray attributes or last fit parameters.
+Given arguments  overwrite parameters and attributes to simulate modelValues
+e.g. to extend X range.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>**kwargs</strong> : parname=value</p>
+<blockquote>
+<div><p>Overwrite parname with value in the dataList attributes or fit results
+e.g. to extend the parameter range or simulate changed parameters.</p>
+</div></blockquote>
+<p><strong>debug</strong> : internal usage documented for completes</p>
+<blockquote>
+<div><p>dictionary passed to model to allow calling model as model(<a href="#id3"><span class="problematic" id="id4">**</span></a>kwargs) for debugging</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dataList of modelValues with parameters as attributes.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Example: extend time range</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">(</span><span class="s1">&#39;iqt_1hho.dat&#39;</span><span class="p">)</span>
+<span class="n">diffusion</span><span class="o">=</span><span class="k">lambda</span> <span class="n">A</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">wavevector</span><span class="p">:</span> <span class="n">A</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">wavevector</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">D</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">diffusion</span><span class="p">,{</span><span class="s1">&#39;D&#39;</span><span class="p">:[</span><span class="mi">2</span><span class="p">],</span><span class="s1">&#39;amplitude&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">]},{},{</span><span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">})</span>    <span class="c1"># do fit</span>
+<span class="c1"># overwritte t to extend range</span>
+<span class="n">newmodelvalues</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">modelValues</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">r_</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">100</span><span class="p">])</span>   <span class="c1">#with more t</span>
+</pre></div>
+</div>
+<p>Example: 1-sigma interval for D</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dL</span><span class="p">(</span><span class="s1">&#39;exampleData/iqt_1hho.dat&#39;</span><span class="p">)</span>
+<span class="n">diffusion</span><span class="o">=</span><span class="k">lambda</span> <span class="n">A</span><span class="p">,</span><span class="n">D</span><span class="p">,</span><span class="n">t</span><span class="p">,</span><span class="n">q</span><span class="p">:</span> <span class="n">A</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">q</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">D</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">diffusion</span><span class="p">,{</span><span class="s1">&#39;D&#39;</span><span class="p">:[</span><span class="mf">0.1</span><span class="p">],</span><span class="s1">&#39;A&#39;</span><span class="p">:[</span><span class="mi">1</span><span class="p">]},{},{</span><span class="s1">&#39;t&#39;</span><span class="p">:</span><span class="s1">&#39;X&#39;</span><span class="p">})</span>    <span class="c1"># do fit</span>
+<span class="c1"># add errors of D for confidence limits</span>
+<span class="n">upper</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">modelValues</span><span class="p">(</span><span class="n">D</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">D</span><span class="o">+</span><span class="n">data</span><span class="o">.</span><span class="n">D_err</span><span class="p">)</span>
+<span class="n">lower</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">modelValues</span><span class="p">(</span><span class="n">D</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">D</span><span class="o">-</span><span class="n">data</span><span class="o">.</span><span class="n">D_err</span><span class="p">)</span>
+<span class="n">data</span><span class="o">.</span><span class="n">showlastErrPlot</span><span class="p">()</span>
+<span class="n">data</span><span class="o">.</span><span class="n">errPlot</span><span class="p">(</span><span class="n">upper</span><span class="p">,</span><span class="n">sy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">li</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">data</span><span class="o">.</span><span class="n">errPlot</span><span class="p">(</span><span class="n">lower</span><span class="p">,</span><span class="n">sy</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">li</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.nakedcopy">
+<code class="descname">nakedcopy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.nakedcopy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns copy without attributes, thus only the data.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jscatter.dataarray.dataList.names">
+<code class="descname">names</code><a class="headerlink" href="#jscatter.dataarray.dataList.names" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of element names.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.polyfit">
+<code class="descname">polyfit</code><span class="sig-paren">(</span><em>func=None</em>, <em>invfunc=None</em>, <em>xfunc=None</em>, <em>invxfunc=None</em>, <em>exfunc=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.polyfit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inter/Extrapolated values along attribut for all given X values using a polyfit.</p>
+<p>To extrapolate along an attribute using twice a polyfit (first along X then along attribute).
+E.g. from a concentration series to extrapolate to concentration zero.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>**kwargs :</strong></p>
+<blockquote>
+<div><p>Keyword arguments
+The first keyword argument found as attribute is used for extrapolation
+e.g. q=0.01  attribute with values where to extrapolate to
+Special kwargs see below.</p>
+</div></blockquote>
+<p><strong>X</strong> : arraylike</p>
+<blockquote>
+<div><p>list of X values were to evaluate</p>
+</div></blockquote>
+<p><strong>funct</strong> : function or lambda</p>
+<blockquote>
+<div><p>Function to be used in Y values before extrapolating.
+See Notes.</p>
+</div></blockquote>
+<p><strong>invfunc</strong> : function or lambda</p>
+<blockquote>
+<div><p>To invert function after extrapolation again.</p>
+</div></blockquote>
+<p><strong>xfunct</strong> : function or lambda</p>
+<blockquote>
+<div><p>Function to be used for X values before interpolating along X.</p>
+</div></blockquote>
+<p><strong>invxfunc</strong> : function or lambda</p>
+<blockquote>
+<div><p>To invert xfunction again.</p>
+</div></blockquote>
+<p><strong>exfunc</strong> : function or lambda</p>
+<blockquote>
+<div><p>Weigth for extrapol along X</p>
+</div></blockquote>
+<p><strong>degx,degy</strong> : integer default degx=0, degy=1</p>
+<blockquote>
+<div><p>polynom degree for extrapolation in x,y
+If degx=0 (default) no extrapolation for X is done and values are linear interpolated.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dataArray</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<dl class="docutils">
+<dt>funct is used to transfer the data to a simpler smoother or polynominal form.</dt>
+<dd><ul class="first last simple">
+<li>Think about data describing diffusion like I~exp(-q**2*D*t) and we want to interpolate along attribute q.
+If funct is np.log we interpolate on a simpler parabolic q**2 and linear in t.</li>
+<li>Same can be done with X axis thin in above case about subdiffusion t**a with a &lt; 1.</li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Task: Extrapolate to zero q for 3 X values for an exp decaying function.
+Here first log(Y) is used (problem linearized), then linear extrapolate and and exp function used for the result.
+This is like lin extapolation of the exponent:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">i5</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">q</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">X</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">11</span><span class="p">],</span><span class="n">func</span><span class="o">=</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="n">invfunc</span><span class="o">=</span><span class="k">lambda</span> <span class="n">y</span><span class="p">:</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="n">deg</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>concentration data with conc and extrapoleate to conc=0</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">polyfit</span><span class="p">(</span><span class="n">conc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">X</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">X</span><span class="p">,</span><span class="n">deg</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.pop">
+<code class="descname">pop</code><span class="sig-paren">(</span><em>i=-1</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.pop" title="Permalink to this definition">¶</a></dt>
+<dd><p>original doc from list
+L.pop([index]) -&gt; item – remove and return item at index (default last).
+Raises IndexError if list is empty or index is out of range.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.prune">
+<code class="descname">prune</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.prune" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reduce number of values between upper and lower limits.</p>
+<p>Prune reduces a dataset to reduced number of data points in an interval
+between lower and upper by selection or by averaging including errors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>*args,**kwargs :</strong></p>
+<blockquote>
+<div><p>arguments and keyword arguments see below</p>
+</div></blockquote>
+<p><strong>lower</strong> : float</p>
+<blockquote>
+<div><p>lower bound min is min of data</p>
+</div></blockquote>
+<p><strong>upper</strong> : float</p>
+<blockquote>
+<div><p>upper bound max is max of data</p>
+</div></blockquote>
+<p><strong>number</strong> : int</p>
+<blockquote>
+<div><p>number of values in result</p>
+</div></blockquote>
+<p><strong>kind</strong> : {‘log’,’lin’} default ‘lin’</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">type of the new point distrubution</div>
+<div class="line">‘log’ closest values in log distribution with number points in [lower,upper]</div>
+<div class="line">‘lin’ closest values in lin distribution with number points in [lower,upper]</div>
+<div class="line">if number==None all points between min,max are used</div>
+</div>
+</div></blockquote>
+<p><strong>type</strong> : {None,’mean’,’error’,’mean+error’} default ‘mean’</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">how to determine the value for a point</div>
+<div class="line">None   original Y value of X closest to new X value</div>
+<div class="line">‘mean’ mean values in interval between 2 X points;</div>
+<div class="line-block">
+<div class="line">weight==None -&gt; equal weight</div>
+<div class="line">if weight!=None with weight=1/col[weight]**2</div>
+<div class="line">weight column will get values according to error propagation</div>
+</div>
+<div class="line">‘mean+std’ calcs mean and adds error columns with standard deviation from intervals</div>
+<div class="line-block">
+<div class="line">can be used if no errors are present</div>
+<div class="line">for single values the error is interpolated from neighbouring values</div>
+<div class="line">! for less pruned data error may be bad defined if only a few points are averaged</div>
+</div>
+</div>
+</div></blockquote>
+<p><strong>col</strong> : ‘X’,’Y’….., or int, default ‘X’</p>
+<blockquote>
+<div><p>column to prune along X,Y,Z or index of column</p>
+</div></blockquote>
+<p><strong>weight</strong> : None, ‘eX’, ‘eY’ or int</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">column for weight as 1/err**2 in ‘mean’ calculation, None is equal weight</div>
+<div class="line">weight columne gets new error sqrt(1/sum_i(1/err_i**2))</div>
+<div class="line">if None or not existing equal weights are used</div>
+</div>
+</div></blockquote>
+<p><strong>keep</strong> : list of int</p>
+<blockquote>
+<div><p>list of indices to keep in any case</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dataArray with values pruned to number of values</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<div class="line-block">
+<div class="line">Attention !!!!</div>
+<div class="line">dependent on the distribution of original data a lower number of points can be the result</div>
+<div class="line">eg think of noisy data between 4 and 5 and a lin distribution from 1 to 10 of 9 points</div>
+<div class="line">as there are no data between 5 and 10 these will all result in 5 and be set to 5 to be unique</div>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">i5</span><span class="o">.</span><span class="n">prune</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span><span class="n">col</span><span class="o">=</span><span class="s1">&#39;X&#39;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">,</span><span class="n">weight</span><span class="o">=</span><span class="s1">&#39;eY&#39;</span><span class="p">)</span>
+<span class="n">i5</span><span class="o">.</span><span class="n">prune</span><span class="p">(</span><span class="n">number</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.remove">
+<code class="descname">remove</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>L.remove(value) – remove first occurrence of value.
+Raises ValueError if the value is not present.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.reverse">
+<code class="descname">reverse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverse dataList -&gt; INPLACE!!!
+original doc from list
+L.reverse() – reverse <em>IN PLACE</em></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.sCI">
+<code class="descname">sCI</code><span class="sig-paren">(</span><em>*arg</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.sCI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the columnIndex where to find X,Y,Z, eY, eX, eZ…..</p>
+<p>Default is ix=0,iy=1,iey=2,iz=None,iex=None,iez=None as it is the most used.
+There is no limitation and each dataArray can have different ones.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ix,iy,iey,iz,iex,iez: integer, None; default ix=0,iy=1,iey=2,iz=None,iex=None,iez=None</strong></p>
+<blockquote class="last">
+<div><div class="line-block">
+<div class="line">usability wins iey=2!!</div>
+<div class="line">if columnIndex differs in dataArrays set them individually</div>
+</div>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<div class="line-block">
+<div class="line">A list of all X in the dataArray is dataArray.X</div>
+<div class="line">integer  column index as 0,1,2,-1 , should be in range</div>
+<div class="line">None     as not used eg iex=None -&gt; no errors for x</div>
+<div class="line">anything else does not change</div>
+</div>
+<p>Shortcut sCI</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>name=None, exclude=['comment', 'lastfit'], fmt='%.5e'</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves dataList as ASCII text file, optional compressed (gzip).</p>
+<p>Saves dataList with attributes to one file that can be reread.
+Dynamic created attributes as e.g. X, Y, eY, are not saved.
+If name extension is ‘.gz’ the file is compressed (gzip).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>filename</p>
+</div></blockquote>
+<p><strong>exclude</strong> : list of str, default [‘comment’,’lastfit’]</p>
+<blockquote>
+<div><p>List of dataList attribut names to exclude from being saved.</p>
+</div></blockquote>
+<p><strong>fmt</strong> : string, default ‘%.5e’</p>
+<blockquote class="last">
+<div><p>Format specifier for writing float as e.g. ‘%.5e’ is exponential with 5 digits precision.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Saves a sequence of the dataArray elements.</p>
+<p>Format rules:</p>
+<blockquote>
+<div><p>Dataset consists of tabulated data with optional attributes and comments.
+Datasets are separated by empty lines, attributes and comments come before data.</p>
+<dl class="docutils">
+<dt>First two strings decide for a line:</dt>
+<dd><ul class="first last simple">
+<li>string + value     -&gt; attribute as attribute name + list of values</li>
+<li>string + string    -&gt; comment line</li>
+<li>value  + value     -&gt; data   (line of an array; in sequence without break)</li>
+<li>single words       -&gt; are appended to comments</li>
+</ul>
+</dd>
+<dt>optional:</dt>
+<dd><ul class="first last simple">
+<li>string + &#64;name   -&gt;  as attribute but links to other dataArray with .name=”name” stored in the same file after this dataset.</li>
+<li>internal parameters starting with underscore (‘_’) are ignored for writing, also X,Y,Z,eX,eY,eZ,</li>
+<li>only ndarray content is stored; no dictionaries in parameters.</li>
+<li>&#64;name is used as identifier or filename can be accessed as name.</li>
+<li>attributes of dataList are saved as common attributes marked with a line “&#64;name header_of_common_parameters”</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.savelastErrPlot">
+<code class="descname">savelastErrPlot</code><span class="sig-paren">(</span><em>filename</em>, <em>format='agr'</em>, <em>size=(1012</em>, <em>760)</em>, <em>dpi=300</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jscatter/dataarray.html#dataList.savelastErrPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jscatter.dataarray.dataList.savelastErrPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves errplot to file with filename.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.savetext">
+<code class="descname">savetext</code><span class="sig-paren">(</span><em>name=None, exclude=['comment', 'lastfit'], fmt='%.5e'</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.savetext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves dataList as ASCII text file, optional compressed (gzip).</p>
+<p>Saves dataList with attributes to one file that can be reread.
+Dynamic created attributes as e.g. X, Y, eY, are not saved.
+If name extension is ‘.gz’ the file is compressed (gzip).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>filename</p>
+</div></blockquote>
+<p><strong>exclude</strong> : list of str, default [‘comment’,’lastfit’]</p>
+<blockquote>
+<div><p>List of dataList attribut names to exclude from being saved.</p>
+</div></blockquote>
+<p><strong>fmt</strong> : string, default ‘%.5e’</p>
+<blockquote class="last">
+<div><p>Format specifier for writing float as e.g. ‘%.5e’ is exponential with 5 digits precision.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Saves a sequence of the dataArray elements.</p>
+<p>Format rules:</p>
+<blockquote>
+<div><p>Dataset consists of tabulated data with optional attributes and comments.
+Datasets are separated by empty lines, attributes and comments come before data.</p>
+<dl class="docutils">
+<dt>First two strings decide for a line:</dt>
+<dd><ul class="first last simple">
+<li>string + value     -&gt; attribute as attribute name + list of values</li>
+<li>string + string    -&gt; comment line</li>
+<li>value  + value     -&gt; data   (line of an array; in sequence without break)</li>
+<li>single words       -&gt; are appended to comments</li>
+</ul>
+</dd>
+<dt>optional:</dt>
+<dd><ul class="first last simple">
+<li>string + &#64;name   -&gt;  as attribute but links to other dataArray with .name=”name” stored in the same file after this dataset.</li>
+<li>internal parameters starting with underscore (‘_’) are ignored for writing, also X,Y,Z,eX,eY,eZ,</li>
+<li>only ndarray content is stored; no dictionaries in parameters.</li>
+<li>&#64;name is used as identifier or filename can be accessed as name.</li>
+<li>attributes of dataList are saved as common attributes marked with a line “&#64;name header_of_common_parameters”</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.savetxt">
+<code class="descname">savetxt</code><span class="sig-paren">(</span><em>name=None, exclude=['comment', 'lastfit'], fmt='%.5e'</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.savetxt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves dataList as ASCII text file, optional compressed (gzip).</p>
+<p>Saves dataList with attributes to one file that can be reread.
+Dynamic created attributes as e.g. X, Y, eY, are not saved.
+If name extension is ‘.gz’ the file is compressed (gzip).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>name</strong> : string</p>
+<blockquote>
+<div><p>filename</p>
+</div></blockquote>
+<p><strong>exclude</strong> : list of str, default [‘comment’,’lastfit’]</p>
+<blockquote>
+<div><p>List of dataList attribut names to exclude from being saved.</p>
+</div></blockquote>
+<p><strong>fmt</strong> : string, default ‘%.5e’</p>
+<blockquote class="last">
+<div><p>Format specifier for writing float as e.g. ‘%.5e’ is exponential with 5 digits precision.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Saves a sequence of the dataArray elements.</p>
+<p>Format rules:</p>
+<blockquote>
+<div><p>Dataset consists of tabulated data with optional attributes and comments.
+Datasets are separated by empty lines, attributes and comments come before data.</p>
+<dl class="docutils">
+<dt>First two strings decide for a line:</dt>
+<dd><ul class="first last simple">
+<li>string + value     -&gt; attribute as attribute name + list of values</li>
+<li>string + string    -&gt; comment line</li>
+<li>value  + value     -&gt; data   (line of an array; in sequence without break)</li>
+<li>single words       -&gt; are appended to comments</li>
+</ul>
+</dd>
+<dt>optional:</dt>
+<dd><ul class="first last simple">
+<li>string + &#64;name   -&gt;  as attribute but links to other dataArray with .name=”name” stored in the same file after this dataset.</li>
+<li>internal parameters starting with underscore (‘_’) are ignored for writing, also X,Y,Z,eX,eY,eZ,</li>
+<li>only ndarray content is stored; no dictionaries in parameters.</li>
+<li>&#64;name is used as identifier or filename can be accessed as name.</li>
+<li>attributes of dataList are saved as common attributes marked with a line “&#64;name header_of_common_parameters”</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.setColumnIndex">
+<code class="descname">setColumnIndex</code><span class="sig-paren">(</span><em>*arg</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.setColumnIndex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the columnIndex where to find X,Y,Z, eY, eX, eZ…..</p>
+<p>Default is ix=0,iy=1,iey=2,iz=None,iex=None,iez=None as it is the most used.
+There is no limitation and each dataArray can have different ones.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ix,iy,iey,iz,iex,iez: integer, None; default ix=0,iy=1,iey=2,iz=None,iex=None,iez=None</strong></p>
+<blockquote class="last">
+<div><div class="line-block">
+<div class="line">usability wins iey=2!!</div>
+<div class="line">if columnIndex differs in dataArrays set them individually</div>
+</div>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<div class="line-block">
+<div class="line">A list of all X in the dataArray is dataArray.X</div>
+<div class="line">integer  column index as 0,1,2,-1 , should be in range</div>
+<div class="line">None     as not used eg iex=None -&gt; no errors for x</div>
+<div class="line">anything else does not change</div>
+</div>
+<p>Shortcut sCI</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.setlimit">
+<code class="descname">setlimit</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.setlimit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set upper and lower limits for parameters in least square fit.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>parname</strong> : [value x 4] , list of 4 x (float/None), default None</p>
+<blockquote class="last">
+<div><p>Use as setlimit(parname=(lowerlimit, upperlimit,lowerhardlimit, upperhardlimit))
+- lowerlimit, upperlimit : float, default None</p>
+<blockquote>
+<div><p>soft limit: chi2 increased with distance from limit, nonfloat resets limit</p>
+</div></blockquote>
+<ul class="simple">
+<li>lowerhardlimit, upperhardlimit: hardlimit float, None
+values are set to border , chi2 is increased strongly</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Penalty methods are a certain class of algorithms for solving constrained optimization problems.
+Here the penalty function increases chi2 by a factor chi*f_conststrain
+- no limit overrun : 1
+- softlimits :  + 1+abs(val-limit)*10 per limit
+- hardlimits :  +10+abs(val-limit)*10 per limit</p>
+<p class="rubric">Examples</p>
+<dl class="docutils">
+<dt>setlimit(D=(1,100),A=(0.2,0.8,0.0001))  to set lower=1 and upper=100</dt>
+<dd>A with a hard limit to avoid zero</dd>
+</dl>
+<p>setlimit(D=(None,100))                  to reset lower and set upper=100
+setlimit(D=(1,’thisisnotfloat’,’‘,))    to set lower=1 and reset upper</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jscatter.dataarray.dataList.shape">
+<code class="descname">shape</code><a class="headerlink" href="#jscatter.dataarray.dataList.shape" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tuple with shapes of dataList elements.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.showattr">
+<code class="descname">showattr</code><span class="sig-paren">(</span><em>maxlength=75, exclude=['comment', 'lastfit']</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.showattr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show data specific attributes for all elements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>maxlength</strong> : integer</p>
+<blockquote>
+<div><p>truncate string representation</p>
+</div></blockquote>
+<p><strong>exclude</strong> : list of str</p>
+<blockquote class="last">
+<div><p>list of attribute names to exclude from show</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.showlastErrPlot">
+<code class="descname">showlastErrPlot</code><span class="sig-paren">(</span><em>title=None</em>, <em>modelValues=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/jscatter/dataarray.html#dataList.showlastErrPlot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#jscatter.dataarray.dataList.showlastErrPlot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows last ErrPlot as created by makeErrPlot with last fit result.</p>
+<p>Same arguments as in makeErrPlot.</p>
+<p>Additional keyword arguments are passed as in modelValues and simulate changes in the parameters.
+Without parameters the last fit is retrieved.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="jscatter.dataarray.dataList.sort">
+<code class="descname">sort</code><span class="sig-paren">(</span><em>key=None</em>, <em>reverse=False</em><span class="sig-paren">)</span><a class="headerlink" href="#jscatter.dataarray.dataList.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sort dataList -&gt; INPLACE!!!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>key</strong> : function</p>
+<blockquote>
+<div><p>A function that is applied to all elements and the output is used for sorting.
+e.g.  ‘Temp’ or lambda a:a.Temp
+convenience: If key is attribut name this attribute is used</p>
+</div></blockquote>
+<p><strong>reverse</strong> : True, False</p>
+<blockquote class="last">
+<div><p>Normal or reverse order.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dlist</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="s1">&#39;q&#39;</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">dlist</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ee</span><span class="p">:</span><span class="n">ee</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="p">)</span>
+<span class="n">dlist</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ee</span><span class="p">:</span><span class="n">ee</span><span class="o">.</span><span class="n">temperatur</span> <span class="p">)</span>
+<span class="n">dlist</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ee</span><span class="p">:</span><span class="n">ee</span><span class="o">.</span><span class="n">Y</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="p">)</span>
+<span class="n">dlist</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ee</span><span class="p">:</span><span class="n">ee</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="p">)</span>
+<span class="n">dlist</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">ee</span><span class="p">:</span><span class="nb">getattr</span><span class="p">(</span><span class="n">ee</span><span class="p">,</span><span class="n">parname</span><span class="p">))</span>
+<span class="n">dlist</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="s1">&#39;parname&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="jscatter.dataarray.dataList.whoHasAttributes">
+<code class="descname">whoHasAttributes</code><a class="headerlink" href="#jscatter.dataarray.dataList.whoHasAttributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists which attribute is found in which element.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dictionary of attributes names: list of indices</p>
+<blockquote class="last">
+<div><p>keys are the attribute names
+values are indices of dataList where attr is existent</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/Jscatter.jpeg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">3. dataList</a><ul>
+<li><a class="reference internal" href="#attributes">3.1. Attributes</a></li>
+<li><a class="reference internal" href="#fitting">3.2. Fitting</a></li>
+<li><a class="reference internal" href="#housekeeping">3.3. Housekeeping</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="dataArray.html"
+                        title="previous chapter">2. dataArray</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="formel.html"
+                        title="next chapter">4. formel</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/dataList.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="formel.html" title="4. formel"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="dataArray.html" title="2. dataArray"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">jscatter 0.6.9 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2014, Ralf Biehl.
+      Last updated on Jan 27, 2018.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>
