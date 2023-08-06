@@ -1,0 +1,73 @@
+.. README generated with readmemako.py (github.com/russianidiot/readme-mako.py) and .README dotfiles (github.com/russianidiot-dotfiles/.README)
+
+
+.. image:: https://img.shields.io/badge/Language-Python-blue.svg?style=plastic
+	:target: none
+
+.. image:: https://img.shields.io/pypi/pyversions/gitconfig.svg
+	:target: https://pypi.org/pypi/gitconfig
+
+.. image:: https://img.shields.io/pypi/v/gitconfig.svg
+	:target: https://pypi.org/pypi/gitconfig
+
+|
+
+.. image:: https://api.codacy.com/project/badge/Grade/30814211057d4820a8a65bc75ecacc19
+	:target: https://www.codacy.com/app/russianidiot/gitconfig-py
+
+.. image:: https://codeclimate.com/github/russianidiot/gitconfig.py/badges/gpa.svg
+	:target: https://codeclimate.com/github/russianidiot/gitconfig.py
+
+.. image:: https://landscape.io/github/russianidiot/gitconfig.py/master/landscape.svg?style=flat
+	:target: https://landscape.io/github/russianidiot/gitconfig.py
+
+.. image:: https://scrutinizer-ci.com/g/russianidiot/gitconfig.py/badges/quality-score.png?b=master
+	:target: https://scrutinizer-ci.com/g/russianidiot/gitconfig.py/
+
+|
+
+
+
+
+Install
+```````
+
+
+.. code:: bash
+
+	`[sudo] pip install gitconfig`
+
+
+
+
+
+Usage
+`````
+
+
+.. code:: python
+
+	from gitconfig import *
+	
+	gitconfig.sections
+	>>> [...]
+	
+	gitconfig.user.password
+	>>> 'secret'
+	
+	gitconfig.not_existing
+	>>> None
+
+
+
+
+
+
+Feedback |github_follow| |github_issues|
+
+.. |github_follow| image:: https://img.shields.io/github/followers/russianidiot.svg?style=social&label=Follow
+	:target: https://github.com/russianidiot
+
+.. |github_issues| image:: https://img.shields.io/github/issues/russianidiot/gitconfig.py.svg
+	:target: https://github.com/russianidiot/gitconfig.py/issues
+
