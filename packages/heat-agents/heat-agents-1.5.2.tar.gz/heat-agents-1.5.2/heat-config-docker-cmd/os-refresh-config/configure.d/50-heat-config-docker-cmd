@@ -1,0 +1,62 @@
+#!/usr/bin/env python
+#
+# Licensed under the Apache License, Version 2.0 (the "License"); you may
+#    not use this file except in compliance with the License. You may obtain
+#    a copy of the License at
+#
+#         http://www.apache.org/licenses/LICENSE-2.0
+#
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+#    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+#    License for the specific language governing permissions and limitations
+#    under the License.
+
+import json
+import logging
+import os
+import sys
+
+import paunch
+
+CONF_FILE = os.environ.get('HEAT_SHELL_CONFIG',
+                           '/var/run/heat-config/heat-config')
+
+DOCKER_CMD = os.environ.get('HEAT_DOCKER_CMD', 'docker')
+
+
+log = None
+
+
+def main(argv=sys.argv):
+    global log
+    log = logging.getLogger('heat-config')
+    handler = logging.StreamHandler(sys.stderr)
+    handler.setFormatter(
+        logging.Formatter(
+            '[%(asctime)s] (%(name)s) [%(levelname)s] %(message)s'))
+    log.addHandler(handler)
+    log.setLevel('DEBUG')
+
+    if not os.path.exists(CONF_FILE):
+        log.warning('No config file %s' % CONF_FILE)
+        return 0
+
+    try:
+        configs = json.load(open(CONF_FILE))
+    except ValueError as e:
+        log.warning('Could not load config json: %s' % e)
+        return 0
+
+    cmd_config_ids = [c['id'] for c in configs
+                      if c['group'] == 'docker-cmd']
+
+    paunch.cleanup(
+        cmd_config_ids,
+        managed_by='docker-cmd',
+        docker_cmd=DOCKER_CMD
+    )
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))
