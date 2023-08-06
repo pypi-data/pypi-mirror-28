@@ -1,0 +1,34 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:genericsetup="http://namespaces.zope.org/genericsetup">
+
+  <adapter
+      factory=".profile.MarshallRegistryFileExportImportAdapter"
+      provides="Products.GenericSetup.interfaces.IFilesystemExporter"
+      for=".interfaces.IMarshallRegistry"
+      />
+
+  <adapter
+      factory=".profile.MarshallRegistryFileExportImportAdapter"
+      provides="Products.GenericSetup.interfaces.IFilesystemImporter"
+      for=".interfaces.IMarshallRegistry"
+      />
+
+  <genericsetup:registerProfile
+      name="default"
+      title="Marshaller"
+      directory="profiles/default"
+      description="Products.Marshall"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler=".profile.install_tool"
+      />
+
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="Uninstall Marshaller"
+      directory="profiles/uninstall"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      post_handler=".profile.uninstall_tool"
+      />
+
+</configure>
