@@ -1,0 +1,52 @@
+Metadata-Version: 2.0
+Name: zigate
+Version: 0.5.8
+Summary: python library for the zigate gateway (zigbee) http://zigate.fr
+Home-page: https://github.com/doudz/zigate
+Author: Sébastien RAMAGE
+Author-email: sebastien.ramage@gmail.com
+License: UNKNOWN
+Keywords: zigate zigbee python3
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3
+Requires-Dist: pyserial-asyncio
+Requires-Dist: pyudev
+
+# zigate
+python library for zigate http://zigate.fr/
+
+inspired by https://github.com/elric91/ZiGate
+
+
+Usage :
+
+```
+import zigate
+z = zigate.ZiGate(port=None) # Leave None to auto-discover the port
+print(z.get_version())
+
+# list devices
+z.list_devices()
+
+# start inclusion mode
+z.permit_join()
+```
+Wifi ZiGate:
+
+```
+import zigate
+z = zigate.ZiGateWiFi(host='192.168.0.10', port=9999)
+print(z.get_version())
+
+# list devices
+z.list_devices()
+
+# start inclusion mode
+z.permit_join()
+```
+
+
+
