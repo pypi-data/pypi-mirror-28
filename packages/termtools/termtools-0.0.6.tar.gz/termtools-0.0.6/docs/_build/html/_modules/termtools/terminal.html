@@ -1,0 +1,871 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>termtools.terminal &#8212; termtools 0.0.5 documentation</title>
+    <link rel="stylesheet" href="../../_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.0.5',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">termtools 0.0.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for termtools.terminal</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module exposes classes to control displaying text and progress bars at any place of the screen.</span>
+
+<span class="sd">The two main classes are TerminalController and ProgressBarController</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">typing</span> <span class="k">as</span> <span class="nn">t</span>
+
+
+<div class="viewcode-block" id="TerminalController"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController">[docs]</a><span class="k">class</span> <span class="nc">TerminalController</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A class for controlling where to print on a screen and the attributes of text to be printed.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Constructor.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="TerminalController.clear"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.clear">[docs]</a>    <span class="k">def</span> <span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            clears the screen</span>
+
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">home</span><span class="p">(</span><span class="n">erase_screen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TerminalController.home"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.home">[docs]</a>    <span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">erase_screen</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            gets the cursor to the top of the screen</span>
+
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">erase_screen</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[2J&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0;0H&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.goto"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.goto">[docs]</a>    <span class="k">def</span> <span class="nf">goto</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            goes to the specified x-y coordingates on the screen</span>
+
+<span class="sd">        :param x: x coordinate from the left to right</span>
+<span class="sd">        :param y: y coordinate from the top to bottom</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">255</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">255</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">255</span><span class="p">:</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">255</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">HORIZ</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">VERT</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># Plot the user_string at the starting at position HORIZ, VERT...</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[&quot;</span> <span class="o">+</span> <span class="n">VERT</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span> <span class="o">+</span> <span class="n">HORIZ</span> <span class="o">+</span> <span class="s2">&quot;f&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.printat"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.printat">[docs]</a>    <span class="k">def</span> <span class="nf">printat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">txt</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            goes to the specified x-y coordingates on the screen and prints the text.</span>
+
+<span class="sd">        :param x: x coordinate from the left to right</span>
+<span class="sd">        :param y: y coordinate from the top to bottom</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">255</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">255</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">255</span><span class="p">:</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">255</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">HORIZ</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">VERT</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+        <span class="c1"># Plot the user_string at the starting at position HORIZ, VERT...</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[&quot;</span> <span class="o">+</span> <span class="n">VERT</span> <span class="o">+</span> <span class="s2">&quot;;&quot;</span> <span class="o">+</span> <span class="n">HORIZ</span> <span class="o">+</span> <span class="s2">&quot;f&quot;</span> <span class="o">+</span> <span class="n">txt</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.up"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.up">[docs]</a>    <span class="k">def</span> <span class="nf">up</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            goes up the specified number of rows</span>
+
+<span class="sd">        :param n: The number of rows to go up (a negative number goes down)</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">down</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.down"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.down">[docs]</a>    <span class="k">def</span> <span class="nf">down</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            goes down the specified number of rows</span>
+
+<span class="sd">        :param n: The number of rows to go down (a negative number goes up)</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">up</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.left"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.left">[docs]</a>    <span class="k">def</span> <span class="nf">left</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            goes left the specified number of rows</span>
+
+<span class="sd">        :param n: The number of rows to go up (a negative number goes right)</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.right"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.right">[docs]</a>    <span class="k">def</span> <span class="nf">right</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            goes right the specified number of rows</span>
+
+<span class="sd">        :param n: The number of rows to go up (a negative number goes left)</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span><span class="p">(</span><span class="o">-</span><span class="n">n</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.bookmark"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.bookmark">[docs]</a>    <span class="k">def</span> <span class="nf">bookmark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            saves current cursor position</span>
+
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[s&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.goto_bookmark"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.goto_bookmark">[docs]</a>    <span class="k">def</span> <span class="nf">goto_bookmark</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            goes to current bookmarked position (must use bookmark() before it)</span>
+
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[u&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.eraseToEOL"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.eraseToEOL">[docs]</a>    <span class="k">def</span> <span class="nf">eraseToEOL</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            erases all text from currnt location to the end of the line</span>
+
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[K&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.eraseToBOL"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.eraseToBOL">[docs]</a>    <span class="k">def</span> <span class="nf">eraseToBOL</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            erases all text from currnt location to the beginning of the line</span>
+
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[1K&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.eraseLine"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.eraseLine">[docs]</a>    <span class="k">def</span> <span class="nf">eraseLine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            erases all text from currnt line</span>
+
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[2K&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.eraseUp"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.eraseUp">[docs]</a>    <span class="k">def</span> <span class="nf">eraseUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            erases all text from currnt line to the beginning of the screen</span>
+
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[1J&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.eraseDown"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.eraseDown">[docs]</a>    <span class="k">def</span> <span class="nf">eraseDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            erases all text from currnt line to the end of the screen</span>
+
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[J&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="c1"># TODO Add Tab control support (http://www.termsys.demon.co.uk/vtansi.htm)</span>
+
+<div class="viewcode-block" id="TerminalController.set_attributes"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.set_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">set_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;keep&quot;</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s2">&quot;keep&quot;</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="s2">&quot;keep&quot;</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            sets the text attributes to be used by new prints. a value of &quot;keep&quot; keeps the current set</span>
+
+<span class="sd">        :param color: one of [&#39;black&#39;,&#39;red&#39;,&#39;green&#39;,&#39;yellow&#39;,&#39;blue&#39;,&#39;magenta&#39;,&#39;cyan&#39;,&#39;white&#39;]</span>
+<span class="sd">        :param background: one of [&#39;black&#39;,&#39;red&#39;,&#39;green&#39;,&#39;yellow&#39;,&#39;blue&#39;,&#39;magenta&#39;,&#39;cyan&#39;,&#39;white&#39;]</span>
+<span class="sd">        :param attrib: one of [&#39;bright&#39;,&#39;dim&#39;,&#39;underscore&#39;,&#39;blink&#39;,&#39;reverse&#39;,&#39;hidden&#39;]</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">color</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">background</span> <span class="o">=</span> <span class="n">background</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">attrib</span> <span class="o">=</span> <span class="n">attrib</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">att</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">clrlst</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;yellow&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;magenta&#39;</span><span class="p">,</span> <span class="s1">&#39;cyan&#39;</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">]</span>
+        <span class="n">attlst</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bright&#39;</span><span class="p">,</span> <span class="s1">&#39;dim&#39;</span><span class="p">,</span> <span class="s1">&#39;underscore&#39;</span><span class="p">,</span> <span class="s1">&#39;blink&#39;</span><span class="p">,</span> <span class="s1">&#39;reverse&#39;</span><span class="p">,</span> <span class="s1">&#39;hidden&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">color</span> <span class="o">==</span> <span class="s2">&quot;keep&quot;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">clr</span> <span class="o">=</span> <span class="n">clrlst</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">clr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">clr</span> <span class="o">=</span> <span class="n">clr</span> <span class="o">+</span> <span class="mi">30</span>
+                <span class="n">att</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clr</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">background</span> <span class="o">==</span> <span class="s2">&quot;keep&quot;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">clr</span> <span class="o">=</span> <span class="n">clrlst</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">background</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">clr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">clr</span> <span class="o">=</span> <span class="n">clr</span> <span class="o">+</span> <span class="mi">40</span>
+                <span class="n">att</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clr</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">attrib</span> <span class="o">==</span> <span class="s2">&quot;keep&quot;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">clr</span> <span class="o">=</span> <span class="n">attlst</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">background</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">clr</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">clr</span> <span class="o">=</span> <span class="n">clr</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">att</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clr</span><span class="p">)</span>
+
+        <span class="n">to_print</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[&quot;</span>
+        <span class="n">nothingAdded</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">att</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">att</span><span class="p">:</span>
+            <span class="n">to_print</span> <span class="o">=</span> <span class="n">to_print</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;;&#39;</span>
+        <span class="k">if</span> <span class="n">nothingAdded</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="n">to_print</span> <span class="o">=</span> <span class="n">to_print</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">to_print</span> <span class="o">=</span> <span class="n">to_print</span> <span class="o">+</span> <span class="s2">&quot;m&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">to_print</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TerminalController.color"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.color">[docs]</a>    <span class="k">def</span> <span class="nf">color</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;keep&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            sets the text foreground color</span>
+
+<span class="sd">        :param color: one of [&#39;black&#39;,&#39;red&#39;,&#39;green&#39;,&#39;yellow&#39;,&#39;blue&#39;,&#39;magenta&#39;,&#39;cyan&#39;,&#39;white&#39;]</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_attributes</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TerminalController.set_foreground"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.set_foreground">[docs]</a>    <span class="k">def</span> <span class="nf">set_foreground</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;keep&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        sets the text foreground color</span>
+
+<span class="sd">        :param color: one of [&#39;black&#39;,&#39;red&#39;,&#39;green&#39;,&#39;yellow&#39;,&#39;blue&#39;,&#39;magenta&#39;,&#39;cyan&#39;,&#39;white&#39;]</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">                &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TerminalController.background"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.background">[docs]</a>    <span class="k">def</span> <span class="nf">background</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s1">&#39;keep&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            sets the text background color</span>
+
+<span class="sd">        :param background: one of [&#39;black&#39;,&#39;red&#39;,&#39;green&#39;,&#39;yellow&#39;,&#39;blue&#39;,&#39;magenta&#39;,&#39;cyan&#39;,&#39;white&#39;]</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_attributes</span><span class="p">(</span><span class="n">background</span><span class="o">=</span><span class="n">background</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TerminalController.set_background"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.set_background">[docs]</a>    <span class="k">def</span> <span class="nf">set_background</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="s1">&#39;keep&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            sets the text background color</span>
+
+<span class="sd">        :param background: one of [&#39;black&#39;,&#39;red&#39;,&#39;green&#39;,&#39;yellow&#39;,&#39;blue&#39;,&#39;magenta&#39;,&#39;cyan&#39;,&#39;white&#39;]</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="p">(</span><span class="n">background</span><span class="o">=</span><span class="n">background</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TerminalController.attrib"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.attrib">[docs]</a>    <span class="k">def</span> <span class="nf">attrib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="s1">&#39;keep&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            sets the text attributes</span>
+
+<span class="sd">        :param attrib: one of [&#39;bright&#39;,&#39;dim&#39;,&#39;underscore&#39;,&#39;blink&#39;,&#39;reverse&#39;,&#39;hidden&#39;]</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">set_attributes</span><span class="p">(</span><span class="n">attrib</span><span class="o">=</span><span class="n">attrib</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TerminalController.set_attribute"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.set_attribute">[docs]</a>    <span class="k">def</span> <span class="nf">set_attribute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attrib</span><span class="o">=</span><span class="s1">&#39;keep&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            sets the text attributes</span>
+
+<span class="sd">        :param attrib: one of [&#39;bright&#39;,&#39;dim&#39;,&#39;underscore&#39;,&#39;blink&#39;,&#39;reverse&#39;,&#39;hidden&#39;]</span>
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attrib</span><span class="p">(</span><span class="n">attrib</span><span class="o">=</span><span class="n">attrib</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TerminalController.reset_attributes"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.reset_attributes">[docs]</a>    <span class="k">def</span> <span class="nf">reset_attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            resets all text attributes to their defaults</span>
+
+<span class="sd">        :rtype: TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TerminalController.print"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.TerminalController.print">[docs]</a>    <span class="k">def</span> <span class="nf">print</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">print</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div></div>
+
+
+<div class="viewcode-block" id="humanize_time"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.humanize_time">[docs]</a><span class="k">def</span> <span class="nf">humanize_time</span><span class="p">(</span><span class="n">secs</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">always_show_all_units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Prints time that is given as seconds in human readable form. Useful only for times &gt;=1sec.</span>
+
+<span class="sd">    :param secs float: number of seconds</span>
+<span class="sd">    :param align bool, optional: whether to align outputs so that they all take the same size (not implemented)</span>
+<span class="sd">    :param always_show_all_units bool, optional: Whether to always show days, hours, and minutes even when they</span>
+<span class="sd">                                are zeros. default False</span>
+<span class="sd">    :return: str formated string with the humanized form</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">units</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;d&quot;</span><span class="p">,</span> <span class="mi">86400</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;h&quot;</span><span class="p">,</span> <span class="mi">3600</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="mi">60</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;s&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+    <span class="n">parts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">unit</span><span class="p">,</span> <span class="n">mul</span> <span class="ow">in</span> <span class="n">units</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">secs</span> <span class="o">/</span> <span class="n">mul</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">mul</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">always_show_all_units</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mul</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">secs</span> <span class="o">/</span> <span class="n">mul</span><span class="p">))</span>
+                <span class="n">secs</span> <span class="o">-=</span> <span class="n">n</span> <span class="o">*</span> <span class="n">mul</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="n">secs</span> <span class="k">if</span> <span class="n">secs</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">(</span><span class="n">secs</span><span class="p">)</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">secs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">align</span><span class="p">:</span>
+                <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%2d%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">parts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%2d%s%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">))</span>
+    <span class="k">return</span> <span class="s2">&quot;:&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="print_progress"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.print_progress">[docs]</a><span class="k">def</span> <span class="nf">print_progress</span><span class="p">(</span><span class="n">iteration</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">decimals</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">barLength</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">limit_range</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Call in a loop to create terminal progress bar</span>
+
+<span class="sd">    :param iteration int: current iteration</span>
+<span class="sd">    :param total int: total iterations</span>
+<span class="sd">    :param prefix str: prefix string</span>
+<span class="sd">    :param suffix str: suffix string</span>
+<span class="sd">    :param decimals int: positive number of decimals in percent complete</span>
+<span class="sd">    :param barLength int: character length of bar</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">total</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="k">if</span> <span class="n">iteration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">iteration</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">boundary_error</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">percent</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">decimals</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">formatStr</span> <span class="o">=</span> <span class="s2">&quot;{:&gt;6.&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">decimals</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;f}&quot;</span>
+        <span class="n">percent</span> <span class="o">=</span> <span class="n">formatStr</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">iteration</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">total</span><span class="p">)))</span>
+    <span class="n">filledLength</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">barLength</span> <span class="o">*</span> <span class="n">iteration</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">total</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">limit_range</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">filledLength</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">boundary_error</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">filledLength</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">filledLength</span> <span class="o">&gt;</span> <span class="n">barLength</span><span class="p">:</span>
+            <span class="n">boundary_error</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">filledLength</span> <span class="o">=</span> <span class="n">barLength</span>
+    <span class="n">bar</span> <span class="o">=</span> <span class="s1">&#39;#&#39;</span> <span class="o">*</span> <span class="n">filledLength</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">*</span> <span class="p">(</span><span class="n">barLength</span> <span class="o">-</span> <span class="n">filledLength</span><span class="p">)</span>  <span class="c1"># █</span>
+    <span class="k">if</span> <span class="n">decimals</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r\033</span><span class="s1">[2K</span><span class="si">%s</span><span class="s1"> |</span><span class="si">%s</span><span class="s1">| </span><span class="si">%s%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">percent</span><span class="p">,</span> <span class="s1">&#39;%&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r\033</span><span class="s1">[2K</span><span class="si">%s</span><span class="s1"> |</span><span class="si">%s</span><span class="s1">| </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">bar</span><span class="p">,</span> <span class="n">suffix</span><span class="p">))</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">boundary_error</span></div>
+
+
+<div class="viewcode-block" id="ProgressBarController"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController">[docs]</a><span class="k">class</span> <span class="nc">ProgressBarController</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A set of progress bars.</span>
+
+<span class="sd">    A set of progress bars with custom pre and post text. It is mostly useful when you have several running threads or</span>
+<span class="sd">    suprocesses and each needs its own bar. It allows prefixes and postfixes that can be changed using the following tags:</span>
+<span class="sd">    &lt;name&gt; bar name</span>
+<span class="sd">    &lt;remaining&gt; remaining time to completion estimate</span>
+<span class="sd">    &lt;activity&gt; An indicator that the process represented by the bar is active</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">_terminal</span> <span class="o">=</span> <span class="n">TerminalController</span><span class="p">()</span>
+    <span class="n">barNames</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">current</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">begTime</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">activityChars</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;.   &#39;</span><span class="p">,</span> <span class="s1">&#39; .  &#39;</span><span class="p">,</span> <span class="s1">&#39;  . &#39;</span><span class="p">,</span> <span class="s1">&#39;   .&#39;</span><span class="p">,</span> <span class="s1">&#39;  . &#39;</span><span class="p">,</span> <span class="s1">&#39; .  &#39;</span><span class="p">,</span> <span class="s1">&#39;.   &#39;</span><span class="p">]</span>
+    <span class="n">last_name_updated</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">last_i</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">last_n</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">running_color</span> <span class="o">=</span> <span class="s1">&#39;yellow&#39;</span>
+    <span class="n">running_background</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+    <span class="n">completed_color</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span>
+    <span class="n">completed_background</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+    <span class="n">over_complete_color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span>
+    <span class="n">over_complete_background</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+    <span class="n">under_complete_color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span>
+    <span class="n">under_complete_background</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">barNames</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">barLength</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">align_bars</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates the set of progress bars.</span>
+
+<span class="sd">        :param barNames: array_like: list of bar names</span>
+<span class="sd">        :param barLength: int: Length of bar in spaces on screen</span>
+<span class="sd">        :param align_bars: bool: whether or not to align all bars to start together and end together. Default True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">barNames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">barNames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">barNames</span> <span class="o">=</span> <span class="n">barNames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">barNames</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_timing</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">barLength</span> <span class="o">=</span> <span class="n">barLength</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">barNames</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activity</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">barNames</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">align_bars</span> <span class="o">=</span> <span class="n">align_bars</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_skip_rows</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">_indexOfBar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">barNames</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">return</span> <span class="n">b</span>
+
+<div class="viewcode-block" id="ProgressBarController.add_bar"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController.add_bar">[docs]</a>    <span class="k">def</span> <span class="nf">add_bar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">start_timing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a bar</span>
+
+<span class="sd">        Can control the name, starting progress (i) and total progress</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): name of bar</span>
+
+<span class="sd">        Kwargs:</span>
+<span class="sd">            i (int): current progress</span>
+<span class="sd">            n (int): total progress</span>
+<span class="sd">            start_timing (bool or None): Starts a timer for this bar, otherwise it uses the begTime member which</span>
+<span class="sd">                                        is common to all bars</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self</span>
+
+<span class="sd">        Remarks:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">barNames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">activity</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">begTime</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="k">if</span> <span class="n">start_timing</span>
+                            <span class="k">else</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">begTime</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                                  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">begTime</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                                  <span class="k">else</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProgressBarController.remove_bar"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController.remove_bar">[docs]</a>    <span class="k">def</span> <span class="nf">remove_bar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Removes a bar given its name</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): bar name</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indexOfBar</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">barNames</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">begTime</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activity</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProgressBarController.start_timing"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController.start_timing">[docs]</a>    <span class="k">def</span> <span class="nf">start_timing</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">forNames</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Starts timing for ETA calculation for the given bar names</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            forNames (str or None): The list of bar names. If None (Default), the beginning time of all bars is set to</span>
+<span class="sd">                                now</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">begTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">forNames</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">begTime</span> <span class="o">=</span> <span class="p">[</span><span class="n">begTime</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">barNames</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">forNames</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indexOfBar</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">begTime</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">begTime</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProgressBarController.set_progress"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController.set_progress">[docs]</a>    <span class="k">def</span> <span class="nf">set_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets progress for a specific bar, optionally setting its limit as well</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str):  bar name</span>
+<span class="sd">            i (int): current progress</span>
+<span class="sd">            n (int or None): Limit (optional)</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indexOfBar</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_name_updated</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_i</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_n</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProgressBarController.get_remaining_time"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController.get_remaining_time">[docs]</a>    <span class="k">def</span> <span class="nf">get_remaining_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets the time remaining till the end of execution (only an estimate)</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name: bar name</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: remaining time (ETA)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indexOfBar</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">current</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="k">if</span> <span class="n">current</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="n">remaining</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">begTime</span><span class="p">[</span><span class="n">b</span><span class="p">])</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">current</span> <span class="o">+</span> <span class="mf">0.0005</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">current</span> <span class="o">+</span> <span class="mf">0.0005</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">remaining</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_max_name_length</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">barNames</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="nb">len</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">10</span>
+        <span class="k">return</span> <span class="n">n</span>
+
+    <span class="k">def</span> <span class="nf">_replace_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="n">remaining</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_remaining_time</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">remaining</span> <span class="o">=</span> <span class="s1">&#39;ETA: unknown&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">remaining</span> <span class="o">=</span> <span class="s1">&#39;ETA: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">humanize_time</span><span class="p">(</span><span class="n">remaining</span><span class="p">,</span> <span class="n">align</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">always_show_all_units</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;{:&lt;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_max_name_length</span><span class="p">())</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+        <span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&lt;name&gt;&#39;</span><span class="p">,</span> <span class="n">fmt</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&lt;remaining&gt;&#39;</span><span class="p">,</span> <span class="n">remaining</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indexOfBar</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">input</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;&lt;activity&gt;&#39;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">activity</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">b</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">activity</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">activity</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">activity</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">activity</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">activityChars</span><span class="p">)</span>
+            <span class="nb">input</span> <span class="o">=</span> <span class="nb">input</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;&lt;activity&gt;&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">activityChars</span><span class="p">[</span><span class="n">activity</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">input</span>
+
+<div class="viewcode-block" id="ProgressBarController.activate"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController.activate">[docs]</a>    <span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Indicate that the given bar is active. If name is None, all bars are indicated to be active by progressing</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): bar name. If None is given then all bars are set to be active</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">barNames</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indexOfBar</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">b</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">activity</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">activity</span><span class="p">[</span><span class="n">b</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">activityChars</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProgressBarController.show"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&lt;name&gt;&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;&lt;remaining&gt;&#39;</span><span class="p">,</span> <span class="n">bar_length</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">from_line_beginning</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Shows a specific bar just in the current place on the screen. We should have a new line before it</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str or None): name of the bar</span>
+<span class="sd">            prefix (str): prefix to write before the bar (see the class doc string for possible tag values)</span>
+<span class="sd">            suffix (str): postfix (see prefix)</span>
+<span class="sd">            bar_length (int): Bar length, if less than zero then the current length set during creation of the bar or</span>
+<span class="sd">                        latest setting of its progess will be used.</span>
+<span class="sd">            from_line_beginning (bool): If true, a &#39;\r&#39; and flushing will be outputed to set the bar to the beginning</span>
+<span class="sd">                            of the line</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">(</span><span class="n">barname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span><span class="p">,</span> <span class="n">bar_length</span><span class="o">=</span><span class="n">bar_length</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indexOfBar</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span>
+            <span class="k">if</span> <span class="n">prefix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replace_tags</span><span class="p">(</span><span class="n">prefix</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">suffix</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_replace_tags</span><span class="p">(</span><span class="n">suffix</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">from_line_beginning</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\r</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+            <span class="k">if</span> <span class="n">c</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">under_complete_color</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">background</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">under_complete_background</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="mf">1.00001</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">over_complete_color</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">background</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">over_complete_background</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">c</span> <span class="o">&gt;</span> <span class="mf">0.99999999999</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">completed_color</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">background</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">completed_background</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">color</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">running_color</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">background</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">running_background</span><span class="p">)</span>
+
+            <span class="n">print_progress</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">[</span><span class="n">b</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span>
+                           <span class="p">,</span> <span class="n">barLength</span><span class="o">=</span><span class="n">bar_length</span> <span class="k">if</span> <span class="n">bar_length</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">barLength</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">reset_attributes</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProgressBarController.show_all"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController.show_all">[docs]</a>    <span class="k">def</span> <span class="nf">show_all</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">barname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">i</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clean_screen</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&lt;name&gt;&lt;activity&gt;&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;&lt;remaining&gt;&#39;</span><span class="p">,</span>
+                 <span class="n">bar_length</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">skip_rows</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shows a specific bar or all bars, possibly cleaning the screen.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            barname (str or None): name of the bar</span>
+<span class="sd">            i (int or None): optional progress value</span>
+<span class="sd">            n (int or None): optional maximum value for the bar</span>
+<span class="sd">            clean_screen (bool): Whether or not to clean the screen before drawing. Default is true</span>
+<span class="sd">            prefix (str): prefix to write before the bar (see the class doc string for possible tag values)</span>
+<span class="sd">            suffix (str): postfix (see prefix)</span>
+<span class="sd">            bar_length (int): Bar length, if less than zero then the current length set during creation of the bar or</span>
+<span class="sd">                        latest setting of its progess will be used.</span>
+<span class="sd">            skip_rows (int): the number of lines to skip between bars</span>
+<span class="sd">            from_line_beginning (bool): If true, a &#39;\r&#39; and flushing will be outputed to set the bar to the beginning</span>
+<span class="sd">                            of the line</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self</span>
+
+<span class="sd">        Remarks:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">clean_screen</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span><span class="o">.</span><span class="n">home</span><span class="p">()</span><span class="o">.</span><span class="n">left</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">barname</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_progress</span><span class="p">(</span><span class="n">barname</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_skip_rows</span> <span class="o">=</span> <span class="n">skip_rows</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">barNames</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span><span class="p">,</span> <span class="n">bar_length</span><span class="o">=</span><span class="n">bar_length</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">skip_rows</span><span class="p">):</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="k">def</span> <span class="nf">_indicateError</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="ProgressBarController.terminal"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController.terminal">[docs]</a>    <span class="k">def</span> <span class="nf">terminal</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TerminalController</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Gets the built-in `TerminalController` object</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            TerminalController</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span></div>
+
+<div class="viewcode-block" id="ProgressBarController.update"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="ow">or</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">i</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="n">t</span><span class="o">.</span><span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+               <span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&lt;name&gt;&lt;activity&gt;&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&lt;remaining&gt;&#39;</span><span class="p">,</span> <span class="n">bar_length</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the progress value of a given bar and shows all the bars in their relative positions</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): bar name</span>
+<span class="sd">            i (int or None): optional progress value</span>
+<span class="sd">            n (int or None): optional maximum value for the bar</span>
+<span class="sd">            clean_screen (bool): Whether or not to clean the screen before drawing. Default is true</span>
+<span class="sd">            prefix (str): prefix to write before the bar (see the class doc string for possible tag values)</span>
+<span class="sd">            suffix (str): postfix (see prefix)</span>
+<span class="sd">            bar_length (int): Bar length, if less than zero then the current length set during creation of the bar or</span>
+<span class="sd">                        latest setting of its progess will be used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_skip_rows</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">show_all</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span><span class="p">,</span> <span class="n">bar_length</span><span class="o">=</span><span class="n">bar_length</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name_updated</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_indicateError</span><span class="p">()</span>
+                    <span class="k">return</span> <span class="bp">self</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name_updated</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_i</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_n</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indexOfBar</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_indicateError</span><span class="p">()</span>
+                <span class="k">return</span> <span class="bp">self</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">n</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">set_progress</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+            <span class="n">loc</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_skip_rows</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">b</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">loc</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span><span class="p">,</span> <span class="n">bar_length</span><span class="o">=</span><span class="n">bar_length</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_skip_rows</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">barNames</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ProgressBarController.show_in_position"><a class="viewcode-back" href="../../termtools.html#termtools.terminal.ProgressBarController.show_in_position">[docs]</a>    <span class="k">def</span> <span class="nf">show_in_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&lt;name&gt;&lt;activity&gt;&#39;</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;&lt;remaining&gt;&#39;</span><span class="p">,</span> <span class="n">bar_length</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shows the named bar in its appropriate position without touching anything else in the screen</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            name (str): bar name</span>
+<span class="sd">            clean_screen (bool): Whether or not to clean the screen before drawing. Default is true</span>
+<span class="sd">            prefix (str): prefix to write before the bar (see the class doc string for possible tag values)</span>
+<span class="sd">            suffix (str): postfix (see prefix)</span>
+<span class="sd">            bar_length (int): Bar length, if less than zero then the current length set during creation of the bar or</span>
+<span class="sd">                        latest setting of its progress will be used.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            self</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_skip_rows</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_indicateError</span><span class="p">()</span>
+                <span class="k">return</span> <span class="bp">self</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name_updated</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_indicateError</span><span class="p">()</span>
+                    <span class="k">return</span> <span class="bp">self</span>
+                <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name_updated</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_indexOfBar</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_indicateError</span><span class="p">()</span>
+                <span class="k">return</span> <span class="bp">self</span>
+            <span class="n">loc</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_skip_rows</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">b</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">loc</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="n">suffix</span><span class="p">,</span> <span class="n">bar_length</span><span class="o">=</span><span class="n">bar_length</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_terminal</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">last_skip_rows</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">barNames</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="bp">self</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">pytest</span>
+
+    <span class="n">pytest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">termtools 0.0.5 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Yasser Mohammad.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>
