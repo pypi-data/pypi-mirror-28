@@ -1,0 +1,884 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>jscatter.mpl &#8212; jscatter 0.6.8 documentation</title>
+    <link rel="stylesheet" href="../../_static//default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.6.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jscatter 0.6.8 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for jscatter.mpl</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># written by Ralf Biehl at the Forschungszentrum Jülich ,</span>
+<span class="c1"># Jülich Center for Neutron Science 1 and Institute of Complex Systems 1</span>
+<span class="c1">#    jscatter is a program to read, analyse and plot data</span>
+<span class="c1">#    Copyright (C) 2015  Ralf Biehl</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is free software: you can redistribute it and/or modify</span>
+<span class="c1">#    it under the terms of the GNU General Public License as published by</span>
+<span class="c1">#    the Free Software Foundation, either version 3 of the License, or</span>
+<span class="c1">#    (at your option) any later version.</span>
+<span class="c1">#</span>
+<span class="c1">#    This program is distributed in the hope that it will be useful,</span>
+<span class="c1">#    but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="c1">#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="c1">#    GNU General Public License for more details.</span>
+<span class="c1">#</span>
+<span class="c1">#    You should have received a copy of the GNU General Public License</span>
+<span class="c1">#    along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+<span class="c1">#</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This is a rudimentary interface to matplotlib to use dataArrays easier.</span>
+<span class="sd">The standard way to use matplotlib is full available without using this module..</span>
+
+<span class="sd">The intention is to allow fast/easy plotting (one command to plot) with some convenience function in relation to dataArrays</span>
+<span class="sd">and in a non blocking mode of matplotlib.</span>
+<span class="sd">E.g. to include automatically the value of an attribute in the legend::</span>
+
+<span class="sd"> fig[0].Plot(mydataArray,legend=&#39;sqr=$qq &#39;,sy=[2,3,-1],li=0)</span>
+
+<span class="sd">With somehow shorter form to determine the marker (sy=symbol) and line (li)</span>
+<span class="sd">and allow plotting in one line. Matplotlib is quite slow and looks for me ugly (really not paper ready).</span>
+<span class="sd">For 2D plotting use xmgrace.</span>
+<span class="sd">For 3D plotting this will give some simple plot options (planned).</span>
+
+<span class="sd">* The new methods introduced all start with a big Letter to allow still the access of the original methods.</span>
+<span class="sd">* By indexing as the axes subplots can be accessed as figure[i] which is figure.axes[i].</span>
+<span class="sd">* Same for axes with lines figure[0][i] is figure.axes[0].lines[i].</span>
+
+<span class="sd">Example 1::</span>
+
+<span class="sd">    import jscatter as js</span>
+<span class="sd">    import numpy as np</span>
+<span class="sd">    i5=js.dL(js.examples.datapath+&#39;/iqt_1hho.dat&#39;)</span>
+<span class="sd">    p=js.mplot()</span>
+<span class="sd">    p[0].Plot(i5,sy=[-1,4,-1],li=1,legend=&#39;Q= $q&#39;)</span>
+<span class="sd">    p[0].Yaxis(scale=&#39;l&#39;)</span>
+<span class="sd">    p[0].Title(&#39;intermediate scattering function&#39;)</span>
+<span class="sd">    p[0].Legend()</span>
+<span class="sd">    p[0].Yaxis(label=&#39;I(Q,t)/I(Q,0)&#39;)</span>
+<span class="sd">    p[0].Xaxis(label=&#39;Q / 1/nm&#39;)</span>
+
+<span class="sd">Example 2::</span>
+
+<span class="sd">    import jscatter as js</span>
+<span class="sd">    import numpy as np</span>
+<span class="sd">    from matplotlib import pyplot</span>
+<span class="sd">    # use this</span>
+<span class="sd">    #fig=pyplot.figure(FigureClass=js.mpl.Figure)</span>
+<span class="sd">    # or</span>
+<span class="sd">    fig=js.mplot()</span>
+<span class="sd">    fig.Multi(2,1)</span>
+<span class="sd">    fig[0].SetView(0.1,0.25,0.8,0.7)</span>
+<span class="sd">    fig[1].SetView(0.1,0.09,0.8,0.15)</span>
+<span class="sd">    q=js.loglist(0.01,5,100)</span>
+<span class="sd">    aa=js.dA(np.c_[q,np.sin(q),0.1*np.cos(q)].T)</span>
+<span class="sd">    bb=js.dA(np.c_[q,q**2].T)</span>
+<span class="sd">    bb.qq=123</span>
+<span class="sd">    fig[0].Plot(aa,legend=&#39;sin&#39;,sy=2,li=3)</span>
+<span class="sd">    for pp in range(10):  fig[0].Plot(aa.X,aa.Y*pp,legend=&#39;sin&#39;,sy=[-1,8,-1,&#39;&#39;],li=0,markeredgewidth =1)</span>
+<span class="sd">    fig[1].Plot(bb,legend=&#39;sqr=$qq &#39;,sy=2,li=0)</span>
+<span class="sd">    fig[0].Title(&#39;test&#39;)</span>
+<span class="sd">    fig[0].Legend()</span>
+<span class="sd">    fig[1].Legend()</span>
+<span class="sd">    fig[0].Yaxis(label=&#39;y-axis&#39;)</span>
+<span class="sd">    fig[1].Yaxis(label=&#39;Residuals&#39;)</span>
+<span class="sd">    fig[1].Xaxis(label=&#39;x-axis&#39;)</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">reduce</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib</span>
+<span class="kn">from</span> <span class="nn">matplotlib.projections</span> <span class="k">import</span> <span class="n">register_projection</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span> 
+<span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="k">import</span> <span class="n">Line2D</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="k">import</span> <span class="n">Axes3D</span>
+<span class="kn">import</span> <span class="nn">matplotlib.cm</span> <span class="k">as</span> <span class="nn">cm</span>
+
+<span class="n">lineStyles</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="s1">&#39;--&#39;</span><span class="p">,</span><span class="s1">&#39;-.&#39;</span><span class="p">,</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+<span class="n">linecolors</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="s1">&#39;k&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="s1">&#39;g&#39;</span><span class="p">,</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="s1">&#39;m&#39;</span><span class="p">,</span><span class="s1">&#39;y&#39;</span><span class="p">,)</span>
+<span class="n">fillstyles</span> <span class="o">=</span> <span class="p">(</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span><span class="s1">&#39;full&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">,)</span>
+<span class="n">symboldefault</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">]</span>  <span class="c1"># type,size,facecolor,edgecolor</span>
+<span class="n">linedefault</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span>    <span class="c1"># type,size,color</span>
+
+<span class="c1">#: gracefactor to get same scaling as in grace set to 10</span>
+<span class="n">gf</span><span class="o">=</span><span class="mi">1</span>
+
+<span class="k">def</span> <span class="nf">_translate</span><span class="p">(</span><span class="n">axlen</span><span class="p">,</span><span class="n">kwargs</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function transforms a short description as [1,2,3] for symbol and line to matplotlib compatible arguments.</span>
+<span class="sd">    This allows a shorter description of the symbol and line formats.</span>
+<span class="sd">    Additionally the replacement of $parname in dataArray attributes is done.</span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#split some special keywords in kwargs</span>
+    <span class="k">if</span> <span class="s1">&#39;legend&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">legend</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;legend&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;legend&#39;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s1">&#39;le&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">legend</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;le&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;le&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">legend</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="s1">&#39;line&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">line</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;line&#39;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s1">&#39;li&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">line</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;li&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;li&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">line</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="s1">&#39;symbol&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">symbol</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;symbol&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;symbol&#39;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s1">&#39;sy&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">symbol</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;sy&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;sy&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">symbol</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s1">&#39;errorbar&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">errorbar</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;errorbar&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;errorbar&#39;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="s1">&#39;er&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">errorbar</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;er&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;er&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">errorbar</span><span class="o">=</span><span class="kc">None</span>
+    <span class="c1">#replace $attr by the value in data</span>
+    <span class="k">if</span> <span class="s1">&#39;$&#39;</span> <span class="ow">in</span> <span class="n">legend</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;_isdataArray&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">par</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">attr</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;$&#39;</span><span class="o">+</span><span class="n">par</span> <span class="ow">in</span> <span class="n">legend</span> <span class="ow">or</span> <span class="s1">&#39;$(&#39;</span><span class="o">+</span><span class="n">par</span><span class="o">+</span><span class="s1">&#39;)&#39;</span> <span class="ow">in</span> <span class="n">legend</span><span class="p">:</span>
+                <span class="c1"># noinspection PyBroadException</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">vall</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">par</span><span class="p">))</span><span class="o">.</span><span class="n">flatten</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">vall</span><span class="p">,(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)):</span>
+                        <span class="n">val</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%.4g</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">vall</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">val</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">vall</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="s1">&#39;$(&#39;</span><span class="o">+</span><span class="n">par</span><span class="o">+</span><span class="s1">&#39;)&#39;</span> <span class="ow">in</span> <span class="n">legend</span><span class="p">:</span>
+                        <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;$(&#39;</span><span class="o">+</span><span class="n">par</span><span class="o">+</span><span class="s1">&#39;)&#39;</span><span class="p">,</span><span class="n">val</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">legend</span><span class="o">=</span><span class="n">legend</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;$&#39;</span><span class="o">+</span><span class="n">par</span><span class="p">,</span><span class="n">val</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                        <span class="k">pass</span>
+    <span class="c1">#--------</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">symbol</span><span class="p">,(</span><span class="nb">int</span><span class="p">,</span><span class="nb">str</span><span class="p">)):</span>
+        <span class="n">symbol</span><span class="o">=</span><span class="p">[</span><span class="n">symbol</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">]</span> <span class="c1"># type,size,facecolor,edgecolor</span>
+    <span class="n">symbol</span><span class="o">=</span><span class="n">symbol</span><span class="o">+</span><span class="n">symboldefault</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">symbol</span><span class="p">):]</span>
+    <span class="c1"># symbol marker</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">symbol</span><span class="p">[</span><span class="mi">0</span><span class="p">],(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">symbol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span><span class="n">symbol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">axlen</span>
+        <span class="k">if</span> <span class="n">symbol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">symbol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">Line2D</span><span class="o">.</span><span class="n">filled_markers</span><span class="p">[</span><span class="nb">divmod</span><span class="p">(</span><span class="n">symbol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">Line2D</span><span class="o">.</span><span class="n">filled_markers</span><span class="p">))[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">symbol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+    <span class="c1"># symbol color</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">symbol</span><span class="p">[</span><span class="mi">2</span><span class="p">],(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">symbol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span><span class="n">symbol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">axlen</span>
+        <span class="k">if</span> <span class="n">symbol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">symbol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">linecolors</span><span class="p">[</span><span class="nb">divmod</span><span class="p">(</span><span class="n">symbol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">linecolors</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">symbol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">symbol</span><span class="p">[</span><span class="mi">3</span><span class="p">],(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">symbol</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span><span class="n">symbol</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">axlen</span>
+        <span class="k">if</span> <span class="n">symbol</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">symbol</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">linecolors</span><span class="p">[</span><span class="nb">divmod</span><span class="p">(</span><span class="n">symbol</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">linecolors</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">symbol</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">linecolors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># synchronize with facecolor</span>
+        <span class="n">symbol</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">=</span><span class="n">symbol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">,(</span><span class="nb">int</span><span class="p">,</span><span class="nb">str</span><span class="p">)):</span>
+        <span class="n">line</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="n">line</span><span class="p">]</span> <span class="c1"># type,size,color</span>
+    <span class="n">line</span><span class="o">=</span><span class="n">line</span><span class="o">+</span><span class="n">linedefault</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">):]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">],(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)):</span> <span class="c1"># type</span>
+        <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">axlen</span>
+        <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="n">lineStyles</span><span class="p">[</span><span class="nb">divmod</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">lineStyles</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">],(</span><span class="nb">int</span><span class="p">,</span><span class="nb">float</span><span class="p">)):</span> <span class="c1"># color</span>
+        <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">:</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">axlen</span>
+        <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">linecolors</span><span class="p">[</span><span class="nb">divmod</span><span class="p">(</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">linecolors</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+            <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">symbol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">!=</span><span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">symbol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">=</span><span class="n">line</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+    <span class="c1">#fmt=fmt,markersize=ssize, markerfacecolor=mfc,linewidth=lsize,label=legend</span>
+    <span class="k">for</span> <span class="n">opt</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;fmt&#39;</span><span class="p">,</span><span class="s1">&#39;markersize&#39;</span><span class="p">,</span><span class="s1">&#39;markerfacecolor&#39;</span><span class="p">,</span><span class="s1">&#39;markeredgecolor&#39;</span><span class="p">,</span><span class="s1">&#39;linewidth&#39;</span><span class="p">,</span><span class="s1">&#39;label&#39;</span><span class="p">,</span><span class="s1">&#39;elinewidth&#39;</span><span class="p">],</span>
+                       <span class="p">[</span><span class="n">symbol</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">+</span><span class="n">symbol</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">symbol</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">gf</span><span class="p">,</span><span class="n">symbol</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">symbol</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">line</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">legend</span><span class="p">,</span><span class="n">errorbar</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">opt</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">opt</span><span class="p">]</span><span class="o">=</span><span class="n">val</span>
+    <span class="k">return</span> <span class="n">kwargs</span>
+
+
+<div class="viewcode-block" id="paperAxes"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.paperAxes">[docs]</a><span class="k">class</span> <span class="nc">paperAxes</span><span class="p">(</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">axes</span><span class="o">.</span><span class="n">Axes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An Axes that default is close to paper quality output</span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">name</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span>
+    <span class="c1">#def __init__(self,*args,**kwargs):</span>
+    <span class="c1">#    super(matplotlib.axes.Axes, self).__init__(*args,**kwargs)</span>
+ 
+<div class="viewcode-block" id="paperAxes.SetView"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.paperAxes.SetView">[docs]</a>    <span class="k">def</span> <span class="nf">SetView</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">xmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">ymin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">xmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">ymax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        this sets the viewport coords.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xmin,xmax,ymin,ymax : float</span>
+<span class="sd">            view range</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_position</span><span class="p">([</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="o">-</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymax</span><span class="o">-</span><span class="n">ymin</span><span class="p">])</span>   <span class="c1"># [left, bottom, width, height]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+        
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="c1"># noinspection PyIncorrectDocstring</span>
+<div class="viewcode-block" id="paperAxes.Plot"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.paperAxes.Plot">[docs]</a>    <span class="k">def</span> <span class="nf">Plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">*</span><span class="n">datasets</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        plot dataArrays or array in matplotlib axes.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        datasets : dataArray, dataList,numpy array, lists of them</span>
+<span class="sd">            several of (comma separated) nonkeyword arguments or as list</span>
+<span class="sd">            if dimension of datasets is one a new Data object is created and plotted</span>
+<span class="sd">            see Notes below for error plots</span>
+<span class="sd">        symbol,sy : int, list of float</span>
+<span class="sd">            - [symbol,size,color,fillcolor,fillpattern] as [1,1,1,-1];</span>
+<span class="sd">            - single integer to chose symbol eg symbol=3;  symbol=0 switches off</span>
+<span class="sd">            - negative increments from last</span>
+<span class="sd">            - symbol =&gt; see Line2D.filled_markers</span>
+<span class="sd">            - size   =&gt;    size in pixel</span>
+<span class="sd">            - color  =&gt; int in sequence = wbgrcmyk</span>
+<span class="sd">            - fillcolor=None    see color</span>
+<span class="sd">            - fillpattern=None  0 empty, 1 full, ....test it</span>
+<span class="sd">        line,li : int, list of float or Line object</span>
+<span class="sd">            - [linestyle,linewidth,color] as [1,1,&#39;&#39;];</span>
+<span class="sd">            - negative increments</span>
+<span class="sd">            - single integer to chose linestyle line=1; line=0 switches of</span>
+<span class="sd">            - linestyle int   &#39;-&#39;,&#39;--&#39;,&#39;-.&#39;,&#39;:&#39;</span>
+<span class="sd">            - linewidth float increasing thickness</span>
+<span class="sd">            - color        see symbol color</span>
+<span class="sd">        legend,le : string</span>
+<span class="sd">            - determines legend for all datasets</span>
+<span class="sd">            - string replacement: attr name prepended by &#39;$&#39; (eg. &#39;$par&#39;)</span>
+<span class="sd">              is replaced by value str(par1.flatten()[0]) if possible.</span>
+<span class="sd">              $(par) for not unique names</span>
+<span class="sd">        errorbar,er : float</span>
+<span class="sd">            - errorbar thickness, zero is no errorbar</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># concat dataList&#39;s</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">alltrue</span><span class="p">([</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">dset</span><span class="p">,</span><span class="s1">&#39;_isdataList&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">dset</span><span class="p">,</span><span class="s1">&#39;_isdataArray&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">dset</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]):</span>
+            <span class="n">datasets</span><span class="o">=</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">:</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="p">,</span><span class="n">datasets</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">alltrue</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">dset</span><span class="p">)</span><span class="o">==</span><span class="mi">1</span> <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]):</span>
+            <span class="n">shape0</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">dset</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">dset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">shape0</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">shape0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">==</span><span class="nb">len</span><span class="p">(</span><span class="n">shape0</span><span class="p">):</span>
+                <span class="n">datasets</span><span class="o">=</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">datasets</span><span class="p">)]</span>
+        <span class="c1"># self.lines is updated only after show so we need to count explicitly</span>
+        <span class="n">nlines</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">)</span>
+        <span class="n">showerr</span><span class="o">=</span><span class="kc">True</span>
+        <span class="k">if</span> <span class="s1">&#39;comment&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span> <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;comment&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;errorbar&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;errorbar&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span> <span class="n">showerr</span><span class="o">=</span><span class="kc">False</span>
+        <span class="k">elif</span> <span class="s1">&#39;er&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;er&#39;</span><span class="p">]</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>       <span class="n">showerr</span><span class="o">=</span><span class="kc">False</span>
+        <span class="k">for</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;_isdataArray&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;_iey&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">showerr</span><span class="p">:</span>
+                    <span class="n">yerr</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">eY</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">yerr</span><span class="o">=</span><span class="kc">None</span>
+                <span class="n">nkwargs</span><span class="o">=</span><span class="n">_translate</span><span class="p">(</span><span class="n">nlines</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">data</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="n">yerr</span><span class="p">,</span><span class="o">**</span><span class="n">nkwargs</span><span class="p">)</span>
+                <span class="n">nlines</span><span class="o">+=</span><span class="mi">1</span>
+            <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;_isdataList&#39;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">da</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;_iey&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">showerr</span><span class="p">:</span>
+                        <span class="n">yerr</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">eY</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">yerr</span><span class="o">=</span><span class="kc">None</span>
+                    <span class="n">nkwargs</span><span class="o">=</span><span class="n">_translate</span><span class="p">(</span><span class="n">nlines</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span><span class="n">da</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">da</span><span class="o">.</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="n">da</span><span class="o">.</span><span class="n">Y</span><span class="p">,</span><span class="n">yerr</span><span class="o">=</span><span class="n">yerr</span><span class="p">,</span><span class="o">**</span><span class="n">nkwargs</span><span class="p">)</span>
+                    <span class="n">nlines</span><span class="o">+=</span><span class="mi">1</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">showerr</span><span class="p">:</span>
+                    <span class="c1"># noinspection PyBroadException</span>
+                    <span class="k">try</span> <span class="p">:</span>
+                        <span class="n">yerr</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="n">yerr</span><span class="o">=</span><span class="kc">None</span>
+                <span class="n">nkwargs</span><span class="o">=</span><span class="n">_translate</span><span class="p">(</span><span class="n">nlines</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">y</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">yerr</span><span class="o">=</span><span class="n">yerr</span><span class="p">,</span><span class="o">**</span><span class="n">nkwargs</span><span class="p">)</span>
+                <span class="n">nlines</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="paperAxes.Yaxis"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.paperAxes.Yaxis">[docs]</a>    <span class="k">def</span> <span class="nf">Yaxis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="nb">min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="nb">max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        set Yaxis</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : string</span>
+<span class="sd">            label</span>
+<span class="sd">        scale : &#39;log&#39;, &#39;normal&#39;</span>
+<span class="sd">        min,max : float</span>
+<span class="sd">            min and max of scale</span>
+<span class="sd">        kwargs : kwargs of axes.set_xscale</span>
+<span class="sd">            any given kwarg overrides the previous</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span><span class="nb">max</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;l&#39;</span><span class="p">:</span>
+                <span class="n">val</span><span class="o">=</span><span class="s1">&#39;log&#39;</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nonposx&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;clip&#39;</span>
+            <span class="k">elif</span>  <span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;n&#39;</span><span class="p">:</span>
+                <span class="n">val</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span>
+            <span class="k">if</span> <span class="s1">&#39;subsy&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;subsy&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="n">val</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+        
+<div class="viewcode-block" id="paperAxes.Xaxis"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.paperAxes.Xaxis">[docs]</a>    <span class="k">def</span> <span class="nf">Xaxis</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="nb">min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="nb">max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        set Xaxis</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : string</span>
+<span class="sd">            label</span>
+<span class="sd">        scale : &#39;log&#39;, &#39;normal&#39;</span>
+<span class="sd">        min,max : float</span>
+<span class="sd">            min and max of scale</span>
+<span class="sd">        kwargs : kwargs of axes.set_xscale</span>
+<span class="sd">            any given kwarg overrides the previous</span>
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">label</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="nb">min</span><span class="p">,</span><span class="nb">max</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;l&#39;</span><span class="p">:</span>
+                <span class="n">val</span><span class="o">=</span><span class="s1">&#39;log&#39;</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;nonposx&#39;</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;clip&#39;</span>
+            <span class="k">elif</span>  <span class="n">scale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;n&#39;</span><span class="p">:</span>
+                <span class="n">val</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span>
+            <span class="k">if</span> <span class="s1">&#39;subsx&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;subsx&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="n">val</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="paperAxes.Resetlast"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.paperAxes.Resetlast">[docs]</a>    <span class="k">def</span> <span class="nf">Resetlast</span><span class="p">(</span><span class="bp">self</span><span class="p">,):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="paperAxes.Legend"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.paperAxes.Legend">[docs]</a>    <span class="k">def</span> <span class="nf">Legend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set axis legend; see Figure.legend</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;charsize&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fontsize&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;charsize&#39;</span><span class="p">]</span><span class="o">*</span><span class="mf">10.</span>
+            <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;charsize&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;fontsize&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;fontsize&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">12</span>
+        <span class="k">if</span> <span class="s1">&#39;labelspacing&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;labelspacing&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">0.2</span>
+        <span class="k">if</span> <span class="s1">&#39;loc&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;loc&#39;</span><span class="p">]</span><span class="o">=</span><span class="mi">2</span> <span class="c1"># upper left</span>
+        <span class="n">x</span><span class="o">=</span><span class="kc">None</span>
+        <span class="n">y</span><span class="o">=</span><span class="kc">None</span>
+        <span class="k">if</span><span class="s1">&#39;x&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="p">:</span>
+            <span class="n">x</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+            <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;y&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="p">:</span>
+            <span class="n">y</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+            <span class="k">del</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;bbox_to_anchor&#39;</span><span class="p">]</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">)</span> <span class="c1"># upper left</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="paperAxes.Title"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.paperAxes.Title">[docs]</a>    <span class="k">def</span> <span class="nf">Title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">title</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;set Axes title&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="paperAxes.Subtitle"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.paperAxes.Subtitle">[docs]</a>    <span class="k">def</span> <span class="nf">Subtitle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">subtitle</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Append subtitle to title</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">subtitle</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_title</span><span class="p">()</span><span class="o">+</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">+</span><span class="n">subtitle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">subtitle</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="paperAxes.Clear"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.paperAxes.Clear">[docs]</a>    <span class="k">def</span> <span class="nf">Clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clear content of this axes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div></div>
+
+<span class="c1"># register that it can be used as other Axes</span>
+<span class="n">register_projection</span><span class="p">(</span><span class="n">paperAxes</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Figure"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.Figure">[docs]</a><span class="k">class</span> <span class="nc">Figure</span><span class="p">(</span><span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">opt</span><span class="p">,</span><span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;facecolor&#39;</span><span class="p">,</span><span class="s1">&#39;frameon&#39;</span><span class="p">,</span><span class="s1">&#39;facecolor&#39;</span><span class="p">,</span><span class="s1">&#39;edgecolor&#39;</span><span class="p">],[</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">opt</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="p">[</span><span class="n">opt</span><span class="p">]</span><span class="o">=</span><span class="n">val</span>
+        <span class="n">matplotlib</span><span class="o">.</span><span class="n">figure</span><span class="o">.</span><span class="n">Figure</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span><span class="p">)</span>
+        <span class="n">lastsymbol</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">lastline</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">lasterror</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span>
+        
+<div class="viewcode-block" id="Figure.Multi"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.Figure.Multi">[docs]</a>    <span class="k">def</span> <span class="nf">Multi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates multiple subplots on grid n,m. with projection &quot;paperAxes&quot;.</span>
+
+<span class="sd">        Subplots can be accesses as fig[i]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">delaxes</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
+        <span class="n">nn</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ni</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">mi</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span> 
+                <span class="n">nn</span><span class="o">+=</span><span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">n</span><span class="p">,</span><span class="n">m</span><span class="p">,</span><span class="n">nn</span><span class="p">,</span><span class="n">projection</span><span class="o">=</span><span class="s1">&#39;paper&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+    
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    
+<div class="viewcode-block" id="Figure.Clear"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.Figure.Clear">[docs]</a>    <span class="k">def</span> <span class="nf">Clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clear content of all axes</span>
+
+<span class="sd">        to clear axes use fig.clear()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Figure.Save"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.Figure.Save">[docs]</a>    <span class="k">def</span> <span class="nf">Save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">,</span><span class="nb">format</span><span class="p">,</span><span class="n">size</span><span class="p">,</span><span class="n">dpi</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Save with filename</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Figure.is_open"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.Figure.is_open">[docs]</a>    <span class="k">def</span> <span class="nf">is_open</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Is the figure window still open.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">fignum_exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">number</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Figure.Exit"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.Figure.Exit">[docs]</a>    <span class="k">def</span> <span class="nf">Exit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="Figure.Close"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.Figure.Close">[docs]</a>    <span class="k">def</span> <span class="nf">Close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close the figure</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pyplot</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
+   
+<div class="viewcode-block" id="mplot"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.mplot">[docs]</a><span class="k">def</span> <span class="nf">mplot</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Open matplotlib figure in interactive mode.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pyplot figure</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">     - By indexing as the axes subplots can be accessed as figure[i] which is figure.axes[i].</span>
+<span class="sd">     - Same for axes with lines figure[0][i] is figure.axes[0].lines[i].</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pyplot</span><span class="o">.</span><span class="n">ion</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">=</span><span class="n">pyplot</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">FigureClass</span><span class="o">=</span><span class="n">Figure</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="regrid"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.regrid">[docs]</a><span class="k">def</span> <span class="nf">regrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">xdim</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make a meshgrid from XYZ data columns.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x,y,z : arary like</span>
+<span class="sd">        Array like data should be quadratic or rectangular.</span>
+<span class="sd">    xdim : None, shape of first x dimension</span>
+<span class="sd">        If None the number of unique values in x is used as first dimension</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        2dim arrays for x,y,z</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">xdim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">xdim</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">try</span><span class="p">:</span><span class="n">xx</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xdim</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span><span class="n">xx</span><span class="o">=</span><span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span><span class="n">yy</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xdim</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span><span class="n">yy</span><span class="o">=</span><span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span><span class="n">zz</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">xdim</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span><span class="n">zz</span><span class="o">=</span><span class="kc">None</span>
+    <span class="k">return</span> <span class="n">xx</span><span class="p">,</span><span class="n">yy</span><span class="p">,</span><span class="n">zz</span></div>
+
+<div class="viewcode-block" id="surface"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.surface">[docs]</a><span class="k">def</span> <span class="nf">surface</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">xdim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">levels</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">colorMap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">lineMap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Surface plot of x,y,z, data</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x,y,z : array</span>
+<span class="sd">        Data as array</span>
+<span class="sd">    xdim : integer</span>
+<span class="sd">        First dimension of x</span>
+<span class="sd">    levels : integer, array</span>
+<span class="sd">        Levels for contour lines as number of levels or array of specific values.</span>
+<span class="sd">    colorMap : string</span>
+<span class="sd">        Color map name, see showColors.</span>
+<span class="sd">    lineMap : string</span>
+<span class="sd">        Color name for contour lines</span>
+<span class="sd">            b: blue</span>
+<span class="sd">            g: green</span>
+<span class="sd">            r: red</span>
+<span class="sd">            c: cyan</span>
+<span class="sd">            m: magenta</span>
+<span class="sd">            y: yellow</span>
+<span class="sd">            k: black</span>
+<span class="sd">            w: white</span>
+<span class="sd">    alpha : float [0,1], default 0.7</span>
+<span class="sd">        Transparency of surface</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        figure</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="o">=</span><span class="n">regrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">xdim</span><span class="p">)</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colorMap</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lmap</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">lineMap</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">lmap</span><span class="o">=</span><span class="n">lineMap</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+    <span class="n">surf</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">plot_surface</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span><span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">antialiased</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">contour</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">contour3D</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">Y</span><span class="p">,</span><span class="n">Z</span><span class="p">,</span><span class="n">levels</span><span class="p">,</span><span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">lmap</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">contour</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contour3D</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">,</span> <span class="n">Z</span><span class="p">,</span> <span class="n">levels</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">colors</span><span class="o">=</span><span class="n">lmap</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">x</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">)])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">y</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">y</span><span class="p">)])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">([</span><span class="nb">min</span><span class="p">(</span><span class="n">z</span><span class="p">),</span><span class="nb">max</span><span class="p">(</span><span class="n">z</span><span class="p">)])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;X axis&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Y axis&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Z axis&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">surf</span><span class="p">,</span><span class="n">shrink</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span> <span class="c1"># note that colorbar is a method of the figure, not the axes</span>
+    <span class="n">pyplot</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="scatter3d"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.scatter3d">[docs]</a><span class="k">def</span> <span class="nf">scatter3d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span> <span class="n">pointsize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Scatter plot of X,Y,Z data</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x,y,z : arrays</span>
+<span class="sd">        Data</span>
+<span class="sd">    pointsize : float</span>
+<span class="sd">        Size of points</span>
+<span class="sd">    color : string</span>
+<span class="sd">        Colors for points</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        figure</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1">#cmap = pyplot.get_cmap(colorMap)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;3d&#39;</span><span class="p">)</span>
+    <span class="n">sc</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="n">pointsize</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">)</span>
+    <span class="n">mi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">([</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">])</span>
+    <span class="n">ma</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span><span class="n">ma</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span><span class="n">ma</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">(</span><span class="n">mi</span><span class="p">,</span><span class="n">ma</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;X axis&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Y axis&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s1">&#39;Z axis&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+    <span class="n">pyplot</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="c1">#fig.colorbar(scatter ,shrink=0.8) # note that colorbar is a method of the figure, not the axes</span>
+    <span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="contourImage"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.contourImage">[docs]</a><span class="k">def</span> <span class="nf">contourImage</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">xdim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">levels</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span><span class="n">colorMap</span><span class="o">=</span><span class="s1">&#39;jet&#39;</span><span class="p">,</span><span class="n">lineMap</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Image with contour lines of x,y,z arrays with ndim=1 or 2.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x,y,z : arrays</span>
+<span class="sd">        x,y,z coordinates for z display</span>
+<span class="sd">    xdim : int</span>
+<span class="sd">        If x,y,z are one dimensional xdim is dimension of first axis of x,y,z</span>
+<span class="sd">        If None the number of unique values in x is used</span>
+<span class="sd">    levels : in, sequence of values</span>
+<span class="sd">        Number of contour lines between min and max or sequence of specific values.</span>
+<span class="sd">    colorMap : string</span>
+<span class="sd">        Get a colormap instance from name.</span>
+<span class="sd">        Standard mpl colormap name (see Notes).</span>
+<span class="sd">    lineMap : string</span>
+<span class="sd">        Label color</span>
+<span class="sd">        Colormap name as in colorMap, otherwise as cs in in Axes.clabel</span>
+<span class="sd">        * if None, the color of each label matches the color of the corresponding contour</span>
+<span class="sd">        * if one string color, e.g., colors = ‘r’ or colors = ‘red’, all labels will be plotted in this color</span>
+<span class="sd">        * if a tuple of matplotlib color args (string, float, rgb, etc), different labels will be plotted in different colors in the order specified</span>
+<span class="sd">    fontsize : int</span>
+<span class="sd">        Size of line labels in pixel</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">        figure</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Colormaps Names</span>
+<span class="sd">     Accent, Accent_r, Blues, Blues_r, BrBG, BrBG_r, BuGn, BuGn_r, BuPu, BuPu_r,</span>
+<span class="sd">     CMRmap, CMRmap_r, Dark2, Dark2_r, GnBu, GnBu_r, Greens, Greens_r, Greys,</span>
+<span class="sd">     Greys_r, OrRd, OrRd_r, Oranges, Oranges_r, PRGn, PRGn_r, Paired, Paired_r,</span>
+<span class="sd">     Pastel1, Pastel1_r, Pastel2, Pastel2_r, PiYG, PiYG_r, PuBu, PuBuGn,</span>
+<span class="sd">     PuBuGn_r, PuBu_r, PuOr, PuOr_r, PuRd, PuRd_r, Purples, Purples_r,</span>
+<span class="sd">     RdBu, RdBu_r, RdGy, RdGy_r, RdPu, RdPu_r, RdYlBu, RdYlBu_r, RdYlGn,</span>
+<span class="sd">     RdYlGn_r, Reds, Reds_r, Set1, Set1_r, Set2, Set2_r, Set3, Set3_r,</span>
+<span class="sd">     Spectral, Spectral_r, Vega10, Vega10_r, Vega20, Vega20_r, Vega20b,</span>
+<span class="sd">     Vega20b_r, Vega20c, Vega20c_r, Wistia, Wistia_r, YlGn, YlGnBu, YlGnBu_r,</span>
+<span class="sd">     YlGn_r, YlOrBr, YlOrBr_r, YlOrRd, YlOrRd_r, afmhot, afmhot_r, autumn,</span>
+<span class="sd">     autumn_r, binary, binary_r, bone, bone_r, brg, brg_r, bwr, bwr_r, cool,</span>
+<span class="sd">     cool_r, coolwarm, coolwarm_r, copper, copper_r, cubehelix, cubehelix_r,</span>
+<span class="sd">     flag, flag_r, gist_earth, gist_earth_r, gist_gray, gist_gray_r, gist_heat,</span>
+<span class="sd">     gist_heat_r, gist_ncar, gist_ncar_r, gist_rainbow, gist_rainbow_r, gist_stern,</span>
+<span class="sd">     gist_stern_r, gist_yarg, gist_yarg_r, gnuplot, gnuplot2, gnuplot2_r, gnuplot_r,</span>
+<span class="sd">     gray, gray_r, hot, hot_r, hsv, hsv_r, inferno, inferno_r, jet, jet_r, magma,</span>
+<span class="sd">     magma_r, nipy_spectral, nipy_spectral_r, ocean, ocean_r, pink, pink_r, plasma,</span>
+<span class="sd">     plasma_r, prism, prism_r, rainbow, rainbow_r, seismic, seismic_r, spectral,</span>
+<span class="sd">     spectral_r, spring, spring_r, summer, summer_r, tab10, tab10_r, tab20, tab20_r,</span>
+<span class="sd">     tab20b, tab20b_r, tab20c, tab20c_r, terrain, terrain_r, viridis, viridis_r,</span>
+<span class="sd">     winter, winter_r</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">:</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="o">=</span><span class="n">regrid</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">z</span><span class="p">,</span><span class="n">xdim</span><span class="p">)</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">colorMap</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">lmap</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">lineMap</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="n">lmap</span><span class="o">=</span><span class="n">lineMap</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">)</span> <span class="c1"># drawing the function</span>
+    <span class="c1"># adding the Contour lines with labels</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">im</span><span class="o">.</span><span class="n">cset</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">levels</span><span class="p">,</span><span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">cmap</span><span class="o">=</span><span class="n">lmap</span><span class="p">)</span>
+        <span class="n">im</span><span class="o">.</span><span class="n">labels</span><span class="o">=</span><span class="n">pyplot</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">cset</span><span class="p">,</span><span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%1.1f</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="n">im</span><span class="o">.</span><span class="n">cset</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">contour</span><span class="p">(</span><span class="n">z</span><span class="p">,</span><span class="n">levels</span><span class="p">,</span> <span class="n">linewidths</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">im</span><span class="o">.</span><span class="n">labels</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">clabel</span><span class="p">(</span><span class="n">im</span><span class="o">.</span><span class="n">cset</span><span class="p">,</span> <span class="n">inline</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%1.1f</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span><span class="n">colors</span><span class="o">=</span><span class="n">lmap</span><span class="p">)</span>
+    <span class="n">im</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;X axis&#39;</span><span class="p">)</span>
+    <span class="n">im</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Y axis&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">)</span> <span class="c1"># note that colorbar is a method of the figure, not the axes</span>
+
+    <span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span></div>
+
+<div class="viewcode-block" id="showColors"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.showColors">[docs]</a><span class="k">def</span> <span class="nf">showColors</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a list of the colormaps in matplotlib.</span>
+
+<span class="sd">    Ignore the ones that end with &#39;_r&#39; because these are</span>
+<span class="sd">    simply reversed versions of ones that don&#39;t end with &#39;_r&#39;</span>
+
+<span class="sd">    Colormaps Names</span>
+<span class="sd">     Accent, Accent_r, Blues, Blues_r, BrBG, BrBG_r, BuGn, BuGn_r, BuPu, BuPu_r,</span>
+<span class="sd">     CMRmap, CMRmap_r, Dark2, Dark2_r, GnBu, GnBu_r, Greens, Greens_r, Greys,</span>
+<span class="sd">     Greys_r, OrRd, OrRd_r, Oranges, Oranges_r, PRGn, PRGn_r, Paired, Paired_r,</span>
+<span class="sd">     Pastel1, Pastel1_r, Pastel2, Pastel2_r, PiYG, PiYG_r, PuBu, PuBuGn,</span>
+<span class="sd">     PuBuGn_r, PuBu_r, PuOr, PuOr_r, PuRd, PuRd_r, Purples, Purples_r,</span>
+<span class="sd">     RdBu, RdBu_r, RdGy, RdGy_r, RdPu, RdPu_r, RdYlBu, RdYlBu_r, RdYlGn,</span>
+<span class="sd">     RdYlGn_r, Reds, Reds_r, Set1, Set1_r, Set2, Set2_r, Set3, Set3_r,</span>
+<span class="sd">     Spectral, Spectral_r, Vega10, Vega10_r, Vega20, Vega20_r, Vega20b,</span>
+<span class="sd">     Vega20b_r, Vega20c, Vega20c_r, Wistia, Wistia_r, YlGn, YlGnBu, YlGnBu_r,</span>
+<span class="sd">     YlGn_r, YlOrBr, YlOrBr_r, YlOrRd, YlOrRd_r, afmhot, afmhot_r, autumn,</span>
+<span class="sd">     autumn_r, binary, binary_r, bone, bone_r, brg, brg_r, bwr, bwr_r, cool,</span>
+<span class="sd">     cool_r, coolwarm, coolwarm_r, copper, copper_r, cubehelix, cubehelix_r,</span>
+<span class="sd">     flag, flag_r, gist_earth, gist_earth_r, gist_gray, gist_gray_r, gist_heat,</span>
+<span class="sd">     gist_heat_r, gist_ncar, gist_ncar_r, gist_rainbow, gist_rainbow_r, gist_stern,</span>
+<span class="sd">     gist_stern_r, gist_yarg, gist_yarg_r, gnuplot, gnuplot2, gnuplot2_r, gnuplot_r,</span>
+<span class="sd">     gray, gray_r, hot, hot_r, hsv, hsv_r, inferno, inferno_r, jet, jet_r, magma,</span>
+<span class="sd">     magma_r, nipy_spectral, nipy_spectral_r, ocean, ocean_r, pink, pink_r, plasma,</span>
+<span class="sd">     plasma_r, prism, prism_r, rainbow, rainbow_r, seismic, seismic_r, spectral,</span>
+<span class="sd">     spectral_r, spring, spring_r, summer, summer_r, tab10, tab10_r, tab20, tab20_r,</span>
+<span class="sd">     tab20b, tab20b_r, tab20c, tab20c_r, terrain, terrain_r, viridis, viridis_r,</span>
+<span class="sd">     winter, winter_r</span>
+
+<span class="sd">    From</span>
+<span class="sd">    https://matplotlib.org/1.2.1/examples/pylab_examples/show_colormaps.html</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">a</span><span class="p">,</span><span class="n">a</span><span class="p">))</span>
+    <span class="c1"># Get a list of the colormaps in matplotlib.  Ignore the ones that end with</span>
+    <span class="c1"># &#39;_r&#39; because these are simply reversed versions of ones that don&#39;t end</span>
+    <span class="c1"># with &#39;_r&#39;</span>
+    <span class="n">maps</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">datad</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">m</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_r&quot;</span><span class="p">))</span>
+    <span class="n">nmaps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">maps</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="c1">#</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.99</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">maps</span><span class="p">):</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">pyplot</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">nmaps</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">pyplot</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;off&quot;</span><span class="p">)</span>
+        <span class="n">pyplot</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s1">&#39;auto&#39;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">pyplot</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">m</span><span class="p">),</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_position</span><span class="p">()</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">m</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">)</span>
+    <span class="c1">#</span>
+    <span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">block</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="test"><a class="viewcode-back" href="../../mpl.html#jscatter.mpl.test">[docs]</a><span class="k">def</span> <span class="nf">test</span><span class="p">(</span><span class="n">keepopen</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A small test if this is working</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="kn">import</span> <span class="nn">jscatter</span> <span class="k">as</span> <span class="nn">js</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+    <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">pyplot</span>
+    <span class="c1"># use this</span>
+    <span class="c1">#fig=pyplot.figure(FigureClass=js.mpl.Figure)</span>
+    <span class="c1"># or</span>
+    <span class="n">fig</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">mplot</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">Multi</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">SetView</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.25</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.9</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">SetView</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="mf">0.09</span><span class="p">,</span><span class="mf">0.8</span><span class="p">,</span><span class="mf">0.20</span><span class="p">)</span>
+    <span class="n">q</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">loglist</span><span class="p">(</span><span class="mf">0.01</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">aa</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dA</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">q</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">q</span><span class="p">),</span><span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">q</span><span class="p">)]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">bb</span><span class="o">=</span><span class="n">js</span><span class="o">.</span><span class="n">dA</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">c_</span><span class="p">[</span><span class="n">q</span><span class="p">,</span><span class="n">q</span><span class="o">**</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+    <span class="n">bb</span><span class="o">.</span><span class="n">qq</span><span class="o">=</span><span class="mi">123</span>
+    <span class="n">fig</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="n">aa</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="s1">&#39;sin&#39;</span><span class="p">,</span><span class="n">sy</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">li</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">pp</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>  <span class="n">fig</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="n">aa</span><span class="o">.</span><span class="n">X</span><span class="p">,</span><span class="n">aa</span><span class="o">.</span><span class="n">Y</span><span class="o">*</span><span class="n">pp</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="s1">&#39;sin&#39;</span><span class="p">,</span><span class="n">sy</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">],</span><span class="n">li</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="n">markeredgewidth</span> <span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Plot</span><span class="p">(</span><span class="n">bb</span><span class="p">,</span><span class="n">legend</span><span class="o">=</span><span class="s1">&#39;sqr=$qq &#39;</span><span class="p">,</span><span class="n">sy</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span><span class="n">li</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Title</span><span class="p">(</span><span class="s1">&#39;test&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Legend</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Legend</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">y</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">Yaxis</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;y-axis&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Yaxis</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;Residuals&#39;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">Xaxis</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;x-axis&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">keepopen</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">fig</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/Jscatter.jpeg" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">jscatter 0.6.8 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2014, Ralf Biehl.
+      Last updated on Jan 23, 2018.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.6.
+    </div>
+  </body>
+</html>
