@@ -1,0 +1,107 @@
+<script type="text/javascript">
+$('#aw_datagrid').datagrid({
+    height: '100%',
+    gridTitle : 'Worker Information',
+    showToolbar: true,
+	toolbarItem:'del,refresh,|,export,exportf',
+    local: 'local',
+    delPK: 'id',
+    dataUrl: '/data/alive_workers',
+    delUrl: '/data/off_workers',
+	columns:[
+		{
+			name:"id",
+			label:"ID",
+			align:"center",
+            add:false,
+            edit:false,
+			width:20
+		},
+		{
+			name:"group_id",
+			label:"Group ID",
+			align:"center",
+			width:30
+		},
+		{
+			name:"refresh_time",
+			label:"Refresh Time",
+			align:"center",
+			width:50,
+			render:timestamp2str
+		},
+		{
+			name:"cpu_free",
+			label:"CPU Free",
+			align:"center",
+			width:30,
+			render:function(value){
+				return value.toString() + "%"
+			}
+		},
+		{
+			name:"memory_free",
+			label:"Memory Free",
+			align:"center",
+			width:30,
+			render:function(value){
+				return value.toString() + "%"
+			}
+		},
+		{
+			name:"disk_write",
+			label:"Disk Write",
+			align:"center",
+			width:40
+		},
+		{
+			name:"disk_read",
+			label:"Disk Read",
+			align:"center",
+			width:40
+		},
+		{
+			name:"net_send",
+			label:"Net Sent",
+			align:"center",
+			width:40
+		},
+		{
+			name:"net_rev",
+			label:"Net Receive",
+			align:"center",
+			width:40
+		},
+		{
+			name:"running_tasks",
+			label:"Task Running",
+			align:"center",
+			width:30
+		},
+        {
+            name:"operation",
+            label:"Operation",
+            align:"center",
+            width:30,
+			render:function(value, data){
+				b = "<button type='button' class='btn-default'data-toggle='doajax' data-options='{url:\"{url}\"}'>Off</button>"
+				url = "/resource/off_worker?wid=" + data.id
+				return b.replace("{url}", url)
+			}
+        }
+	],
+    paging: {pageSize:20, pageCurrent:1},
+    linenumberAll: true,
+    tableWidth:'100%',
+    noremove: false
+})
+</script>
+<div class="bjui-pageHeader" style="background-color:#fff; border-bottom:none;">
+    <div class="bs-callout bs-callout-warning">
+        <h4>Alive workers are list as follows</h4>
+		<p>You can monitor the health data of  alive workers here</p>
+    </div>
+</div>
+<div class="bjui-pageContent">
+	<table id="aw_datagrid" class="table table-bordered"></table>
+</div>

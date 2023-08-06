@@ -1,0 +1,67 @@
+<script type="text/javascript">
+$('#jg_datagrid').datagrid({
+    height: '100%',
+    gridTitle : 'Job Group Information',
+    showToolbar: true,
+    toolbarItem: 'all',
+    local: 'local',
+    delPK: 'id',
+    dataUrl: '/data/all_jgs',
+    editUrl: '/data/update_jgs',
+    delUrl: '/data/delete_jgs',
+	columns:[
+		{
+			name:"id",
+			label:"ID",
+			align:"center",
+            add:false,
+            edit:false,
+			width:70
+		},
+		{
+			name:"name",
+			label:"Job Name",
+			align:"center",
+			width:70
+		},
+		{
+			name:"desc",
+			label:"Description",
+			align:"center",
+			width:70
+		},
+		{
+			name:"first_job_id",
+			label:"First Job ID",
+			align:"center",
+			width:70
+		},
+        {
+            name:"operation",
+            label:"Operation",
+            align:"center",
+            add:false,
+            edit:false,
+            width:70,
+			render:function(value, data){
+				b = "<button type='button' class='btn-default'data-toggle='doajax' data-options='{url:\"{url}\"}'>Apply</button>"
+				url = "/job/apply_group?gid=" + data.id
+				return b.replace("{url}", url)
+			}
+        }
+	],
+    paging: {pageSize:20, pageCurrent:1},
+    linenumberAll: true,
+    tableWidth:'100%',
+    noremove: false
+})
+</script>
+<div class="bjui-pageHeader" style="background-color:#fff; border-bottom:none;">
+    <div class="bs-callout bs-callout-warning">
+        <h4>All job groups are list as follows</h4>
+		<p>You can add, delete, update, query groups here</p>
+    </div>
+</div>
+<div class="bjui-pageContent">
+	<table id="jg_datagrid" class="table table-bordered"></table>
+</div>

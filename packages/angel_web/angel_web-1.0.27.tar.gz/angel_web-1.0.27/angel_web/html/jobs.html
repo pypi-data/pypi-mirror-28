@@ -1,0 +1,96 @@
+<script type="text/javascript">
+$('#j_datagrid').datagrid({
+    height: '100%',
+    gridTitle : 'Job Information',
+    showToolbar: true,
+    toolbarItem: 'all',
+    local: 'local',
+    delPK: 'id',
+    dataUrl: '/data/all_jobs',
+    editUrl: '/data/update_jobs',
+    delUrl: '/data/delete_jobs',
+	columns:[
+		{
+			name:"id",
+			label:"ID",
+			align:"center",
+            add:false,
+            edit:false,
+			width:10
+		},
+		{
+			name:"group_id",
+			label:"Group ID",
+			align:"center",
+			width:10
+		},
+		{
+			name:"name",
+			label:"Job Name",
+			align:"center",
+			width:20
+		},
+		{
+			name:"worker_gid",
+			label:"Worker Group ID",
+			align:"center",
+			width:10
+		},
+		{
+			name:"desc",
+			label:"Description",
+			align:"center",
+			width:25
+		},
+		{
+			name:"trigger",
+			label:"Trigger",
+			align:"center",
+			width:15
+		},
+		{
+			name:"running_timeout",
+			label:"Running Timeout",
+			align:"center",
+			width:10,
+			render: function(value){
+				return value.toString() + "s";
+			}
+		},
+		{
+			name:"depends",
+			label:"Job Depends",
+			align:"center",
+            add:false,
+            edit:false,
+			width:15
+		},
+		{
+			name:"operator",
+			label:"Operator",
+			align:"center",
+			width:20,
+            add:false,
+            edit:false,
+			render:function(value, data){
+				url = "html/upload.html?type=script&jid=" + data.id;
+				b = "<button type='button' class='btn-default' data-toggle='dialog' data-options=\"{id:'upload',title:'upload executable file',url:'{url}'}\">Upload Script</button>";
+				return b.replace("{url}", url);
+			}
+		}
+	],
+    paging: {pageSize:20, pageCurrent:1},
+    linenumberAll: true,
+    tableWidth:'100%',
+    noremove: false
+})
+</script>
+<div class="bjui-pageHeader" style="background-color:#fff; border-bottom:none;">
+    <div class="bs-callout bs-callout-warning">
+        <h4>All jobs are list as follows</h4>
+		<p>You can add, delete, update, query jobs here</p>
+    </div>
+</div>
+<div class="bjui-pageContent">
+	<table id="j_datagrid" class="table table-bordered"></table>
+</div>
