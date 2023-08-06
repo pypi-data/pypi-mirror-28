@@ -1,0 +1,2 @@
+class SAEngineNotInitializedError(Exception):
+    pass
