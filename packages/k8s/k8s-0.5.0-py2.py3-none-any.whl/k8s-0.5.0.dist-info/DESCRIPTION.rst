@@ -1,0 +1,56 @@
+k8s - Python client library for the Kubernetes API
+--------------------------------------------------
+
+|Build Status| |Codacy Quality Badge| |Codacy Coverage Badge|
+
+.. |Build Status| image:: https://semaphoreci.com/api/v1/fiaas/k8s/branches/master/badge.svg
+    :target: https://semaphoreci.com/fiaas/k8s
+.. |Codacy Quality Badge| image:: https://api.codacy.com/project/badge/Grade/cb51fc9f95464f22b6084379e88fad77
+    :target: https://www.codacy.com/app/mortenlj/k8s?utm_source=github.com&utm_medium=referral&utm_content=fiaas/k8s&utm_campaign=badger
+.. |Codacy Coverage Badge| image:: https://api.codacy.com/project/badge/Coverage/cb51fc9f95464f22b6084379e88fad77
+    :target: https://www.codacy.com/app/mortenlj/k8s?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=fiaas/k8s&amp;utm_campaign=Badge_Coverage
+
+Documentation
+    https://k8s.readthedocs.io
+Code
+    https://github.com/fiaas/k8s
+
+k8s is a python client library for Kubernetes developed as part of the FiaaS project at FINN.no, Norway's leading classifieds site. The library tries to provide an intuitive developer experience, rather than modelling the REST API directly. Our approach does not allow us to use Swagger to auto-generate a library that covers the entire API, but the parts we have implemented are (in our opinion) easier to work with than the client you get when using Swagger.
+
+Check out the tutorial_ to find out how to use the library, or the `developer guide`_ to learn how to extend the library to cover parts of the API we haven't gotten around to yet.
+
+.. _tutorial: http://k8s.readthedocs.io/en/latest/tutorial.html
+.. _developer guide: http://k8s.readthedocs.io/en/latest/developer.html
+
+
+Changes since last version
+--------------------------
+
+* `3d18044`_: Set max line length to 120
+* `c5f151c`_: Revert "Add flake8 config - bump max line length to 120"
+* `812f30d`_: Add flake8 config - bump max line length to 120
+* `bee22e3`_: Clarify error message when watch_list_url_tempalte is missing
+* `e043949`_: Add namespace parameter to high-level watcher
+* `70d81e5`_: Add namespace parameter to watch_list
+* `6134c9e`_: Add missing test_requirements
+* `d1ca879`_: Test all possible sensitive headers
+* `f478856`_: Try to not leak sensitive headers when logging HTTP errors
+* `eddf973`_: Add some documentation
+* `ae0c4ff`_: Support events for object with same name in different namespace
+* `aa66e35`_: Add a Watcher, with some high-level handling of watches
+* `4998f3f`_: Add auto-generated CRD docs
+
+.. _eddf973: https://github.com/fiaas/k8s/commit/eddf973
+.. _c5f151c: https://github.com/fiaas/k8s/commit/c5f151c
+.. _e043949: https://github.com/fiaas/k8s/commit/e043949
+.. _ae0c4ff: https://github.com/fiaas/k8s/commit/ae0c4ff
+.. _812f30d: https://github.com/fiaas/k8s/commit/812f30d
+.. _f478856: https://github.com/fiaas/k8s/commit/f478856
+.. _70d81e5: https://github.com/fiaas/k8s/commit/70d81e5
+.. _4998f3f: https://github.com/fiaas/k8s/commit/4998f3f
+.. _6134c9e: https://github.com/fiaas/k8s/commit/6134c9e
+.. _aa66e35: https://github.com/fiaas/k8s/commit/aa66e35
+.. _bee22e3: https://github.com/fiaas/k8s/commit/bee22e3
+.. _3d18044: https://github.com/fiaas/k8s/commit/3d18044
+.. _d1ca879: https://github.com/fiaas/k8s/commit/d1ca879
+
