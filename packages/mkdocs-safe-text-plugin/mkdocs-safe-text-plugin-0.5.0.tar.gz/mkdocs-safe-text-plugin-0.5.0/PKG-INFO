@@ -1,0 +1,114 @@
+Metadata-Version: 1.1
+Name: mkdocs-safe-text-plugin
+Version: 0.5.0
+Summary: Plugin for safe text editing with MKDocs.
+Home-page: https://github.com/raimon49/mkdocs-safe-text-plugin
+Author: raimon49
+Author-email: raimon49@hotmail.com
+License: BSD License
+Description-Content-Type: UNKNOWN
+Description: mkdocs-safe-text-plugin
+        =======================
+        
+        |Build Status| |PyPI version| |Codecov| |BSD License| |Requirements
+        Status|
+        
+        Plugin for safe text editing with `MKDocs <http://www.mkdocs.org/>`__.
+        
+        Table of Contents
+        -----------------
+        
+        -  `How does this plugin work? <#how-does-this-plugin-work>`__
+        -  `Installation <#installation>`__
+        -  `Plugin configuration <#plugin-configuration>`__
+        -  `License <#license>`__
+        
+        How does this plugin work?
+        --------------------------
+        
+        Markdown is a very flexible format, and raw HTML is allowed. But it is
+        unnecessary in multiple-person text editing.
+        
+        When raw HTML like ``<font>`` tag is used in MKDocs, it is rendered as
+        it is.
+        
+        |No escaped font|
+        
+        If you use this plug-in with MKDocs, tags that are not allowed in the
+        whitelist are escaped.
+        
+        |Escaped font|
+        
+        Installation
+        ------------
+        
+        Install it via PyPI using ``pip`` command.
+        
+        .. code:: console
+        
+            $ pip install mkdocs-safe-text-plugin
+        
+        And add it to your ``mkdocs.yml`` file.
+        
+        .. code:: yaml
+        
+            plugins:
+              - mkdocs_safe_text
+        
+        An example of use can be checked by
+        `example/basic-usage <examples/basic-usage>`__.
+        
+        Plugin configuration
+        --------------------
+        
+        This plugin works with the HTML tag element for Markdown defined by
+        `bleach-whitelist <https://github.com/yourcelf/bleach-whitelist/blob/master/bleach_whitelist/bleach_whitelist.py>`__
+        enabled. This implementation approach is recommended in `the
+        Python-Markdown release
+        notes <https://python-markdown.github.io/change_log/release-2.6/>`__.
+        
+        And user can change this setting.
+        
+        .. code:: yaml
+        
+            plugins:
+              - mkdocs_safe_text:
+                  append_allowed_tags:
+                    - tag1
+                    - tag2
+                  remove_allowed_tags:
+                    - tag3
+                    - tag4
+                  allowed_attrs:
+                    tag5:
+                      - attribute1
+                      - attribute2
+        
+        An example of use can be checked by
+        `example/customization-usage <examples/customization-usage>`__.
+        
+        License
+        -------
+        
+        `BSD 2-Clause License <LICENSE>`__
+        
+        .. |Build Status| image:: https://travis-ci.org/raimon49/mkdocs-safe-text-plugin.svg?branch=master
+           :target: https://travis-ci.org/raimon49/mkdocs-safe-text-plugin
+        .. |PyPI version| image:: https://badge.fury.io/py/mkdocs-safe-text-plugin.svg
+           :target: https://badge.fury.io/py/mkdocs-safe-text-plugin
+        .. |Codecov| image:: https://codecov.io/gh/raimon49/mkdocs-safe-text-plugin/branch/master/graph/badge.svg
+           :target: https://codecov.io/gh/raimon49/mkdocs-safe-text-plugin
+        .. |BSD License| image:: http://img.shields.io/badge/license-BSD-green.svg
+           :target: LICENSE
+        .. |Requirements Status| image:: https://requires.io/github/raimon49/mkdocs-safe-text-plugin/requirements.svg?branch=master
+           :target: https://requires.io/github/raimon49/mkdocs-safe-text-plugin/requirements/?branch=master
+        .. |No escaped font| image:: https://user-images.githubusercontent.com/221802/35481481-ac9e4894-0467-11e8-89ab-47ca5037d9d2.png
+        .. |Escaped font| image:: https://user-images.githubusercontent.com/221802/35481484-b268e02c-0467-11e8-8b7a-c3c7232312ed.png
+        
+        
+Keywords: mkdocs,bleach,xss
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
