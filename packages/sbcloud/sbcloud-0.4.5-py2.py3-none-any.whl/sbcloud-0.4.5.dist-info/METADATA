@@ -1,0 +1,75 @@
+Metadata-Version: 2.0
+Name: sbcloud
+Version: 0.4.5
+Summary: SBCloud
+Home-page: UNKNOWN
+Author: Swimlane LLC
+Author-email: info@swimlane.com
+License: UNLICENSED
+Description-Content-Type: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.7
+Requires-Dist: apache-libcloud (==2.2.1)
+Requires-Dist: click (<7.0,>=6.0)
+Requires-Dist: cookiecutter (<1.7,>=1.6)
+
+SBCloud
+=======
+
+Swimbundle Cloud
+
+Package provides reusable provider-agnostic cloud integrations for Swimbundles
+
+Provides a CLI to generate new swimbundles, and can be installed as a dependency in swimbundles to extend all default
+cloud integrations functionality
+
+Built using `Apache Libcloud`_
+
+.. _Apache Libcloud: https://libcloud.readthedocs.io/en/latest/index.html
+
+Currently support COMPUTE providers only
+
+
+Installation
+------------
+
+Install from public repository
+
+::
+
+    pip install sbcloud
+
+
+CLI
+---
+
+Scaffold new cloud swimbundle with all supported integrations for the chosen provider
+
+See https://libcloud.readthedocs.io/en/latest/supported_providers.html#compute for available providers
+
+::
+
+    sbcloud generate --vendor "Amazon Web Services" --product "EC2" --provider "EC2" --logo-path "./path/to/logo.png"
+
+Manifests will be generated based on expected arguments for chosen provider, but asset and integration inputs may need
+adjusted
+
+
+Swimbundle Usage
+----------------
+
+List in `dist_requirements.txt` file in swimbundles
+
+Import and extend base classes provided by package and configure with provider information
+
+::
+
+    from sbcloud.integrations.compute import ComputeListNodesIntegration
+
+
+    class SwMain(ComputeListNodesIntegration):
+
+        provider = 'ec2'
+
+
