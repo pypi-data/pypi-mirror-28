@@ -1,0 +1,141 @@
+Compatibilité EAC-CPF
+=====================
+
+Le tableau ci-dessous référence les `balises XML du format EAC-CPF`_ prises en
+compte ou non au moment de l'import. Les points ``.`` indiquent
+que la balise est prise en compte (pour certaines partiellement). Les ``x``
+indiquent que la balise n'est pas prise en compte, les ``-`` qu'elle ne l'est
+que partiellement.
+
+.. _`balises XML du format EAC-CPF`: http://eac.staatsbibliothek-berlin.de/fileadmin/user_upload/schema/cpfTagLibrary.html
+
+===== ==========================
+Sup.       Éléments EAC-CPF     
+===== ==========================
+  x          abbreviation       
+  x            abstract         
+  .            address          
+  .          addressLine        
+  x           agencyCode        
+  x           agencyName        
+  .             agent           
+  .           agentType         
+  x        alternativeForm      
+  x         alternativeSet      
+  .         authorizedForm      
+  .            biogHist         
+  x           chronItem         
+  x           chronList         
+  .            citation         
+  x         componentEntry      
+  .            control          
+  x     conventionDeclaration   
+  .         cpfDescription      
+  .          cpfRelation        
+  .              date           
+  .           dateRange         
+  x            dateSet          
+  .          description        
+  .        descriptiveNote      
+  .            eac-cpf          
+  .            entityId         
+  .           entityType        
+  x             event           
+  .         eventDateTime       
+  .        eventDescription     
+  .           eventType         
+  .           existDates        
+  .            fromDate         
+  .            function         
+  x        functionRelation     
+  .           functions         
+  .         generalContext      
+  .            identity         
+  x              item           
+  x            language         
+  x      languageDeclaration    
+  x         languagesUsed       
+  x          languageUsed       
+  .          legalStatus        
+  .         legalStatuses       
+  x             level           
+  x              list           
+  x          localControl       
+  x        localDescription     
+  x       localDescriptions     
+  x      localTypeDeclaration   
+  x       maintenanceAgency     
+  .        maintenanceEvent     
+  .       maintenanceHistory    
+  x       maintenanceStatus     
+  .            mandate          
+  .            mandates         
+  x       multipleIdentities    
+  .           nameEntry         
+  x       nameEntryParallel     
+  x         objectBinWrap       
+  .         objectXMLWrap       
+  .           occupation        
+  .          occupations        
+  x        otherAgencyCode      
+  x         otherRecordId       
+  x            outline          
+  .               p             
+  x              part           
+  .             place           
+  .           placeEntry        
+  .           placeRole         
+  .             places          
+  x         preferredForm       
+  x       publicationStatus     
+  .            recordId         
+  .         relationEntry       
+  .           relations         
+  .        resourceRelation     
+  x             script          
+  x          setComponent       
+  .             source          
+  .          sourceEntry        
+  .            sources          
+  .              span           
+  .      structureOrGenealogy   
+  .              term           
+  .             toDate          
+  x            useDates         
+===== ==========================
+
+
+===== ==========================
+Sup.       Attributs EAC-CPF    
+===== ==========================
+  x     @accuracy               
+  x     @altitude               
+  x     @countryCode            
+  .     @cpfRelationType        
+  x     @functionRelationType   
+  x     @identityType           
+  x     @languageCode           
+  x     @lastDateTimeVerified   
+  x     @latitude               
+  \-    @localType              
+  x     @longitude              
+  x     @notAfter               
+  x     @notBefore              
+  .     @resourceRelationType   
+  x     @scriptCode             
+  .     @standardDate           
+  .     @standardDateTime       
+  x     @style                  
+  x     @transliteration        
+  .     @vocabularySource       
+  x     @xlink:actuate          
+  x     @xlink:arcrole          
+  \-    @xlink:href             
+  \-    @xlink:role             
+  x     @xlink:show             
+  x     @xlink:title            
+  x     @xlink:type             
+  x     @xml:base               
+  x     @xml:id                 
+  x     @xml:lang               
+===== ==========================
