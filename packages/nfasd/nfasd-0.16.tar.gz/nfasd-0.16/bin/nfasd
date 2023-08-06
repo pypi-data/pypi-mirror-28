@@ -1,0 +1,341 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# PYTHON_ARGCOMPLETE_OK
+import argcomplete, argparse
+import os     # to execute nvim
+import platform # to find XDG_DATA_HOME
+import operator
+import msgpack # to parse shada
+import re
+# from argcomplete import warn # logging
+
+def shada_path():
+  # Unix:     ~/.local/share/nvim/
+  # Windows:  ~/AppData/Local/nvim-data/
+  key = 'XDG_DATA_HOME'
+  path = None
+  if key in os.environ:
+    path = os.environ[key]
+  if not path:
+    if platform.system() == 'Windows':
+      path = '~/AppData/Local'
+    else:
+      path = '~/.local/share'
+  if platform.system() == 'Windows':
+    path = os.path.join(path, 'nvim-data')
+  else:
+    path = os.path.join(path, 'nvim')
+  path = os.path.join(path, 'shada', 'main.shada')
+  return path
+
+# return an array of v:oldfiles
+def nvim_oldfiles(shada_path):
+  shada_path = os.path.expanduser(shada_path)
+  f = open(shada_path, 'rb')
+  unpacker = msgpack.Unpacker(f)
+
+  # see https://neovim.io/doc/user/starting.html#shada-format
+
+  # 1. First goes type of the entry.  Object type must be an unsigned integer.
+  #    Object type must not be equal to zero.
+  # 2. Second goes entry timestamp.  It must also be an unsigned integer.
+  # 3. Third goes the length of the fourth entry.  Unsigned integer as well, used
+  #    for fast skipping without parsing.
+  # 4. Fourth is actual entry data.  All currently used ShaDa entries use
+  #    containers to hold data: either map or array.  Exact format depends on the
+  #    entry type:
+
+  # 7 (GlobalMark)
+  # 8 (Jump)
+  # 10 (LocalMark)
+  # 11 (Change)
+  valid_types = [7, 8, 10, 11]
+
+  file_set = set()
+  recent_files = []
+
+  try:
+    while True:
+      type = unpacker.unpack()
+
+      unpacker.skip() # timestamp
+      unpacker.skip() # data_length in bytes
+      if not type in valid_types:
+        unpacker.skip()
+      else:
+        data = unpacker.unpack()
+        file_name = data['f']
+        if not file_name in file_set:
+          file_set.add(file_name)
+          recent_files.append(file_name)
+  except msgpack.exceptions.OutOfData as e:
+    # all data are processed
+    pass
+  return recent_files
+
+
+# convert string into a (char -> list) map
+# the list contains the indices of char position in string
+# we use this map to find the location of corresponding char from user_input
+def index_map(user_input, string):
+  indices = {}
+  for ch in user_input:
+    if not indices.has_key(ch):
+      indices[ch] = []
+
+  for i, ch in enumerate(string):
+    if indices.has_key(ch):
+      index = indices[ch]
+      index.append(i)
+
+  return indices
+
+# for file name partial matching
+# objective: find the largest chunk of keyword
+# we want to give substring the lowest score (the lower the better)
+# 0: 'abc', '123abc456' <= exact substring
+# 1: 'abc', '12a34bc56' <= two substring 'a', 'bc'
+# 2: 'abc', '1a34b5c6' <= three substring 'a', 'b', 'c'
+# None: 'abc', '123ab456' <= 'abc' is not a subsequence of '123ab456'
+def match_fuzzy_substring(user_input, string):
+  if len(user_input) <= 0:
+    # are you kidding me?
+    return 0
+
+  max_cost = len(user_input) + 1
+  indices = index_map(user_input, string)
+
+  # first line
+  distances = []
+  for i in indices[user_input[0]]:
+    distances.append((0, [i])) # cost, indices
+
+  for ch in user_input[1:]:
+    if len(distances) <= 0:
+      # user_input is not a subsequence of string
+      break
+    distances_ = []
+    for i in indices[ch]:
+      min_cost = max_cost
+      min_indices = []
+      for t in distances:
+        # TODO: binary search?
+        if (t[1][-1] >= i):
+          continue
+
+        if t[1][-1] != i - 1:
+          # non-consecutive matching
+          # cost++
+          # e.g. compare 'aa' against 'aba'
+          cost = t[0] + 1
+        else:
+          # consecutive matching
+          # e.g. compare 'aa' against 'aa' or 'baa' or 'aab'
+          cost = t[0]
+        if cost < min_cost:
+          min_cost = cost
+          min_indices = t[1]
+
+      if min_cost != max_cost: # at least we got something
+        distances_.append((min_cost, min_indices+[i]))
+    distances = distances_
+
+  if len(distances) > 0:
+    return sorted(distances)[0] # return tuple (final cost, an array of last matching indices)
+  else:
+    return None # user_input is not a subsequence of string
+
+# for file name partial matching
+def fuzzyfinder(user_input, collection, is_case_sensitive = True):
+    # reverse matching favors the matched char near the end
+    # in our case, it prefers the result that matches files name
+    is_reverse_matching = True
+    if not is_case_sensitive:
+      user_input = user_input.lower()
+    if is_reverse_matching:
+      user_input = user_input[::-1]
+
+    suggestions = []
+    for i, item in enumerate(collection):
+      matching_item = item
+      if not is_case_sensitive:
+        matching_item = item.lower()
+      if is_reverse_matching:
+        matching_item = matching_item[::-1]
+
+      res = match_fuzzy_substring(user_input, matching_item) # Checks if user_input is a subsequence of theItem
+      if res != None:
+        score = res[0]
+
+        # first_matching_index example:
+        # 1: 'abc', '1a34b5c6'
+        # 3: 'abc', '123abc456'
+        # if is_reverse_matching is True, the first_matching_index is index the last match char in the reversed string
+        first_matching_index = res[1][0]
+        # print (score, item)
+        suggestions.append((score, first_matching_index, i, item)) # usually user will type filename instead of path. last_matching_index will give filename higher weight
+
+    # sort the result based on score and i
+    # smaller i means more recent files
+    return [x for _, _, _, x in sorted(suggestions, key = operator.itemgetter(0, 1, 2))]
+
+# no need to validate
+def novalidator(completion, prefix):
+    # return TRUE
+    return completion.startwith(prefix)
+
+# only return existed files
+def exist_filter(files, max_count):
+  res = []
+  for i, path in enumerate(files):
+    if os.path.exists(path):
+      res.append(path)
+    if len(res) >= max_count:
+      break
+
+  return res
+
+# returns the files in current folder which matches prefix
+def file_prefix_completer(prefix, cwd, is_case_sensitive, prefix_only=True):
+  res = []
+
+  # if user typed a complete dir name, search for the files in it instead
+  prefix = os.path.join(prefix, '') if os.path.isdir(prefix) else prefix
+
+  (prefix_path, last_item) = os.path.split(prefix)
+
+  target_dir = os.path.join(cwd, prefix_path)
+
+  if not os.path.isdir(target_dir):
+    return []
+
+  if not is_case_sensitive:
+    last_item = last_item.lower()
+
+  for i in os.listdir(target_dir):
+    filename = i if is_case_sensitive else i.lower()
+
+    if prefix_only and filename.startswith(last_item):
+      # prefix matching
+      res.append(os.path.join(target_dir, i))
+    elif not prefix_only and last_item in filename:
+      # substring matching
+      res.append(os.path.join(target_dir, i))
+
+  return res
+
+def nvim_recent_files(prefix, parsed_args, **kwargs):
+    MAX_OUTPUT_NUMBER = 8 # limit choices to 8, otherwise the screen might be cluttered with lines
+    # handle ~/my_file or ~abc cases
+    prefix = os.path.expanduser(os.path.normpath(prefix))
+
+    # get nvim recent files
+    history = nvim_oldfiles(shada_path())
+
+    cwd = os.getcwd()
+
+    is_case_sensitive = False
+
+    # case insensitive is better in all scenarios
+    # if prefix == prefix.lower():
+      # smart case: no uppercase char, so we just ignore cases
+      # is_case_sensitive = False
+
+    # search for local files
+    files = file_prefix_completer(prefix, cwd, is_case_sensitive)
+
+    matched = []
+    if len(prefix) and len(files) < MAX_OUTPUT_NUMBER: # don't need to do expensive fuzzy matching if we already got enough data
+      # fuzzy file matching, will match infix or suffix substring
+      fuzzy_files = file_prefix_completer(prefix, cwd, is_case_sensitive, False)
+      matched = fuzzyfinder(prefix, fuzzy_files + history, is_case_sensitive)
+    else:
+      matched = history
+
+    # give local files higher priority over nvim history (my intuition?)
+    collection = files + matched
+
+    # remove duplicated files
+    seen = {}
+    collection = [seen.setdefault(x, x) for x in collection if x not in seen]
+
+    if parsed_args is not None and parsed_args.exclude is not None:
+      exclude = re.compile(parsed_args.exclude)
+      collection = [x for x in collection if not exclude.search(x)]
+
+    res = exist_filter(collection, MAX_OUTPUT_NUMBER)
+
+    # if the result is a subdir of current working dir
+    # remove the common prefix if it is not current working directory ('./' looks weird in terminal)
+    res = [os.path.relpath(x, cwd) if x.startswith(cwd) and x != cwd else x for x in res]
+
+    # add trailing slash for directories
+    res = [os.path.join(x, '') if os.path.isdir(x) else x for x in res]
+
+    return res
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-e", help='the executable name of neovim')
+
+# the text is copied from man grep
+parser.add_argument("--exclude", help='If specified, it excludes files matching the given filename pattern. Patterns are matched to the full path specified, not only to the filename component. The pattern is matched by python re module')
+parser.add_argument("filepath", help='the path of the recent file').completer = nvim_recent_files
+
+def my_validator(current_input, keyword_to_check_against):
+    # warn('my_validator'+current_input+keyword_to_check_against)
+    # Pass through ALL options even if they don't all start with 'current_input'
+    return True
+
+argcomplete.autocomplete(parser, validator=my_validator, always_complete_options=False) # don't complete annoying --help
+
+# args = parser.parse_args()
+args, unknown = parser.parse_known_args()
+
+# print args.filepath
+# print args.e
+# print unknown
+
+if len(unknown):
+  path = unknown[0]
+else:
+  path = args.filepath
+
+if not os.path.exists(path):
+  # the user might forget to press tab (like nfasd -e nvim mysomet...)
+  # help the user press "the tab"
+  res = nvim_recent_files(path, None)
+
+  if len(res):
+    path = res[0]
+
+# don't do anything when the file doesn't exist
+# we don't want user to accidentally create some file with strange partial file name
+if os.path.exists(path):
+  exe_name = 'nvim'
+  if args.e and len(args.e):
+    exe_name = args.e # use the user-defined executable name
+  exec_str = exe_name + ' ' + path
+
+  os.system(exec_str)
+
+# if __name__ == "__main__":
+  # print match_fuzzy_substring('drop', 'Dropbox/p')         # =>None
+  # print match_fuzzy_substring('ber', u"Hi!Übersicht")      # =>None
+  # print match_fuzzy_substring('drop', 'dropbox/p')         # =>(3, 0)
+  # print match_fuzzy_substring('aa', 'aa')                  # =>(1, 0)
+  # print match_fuzzy_substring('aa', 'aab')                 # =>(1, 0)
+  # print match_fuzzy_substring('aa', 'baa')                 # =>(2, 0)
+  # print match_fuzzy_substring('aa', 'bbaa')                # =>(3, 0)
+  # print match_fuzzy_substring('aa', 'aabb')                # =>(1, 0)
+  # print match_fuzzy_substring('aa', 'abba')                # =>(3, 1)
+  # print match_fuzzy_substring('aaa', 'ababa')              # =>(4, 2)
+  # print match_fuzzy_substring('init', 'ing/install.sh')    # =>(7, 2)
+  # print match_fuzzy_substring('init', 'ing/nvim/init.vim') # =>(12, 0)
+  # print match_fuzzy_substring('init', 'ing/insitall.sh')   # =>(8, 1)
+  # print match_fuzzy_substring("foo",  "foobar")            # =>(2, 0)
+  # print match_fuzzy_substring("foo",  "FooBar")            # =>None
+  # print match_fuzzy_substring("fb",  "foobar")             # =>(3, 1)
+  # print match_fuzzy_substring("",  "foo bar")              # =>0
+  # print match_fuzzy_substring("",  "")                     # =>0
+  # print match_fuzzy_substring("f",  "")                    # =>None
+
