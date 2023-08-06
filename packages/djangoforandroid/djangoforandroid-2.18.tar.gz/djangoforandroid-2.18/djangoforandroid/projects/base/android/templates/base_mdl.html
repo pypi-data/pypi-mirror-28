@@ -1,0 +1,69 @@
+{% load compile_static %}
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A front-end template that helps you build fast, modern mobile web apps.">
+    <meta content='True' name='HandheldFriendly'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0, maximum-scale=1.0"/>
+    <title>{{APPNAME}}</title>
+
+    <!--Include default material and touchsupport, this include JQuery too-->
+    {% include "djangoforandroid/mdl.html" %}
+
+  </head>
+
+
+
+<body>
+
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+  {% block header %}
+  <header class="mdl-layout__header">
+    <div class="mdl-layout__header-row">
+      <!-- Title -->
+
+      <span class="mdl-layout-title">{% block title_ %}{{APPNAME}}{% endblock %}</span>
+      <!-- Add spacer, to align navigation to the right -->
+      <div class="mdl-layout-spacer"></div>
+      <!-- Navigation. We hide it in small screens. -->
+      <!--<nav class="mdl-navigation mdl-layout--large-screen-only">-->
+        <!--<a class="mdl-navigation__link" href="">Link</a>-->
+        <!--<a class="mdl-navigation__link" href="">Link</a>-->
+        <!--<a class="mdl-navigation__link" href="">Link</a>-->
+        <!--<a class="mdl-navigation__link" href="">Link</a>-->
+      <!--</nav>-->
+    </div>
+  </header>
+  <div class="mdl-layout__drawer">
+    <span class="mdl-layout-title">{{APPNAME}}</span>
+    <nav class="mdl-navigation">
+
+      {% with name_url="home" %}
+      <a class="mdl-navigation__link {% url name_url as target_url %}{% ifequal target_url request.path %}active{% endifequal %}{% ifequal target_url|add:"/" request.path %}active{% endifequal %}" href="{% url name_url %}">
+        <i class="material-icons">home</i> Home
+      </a>
+      {% endwith %}
+
+    </nav>
+  </div>
+  {% endblock %}
+
+  <main class="mdl-layout__content">
+    <div class="page-content">{% block content %} {% endblock %}</div>
+  </main>
+</div>
+
+
+
+</body>
+
+
+
+</html>
