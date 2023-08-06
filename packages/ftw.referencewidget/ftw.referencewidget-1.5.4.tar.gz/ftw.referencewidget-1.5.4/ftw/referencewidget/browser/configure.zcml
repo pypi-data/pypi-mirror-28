@@ -1,0 +1,37 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:z3c="http://namespaces.zope.org/z3c"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="ftw.referencewidget">
+
+    <browser:page
+        for="ftw.referencewidget.interfaces.IReferenceWidget"
+        name="get_reference_data"
+        class=".jsongenerator.ReferenceJsonEndpoint"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="ftw.referencewidget.interfaces.IReferenceWidget"
+        name="search_for_refs"
+        class=".search.SearchView"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="ftw.referencewidget.interfaces.IReferenceWidget"
+        name="generate_pathbar"
+        class=".generate_pathbar.GeneratePathbar"
+        permission="zope2.View"
+        />
+
+  <browser:page
+      name="refbrowsernavigation"
+      for="*"
+      class=".refbrowser_batching.RefBrowserBatchView"
+      permission="zope.Public"
+      />
+
+</configure>
