@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Finding out this script path
+ADSMT_PATH="`dirname \"$0\"`"
+ADSMT_PATH="`( cd \"$ADSMT_PATH\" && pwd )`"
+if [ -z "$ADSMT_PATH" ]; then
+	echo "ERROR: cannot access 'ADSMT' directory ${ADSMT_PATH}"
+	exit 1
+fi
+
+# Checking is config file exists
+if [ ! -f "/etc/adsmt.conf" ]; then
+	echo "ERROR: cannot find configuration file /etc/adsmt.conf"
+	exit 1
+fi
+
+# Starting up CLI using Python3 or default Python if no Python3 is installed
+if [ -f "/usr/bin/python3" ]; then
+	/usr/bin/python3 ${ADSMT_PATH}/cli.py
+elif [ -f "/usr/local/bin/python3" ]; then
+	/usr/local/bin/python3 ${ADSMT_PATH}/cli.py
+elif [ -f "/usr/bin/python" ]; then
+	/usr/bin/python ${ADSMT_PATH}/cli.py
+elif [ -f "/usr/local/bin/python" ]; then
+	/usr/local/bin/python ${ADSMT_PATH}/cli.py
+else
+	echo "ERROR: cannot find Python interpreter binary!"
+	exit 1
+fi
+
+
