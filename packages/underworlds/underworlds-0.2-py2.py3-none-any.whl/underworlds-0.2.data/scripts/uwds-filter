@@ -1,0 +1,39 @@
+#!/usr/bin/python
+#-*- coding: UTF-8 -*-
+
+import logging; logger = logging.getLogger("underworlds.filter")
+
+import underworlds
+
+import argparse
+parser = argparse.ArgumentParser(description='Copy a given list of nodes from one world to another')
+parser.add_argument("input", help="world to take nodes from")
+parser.add_argument("output", help="output world")
+parser.add_argument("nodes", nargs='+', help="list of nodes names (or regex) to copy over")
+
+if __name__ == "__main__":
+
+    # Manage command line options
+    args = parser.parse_args()
+
+    with underworlds.Context("filter") as ctx:
+
+        in_world = ctx.worlds[args.input]
+
+        out_world = ctx.worlds[args.output]
+
+
+        out_world.copy_from(in_world) # override previous content
+
+        filter(in_world.scene, out_world.scene)
+
+        try:
+            while True:
+                in_world.scene.waitforchanges()
+                filter(in_world.scene, out_world.scene)
+
+        except KeyboardInterrupt:
+            print("Bye bye")
+
+
+
