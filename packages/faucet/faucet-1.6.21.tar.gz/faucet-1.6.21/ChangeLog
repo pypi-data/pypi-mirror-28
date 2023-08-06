@@ -1,0 +1,196 @@
+CHANGES
+=======
+
+1.6.21
+------
+
+* Release v1.6.21
+* appease 2to3
+* Add --display-labels option to fctl
+* Remove unused matches
+* Remove unneeded ryuapp variables
+* Move common initializers to valve\_ryuapp.py
+* Miss call to self.get\_setting()
+* Setting needs to be upper
+* Move get\_setting() method to valve\_ryuapp.py
+* Revert "Move more common features to valve\_ryuapp.py."
+* Revert "Move common logging/setting parsing to valve\_ryuapp."
+* Move common logging/setting parsing to valve\_ryuapp
+* Move more common features to valve\_ryuapp.py
+* Use common RyuApp class
+* Test request\_reload\_config()
+* Increase test coverage for valves manager loads\_configs()
+* Add testing for valve managers load\_configs()
+* Move hard to test code out of faucet.py
+* reload\_config() doesn't need to return cold start flag
+* Add coveralls.io badge
+* Increase minimum test coverage
+* Increase test coverage for fctl
+* Reparse args for testability
+* Test new\_valve()
+* pylint
+* Add test coverage for main
+* Increase minimum test coverage
+* Don't have to hardcode astroid
+* Test coverage for fctl
+* pytype found corner case with no resolver flows
+* New pytype workaround
+* Prevsion 1.6.21
+
+1.6.20
+------
+
+* Revert "Test new\_valve()."
+* Version bump for release
+* Test config file change detection
+* Test new\_valve()
+* Test parse\_configs()
+* Move new\_valve to valves manager
+* pylint
+* Fix ofdescstats handler
+* Increase minimum unit test coverage
+* Use port state helper
+* Add port state decoder
+* Move ofdescstats\_handler to valve
+* Move more un-unit testable code out of faucet.py
+* Test valve packet in
+* More test coverage for valves manager
+* Need to give callable to valves manager so can send flows to DP by ID
+* Initial coverage for valves manager
+* faucet.py no longer needs config hashes
+* Move config change stat to valves\_manager
+* BGP gets metrics as initializer
+* Incremental move of BGP to valves manager
+* Incremental move of update\_metrics to valves\_manager
+* Incremental move faucet.py state to valves\_manager
+* Add ValvesManager class (incremental change)
+* Ryu 4.22
+* Need to reset nexthop retries if we get more packets for long-term dead nexthop
+* Clarify ACL change detection
+* Test other valves which may not be stacked
+* Verify stacking flooding
+* Clarify flooding test messages further
+* Clarify messages from flooding test
+* Run docker pull explicitly to avoid Travis timeout
+* Increase test coverage handling packet in
+* pylint
+* Move pkt\_meta parsing to valve
+* Test handling of unknown port number
+* Check port number is known for port status handling messages
+* Use common mirroring actions implementation
+* Fix port name reference in interface mirroring
+* Simplify use of resolve\_port()
+* dp ref
+* Consider only other stacked values
+* Updated configuration docs with new config changes
+* Fixed controller crash on using port names instead of number
+* Updated documentation to include PKI Setup
+* Resolves issue #1547. Mirror interface supports more than one port. Modified config to allow single mirror port and list. Added unit tests to check multi port mirroring
+* Learn test tuning
+* Increase minimum coverage
+* Force initialization of test stack
+* Update minimum code coverage threshold
+* Coverage for update\_config\_metrics
+* Add valve\_flood coverage
+* pylint
+* Sanity check stacking
+* Test coverage for mirroring
+* More adaptive timeout for Learn test. Add coverage for Prometheus config variables
+* pytype for check\_faucet\_config.py
+* Add coverage for ofchannel\_log
+* Quiten test\_check\_config.py
+* Add test coverage for check\_faucet\_config
+* Fix Learn test
+* Add coverage for valve\_flowreorder()
+* Test up to 1024 L2 hosts
+* Connect to notify socket
+* git hook path
+* pre-commit update
+* pre-commit update
+* Doc changes to recommend pre-commit hook
+* Fail int tests if code coverage drops below minimum
+* Test ping unknown neighbor
+* Add route for which gateway unresolvable
+* Test run of event notifier
+* Test LLDP beacon
+* Add coverage for logging and event notification
+* Fix unclosed file warning
+* Sanity test TFM parser
+* Test GenericTFM
+* ipv4 ping controller
+* Correct test packet layer build order, and test that L3 packets in result in L3 packets out
+* Add support for lists of acls\_in
+* Reduce Learn test pace slightly (unrealistically low latency)
+* Pre-version 1.6.20
+
+1.6.19
+------
+
+* Re-install blackhole FIB routes periodically
+* Bump versions for release
+* Clean up documentation on installing and running faucet
+* Test stack and non stack DPs
+* Allow Prometheus variables to be tested
+* pylint
+* Correct P2 MAC
+* Test IPv6 ND
+* pylint
+* Add IP payload to test packets consistently
+* Cold start learning optimization (don't need to delete entries for host we have not learned before, if we know no hosts expired since we cold started)
+* Refactor \_is\_host\_fib\_route()
+* Add jitter to FIB blackhole time
+* Rate limiter shouldn't apply to route manager control plane messages
+* More time for FIB blackhole
+* Add nmap
+* router -> routed
+* Proactive resolver did not install temporary blackhole-pending-resolution FIB routes in all VLANs
+* Ban rules have to be processed early
+* Move test suite onto new faucet start script
+* Simplify L3 packet handling
+* Simplify packet in path and short circuit unexpected stack packet check
+* Further fix for loop protection
+* Loop protect logic needs cache age check
+* Simplify loop protection logic. When L2 learning, refresh flows less often, and refresh only (do not delete flows) if L2 re-learning a host on the same port
+* Simple test of L2 learning up to 512 hosts
+* Moves documentation and sample scripts to new faucet start script
+* Add optional ryu arguments to startup script
+* Tests for LLDP defaults
+* Provide sensible defaults for LLDP TLVs
+* Use empty list rather than None when missing config option is a list
+* Update arch diagram to reflect new event subsystem
+* Swap dockerfiles to use "faucet" start script
+* Add documentation for running docker with additional args
+* Add verbose and TLS control channel args to start script
+* Move VM documentation to Sphinx
+* Fix config parsing for meters
+* Noviflow docs: icmpv6 match moved to table 6 instead of 3
+* avoid hardcoded port in FaucetDeleteConfigReloadTest
+* Test opstatus\_reconf
+* Add port level config item opstatus\_reconf, default True. If False, the pipeline is not reconfigured if operational state of the port changes
+* Pre-version
+
+1.6.18
+------
+
+* version numbers for release
+* Test routing still works after cold start
+* Explicit reset neighbor cache as well as host cache on a cold start
+* When a port is mirroring another port, it cannot have any VLANs assigned to it (would result in duplicate packets being flooded, if the mirroring port was a member of the same VLAN as the mirrored port)
+* Comments clarifying mirror usage and interface ranges
+* Support stack and non-stack DPs in same config file
+* Add LLDP port\_descr
+* Add support for system\_name LLDP TLV
+* pylint
+* test\_gauge.py less noisy
+* Run test\_gauge.py in presubmit
+* pre-commit can be a symlink
+* If org\_tlv info isn't a hex string, conveniently interpret as bytes
+* more git hook fixes
+* More git hook fixes
+* Add type annotations so that pre-commit works on faucet.py
+* pylint
+* Keep 2to3 happy
+* Fix typo in OVS command
+* Make pytype happy with use of stack config
+* Clarify use of LLDP beacon service (and simplfy helper functions)
+* Update readthedocs URL
