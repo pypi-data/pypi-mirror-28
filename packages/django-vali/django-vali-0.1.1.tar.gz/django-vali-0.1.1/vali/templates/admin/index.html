@@ -1,0 +1,81 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+{% block title %}{{ title }}{% endblock %}
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static 'admin/css/dashboard.css' %}" />
+<style>
+#content {padding:0px;}
+</style>
+{% endblock %}
+{% block extrahead %}
+{{ block.super }}
+<script type="text/javascript" src="{% static 'vali/js/bootstrap-closable-tab.js' %}"></script>
+<script type="text/javascript">
+function bodyscroll(){
+    var activeframes = $(".tab-pane.active iframe");
+    var tp = document.body.scrollTop;
+    if (activeframes.length == 1) {
+        var content = activeframes[0].contentDocument;
+        var apptitle = content.getElementsByClassName("app-title");
+        var wintool = content.getElementsByClassName("formtoolbox");
+        $(apptitle).css("top", (tp-2)+"px");
+        $(wintool).css("top", tp+"px");
+    }
+};
+function addTab(id, name , url, canClose, reload=false){
+    closableTab.addTab({'id':id,'name':name,'url':url,'closable':canClose, 'reload':reload}, change_callback);
+};
+function change_callback(self){
+    //$("#site-name a").text('远程专家会诊平台 - ' + self.find('a').text());
+};
+function setCookie(c_name,value,expiredays)
+{
+    var exdate=new Date();
+    exdate.setDate(exdate.getDate()+expiredays);
+    document.cookie=c_name+ "=" +escape(value)+((expiredays==null) ? "" : ";expires="+exdate.toGMTString());
+};
+function getCookie(c_name)
+{
+    if (document.cookie.length>0)
+    {
+        c_start=document.cookie.indexOf(c_name + "=");
+        if (c_start!=-1)
+        {
+            c_start=c_start + c_name.length+1;
+            c_end=document.cookie.indexOf(";",c_start);
+            if (c_end==-1) c_end=document.cookie.length;
+            return unescape(document.cookie.substring(c_start,c_end));
+        }
+    }
+    return "";
+};
+
+</script>
+{% endblock %}
+{% block bodyevent%}onscroll="bodyscroll()" {% endblock %}
+{% block coltype %}{{ block.super }}{% endblock %}
+
+{% block bodyclass %}{{ block.super }}app sidebar-mini pace-done dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% block content %}
+<div id="content-main" >
+<div id="pages" class="card text-white bg-light" role="tabpanel">
+    <ul class="nav nav-tabs" style="position:fixed;width:100%;background-color:#f8f9fa !important">
+    </ul>
+    <div class="tab-content" style="margin-top:40px">
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+{% block footer %}{% endblock %}
+{% block footscript %}
+<script src="{% static 'vali/js/main.js' %}"></script>
+<!--<script type="text/javascript" src="{% static 'vali/js/plugins/chart.js' %}"></script>-->
+{% endblock %}
