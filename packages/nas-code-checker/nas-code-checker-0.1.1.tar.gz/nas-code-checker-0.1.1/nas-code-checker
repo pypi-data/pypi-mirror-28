@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import json
+import urllib
+import urllib2
+
+from datetime import datetime
+
+PROJECT_PATH =  os.getcwd() #"/opt/project"
+
+if ".git" not in os.listdir(PROJECT_PATH):
+    print "[Error] Run this command at root directory, where .git directory is located"
+    sys.exit()
+print "OK"
+
+# Constants
+API_ENDPOINT = "http://10.1.2.112:8010"
+UI_ENDPOINT = "http://10.1.2.112:8005"
+API_CREATE = "%s/commit/script_create" % (API_ENDPOINT)
+UI_VIEW = "%s/commit/view?id=%s"
+
+# Init
+now = datetime.now()
+diff_prefix = "diff_%s%s%s-%s%s%s.txt" % (now.year, now.month, now.day, now.hour, now.minute, now.second)
+stat_prefix = "stat_%s%s%s-%s%s%s.txt" % (now.year, now.month, now.day, now.hour, now.minute, now.second)
+diff_file = "/tmp/%s" % (diff_prefix)
+stat_file = "/tmp/%s" % (stat_prefix)
+
+# Write diff to file
+os.system("cd %s; git diff > %s" % (PROJECT_PATH, diff_file))
+os.system("cd %s; git diff --stat > %s" % (PROJECT_PATH, stat_file))
+
+# Test
+with open(diff_file, "r") as f, open(stat_file, "r") as f2:
+    post_data = urllib.urlencode({
+        "diff":         f.read(),
+        "diff_stat":    f2.read(),
+        "author":       "tdquang",
+    })
+    request = urllib2.Request(
+        url=API_CREATE,
+        data=post_data
+    )
+    response = urllib2.urlopen(request)
+    response_data = json.loads(response.read())
+    preview_url = UI_VIEW % (UI_ENDPOINT, response_data["data"]["pk"])
+    
+    # Result
+    print "Preview URL: %s" % (preview_url)
