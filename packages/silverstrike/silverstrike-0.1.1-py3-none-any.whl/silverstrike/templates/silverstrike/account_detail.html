@@ -1,0 +1,133 @@
+{% extends 'silverstrike/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content_header %}
+<h1>{{ account.name }}
+  <small>{{ month|date:'F Y'}}</small>
+</h1>
+<ol class="breadcrumb">
+  <li><a href="/">{% trans 'Home' %}</a></li>
+  <li><a href="{% url 'accounts' %}">{% trans 'Accounts' %}</a></li>
+  <li class="active">{{ account }}</li>
+</ol>
+{% endblock %}
+
+{% block content %}
+<div class="box">
+  <div class="box-body">
+    <div class="text-center">
+      Showing Data from <b>{{ dstart }}</b> to <b>{{ dend }}</b>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4 col-md-push-8">
+    <div class="box">
+      <div class="box-header">
+        <h3 class="box-title">Overview</h3>
+      </div>
+      <div class="box-content">
+        <table class="table">
+          <tr>
+          <th>{% trans 'Current Balance' %}</th><td class="text-{% if balance < 0 %}red{% else %}green{% endif %}">{{ balance }}</td>
+        </tr>
+        <tr>
+          <th>{% trans 'In' %}</th><td>{{ in }}</td>
+        </tr>
+        <tr>
+          <th>{% trans 'Out' %}</th><td class="text-red">{{ out }}</td>
+        </tr>
+        <tr>
+          <th>{% trans 'Difference' %}</th><td{% if difference < 0 %} class="text-red"{% endif %}>{{ difference }}</td>
+        </tr>
+        </table>
+      </div>
+      <div class="box-footer">
+          <a href="{% url 'account_update' account.pk %}" class="btn btn-warning">{% trans 'Edit' %}</a>
+          {% if account.is_personal %}
+          <a href="{% url 'account_reconcile' account.pk %}" class="btn btn-default">{% trans 'Reconcile' %}</a>
+          {% endif %}
+          <a href="{% url 'account_detail_all' account.pk %}" class="btn btn-primary">{% trans 'Show all' %}</a>
+      </div>
+    </div>
+  </div>
+<div class="col-md-8 col-md-pull-4">
+<div class="box">
+  <div class="box-body">
+  <canvas id="myChart" width="400" height="200"></canvas>
+</div>
+</div>
+</div>
+</div>
+<div class="box">
+<div class="box-header with-border">
+  <h3 class="box-title">{% trans 'Transaction list' %}</h3>
+</div>
+<div class="box-body">
+<table class="table table-striped">
+  <tr>
+    <th>{% trans 'Title' %}</th>
+    <th>{% trans 'Date' %}</th>
+    <th>{% trans 'Amount' %}</th>
+    <th class="hidden-xs">{% trans 'Account' %}</th>
+    <th class="hidden-xs">{% trans 'Category' %}</th>
+  </tr>
+{% for transaction in transactions %}
+<tr>
+  <td><a href="{% url 'transaction_detail' transaction.transaction.pk %}">{{ transaction.transaction.title }}</a></td>
+  <td>{{ transaction.transaction.date }}</td>
+  <td{% if transaction.amount < 0 %} class="text-red"{% elif transaction.is_deposit %} class="text-green"{% endif %}>{{ transaction.amount }}</td>
+  <td class="hidden-xs">{% if transaction.is_system %}{% trans 'Reconcilation' %}{% else %}<a href="{{ transaction.opposing_account.get_absolute_url }}">{{ transaction.opposing_account }}</a>{% endif %}</td>
+  <td class="hidden-xs">
+    {% if transaction.category %}
+    <a href="{{ transaction.category.get_absolute_url }}">{{ transaction.category }}
+    {% endif %}
+  </td>
+  </tr>
+{% endfor %}
+</table>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'vendor/js/Chart.bundle.min.js' %}"></script>
+<script type="text/javascript">
+var ctx = document.getElementById("myChart").getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    options: {
+        legend: {
+          position: 'none',
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                }
+            }]
+        },
+    },
+    data: {
+        labels: [
+  {% for label, value in dataset %}
+  "{{ label|date }}",
+  {% endfor %}
+  ],
+        datasets: [{
+            label: 'Balance',
+            fill: false,
+            pointRadius: 2,
+            borderColor: '#357ca5',
+            backgroundColor: '#357ca5',
+            data: [
+      {% for label, value in dataset %}
+      {{ value }},
+      {% endfor %}
+    ],
+        }]
+    }
+  });
+</script>
+{% endblock %}
