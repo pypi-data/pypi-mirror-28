@@ -1,0 +1,2247 @@
+.\" Man page generated from reStructuredText.
+.
+.TH "GEOLOGICALTOOLBOX" "1" "Jan 23, 2018" "0.1.0" "Geological Toolbox"
+.SH NAME
+geologicaltoolbox \- Geological Toolbox Documentation
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.SH THE GEOLOGICALTOOLBOX API REFERENCE
+.SS Members of the ‘GeologicalToolbox’ package
+.sp
+Geological Toolbox Module
+.sp
+This Module is the base for processing and storing of geological data.
+.SS Members of the ‘GeologicalToolbox.AbstractLog’ module
+.sp
+This module provides an abstract base class for storing logging or property information.
+.INDENT 0.0
+.INDENT 3.5
+.SS Todo
+.INDENT 0.0
+.IP \(bu 2
+reformat docstrings, espacially of setter and getter functions
+.IP \(bu 2
+check exception types
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.AbstractLog.AbstractLogClass(property_name, property_unit, *args, **kwargs)
+This class is the base for storing logging information or properties. This class should be treated as abstract, no
+object should be created directly!
+.INDENT 7.0
+.TP
+.B property_name
+Returns the name of the property
+.INDENT 7.0
+.TP
+.B Returns
+Returns the name of the property
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B property_unit
+Returns the unit of the property
+.INDENT 7.0
+.TP
+.B Returns
+Returns the unit of the property
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Constants defined in the ‘GeologicalToolbox’ package
+.sp
+This module defines constants which are used in the API.
+.INDENT 0.0
+.TP
+.B GeologicalToolbox.Constants.float_precision = 0.001
+precision for float comparison
+.UNINDENT
+.SS Members of the ‘GeologicalToolbox.DBHandler’ module
+.sp
+This module provides a class for database access through an SQLAlchemy session and the base class for all database
+related classes.
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.DBHandler.AbstractDBObject(session, name=\(aq\(aq, comment=\(aq\(aq)
+This class represents the base class for all database objects. It should be treated as abstract, no object should be
+created directly!
+.INDENT 7.0
+.TP
+.B comment
+The additional comments for the AbstractDBObject
+.INDENT 7.0
+.TP
+.B Type
+str
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod delete_from_db(obj, session)
+Deletes an object from the database
+:param obj: object to delete
+:type obj; object
+:param session: SQLAlchemy Session handling the connection to the database
+:type session: Session
+:return: Nothing
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_all_from_db(session)
+Returns all well marker in the database connected to the SQLAlchemy Session session
+.INDENT 7.0
+.TP
+.B Parameters
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.TP
+.B Returns
+a list of well marker representing the result of the database query
+.TP
+.B Return type
+List[WellMarker]
+.TP
+.B Raises
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_by_id_from_db(id, session)
+Returns the line with the given id in the database connected to the SQLAlchemy Session session
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBid\fP (\fIint\fP) – Only the object with this id will be returned (has to be 1, unique value)
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+a single line representing the result of the database query
+.TP
+.B Return type
+Line
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBNoResultFound\fP – Raises NoResultFound if no line was found with this id
+.IP \(bu 2
+\fBIntegrityError\fP – Raises IntegrityError if more than one line is found (more than one unique value)
+.IP \(bu 2
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_by_name_from_db(name, session)
+Returns all DBObjects with the given name in the database connected to the SQLAlchemy Session session
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fIstr\fP) – Only DBObjects or derived types with this name will be returned
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+a list of DBObjects representing the result of the database query
+.TP
+.B Return type
+List[cls]
+.TP
+.B Raises
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+The name of the AbstractDBObject
+.INDENT 7.0
+.TP
+.B Type
+str
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B save_to_db()
+Saves all changes of the well marker to the database
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBIntegrityError\fP – raises IntegrityError if the commit to the database fails and rolls all changes back
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B session
+The current Session object
+.INDENT 7.0
+.TP
+.B Type
+Session
+.TP
+.B Raises
+\fBTypeError\fP – if session is not of an instance of Session
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.DBHandler.DBHandler(connection=\(aqsqlite:///:memory:\(aq, *args, **kwargs)
+A class for database access through an SQLAlchemy session.
+.INDENT 7.0
+.TP
+.B get_session()
+Returns the session object for the current database connection
+.INDENT 7.0
+.TP
+.B Returns
+Returns the session object for the current database connection
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Exceptions defined for the API
+.INDENT 0.0
+.TP
+.B exception GeologicalToolbox.Exceptions.ArgumentError(msg)
+This exception should be raised, if a wrong number of arguments are submitted or an other failure inside the
+arguments are recognised.
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception GeologicalToolbox.Exceptions.DatabaseException(msg)
+This exception should be raised, if an unresolved database issue occurred (e.g. more than one value in a unique
+column
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception GeologicalToolbox.Exceptions.DatabaseRequestException(msg)
+This exception should be raised, if an error occurs during a database request (e.g. not the expected result)
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception GeologicalToolbox.Exceptions.FaultException(msg)
+Will be raised, if a fault marker causes an interruption
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception GeologicalToolbox.Exceptions.ListOrderException(msg)
+Will be raised, if the ordering of a list is wrong (e.g. min values in an extent list after max…)
+.UNINDENT
+.INDENT 0.0
+.TP
+.B exception GeologicalToolbox.Exceptions.WellMarkerDepthException(msg)
+Will be raised, if a new well marker should be located deeper than the depth of the well
+.UNINDENT
+.SS Members of the ‘GeologicalToolbox.Geometries’ module
+.sp
+This module provides basic geometries (points and lines) for storing geological data in database.
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.Geometries.GeoPoint(horizon, has_z, *args, **kwargs)
+Class GeoPoint
+.sp
+Represents a geological point feature, e.g. for storing line nodes or geological outcrops in a database.
+.INDENT 7.0
+.TP
+.B add_property(prop)
+Adds a new property to the point
+.INDENT 7.0
+.TP
+.B Parameters
+\fBprop\fP (\fIProperty\fP) – new point property
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBTypeError\fP – if log is not of type Property
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B del_z()
+removes the z\-value from the point
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B delete_property(prop)
+Deletes a property from the point
+.INDENT 7.0
+.TP
+.B Parameters
+\fBprop\fP (\fIProperty\fP) – property to delete
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – if log is not of type Property
+.IP \(bu 2
+\fBValueError\fP – if log is not part of self.properties
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B get_property(property_name)
+Returns requested property, if the property with the name property_name exists for the GeoPoint
+.INDENT 7.0
+.TP
+.B Parameters
+\fBproperty_name\fP (\fIstr\fP) – name of the requested property
+.TP
+.B Returns
+Returns the property
+.TP
+.B Return type
+Property
+.TP
+.B Raises
+\fBValueError\fP – if no property with the name exists
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B has_property(property_name)
+Returns True, if a property with the name property_name exists for the GeoPoint, else False
+.INDENT 7.0
+.TP
+.B Parameters
+\fBproperty_name\fP (\fIstr\fP) – name of the requested property
+.TP
+.B Returns
+Returns True, if a property with the name property_name exists for the GeoPoint, else False
+.TP
+.B Return type
+bool
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B horizon
+The stratigraphy of the point object
+.INDENT 7.0
+.TP
+.B Type
+StratigraphicObject or None
+.TP
+.B Raises
+\fBTypeError\fP – if value is not of type Stratigraphy
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_all_without_lines_from_db(session)
+Returns all points in the database connected to the SQLAlchemy Session session, which are not part of a line.
+This function is similar the AbstractGeoObject.load_all_from_db(…) function.
+.INDENT 7.0
+.TP
+.B Parameters
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.TP
+.B Returns
+a list of points representing the result of the database query
+.TP
+.B Return type
+List[GeoPoint]
+.TP
+.B Raises
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_by_name_without_lines_from_db(name, session)
+Returns all GeoPoints with the given name in the database connected to the SQLAlchemy Session session, which
+don’t belong to a line
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fIstr\fP) – Only GeoPoints with this name will be returned
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+a list of GeoPoints representing the result of the database query
+.TP
+.B Return type
+List[GeoPoints]
+.TP
+.B Raises
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_in_extent_without_lines_from_db(session, min_easting, max_easting, min_northing, max_northing)
+Returns all points inside the given extent in the database connected to the SQLAlchemy Session session, which
+are not part of a line. This function is similar the AbstractGeoObject.load_in_extent_from_db(…) function.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmin_easting\fP (\fIfloat\fP) – minimal easting of extent
+.IP \(bu 2
+\fBmax_easting\fP (\fIfloat\fP) – maximal easting of extent
+.IP \(bu 2
+\fBmin_northing\fP (\fIfloat\fP) – minimal northing of extent
+.IP \(bu 2
+\fBmax_northing\fP (\fIfloat\fP) – maximal northing of extent
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+a list of points representing the result of the database query
+.TP
+.B Return type
+List[GeoPoint]
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBValueError\fP – if one of the extension values is not compatible to type float
+.IP \(bu 2
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B use_z()
+uses the altitude value as z coordinate
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.Geometries.Line(closed, horizon, points, *args, **kwargs)
+Class Line
+.sp
+Represents a geological line feature, e.g. for storing faults or horizon surface expressions.
+.INDENT 7.0
+.TP
+.B delete_point(point)
+Deletes the point from the line
+.INDENT 7.0
+.TP
+.B Parameters
+\fBpoint\fP (\fIGeoPoint\fP) – GeoPoint object which should be deleted
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – Raises TypeError if point is not of type GeoPoint
+.IP \(bu 2
+\fBValueError\fP – Raises ValueError the point is not part of the line
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B delete_point_by_coordinates(easting, northing, altitude=0)
+Deletes a point with the given coordinates from the line
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBeasting\fP (\fIfloat\fP) – easting value of the point to be deleted
+.IP \(bu 2
+\fBnorthing\fP (\fIfloat\fP) – northing value of the point to be deleted
+.IP \(bu 2
+\fBaltitude\fP (\fIfloat\fP) – altitude value of the point to be deleted (only necessary if point has z\-values!)
+.UNINDENT
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBValueError\fP – Raises ValueError if one parameter is not compatible to type float or no point can be found
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B get_point_index(point)
+Returns the index of the given point in the line
+.INDENT 7.0
+.TP
+.B Parameters
+\fBpoint\fP (\fIGeoPoint\fP) – point which has to be looked up
+.TP
+.B Returns
+Index of the point in the line
+.TP
+.B Return type
+int
+.TP
+.B Raises
+\fBValueError\fP – Raises ValueError if committed point is not part of the line
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B horizon
+The stratigraphy of the line object
+.INDENT 7.0
+.TP
+.B Type
+StratigraphicObject
+.TP
+.B Raises
+\fBTypeError\fP – Raises TypeError if value is not of type Stratigraphy
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B insert_point(point, position)
+Insert a point in the line at the committed index.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBpoint\fP (\fIGeoPoint\fP) – point to be inserted in the line
+.IP \(bu 2
+\fBposition\fP (\fIint\fP) – Index, where points should be inserted in the line
+.UNINDENT
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – Raises TypeError if point is not of type GeoPoint
+.IP \(bu 2
+\fBValueError\fP – Raises ValueError if position is not of type int or cannot be converted to int
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B insert_points(points, position)
+Insert a points in the line at the committed index.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBpoints\fP (\fIList\fP\fI[\fP\fIGeoPoint\fP\fI]\fP) – List of points to be inserted in the line
+.IP \(bu 2
+\fBposition\fP (\fIint\fP) – Index, where points should be inserted in the line
+.UNINDENT
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – Raises TypeError if one of the points is not of type GeoPoint
+.IP \(bu 2
+\fBValueError\fP – Raises ValueError if position is not of type int or cannot be converted to int
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B is_closed
+True if the line is closed else False
+.INDENT 7.0
+.TP
+.B Type
+bool
+.TP
+.B Raises
+\fBValueError\fP – if value is not compatible to type bool
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_in_extent_from_db(session, min_easting, max_easting, min_northing, max_northing)
+Returns all lines with at least on point inside the given extent in the database connected to the SQLAlchemy
+Session session. This function overloads the AbstractGeoObject.load_in_extent_from_db(…) function.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmin_easting\fP (\fIfloat\fP) – minimal easting of extent
+.IP \(bu 2
+\fBmax_easting\fP (\fIfloat\fP) – maximal easting of extent
+.IP \(bu 2
+\fBmin_northing\fP (\fIfloat\fP) – minimal northing of extent
+.IP \(bu 2
+\fBmax_northing\fP (\fIfloat\fP) – maximal northing of extent
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+a list of lines representing the result of the database query
+.TP
+.B Return type
+List[Line]
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBValueError\fP – if one of the extension values is not compatible to type float
+.IP \(bu 2
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Members of the ‘GeologicalToolbox.GeoObject’ module
+.sp
+This module hosts the basic AbstractGeoObject class. This class inherits all basic function for GeoObjects
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.GeoObject.AbstractGeoObject(reference_system, easting, northing, altitude, *args, **kwargs)
+This is a base class which stores central GeoObject data. This class should be treated as abstract, no object
+should be created directly!
+.INDENT 7.0
+.TP
+.B altitude
+The height above sea level of the object
+.INDENT 7.0
+.TP
+.B Type
+float
+.TP
+.B Raises
+\fBValueError\fP – if value is not compatible to type float
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B easting
+The easting value of the object
+.INDENT 7.0
+.TP
+.B Type
+float
+.TP
+.B Raises
+\fBValueError\fP – if value is not compatible to type float
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_in_extent_from_db(session, min_easting, max_easting, min_northing, max_northing)
+Returns all points inside the given extent in the database connected to the SQLAlchemy Session session
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmin_easting\fP (\fIfloat\fP) – minimal easting of extent
+.IP \(bu 2
+\fBmax_easting\fP (\fIfloat\fP) – maximal easting of extent
+.IP \(bu 2
+\fBmin_northing\fP (\fIfloat\fP) – minimal northing of extent
+.IP \(bu 2
+\fBmax_northing\fP (\fIfloat\fP) – maximal northing of extent
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+a list of points representing the result of the database query
+.TP
+.B Return type
+List[cls]
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBValueError\fP – if one of the extension values is not compatible to type float
+.IP \(bu 2
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B northing
+The northing value of the object
+.INDENT 7.0
+.TP
+.B Type
+float
+.TP
+.B Raises
+\fBValueError\fP – if value is not compatible to type float
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B reference_system
+The reference system in WKT format
+ATTENTION: The reference system is not checked!
+.INDENT 7.0
+.TP
+.B Returns
+Returns the current reference system
+.TP
+.B Type
+str
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Members of the ‘GeologicalToolbox.Properties’ module
+.sp
+This module provides a class for storing properties of points (and therefore also for lines). Properties for points are
+the same as logs, except there is only one value, not a list of values. They are both derived from the AbstractLogClass.
+.INDENT 0.0
+.INDENT 3.5
+.SS Todo
+.INDENT 0.0
+.IP \(bu 2
+reformat docstrings, espacially of setter and getter functions
+.IP \(bu 2
+check exception types
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.Properties.Property(*args, **kwargs)
+This class represents logging information for wells
+.INDENT 7.0
+.TP
+.B value
+Returns the value of the property
+.INDENT 7.0
+.TP
+.B Returns
+Returns the value of the property
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Members of the ‘GeologicalToolbox.Requests’ module
+.sp
+This module hosts the class Requests, which provides functionality for special (geo\-)database requests.
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.Requests.Requests
+The class Requests, which provides functionality for special (geo\-)database requests.
+.INDENT 7.0
+.TP
+.B static check_extent(extent)
+checks, if the given extent has the right format
+.INDENT 7.0
+.TP
+.B Parameters
+\fBextent\fP – value to be checked
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – if extent is not a list
+.IP \(bu 2
+\fBValueError\fP – if on list element is not compatible to float or number of elements is not 4
+.IP \(bu 2
+\fBListOrderException\fP – if the ordering of the extent list [min_easting, max_easting, min_northing,
+max_northing] is wrong.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B static create_thickness_point(sorted_dict, well_id, marker_1, marker_2, session, use_faulted=False, fault_name=\(aq\(aq, add_properties=())
+Generate a new GeoPoint with thickness property from 2 well marker
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsorted_dict\fP (\fIdict\fP\fI(\fP\fI)\fP) – dictionary containing well_id / WellMarker data
+.IP \(bu 2
+\fBwell_id\fP (\fIint\fP) – current well_id
+.IP \(bu 2
+\fBmarker_1\fP (\fIint\fP) – id of marker 1
+.IP \(bu 2
+\fBmarker_2\fP (\fIint\fP) – id of marker 2
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – current SQLAlchemy session
+.IP \(bu 2
+\fBuse_faulted\fP (\fIbool\fP) – should faulted sequence be included?
+.IP \(bu 2
+\fBfault_name\fP (\fIstr\fP) – name of fault stratigraphic unit (default: “Fault”)
+.IP \(bu 2
+\fBadd_properties\fP (\fItuple\fP\fI(\fP\fI)\fP) – Adds the properties to the GeoPoint. Format for each property: (name, unit, value)
+.UNINDENT
+.TP
+.B Returns
+new GeoPoint Object
+.TP
+.B Return type
+GeoPoint
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBFaultException\fP – if a fault is inside the section and use_faulted is False
+.IP \(bu 2
+\fBValueError\fP – if a property in the add_property tuple has less than 3 entries
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B static interpolate_geopoints(points, property_name, method)
+Interpolate the property values of the given GeoPoints using the interpolation method ‘method’
+.INDENT 7.0
+.INDENT 3.5
+.SS Todo
+.INDENT 0.0
+.IP \(bu 2
+Integrate functionality
+.IP \(bu 2
+define interpolation methods
+.IP \(bu 2
+define return statement
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBpoints\fP (\fIList\fP\fI[\fP\fIGeoPoint\fP\fI]\fP) – List of GeoPoints as interpolation base
+.IP \(bu 2
+\fBproperty_name\fP (\fIstr\fP) – Name of the property to interpolate
+.IP \(bu 2
+\fBmethod\fP (\fIstr\fP) – Interpolation method
+.UNINDENT
+.TP
+.B Returns
+Currently Nothing
+.TP
+.B Raises
+\fBTypeError\fP – if on of the points is not of type GeoPoint
+.UNINDENT
+.sp
+possible values for interpolation \fBmethod\fP are:
+.INDENT 7.0
+.IP \(bu 2
+\fBnearest\fP (Nearest Neighbour interpolation)
+.IP \(bu 2
+\fBide\fP (Inverse Distance interpolation)
+.IP \(bu 2
+\fBspline\fP (Thin\-Plate\-Spline interpolation)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B static well_markers_to_thickness(session, marker_1, marker_2, *args, **kwargs)
+This static method generates a point set including a thickness property derived from the committed well marker
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – The SQLAlchemy session connected to the database storing the geodata
+.IP \(bu 2
+\fBmarker_1\fP (\fIstr\fP) – First WellMarker unit name
+.IP \(bu 2
+\fBmarker_2\fP (\fIstr\fP) – Second WellMarker unit name
+.IP \(bu 2
+\fBsummarise_multiple\fP (\fIbool\fP) – Summarise multiple occurrences of marker_1 and marker_2 to a maximum thickness. If this parameter is False (default value) create multiple points.
+.IP \(bu 2
+\fBextent\fP (\fI[\fP\fIfloat\fP\fI, \fP\fIfloat\fP\fI, \fP\fIfloat\fP\fI, \fP\fIfloat\fP\fI]\fP) – extension rectangle as list which borders the well distribution. The list has the following order: [min easting, max easting, min northing, max northing]
+.IP \(bu 2
+\fBuse_faulted\fP (\fIbool\fP) – if True, also sections with faults between marker_1 and marker_2 are returned
+.IP \(bu 2
+\fBfault_name\fP (\fIstr\fP) – unit name of fault marker (standard: ‘Fault’)
+.UNINDENT
+.TP
+.B Returns
+A list of GeoPoints each with a thickness property
+.TP
+.B Return type
+[GeoPoint]
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBAttributeError\fP – if marker_1 and marker_2 are equal
+.IP \(bu 2
+\fBDatabaseException\fP – if the database query results in less than 2 marker of a well_id
+.IP \(bu 2
+\fBDatabaseRequestException\fP – if an unexpected query result occurs
+.IP \(bu 2
+\fBTypeError\fP – if session is not an instance of SQLAlchemy session
+.IP \(bu 2
+\fBValueError\fP – if a parameter is not compatible with the required type
+.UNINDENT
+.UNINDENT
+.sp
+for further raises see \fI\%Requests.check_extent()\fP
+.sp
+Query for selecting markers:
+.INDENT 7.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+SELECT wm1.* FROM well_marker wm1
+JOIN stratigraphy st1
+ON wm1.horizon_id = st1.id
+WHERE st1.unit_name IN ("mu", "so")
+AND EXISTS
+(
+    SELECT 1 FROM well_marker wm2
+    JOIN stratigraphy st2
+    ON wm2.horizon_id = st2.id
+    WHERE st2.unit_name IN ("mu", "so")
+    AND wm1.well_id = wm2.well_id
+    AND st1.unit_name <> st2.unit_name
+)
+ORDER BY wm1.well_id,wm1.drill_depth
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Members of the ‘GeologicalToolbox.Stratigraphy’ module
+.sp
+This module provides a class for storing stratigraphical information in a database.
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.Stratigraphy.StratigraphicObject(session, name, age=\-1)
+A class for storing stratigraphical information in a database.
+.INDENT 7.0
+.TP
+.B horizon_age
+The age of the stratigraphic unit
+.INDENT 7.0
+.TP
+.B Type
+float
+.TP
+.B Raises
+\fBValueError\fP – if new value is convertible to type int
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod init_stratigraphy(session, name, age=\-1, update=False)
+Initialize a stratigraphic unit. Create a new one if unit doesn’t exists in the database, else use the existing.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – SQLAlchemy session, which includes the database connection
+.IP \(bu 2
+\fBname\fP (\fIstr\fP) – Name of the stratigraphic unit
+.IP \(bu 2
+\fBage\fP (\fIfloat\fP) – age of the stratigraphic unit (\-1 if none)
+.IP \(bu 2
+\fBupdate\fP (\fIbool\fP) – update age if stratigraphic unit exists
+.UNINDENT
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBValueError\fP – if age is not compatible to float
+.IP \(bu 2
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_all_from_db(session)
+Returns all stratigraphic units stored in the database connected to the SQLAlchemy Session session
+.INDENT 7.0
+.TP
+.B Parameters
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.TP
+.B Returns
+a list of stratigraphic units representing the result of the database query
+.TP
+.B Return type
+List[StratigraphicObject]
+.TP
+.B Raises
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_by_age_from_db(min_age, max_age, session)
+Returns a list of stratigraphic units with an age between min_age and max_age from the database connected to
+the SQLAlchemy Session session. If no result was found, this function returns an empty list.
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmin_age\fP (\fIfloat\fP) – Minimal age of the stratigraphic units
+.IP \(bu 2
+\fBmax_age\fP (\fIfloat\fP) – Maximal age of the stratigraphic units
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+Returns a list of stratigraphic units with an age between min_age and max_age.
+.TP
+.B Return type
+List[StratigraphicObject]
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBValueError\fP – if min_age or max_age is not compatible to float
+.IP \(bu 2
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_by_name_from_db(name, session)
+Returns the stratigraphic unit with the given name in the database connected to the SQLAlchemy Session session
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fIstr\fP) – The name of the requested stratigraphic unit
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+As the name is a unique value, only one result can be returned or None
+.TP
+.B Return type
+StratigraphicObject or None
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBDatabaseException\fP – if more than one result was found (name is an unique value)
+.IP \(bu 2
+\fBTypeError\fP – if session is not of type SQLAlchemy Session
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B name
+The name of the stratigraphic unit
+.INDENT 7.0
+.TP
+.B Type
+str
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B save_to_db()
+Saves all changes of the line or the line itself to the connected database
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBIntegrityError\fP – if the commit to the database fails and rolls all changes back
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B session
+The current Session object
+.INDENT 7.0
+.TP
+.B Type
+Session
+.TP
+.B Raises
+\fBTypeError\fP – if new value is not of an instance of Session
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Members of the ‘GeologicalToolbox.WellLogs’ module
+.sp
+This module provides a class for storing logging information of wells. The logging class is derived from the
+AbstractLogClass.
+.INDENT 0.0
+.INDENT 3.5
+.SS Todo
+.INDENT 0.0
+.IP \(bu 2
+reformat docstrings, espacially of setter and getter functions
+.IP \(bu 2
+check exception types
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.WellLogs.WellLog(*args, **kwargs)
+This class represents logging information for wells
+.INDENT 7.0
+.TP
+.B delete_value(value)
+Deletes the value from the well log
+.INDENT 7.0
+.TP
+.B Parameters
+\fBvalue\fP (\fIWellLogValue\fP) – WellLogValue object which should be deleted
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – Raises TypeError if value is not of type WellLogValue
+.IP \(bu 2
+\fBValueError\fP – Raises ValueError the value is not part of the well log
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B get_value_by_depth(depth)
+Returns the value at depth ‘depth’
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdepth\fP (\fIfloat\fP) – depth of the requested marker
+.TP
+.B Returns
+Returns the value at depth ‘depth’
+.TP
+.B Return type
+WellLogValue
+.TP
+.B Raises
+\fBValueError\fP – Raises ValueError if no marker was found for the committed depth or depth is
+not compatible to float
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B insert_log_value(log_value)
+Insert a new log value in the log
+ATTENTION: If you insert a log value, the log will be automatically stored in the database!
+.INDENT 7.0
+.TP
+.B Parameters
+\fBlog_value\fP (\fIWellLogValue\fP) – WellLogValue to be inserted
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – Raises TypeError if marker is not an instance of WellLogValue
+.IP \(bu 2
+\fBValueError\fP – Raises ValueError if the depth of the marker is larger than the drilled depth of the well
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B insert_multiple_log_values(log_values)
+Insert the multiple log values in the log
+ATTENTION: If you insert value, the log will be automatically stored in the database!
+.INDENT 7.0
+.TP
+.B Parameters
+\fBlog_values\fP (\fIList\fP\fI[\fP\fIWellLogValue\fP\fI]\fP) – List of marker to be inserted
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – Raises TypeError if one of the marker is not an instance of WellLogValue
+.IP \(bu 2
+\fBValueError\fP – Raises ValueError if the depth of a value is larger than the drilled depth of the well
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.WellLogs.WellLogValue(depth, value, *args, **kwargs)
+This class connects the logging values to their related depth
+.INDENT 7.0
+.TP
+.B depth
+Returns the depth of the log value
+.INDENT 7.0
+.TP
+.B Returns
+Returns the depth of the log value
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B value
+Returns the value of the log depth
+.INDENT 7.0
+.TP
+.B Returns
+Returns the value of the log depth
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Members of the ‘GeologicalToolbox.Wells’ module
+.sp
+This module provides classes for storing drilling data in a database.
+.INDENT 0.0
+.INDENT 3.5
+.SS Todo
+.INDENT 0.0
+.IP \(bu 2
+reformat docstrings, especially of setter and getter functions
+.IP \(bu 2
+check exception types
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.Wells.Well(well_name, short_name, depth, *args, **kwargs)
+Class Well
+.sp
+Represents a well for storage of geoscientific data.
+.INDENT 7.0
+.TP
+.B add_log(log)
+Adds a new log to the well
+.INDENT 7.0
+.TP
+.B Parameters
+\fBlog\fP (\fIWellLog\fP) – new well log
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBTypeError\fP – Raises TypeError if log is not of type WellLog
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B delete_log(log)
+Deletes a log from the well
+.INDENT 7.0
+.TP
+.B Parameters
+\fBlog\fP (\fIWellLog\fP) – log to delete
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – Raises TypeError if log is not of type WellLog
+.IP \(bu 2
+\fBValueError\fP – Raises ValueError if log is not part of self.logs
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B delete_marker(marker)
+Deletes the marker from the well
+.INDENT 7.0
+.TP
+.B Parameters
+\fBmarker\fP (\fIWellMarker\fP) – WellMarker object which should be deleted
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – Raises TypeError if marker is not of type WellMarker
+.IP \(bu 2
+\fBValueError\fP – Raises ValueError the marker is not part of the well
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B depth
+Returns the drilling depth of the well
+.INDENT 7.0
+.TP
+.B Returns
+Returns the drilling depth of the well
+.TP
+.B Return type
+float
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B get_marker_by_depth(depth)
+Returns the marker at depth ‘depth’
+.INDENT 7.0
+.TP
+.B Parameters
+\fBdepth\fP (\fIfloat\fP) – depth of the requested marker
+.TP
+.B Returns
+Returns the marker at depth ‘depth’
+.TP
+.B Return type
+WellMarker
+.TP
+.B Raises
+\fBValueError\fP – Raises ValueError if no marker was found for the committed depth or depth is
+not compatible to float
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B insert_marker(marker)
+Insert a new WellMarker in the well
+ATTENTION: If you insert a marker, the well will be automatically stored in the database!
+.INDENT 7.0
+.TP
+.B Parameters
+\fBmarker\fP (\fIWellMarker\fP) – WellMarker to be inserted
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – Raises TypeError if marker is not of type WellMarker
+.IP \(bu 2
+\fBValueError\fP – Raises ValueError if the depth of the marker is larger than the drilled depth of the well
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B insert_multiple_marker(marker)
+Insert the multiple marker in the well
+ATTENTION: If you insert marker, the well will be automatically stored in the database!
+.INDENT 7.0
+.TP
+.B Parameters
+\fBmarker\fP (\fIList\fP\fI[\fP\fIWellMarker\fP\fI]\fP) – List of marker to be inserted
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+.INDENT 7.0
+.IP \(bu 2
+\fBTypeError\fP – Raises TypeError if one of the marker is not of type WellMarker
+.IP \(bu 2
+\fBValueError\fP – Raises ValueError if the depth of a marker is larger than the drilled depth of the well
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_by_wellname_from_db(name, session)
+Returns the well with the given name in the database connected to the SQLAlchemy Session session
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBname\fP (\fIstr\fP) – Only the well with this name will be returned
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+As the name is a unique value, only one result can be returned or None
+.TP
+.B Return type
+Well or None
+.TP
+.B Raises
+\fBDatabaseException\fP – Raises DatabaseException if more than one result was found (name is an unique value)
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_deeper_than_value_from_db(session, min_depth)
+Returns all wells with a drilled depth below the min_depth in the database connected to the SQLAlchemy Session
+session
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmin_depth\fP (\fIfloat\fP) – minimal drilled depth
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+a list of wells representing the result of the database query
+.TP
+.B Return type
+List[Well]
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B short_name
+Returns the short name of the well
+.INDENT 7.0
+.TP
+.B Returns
+Returns the short name of the well
+.TP
+.B Return type
+str
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B well_name
+Returns the name of the well
+.INDENT 7.0
+.TP
+.B Returns
+Returns the name of the well
+.TP
+.B Return type
+str
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.Wells.WellMarker(depth, horizon, *args, **kwargs)
+Class WellMarker
+.sp
+Represents single markers in a drilled well
+.INDENT 7.0
+.TP
+.B depth
+Returns the depth of the well marker below Kelly Bushing.
+.INDENT 7.0
+.TP
+.B Returns
+Returns the depth of the well marker below Kelly Bushing.
+.TP
+.B Return type
+float
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B horizon
+Returns the stratigraphy of the point
+.INDENT 7.0
+.TP
+.B Returns
+Returns the current Stratigraphy
+.TP
+.B Return type
+StratigraphicObject
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_all_by_stratigraphy_from_db(horizon, session)
+Returns all WellMarker in the database which are connected to the horizon ‘horizon’
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBhorizon\fP (\fIStratigraphicObject\fP) – stratigraphy for the database query
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+a list of WellMarker
+.TP
+.B Return type
+List[WellMarker]
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_all_by_stratigraphy_in_extent_from_db(horizon, min_easting, max_easting, min_northing, max_northing, session)
+Returns all WellMarker in the database which are connected to the horizon ‘horizon’
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBhorizon\fP (\fIStratigraphicObject\fP) – stratigraphy for the database query
+.IP \(bu 2
+\fBmin_easting\fP (\fIfloat\fP) – minimal easting of extent
+.IP \(bu 2
+\fBmax_easting\fP (\fIfloat\fP) – maximal easting of extent
+.IP \(bu 2
+\fBmin_northing\fP (\fIfloat\fP) – minimal northing of extent
+.IP \(bu 2
+\fBmax_northing\fP (\fIfloat\fP) – maximal northing of extent
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+a list of WellMarker
+.TP
+.B Return type
+List[WellMarker]
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod load_in_extent_from_db(session, min_easting, max_easting, min_northing, max_northing)
+Returns all well marker with committed horizon inside the given extent in the database connected to the
+SQLAlchemy Session session
+.INDENT 7.0
+.TP
+.B Parameters
+.INDENT 7.0
+.IP \(bu 2
+\fBmin_easting\fP (\fIfloat\fP) – minimal easting of extent
+.IP \(bu 2
+\fBmax_easting\fP (\fIfloat\fP) – maximal easting of extent
+.IP \(bu 2
+\fBmin_northing\fP (\fIfloat\fP) – minimal northing of extent
+.IP \(bu 2
+\fBmax_northing\fP (\fIfloat\fP) – maximal northing of extent
+.IP \(bu 2
+\fBsession\fP (\fISession\fP) – represents the database connection as SQLAlchemy Session
+.UNINDENT
+.TP
+.B Returns
+a list of wells representing the result of the database query
+.TP
+.B Return type
+List[WellMarker]
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B to_geopoint()
+Returns the current well marker as GeoPoint
+.INDENT 7.0
+.TP
+.B Returns
+Returns the current well marker as GeoPoint
+.TP
+.B Return type
+GeoPoint
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SH THE GEOLOGICALTOOLBOX API REFERENCE
+.SS Unittest for the ‘GeologicalToolbox.GeoPoint’ class
+.sp
+This is a test module for the Resources.Geometries.GeoPoint class using unittest
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass(methodName=\(aqrunTest\(aq)
+This is a unittest class for the Resources.Geometries.GeoPoint class
+.INDENT 7.0
+.TP
+.B setUp()
+Initialise a temporary database connection for all test cases and fill the database with test data
+.INDENT 7.0
+.TP
+.B Returns
+None
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B tearDown()
+Empty function, nothing to shutdown after the testing process
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_add_and_delete_properties()
+Test the add_property and delete_property function
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_init()
+Test the initialisation of the database
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_loading()
+Test the loading functions of the GeoPoint class
+/1/ load all from database
+/2/ load by name
+/3/ load in extent
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_setter_and_getter()
+Test the setter and getter functions of class GeoPoint
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Unittest for the ‘GeologicalToolbox.Line’ class
+.sp
+This is a test module for the Resources.Geometries.Line class using unittest
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.tests.test_Line.TestLineClass(methodName=\(aqrunTest\(aq)
+This is a unittest class for the Resources.Geometries.Line class
+.INDENT 7.0
+.TP
+.B setUp()
+Initialise a temporary database connection for all test cases and fill the database with test data
+.INDENT 7.0
+.TP
+.B Returns
+None
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_delete_point()
+Test the deletion of a point.
+/1/ the point itself
+/2/ delete by coordinates
+/3/ test auto\-removal of doubled points after deletion
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_init()
+Test the initialisation of the database
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_insert_multiple()
+Test the insertion of multiple points. Although test remove of doubled values in a line.
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_insert_one()
+Test the insertion of one point. Additionally test get_point_index(point) function
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_loading()
+Test the different types of loading of lines from the db.
+Part 1: load all lines from the database
+Part 2: load line by id
+Part 3: load lines by name
+Part 4: load lines with minimal one point in given extent
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_setter_and_getter()
+Test the setter and getter functions of class Line
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Unittest for the ‘GeologicalToolbox.PropertyLogs’ module
+.sp
+This is a test module for the Resources.PropertyLogs\-Module classes using unittests
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.tests.test_PropLogs.TestPropertyClass(methodName=\(aqrunTest\(aq)
+a unittest for Property class
+.INDENT 7.0
+.TP
+.B setUp()
+Initialise a temporary database connection for all test cases and fill the database with test data
+.INDENT 7.0
+.TP
+.B Returns
+None
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B tearDown()
+Empty function, nothing to shutdown after the testing process
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_init()
+Test the initialisation of the class
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_setter_and_getter()
+Test the setter and getter functionality
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises Assertion Error when a test fails
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.tests.test_PropLogs.TestWellLogClass(methodName=\(aqrunTest\(aq)
+a unittest for WellLog class
+.INDENT 7.0
+.TP
+.B setUp()
+Initialise a temporary database connection for all test cases and fill the database with test data
+.INDENT 7.0
+.TP
+.B Returns
+None
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B tearDown()
+Empty function, nothing to shutdown after the testing process
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_WellLogValue_init()
+Test the initialisation of the database
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_insert_and_delete_logvalue()
+Test insertion and deletion functionality of class WellLog
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_setter_and_getter()
+Tests the setter and getter functionality of the WellLogValue class
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.tests.test_PropLogs.TestWellLogValueClass(methodName=\(aqrunTest\(aq)
+a unittest for WellLogValue class
+.INDENT 7.0
+.TP
+.B setUp()
+Initialise a temporary database connection for all test cases and fill the database with test data
+.INDENT 7.0
+.TP
+.B Returns
+None
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B tearDown()
+Empty function, nothing to shutdown after the testing process
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_WellLogValue_init()
+Test the initialisation of the database
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_setter_and_getter()
+Tests the setter and getter functionality of the WellLogValue class
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS Unittest for the ‘GeologicalToolbox.StratigraphicObject’ module
+.sp
+This is a test module for the Resources.StratigraphicObject.StratigraphicObject class using unittest
+.SS Unittest for the ‘GeologicalToolbox.Wells’ module
+.sp
+This is a test module for the Resources.Geometries.Well and WellMarker classes using unittest
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.tests.test_Well.TestWellClass(methodName=\(aqrunTest\(aq)
+a unittest for Well class
+.INDENT 7.0
+.TP
+.B setUp()
+Initialise a temporary database connection for all test cases and fill the database with test data
+.INDENT 7.0
+.TP
+.B Returns
+None
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B tearDown()
+Empty function, nothing to shutdown after the testing process
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_delete_marker()
+Test the Well.get_marker_by_depth function
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_get_marker_by_depth()
+Test the Well.get_marker_by_depth function
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_init()
+Test the initialisation of the database
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_insertion()
+Test the insert functions of class Well
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_loading()
+Test the different types of loading of lines from the db.
+Part 1: load all wells from the database
+Part 2: load well by name
+Part 3: load wells in given extent
+Part 4: load wells with minimal depth
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_log_handling()
+Tests the log handling functionality
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_setter_and_getter()
+Test setter and getter functionality
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises Assertion Error if a test fails
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class GeologicalToolbox.tests.test_Well.TestWellMarkerClass(methodName=\(aqrunTest\(aq)
+a unittest for WellMarker class
+.INDENT 7.0
+.TP
+.B setUp()
+Initialise a temporary database connection for all test cases and fill the database with test data
+.INDENT 7.0
+.TP
+.B Returns
+None
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B tearDown()
+Empty function, nothing to shutdown after the testing process
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_WellMarker_init()
+Test the initialisation of the database
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises AssertionError if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_WellMarker_setter_and_getter()
+Test setter and getter functionality
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises Assertion Error if a test fails
+.UNINDENT
+.UNINDENT
+.INDENT 7.0
+.TP
+.B test_WellMarker_to_GeoPoint()
+Test WellMarker.to_GeoPoint functionality
+.INDENT 7.0
+.TP
+.B Returns
+Nothing
+.TP
+.B Raises
+\fBAssertionError\fP – Raises Assertion Error if a test fails
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SH TODO LIST
+.INDENT 0.0
+.INDENT 3.5
+.SH TODO
+.INDENT 0.0
+.IP \(bu 2
+reformat docstrings, espacially of setter and getter functions
+.IP \(bu 2
+check exception types
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+(The \fI\%original entry\fP is located in /Users/stephan/GeologicalToolbox/GeologicalToolbox/AbstractLog.py:docstring of GeologicalToolbox.AbstractLog, line 3.)
+.INDENT 0.0
+.INDENT 3.5
+.SH TODO
+.INDENT 0.0
+.IP \(bu 2
+reformat docstrings, espacially of setter and getter functions
+.IP \(bu 2
+check exception types
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+(The \fI\%original entry\fP is located in /Users/stephan/GeologicalToolbox/GeologicalToolbox/Properties.py:docstring of GeologicalToolbox.Properties, line 4.)
+.INDENT 0.0
+.INDENT 3.5
+.SH TODO
+.INDENT 0.0
+.IP \(bu 2
+Integrate functionality
+.IP \(bu 2
+define interpolation methods
+.IP \(bu 2
+define return statement
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+(The \fI\%original entry\fP is located in /Users/stephan/GeologicalToolbox/GeologicalToolbox/Requests.py:docstring of GeologicalToolbox.Requests.Requests.interpolate_geopoints, line 3.)
+.INDENT 0.0
+.INDENT 3.5
+.SH TODO
+.INDENT 0.0
+.IP \(bu 2
+reformat docstrings, espacially of setter and getter functions
+.IP \(bu 2
+check exception types
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+(The \fI\%original entry\fP is located in /Users/stephan/GeologicalToolbox/GeologicalToolbox/WellLogs.py:docstring of GeologicalToolbox.WellLogs, line 4.)
+.INDENT 0.0
+.INDENT 3.5
+.SH TODO
+.INDENT 0.0
+.IP \(bu 2
+reformat docstrings, especially of setter and getter functions
+.IP \(bu 2
+check exception types
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+(The \fI\%original entry\fP is located in /Users/stephan/GeologicalToolbox/GeologicalToolbox/Wells.py:docstring of GeologicalToolbox.Wells, line 3.)
+.SH INDICES AND TABLES
+.INDENT 0.0
+.IP \(bu 2
+genindex
+.IP \(bu 2
+modindex
+.IP \(bu 2
+search
+.UNINDENT
+.SH AUTHOR
+Stephan Donndorf
+.SH COPYRIGHT
+2018, Stephan Donndorf
+.\" Generated by docutils manpage writer.
+.

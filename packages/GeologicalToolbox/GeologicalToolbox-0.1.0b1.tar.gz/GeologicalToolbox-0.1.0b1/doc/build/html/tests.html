@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+
+
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    
+    <title>2. The GeologicalToolbox API reference &mdash; Geological Toolbox 0.1.0b documentation</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Play:400,700|Raleway:400,400i,700,700i&amp;subset=latin-ext" media="screen and (min-width:481px)" type="text/css" />
+
+<link rel="stylesheet" href="_static/css/basicstrap-base.css" type="text/css" />
+<link rel="stylesheet" id="current-theme" href="_static/css/bootstrap3/bootswatch-cosmo.css" type="text/css" />
+<link rel="stylesheet" id="current-adjust-theme" href="_static/css/adjust_theme/bootswatch-cosmo.css" type="text/css" />
+
+<link rel="stylesheet" href="_static/css/font-awesome.min.css">
+
+<style type="text/css">
+  body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+  }
+</style>
+
+<link rel="stylesheet" href="_static/css/basicstrap.css" type="text/css" />
+<link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+<link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+    
+<script type="text/javascript">
+  var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:    './',
+            VERSION:     '0.1.0b',
+            COLLAPSE_INDEX: false,
+            FILE_SUFFIX: '.html',
+            HAS_SOURCE:  true
+  };
+</script>
+    <script type="text/javascript" src="_static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/js/bootstrap3.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="_static/js/basicstrap.js"></script>
+<script type="text/javascript">
+</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="top" title="Geological Toolbox 0.1.0b documentation" href="index.html" />
+    <link rel="prev" title="1. The GeologicalToolbox API reference" href="api.html" /> 
+  </head>
+  <body role="document">
+    <div id="navbar-top" class="navbar navbar-fixed-top navbar-default" role="navigation" aria-label="top navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html">Geological Toolbox 0.1.0b documentation</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+              <li class="dropdown visible-xs">
+                <a role="button" id="localToc" data-toggle="dropdown" data-target="#" href="#">Table Of Contents <b class="caret"></b></a>
+                <ul class="dropdown-menu localtoc sp-localtoc" role="menu" aria-labelledby="localToc">
+                <ul>
+<li><a class="reference internal" href="#">2. The GeologicalToolbox API reference</a><ul>
+<li><a class="reference internal" href="#module-GeologicalToolbox.tests.test_GeoPoint">2.1. Unittest for the ‘GeologicalToolbox.GeoPoint’ class</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.tests.test_Line">2.2. Unittest for the ‘GeologicalToolbox.Line’ class</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.tests.test_PropLogs">2.3. Unittest for the ‘GeologicalToolbox.PropertyLogs’ module</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.tests.test_Stratigraphy">2.4. Unittest for the ‘GeologicalToolbox.StratigraphicObject’ module</a></li>
+<li><a class="reference internal" href="#module-GeologicalToolbox.tests.test_Well">2.5. Unittest for the ‘GeologicalToolbox.Wells’ module</a></li>
+</ul>
+</li>
+</ul>
+
+                </ul>
+              </li>
+
+            
+              <li><a href="api.html" title="1. The GeologicalToolbox API reference" accesskey="P">previous </a></li>
+              <li><a href="py-modindex.html" title="Python Module Index" >modules </a></li>
+              <li><a href="genindex.html" title="General Index" accesskey="I">index </a></li>
+            
+            <li class="visible-xs"><a href="_sources/tests.rst.txt" rel="nofollow">Show Source</a></li>
+
+            <li class="visible-xs">
+                <form class="search form-search form-inline navbar-form navbar-right sp-searchbox" action="search.html" method="get">
+                  <div class="input-append input-group">
+                    <input type="text" class="search-query form-control" name="q" placeholder="Search...">
+                    <span class="input-group-btn">
+                    <input type="submit" class="btn" value="Go" />
+                    </span>
+                  </div>
+                  <input type="hidden" name="check_keywords" value="yes" />
+                  <input type="hidden" name="area" value="default" />
+                </form>
+            </li>
+
+            
+
+          </ul>
+
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- container -->
+    <div class="container">
+
+      <!-- row -->
+      <div class="row">
+         
+<div class="col-md-3 hidden-xs" id="sidebar-wrapper">
+  <div class="sidebar hidden-xs" role="navigation" aria-label="main navigation">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="api.html"
+                        title="previous chapter">1. The GeologicalToolbox API reference</a></p>
+<div id="searchbox" role="search">
+  <h3>Quick search</h3>
+  <form class="search form-inline" action="search.html" method="get">
+      <div class="input-append input-group">
+        <input type="text" class="search-query form-control" name="q" placeholder="Search...">
+        <span class="input-group-btn">
+        <input type="submit" class="btn" value="Go" />
+        </span>
+      </div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+  </div>
+</div> 
+        
+
+        <div class="col-md-9" id="content-wrapper">
+          <div class="document" role="main">
+            <div class="documentwrapper">
+              <div class="bodywrapper">
+                <div class="body">
+                  
+  <div class="section" id="the-geologicaltoolbox-api-reference">
+<h1>2. The GeologicalToolbox API reference<a class="headerlink" href="#the-geologicaltoolbox-api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-GeologicalToolbox.tests.test_GeoPoint">
+<span id="unittest-for-the-geologicaltoolbox-geopoint-class"></span><h2>2.1. Unittest for the ‘GeologicalToolbox.GeoPoint’ class<a class="headerlink" href="#module-GeologicalToolbox.tests.test_GeoPoint" title="Permalink to this headline">¶</a></h2>
+<p>This is a test module for the Resources.Geometries.GeoPoint class using unittest</p>
+<dl class="class">
+<dt id="GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.tests.test_GeoPoint.</code><code class="descname">TestGeoPointClass</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a unittest class for the Resources.Geometries.GeoPoint class</p>
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise a temporary database connection for all test cases and fill the database with test data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.tearDown">
+<code class="descname">tearDown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empty function, nothing to shutdown after the testing process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.test_add_and_delete_properties">
+<code class="descname">test_add_and_delete_properties</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.test_add_and_delete_properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the add_property and delete_property function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.test_init">
+<code class="descname">test_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.test_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the initialisation of the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.test_loading">
+<code class="descname">test_loading</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.test_loading" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the loading functions of the GeoPoint class
+/1/ load all from database
+/2/ load by name
+/3/ load in extent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.test_setter_and_getter">
+<code class="descname">test_setter_and_getter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_GeoPoint.TestGeoPointClass.test_setter_and_getter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the setter and getter functions of class GeoPoint</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.tests.test_Line">
+<span id="unittest-for-the-geologicaltoolbox-line-class"></span><h2>2.2. Unittest for the ‘GeologicalToolbox.Line’ class<a class="headerlink" href="#module-GeologicalToolbox.tests.test_Line" title="Permalink to this headline">¶</a></h2>
+<p>This is a test module for the Resources.Geometries.Line class using unittest</p>
+<dl class="class">
+<dt id="GeologicalToolbox.tests.test_Line.TestLineClass">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.tests.test_Line.</code><code class="descname">TestLineClass</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Line.TestLineClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>This is a unittest class for the Resources.Geometries.Line class</p>
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Line.TestLineClass.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Line.TestLineClass.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise a temporary database connection for all test cases and fill the database with test data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Line.TestLineClass.test_delete_point">
+<code class="descname">test_delete_point</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Line.TestLineClass.test_delete_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the deletion of a point.
+/1/ the point itself
+/2/ delete by coordinates
+/3/ test auto-removal of doubled points after deletion</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Line.TestLineClass.test_init">
+<code class="descname">test_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Line.TestLineClass.test_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the initialisation of the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Line.TestLineClass.test_insert_multiple">
+<code class="descname">test_insert_multiple</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Line.TestLineClass.test_insert_multiple" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the insertion of multiple points. Although test remove of doubled values in a line.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Line.TestLineClass.test_insert_one">
+<code class="descname">test_insert_one</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Line.TestLineClass.test_insert_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the insertion of one point. Additionally test get_point_index(point) function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Line.TestLineClass.test_loading">
+<code class="descname">test_loading</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Line.TestLineClass.test_loading" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the different types of loading of lines from the db.
+Part 1: load all lines from the database
+Part 2: load line by id
+Part 3: load lines by name
+Part 4: load lines with minimal one point in given extent</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Line.TestLineClass.test_setter_and_getter">
+<code class="descname">test_setter_and_getter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Line.TestLineClass.test_setter_and_getter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the setter and getter functions of class Line</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.tests.test_PropLogs">
+<span id="unittest-for-the-geologicaltoolbox-propertylogs-module"></span><h2>2.3. Unittest for the ‘GeologicalToolbox.PropertyLogs’ module<a class="headerlink" href="#module-GeologicalToolbox.tests.test_PropLogs" title="Permalink to this headline">¶</a></h2>
+<p>This is a test module for the Resources.PropertyLogs-Module classes using unittests</p>
+<dl class="class">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestPropertyClass">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.tests.test_PropLogs.</code><code class="descname">TestPropertyClass</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestPropertyClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>a unittest for Property class</p>
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestPropertyClass.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestPropertyClass.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise a temporary database connection for all test cases and fill the database with test data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestPropertyClass.tearDown">
+<code class="descname">tearDown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestPropertyClass.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empty function, nothing to shutdown after the testing process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestPropertyClass.test_init">
+<code class="descname">test_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestPropertyClass.test_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the initialisation of the class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestPropertyClass.test_setter_and_getter">
+<code class="descname">test_setter_and_getter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestPropertyClass.test_setter_and_getter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the setter and getter functionality</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises Assertion Error when a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestWellLogClass">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.tests.test_PropLogs.</code><code class="descname">TestWellLogClass</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestWellLogClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>a unittest for WellLog class</p>
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestWellLogClass.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestWellLogClass.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise a temporary database connection for all test cases and fill the database with test data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestWellLogClass.tearDown">
+<code class="descname">tearDown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestWellLogClass.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empty function, nothing to shutdown after the testing process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestWellLogClass.test_WellLogValue_init">
+<code class="descname">test_WellLogValue_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestWellLogClass.test_WellLogValue_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the initialisation of the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestWellLogClass.test_insert_and_delete_logvalue">
+<code class="descname">test_insert_and_delete_logvalue</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestWellLogClass.test_insert_and_delete_logvalue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test insertion and deletion functionality of class WellLog</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestWellLogClass.test_setter_and_getter">
+<code class="descname">test_setter_and_getter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestWellLogClass.test_setter_and_getter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the setter and getter functionality of the WellLogValue class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestWellLogValueClass">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.tests.test_PropLogs.</code><code class="descname">TestWellLogValueClass</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestWellLogValueClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>a unittest for WellLogValue class</p>
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestWellLogValueClass.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestWellLogValueClass.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise a temporary database connection for all test cases and fill the database with test data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestWellLogValueClass.tearDown">
+<code class="descname">tearDown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestWellLogValueClass.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empty function, nothing to shutdown after the testing process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestWellLogValueClass.test_WellLogValue_init">
+<code class="descname">test_WellLogValue_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestWellLogValueClass.test_WellLogValue_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the initialisation of the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_PropLogs.TestWellLogValueClass.test_setter_and_getter">
+<code class="descname">test_setter_and_getter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_PropLogs.TestWellLogValueClass.test_setter_and_getter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the setter and getter functionality of the WellLogValue class</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-GeologicalToolbox.tests.test_Stratigraphy">
+<span id="unittest-for-the-geologicaltoolbox-stratigraphicobject-module"></span><h2>2.4. Unittest for the ‘GeologicalToolbox.StratigraphicObject’ module<a class="headerlink" href="#module-GeologicalToolbox.tests.test_Stratigraphy" title="Permalink to this headline">¶</a></h2>
+<p>This is a test module for the Resources.StratigraphicObject.StratigraphicObject class using unittest</p>
+</div>
+<div class="section" id="module-GeologicalToolbox.tests.test_Well">
+<span id="unittest-for-the-geologicaltoolbox-wells-module"></span><h2>2.5. Unittest for the ‘GeologicalToolbox.Wells’ module<a class="headerlink" href="#module-GeologicalToolbox.tests.test_Well" title="Permalink to this headline">¶</a></h2>
+<p>This is a test module for the Resources.Geometries.Well and WellMarker classes using unittest</p>
+<dl class="class">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellClass">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.tests.test_Well.</code><code class="descname">TestWellClass</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>a unittest for Well class</p>
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellClass.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellClass.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise a temporary database connection for all test cases and fill the database with test data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellClass.tearDown">
+<code class="descname">tearDown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellClass.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empty function, nothing to shutdown after the testing process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellClass.test_delete_marker">
+<code class="descname">test_delete_marker</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellClass.test_delete_marker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the Well.get_marker_by_depth function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellClass.test_get_marker_by_depth">
+<code class="descname">test_get_marker_by_depth</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellClass.test_get_marker_by_depth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the Well.get_marker_by_depth function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellClass.test_init">
+<code class="descname">test_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellClass.test_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the initialisation of the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellClass.test_insertion">
+<code class="descname">test_insertion</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellClass.test_insertion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the insert functions of class Well</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellClass.test_loading">
+<code class="descname">test_loading</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellClass.test_loading" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the different types of loading of lines from the db.
+Part 1: load all wells from the database
+Part 2: load well by name
+Part 3: load wells in given extent
+Part 4: load wells with minimal depth</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellClass.test_log_handling">
+<code class="descname">test_log_handling</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellClass.test_log_handling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the log handling functionality</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellClass.test_setter_and_getter">
+<code class="descname">test_setter_and_getter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellClass.test_setter_and_getter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test setter and getter functionality</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises Assertion Error if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellMarkerClass">
+<em class="property">class </em><code class="descclassname">GeologicalToolbox.tests.test_Well.</code><code class="descname">TestWellMarkerClass</code><span class="sig-paren">(</span><em>methodName='runTest'</em><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellMarkerClass" title="Permalink to this definition">¶</a></dt>
+<dd><p>a unittest for WellMarker class</p>
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellMarkerClass.setUp">
+<code class="descname">setUp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellMarkerClass.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise a temporary database connection for all test cases and fill the database with test data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellMarkerClass.tearDown">
+<code class="descname">tearDown</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellMarkerClass.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd><p>Empty function, nothing to shutdown after the testing process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellMarkerClass.test_WellMarker_init">
+<code class="descname">test_WellMarker_init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellMarkerClass.test_WellMarker_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test the initialisation of the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises AssertionError if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellMarkerClass.test_WellMarker_setter_and_getter">
+<code class="descname">test_WellMarker_setter_and_getter</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellMarkerClass.test_WellMarker_setter_and_getter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test setter and getter functionality</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises Assertion Error if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="GeologicalToolbox.tests.test_Well.TestWellMarkerClass.test_WellMarker_to_GeoPoint">
+<code class="descname">test_WellMarker_to_GeoPoint</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#GeologicalToolbox.tests.test_Well.TestWellMarkerClass.test_WellMarker_to_GeoPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test WellMarker.to_GeoPoint functionality</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>AssertionError</strong> – Raises Assertion Error if a test fails</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        
+      </div><!-- /row -->
+
+      <!-- row -->
+      <div class="row footer-relbar">
+<div id="navbar-related" class=" related navbar navbar-default" role="navigation" aria-label="related navigation">
+  <div class="navbar-inner">
+    <ul class="nav navbar-nav ">
+        <li><a href="index.html">Geological Toolbox 0.1.0b documentation</a></li>
+    </ul>
+<ul class="nav navbar-nav pull-right hidden-xs hidden-sm">
+      
+        <li><a href="api.html" title="1. The GeologicalToolbox API reference" >previous</a></li>
+        <li><a href="py-modindex.html" title="Python Module Index" >modules</a></li>
+        <li><a href="genindex.html" title="General Index" >index</a></li>
+        <li><a href="#">top</a></li> 
+      
+    </ul>
+  </div>
+</div>
+      </div><!-- /row -->
+
+      <!-- footer -->
+      <footer role="contentinfo">
+          &copy; Copyright 2018, Stephan Donndorf.
+        Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.6.6.
+      </footer>
+      <!-- /footer -->
+
+    </div>
+    <!-- /container -->
+
+  </body>
+</html>
