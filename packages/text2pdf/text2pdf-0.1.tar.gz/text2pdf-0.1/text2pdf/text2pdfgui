@@ -1,0 +1,147 @@
+#!/usr/bin/python3
+import math
+import sys
+import PyQt5.QtWidgets as Qw
+import PyQt5.QtCore as Qc
+import PyQt5.QtGui as Qg
+import PyQt5.QtPrintSupport as Qp
+
+
+def findBestFontSize(linesize, pageRect, fontname, margin=5):
+    size = 14
+    while True:
+        font = Qg.QFont(fontname, size)
+        sansLineHeight = Qg.QFontMetrics(font).height()
+        sansLineWidth  = (Qg.QFontMetrics(font).width('A') * linesize)
+        if pageRect.width() < sansLineWidth:
+            size = size - 1
+        else:
+            break
+    return size
+
+class Form(Qw.QDialog):
+    def __init__(self, args=None, parent=None):
+        super(Form, self).__init__(parent)
+        self.filename = ''
+        #File name to convert
+        lblFileName = Qw.QLabel("File Name")
+        self.txtFileNames = Qw.QPlainTextEdit()
+        self.filenames = []
+        tmpfilenames = args[1:]
+        tmpTxt = u''
+        for f in tmpfilenames:
+            self.filenames.append(f)
+            tmpTxt += f + '\n'
+        self.txtFileNames.insertPlainText(tmpTxt)
+        self.txtFileNames.setReadOnly(True)
+        btnGetFileName = Qw.QToolButton()
+        btnGetFileName.setText("..")
+        getFileLayout = Qw.QHBoxLayout()
+        getFileLayout.addWidget(self.txtFileNames)     
+        #Code page of file
+        lblCodePage = Qw.QLabel("Code Page")
+        self.cmbCodePage = Qw.QComboBox()
+        self.cmbCodePage.addItem("utf8")
+        self.cmbCodePage.addItem("windows")
+        self.cmbCodePage.addItem("dos")
+        codePageLayout = Qw.QHBoxLayout()
+        codePageLayout.addStretch()
+        codePageLayout.addWidget(lblCodePage)
+        codePageLayout.addWidget(self.cmbCodePage)
+        #Printer Orientation (Portrait / Landscape)
+        lblOrientation = Qw.QLabel("Orientation")
+        self.cmbOrientation = Qw.QComboBox()
+        self.cmbOrientation.addItem("portait")
+        self.cmbOrientation.addItem("landscape")
+        orientationLayout = Qw.QHBoxLayout()
+        orientationLayout.addStretch()
+        orientationLayout.addWidget(lblOrientation)
+        orientationLayout.addWidget(self.cmbOrientation)
+        #Buttons for save or Just quit
+        bSave = Qw.QPushButton("Make PDF")
+        bQuit = Qw.QPushButton("Abort")
+        buttonLayout = Qw.QHBoxLayout()
+        buttonLayout.addWidget(bQuit)
+        buttonLayout.addStretch()
+        buttonLayout.addWidget(bSave)
+        
+        #Final Layout
+        layout = Qw.QVBoxLayout()
+        layout.addLayout(getFileLayout)
+        layout.addLayout(codePageLayout)
+        layout.addLayout(orientationLayout)
+        layout.addLayout(buttonLayout)
+        self.setLayout(layout)
+        
+        #Connections
+        bSave.clicked.connect(self.batchPrint)
+        bQuit.clicked.connect(self.accept)
+        btnGetFileName.clicked.connect(self.getFileName)
+        self.setWindowTitle("dos/windows text to PDF")
+
+    @property
+    def code_page(self):
+        cmbt = str(self.cmbCodePage.currentText())
+        if cmbt == 'dos':
+            return 'cp737'
+        elif cmbt == 'windows':
+            return 'iso8859-7'
+        else:
+            return 'utf-8'
+
+    def getFileName(self):
+        fd = Qw.QFileDialog(self)
+        self.filename = fd.getOpenFileName()
+        self.txtFileName.setText(self.filename)
+        
+    def batchPrint(self):
+        for afile in self.filenames:
+            self.make_pdf(afile)
+            
+    def make_pdf(self, afile):
+        # fontname = "Courier"
+        fontname = "Monospace"
+        from os.path import isfile
+        if isfile(afile):
+            with open(afile, encoding=self.code_page) as afi:
+                lines = list(afi)
+        else:
+            return
+        *fname, postfix = afile.split('.')
+        fname = '.'.join(fname + ['pdf'])
+        self.printer = Qp.QPrinter()
+        self.printer.setPageSize(Qp.QPrinter.A4)
+        self.printer.setOutputFileName(fname)
+        self.printer.setOutputFormat(Qp.QPrinter.PdfFormat)
+        if self.cmbOrientation.currentText() == 'landscape':
+            self.printer.setOrientation(Qp.QPrinter.Landscape)
+        pageRect = self.printer.pageRect()
+        LeftMargin = 30
+        bestSize = findBestFontSize(
+            max([len(i) for i in lines]), pageRect, fontname)
+        font = Qg.QFont(fontname, bestSize)
+        # font.setStyleHint(Qg.QFont.TypeWriter)
+        sansLineHeight = Qg.QFontMetrics(font).height()
+        painter = Qg.QPainter(self.printer)
+        page = 1
+        y = 20
+        for line in lines:
+            painter.save()
+            painter.setFont(font)
+            y += sansLineHeight
+            x = LeftMargin
+            try:
+                painter.drawText(x, y, line)
+            except:
+                painter.drawText(x,y,'CodePage error !!!')
+            if y > (pageRect.height() - 54) :
+                self.printer.newPage()
+                y = 20
+            painter.restore()
+        self.accept()
+
+if __name__ == "__main__":
+    app = Qw.QApplication(sys.argv)
+    form = Form(sys.argv)
+    form.show()
+    app.exec_()

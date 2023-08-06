@@ -1,0 +1,82 @@
+#!/usr/bin/python3
+import os.path
+import argparse
+import PyQt5.QtWidgets as Qw
+import PyQt5.QtGui as Qg
+import PyQt5.QtPrintSupport as Qp
+
+
+def best_font_size(linesize, pageRect, fontname, margin=5):
+    size = 14
+    while True:
+        font = Qg.QFont(fontname, size)
+        font_line_height = Qg.QFontMetrics(font).height()
+        font_line_width = (Qg.QFontMetrics(font).width('A') * linesize)
+        # print(int(pageRect.width() / Qg.QFontMetrics(font).width('A')))
+        # print(int(pageRect.height() / Qg.QFontMetrics(font).height()))
+        if pageRect.width() < font_line_width:
+            size = size - 1
+        else:
+            break
+    return size
+
+
+def make_pdf(afile, orientation='portait', encoding='utf-8', point=(30, 20)):
+    """Create PDF from text
+
+    :param afile: Text file to convert
+    :param orientation: PDF orientation (lamdscape or portrait)
+    :param encoding: The actual encoding of afile
+    :param point: (column, row) start point
+    """
+    # fontname = "DejaVu Sans Mono"
+    # fontname = "Monospace"
+    fontname = "Ubuntu Mono"
+    # fontname = "Liberation Mono"
+    start_row, start_col = point
+    with open(afile, encoding=encoding) as afi:
+        lines = list(afi)
+    *fname, _ = afile.split('.')
+    fname = '.'.join(fname + ['pdf'])
+    printer = Qp.QPrinter()
+    printer.setPageSize(Qp.QPrinter.A4)
+    printer.setOutputFileName(fname)
+    printer.setOutputFormat(Qp.QPrinter.PdfFormat)
+    if orientation == 'landscape':
+        printer.setOrientation(Qp.QPrinter.Landscape)
+    pageRect = printer.pageRect()
+    bestSize = best_font_size(
+        max([len(i) for i in lines]), pageRect, fontname)
+    font = Qg.QFont(fontname, bestSize)
+    # font.setStyleHint(Qg.QFont.TypeWriter)
+    font_line_height = Qg.QFontMetrics(font).height()
+    painter = Qg.QPainter(printer)
+    page = 1
+    row = start_row
+    for line in lines:
+        painter.save()
+        painter.setFont(font)
+        row += font_line_height
+        try:
+            painter.drawText(start_col, row, line)
+        except:
+            painter.drawText(start_col, row, 'CodePage error !!!')
+        if row > (pageRect.height() - 54):
+            printer.newPage()
+            row = start_row
+        painter.restore()
+    painter.end()
+
+
+if __name__ == '__main__':
+    pars = argparse.ArgumentParser(description='Convert text to pdf')
+    pars.add_argument('file', help='Text FILE to be converted')
+    pars.add_argument('-e', '--Encoding', help='Encoding of file')
+    pars.add_argument('-o', '--Orientation', help='portrait or landscape')
+    pars.add_argument('--version', action='version', version='1.0')
+    args = pars.parse_args()
+    if not os.path.isfile(args.file):
+        print('No such file : %s' % args.file)
+    else:
+        app = Qw.QApplication([])
+        ret = make_pdf(args.file, args.Orientation, args.Encoding)
