@@ -1,0 +1,76 @@
+Metadata-Version: 1.1
+Name: architect-client
+Version: 0.3
+Summary: Architect Client is client-side of service modeling,
+management and visualization platform.
+Home-page: https://github.com/cznewt/architect-client/
+Author: Aleš Komárek
+Author-email: ales.komarek@newt.cz
+License: Apache License, Version 2.0
+Description-Content-Type: UNKNOWN
+Description: 
+        ====================
+        The Architect Client
+        ====================
+        
+        Client library and CLI for Architect API service.
+        
+        
+        Client Installation
+        ===================
+        
+        Following steps show how to deploy and configure Architect Client.
+        
+        .. code-block:: bash
+        
+            pip install architect-client
+        
+        Create configuration file ``/etc/architect/client.yml`` for client.
+        
+        .. code-block:: yaml
+        
+            project: project-name
+            host: architect-api
+            port: 8181
+            username: salt
+            password: password
+        
+        
+        SaltStack Integration
+        ---------------------
+        
+        To setup architect as Salt master Pillar source, set following configuration
+        to your Salt master.
+        
+        .. code-block:: yaml
+        
+            ext_pillar:
+              - cmd_yaml: 'architect-salt-pillar %s'
+        
+        To setup architect as Salt master Tops source, set following configuration
+        to your Salt master.
+        
+        .. code-block:: yaml
+        
+            master_tops:
+               ext_nodes: architect-salt-top
+        
+        
+        Ansible Integration
+        -------------------
+        
+        To setup architect as Ansible dynamic inventory source, set following
+        configuration to your Ansible control node.
+        
+        .. code-block:: bash
+        
+            ansible -i architect-ansible-inventory
+        
+Platform: UNKNOWN
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
