@@ -1,0 +1,13 @@
+{% macro vertical_field(field) %}
+    <div class="form-group clearfix">
+        {{ field.label() }}
+        {{ field(class="text-center form-control", **kwargs) | safe }}
+        {% if field.errors %}
+            <ul class="list-form-errors text-danger list-unstyled">
+                {% for error in field.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+{% endmacro %}
