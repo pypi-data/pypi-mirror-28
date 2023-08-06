@@ -1,0 +1,38 @@
+{% load compile_static %}
+{% load static %}
+
+<html class="mdc-typography">
+  <head>
+
+
+    {% if show_splash %}
+      <div class="splash_loading">
+        {% include 'splash.html' %}
+      </div>
+    {% endif %}
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title></title>
+
+    <!--Include default material and touchsupport, this include JQuery too-->
+    {% include "djangoforandroid/mdc.html" with scripts=False %}
+    {% include "djangoforandroid/brython.html" with debug=0 %}
+
+    <script type="text/python">
+    import sys
+    sys.path.append("{% static '' %}")
+    </script>
+
+    <script type="text/python" src="{% static brython_template %}"></script>
+  </head>
+  {% csrf_token %}
+  <body>
+
+
+
+
+  </body>
+</html>
+
