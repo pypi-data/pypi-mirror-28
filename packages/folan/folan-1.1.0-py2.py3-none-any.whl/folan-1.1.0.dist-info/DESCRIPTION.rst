@@ -1,0 +1,127 @@
+Copyright (c) 2018 Matthew Timms
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Description-Content-Type: UNKNOWN
+Description: 
+        FoLAN
+
+        =====
+
+        
+
+        .. image:: https://badge.fury.io/py/folan.svg
+
+            :target: https://badge.fury.io/py/folan
+
+        .. image:: https://travis-ci.org/MattTimms/folan.svg?branch=master
+
+            :target: https://travis-ci.org/MattTimms/folan
+
+        
+
+        Files over LAN is a pretty simple script used for sending Files over LAN.
+
+        
+
+        Have a host listen on particular local ip:port for another host whom is sending to those same address details.
+
+        
+
+        ``pip install folan``
+
+        
+
+        Usage
+
+        -----
+
+        
+
+        ::
+
+        
+
+            Files over LAN.
+
+            Written by Matthew Timms for MonashUAS
+
+        
+
+            Send/Receives files, or polls directory until user kills process.
+
+        
+
+            Usage:
+
+              folan.py listen <ip:port> [--save_path DIR_PATH] [options]
+
+              folan.py send files <ip:port> [options] <file_path>...
+
+              folan.py send dir <ip:port> <dir_path> [options]
+
+              folan.py (-h | --help)
+
+        
+
+            Example:
+
+              folan.py listen 196.168.0.13:40000 -s . --limit=10
+
+              folan.py send dir 10.100.192.15:5555 imgs/ --stayalive
+
+        
+
+            Options:
+
+              -h --help                 Shows this screen.
+
+              --stayalive               Continues to poll directory and send new files
+
+              --limit LEN_FILES         Limits number of files to receive before closing
+
+              -s, --save_path DIR_PATH  Path to saving directory [default: folan_dest/].
+
+        
+
+        
+
+        Requirements
+
+        ------------
+
+        
+
+        ``pip install -r requirements.txt``
+
+        
+
+        -  docopt (https://github.com/docopt/docopt)
+Keywords: file sharing,tcp,lan
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Topic :: Communications :: File Sharing
+Classifier: Topic :: Software Development
+Classifier: Topic :: Utilities
