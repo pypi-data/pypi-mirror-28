@@ -1,0 +1,53 @@
+
+---
+default:
+
+    rest_api:
+        url: 'http://localhost:4999/api/0.1'
+        username: 'a_user'
+        password: 'a_password'
+
+    ncbi_cache: ':memory:'
+
+    executor:
+        job_execution: local  # pbs, slurm, local
+        qsub: '/bin/sh'
+        job_queue: 'a_job_queue'
+        pre_job_source: bashrc
+
+    logging:
+        format: '[%(asctime)s][%(name)s][%(levelname)s] %(message)s'
+        datefmt: '%Y-%b-%d %H:%M:%S'
+        stream_handlers:
+          - stream: 'ext://sys.stdout'
+            level: 'DEBUG'
+        file_handlers:
+          - filename: tests/assets/test.log
+            mode: 'a'
+            level: 'WARNING'
+        timed_rotating_file_handlers:
+          - filename: tests/assets/test.log
+            when: 'h'
+            interval: 1
+
+    clarity:
+        baseuri: 'a_baseuri'
+        username: 'a_user'
+        password: 'a_password'
+
+    notifications:
+        email:
+            sender: 'this'
+            recipients: ['that', 'other']
+            mailhost: 'localhost'
+            port: 1337
+            strict: True
+
+        asana:
+            access_token: 'an_access_token'
+            workspace_id: 1337
+            project_id: 1338
+
+
+another_env:
+  ncbi_cache: 'path/to/ncbi.sqlite'
