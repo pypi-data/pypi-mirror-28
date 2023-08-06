@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{%import json %}
+{% block main_body_right %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Data Source Information
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+      <div class="box box-default">
+          {% if 'error' in base_navigation_dict.keys()%}
+              <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h4><i class="icon fa fa-ban"></i> Error!</h4>
+                {{base_navigation_dict['error']}}
+              </div>
+          {%end%}
+
+            <!-- general form elements disabled -->
+          <form action="{{ request.path }}" method="post"  role="form">
+                  <!-- text input -->
+
+          <div class="box-header with-border">
+          <h3 class="box-title">Data Source Information</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+          </div>
+        </div>
+          <div class="box-body">
+          <div class="row">
+
+
+          <div class="col-md-6">
+            <!-- Horizontal Form -->
+                  <!-- select -->
+
+                    {% if base_navigation_dict['selected_add_data_source'] == False  %}
+                      <input type="hidden" name="ds_type" value="{{base_navigation_dict['db'].ds_type}}" />
+                    {% end %}
+                  <div class="form-group">
+                    <label>Choose The Data Source Type (Required): </label>
+                    <select id = "ds_type"  name = "ds_type" class="form-control"
+                            {{'disabled=true' if base_navigation_dict['selected_add_data_source'] == False  else ''  }}
+                    >
+                      {% for p in base_navigation_dict['plugin_name_list']   %}
+                            <option {{'selected' if ('input_db_type' in base_navigation_dict.keys() and base_navigation_dict['input_db_type'] == p) or \
+                                                    ('db' in base_navigation_dict.keys() and base_navigation_dict['db'].ds_type == p) \
+                                                  else '' }} >
+                             {{p}}</option>
+                      {% end %}
+                    </select>
+                  </div>
+
+                  <div class="form-group required ">
+                    <label>Data Source Name (Required): </label>
+                    <input name="ds_name" type="text" class="form-control" placeholder="Enter Data Source Name..."
+                            {{readonly="readonly" if   base_navigation_dict['selected_add_data_source'] == False else ''  }}
+                           value="{{ base_navigation_dict['db'].ds_name if 'db' in base_navigation_dict.keys()   else '' }}">
+                  </div>
+
+                  <!-- checkbox -->
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label>
+                        <input name="reflect_database_automatic" type="checkbox" checked='checked'>
+                        Reflect Data Source Immediately
+                      </label>
+                    </div>
+
+                  </div>
+
+                  <div class="form-group">
+                    <label>Description: </label>
+                    <textarea  name="ds_desc" class="form-control" rows="3" placeholder="Enter ...">
+                      {{ base_navigation_dict['db'].ds_desc if 'db' in base_navigation_dict.keys() else "" }}
+                    </textarea>
+                  </div>
+
+
+
+          </div>
+          <div class="col-md-6">
+
+
+              {#  to show existing datasource and to show new data source should be same now! #}
+                  {# if base_navigation_dict['selected_add_data_source'] == False     This is to use plugin parameter to create a new DS#}
+
+                    {% for param_id in base_navigation_dict['input_ds_param'].keys() %}
+
+                                {% if  base_navigation_dict['input_ds_param'][param_id]['type'] == 'Boolean'  %} {# This is to show existing datasource#}
+                  <div class="form-group">
+                    <div class="checkbox">
+                      <label>
+                        <input name="ds_param.{{param_id}}" type="checkbox"
+                               {{'checked="checked"'  if 'db' in base_navigation_dict.keys() and  base_navigation_dict['db'].to_dict()['ds_param'][param_id]  == 'on' else '' }}
+                        　　　　data-toggle="tooltip" title="{{ base_navigation_dict['input_ds_param'][param_id]['desc']}}">
+                        {{ base_navigation_dict['input_ds_param'][param_id]['full_name']}}
+                      </label>
+                    </div>
+                  </div>
+
+                        {% else %} {# all other types are treated as String#}
+                  <div class="form-group">
+                    <label>{{ base_navigation_dict['input_ds_param'][param_id]['full_name']}}</label>
+                    <input name="ds_param.{{param_id}}" type="text" class="form-control"
+                           placeholder="{{ base_navigation_dict['input_ds_param'][param_id]['desc']}}"
+                           value="{{ base_navigation_dict['input_ds_param'][param_id]['default_value']}}"
+                           data-toggle="tooltip" title="{{ base_navigation_dict['input_ds_param'][param_id]['desc']}}"
+                           value="{{ base_navigation_dict['db'].to_dict()['ds_param'][param_id]  if 'db' in base_navigation_dict.keys() else ''}}">
+                  </div>
+
+                        {% end %}
+
+
+
+                    {% end %}
+
+
+                  <div class="form-group">
+
+                  </div>
+
+                </div>
+          </div>
+
+
+            </div>
+          <div class="box-footer">
+
+              <a href="javascript:history.back()" id="cancel" name="cancel" class="btn btn-default">Cancel</a>
+
+              <input type="submit" value="{{ _("Save Changes") if base_navigation_dict['selected_add_data_source'] == False else _("Create Data Source") }}"
+                     class="btn btn-info pull-right"/>
+
+       　　</div>
+                </form>
+              <!-- /.box-body -->
+          <!-- /.box -->
+      </div>
+
+
+
+                 {% if 'db' in base_navigation_dict.keys() %}
+      <div class="box box-default">
+          <form action="/delete_data_source" method="post"  role="form">
+               <!-- checkbox -->
+
+              <div class="box-footer">
+
+              <div class="col-md-8 col-md-offset-2">
+
+                  <!-- checkbox -->
+                  <div class="form-group">
+
+                      <label>
+                        <input name="delete_reflected_database_automatic" type="checkbox">
+                        Delete Contents in Data Source
+                      </label>
+
+                  <input name="ds_name" type="hidden" value="{{ base_navigation_dict['db'].ds_name}}">
+                  <input type="submit" value="Delete Data Source" class="btn btn-danger pull-right"/>
+
+                    </div>
+              </div>
+            </form>
+    　　</div>
+     {% end %}
+
+    </section>
+    <!-- /.content -->
+
+
+    <!-- Main content -->
+    <section class="content">
+      <!-- Info boxes -->
+
+      <!-- Main row -->
+      <div class="row">
+        <!-- Left col -->
+        <div class="col-md-12">
+          <!-- MAP & BOX PANE -->
+
+          <!-- TABLE: LATEST ORDERS -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title">List of Tables (only for relational DBs)</h3>
+
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+                <table class="table no-margin">
+                  <thead>
+                  <tr>
+                    <th>Database Name</th>
+                    <th>Table Name</th>
+                    <th>Table Comments</th>
+                    <th>Column Names</th>
+                    <th>Operations</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+  {% if 'tabrs' in base_navigation_dict.keys()     %}
+
+  {% for tab in base_navigation_dict['tabrs']   %}
+                  <tr>
+                    <td>{{ '.'.join([tab.ds_name])  }} </td>
+                    <td>{{ tab.table_name }}</td>
+                    <td>{{ tab.table_comment }}</td>
+                    <td>{{ tab.column_names }}</td>
+                    <td><a href="/view_table_in_notebook?table_name={{ tab.table_name }}&ds_name={{ tab.ds_name }}">Create Notebook</a>
+
+
+                    </td>
+                  </tr>
+  {% end %}
+  {% end %}
+
+
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.table-responsive -->
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer text-center">
+                <form action="/relfect_data_source" method="post"  role="form">
+                    <!--a href="javascript:void(0)" class="uppercase">View All Tables</a-->
+                {% if base_navigation_dict['selected_add_data_source'] == False   %}
+                    <input type="hidden" name="ds_name" value="{{base_navigation_dict['db'].ds_name}}">
+                    <input type="submit" value="{{ _("Reflect Now!") }}" class="btn btn-info pull-right"/>
+                {% end %}
+                </form>
+
+
+            </div>
+            <!-- /.box-footer -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+
+<script> {#https://stackoverflow.com/questions/5150363/onchange-open-url-via-select-jquery#}
+    $(function(){
+      // bind change event to select
+      $('#ds_type').on('change', function () {
+          var ds_typ = $(this).val(); // get selected value
+          if (ds_typ) { // require a URL
+              window.location = '/add_data_source?ds_type=' + ds_typ; // redirect
+          }
+          return false;
+      });
+    });
+</script>
+
+
+{% end %}
