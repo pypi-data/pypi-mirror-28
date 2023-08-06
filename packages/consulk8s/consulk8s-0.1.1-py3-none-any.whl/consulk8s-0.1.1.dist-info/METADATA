@@ -1,0 +1,52 @@
+Metadata-Version: 2.0
+Name: consulk8s
+Version: 0.1.1
+Summary: Integrate Consul and Kubernetes
+Home-page: https://github.com/joshbenner/consulk8s
+Author: Josh Benner
+Author-email: joshb@aweber.com
+License: BSD
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Intended Audience :: System Administrators
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: Implementation :: CPython
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: System :: Clustering
+Classifier: Topic :: System :: Systems Administration
+Requires-Dist: click (<7,>=6.7)
+Requires-Dist: kubernetes (<5,>=4.0)
+Provides-Extra: test
+Requires-Dist: pytest; extra == 'test'
+
+consulk8s
+=========
+
+|Status|
+
+CLI tool that integrates Consul and Kubernetes.
+
+Command: write-ingresses
+------------------------
+
+This command will query Kubernetes ingress resources for details to use to write
+a Consul service configuration file.
+
+This is useful on Kubernetes workers that are running ingress controllers or
+other servers that might be proxying into ingress controllers, allowing
+discovery of services exposed by Kubernetes.
+
+.. code-block:: bash
+
+    consulk8s write-ingresses -s /etc/consul.d/k8s_services.json
+
+See ``consulk8s --help`` and ``consulk8s write-ingresses --help`` for more details.
+
+.. |Status| image:: https://img.shields.io/travis/joshbenner/consulk8s.svg?
+   :target: https://travis-ci.org/joshbenner/consulk8s
+
+
