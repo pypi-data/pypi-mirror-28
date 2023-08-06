@@ -1,0 +1,142 @@
+import json
+from apicheckr import ApiCheckr
+from functools import partial
+
+
+class {{endpoint|replace('-','_')}}Test(ApiCheckr):
+
+    def __init__(self, *args):
+        self.url = "{{url}}"
+        ApiCheckr.__init__(self, self.url, *args)
+
+    def test_endpoints(self):
+        ''' check for no new or removed endpoints '''
+        self.assertEqual(set(self.ac.get_all_end_points()),
+                         set({{endpoints}}),
+                         "Endpoints differ")
+
+    def test_functions(self):
+        ''' check for new or removed functions for endpoint '{{endpoint}}' '''
+        self.assertEqual(
+            set(self.ac.get_all_functions_of_endpoints('{{endpoint}}')),
+            set({{functions[endpoint]|safe}}),
+            "Functions from '{{endpoint}}' differ")
+
+{% for group, list in funcs|groupby('function') %}
+    def test_{{list[0].function}}_responses(self):
+        '''
+        check for new or removed responses for function '{{list[0].function}}'
+        '''
+        self.assertEqual(
+            set(self.ac.get_responsekeys_of_function('{{endpoint}}', '{{list[0].function}}')),
+            set({{functionsresponses[endpoint][list[0].function]|safe}}),
+            "Responses for function '{{list[0].function}}' differ")
+
+    def test_{{list[0].function}}_parameter(self):
+        '''
+        check for new or removed parameters for function '{{list[0].function}}'
+        '''
+        self.assertEqual(
+            set(self.ac.get_short_parameters_of_function('{{endpoint}}', '{{list[0].function}}')),
+            set({{functionsparameters[endpoint][list[0].function]|safe}}),
+            "Parameters for function '{{list[0].function}}' differ")
+
+{% for func in list %}
+    def test_{{func.function}}_{{func.response}}(self):
+        '''
+        {{func.description|wordwrap(70,True,'\n        ')}}
+        '''
+{% for item in func.models %}
+        # create an {{item}} object
+        {{item}} = self.client.get_model('{{item}}')
+{% endfor %}
+{% set funcresponse = func.response | int %}
+{% if funcresponse is greaterthan 299 %}
+        def do_check(response):
+            # DONOTDEL checkstart
+            pass
+            # DONOTDEL checkend
+        try:
+            self.client._get_resource('{{endpoint}}').{{func.function}}(
+{% for item in func.parameters %}
+                {% if item.isobject %}
+                {% set val = '# ' + item.name + ' is a ' + ( '' if item.required else '(non-required) ' ) + item.type + ' object' + ( ' array' if item.isarray else '' ) %}
+                {% else %}
+                {% set val = '# ' + item.name + ' is a ' + ( '' if item.required else '(non-required) ' ) + item.type %}
+                {% endif %}
+                {% if item.description %}
+                {% set val = val + ', description: ' + item.description %}
+                {% endif %}
+                {% if item.isobject %}
+                {% set val = val + '\n' + item.objectdetail %}
+                {% endif %}
+                {{val|wordwrap(60,True,'\n                # ')}}
+                {% if item.isobject %}
+                {{item.name}}={% if item.isarray %}[{% endif %}{{item.type}}(
+                    {% for p in item.objectproperties %}
+                    {{p}}=TODO,
+                    {% endfor %}
+                ){% if item.isarray %}]{% endif %},
+                {% else %}
+                {{item.name}}=TODO,
+                {% endif %}
+{% endfor %}
+                _request_options={'response_callbacks':
+                                  [partial(
+                                      self.check_response_code, response={{func.response}},
+                                      do_check=do_check
+                                  )],
+                                  'headers': TODO
+                                  }
+            ).result()
+        except (self.get_exception('{{func.response}}')):
+            pass
+        else:
+            print('must be an {{func.responseexception}} exception!')
+{% else %}
+        {%+ if func.responsedata %}out_{{func.responsedata}} = {% endif %}self.client._get_resource('{{endpoint}}').{{func.function}}(
+{% for item in func.parameters %}
+            {% if item.isobject %}
+            {% set val = '# ' + item.name + ' is a ' + ( '' if item.required else '(non-required) ' ) + item.type + ' object' + ( ' array' if item.isarray else '' ) %}
+            {% else %}
+            {% set val = '# ' + item.name + ' is a ' + ( '' if item.required else '(non-required) ' ) + item.type %}
+            {% endif %}
+            {% if item.description %}
+            {% set val = val + ', description: ' + item.description %}
+            {% endif %}
+            {% if item.isobject %}
+            {% set val = val + '\n' + item.objectdetail %}
+            {% endif %}
+            {{val|wordwrap(60,True,'\n            # ')}}
+            {% if item.isobject %}
+            {{item.name}}={% if item.isarray %}[{% endif %}{{item.type}}(
+                {% for p in item.objectproperties %}
+                {{p}}=TODO,
+                {% endfor %}
+            ){% if item.isarray %}]{% endif %},
+            {% else %}
+            {{item.name}}=TODO,
+            {% endif %}
+{% endfor %}
+            _request_options={'response_callbacks':
+                              [partial(
+                                  self.check_response_code, response={{func.response}}
+                              )],
+                              'headers': TODO
+                              }
+        ).result()
+        {%if func.responsedata %}
+        # DONOTDEL checkstart
+        # TODO check out_{{func.responsedata}}
+        # DONOTDEL checkend
+{%if func.responsedetails %}
+{{func.responsedetails|wordwrap(60,True,'\n        # ')}}
+{% endif %}
+        {% endif %}
+{% endif %}
+
+{% endfor %}
+{% endfor %}
+
+if __name__ == "__main__":
+    {{endpoint|replace('-','_')}}Test().unittest()
